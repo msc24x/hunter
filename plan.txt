@@ -1,0 +1,7 @@
+/compete
+  Button - join competition with code
+  Button - create competition
+  List - public competitions
+
+/c/"competiton id"
+

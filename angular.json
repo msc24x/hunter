@@ -13,13 +13,14 @@
           "strict": true
         }
       },
-      "root": "",
+      "root": "./",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["crypto"],
             "outputPath": "dist/hunter",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -34,6 +35,7 @@
               "src/styles.scss"
             ],
             "scripts": []
+
           },
           "configurations": {
             "production": {
@@ -70,6 +72,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "src/proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "browserTarget": "Hunter:build:production"

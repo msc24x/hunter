@@ -1,0 +1,125 @@
+@use "../../assets/colors";
+@use "../../assets/fonts";
+
+div.appBar{
+  margin-top: 24px;
+  margin-left: 5%;
+  margin-right: 5%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-items: center;
+  align-items: center;
+
+  #app_title{
+    color: colors.$text_black;
+    font-family: appFont;
+    font-weight: bold;
+    font-size: 3em;
+    margin-left: 2%;
+
+  #register_btn{
+    background-color: colors.$text_black;
+    border-radius: 2px;
+    color: colors.$text_white;
+    font-family: appFont;
+    text-align: left;
+    font-weight: bold;
+    font-size: 12px;
+    border-width: 0px;
+    stroke-width: 0px;
+    padding-top: 10px;
+    height: 30px;
+    width: 120px;
+    margin-left: 24px;
+    vertical-align: middle;
+  }
+  #register_btn:hover{
+    transform: scale(1.02);
+    cursor: pointer;
+  }
+  }
+  @media only screen and (max-width : 1024px) {
+    #navBar{
+      display: none;
+    }
+  }
+  @media only screen and (min-width : 1024px) {
+    #navBarBtn{
+      display: none;
+    }
+  }
+
+  #navBarBtn{
+    font-family: appFont;
+    font-weight: bolder;
+    background-color: colors.$dim_white;
+    padding : 8px;
+    padding-top: 10px;
+    border-radius: 8px;
+    margin-right: 84px;
+    cursor: pointer;
+
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+  }
+  #navBarBtn:hover{
+    background-color: white;
+  }
+
+  #navBarCompact{
+    font-family: appFont;
+    font-weight: bold;
+    margin-top: 14px;
+    position: absolute;
+    display: none;
+
+    ul{
+      padding : 0px;
+      list-style: none;
+      li{
+        text-align: left;
+        padding : 8px;
+        padding-top: 10px;
+        background-color: colors.$dim_white;
+        border-radius: 6px;
+        margin: 5px;
+        min-width: 120px;
+        cursor: pointer;
+      }
+      li:hover{
+        background-color: whitesmoke;
+      }
+    }
+  }
+
+  #navBar{
+    ul{
+      color: colors.$text_black;
+      font-family: appFont;
+      font-weight: bold;
+      display: flex;
+      flex-wrap: wrap;
+      list-style-type: none;
+      li{
+        min-width : 140px;
+        text-align: center;
+      }
+      li:hover{
+        animation: forwards;
+        animation-name: burn;
+        animation-duration: 0.18s;
+        animation-iteration-count: 1;
+        cursor :  pointer;
+      }
+      @keyframes burn {
+        100%{
+          color: whitesmoke;
+        }
+      }
+    }
+
+  }
+}

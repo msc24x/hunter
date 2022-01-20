@@ -3,7 +3,11 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": ["node"],
+    "paths": {
+      "@app/*" : ["app/*"],
+      "@assets/*" : ["assests/*"]
+    }
   },
   "files": [
     "src/main.ts",

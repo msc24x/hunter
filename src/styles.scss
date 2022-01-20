@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+@use "./assets/colors";
+
+/*160deg*/
+
+body{
+  background: linear-gradient(165deg, colors.$text_white, #563e78);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+

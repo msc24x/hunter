@@ -1,0 +1,17 @@
+<div id="signinDialog">
+  <p class="sectionHeading">Register</p>
+  <p class = "inputHeading">Email *</p>
+  <input type="email" class = "textbox">
+  <p class = "inputHeading">Password *</p>
+  <input type="password" class = "textbox">
+  <p><br></p>
+
+  <button id="register_btn" (click)="sendRegisterReq()">
+    Submit
+  </button>
+
+  <p id="login_heading" routerLink="/home">Already have an account?</p>
+  <p id="responseMessage">{{registerResponseMessage}}</p>
+
+
+</div>

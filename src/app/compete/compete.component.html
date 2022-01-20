@@ -1,0 +1,30 @@
+<app-bar></app-bar>
+
+<div class="flex_container">
+  <div id = "create_btn">
+    <div id="plus_btn">+</div>
+    &nbsp;&nbsp;&nbsp;Create new competition
+  </div>
+
+  <div id = "join_competition">
+    <p class = "heading">Join with competition code </p>
+    <input type="text" id="competition_id_text" placeholder="Eg. 54321">
+    <button id="btn_submit_compt_code">Join</button>
+  </div>
+</div>
+
+
+<div id = "public_competitions">
+  <p class = "heading">Public Competitons</p>
+  <ul id="list_public_competitions">
+    <li *ngFor="let com of coms">
+      <div class = "competition_card" routerLink="/hunt/{{com.id}}">
+        <a id = "c_title">{{com.title}}</a>
+        <a id = "c_date_created">Created on : {{com.dateCreated}}</a>
+        <br>
+        <p id = "c_about">{{com.about}}</p>
+      </div>
+    </li>
+  </ul>
+  <div id="list_end">No more public competition available!</div>
+</div>
