@@ -5,6 +5,7 @@ A competition platform that allows not only to participate in various competitio
 ## Development server
 
 Run `ng serve` for a dev server in ./Hunter/ Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
 Run `npm start` for backend server in ./Hunter/server/ to listen to api requests from `http://localhost:4200/`
 
 ## Build
