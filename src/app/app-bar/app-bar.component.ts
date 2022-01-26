@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { UserInfo } from 'src/environments/environment';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-bar',
@@ -7,14 +9,25 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class AppBarComponent implements OnInit {
 
+  isAuthenticated : boolean = false
+  user : UserInfo = {
+    id : "",
+    email : "",
+    name : ""
+  }
+
   @Input()
   showRegisterBtn : boolean = true
 
-  constructor() { }
+  constructor(private authService : AuthService) {
+    authService.isAuthenticated.subscribe(val=>{
+      this.user = this.authService.user
+      this.isAuthenticated = val
+    })
+  }
 
   ngOnInit(): void {
     const navBar = document.getElementById("navBarCompact") as HTMLElement;
-
     navBar.style.display = "none"
   }
 
@@ -25,6 +38,18 @@ export class AppBarComponent implements OnInit {
     }else{
       navBar.style.display = "none"
     }
+  }
+
+  sendLogoutRequest(){
+    this.authService.logout().subscribe(res=>{
+      console.log(res)
+      this.authService.user = {
+        id : "",
+        email : "",
+        name : ""
+      }
+      this.authService.isAuthenticated.next(false)
+    })
   }
 
 }
