@@ -3,8 +3,8 @@
 
 div.appBar{
   margin-top: 24px;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 2%;
+  margin-right: 2%;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -17,47 +17,80 @@ div.appBar{
     font-weight: bold;
     font-size: 3em;
     margin-left: 2%;
+    display: flex;
+    align-items: center;
 
-  #register_btn{
-    background-color: colors.$text_black;
-    border-radius: 2px;
-    color: colors.$text_white;
-    font-family: appFont;
-    text-align: left;
-    font-weight: bold;
-    font-size: 12px;
-    border-width: 0px;
-    stroke-width: 0px;
-    padding-top: 10px;
-    height: 30px;
-    width: 120px;
-    margin-left: 24px;
-    vertical-align: middle;
+    @media only screen and (max-width : 686px) {
+      #app_title_full{
+        display: none;
+      }
+      #app_title_short{
+        display: initial;
+      }
+    }
+    @media only screen and (min-width : 686px) {
+      #app_title_full{
+        display: initial;
+      }
+      #app_title_short{
+        display: none;
+      }
+    }
+    #register_btn{
+      background-color: colors.$text_black;
+      border-radius: 2px;
+      color: colors.$text_white;
+      font-family: appFont;
+      text-align: left;
+      font-weight: bold;
+      font-size: 12px;
+      border-width: 0px;
+      stroke-width: 0px;
+      padding-top: 10px;
+      height: 30px;
+      width: 120px;
+      margin-left: 24px;
+      vertical-align: middle;
+    }
+    #register_btn:hover{
+      transform: scale(1.02);
+      cursor: pointer;
+    }
+    #user_email, #logout_btn{
+      font-size: 12px;
+      background-color: colors.$dim_white;
+      border-radius: 8px;
+      padding : 4px;
+      padding-inline: 16px;
+      margin-left: 24px;
+      cursor: pointer;
+    }
+    #user_email:hover, #logout_btn:hover{
+      background-color: white;
+    }
   }
-  #register_btn:hover{
-    transform: scale(1.02);
-    cursor: pointer;
-  }
-  }
-  @media only screen and (max-width : 1024px) {
+  @media only screen and (max-width : 1200px) {
     #navBar{
       display: none;
     }
   }
-  @media only screen and (min-width : 1024px) {
+  @media only screen and (min-width : 1200px) {
     #navBarBtn{
-      display: none;
+      visibility: hidden;
     }
   }
 
   #navBarBtn{
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    align-items: flex-end;
     font-family: appFont;
     font-weight: bolder;
     background-color: colors.$dim_white;
     padding : 8px;
     padding-top: 10px;
     border-radius: 8px;
-    margin-right: 84px;
     cursor: pointer;
 
     -webkit-user-select: none; /* Safari */
@@ -83,10 +116,11 @@ div.appBar{
         text-align: left;
         padding : 8px;
         padding-top: 10px;
-        background-color: colors.$dim_white;
+        background-color: colors.$text_white;
         border-radius: 6px;
         margin: 5px;
         min-width: 120px;
+        box-shadow: 0px 0px 15px 0px gray;
         cursor: pointer;
       }
       li:hover{
@@ -99,16 +133,19 @@ div.appBar{
     ul{
       color: colors.$text_black;
       font-family: appFont;
-      font-weight: bold;
+      font-weight: normal;
       display: flex;
       flex-wrap: wrap;
       list-style-type: none;
       li{
         min-width : 140px;
         text-align: center;
+        stroke-width: 0px;
       }
       li:hover{
+        font-weight: bolder;
         animation: forwards;
+        stroke-width: 50px;
         animation-name: burn;
         animation-duration: 0.18s;
         animation-iteration-count: 1;
@@ -116,7 +153,7 @@ div.appBar{
       }
       @keyframes burn {
         100%{
-          color: whitesmoke;
+          color: black;
         }
       }
     }
