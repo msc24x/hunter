@@ -1,12 +1,14 @@
-# Hunter
+# HUNTER_
 ### Host or Participate in coding challanges
 A competition platform that allows not only to participate in various competitions and challanges, but also gives anyone the ability to host their own competition.
 
 ## Development server
 
-Run `ng serve` for a dev server in ./Hunter/ Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server in `./Hunter/` Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Run `npm start` for backend server in ./Hunter/server/ to listen to api requests from `http://localhost:4200/`
+Make sure the MySQL service is running on your machine before running the node server.
+
+Run `npm start` for backend server in `./Hunter/server/` to listen to api requests from `http://localhost:4200/`
 
 ## Build
 
