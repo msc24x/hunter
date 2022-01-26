@@ -7,6 +7,11 @@ export const environment = {
   apiUrl : "http://localhost:4200/api"
 };
 
+export interface UserInfo{
+  id : string, email : string, name : string
+
+}
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

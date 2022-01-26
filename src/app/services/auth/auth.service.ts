@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, ɵresetJitOptions } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { environment, UserInfo } from 'src/environments/environment';
 
 
 
@@ -9,15 +10,24 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
+  isAuthenticated = new BehaviorSubject<boolean>(false)
+  user : UserInfo = {
+    id : "",
+    email : "",
+    name : ""
+  }
+
   apiUrl = environment.apiUrl;
 
   apiEndpoints = {
     register : this.apiUrl+"/register",
     login : this.apiUrl+"/login",
-    authenticate : this.apiUrl+"/authenticate"
+    authenticate : this.apiUrl+"/authenticate",
+    logout : this.apiUrl+"/logout"
   }
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient) {
+   }
 
   register(email : string, password : string) {
 
@@ -55,4 +65,13 @@ export class AuthService {
       observe : "response",
     });
   }
+
+  logout(){
+    return this.http.get(this.apiEndpoints.logout,{
+      responseType : "json",
+      withCredentials : true,
+      observe : "response",
+    })
+  }
+
 }
