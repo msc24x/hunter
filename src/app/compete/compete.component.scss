@@ -57,17 +57,19 @@
   margin-top: 24px;
   margin-left: 7%;
   margin-right: 7%;
-  width: fit-content;
+  flex-wrap: wrap;
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding : 6px
 }
 
 
 #join_competition p.heading{
-  margin-left: 16px;
   font-size: 20px;
   font-weight: bolder;
   text-align: center;
+  padding-inline: 12px;
 }
 
 #competition_id_text{
@@ -77,8 +79,7 @@
     stroke-width: 0px;
     border-width: 0.3px;
     height: 28px;
-    width: 259px;
-    margin-left: 16px;
+    width: 212px;
     font-family: appFont;
     font-size: 16px;
     text-align: left;
@@ -88,6 +89,8 @@
 #btn_submit_compt_code{
   margin-left: 16px;
   margin-right: 16px;
+  margin-top: 16px;
+  margin : 16px;
   background-color: colors.$sweet_white;
   color: colors.$text_black;
   stroke-width: 0px;
@@ -96,6 +99,10 @@
   width: 48px;
   border-radius: 4px;
   font-family: appFont;
+}
+
+#btn_submit_compt_code:hover{
+  font-weight: bolder;
 }
 
 #btn_submit_compt_code:hover{
@@ -110,6 +117,18 @@
   margin-left: 7%;
   margin-right: 7%;
   padding-bottom: 24px;
+}
+
+@media only screen and (max-width : 1024px) {
+  #public_competitions{
+    margin-inline: 0.5%;
+  }
+  .flex_container{
+    justify-content: center;
+  }
+  #create_btn{
+    margin-left: 0px;
+  }
 }
 
 #competition_card:hover{
