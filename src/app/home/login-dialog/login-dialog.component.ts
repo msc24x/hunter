@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserInfo } from 'src/environments/environment';
 
 @Component({
   selector: 'login-dialog',
@@ -75,6 +76,9 @@ export class LoginDialogComponent implements OnInit {
         break;
       case 202:
         this.loginResponse = "*Authenticated successfully"
+        const body = res.body as UserInfo
+        this.authService.user = {id : body.id, email : body.email, name : body.name}
+        this.authService.isAuthenticated.next(true)
         break;
       default:
         this.loginResponse = "*Unknown error occurred"

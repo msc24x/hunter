@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserInfo } from 'src/environments/environment';
+import { AuthService } from '../services/auth/auth.service';
 
 export class Question{
   constructor(
@@ -31,7 +33,16 @@ export class CompeteComponent implements OnInit {
 
   public coms : Competition[];
 
-  constructor() {
+  isAuthenticated : boolean = false
+  user = {
+    id : "",
+    email : "",
+    name : ""
+  }
+
+
+  constructor(private authService : AuthService) {
+
     const comp = new Competition(
       45,
       "Downtown kabbadi competition",
@@ -42,11 +53,33 @@ export class CompeteComponent implements OnInit {
        true
     );
 
-    this.coms = [comp, comp, comp, comp, comp, comp, comp, comp, comp];
-    console.log(this.coms[0].questions);
+    this.coms = [];
+    //console.log(this.coms[0].questions);
+
+    this.authService.isAuthenticated.subscribe(isAuth=>{
+      this.user = this.authService.user
+      this.isAuthenticated = isAuth;
+    })
   }
 
   ngOnInit(): void {
+
+    this.authService.authenticate_credentials().subscribe(res=>{
+      if(res.status == 202){
+        const body = res.body as UserInfo
+        this.user = {
+          id :  body.id,
+          email : body.email,
+          name : body.name
+        }
+        this.authService.user = this.user
+        this.isAuthenticated = true
+        this.authService.isAuthenticated.next(true)
+
+      }
+    })
+
   }
+
 
 }
