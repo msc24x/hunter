@@ -5,7 +5,9 @@ import mysql, { Types } from 'mysql';
 import { AppDB } from './database/interface';
 import { RegisterRequest } from './database/types';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 import { Interface } from 'readline';
+import { rmSync } from 'fs';
 const argon2 =  require('argon2');
 
 interface User{
@@ -25,6 +27,7 @@ const resCode = {
 
 const app = express();
 app.use(cookieParser())
+app.use(bodyParser.json())
 
 const dbConnection = mysql.createConnection({
   host: "localhost",
@@ -81,6 +84,30 @@ app.get("/register", (req, res) =>{
         })
       });
     })
+  })
+
+})
+
+app.post("/create/competition", (req, res)=>{
+
+  const title = req.body.title;
+
+  if(title == null || (title as string).length > 50){
+    console.log(title)
+    sendResponse(res, resCode.badRequest)
+    return;
+  }
+
+  authenticate(req, res, (req : Request, res : Response, user : User)=>{
+    dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating) values( ${user.id}, "${title}", NOW() , 0 )  ;`, (err)=>{
+      if(err){
+        console.log(err)
+        sendResponse(res, resCode.serverErrror)
+        return
+      }
+      res.sendStatus(resCode.created)
+    })
+
   })
 
 })
@@ -227,7 +254,7 @@ function authenticate(req: Request, res : Response, callback : Function = (req :
 }
 
 function sendResponse(res : Response , code : number ,msg : string = "") {
-
+  console.log("sending rescode ", code)
   res.status(code).send(msg);
 }
 
@@ -236,6 +263,10 @@ function sendResponseJson(res : Response , code : number , body : {
   email : string,
   name : string,
   msg? : string
+} |
+{
+  id : string,
+  title : string
 }) {
   res.status(code).send(body);
 }
