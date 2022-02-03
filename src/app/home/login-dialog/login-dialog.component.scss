@@ -1,5 +1,7 @@
 @use "../../../assets/colors";
 @use "../../../assets/fonts";
+@use "../../../assets/mixins";
+
 
 
 
@@ -35,17 +37,7 @@ div#loginDialog{
     color: colors.$text_black;
   }
   input.textbox{
-    border-radius: 5px;
-    color: colors.$text_black;
-    border-width: 0px;
-    stroke-width: 0px;
-    height: 30px;
-    width: 259px;;
-    margin-left: 12px;
-    font-family: appFont;
-    font-size: 16px;
-    text-align: left;
-    padding-left: 12px;
+    @include mixins.inputText;
   }
   #keep_logged_check{
     size: 12px;

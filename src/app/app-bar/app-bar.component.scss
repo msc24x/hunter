@@ -120,11 +120,11 @@ div.appBar{
         border-radius: 6px;
         margin: 5px;
         min-width: 120px;
-        box-shadow: 0px 0px 15px 0px gray;
+        box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.219);
         cursor: pointer;
       }
       li:hover{
-        background-color: whitesmoke;
+        background-color: white;
       }
     }
   }

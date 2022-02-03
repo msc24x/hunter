@@ -3,8 +3,9 @@
 /*160deg*/
 
 body{
-  background: linear-gradient(165deg, colors.$text_white, #563e78);
+  background: linear-gradient(165deg, colors.$text_white,colors.$purple_high);
   background-repeat: no-repeat;
   background-attachment: fixed;
+  margin : 0px;
 }
 

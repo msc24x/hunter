@@ -1,6 +1,15 @@
 @use "../../assets/colors";
 @use "../../assets/fonts";
 
+html{
+  background-color: black;
+}
+
+create-dialog{
+  display: none;
+}
+
+
 .heading{
   font-family: appFont;
   font-weight: normal;
@@ -146,8 +155,8 @@
 }
 
 #public_competitions p.heading{
-  margin-left: 16px;
-  padding-top: 16px;
+  margin-inline: 16px;
+  padding-top: 24px;
   font-size: 26px;
   font-weight: bolder;
 }
@@ -155,6 +164,9 @@
 #list_public_competitions{
   list-style-type: none;
   padding-left: 0px;
+  max-height: 512px;
+  overflow: scroll;
+  scroll-behavior: smooth;
   li{
     border-width: 2px;
     border-color: black;
@@ -170,14 +182,14 @@
   border-color: black;
   border-width: 110px;
   height: fit-content;
-  background-color: #e2e2e2;
+  background-color: #ebebeb;
   font-family: appFont;
 
 }
 
 .competition_card:hover{
   cursor: pointer;
-  background-color: #b8b8b8;
+  background-color: #d8d8d8;
 }
 
 #c_title{
@@ -192,4 +204,5 @@
 
 #c_about{
   font-size: 1em;
+  line-break: anywhere;
 }
