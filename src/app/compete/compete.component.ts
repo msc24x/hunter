@@ -46,15 +46,15 @@ export class CompeteComponent implements OnInit {
     const comp = new Competition(
       45,
       "Downtown kabbadi competition",
-      "Wrestling is a combat sport involving grappling-type techniques such as clinch fighting, throws and takedowns, joint locks, pins and other grappling holds. ... A wrestling bout is a physical competition, between two (sometimes more) competitors or sparring partners, who attempt to gain and maintain a superior position.",
+      "B%5*[_FUX5bd5ab}kxZ$k3+e.rSwL8Hn+z2]j}t[8VE#M2y-S)txVm*xGrG(7r3C./SVU3VVzEvHZ*#@T_tNQTGx;u.Cp,dkHN@hp(W&XHxaXDn{qvKr})yRN[vL!Upuh}A$jtA;(zVn_C#,E]+ZB.p=v5dYXZf]pSgYbVqguAX5},gh4%,KUg+Qa:H*@]bT/)rJW[ZCWFQJj9k]$N=vTbC8+HX/FX!N97atJ79K-qhzFrF5PB(ALV44[u+aX)qi!(C%X+29c4{96my2;$J+bunSHAq3Bk9-%$VQTCWfE9AD([PdY{7f-d%E7rvhBeRd92(g(mXa#F#yfmq$ihrdg=X@x&V+4]vFcR$*3(uy!U;!pwH:ijzck.kjg=Tn#cd!)id])dxKN9&7eq_GtA8/UJi_YnMF8Ju_Y;_PF{-z#qHq$?(mJLmr%J#NyqjW:}[d,_/e]UDE",
       545481,
       45454,
       [new Question("dfsf","fdsdf", 545)],
        true
     );
 
-    this.coms = [];
-    //console.log(this.coms[0].questions);
+    this.coms = [comp, comp, comp, comp, comp, comp, comp, comp, comp];
+    console.log(this.coms[0].questions);
 
     this.authService.isAuthenticated.subscribe(isAuth=>{
       this.user = this.authService.user
@@ -79,6 +79,15 @@ export class CompeteComponent implements OnInit {
       }
     })
 
+  }
+
+  showCreateDialog(show : boolean){
+    let createDialog = document.getElementsByTagName("create-dialog")[0] as HTMLDivElement
+    if(show){
+      createDialog.style.display = "block"
+    }else{
+      createDialog.style.display = "none"
+    }
   }
 
 

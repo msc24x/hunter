@@ -1,12 +1,14 @@
+<create-dialog (backgroundClick)="showCreateDialog(false)"></create-dialog>
+
 <app-bar></app-bar>
 
-<div class="flex_container">
+<div class="flex_container" (click)="showCreateDialog(true)">
   <div id = "create_btn">
     <div id="plus_btn">+</div>
     &nbsp;&nbsp;&nbsp;Create competition
   </div>
 
-  <div id = "join_competition">
+  <div id = "join_competition" >
     <p class = "heading">Join with competition code </p>
     <input type="text" id="competition_id_text" placeholder="Eg. 54321">
     <button id="btn_submit_compt_code">Join</button>
@@ -16,6 +18,7 @@
 
 <div id = "public_competitions">
   <p class = "heading">Public Competitons</p>
+
   <ul id="list_public_competitions">
     <li *ngFor="let com of coms">
       <div class = "competition_card" routerLink="/hunt/{{com.id}}">
