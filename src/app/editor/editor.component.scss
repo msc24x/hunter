@@ -1,0 +1,165 @@
+@use "../../assets/colors";
+@use "../../assets/mixins";
+@use "../../assets/fonts";
+
+
+
+#created_on{
+  background-color: whitesmoke;
+  font-family: appFont;
+  width: fit-content;
+  padding : 10px;
+  border-radius: 0px 0px 24px 24px ;
+}
+
+#visbility_controller{
+  display: flex;
+  margin-top: 16px;
+  font-family: appFont;
+  cursor: default;
+
+  #id{
+    background-color: white;
+    border-radius: 24px 0px 0px 24px;
+    font-family: appFont;
+    width: fit-content;
+    padding : 10px;
+  }
+
+  #rating{
+    background-color: whitesmoke;
+    font-family: appFont;
+    width: fit-content;
+    padding : 10px;
+  }
+
+  #visibility{
+    background-color: rgb(20, 220, 120);
+    color : rgb(0, 0, 0);
+    border-radius: 0px 24px 24px 0px;
+    font-family: appFont;
+    font-weight: bold;
+    width: 64px;
+    padding : 10px;
+    cursor: pointer;
+    text-align: center;
+  }
+}
+
+.vertical_flex{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+}
+
+.row_flex{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+#title_label, #desc_label{
+  font-family: appFont;
+  font-size: 1.2rem;
+  text-align: left;
+  width: 100%;
+  margin-left: 16px;
+  margin-top: 6px;
+  color: colors.$text_black;
+}
+
+#text_title{
+  resize: none;
+  width: 246px;
+  border-radius: 24px;
+  font-family: appFont;
+  font-size: 1rem;
+  padding: 8px;
+  border-width: 0px;
+  margin-top: 4px;
+}
+
+#text_description{
+  resize: none;
+  min-width: 0px;
+  width: 512px;
+  border-radius: 24px;
+  font-family: appFont;
+  font-size: 1rem;
+  padding: 8px;
+  border-width: 0px;
+  margin-top: 4px;
+}
+
+@media only screen and (max-width : 556px) {
+  #text_description{
+    width: 246px;
+  }
+
+}
+
+#controls{
+  justify-content: space-around;
+  align-items: stretch;
+
+  button{
+    border-radius: 24px;
+    font-family: appFont;
+    font-size: 1rem;
+    padding: 8px;
+    border-width: 0px;
+    margin-top: 4px;
+    padding-inline: 16px;
+  }
+
+  button:hover{
+    background-color: colors.$app_c;
+    color: white;
+  }
+}
+
+#questions_list{
+  list-style: none;
+  padding: 0px;
+  display: flex;
+  overflow: scroll;
+  background-color: colors.$dim_white;
+  border-radius: 12px;
+  font-family: appFont;
+  margin-inline: 7%;
+  scroll-behavior: smooth;
+
+
+  div{
+
+    background-color: white;
+    border-radius: 12px;
+    padding : 16px;
+    font-weight: bold;
+    width: max-content;
+    text-align: center;
+    margin-right: 16px;
+    cursor: default;
+  }
+
+  li{
+    background-color: whitesmoke;
+    border-radius: 12px;
+    padding : 16px;
+    font-weight: bold;
+    width: max-content;
+    text-align: center;
+    margin-right: 6px;
+    cursor: pointer;
+  }
+
+  li:hover{
+    background-color: colors.$text_black;
+    color : colors.$text_white;
+  }
+}
+
