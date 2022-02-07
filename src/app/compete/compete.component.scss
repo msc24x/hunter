@@ -42,7 +42,6 @@ create-dialog{
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 2px 2px 15px 1px #00000044;
   }
 
 }
@@ -52,6 +51,8 @@ create-dialog{
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
+  //box-shadow: 2px 2px 15px 1px #00000044;
+
 }
 @keyframes outline {
   100%{
