@@ -2,12 +2,14 @@
 @use "../../../assets/mixins";
 
 #dialog_box{
-  position: fixed;
+  position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.548);
+  box-shadow: 0 50px 9000px 900px rgba(0, 0, 0, 0.548);
 }
 
 #dialog{
@@ -15,7 +17,8 @@
   width: fit-content;
   height: fit-content;
   border-radius: 10px;
-  box-shadow: 0 0 9000px 9000px rgba(0, 0, 0, 0.295);
+  //box-shadow: 0 0 9000px 9000px rgba(0, 0, 0, 0.295);
+  box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
 
   p.h1{
     font-family: appFont;

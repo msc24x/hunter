@@ -1,5 +1,6 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { resCode } from 'src/app/services/auth/responseCodes';
 
@@ -15,7 +16,7 @@ export class CreateDialogComponent implements OnInit {
 
   responseMessage : string = ""
 
-  constructor(private authService : AuthService) { }
+  constructor(private authService : AuthService, private router : Router) { }
 
   ngOnInit(): void {
   }
@@ -53,6 +54,7 @@ export class CreateDialogComponent implements OnInit {
         break;
       case this.authService.resCode.created:
         this.responseMessage = "*created successfully"
+        this.router.navigate([`/editor/${(res as unknown as {status : number, id : number}).id}`])
         break;
       case this.authService.resCode.accepted:
         break;
