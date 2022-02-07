@@ -1,5 +1,5 @@
 @use "../../assets/colors";
-@use "../../assets/mixins";
+@use "../../assets/mixins" as *;
 @use "../../assets/fonts";
 
 
@@ -73,25 +73,15 @@
 }
 
 #text_title{
-  resize: none;
+  @include appTextArea();
   width: 246px;
-  border-radius: 24px;
-  font-family: appFont;
-  font-size: 1rem;
-  padding: 8px;
-  border-width: 0px;
   margin-top: 4px;
 }
 
 #text_description{
-  resize: none;
+  @include appTextArea();
   min-width: 0px;
   width: 512px;
-  border-radius: 24px;
-  font-family: appFont;
-  font-size: 1rem;
-  padding: 8px;
-  border-width: 0px;
   margin-top: 4px;
 }
 
@@ -104,7 +94,8 @@
 
 #controls{
   justify-content: space-around;
-  align-items: stretch;
+  align-items: center;
+  width: 100%;
 
   button{
     border-radius: 24px;
@@ -114,6 +105,7 @@
     border-width: 0px;
     margin-top: 4px;
     padding-inline: 16px;
+    min-width: 156px;
   }
 
   button:hover{
@@ -127,7 +119,6 @@
   padding: 0px;
   display: flex;
   overflow: scroll;
-  background-color: colors.$dim_white;
   border-radius: 12px;
   font-family: appFont;
   margin-inline: 7%;
@@ -163,3 +154,24 @@
   }
 }
 
+#question_editor{
+  align-items: stretch;
+  width: 100%;
+}
+
+#qtitle_label, #qstatement_label{
+  padding-left: 7.5%;
+  font-family: appFont;
+  font-weight: normal;
+  margin-top: 16px;
+  font-size: 1.2rem;
+}
+
+#text_qtitle, #text_statement{
+  @include appTextArea;
+  margin-inline: 7%;
+}
+
+body{
+  margin: 0px;
+}

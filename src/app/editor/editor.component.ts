@@ -1,6 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { time } from 'console';
+import { userInfo } from 'os';
+import { timestamp } from 'rxjs';
 import { CompetitionInfo, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../services/auth/auth.service';
 
@@ -12,7 +15,15 @@ import { AuthService } from '../services/auth/auth.service';
 export class EditorComponent implements OnInit {
 
   competition_id : string
-  competitionInfo : CompetitionInfo | null = null
+  competitionInfo : CompetitionInfo  = {
+    id : "",
+    title : "",
+    created_on : "",
+    host_user_id : "",
+    description : "",
+    public : false,
+    rating : 0
+  } as CompetitionInfo
 
   isAuthenticated : boolean = false
   user = {
@@ -21,15 +32,14 @@ export class EditorComponent implements OnInit {
     name : ""
   }
 
-  constructor(private activatedRoute : ActivatedRoute, private authService : AuthService) {
+  constructor(private router :  Router, private activatedRoute : ActivatedRoute, private authService : AuthService) {
 
     this.competition_id =  activatedRoute.snapshot.paramMap.get("competition_id") as string
-
-    this.fetchCompetitionInfo(this.competition_id)
 
     this.authService.isAuthenticated.subscribe(isAuth=>{
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
+
     })
   }
 
@@ -41,37 +51,54 @@ export class EditorComponent implements OnInit {
         this.user = body
         this.authService.user = this.user
         this.authService.isAuthenticated.next(true)
+
+        this.fetchCompetitionInfo(this.competition_id)
+
       }
+    },
+    err=>{
+      this.router.navigate(["/home"])
     })
 
 
   }
 
 
+  convertZtoUTC(zString : string) : string{
+    let utc = new Date(zString)
+    return utc.toUTCString()
+  }
+
   fetchCompetitionInfo(id :  string){
     this.authService.getCompetitionInfo(id as string).subscribe(res=>{
       if(res.status == this.authService.resCode.found){
         this.competitionInfo = res.body as CompetitionInfo
-        //console.log(this.competitionInfo)
       }
     },
     err =>{
       if(err.status == this.authService.resCode.found){
         this.competitionInfo = err.error as CompetitionInfo
-        // this.competitionInfo = {
-        //   id : body.id,
-        //   host_user_id : body.host_user_id,
-        //   title : body.title,
-        //   description : body.description,
-        //   created_on : body.created_on,
-        //   rating : body.rating,
-        //   public : body.public
-        // }
-        console.log(this.competitionInfo)
+        this.competitionInfo.created_on = this.convertZtoUTC(this.competitionInfo.created_on)
         this.toggleVisibility()
         this.toggleVisibility()
+
+        if(this.competitionInfo.host_user_id != this.user.id){
+          this.router.navigate(["/home"])
+        }
+      }
+      else{
+        this.router.navigate(["/home"])
       }
     })
+  }
+
+  refreshCompetitionInfo(){
+    this.fetchCompetitionInfo(this.competition_id)
+    const title = document.getElementById("text_title") as HTMLTextAreaElement
+    const description = document.getElementById("text_description") as HTMLTextAreaElement
+    title.value = this.competitionInfo.title as string
+    description.value = this.competitionInfo.description as string
+
   }
 
   toggleVisibility(){
@@ -91,7 +118,15 @@ export class EditorComponent implements OnInit {
     }
   }
 
-
+  saveChanges(){
+    const title = document.getElementById("text_title") as HTMLTextAreaElement
+    const description = document.getElementById("text_description") as HTMLTextAreaElement
+    this.competitionInfo.title  = title.value
+    this.competitionInfo.description = description.value
+    this.authService.updateCompetitionInfo(this.competitionInfo).subscribe(res=>{
+      console.log(res);
+    })
+  }
 
 
 }

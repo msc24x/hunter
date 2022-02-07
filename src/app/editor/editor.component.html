@@ -4,8 +4,6 @@
 <div class="row_flex" style="margin-top: 16px;">
 
   <div class="vertical_flex">
-    <div id = "title_label">Competition Title</div>
-    <textarea maxlength="120" rows="4" id="text_title">{{this.competitionInfo?.title}}</textarea>
     <div class="vertical_flex">
       <div id ="visbility_controller">
         <div id="id">
@@ -17,24 +15,17 @@
       <div id="created_on">
         {{this.competitionInfo?.created_on}}
       </div>
+    <div id = "title_label">Competition Title</div>
+    <textarea maxlength="120" rows="4" id="text_title">{{this.competitionInfo?.title}}</textarea>
+
     </div>
 
   </div>
 
   <div class="vertical_flex">
     <div id = "desc_label">Competition Description</div>
-      <textarea maxlength="456" rows="7" id="text_description">{{this.competitionInfo?.description}}</textarea>
+      <textarea maxlength="456" rows="8" id="text_description">{{this.competitionInfo?.description}}</textarea>
   </div>
-
-  <div class = "vertical_flex" id="controls">
-    <button>Reset</button>
-    <button>Save Changes</button>
-    <button>Guide</button>
-  </div>
-
-
-
-
 
 </div>
 
@@ -46,4 +37,20 @@
   <li>Q4</li>
 </ul>
 
+<div class="vertical_flex" id="question_editor">
+ <div id="qtitle_label">
+   Title
+ </div>
+  <textarea id = "text_qtitle" maxlength="150" rows="4"></textarea>
 
+ <div id="qstatement_label">
+  Statement
+</div>
+ <textarea id = "text_statement" maxlength="2048" rows="15"></textarea>
+</div>
+
+<div class = "vertical_flex" id="controls">
+  <button (click)="refreshCompetitionInfo()">Reset</button>
+  <button (click)="this.saveChanges()">Save Changes</button>
+  <button>Guide</button>
+</div>
