@@ -9,7 +9,16 @@ export const environment = {
 
 export interface UserInfo{
   id : string, email : string, name : string
+}
 
+export interface CompetitionInfo{
+  id : string,
+  host_user_id : string,
+  title : string,
+  description : string,
+  created_on : string,
+  rating : number,
+  public : boolean
 }
 
 /*

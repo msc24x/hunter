@@ -15,3 +15,12 @@
   text-align: left;
   padding-left: 12px;
 }
+
+@mixin appTextArea {
+  resize: none;
+  border-radius: 24px;
+  font-family: appFont;
+  font-size: 1rem;
+  padding: 8px;
+  border-width: 0px;
+}

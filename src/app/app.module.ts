@@ -12,6 +12,7 @@ import { CompeteComponent } from './compete/compete.component';
 import { CompetitionComponent } from './competition/competition.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateDialogComponent } from './compete/create-dialog/create-dialog.component';
+import { EditorComponent } from './editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CreateDialogComponent } from './compete/create-dialog/create-dialog.com
     SigninDialogComponent,
     CompeteComponent,
     CompetitionComponent,
-    CreateDialogComponent
+    CreateDialogComponent,
+    EditorComponent
 
   ],
   imports: [
