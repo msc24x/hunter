@@ -1,6 +1,6 @@
 import { argon2d, hash, verify } from 'argon2';
 import { randomBytes } from 'crypto';
-import express, { query, Request, Response } from 'express';
+import express, { query, Request, response, Response } from 'express';
 import mysql, { Types } from 'mysql';
 import { AppDB } from './database/interface';
 import { RegisterRequest } from './database/types';
@@ -8,10 +8,20 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { Interface } from 'readline';
 import { rmSync } from 'fs';
+import { request } from 'http';
 const argon2 =  require('argon2');
 
 interface User{
   id : string, email : string, name : string
+}
+interface CompetitionInfo{
+  id : string,
+  host_user_id : string,
+  title : string,
+  description : string,
+  created_on : string,
+  rating : number,
+  public : boolean
 }
 
 const resCode = {
@@ -99,13 +109,21 @@ app.post("/create/competition", (req, res)=>{
   }
 
   authenticate(req, res, (req : Request, res : Response, user : User)=>{
-    dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating) values( ${user.id}, "${title}", NOW() , 0 )  ;`, (err)=>{
+    dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating, public) values( ${user.id}, "${title}", NOW() , 0, false )  ;`, (err)=>{
       if(err){
         console.log(err)
         sendResponse(res, resCode.serverErrror)
         return
       }
-      res.sendStatus(resCode.created)
+      dbConnection.query(`select * from competitions where host_user_id = "${user.id}" order by created_on desc;`, (err, rows)=>{
+        if(err){
+          console.log(err)
+          sendResponse(res, resCode.serverErrror)
+          return
+        }
+
+        res.send({status : resCode.created, id : rows[0].id})
+      })
     })
 
   })
@@ -127,7 +145,7 @@ app.get("/authenticate", (req, res)=>{
 
 })
 
-app.get("/logout", (req, res)=>{
+app.post("/logout", (req, res)=>{
   console.log("logout requested")
   const session_id = req.cookies.session_id
   if(session_id){
@@ -144,6 +162,88 @@ app.get("/logout", (req, res)=>{
     sendResponse(res, resCode.badRequest)
   }
 })
+
+app.put("/competition", (req, res)=>{
+  const competition = req.body as CompetitionInfo
+  if(!competition.host_user_id){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  authenticate(req, res, (req : Request, res : Response, user : User)=>{
+
+    getCompetition(req, res, (competition_db : CompetitionInfo)=>{
+      if(
+            competition_db.host_user_id == competition.host_user_id
+        &&  competition_db.host_user_id == user.id
+        ){
+          console.log(competition)
+          dbConnection.query(`update competitions set title = "${competition.title}", description = "${competition.description}", public = ${competition.public} where id = "${competition.id}" ; `, (err)=>{
+            if(err){
+              sendResponse(res, resCode.serverErrror)
+              return
+            }
+            sendResponse(res, resCode.success)
+          })
+        }
+        else{
+          sendResponse(res, resCode.forbidden)
+          return
+        }
+    }, competition.id)
+
+  })
+})
+
+app.get("/competition", (req, res)=>{
+  getCompetition(req, res, (competition : CompetitionInfo)=>{
+    sendResponseJson(res, resCode.found, competition)
+  })
+})
+
+
+function getCompetition(
+  req : Request ,
+  res : Response,
+  callback : Function = (competition : CompetitionInfo)=>{},
+  competition_id : string = ""){
+    let cid = req.query.competition_id
+
+    if(cid == null && competition_id == ""){
+      sendResponse(res, resCode.badRequest)
+      return
+    }
+    else if(competition_id != ""){
+      cid = competition_id
+    }
+
+    dbConnection.query(`select * from competitions where id = "${cid}" ; `, (err, rows)=>{
+      if(err){
+        console.log(err)
+        sendResponse(res, resCode.serverErrror)
+        return
+      }
+      if(rows.length == 0){
+        sendResponse(res, resCode.notFound)
+        return
+      }
+      const row : CompetitionInfo = rows[0]
+
+      const comp = {
+        id : row.id,
+        host_user_id : row.host_user_id,
+        title : row.title,
+        description : row.description,
+        created_on : row.created_on,
+        rating : row.rating,
+        public : row.public
+      }
+
+      callback(comp)
+
+    })
+
+}
 
 function getUser(req:Request, res : Response, callback : Function = (user : User)=>{}, user_id : string = "") {
 
@@ -181,7 +281,8 @@ function getUser(req:Request, res : Response, callback : Function = (user : User
   }
 }
 
-function authenticate(req: Request, res : Response, callback : Function = (req : Request, res : Response, user :  User)=>{}) {
+function authenticate(req: Request, res : Response,
+  callback : Function = (req : Request, res : Response, user :  User)=>{}) {
 
   const email = req.query.email;
   const password = req.query.password;
@@ -267,7 +368,7 @@ function sendResponseJson(res : Response , code : number , body : {
 {
   id : string,
   title : string
-}) {
+} | CompetitionInfo) {
   res.status(code).send(body);
 }
 
