@@ -20,7 +20,7 @@ div.appBar{
     display: flex;
     align-items: center;
 
-    @media only screen and (max-width : 686px) {
+    @media only screen and (max-width : 686px) and (min-width : 375px) {
       #app_title_full{
         display: none;
       }
@@ -62,7 +62,7 @@ div.appBar{
       border-radius: 8px;
       padding : 4px;
       padding-inline: 16px;
-      margin-left: 24px;
+      margin-left: 12px;
       cursor: pointer;
     }
     #user_email:hover, #logout_btn:hover{
@@ -77,6 +77,18 @@ div.appBar{
   @media only screen and (min-width : 1200px) {
     #navBarBtn{
       visibility: hidden;
+    }
+  }
+
+  @media only screen and (max-width : 375px){
+    #app_title_short{
+      display: none;
+    }
+    #app_title_full{
+      display: none;
+    }
+    #navBarBtn{
+      background-color: colors.$text_black;
     }
   }
 

@@ -9,6 +9,11 @@ import { AuthService } from '../services/auth/auth.service';
 })
 export class AppBarComponent implements OnInit {
 
+  @Input()
+  app_title = "HUNTER_"
+  @Input()
+  app_title_s = "H_"
+
   isAuthenticated : boolean = false
   user : UserInfo = {
     id : "",

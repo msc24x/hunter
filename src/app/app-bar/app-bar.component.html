@@ -1,7 +1,7 @@
 <div class="appBar">
   <div id="app_title">
-    <a id = "app_title_full">HUNTER_</a>
-    <a id = "app_title_short">H_</a>
+    <a id = "app_title_full">{{app_title}}</a>
+    <a id = "app_title_short">{{app_title_s}}</a>
     <button *ngIf="!isAuthenticated && showRegisterBtn" id = "register_btn" routerLink="/register">SIGN UP</button>
     <a *ngIf="isAuthenticated" id = "logout_btn" (click)="sendLogoutRequest()">Logout</a>
     <a *ngIf="isAuthenticated" id= "user_email" >{{user.email}}</a>
