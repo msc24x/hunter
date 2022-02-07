@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, ɵresetJitOptions } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment, UserInfo } from 'src/environments/environment';
+import { CompetitionInfo, environment, UserInfo } from 'src/environments/environment';
 
 
 
@@ -11,11 +11,15 @@ import { environment, UserInfo } from 'src/environments/environment';
 export class AuthService {
 
   isAuthenticated = new BehaviorSubject<boolean>(false)
+
   user : UserInfo = {
     id : "",
     email : "",
     name : ""
   }
+
+
+
   resCode = {
     serverErrror : 503,
     success : 200,
@@ -34,7 +38,8 @@ export class AuthService {
     login : this.apiUrl+"/login",
     authenticate : this.apiUrl+"/authenticate",
     logout : this.apiUrl+"/logout",
-    createCompetition : this.apiUrl+"/create/competition"
+    createCompetition : this.apiUrl+"/create/competition",
+    getCompititionInfo : this.apiUrl+"/competition"
   }
 
   constructor(private http : HttpClient) {
@@ -78,7 +83,7 @@ export class AuthService {
   }
 
   logout(){
-    return this.http.get(this.apiEndpoints.logout,{
+    return this.http.post(this.apiEndpoints.logout,{
       responseType : "json",
       withCredentials : true,
       observe : "response",
@@ -96,7 +101,26 @@ export class AuthService {
       observe : "response",
       title : title
     })
+  }
 
+  updateCompetitionInfo(competition : CompetitionInfo){
+    return this.http.put(this.apiEndpoints.getCompititionInfo, competition, {
+      observe : "response",
+      responseType : "json",
+      withCredentials : true
+    })
+
+  }
+
+  getCompetitionInfo(id :  string){
+    let params = new HttpParams()
+    params = params.set("competition_id", id)
+
+    return this.http.get(this.apiEndpoints.getCompititionInfo,{
+      responseType : "json",
+      observe : "response",
+      params : params
+    })
   }
 
 }
