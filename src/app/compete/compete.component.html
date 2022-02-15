@@ -15,20 +15,9 @@
   </div>
 </div>
 
+<competitions-list
+  [competitionsList]="this.publicCompetitions"
+  heading="Public Competitions"
+  route="hunt"
+></competitions-list>
 
-<div id = "public_competitions">
-  <p class = "heading">Public Competitons</p>
-
-  <ul id="list_public_competitions">
-    <li *ngFor="let com of coms">
-      <div class = "competition_card" routerLink="/hunt/{{com.id}}">
-        <a id = "c_title">{{com.title}}</a>
-        <a id = "c_date_created">Created on : {{com.dateCreated}}</a>
-        <br>
-        <p id = "c_about">{{com.about}}</p>
-      </div>
-    </li>
-    <li><div id="list_end">No more public competitions available!</div></li>
-  </ul>
-
-</div>

@@ -1,0 +1,15 @@
+<div id = "competitions_list">
+  <p class = "heading">{{this.heading}}</p>
+
+  <ul id="competitions_ol">
+    <li *ngFor="let com of this.competitionsList">
+      <div class = "competition_card" routerLink="/{{this.route}}/{{com.id}}">
+        <a id = "c_title">{{com.title}}</a>
+        <a id = "c_date_created">Created {{com.created_on | date}} <b>by {{com.host_user_id}}</b></a>
+        <br>
+        <p id = "c_about">{{com.description}}</p>
+      </div>
+    </li>
+    <li><div id="list_end">No more {{this.heading}} available!</div></li>
+  </ul>
+</div>
