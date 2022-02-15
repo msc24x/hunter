@@ -2,38 +2,10 @@ import { argon2d, hash, verify } from 'argon2';
 import { randomBytes } from 'crypto';
 import express, { query, Request, response, Response } from 'express';
 import mysql, { Types } from 'mysql';
-import { AppDB } from './database/interface';
-import { RegisterRequest } from './database/types';
+import { CompetitionInfo, RegisterRequest, resCode, UserInfo } from './database/types';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import { Interface } from 'readline';
-import { rmSync } from 'fs';
-import { request } from 'http';
 const argon2 =  require('argon2');
-
-interface User{
-  id : string, email : string, name : string
-}
-interface CompetitionInfo{
-  id : string,
-  host_user_id : string,
-  title : string,
-  description : string,
-  created_on : string,
-  rating : number,
-  public : boolean
-}
-
-const resCode = {
-  serverErrror : 503,
-  success : 200,
-  accepted : 202,
-  created : 201,
-  badRequest : 400,
-  forbidden : 403,
-  notFound : 404,
-  found  : 302
-}
 
 const app = express();
 app.use(cookieParser())
@@ -78,7 +50,7 @@ app.get("/register", (req, res) =>{
         return;
       }
       if(rows.length != 0){
-        sendResponse(res, resCode.forbidden, "User already exists")
+        sendResponse(res, resCode.forbidden, "UserInfo already exists")
         return;
       }
 
@@ -88,7 +60,7 @@ app.get("/register", (req, res) =>{
           sendResponse(res, resCode.serverErrror);
           return
         }
-        authenticate(req, res, (req : Request, res : Response, user : User)=>{
+        authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
           sendResponseJson(res, resCode.accepted, user);
           console.log("Authentication successfull")
         })
@@ -98,47 +70,40 @@ app.get("/register", (req, res) =>{
 
 })
 
-app.post("/create/competition", (req, res)=>{
-
-  const title = req.body.title;
-
-  if(title == null || (title as string).length > 50){
-    console.log(title)
-    sendResponse(res, resCode.badRequest)
-    return;
-  }
-
-  authenticate(req, res, (req : Request, res : Response, user : User)=>{
-    dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating, public) values( ${user.id}, "${title}", NOW() , 0, false )  ;`, (err)=>{
-      if(err){
-        console.log(err)
-        sendResponse(res, resCode.serverErrror)
-        return
-      }
-      dbConnection.query(`select * from competitions where host_user_id = "${user.id}" order by created_on desc;`, (err, rows)=>{
-        if(err){
-          console.log(err)
-          sendResponse(res, resCode.serverErrror)
-          return
-        }
-
-        res.send({status : resCode.created, id : rows[0].id})
-      })
-    })
-
-  })
-
-})
 
 app.get("/user", (req, res)=>{
-  getUser(req, res, (user : User)=>{
+  getUser(req, res, (user : UserInfo)=>{
     sendResponseJson(res, resCode.found, user);
   })
 })
 
-app.get("/authenticate", (req, res)=>{
+app.put("/user", (req, res)=>{
 
-  authenticate(req, res, (req : Request, res : Response, user : User)=>{
+  const updateUser = req.body as UserInfo
+
+  if(updateUser.id == null){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
+    if(user.id != updateUser.id){
+      sendResponse(res, resCode.forbidden)
+      return
+    }
+    dbConnection.query(` update users set name = "${updateUser.name}" where id = "${user.id}" ; `,(err)=>{
+      if(err){
+        console.log(err)
+        sendResponse(res, resCode.serverErrror);
+        return
+      }
+      sendResponse(res, resCode.success);
+    })
+  })
+})
+
+app.get("/authenticate", (req, res)=>{
+  authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
     sendResponseJson(res, resCode.accepted, user);
     console.log("Authentication successfull")
   })
@@ -163,14 +128,46 @@ app.post("/logout", (req, res)=>{
   }
 })
 
+app.post("/competition", (req, res)=>{
+
+  const title = req.body.title;
+
+  if(title == null || (title as string).length > 120){
+    console.log(title)
+    sendResponse(res, resCode.badRequest)
+    return;
+  }
+
+  authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
+    dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating, public) values( ${user.id}, "${title}", NOW() , 0, false )  ;`, (err)=>{
+      if(err){
+        console.log(err)
+        sendResponse(res, resCode.serverErrror)
+        return
+      }
+      dbConnection.query(`select * from competitions where host_user_id = "${user.id}" order by created_on desc;`, (err, rows)=>{
+        if(err){
+          console.log(err)
+          sendResponse(res, resCode.serverErrror)
+          return
+        }
+
+        res.send({status : resCode.created, id : rows[0].id})
+      })
+    })
+
+  })
+
+})
+
 app.put("/competition", (req, res)=>{
   const competition = req.body as CompetitionInfo
-  if(!competition.host_user_id){
+  if(!competition.host_user_id || competition.title.length > 120 || competition.description.length > 456){
     sendResponse(res, resCode.badRequest)
     return
   }
 
-  authenticate(req, res, (req : Request, res : Response, user : User)=>{
+  authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
 
     getCompetition(req, res, (competition_db : CompetitionInfo)=>{
       if(
@@ -201,6 +198,92 @@ app.get("/competition", (req, res)=>{
   })
 })
 
+app.get("/competitions", (req, res)=>{
+
+  console.log("get competitions requested")
+
+  const params = {
+    id : req.query.id,
+    host_user_id : req.query.host_user_id
+  }
+  let isPublic = true
+  let dateOrder : 1 | 0| -1 = 0
+  if(req.query.public != "false"){
+    isPublic = false
+  }
+  if(req.query.dateOrder){
+    if(req.query.dateOrder == "1"){
+      dateOrder = 1
+    }
+    else if(req.query.dateOrder == "0"){
+      dateOrder = 0
+    }
+  }
+  let callback = (competitions : Array<CompetitionInfo>)=>{
+    sendResponseJson(res, resCode.found, competitions)
+    return 0
+  }
+  let errCallback = ()=>{
+    sendResponse(res, resCode.serverErrror)
+    return 0
+  }
+
+  if(!isPublic && params.host_user_id != null){
+    authenticate(req, res, (req : Request, res : Response, user :  UserInfo)=>{
+      if(user.id != params.host_user_id){
+        sendResponse(res, resCode.forbidden)
+        return
+      }
+      getCompetitions(params, dateOrder, isPublic, callback, errCallback)
+    })
+  }
+  else if(!isPublic){
+    isPublic = true
+    getCompetitions(params, dateOrder, isPublic, callback, errCallback)
+  }
+
+})
+
+
+function getCompetitions(
+  params : any,
+  dateOrder : 1 | 0 | -1,
+  isPublic : boolean,
+  callback : (competitions : Array<CompetitionInfo>)=>{},
+  errCallback : ()=>{}
+){
+
+  let query = "select * from competitions where true = true "
+  if(params.id != null){
+    query += `and id = "${params.id}" `
+  }
+  if(params.host_user_id != null){
+    query += `and host_user_id = "${params.host_user_id}" `
+  }
+  if(isPublic){
+    query += `and public = ${isPublic} `
+  }
+  switch(dateOrder){
+    case 1:
+      query += `order by created_on `
+      break
+    case -1:
+      query += `order by created_on desc`
+      break
+  }
+  query += ";"
+  console.log(query)
+
+  dbConnection.query(query, (err, rows)=>{
+    if(err){
+      console.log(err)
+      errCallback()
+      return
+    }
+    callback(rows as Array<CompetitionInfo>);
+  })
+
+}
 
 function getCompetition(
   req : Request ,
@@ -245,7 +328,7 @@ function getCompetition(
 
 }
 
-function getUser(req:Request, res : Response, callback : Function = (user : User)=>{}, user_id : string = "") {
+function getUser(req:Request, res : Response, callback : Function = (user : UserInfo)=>{}, user_id : string = "") {
 
   let id = req.query.id
   if(user_id != ""){
@@ -282,7 +365,7 @@ function getUser(req:Request, res : Response, callback : Function = (user : User
 }
 
 function authenticate(req: Request, res : Response,
-  callback : Function = (req : Request, res : Response, user :  User)=>{}) {
+  callback : Function = (req : Request, res : Response, user :  UserInfo)=>{}) {
 
   const email = req.query.email;
   const password = req.query.password;
@@ -297,7 +380,7 @@ function authenticate(req: Request, res : Response,
         return
       }
       if(rows.length == 0){
-        sendResponse(res, resCode.forbidden, "User does not exists")
+        sendResponse(res, resCode.forbidden, "UserInfo does not exists")
         return
       }
 
@@ -342,7 +425,7 @@ function authenticate(req: Request, res : Response,
         return;
       }
 
-      getUser(req, res, (user : User)=>{
+      getUser(req, res, (user : UserInfo)=>{
         callback(req, res, user);
       },
       rows[0].user_id)
@@ -354,12 +437,12 @@ function authenticate(req: Request, res : Response,
 
 }
 
-function sendResponse(res : Response , code : number ,msg : string = "") {
+function sendResponse(res : any , code : number ,msg : string = "") {
   console.log("sending rescode ", code)
   res.status(code).send(msg);
 }
 
-function sendResponseJson(res : Response , code : number , body : {
+function sendResponseJson(res : any , code : number , body : {
   id : string,
   email : string,
   name : string,
@@ -368,7 +451,7 @@ function sendResponseJson(res : Response , code : number , body : {
 {
   id : string,
   title : string
-} | CompetitionInfo) {
+} | CompetitionInfo | Array<CompetitionInfo>) {
   res.status(code).send(body);
 }
 
