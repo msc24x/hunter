@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, ɵresetJitOptions } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CompetitionInfo, environment, UserInfo } from 'src/environments/environment';
+import { apiEndpoints, CompetitionInfo, environment, UserInfo } from 'src/environments/environment';
 
 
 
@@ -18,29 +18,7 @@ export class AuthService {
     name : ""
   }
 
-
-
-  resCode = {
-    serverErrror : 503,
-    success : 200,
-    accepted : 202,
-    created : 201,
-    badRequest : 400,
-    forbidden : 403,
-    notFound : 404,
-    found  : 302
-  }
-
   apiUrl = environment.apiUrl;
-
-  apiEndpoints = {
-    register : this.apiUrl+"/register",
-    login : this.apiUrl+"/login",
-    authenticate : this.apiUrl+"/authenticate",
-    logout : this.apiUrl+"/logout",
-    createCompetition : this.apiUrl+"/create/competition",
-    getCompititionInfo : this.apiUrl+"/competition"
-  }
 
   constructor(private http : HttpClient) {
    }
@@ -51,7 +29,7 @@ export class AuthService {
     params = params.set("email", email);
     params = params.set("password", password);
 
-    return this.http.get(this.apiEndpoints.register, {
+    return this.http.get(apiEndpoints.register, {
       responseType : "json",
       withCredentials : true,
       observe : "response",
@@ -66,7 +44,7 @@ export class AuthService {
     params = params.set("password", password);
     params = params.set("remember", remember);
 
-    return this.http.get(this.apiEndpoints.authenticate, {
+    return this.http.get(apiEndpoints.authenticate, {
       responseType : "json",
       withCredentials : true,
       observe : "response",
@@ -75,7 +53,7 @@ export class AuthService {
   }
 
   authenticate_credentials(){
-    return this.http.get(this.apiEndpoints.authenticate, {
+    return this.http.get(apiEndpoints.authenticate, {
       responseType : "json",
       withCredentials : true,
       observe : "response",
@@ -83,43 +61,10 @@ export class AuthService {
   }
 
   logout(){
-    return this.http.post(this.apiEndpoints.logout,{
+    return this.http.post(apiEndpoints.logout,{
       responseType : "json",
       withCredentials : true,
       observe : "response",
-    })
-  }
-
-  createCompetition(title : string){
-    if(!this.isAuthenticated){
-      return
-    }
-
-    return this.http.post(this.apiEndpoints.createCompetition, {
-      responseType : "json",
-      withCredentials : true,
-      observe : "response",
-      title : title
-    })
-  }
-
-  updateCompetitionInfo(competition : CompetitionInfo){
-    return this.http.put(this.apiEndpoints.getCompititionInfo, competition, {
-      observe : "response",
-      responseType : "json",
-      withCredentials : true
-    })
-
-  }
-
-  getCompetitionInfo(id :  string){
-    let params = new HttpParams()
-    params = params.set("competition_id", id)
-
-    return this.http.get(this.apiEndpoints.getCompititionInfo,{
-      responseType : "json",
-      observe : "response",
-      params : params
     })
   }
 

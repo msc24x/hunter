@@ -21,6 +21,26 @@ export interface CompetitionInfo{
   public : boolean
 }
 
+export const apiEndpoints = {
+  register : environment.apiUrl+"/register",
+  login : environment.apiUrl+"/login",
+  authenticate : environment.apiUrl+"/authenticate",
+  logout : environment.apiUrl+"/logout",
+  competition : environment.apiUrl+"/competition",
+  getCompetitions : environment.apiUrl+"/competitions"
+}
+
+export const resCode = {
+  serverErrror : 503,
+  success : 200,
+  accepted : 202,
+  created : 201,
+  badRequest : 400,
+  forbidden : 403,
+  notFound : 404,
+  found  : 302
+}
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
