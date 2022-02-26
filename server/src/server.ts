@@ -337,15 +337,16 @@ app.post("/execute", (req, res)=>{
 
   if(!isValidExecRequest(hunterExecutable)){
     sendResponse(res, resCode.badRequest)
+    return
   }
   console.log(getFileName(hunterExecutable))
-  writeFile(`src/database/files/c${getFileName(hunterExecutable)}.${hunterExecutable.solution.lang}`, hunterExecutable.solution.code, {flag:"w+"}, (err)=>{
+  writeFile(`src/database/files/c${getFileName(hunterExecutable)}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w+"}, (err)=>{
     if(err){
       console.log(err)
       sendResponse(res, resCode.serverErrror)
       return
     }
-    exec(`D:/projects/RedocX/Hunter/server/src/runTests.bat "${getFileName(hunterExecutable)}" "${hunterExecutable.solution.lang}"`, (error, stdout, stderr)=>{
+    exec(`D:/projects/RedocX/Hunter/server/src/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang}`, (error, stdout, stderr)=>{
       if(error){
         console.log(stderr)
         sendResponse(res, resCode.serverErrror)
