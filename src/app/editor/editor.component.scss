@@ -7,8 +7,10 @@
 #created_on{
   background-color: whitesmoke;
   font-family: appFont;
+  font-size: 0.8rem;
   width: fit-content;
   padding : 10px;
+  margin-inline: auto;
   border-radius: 0px 0px 24px 24px ;
 }
 
@@ -62,7 +64,7 @@
 }
 
 
-#title_label, #desc_label{
+#title_label, #desc_label, #duration_label, #schedule_label{
   font-family: appFont;
   font-size: 1.2rem;
   text-align: left;
@@ -71,6 +73,12 @@
   margin-top: 6px;
   color: colors.$text_black;
 }
+
+#competition_duration, #competition_schedule{
+  @include appTextArea;
+  font-size: 1rem;
+}
+
 
 #text_title{
   @include appTextArea();
@@ -85,33 +93,42 @@
   margin-top: 4px;
 }
 
+
 @media only screen and (max-width : 556px) {
-  #text_description{
-    width: 246px;
+  #text_description, #text_title{
+    width: 320px;
   }
 
 }
 
 #controls{
+  position: fixed;
+  bottom: 0px;
+  left: auto;
+  right: auto;
   justify-content: space-around;
   align-items: center;
   width: 100%;
+  background-color: rgba(0, 0, 0, 0.295);
+  backdrop-filter: blur(8px);
 
   button{
-    border-radius: 24px;
     font-family: appFont;
+    font-weight: normal;
+    color: colors.$text_black;
     font-size: 1rem;
-    padding: 8px;
+    background-color: transparent;
     border-width: 0px;
-    margin-top: 4px;
     padding-inline: 16px;
     min-width: 156px;
+    margin: 8px;
+    //border: solid colors.$text_white;
+    //border-width: 1px;//0px 1px 0px 1px;
+  }
+  button:hover{
+    transform: scale(1.1);
   }
 
-  button:hover{
-    background-color: colors.$app_c;
-    color: white;
-  }
 }
 
 #questions_list{
@@ -124,9 +141,7 @@
   margin-inline: 7%;
   scroll-behavior: smooth;
 
-
   div{
-
     background-color: white;
     border-radius: 12px;
     padding : 16px;
@@ -135,6 +150,16 @@
     text-align: center;
     margin-right: 16px;
     cursor: default;
+  }
+
+  div#create_question_btn{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
   }
 
   li{
@@ -148,7 +173,7 @@
     cursor: pointer;
   }
 
-  li:hover{
+  li:hover, div#create_question_btn:hover{
     background-color: colors.$text_black;
     color : colors.$text_white;
   }
@@ -170,6 +195,34 @@
 #text_qtitle, #text_statement{
   @include appTextArea;
   margin-inline: 7%;
+}
+
+label.file_input{
+  font-family: appFont;
+  font-weight: bold;
+  color: colors.$text_black;
+  background-color: colors.$dim_white;
+  border-radius: 24px;
+  width: fit-content;
+  padding : 12px;
+  margin : 4px;
+  cursor: default;
+}
+label.file_input:hover{
+  background-color: colors.$sweet_white;
+}
+
+input.file_input{
+  display: none;
+}
+
+.info_text{
+  text-align : center;
+  font-family: appFont;
+  color : white;
+  font-style: italic;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 body{
