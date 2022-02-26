@@ -13,6 +13,9 @@ import { CompetitionComponent } from './competition/competition.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateDialogComponent } from './compete/create-dialog/create-dialog.component';
 import { EditorComponent } from './editor/editor.component';
+import { EditorMenuComponent } from './editor-menu/editor-menu.component';
+import { CompetitionsListComponent } from './compete/competitions-list/competitions-list.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import { EditorComponent } from './editor/editor.component';
     CompeteComponent,
     CompetitionComponent,
     CreateDialogComponent,
-    EditorComponent
+    EditorComponent,
+    EditorMenuComponent,
+    CompetitionsListComponent
 
   ],
   imports: [
@@ -33,7 +38,7 @@ import { EditorComponent } from './editor/editor.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
