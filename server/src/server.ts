@@ -2,9 +2,12 @@ import { argon2d, hash, verify } from 'argon2';
 import { randomBytes } from 'crypto';
 import express, { query, Request, response, Response } from 'express';
 import mysql, { Types } from 'mysql';
-import { CompetitionInfo, RegisterRequest, resCode, UserInfo } from './database/types';
+import { CompetitionInfo, HunterExecutable, QuestionInfo, RegisterRequest, resCode, UserInfo } from './database/types';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import { send } from 'process';
+import { exec } from 'child_process';
+import { writeFile } from 'fs';
 const argon2 =  require('argon2');
 
 const app = express();
@@ -175,7 +178,7 @@ app.put("/competition", (req, res)=>{
         &&  competition_db.host_user_id == user.id
         ){
           console.log(competition)
-          dbConnection.query(`update competitions set title = "${competition.title}", description = "${competition.description}", public = ${competition.public} where id = "${competition.id}" ; `, (err)=>{
+          dbConnection.query(`update competitions set title = "${competition.title}", description = "${competition.description}", public = ${competition.public}, duration = "${competition.duration}", start_schedule = "${competition.start_schedule}" where id = "${competition.id}" ; `, (err)=>{
             if(err){
               sendResponse(res, resCode.serverErrror)
               return
@@ -243,6 +246,161 @@ app.get("/competitions", (req, res)=>{
   }
 
 })
+
+app.post("/question", (req, res)=>{
+  authenticate(req, res, (req : Request, res : Response, user :  UserInfo)=>{
+    getCompetition(req, res, (competition : CompetitionInfo)=>{
+      if(competition.host_user_id != user.id){
+        sendResponse(res, resCode.forbidden);
+        return
+      }
+      addQuestion(competition.id, (question_id : string)=>{
+        sendResponse(res, resCode.success)
+      },
+      (err : number)=>{
+        sendResponse(res, err)
+      })
+    }, req.body.competition_id as string)
+  })
+})
+
+app.get("/question", (req, res)=>{
+
+  var competition_id : string | null = req.query.competition_id as string
+  var id : string | null = req.query.id  as string
+
+  if(competition_id == null && id == null){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  authenticate(req, res,  (req : Request, res : Response, user :  UserInfo)=>{
+    getQuestions(
+      {
+        competition_id : competition_id,
+        id : id
+      },
+      (questions : Array<QuestionInfo>)=>{
+        sendResponseJson(res, resCode.success, questions)
+      },
+      (err : number)=>{
+        sendResponse(res, err)
+      }
+    )
+
+  })
+
+})
+
+function isValidExecRequest(exec : HunterExecutable) : boolean{
+
+  const langs = ["c", "cpp", "py", "js"]
+
+  try {
+    if(
+      exec.for.competition_id &&
+      exec.for.question_id &&
+      exec.solution.code &&
+      langs.includes(exec.solution.lang)
+    ) return true
+
+  } catch (error) {
+    return false
+  }
+
+  return false;
+}
+
+app.post("/upload", (req, res)=>{
+  const fileType = req.body.fileType
+  const file = req.body.file
+
+  if(!file || !fileType){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+  if(["tests", "sols".includes(fileType as string)]){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  sendResponse(res, resCode.serverErrror, "not implemented")
+
+})
+
+function getFileName(hunterExecutable : HunterExecutable){
+  return `${hunterExecutable.for.competition_id}${hunterExecutable.for.question_id}`
+}
+
+app.post("/execute", (req, res)=>{
+  const hunterExecutable = req.body as HunterExecutable
+
+  if(!isValidExecRequest(hunterExecutable)){
+    sendResponse(res, resCode.badRequest)
+  }
+  console.log(getFileName(hunterExecutable))
+  writeFile(`src/database/files/c${getFileName(hunterExecutable)}.${hunterExecutable.solution.lang}`, hunterExecutable.solution.code, {flag:"w+"}, (err)=>{
+    if(err){
+      console.log(err)
+      sendResponse(res, resCode.serverErrror)
+      return
+    }
+    exec(`D:/projects/RedocX/Hunter/server/src/runTests.bat "${getFileName(hunterExecutable)}" "${hunterExecutable.solution.lang}"`, (error, stdout, stderr)=>{
+      if(error){
+        console.log(stderr)
+        sendResponse(res, resCode.serverErrror)
+        return
+      }
+      sendResponse(res, resCode.success, stdout)
+    })
+  } )
+
+
+
+
+
+})
+
+
+function getQuestions(
+  params : {competition_id : string | null, id : string | null },
+  callback : (questions : Array<QuestionInfo>)=>any,
+  errCallback : (err: number)=>any
+){
+  let query = "select * from questions where true = true "
+  if(params.competition_id != null){
+    query += `and competition_id = "${params.competition_id}" `
+  }
+  if(params.id != null){
+    query += `and id = "${params.id}" `
+  }
+  query += ";"
+
+  dbConnection.query(query, (err, rows)=>{
+    if(err){
+      console.log(err)
+      errCallback(resCode.serverErrror)
+      return
+    }
+
+    let questions : Array<QuestionInfo> = []
+    for(const row of rows){
+      questions.push(
+        {
+          id : row.id,
+          competition_id : row.competition_id,
+          title : row.title,
+          statement : row.statement,
+          created_on : row.date_created,
+          points : row.points,
+          solutions_id : row.solutions_id,
+          tests_id : row.tests_id
+        } as QuestionInfo
+      )
+    }
+    callback(questions as  Array<QuestionInfo>)
+  })
+}
 
 
 function getCompetitions(
@@ -319,8 +477,10 @@ function getCompetition(
         description : row.description,
         created_on : row.created_on,
         rating : row.rating,
-        public : row.public
-      }
+        public : row.public,
+        duration : row.duration,
+        start_schedule : row.start_schedule
+      } as CompetitionInfo
 
       callback(comp)
 
@@ -451,10 +611,29 @@ function sendResponseJson(res : any , code : number , body : {
 {
   id : string,
   title : string
-} | CompetitionInfo | Array<CompetitionInfo>) {
+} | CompetitionInfo | Array<CompetitionInfo> | any) {
   res.status(code).send(body);
 }
 
+function addQuestion(
+    competition_id : string,
+    callback : (question_id : string)=>any,
+    errCallback : (err: number)=>any
+  ){
+  dbConnection.query(` insert into questions (competition_id, date_created) values("${competition_id}", NOW()) ; `,err=>{
+    if(err){
+      errCallback(resCode.serverErrror)
+      return
+    }
+    dbConnection.query(` select * from questions where competition_id = "${competition_id}" order by date_created ;`, (err, rows)=>{
+      if(err || rows.length == 0){
+        errCallback(resCode.serverErrror)
+        return
+      }
+      callback(rows[0].id)
+    })
+  })
+}
 
 
 app.listen(port, ()=>{
