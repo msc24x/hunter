@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { apiEndpoints, CompetitionInfo } from 'src/environments/environment';
+import { apiEndpoints, CompetitionInfo, QuestionInfo } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
@@ -10,16 +10,39 @@ export class CompetitionsDataService {
 
   constructor(private authService : AuthService, private http : HttpClient) { }
 
+  addQuestion(competition_id : string){
+    return this.http.post(apiEndpoints.question,{competition_id : competition_id},{
+      withCredentials : true,
+      observe : "response",
+    })
+  }
+
+  getQuestions(
+    params : {competition_id? : string, id? : string }
+  ){
+    let httpParams = new HttpParams()
+    if(params.competition_id != null)
+      httpParams = httpParams.set("competition_id", params.competition_id)
+    if(params.id != null)
+      httpParams = httpParams.set("id", params.id)
+
+    return this.http.get<Array<QuestionInfo>>(apiEndpoints.question, {
+      responseType : 'json',
+      withCredentials : true,
+      observe : "response",
+      params : httpParams
+    })
+  }
+
   createCompetition(title : string){
     if(!this.authService.isAuthenticated){
       return
     }
 
-    return this.http.post(apiEndpoints.competition, {
+    return this.http.post(apiEndpoints.competition, {title : title}, {
       responseType : "json",
       withCredentials : true,
       observe : "response",
-      title : title
     })
   }
 

@@ -18,7 +18,9 @@ export interface CompetitionInfo{
   description : string,
   created_on : string,
   rating : number,
-  public : boolean
+  public : boolean,
+  duration : number,
+  start_schedule : string
 }
 
 export const apiEndpoints = {
@@ -27,7 +29,8 @@ export const apiEndpoints = {
   authenticate : environment.apiUrl+"/authenticate",
   logout : environment.apiUrl+"/logout",
   competition : environment.apiUrl+"/competition",
-  getCompetitions : environment.apiUrl+"/competitions"
+  getCompetitions : environment.apiUrl+"/competitions",
+  question : environment.apiUrl+"/question"
 }
 
 export const resCode = {
@@ -40,7 +43,16 @@ export const resCode = {
   notFound : 404,
   found  : 302
 }
-
+export interface QuestionInfo{
+  id : string,
+  competition_id : string,
+  title : string,
+  statement : string,
+  created_on : string,
+  tests_id : string,
+  solutions_id : string,
+  points : number,
+}
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
