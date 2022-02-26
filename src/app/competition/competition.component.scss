@@ -1,0 +1,15 @@
+@use "../../assets/colors";
+@use "../../assets/mixins" as *;
+@use "../../assets/fonts";
+
+#editor{
+  height: 456px;
+  font-size: 1rem;
+  margin-inline: 7%;
+}
+
+@media screen and (max-width : 1024px) {
+  #editor{
+    margin-inline: 0px;
+  }
+}
