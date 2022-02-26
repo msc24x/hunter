@@ -1,11 +1,15 @@
+import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { HtmlParser } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { time } from 'console';
 import { userInfo } from 'os';
 import { timestamp } from 'rxjs';
-import { CompetitionInfo, UserInfo } from 'src/environments/environment';
+import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../services/auth/auth.service';
+import { CompetitionsDataService } from '../services/data/competitions-data.service';
+import { convert } from '../utils/utils';
 
 @Component({
   selector: 'editor',
@@ -22,8 +26,11 @@ export class EditorComponent implements OnInit {
     host_user_id : "",
     description : "",
     public : false,
-    rating : 0
+    rating : 0,
+    duration : 0,
+    start_schedule : ""
   } as CompetitionInfo
+  competitionQuestions : Array<QuestionInfo> = []
 
   isAuthenticated : boolean = false
   user = {
@@ -32,7 +39,13 @@ export class EditorComponent implements OnInit {
     name : ""
   }
 
-  constructor(private router :  Router, private activatedRoute : ActivatedRoute, private authService : AuthService) {
+  constructor(
+    private router :  Router,
+    private activatedRoute : ActivatedRoute,
+    private authService : AuthService,
+    private competitionsData : CompetitionsDataService,
+    private datePipe : DatePipe
+  ) {
 
     this.competition_id =  activatedRoute.snapshot.paramMap.get("competition_id") as string
 
@@ -51,8 +64,7 @@ export class EditorComponent implements OnInit {
         this.user = body
         this.authService.user = this.user
         this.authService.isAuthenticated.next(true)
-
-        this.fetchCompetitionInfo(this.competition_id)
+        this.fetchCompetitionInfo()
 
       }
     },
@@ -63,28 +75,39 @@ export class EditorComponent implements OnInit {
 
   }
 
-
-  convertZtoUTC(zString : string) : string{
-    let utc = new Date(zString)
-    return utc.toUTCString()
+  addQuestion(){
+    this.competitionsData.addQuestion(this.competitionInfo.id).subscribe(res=>{
+      this.fetchQuestions()
+    })
   }
 
-  fetchCompetitionInfo(id :  string){
-    this.authService.getCompetitionInfo(id as string).subscribe(res=>{
-      if(res.status == this.authService.resCode.found){
+  fetchQuestions(){
+    this.competitionsData.getQuestions({competition_id : this.competitionInfo.id as string}).subscribe(res=>{
+      if(res.status == resCode.success){
+        if(res.body)
+          this.competitionQuestions = res.body
+      }
+    })
+  }
+
+  fetchCompetitionInfo(){
+    this.competitionsData.getCompetitionInfo(this.competition_id as string).subscribe(res=>{
+      if(res.status == resCode.found){
         this.competitionInfo = res.body as CompetitionInfo
       }
     },
     err =>{
-      if(err.status == this.authService.resCode.found){
+      if(err.status == resCode.found){
         this.competitionInfo = err.error as CompetitionInfo
-        this.competitionInfo.created_on = this.convertZtoUTC(this.competitionInfo.created_on)
         this.toggleVisibility()
         this.toggleVisibility()
+
 
         if(this.competitionInfo.host_user_id != this.user.id){
           this.router.navigate(["/home"])
         }
+
+        this.fetchQuestions()
       }
       else{
         this.router.navigate(["/home"])
@@ -93,12 +116,15 @@ export class EditorComponent implements OnInit {
   }
 
   refreshCompetitionInfo(){
-    this.fetchCompetitionInfo(this.competition_id)
+    this.fetchCompetitionInfo()
     const title = document.getElementById("text_title") as HTMLTextAreaElement
     const description = document.getElementById("text_description") as HTMLTextAreaElement
+    const duration = document.getElementById("competition_duration") as HTMLInputElement
+    const schedule = document.getElementById("competition_schedule") as HTMLInputElement
+    duration.value = this.competitionInfo.duration as unknown as string
+    schedule.value = this.datePipe.transform(this.competitionInfo.start_schedule, "yyyy-MM-ddThh:mm")!
     title.value = this.competitionInfo.title as string
     description.value = this.competitionInfo.description as string
-
   }
 
   toggleVisibility(){
@@ -121,9 +147,13 @@ export class EditorComponent implements OnInit {
   saveChanges(){
     const title = document.getElementById("text_title") as HTMLTextAreaElement
     const description = document.getElementById("text_description") as HTMLTextAreaElement
+    const duration = document.getElementById("competition_duration") as HTMLInputElement
+    const schedule = document.getElementById("competition_schedule") as HTMLInputElement
     this.competitionInfo.title  = title.value
     this.competitionInfo.description = description.value
-    this.authService.updateCompetitionInfo(this.competitionInfo).subscribe(res=>{
+    this.competitionInfo.duration = duration.value as unknown as number
+    this.competitionInfo.start_schedule = schedule.value
+    this.competitionsData.updateCompetitionInfo(this.competitionInfo).subscribe(res=>{
       console.log(res);
     })
   }

@@ -3,54 +3,74 @@
 
 <div class="row_flex" style="margin-top: 16px;">
 
-  <div class="vertical_flex">
-    <div class="vertical_flex">
-      <div id ="visbility_controller">
-        <div id="id">
-          Code : <b>{{competition_id}}</b>
-        </div>
-        <div id="rating">Rating : <b>{{this.competitionInfo?.rating}}</b></div>
-        <div id="visibility" (click)="toggleVisibility()">PUBLIC</div>
-      </div>
-      <div id="created_on">
-        {{this.competitionInfo?.created_on}}
-      </div>
-    <div id = "title_label">Competition Title</div>
-    <textarea maxlength="120" rows="4" id="text_title">{{this.competitionInfo?.title}}</textarea>
+  <div class="vertical_flex" style="align-items: stretch;">
 
+    <div id="duration_label">Duration (minutes)</div>
+    <input type="number" min="0" id = "competition_duration"[value]="competitionInfo.duration" >
+
+    <div id="schedule_label">Set Live on schedule</div>
+    <input type="datetime-local" id = "competition_schedule" [value]="competitionInfo.start_schedule | date : 'yyyy-MM-ddThh:mm'">
+
+    <div id ="visbility_controller">
+      <div id="id">
+        Code : <b>{{competition_id}}</b>
+      </div>
+      <div id="rating">Rating : <b>{{this.competitionInfo?.rating}}</b></div>
+      <div id="visibility" (click)="toggleVisibility()">PUBLIC</div>
+    </div>
+
+    <div id="created_on">
+      {{this.competitionInfo.created_on | date : 'medium'}}
     </div>
 
   </div>
 
+
+  <div class="vertical_flex">
+    <div class="vertical_flex">
+      <div id = "title_label">Competition Title</div>
+      <textarea maxlength="120" rows="7" id="text_title">{{this.competitionInfo?.title}}</textarea>
+    </div>
+  </div>
+
   <div class="vertical_flex">
     <div id = "desc_label">Competition Description</div>
-      <textarea maxlength="456" rows="8" id="text_description">{{this.competitionInfo?.description}}</textarea>
+      <textarea maxlength="456" rows="7" id="text_description">{{this.competitionInfo?.description}}</textarea>
   </div>
 
 </div>
 
 <ul id="questions_list">
   <div>Questions</div>
-  <li>Q1</li>
-  <li>Q2</li>
-  <li>Q3</li>
-  <li>Q4</li>
+  <li *ngFor="let question of this.competitionQuestions">Q{{this.competitionQuestions.indexOf(question)}}</li>
+  <div id="create_question_btn" (click)="addQuestion()">+</div>
 </ul>
 
 <div class="vertical_flex" id="question_editor">
  <div id="qtitle_label">
-   Title
+   Question Title
  </div>
   <textarea id = "text_qtitle" maxlength="150" rows="4"></textarea>
 
  <div id="qstatement_label">
-  Statement
-</div>
+  Question Statement
+  </div>
  <textarea id = "text_statement" maxlength="2048" rows="15"></textarea>
+
+ <div class="row_flex">
+  <label class = "file_input" for="testcases_file">Upload test cases test file...</label>
+  <input class = "file_input" id = "testcases_file" type="file" >
+  <label class = "file_input" for="solutions_file">Upload test solutions file...</label>
+  <input class = "file_input" id = "solutions_file" type="file">
+
+ </div>
+
+ <div class = "info_text">Tip : Reading the guide is recommended for smooth competition hosting</div>
+
 </div>
 
-<div class = "vertical_flex" id="controls">
-  <button (click)="refreshCompetitionInfo()">Reset</button>
-  <button (click)="this.saveChanges()">Save Changes</button>
-  <button>Guide</button>
+<div class = "row_flex" id="controls">
+  <button (click)="refreshCompetitionInfo()">RESET</button>
+  <button (click)="this.saveChanges()">SAVE CHANGES</button>
+  <button>GUIDE</button>
 </div>
