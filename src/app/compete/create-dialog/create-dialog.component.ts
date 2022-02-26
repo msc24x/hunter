@@ -2,7 +2,8 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { resCode } from 'src/app/services/auth/responseCodes';
+import { CompetitionsDataService } from 'src/app/services/data/competitions-data.service';
+import { resCode } from 'src/environments/environment';
 
 @Component({
   selector: 'create-dialog',
@@ -16,7 +17,11 @@ export class CreateDialogComponent implements OnInit {
 
   responseMessage : string = ""
 
-  constructor(private authService : AuthService, private router : Router) { }
+  constructor(
+    private authService : AuthService,
+    private router : Router,
+    private competitionsData : CompetitionsDataService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -28,7 +33,7 @@ export class CreateDialogComponent implements OnInit {
 
   requestCreateCompetition(){
     const title = (document.getElementById("competition_title") as HTMLInputElement).value;
-    this.authService.createCompetition(title)?.subscribe(res =>{
+    this.competitionsData.createCompetition(title)?.subscribe(res =>{
       console.log(res)
       this.handleResponse(res as HttpResponse<Object>)
     },
@@ -43,20 +48,20 @@ export class CreateDialogComponent implements OnInit {
     this.toggleSubmitButton(true);
 
     switch (res.status) {
-      case this.authService.resCode.serverErrror:
+      case resCode.serverErrror:
         this.responseMessage = "*Server side exception, please try again later";
         break;
-      case this.authService.resCode.forbidden:
+      case resCode.forbidden:
         this.responseMessage = "*"+(res as unknown as HttpErrorResponse).error;
         break;
-      case this.authService.resCode.badRequest:
+      case resCode.badRequest:
         this.responseMessage = "*Title not valid";
         break;
-      case this.authService.resCode.created:
+      case resCode.created:
         this.responseMessage = "*created successfully"
         this.router.navigate([`/editor/${(res as unknown as {status : number, id : number}).id}`])
         break;
-      case this.authService.resCode.accepted:
+      case resCode.accepted:
         break;
       default:
         this.responseMessage = "*Unknown error occurred"

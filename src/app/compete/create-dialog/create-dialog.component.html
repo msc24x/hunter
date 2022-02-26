@@ -1,8 +1,8 @@
 <div id="dialog_box" (click)="hideSelf($event)">
   <div id = "dialog" >
     <p class="h1">Create Competition</p>
-    <p class="h2">Title (50 characters)</p>
-    <input id = "competition_title" type="text" maxlength="50">
+    <p class="h2">Title (120 characters)</p>
+    <input id = "competition_title" type="text" maxlength="120">
     <br>
     <button id = "create_btn" (click)="requestCreateCompetition()">Build</button>
     <p class = "error">{{responseMessage}}</p>
