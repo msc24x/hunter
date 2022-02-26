@@ -4,6 +4,25 @@ export interface RegisterRequest{
   password : string;
 }
 
+export interface QuestionInfo{
+  id : string,
+  competition_id : string,
+  title : string,
+  statement : string,
+  created_on : string,
+  tests_id : string,
+  solutions_id : string,
+  points : number,
+}
+
+export const execCode = {
+  correct : 1,
+  incorrect : 2,
+  error : 3,
+  timeout : 4,
+  memoryExceeded : 5
+}
+
 export interface UserInfo{
   id : string, email : string, name : string
 }
@@ -14,7 +33,23 @@ export interface CompetitionInfo{
   description : string,
   created_on : string,
   rating : number,
-  public : boolean
+  public : boolean,
+  duration : number,
+  start_schedule : string
+}
+
+export interface HunterExecutable{
+  for : {
+    competition_id : string,
+    question_id : string,
+
+  }
+
+  solution : {
+    lang : "py" | "c" | "cpp" | "js",
+    code : string
+  }
+
 }
 
 export const resCode = {
