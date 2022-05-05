@@ -8,26 +8,14 @@ import bodyParser from 'body-parser';
 import { send } from 'process';
 import { exec } from 'child_process';
 import { writeFile } from 'fs';
+import { database } from './database/database';
 const argon2 =  require('argon2');
 
 const app = express();
 app.use(cookieParser())
 app.use(bodyParser.json())
 
-const dbConnection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database : "hunter_db"
-});
-
-dbConnection.connect(err=>{
-  if(err){
-    console.log(err);
-    return
-  }
-  console.log("Connected to hunter_db");
-});
+const dbConnection = database.getDataBase()
 
 const port = 8080;
 
@@ -155,7 +143,7 @@ app.post("/competition", (req, res)=>{
           return
         }
 
-        res.send({status : resCode.created, id : rows[0].id})
+        res.status(resCode.created).send({id : rows[0].id})
       })
     })
 
@@ -346,7 +334,7 @@ app.post("/execute", (req, res)=>{
       sendResponse(res, resCode.serverErrror)
       return
     }
-    exec(`D:/projects/RedocX/Hunter/server/src/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang}`, (error, stdout, stderr)=>{
+    exec(`D:/projects/RedocX/Hunter/server/src/scripts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang}`, (error, stdout, stderr)=>{
       if(error){
         console.log(stderr)
         sendResponse(res, resCode.serverErrror)

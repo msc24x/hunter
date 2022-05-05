@@ -46,6 +46,7 @@ export class CreateDialogComponent implements OnInit {
 
   private handleResponse(res : HttpResponse<Object>){
     this.toggleSubmitButton(true);
+    console.log(res.status)
 
     switch (res.status) {
       case resCode.serverErrror:
@@ -59,7 +60,7 @@ export class CreateDialogComponent implements OnInit {
         break;
       case resCode.created:
         this.responseMessage = "*created successfully"
-        this.router.navigate([`/editor/${(res as unknown as {status : number, id : number}).id}`])
+        this.router.navigate([`/editor/${(res.body as unknown as {id : number}).id}`])
         break;
       case resCode.accepted:
         break;
