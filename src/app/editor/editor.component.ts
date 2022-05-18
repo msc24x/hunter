@@ -73,6 +73,31 @@ export class EditorComponent implements OnInit {
     })
 
 
+
+
+
+  }
+
+  openFile(event : any){
+    const input  = event.target as HTMLInputElement
+    input.type = "file"
+    input.click()
+  }
+
+  updateSolutionsFile(event: any){
+    const file = (event.target as HTMLInputElement).files
+    if(file && file.length > 0){
+      const label = document.getElementById("solutions_file_label") as HTMLLabelElement
+      label.innerText = "Test against " + file[0].name
+    }
+  }
+
+  updateTestCasesFile(event: any){
+    const file = (event.target as HTMLInputElement).files
+    if(file && file.length > 0){
+      const label = document.getElementById("testcases_file_label") as HTMLLabelElement
+      label.innerText = "Test cases " + file[0].name
+    }
   }
 
   addQuestion(){

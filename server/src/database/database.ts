@@ -12,22 +12,17 @@ export class database{
 
   static getDataBase() : mysql.Connection {
 
-    while(database.lock){}
-    database.lock = true
-
-
     if(database.inititalized && database._dbConnection)
       return database._dbConnection
+
     database._dbConnection = mysql.createConnection({
       host: "localhost",
       user: "root",
       password: "password",
       database : "hunter_db"
     })
+
     database.inititalized = true
-
-
-    database.lock = false
 
     database._dbConnection.connect(err=>{
       if(err){

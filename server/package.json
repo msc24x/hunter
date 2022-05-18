@@ -2,10 +2,10 @@
   "name": "hunterapi",
   "version": "1.0.0",
   "description": "Hunter server",
-  "main": "src/server.ts",
+  "main": "src/api/app.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon src/server.ts"
+    "start": "nodemon src/api/app.ts"
   },
   "author": "Maninderpal Singh (msc24x@gmail.com)",
   "license": "ISC",

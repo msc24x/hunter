@@ -58,10 +58,10 @@
  <textarea id = "text_statement" maxlength="2048" rows="15"></textarea>
 
  <div class="row_flex">
-  <label class = "file_input" for="testcases_file">Upload test cases test file...</label>
-  <input class = "file_input" id = "testcases_file" type="file" >
+  <label id ="testcases_file_label" (click)="openFile($event)" class = "file_input" for="testcases_file">Upload test cases test file...</label>
+  <input class = "file_input" (change)="updateTestCasesFile($event)" id = "testcases_file" type="file" >
   <label class = "file_input" for="solutions_file">Upload test solutions file...</label>
-  <input class = "file_input" id = "solutions_file" type="file">
+  <input id = "solutions_file_label" class = "file_input" id = "solutions_file" type="file">
 
  </div>
 
