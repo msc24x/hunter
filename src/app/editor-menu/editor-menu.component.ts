@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { userInfo } from 'os';
-import { CompetitionInfo, UserInfo } from 'server/src/database/types';
+import { CompetitionInfo, UserInfo } from 'server/src/environments/environment';
 import { AuthService } from '../services/auth/auth.service';
 import { CompetitionsDataService } from '../services/data/competitions-data.service';
 

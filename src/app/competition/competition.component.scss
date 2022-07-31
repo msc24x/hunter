@@ -3,9 +3,10 @@
 @use "../../assets/fonts";
 
 #editor{
-  height: 456px;
+  height: 720px;
   font-size: 1rem;
   margin-inline: 7%;
+  margin-top: 7%;
 }
 
 @media screen and (max-width : 1024px) {

@@ -59,14 +59,16 @@ div.appBar{
     #user_email, #logout_btn{
       font-size: 12px;
       background-color: colors.$dim_white;
-      border-radius: 8px;
-      padding : 4px;
+      border-radius: 12px;
+      border: 1px solid grey;
+      padding-block: 4px;
       padding-inline: 16px;
       margin-left: 12px;
       cursor: pointer;
     }
     #user_email:hover, #logout_btn:hover{
       background-color: white;
+      border-color: black;
     }
   }
   @media only screen and (max-width : 1200px) {
@@ -122,12 +124,12 @@ div.appBar{
     display: none;
 
     ul{
-      padding : 0px;
+      padding : 5px;
       list-style: none;
       backdrop-filter: blur(16px);
       border-radius: 16px;
       background-color: rgba(255, 255, 255, 0.411);
-      box-shadow: -5px 0px 15px 0px rgba(0, 0, 0, 0.219);
+      box-shadow: -2px 0px 15px 0px rgba(0, 0, 0, 0.219);
 
       li{
         text-align: left;

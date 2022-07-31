@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CompetitionInfo } from 'server/src/database/types';
+import { CompetitionInfo } from 'server/src/environments/environment';
 
 @Component({
   selector: 'competitions-list',

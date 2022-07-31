@@ -9,11 +9,11 @@
 
 #competitions_list{
   background-color: colors.$sweet_white;
-  border-radius: 12px;
-  height: fit-content;
   margin-left: 7%;
   margin-right: 7%;
   padding-bottom: 24px;
+  border-radius: 12px;
+  margin-top: 24px;
 }
 
 @media only screen and (max-width : 1024px) {
@@ -44,7 +44,7 @@
 
 #competitions_list p.heading{
   margin-inline: 16px;
-  padding-top: 24px;
+  padding-top: 12px;
   font-size: 26px;
   font-weight: bolder;
 }
@@ -52,7 +52,6 @@
 #competitions_ol{
   list-style-type: none;
   padding-left: 0px;
-  max-height: 512px;
   overflow: scroll;
   scroll-behavior: smooth;
   li{
