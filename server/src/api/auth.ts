@@ -1,5 +1,5 @@
 import  express, {Response, Request}from 'express';
-import {resCode, UserInfo } from '../database/types';
+import {resCode, UserInfo } from '../environments/environment';
 import { verify } from 'argon2';
 import { randomBytes } from 'crypto';
 import { Types } from 'mysql';
@@ -18,8 +18,9 @@ export function authenticate(req: Request, res : Response,
   if(email && password){
 
     const users = new User()
+    const params = {id : null, email : email, name : null}
 
-    users.findAll(null, email as string, null, (err : any, rows : any)=>{
+    users.findAll(params, (err : any, rows : any)=>{
       if(err){
         console.log(err);
         sendResponse(res, resCode.serverErrror);
@@ -71,9 +72,11 @@ export function authenticate(req: Request, res : Response,
         return;
       }
 
-      const userDao = new User()
+      const userModel = new User()
 
-      userDao.findAll(rows[0].user_id, req.query.email as string, req.query.name as string, (err : any, rows : any)=>{
+      const params = { id : rows[0].user_id, email : req.query.email, name : req.query.name as string}
+
+      userModel.findAll(params, (err : any, rows : any)=>{
         if(!rows || rows && rows.length == 0){
           sendResponse(res, resCode.notFound)
         }
@@ -81,12 +84,6 @@ export function authenticate(req: Request, res : Response,
           callback(req, res, {id : rows[0].id, email : rows[0].email, name : rows[0].name})
         }
       })
-
-      // getUser(req, res, (user : UserInfo)=>{
-      //   callback(req, res, user);
-      // },
-      // rows[0].user_id)
-
     })
   }
   else{

@@ -1,5 +1,6 @@
-import mysql from 'mysql'
+import mysql, { MysqlError } from 'mysql'
 import { database } from '../database'
+import { UserInfo } from '../../environments/environment'
 
 export class User{
 
@@ -9,31 +10,30 @@ export class User{
     this.dbConnection = database.getDataBase()
   }
 
-  findAll(id : string | null, email : string | null, name : string | null, callback : Function ){
+  update(newUserInfo : UserInfo, callback : ( err : mysql.MysqlError | null)=>void){
+    this.dbConnection.query(` update users set email = "${newUserInfo.email}", name = "${newUserInfo.name}" where id = ${newUserInfo.id} ; `,
+      (err)=>[
+        callback(err)
+      ]
+    )
+  }
 
-    if(id || email || name){
+  findAll(params : any, callback : (err : MysqlError | null , rows : any)=>void ){
 
-      var query = "select * from users where true"
-      if(id &&  id != "")
-        query += ` and users.id = "${id}"`;
-      if(email && email != "")
-        query += ` and users.email = "${email}"`
-      if(name && name != "")
-        query += ` and user.name = "${name}"`
-      query += ";"
+    var query = "select * from users where true"
+    if(params.id)
+      query += ` and users.id = "${params.id}"`;
+    if(params.email)
+      query += ` and users.email = "${params.email}"`
+    if(params.name)
+      query += ` and user.name = "${params.name}"`
+    query += ";"
 
-      console.log(query)
+    console.log(query)
 
-      this.dbConnection.query(query, (err, rows)=>{
-        callback(err,rows)
-      })
-
-    }
-    else{
-      console.log(id, email, name)
-
-      callback(null, null)
-    }
+    this.dbConnection.query(query, (err, rows)=>{
+      callback(err,rows)
+    })
 
   }
 

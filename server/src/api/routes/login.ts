@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { hash, verify } from 'argon2';
 import { randomBytes } from 'crypto';
 import { database } from '../../database/database';
-import { resCode, UserInfo } from '../../database/types';
+import { resCode, UserInfo } from '../../environments/environment';
 import { sendResponse, sendResponseJson } from '../app';
 import bodyParser from 'body-parser';
 import { authenticate } from '../auth';
@@ -74,41 +74,5 @@ router.get("/register", (req, res) =>{
   })
 
 })
-
-// export function getUser(req:Request, res : Response, callback : Function = (user : UserInfo)=>{}, user_id : string = "") {
-
-//   let id = req.query.id
-//   if(user_id != ""){
-//     id = user_id
-//   }
-//   const email = req.query.email
-
-//   if(id || email){
-//     var query = ""
-//     if(id)
-//       query = ` select * from users where users.id = "${id}" ; `;
-//     else if(email)
-//       query = ` select * from users where users.email = "${email}" ; `
-
-//     dbConnection.query(query, (err, rows)=>{
-//       if(err){
-//         console.log(err);
-//         sendResponse(res, resCode.serverErrror);
-//         return;
-//       }
-//       if(rows.length == 0){
-//         sendResponse(res, resCode.notFound)
-//         return;
-//       }
-//       callback({
-//         id : rows[0].id,
-//         email : rows[0].email,
-//         name : rows[0].name
-//       });
-//     })
-//   }else{
-//     sendResponse(res, resCode.badRequest)
-//   }
-// }
 
 module.exports = router

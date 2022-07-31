@@ -1,5 +1,5 @@
 import express, {Response, Request}from 'express';
-import { CompetitionInfo, HunterExecutable, resCode, UserInfo } from '../database/types';
+import { CompetitionInfo, HunterExecutable, resCode, UserInfo } from '../environments/environment';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { exec } from 'child_process';

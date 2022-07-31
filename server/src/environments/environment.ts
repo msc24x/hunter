@@ -1,10 +1,32 @@
 
-export interface RegisterRequest{
+
+export const execCode =  {
+  correct : 1,
+  incorrect : 2,
+  error : 3,
+  timeout : 4,
+  memoryExceeded : 5
+}
+export const resCode = {
+  serverErrror : 503,
+  success : 200,
+  accepted : 202,
+  created : 201,
+  badRequest : 400,
+  forbidden : 403,
+  notFound : 404,
+  found  : 302
+}
+
+
+
+
+export type RegisterRequest = {
   user : string;
   password : string;
 }
 
-export interface QuestionInfo{
+export type QuestionInfo = {
   id : string,
   competition_id : string,
   title : string,
@@ -15,18 +37,11 @@ export interface QuestionInfo{
   points : number,
 }
 
-export const execCode = {
-  correct : 1,
-  incorrect : 2,
-  error : 3,
-  timeout : 4,
-  memoryExceeded : 5
-}
-
-export interface UserInfo{
+export type UserInfo = {
   id : string, email : string, name : string
 }
-export interface CompetitionInfo{
+
+export type CompetitionInfo = {
   id : string,
   host_user_id : string,
   title : string,
@@ -38,7 +53,7 @@ export interface CompetitionInfo{
   start_schedule : string
 }
 
-export interface HunterExecutable{
+export type HunterExecutable = {
   for : {
     competition_id : string,
     question_id : string,
@@ -52,13 +67,4 @@ export interface HunterExecutable{
 
 }
 
-export const resCode = {
-  serverErrror : 503,
-  success : 200,
-  accepted : 202,
-  created : 201,
-  badRequest : 400,
-  forbidden : 403,
-  notFound : 404,
-  found  : 302
-}
+

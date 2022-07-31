@@ -1,18 +1,31 @@
 import express, {Request, Response} from "express"
-import { database } from "../../database/database"
-import { resCode, UserInfo } from "../../database/types"
+import { User } from "../../database/models/User"
+import { resCode, UserInfo } from "../../environments/environment"
 import { sendResponse, sendResponseJson } from "../app"
 import { authenticate } from "../auth"
 
 
 var router = express.Router()
 
-var dbConnection = database.getDataBase()
+const userModel = new User()
 
 router.get("/user", (req, res)=>{
-  getUser(req, res, (user : UserInfo)=>{
-    sendResponseJson(res, resCode.found, user);
-  })
+  userModel.findAll(
+    {id : req.query.id, email : req.query.email},
+    (err, rows : UserInfo[])=>{
+      if(err){
+        sendResponse(res, resCode.serverErrror)
+        return
+      }
+
+      if(rows.length == 0){
+        sendResponse(res, resCode.notFound)
+        return
+      }
+
+      sendResponseJson(res, resCode.found, rows[0])
+    }
+  )
 })
 
 router.put("/user", (req, res)=>{
@@ -29,7 +42,8 @@ router.put("/user", (req, res)=>{
       sendResponse(res, resCode.forbidden)
       return
     }
-    dbConnection.query(` update users set name = "${updateUser.name}" where id = "${user.id}" ; `,(err)=>{
+
+    userModel.update(updateUser, (err)=>{
       if(err){
         console.log(err)
         sendResponse(res, resCode.serverErrror);
@@ -39,42 +53,5 @@ router.put("/user", (req, res)=>{
     })
   })
 })
-
-export function getUser(req:Request, res : Response, callback : Function = (user : UserInfo)=>{}, user_id : string = "") {
-
-  let id = req.query.id
-  if(user_id != ""){
-    id = user_id
-  }
-  const email = req.query.email
-
-  if(id || email){
-    var query = ""
-    if(id)
-      query = ` select * from users where users.id = "${id}" ; `;
-    else if(email)
-      query = ` select * from users where users.email = "${email}" ; `
-
-    dbConnection.query(query, (err, rows)=>{
-      if(err){
-        console.log(err);
-        sendResponse(res, resCode.serverErrror);
-        return;
-      }
-      if(rows.length == 0){
-        sendResponse(res, resCode.notFound)
-        return;
-      }
-      callback({
-        id : rows[0].id,
-        email : rows[0].email,
-        name : rows[0].name
-      });
-    })
-  }else{
-    sendResponse(res, resCode.badRequest)
-  }
-}
-
 
 module.exports = router
