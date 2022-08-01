@@ -11,6 +11,45 @@ const competitionsModel = new Competitions()
 const questionsModel = new Questions()
 
 
+router.post("/question/delete", (req, res)=>{
+  if(!req.body.id){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  authenticate(req, res, (req, res, user)=>{
+    questionsModel.findAll({id : req.body.id}, questions =>{
+      console.log(req.body.id)
+
+      if(questions.length == 0){
+        sendResponse(res, resCode.notFound)
+        return
+      }
+      competitionsModel.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
+        if(competitions.length == 0){
+          sendResponse(res, resCode.notFound)
+          return
+        }
+
+        if(competitions[0].host_user_id != user.id){
+          console.log(competitions[0], user, req.query)
+          sendResponse(res, resCode.forbidden)
+          return
+        }
+
+        questionsModel.drop(req.body.id as string, err =>{
+          if(!err){
+            sendResponse(res, resCode.success)
+            return
+          }
+        })
+
+      }, ()=>{})
+    })
+  })
+
+
+})
 
 router.post("/question", (req, res)=>{
   authenticate(req, res, (req : Request, res : Response, user :  UserInfo)=>{

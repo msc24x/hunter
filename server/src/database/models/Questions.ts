@@ -8,6 +8,12 @@ export class Questions{
   dbConnection = database.getDataBase()
   competitionsModel = new Competitions()
 
+  drop(id : string, callback : (err : MysqlError | null)=>void){
+    this.dbConnection.query(`delete from questions where id = ${id};`, (err)=>{
+      callback(err)
+    })
+  }
+
   findAll(params : any, callback : (questions : Array<QuestionInfo>)=>void){
     let query = "select * from questions where true = true "
     if(params.competition_id != null){
