@@ -89,7 +89,11 @@ router.get("/competition", (req, res)=>{
     (competitions)=>{
 
       authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
-        if(competitions[0].host_user_id != user.id){
+        if(competitions.length == 0){
+          sendResponse(res, resCode.notFound)
+          return
+        }
+        if(competitions[0].host_user_id != user.id && !competitions[0].public){
           sendResponse(res, resCode.forbidden)
           return
         }
