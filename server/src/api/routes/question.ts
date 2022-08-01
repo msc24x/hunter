@@ -7,7 +7,6 @@ import { authenticate } from "../auth"
 
 var router = express.Router()
 
-
 const competitionsModel = new Competitions()
 const questionsModel = new Questions()
 
@@ -20,6 +19,11 @@ router.post("/question", (req, res)=>{
       0,
       -1,
       (competitions)=>{
+        if(competitions.length == 0){
+          sendResponse(res, resCode.notFound)
+          return
+        }
+
         const competition = competitions[0]
         if(competition.host_user_id != user.id){
           sendResponse(res, resCode.forbidden);
@@ -31,14 +35,59 @@ router.post("/question", (req, res)=>{
             sendResponse(res, resCode.success)
           },
           (err)=>{
+            console.log(err)
             sendResponse(res, resCode.serverErrror)
           }
         )
       },
 
-      ()=>{}
+      (err)=>{
+        console.log(err)
+        sendResponse(res, resCode.serverErrror)
+      }
     )
   })
+})
+
+router.put("/question", (req, res)=>{
+  var params = req.body
+
+  console.log(params)
+
+  authenticate(req, res, (req, res, user)=>{
+    questionsModel.findAll({id : params.id}, (questions)=>{
+      if(questions.length == 0){
+        sendResponse(res, resCode.notFound)
+        return
+      }
+      competitionsModel.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
+        if(competitions.length == 0){
+          sendResponse(res, resCode.notFound)
+          return
+        }
+
+        if(competitions[0].host_user_id != user.id){
+          console.log(competitions[0], user, req.query)
+          sendResponse(res, resCode.forbidden)
+          return
+        }
+
+        questionsModel.update(params, err =>{
+          if(err){
+            console.log(err)
+            sendResponse(res, resCode.serverErrror)
+            return
+          }
+
+          sendResponse(res, resCode.success)
+        })
+
+      },
+      ()=>{}
+      )
+    })
+  })
+
 })
 
 router.get("/question", (req, res)=>{

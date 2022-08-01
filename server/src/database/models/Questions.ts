@@ -60,4 +60,13 @@ export class Questions{
       })
     })
   }
+
+  update(newQuestion : any, callback : (err : MysqlError | null)=>void){
+
+
+
+    this.dbConnection.query(`update questions set title = "${newQuestion.title}", statement = "${newQuestion.statement}", points = "${newQuestion.points}" where id = "${newQuestion.id}" ; `, (err)=>{
+      callback(err)
+    })
+  }
 }
