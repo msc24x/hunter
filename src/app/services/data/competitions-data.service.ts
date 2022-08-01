@@ -10,11 +10,20 @@ export class CompetitionsDataService {
 
   constructor(private authService : AuthService, private http : HttpClient) { }
 
-  addQuestion(competition_id : string){
+  postQuestion(competition_id : string){
 
     return this.http.post(apiEndpoints.question,{competition_id : competition_id},{
       withCredentials : true,
       observe : "response",
+    })
+  }
+
+  putQuestion(params : any){
+
+    return this.http.put(apiEndpoints.question, params, {
+      responseType : 'json',
+      withCredentials : true,
+      observe : "response"
     })
   }
 
@@ -35,7 +44,7 @@ export class CompetitionsDataService {
     })
   }
 
-  createCompetition(title : string){
+  postCompetition(title : string){
     if(!this.authService.isAuthenticated){
       return
     }
@@ -47,7 +56,7 @@ export class CompetitionsDataService {
     })
   }
 
-  updateCompetitionInfo(competition : CompetitionInfo){
+  putCompetitionInfo(competition : CompetitionInfo){
     return this.http.put(apiEndpoints.competition, competition, {
       observe : "response",
       responseType : "json",

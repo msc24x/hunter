@@ -19,25 +19,13 @@ import { convert } from '../utils/utils';
 export class EditorComponent implements OnInit {
 
   competition_id : string
-  competitionInfo : CompetitionInfo  = {
-    id : "",
-    title : "",
-    created_on : "",
-    host_user_id : "",
-    description : "",
-    public : false,
-    rating : 0,
-    duration : 0,
-    start_schedule : ""
-  } as CompetitionInfo
+  competitionInfo : CompetitionInfo  = {} as CompetitionInfo
   competitionQuestions : Array<QuestionInfo> = []
+  questionSelected = -1
+  questionSelectedInfo = {} as QuestionInfo
 
   isAuthenticated : boolean = false
-  user = {
-    id : "",
-    email : "",
-    name : ""
-  }
+  user = {} as UserInfo
 
   constructor(
     private router :  Router,
@@ -72,10 +60,36 @@ export class EditorComponent implements OnInit {
       this.router.navigate(["/home"])
     })
 
+  }
 
 
+  selectedQuestionElement() : HTMLLIElement | null {
+    let prevTarget = document.getElementById("questions_list")?.getElementsByTagName("li")[this.questionSelected]
+    if(prevTarget){
+      return prevTarget
+    }
+    else
+      return null
+  }
 
+  selectQuestion({target} : any){
 
+    let index = (target.innerHTML as string).substring(1);
+    if(this.questionSelected != -1){
+      let prevTarget = this.selectedQuestionElement()
+      if(prevTarget){
+        prevTarget.style.background = "#E4E4E4"
+        prevTarget.style.color = "black"
+      }
+    }
+
+    this.questionSelected = index as unknown as number
+    this.questionSelectedInfo = this.competitionQuestions[this.questionSelected]
+
+    target.style.background = "black"
+    target.style.color = "whitesmoke"
+
+    this.displayLog("Question "+this.questionSelected+ " selected")
   }
 
   openFile(event : any){
@@ -100,9 +114,36 @@ export class EditorComponent implements OnInit {
     }
   }
 
+  saveQuestion(){
+    let element = this.selectedQuestionElement()
+    if(!element){
+      return
+    }
+
+    console.log(element, this.competitionQuestions[this.questionSelected])
+
+
+
+    this.competitionsData.putQuestion({
+      id : this.competitionQuestions[this.questionSelected].id,
+      title : (document.getElementById("text_qtitle") as HTMLTextAreaElement).value,
+      statement : (document.getElementById("text_statement") as HTMLTextAreaElement).value,
+      points : (document.getElementById("question_points") as HTMLInputElement).valueAsNumber
+    }).subscribe((res)=>{
+      console.log(res)
+      this.displayLog("Question Updated")
+    })
+
+  }
+
+  delQuestion(){
+
+  }
+
   addQuestion(){
-    this.competitionsData.addQuestion(this.competitionInfo.id).subscribe(res=>{
+    this.competitionsData.postQuestion(this.competition_id).subscribe(res=>{
       this.fetchQuestions()
+      this.displayLog("New question inserted and saved")
     })
   }
 
@@ -111,18 +152,28 @@ export class EditorComponent implements OnInit {
       if(res.status == resCode.success){
         if(res.body)
           this.competitionQuestions = res.body
+          this.questionSelected = -1
       }
     })
   }
 
   fetchCompetitionInfo(){
     this.competitionsData.getCompetitionInfo(this.competition_id as string).subscribe(res=>{
-      if(res.status == resCode.found){
+      if(res.status == resCode.success){
         this.competitionInfo = res.body as CompetitionInfo
+        this.toggleVisibility()
+        this.toggleVisibility()
+
+
+        if(this.competitionInfo.host_user_id != this.user.id){
+          this.router.navigate(["/home"])
+        }
+
+        this.fetchQuestions()
       }
     },
     err =>{
-      if(err.status == resCode.found){
+      if(err.status == resCode.success){
         this.competitionInfo = err.error as CompetitionInfo
         this.toggleVisibility()
         this.toggleVisibility()
@@ -150,6 +201,9 @@ export class EditorComponent implements OnInit {
     schedule.value = this.datePipe.transform(this.competitionInfo.start_schedule, "yyyy-MM-ddThh:mm")!
     title.value = this.competitionInfo.title as string
     description.value = this.competitionInfo.description as string
+
+    this.displayLog("Data refreshed")
+
   }
 
   toggleVisibility(){
@@ -178,10 +232,16 @@ export class EditorComponent implements OnInit {
     this.competitionInfo.description = description.value
     this.competitionInfo.duration = duration.value as unknown as number
     this.competitionInfo.start_schedule = schedule.value
-    this.competitionsData.updateCompetitionInfo(this.competitionInfo).subscribe(res=>{
+    this.competitionsData.putCompetitionInfo(this.competitionInfo).subscribe(res=>{
       console.log(res);
+      this.displayLog("Competition changes saved")
     })
   }
 
+  displayLog(msg : string){
+    const elem = document.getElementById("log")
+    if(elem)
+      elem.innerHTML = msg
+  }
 
 }

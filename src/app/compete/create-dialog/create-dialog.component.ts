@@ -33,7 +33,7 @@ export class CreateDialogComponent implements OnInit {
 
   requestCreateCompetition(){
     const title = (document.getElementById("competition_title") as HTMLInputElement).value;
-    this.competitionsData.createCompetition(title)?.subscribe(res =>{
+    this.competitionsData.postCompetition(title)?.subscribe(res =>{
       console.log(res)
       this.handleResponse(res as HttpResponse<Object>)
     },

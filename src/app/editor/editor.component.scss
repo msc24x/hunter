@@ -152,12 +152,22 @@
     text-align: center;
     margin-right: 16px;
     cursor: default;
+    border : 1px solid gray;
+
   }
 
   div#create_question_btn{
     padding-top: 0px;
     padding-bottom: 0px;
-    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+  }
+
+  div#delete_question_btn{
+    padding-top: 0px;
+    padding-bottom: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -165,7 +175,7 @@
   }
 
   li{
-    background-color: whitesmoke;
+    background-color: #E4E4E4;
     border-radius: 12px;
     padding : 16px;
     font-weight: bold;
@@ -175,7 +185,7 @@
     cursor: pointer;
   }
 
-  li:hover, div#create_question_btn:hover{
+  li:hover, div#create_question_btn:hover, div#save_question_btn:hover, div#delete_question_btn:hover{
     background-color: colors.$text_black;
     color : colors.$text_white;
   }
@@ -219,6 +229,10 @@ input.file_input{
   display: none;
 }
 
+#question_points{
+  @include appTextArea;
+}
+
 .info_text{
   text-align : center;
   font-family: appFont;
@@ -226,6 +240,12 @@ input.file_input{
   font-style: italic;
   text-decoration: underline;
   cursor: pointer;
+}
+
+#log{
+  font-family: appFont;
+  font-style: italic;
+  color:black;
 }
 
 body{

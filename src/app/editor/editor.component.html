@@ -15,7 +15,7 @@
       <div id="id">
         Code : <b>{{competition_id}}</b>
       </div>
-      <div id="rating">Rating : <b>{{this.competitionInfo?.rating}}</b></div>
+      <div id="rating">Rating : <b>{{this.competitionInfo.rating}}</b></div>
       <div id="visibility" (click)="toggleVisibility()">PUBLIC</div>
     </div>
 
@@ -29,39 +29,45 @@
   <div class="vertical_flex">
     <div class="vertical_flex">
       <div id = "title_label">Competition Title</div>
-      <textarea maxlength="120" rows="7" id="text_title">{{this.competitionInfo?.title}}</textarea>
+      <textarea maxlength="120" rows="7" id="text_title">{{this.competitionInfo.title}}</textarea>
     </div>
   </div>
 
   <div class="vertical_flex">
     <div id = "desc_label">Competition Description</div>
-      <textarea maxlength="456" rows="7" id="text_description">{{this.competitionInfo?.description}}</textarea>
+      <textarea maxlength="456" rows="7" id="text_description">{{this.competitionInfo.description}}</textarea>
   </div>
 
 </div>
 
-<ul id="questions_list">
+<ol id="questions_list">
   <div>Questions</div>
-  <li *ngFor="let question of this.competitionQuestions">Q{{this.competitionQuestions.indexOf(question)}}</li>
-  <div id="create_question_btn" (click)="addQuestion()">+</div>
-</ul>
+  <li *ngFor="let question of this.competitionQuestions" (click)="selectQuestion($event)">Q{{this.competitionQuestions.indexOf(question)}}</li>
+  <div id="create_question_btn" (click)="addQuestion()">Add</div>
+  <div id="save_question_btn" (click)="saveQuestion()">Save</div>
+  <div id="delete_question_btn" (click)="delQuestion()">Delete</div>
+
+</ol>
 
 <div class="vertical_flex" id="question_editor">
  <div id="qtitle_label">
    Question Title
  </div>
-  <textarea id = "text_qtitle" maxlength="150" rows="4"></textarea>
+  <textarea id = "text_qtitle" maxlength="150" rows="4">{{questionSelectedInfo.title}}</textarea>
 
  <div id="qstatement_label">
   Question Statement
   </div>
- <textarea id = "text_statement" maxlength="2048" rows="15"></textarea>
+ <textarea id = "text_statement" maxlength="2048" rows="15" [value]="">{{questionSelectedInfo.statement}}</textarea>
 
  <div class="row_flex">
   <label id ="testcases_file_label" (click)="openFile($event)" class = "file_input" for="testcases_file">Upload test cases test file...</label>
   <input class = "file_input" (change)="updateTestCasesFile($event)" id = "testcases_file" type="file" >
   <label class = "file_input" for="solutions_file">Upload test solutions file...</label>
   <input id = "solutions_file_label" class = "file_input" id = "solutions_file" type="file">
+
+  <div id="question_points_lbl">Points <input id="question_points" type="number" min="0" [value]="questionSelectedInfo.points" ></div>
+
 
  </div>
 
@@ -73,4 +79,5 @@
   <button (click)="refreshCompetitionInfo()">RESET</button>
   <button (click)="this.saveChanges()">SAVE CHANGES</button>
   <button>GUIDE</button>
+  <div id = "log">Welcome</div>
 </div>
