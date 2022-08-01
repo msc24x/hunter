@@ -8,7 +8,7 @@ import { database } from '../database/database';
 import { User } from '../database/models/User';
 
 export function authenticate(req: Request, res : Response,
-  callback : Function = (req : Request, res : Response, user :  UserInfo)=>{}) {
+  callback : (req : Request, res : Response, user :  UserInfo)=>void) {
 
   const email = req.query.email;
   const password = req.query.password;

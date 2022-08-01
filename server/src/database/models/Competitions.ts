@@ -1,4 +1,4 @@
-import mysql from 'mysql'
+import mysql, { MysqlError } from 'mysql'
 import { database } from '../database'
 import { CompetitionInfo } from '../../environments/environment'
 
@@ -10,8 +10,18 @@ export class Competitions{
     this.dbConnection = database.getDataBase()
   }
 
-  update(newCompetition : CompetitionInfo, callback : (err : mysql.MysqlError | null)=>void){
-    this.dbConnection.query(`update competitions set title = "${newCompetition.title}", description = "${newCompetition.description}", public = ${newCompetition.public}, duration = "${newCompetition.duration}", start_schedule = "${newCompetition.start_schedule}" where id = "${newCompetition.id}" ; `, (err)=>{
+  update(newCompetition : any, callback : (err : mysql.MysqlError | null)=>void){
+    let query = `update competitions set title = "${newCompetition.title}", description = "${newCompetition.description}", public = ${newCompetition.public}`
+    if(newCompetition.duration){
+      query += `, duration = "${newCompetition.duration}"`
+    }
+
+    if(newCompetition.start_schedule){
+      query += `, start_schedule = "${newCompetition.start_schedule}"`
+    }
+    query += ` where id = "${newCompetition.id}" ; `
+
+    this.dbConnection.query(query, (err)=>{
       callback(err)
     })
   }
@@ -29,7 +39,7 @@ export class Competitions{
     dateOrder : 1 | 0 | -1,
     isPublic : true | false | -1,
     callback : (competitions : Array<CompetitionInfo>)=>void,
-    errCallback : ()=>void
+    errCallback : (err : MysqlError)=>void
   ){
 
     let query = "select * from competitions where true = true "
@@ -61,7 +71,7 @@ export class Competitions{
     this.dbConnection.query(query, (err, rows)=>{
       if(err){
         console.log(err)
-        errCallback()
+        errCallback(err)
         return
       }
       callback(rows as Array<CompetitionInfo>);

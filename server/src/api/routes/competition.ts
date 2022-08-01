@@ -71,8 +71,9 @@ router.put("/competition", (req, res)=>{
 
       },
 
-      ()=>{
-
+      (err)=>{
+        console.log(err)
+        sendResponse(res, resCode.serverErrror)
       }
 
     )
@@ -92,7 +93,7 @@ router.get("/competition", (req, res)=>{
           sendResponse(res, resCode.forbidden)
           return
         }
-        sendResponseJson(res, resCode.found, competitions[0])
+        sendResponseJson(res, resCode.success, competitions[0])
       })
 
     },
@@ -135,7 +136,7 @@ router.get("/competitions", (req, res)=>{
         if(element.host_user_id == user.id || element.public)
           filteredCompetitions.push(element)
       }
-      sendResponseJson(res, resCode.found, filteredCompetitions)
+      sendResponseJson(res, resCode.success, filteredCompetitions)
       return 0
     }, errCallback)
   })
