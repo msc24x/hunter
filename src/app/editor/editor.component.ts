@@ -120,24 +120,23 @@ export class EditorComponent implements OnInit {
       return
     }
 
-    console.log(element, this.competitionQuestions[this.questionSelected])
-
-
-
     this.competitionsData.putQuestion({
       id : this.competitionQuestions[this.questionSelected].id,
       title : (document.getElementById("text_qtitle") as HTMLTextAreaElement).value,
       statement : (document.getElementById("text_statement") as HTMLTextAreaElement).value,
       points : (document.getElementById("question_points") as HTMLInputElement).valueAsNumber
     }).subscribe((res)=>{
-      console.log(res)
       this.displayLog("Question Updated")
     })
 
   }
 
   delQuestion(){
-
+    if(this.questionSelected != -1)
+      this.competitionsData.deleteQuestion(this.competitionQuestions[this.questionSelected].id).subscribe(res =>{
+        this.displayLog("Question "+ this.questionSelected+ " deleted")
+        this.fetchQuestions()
+      })
   }
 
   addQuestion(){
@@ -241,7 +240,7 @@ export class EditorComponent implements OnInit {
   displayLog(msg : string){
     const elem = document.getElementById("log")
     if(elem)
-      elem.innerHTML = msg
+      elem.innerHTML = "Last Operation : " + msg
   }
 
 }

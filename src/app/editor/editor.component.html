@@ -53,12 +53,12 @@
  <div id="qtitle_label">
    Question Title
  </div>
-  <textarea id = "text_qtitle" maxlength="150" rows="4">{{questionSelectedInfo.title}}</textarea>
+  <textarea id = "text_qtitle" maxlength="150" rows="4" [value]="questionSelectedInfo.title"></textarea>
 
  <div id="qstatement_label">
   Question Statement
   </div>
- <textarea id = "text_statement" maxlength="2048" rows="15" [value]="">{{questionSelectedInfo.statement}}</textarea>
+ <textarea id = "text_statement" maxlength="2048" rows="15" [value]="questionSelectedInfo.statement"></textarea>
 
  <div class="row_flex">
   <label id ="testcases_file_label" (click)="openFile($event)" class = "file_input" for="testcases_file">Upload test cases test file...</label>

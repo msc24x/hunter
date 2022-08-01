@@ -18,6 +18,14 @@ export class CompetitionsDataService {
     })
   }
 
+  deleteQuestion(id : string){
+    return this.http.post(apiEndpoints.deleteQuestion, {id : id}, {
+      responseType : 'json',
+      withCredentials : true,
+      observe : "response"
+    })
+  }
+
   putQuestion(params : any){
 
     return this.http.put(apiEndpoints.question, params, {

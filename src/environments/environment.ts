@@ -30,7 +30,8 @@ export const apiEndpoints = {
   logout : environment.apiUrl+"/logout",
   competition : environment.apiUrl+"/competition",
   getCompetitions : environment.apiUrl+"/competitions",
-  question : environment.apiUrl+"/question"
+  question : environment.apiUrl+"/question",
+  deleteQuestion :  environment.apiUrl+"/question/delete"
 }
 
 export const resCode = {
