@@ -1,0 +1,59 @@
+@use "../../../assets/colors";
+
+
+#questions_list{
+  margin-top: 56px;
+  list-style: none;
+  padding: 0px;
+  display: flex;
+  overflow: scroll;
+  border-radius: 12px;
+  font-family: appFont;
+  scroll-behavior: smooth;
+
+  div{
+    background-color: white;
+    border-radius: 12px;
+    padding : 16px;
+    font-weight: bold;
+    width: max-content;
+    text-align: center;
+    margin-right: 16px;
+    cursor: default;
+
+  }
+
+  div#create_question_btn{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+  }
+
+  div#delete_question_btn{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+  }
+
+  li{
+    background-color: colors.$grey;
+    border-radius: 12px;
+    padding : 16px;
+    font-weight: bold;
+    width: max-content;
+    text-align: center;
+    margin-right: 6px;
+    cursor: pointer;
+  }
+
+  li:hover, div#create_question_btn:hover, div#save_question_btn:hover, div#delete_question_btn:hover{
+    background-color: colors.$text_black !important;
+    color : colors.$text_white !important;
+  }
+}
