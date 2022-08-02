@@ -2,14 +2,17 @@
 @use "../../assets/fonts";
 
 div.appBar{
-  margin-top: 24px;
-  margin-left: 2%;
-  margin-right: 2%;
+  padding-block: 24px;
+  width: 100%;
+  position: absolute;
+  left: 0px;
+  top : 0px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   justify-items: center;
   align-items: center;
+  background-color: whitesmoke;
 
   #app_title{
     color: colors.$text_black;
@@ -57,18 +60,16 @@ div.appBar{
       cursor: pointer;
     }
     #user_email, #logout_btn{
-      font-size: 12px;
-      background-color: colors.$dim_white;
+      font-size: 0.8rem;
+      background-color: colors.$text_white;
       border-radius: 12px;
-      border: 1px solid grey;
       padding-block: 4px;
       padding-inline: 16px;
       margin-left: 12px;
       cursor: pointer;
     }
     #user_email:hover, #logout_btn:hover{
-      background-color: white;
-      border-color: black;
+      background-color: white
     }
   }
   @media only screen and (max-width : 1200px) {
@@ -101,7 +102,7 @@ div.appBar{
     align-items: flex-end;
     font-family: appFont;
     font-weight: bolder;
-    background-color: colors.$dim_white;
+    background-color: colors.$text_white;
     padding : 8px;
     padding-top: 10px;
     border-radius: 8px;

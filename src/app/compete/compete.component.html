@@ -3,16 +3,18 @@
 <app-bar></app-bar>
 
 <div class="flex_container" >
-  <div id = "create_btn" (click)="showCreateDialog(true)">
-    <div id="plus_btn">+</div>
-    &nbsp;&nbsp;&nbsp;Create competition
-  </div>
 
   <div id = "join_competition" >
     <p class = "heading">Join with competition code </p>
     <input type="text" id="competition_id_text" placeholder="Eg. 54321">
     <button id="btn_submit_compt_code" routerLink="">Join</button>
   </div>
+
+  <div id = "create_btn" (click)="showCreateDialog(true)">
+    <div id="plus_btn">+</div>
+    &nbsp;&nbsp;&nbsp;Create competition
+  </div>
+
 </div>
 
 <competitions-list

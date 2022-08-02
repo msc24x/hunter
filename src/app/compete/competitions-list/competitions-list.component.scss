@@ -8,9 +8,6 @@
 }
 
 #competitions_list{
-  background-color: colors.$sweet_white;
-  margin-left: 7%;
-  margin-right: 7%;
   padding-bottom: 24px;
   border-radius: 12px;
   margin-top: 24px;
@@ -28,10 +25,6 @@
   }
 }
 
-#competition_card:hover{
-  cursor: pointer;
-  background-color: #eeeeee;
-}
 
 #list_end{
   display: flex;
@@ -45,7 +38,7 @@
 #competitions_list p.heading{
   margin-inline: 16px;
   padding-top: 12px;
-  font-size: 26px;
+  font-size: 2.5rem;
   font-weight: bolder;
 }
 
@@ -69,14 +62,14 @@
   border-color: black;
   border-width: 110px;
   height: fit-content;
-  background-color: #ebebeb;
+  background-color: whitesmoke;
   font-family: appFont;
 
 }
 
 .competition_card:hover{
   cursor: pointer;
-  background-color: #d8d8d8;
+  background-color: #d3d3d3;
 }
 
 #c_title{
