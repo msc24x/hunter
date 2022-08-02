@@ -23,6 +23,7 @@ export class Questions{
       query += `and id = "${params.id}" `
     }
     query += ";"
+    console.log(query)
 
     this.dbConnection.query(query, (err, rows)=>{
       if(err){
@@ -69,10 +70,19 @@ export class Questions{
 
   update(newQuestion : any, callback : (err : MysqlError | null)=>void){
 
+    let query = `update questions set title = "${newQuestion.title}", statement = "${newQuestion.statement}"`
+    if(newQuestion.points){
+      query += `, points = "${newQuestion.points}"`
+    }
 
+    query += ` where id = "${newQuestion.id}" ; `
 
-    this.dbConnection.query(`update questions set title = "${newQuestion.title}", statement = "${newQuestion.statement}", points = "${newQuestion.points}" where id = "${newQuestion.id}" ; `, (err)=>{
+    this.dbConnection.query(query, (err)=>{
       callback(err)
     })
+
+    // this.dbConnection.query(`update questions set title = "${newQuestion.title}", statement = "${newQuestion.statement}", points = "${newQuestion.points}" where id = "${newQuestion.id}" ; `, (err)=>{
+    //   callback(err)
+    // })
   }
 }

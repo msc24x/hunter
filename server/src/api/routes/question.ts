@@ -1,4 +1,5 @@
 import express, {Request, Response} from "express"
+import { writeFile } from "fs"
 import { Competitions } from "../../database/models/Competitions"
 import { Questions } from "../../database/models/Questions"
 import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from "../../environments/environment"
@@ -10,6 +11,65 @@ var router = express.Router()
 const competitionsModel = new Competitions()
 const questionsModel = new Questions()
 
+
+router.post("/question/upload", (req, res)=>{
+  if(!req.body.id){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  const fileType = req.body.fileType as string
+  const file = req.body.file
+
+  if(!file || !fileType){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+  if(! ["testcases", "solutions"].includes(fileType)){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  if(file.length > 1572864){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  authenticate(req, res, (req, res, user)=>{
+    questionsModel.findAll({id : req.body.id}, questions =>{
+      console.log(req.body.id)
+
+      if(questions.length == 0){
+        sendResponse(res, resCode.notFound)
+        return
+      }
+      competitionsModel.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
+        if(competitions.length == 0){
+          sendResponse(res, resCode.notFound)
+          return
+        }
+
+        if(competitions[0].host_user_id != user.id){
+          console.log(competitions[0], user, req.query)
+          sendResponse(res, resCode.forbidden)
+          return
+        }
+        let fileName = `src/database/files/${competitions[0].id}_${questions[0].id}_${fileType[0]}.txt`
+
+        writeFile(fileName, file, {flag : "w"}, err=>{
+          if(err){
+            console.log(err)
+            sendResponse(res, resCode.serverErrror)
+            return
+          }
+          sendResponse(res, resCode.success)
+        })
+
+      }, ()=>{})
+    })
+  })
+
+})
 
 router.post("/question/delete", (req, res)=>{
   if(!req.body.id){
@@ -148,7 +208,6 @@ router.get("/question", (req, res)=>{
     (questions : Array<QuestionInfo>)=>{
       sendResponseJson(res, resCode.success, questions)
     })
-
 
   })
 
