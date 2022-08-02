@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import * as ace from 'ace-builds';
-import { CompetitionInfo, UserInfo } from 'src/environments/environment';
+import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../services/auth/auth.service';
 import { CompetitionsDataService } from '../services/data/competitions-data.service';
 @Component({
@@ -18,6 +18,12 @@ export class CompetitionComponent implements OnInit {
   user = {} as UserInfo
   competition = {} as CompetitionInfo
 
+  competitionQuestions : Array<QuestionInfo> = []
+  questionSelected = -1
+  questionSelectedInfo = {} as QuestionInfo
+  solutionOutput = ""
+
+
 
   constructor(
     private route : ActivatedRoute,
@@ -33,7 +39,7 @@ export class CompetitionComponent implements OnInit {
     this.authService.isAuthenticated.subscribe(isAuth=>{
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
-
+      this.fetchData()
     })
 
   }
@@ -48,14 +54,51 @@ export class CompetitionComponent implements OnInit {
         this.user = body
         this.authService.user = this.user
         this.authService.isAuthenticated.next(true)
-        this.competitionsService.getCompetitionInfo(this.c_id).subscribe(res=>{
-          this.competition = res.body as CompetitionInfo
-        })
+        this.fetchData()
       }
     },
     err=>{
       this.router.navigate(["/home"])
     })
+  }
+
+  postSolution(){
+
+    if(this.questionSelected == -1){
+      this.solutionOutput = "No question selected"
+      return
+    }
+
+    this.solutionOutput = "Judging.... (This might take few seconds)"
+    this.competitionsService.judgeSolution({
+      for : {
+        competition_id : this.c_id,
+        question_id : this.competitionQuestions[this.questionSelected].id
+      },
+      solution : {
+        lang : "cpp",
+        code : this.editor.getValue()
+      }
+    }).subscribe(res=>{
+      console.log(res)
+      this.solutionOutput = ( res.body as {output : string}).output
+
+    })
+  }
+
+  fetchData(){
+    this.competitionsService.getCompetitionInfo(this.c_id).subscribe(res=>{
+      this.competition = res.body as CompetitionInfo
+      this.competitionsService.getQuestions({competition_id : this.c_id}).subscribe(res=>{
+        this.competitionQuestions = res.body as QuestionInfo[]
+      })
+    })
+  }
+
+  selectQuestion(index : number){
+    this.questionSelected = index
+    this.questionSelectedInfo = this.competitionQuestions[index]
+    console.log(this.questionSelectedInfo)
   }
 
 

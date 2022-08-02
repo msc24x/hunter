@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { apiEndpoints, CompetitionInfo, QuestionInfo } from 'src/environments/environment';
+import { apiEndpoints, CompetitionInfo, HunterExecutable, QuestionInfo } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
@@ -10,11 +10,27 @@ export class CompetitionsDataService {
 
   constructor(private authService : AuthService, private http : HttpClient) { }
 
+  judgeSolution(exe : HunterExecutable){
+    return this.http.post(apiEndpoints.execute, exe, {
+      responseType : 'json',
+      withCredentials : true,
+      observe : "response"
+    })
+  }
+
   postQuestion(competition_id : string){
 
     return this.http.post(apiEndpoints.question,{competition_id : competition_id},{
       withCredentials : true,
       observe : "response",
+    })
+  }
+
+  postFile(params : any){
+    return this.http.post(apiEndpoints.postFile, params, {
+      responseType : 'json',
+      withCredentials : true,
+      observe : "response"
     })
   }
 

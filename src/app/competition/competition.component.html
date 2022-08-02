@@ -1,9 +1,38 @@
 <app-bar></app-bar>
 
-<div id = "competitions_info">
-  title : {{this.competition.title}}
-  desc : {{this.competition.description}}
+<div class="body">
+
+  <div id = "competition_info">
+
+    <div>
+      <b>{{this.competition.title}}</b>
+      - {{this.competition.description}}
+    </div>
+
+    <div id="duration_info">Time Remaining : <b>{{competition.duration}}</b> mins</div>
+
+  </div>
+
+  <questions-list
+    [competitionInfo]="competition"
+    [questionsList]="competitionQuestions"
+    [editable]="false"
+    (questionSelectEmitter)="selectQuestion($event)"
+  ></questions-list>
+
+  <div id="question_title" [innerText]="">
+    Question ID : {{questionSelectedInfo.id}} for {{questionSelectedInfo.points}} pts
+    <br>
+    <b>{{questionSelectedInfo.title}}</b>
+  </div>
+  <div id="question_statement" [innerText]="questionSelectedInfo.statement">
+  </div>
+
+  <div id="editor"></div>
+
+  <div id="submit_code_btn" (click)="postSolution()">Submit</div>
+
+  <div id="solution_output" [innerText]="solutionOutput"></div>
+
+
 </div>
-
-<div id="editor"></div>
-
