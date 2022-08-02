@@ -62,6 +62,19 @@ export class EditorComponent implements OnInit {
 
   }
 
+  saveQuestion(){
+
+    this.competitionsData.putQuestion({
+      id : this.competitionQuestions[this.questionSelected].id,
+      title : (document.getElementById("text_qtitle") as HTMLTextAreaElement).value,
+      statement : (document.getElementById("text_statement") as HTMLTextAreaElement).value,
+      points : (document.getElementById("question_points") as HTMLInputElement).valueAsNumber
+    }).subscribe((res)=>{
+      this.displayLog("Question Updated")
+      this.fetchQuestions()
+    })
+
+  }
 
   selectedQuestionElement() : HTMLLIElement | null {
     let prevTarget = document.getElementById("questions_list")?.getElementsByTagName("li")[this.questionSelected]
@@ -72,78 +85,51 @@ export class EditorComponent implements OnInit {
       return null
   }
 
-  selectQuestion({target} : any){
+  selectQuestion(index : number){
 
-    let index = (target.innerHTML as string).substring(1);
-    if(this.questionSelected != -1){
-      let prevTarget = this.selectedQuestionElement()
-      if(prevTarget){
-        prevTarget.style.background = "#E4E4E4"
-        prevTarget.style.color = "black"
-      }
-    }
+    this.questionSelected = index
+    this.questionSelectedInfo = this.competitionQuestions[index]
 
-    this.questionSelected = index as unknown as number
-    this.questionSelectedInfo = this.competitionQuestions[this.questionSelected]
-
-    target.style.background = "black"
-    target.style.color = "whitesmoke"
-
-    this.displayLog("Question "+this.questionSelected+ " selected")
   }
 
-  openFile(event : any){
-    const input  = event.target as HTMLInputElement
-    input.type = "file"
-    input.click()
-  }
 
-  updateSolutionsFile(event: any){
+  updateFile(event: any, filen : string){
     const file = (event.target as HTMLInputElement).files
-    if(file && file.length > 0){
-      const label = document.getElementById("solutions_file_label") as HTMLLabelElement
-      label.innerText = "Test against " + file[0].name
-    }
-  }
 
-  updateTestCasesFile(event: any){
-    const file = (event.target as HTMLInputElement).files
-    if(file && file.length > 0){
-      const label = document.getElementById("testcases_file_label") as HTMLLabelElement
-      label.innerText = "Test cases " + file[0].name
-    }
-  }
-
-  saveQuestion(){
-    let element = this.selectedQuestionElement()
-    if(!element){
+    if(!file || file.length == 0 ){
+      this.displayLog("Error while uploading")
       return
     }
 
-    this.competitionsData.putQuestion({
-      id : this.competitionQuestions[this.questionSelected].id,
-      title : (document.getElementById("text_qtitle") as HTMLTextAreaElement).value,
-      statement : (document.getElementById("text_statement") as HTMLTextAreaElement).value,
-      points : (document.getElementById("question_points") as HTMLInputElement).valueAsNumber
-    }).subscribe((res)=>{
-      this.displayLog("Question Updated")
-    })
+    if(this.questionSelected == -1){
+      this.displayLog("Error : No question selected")
+      return
+    }
 
-  }
+    if(file[0].size > 1572864 || file[0].type != "text/plain"){
+      this.displayLog("File should be .txt < 1.5 Mb")
+      return
+    }
+    console.log(filen.toLowerCase())
+    const label = document.getElementById(filen.toLowerCase()+"_file_label") as HTMLLabelElement
+    label.innerText = "Uploading.. " + filen + " " + file[0].name
 
-  delQuestion(){
-    if(this.questionSelected != -1)
-      this.competitionsData.deleteQuestion(this.competitionQuestions[this.questionSelected].id).subscribe(res =>{
-        this.displayLog("Question "+ this.questionSelected+ " deleted")
-        this.fetchQuestions()
+    const contents = file[0].text()
+
+    contents.then((result)=>{
+      this.competitionsData.postFile({
+        id : this.questionSelectedInfo.id,
+        fileType : filen.toLowerCase(),
+        file : result
+      }).subscribe(res=>{
+        console.log(res)
+        this.displayLog("File for "+filen+" Uploaded")
+        label.innerText = filen + " Uploaded"
       })
-  }
-
-  addQuestion(){
-    this.competitionsData.postQuestion(this.competition_id).subscribe(res=>{
-      this.fetchQuestions()
-      this.displayLog("New question inserted and saved")
     })
+
+
+
   }
 
   fetchQuestions(){

@@ -16,6 +16,7 @@ import { EditorComponent } from './editor/editor.component';
 import { EditorMenuComponent } from './editor-menu/editor-menu.component';
 import { CompetitionsListComponent } from './compete/competitions-list/competitions-list.component';
 import { DatePipe } from '@angular/common';
+import { QuestionsListComponent } from './editor/questions-list/questions-list.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { DatePipe } from '@angular/common';
     CreateDialogComponent,
     EditorComponent,
     EditorMenuComponent,
-    CompetitionsListComponent
+    CompetitionsListComponent,
+    QuestionsListComponent
 
   ],
   imports: [

@@ -23,6 +23,20 @@ export interface CompetitionInfo{
   start_schedule : string
 }
 
+export type HunterExecutable = {
+  for : {
+    competition_id : string,
+    question_id : string,
+
+  }
+
+  solution : {
+    lang : "py" | "c" | "cpp" | "js",
+    code : string
+  }
+
+}
+
 export const apiEndpoints = {
   register : environment.apiUrl+"/register",
   login : environment.apiUrl+"/login",
@@ -31,7 +45,9 @@ export const apiEndpoints = {
   competition : environment.apiUrl+"/competition",
   getCompetitions : environment.apiUrl+"/competitions",
   question : environment.apiUrl+"/question",
-  deleteQuestion :  environment.apiUrl+"/question/delete"
+  deleteQuestion :  environment.apiUrl+"/question/delete",
+  postFile : environment.apiUrl+"/question/upload",
+  execute : environment.apiUrl+"/execute"
 }
 
 export const resCode = {
