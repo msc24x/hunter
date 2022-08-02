@@ -113,10 +113,13 @@ router.get("/competitions", (req, res)=>{
     id : req.query.id,
     host_user_id : req.query.host_user_id
   }
-  let isPublic = true
+  let isPublic : boolean | -1 = -1
   let dateOrder : 1 | 0| -1 = 0
   if(req.query.public == "false"){
     isPublic = false
+  }
+  else if(req.query.public == "true"){
+    isPublic = true
   }
   if(req.query.dateOrder){
     if(req.query.dateOrder == "1"){
