@@ -3,7 +3,7 @@ import { CompetitionInfo, HunterExecutable, resCode, UserInfo } from '../environ
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { exec } from 'child_process';
-import { writeFile } from 'fs';
+import { writeFile, writeFileSync } from 'fs';
 import { database } from '../database/database';
 import { verify } from 'argon2';
 import { randomBytes } from 'crypto';
@@ -38,25 +38,10 @@ function isValidExecRequest(exec : HunterExecutable) : boolean{
   return false;
 }
 
-app.post("/upload", (req, res)=>{
-  const fileType = req.body.fileType
-  const file = req.body.file
 
-  if(!file || !fileType){
-    sendResponse(res, resCode.badRequest)
-    return
-  }
-  if(["tests", "sols".includes(fileType as string)]){
-    sendResponse(res, resCode.badRequest)
-    return
-  }
-
-  sendResponse(res, resCode.serverErrror, "not implemented")
-
-})
 
 function getFileName(hunterExecutable : HunterExecutable){
-  return `${hunterExecutable.for.competition_id}${hunterExecutable.for.question_id}`
+  return `${hunterExecutable.for.competition_id}_${hunterExecutable.for.question_id}`
 }
 
 app.post("/execute", (req, res)=>{
@@ -67,24 +52,21 @@ app.post("/execute", (req, res)=>{
     return
   }
   console.log(getFileName(hunterExecutable))
-  writeFile(`src/database/files/c${getFileName(hunterExecutable)}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w+"}, (err)=>{
+  writeFile(`src/database/files/${getFileName(hunterExecutable)}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w"}, (err)=>{
     if(err){
       console.log(err)
       sendResponse(res, resCode.serverErrror)
       return
     }
-    exec(`D:/projects/RedocX/Hunter/server/src/scripts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang}`, (error, stdout, stderr)=>{
+    exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang}`, (error, stdout, stderr)=>{
       if(error){
         console.log(stderr)
         sendResponse(res, resCode.serverErrror)
         return
       }
-      sendResponse(res, resCode.success, stdout)
+      sendResponseJson(res, resCode.success, {output : stdout})
     })
   } )
-
-
-
 
 
 })

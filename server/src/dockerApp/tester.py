@@ -2,14 +2,13 @@ from ctypes import sizeof
 from fileinput import filename
 import sys
 import os
-import mysql.connector
 
 if len(sys.argv) < 2:
     print('ERROR : language not specified, supported_langs = ["c", "cpp", "py", "js"]')
     exit()
 
 def postResult(code, message = ""):
-    print(code)
+    print(codeMsg[code])
     print(message)
 
 supported_langs = ["c", "cpp", "py", "js"]
@@ -21,6 +20,12 @@ codeOutputfile = "app/files/output.txt"
 codeInputfile = "app/files/input.txt"
 resultFile = "app/res.txt"
 language = (sys.argv[1])
+codeMsg = {
+  1 : "Accepted",
+  2 : "Wrong Answer",
+  3 : "Runtime Error",
+  4 : "Timeout"
+}
 
 if language not in supported_langs :
     print('ERROR : language ', language, ' not supported, supported_langs = ["c", "cpp", "py", "js"]')
