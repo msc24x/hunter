@@ -7,6 +7,7 @@ import { CompetitionComponent } from './competition/competition.component';
 import { EditorMenuComponent } from './editor-menu/editor-menu.component';
 import { EditorComponent } from './editor/editor.component';
 import { HomeComponent } from './home/home.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [{
@@ -31,6 +32,15 @@ const routes: Routes = [{
 {
   "path" : "editor",
   "component" : EditorMenuComponent
+},
+{
+  "path" : "404",
+  "component" : NotFoundComponent
+},
+{
+    "path"        : '**',
+    "pathMatch"   : 'full',
+    "component"   : NotFoundComponent
 }
 ];
 

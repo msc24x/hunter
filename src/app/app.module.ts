@@ -17,6 +17,8 @@ import { EditorMenuComponent } from './editor-menu/editor-menu.component';
 import { CompetitionsListComponent } from './compete/competitions-list/competitions-list.component';
 import { DatePipe } from '@angular/common';
 import { QuestionsListComponent } from './editor/questions-list/questions-list.component';
+import { DropDownListComponent } from './competition/drop-down-list/drop-down-list.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { QuestionsListComponent } from './editor/questions-list/questions-list.c
     EditorComponent,
     EditorMenuComponent,
     CompetitionsListComponent,
-    QuestionsListComponent
+    QuestionsListComponent,
+    DropDownListComponent,
+    NotFoundComponent
 
   ],
   imports: [
