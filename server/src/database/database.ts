@@ -26,7 +26,7 @@ export class database{
 
     database._dbConnection.connect(err=>{
       if(err){
-        console.log(err);
+         console.log(err);
         return
       }
     });

@@ -29,7 +29,7 @@ export class User{
       query += ` and user.name = "${params.name}"`
     query += ";"
 
-    console.log(query)
+
 
     this.dbConnection.query(query, (err, rows)=>{
       callback(err,rows)

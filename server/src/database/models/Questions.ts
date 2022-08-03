@@ -23,11 +23,11 @@ export class Questions{
       query += `and id = "${params.id}" `
     }
     query += ";"
-    console.log(query)
+
 
     this.dbConnection.query(query, (err, rows)=>{
       if(err){
-        console.log(err)
+         console.log(err)
         return
       }
 
