@@ -6,8 +6,8 @@
 
   <div id = "join_competition" >
     <p class = "heading">Join with competition code </p>
-    <input type="text" id="competition_id_text" placeholder="Eg. 54321">
-    <button id="btn_submit_compt_code" routerLink="">Join</button>
+    <input type="number" id="competition_id_text" placeholder="Eg. 54321">
+    <button id="btn_submit_compt_code" (click)="routeToCompetition()">Join</button>
   </div>
 
   <div id = "create_btn" (click)="showCreateDialog(true)">

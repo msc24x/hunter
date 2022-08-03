@@ -34,7 +34,7 @@ export class CreateDialogComponent implements OnInit {
   requestCreateCompetition(){
     const title = (document.getElementById("competition_title") as HTMLInputElement).value;
     this.competitionsData.postCompetition(title)?.subscribe(res =>{
-      console.log(res)
+
       this.handleResponse(res as HttpResponse<Object>)
     },
     err=>{
@@ -46,7 +46,7 @@ export class CreateDialogComponent implements OnInit {
 
   private handleResponse(res : HttpResponse<Object>){
     this.toggleSubmitButton(true);
-    console.log(res.status)
+
 
     switch (res.status) {
       case resCode.serverErrror:

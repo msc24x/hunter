@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CompetitionInfo, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../services/auth/auth.service';
 import { CompetitionsDataService } from '../services/data/competitions-data.service';
@@ -45,7 +46,8 @@ export class CompeteComponent implements OnInit {
 
   constructor(
     private authService : AuthService,
-    private competitionsDataService : CompetitionsDataService
+    private competitionsDataService : CompetitionsDataService,
+    private router : Router
   ) {
 
     this.authService.isAuthenticated.subscribe(isAuth=>{
@@ -61,6 +63,8 @@ export class CompeteComponent implements OnInit {
     })
 
   }
+
+
 
   ngOnInit(): void {
 
@@ -79,6 +83,11 @@ export class CompeteComponent implements OnInit {
       }
     })
 
+  }
+
+  routeToCompetition(){
+    const id = document.getElementById("competition_id_text") as HTMLInputElement
+    this.router.navigate(["/hunt/"+id.valueAsNumber])
   }
 
   showCreateDialog(show : boolean){
