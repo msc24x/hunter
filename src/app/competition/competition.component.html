@@ -28,6 +28,12 @@
   <div id="question_statement" [innerText]="questionSelectedInfo.statement">
   </div>
 
+  <drop-down-list
+    listType = "Language"
+    [items]="['cpp', 'c', 'py', 'js']"
+    (itemSelectedEvent)="languageSelected = $event"
+  ></drop-down-list>
+
   <div id="editor"></div>
 
   <div id="submit_code_btn" (click)="postSolution()">Submit</div>

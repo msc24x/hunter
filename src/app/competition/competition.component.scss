@@ -4,11 +4,13 @@
 
 
 
+drop-down-list{
+  margin-top: 7%;
+}
 
 #editor{
   height: 720px;
   font-size: 1rem;
-  margin-top: 7%;
 }
 
 #competition_info{
@@ -18,7 +20,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 24px;
 
   #duration_info{
     background-color: whitesmoke;
@@ -28,6 +29,12 @@
     padding-inline: 24px;
     min-width: max-content;
 
+  }
+}
+
+@media only screen and (max-width : 720px) {
+  #competition_info{
+    flex-direction: column-reverse;
   }
 }
 
