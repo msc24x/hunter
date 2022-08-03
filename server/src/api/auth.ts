@@ -22,7 +22,7 @@ export function authenticate(req: Request, res : Response,
 
     users.findAll(params, (err : any, rows : any)=>{
       if(err){
-        console.log(err);
+         console.log(err);
         sendResponse(res, resCode.serverErrror);
         return
       }
@@ -39,10 +39,10 @@ export function authenticate(req: Request, res : Response,
           const session_id = randomBytes(12).toString("hex")+rows[0].id;
           dbConnection.query(` delete from session where session.user_id = "${rows[0].id}" ; `)
           if(req.query.remember == "true"){
-            console.log("remember me was "+req.query.remember)
+
             dbConnection.query(` insert into session(id, user_id) values( "${session_id}", "${rows[0].id}" ); `, err=>{
               if(err){
-                console.log(err);
+                 console.log(err);
                 sendResponse(res, resCode.serverErrror);
                 return
               }
@@ -63,7 +63,7 @@ export function authenticate(req: Request, res : Response,
   else if(session_id){
     dbConnection.query(` select * from session where session.id = "${session_id}";`, (err, rows)=>{
       if(err){
-        console.log(err);
+         console.log(err);
         sendResponse(res, resCode.serverErrror);
         return;
       }

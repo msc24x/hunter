@@ -15,17 +15,17 @@ var dbConnection = database.getDataBase()
 router.get("/authenticate", (req, res)=>{
   authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
     sendResponseJson(res, resCode.accepted, user);
-    console.log("Authentication successfull")
+
   })
 })
 
 router.post("/logout", (req, res)=>{
-  console.log("logout requested")
+
   const session_id = req.cookies.session_id
   if(session_id){
     dbConnection.query(` delete from session where session.id = "${session_id}" ; `, (err)=>{
       if(err){
-        console.log(err)
+         console.log(err)
         sendResponse(res, resCode.serverErrror)
         return
       }
@@ -61,13 +61,13 @@ router.get("/register", (req, res) =>{
 
       dbConnection.query(` insert into users(email, password_hash, salt) values( "${req.query.email}" , "${salted_hash}" , "${salt}" ); `, err=>{
         if(err){
-          console.log(err);
+           console.log(err);
           sendResponse(res, resCode.serverErrror);
           return
         }
         authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
           sendResponseJson(res, resCode.accepted, user);
-          console.log("Authentication successfull")
+
         })
       });
     })

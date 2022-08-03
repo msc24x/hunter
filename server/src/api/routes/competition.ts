@@ -15,7 +15,7 @@ router.post("/competition", (req, res)=>{
   const title = req.body.title;
 
   if(title == null || (title as string).length > 120){
-    console.log(title)
+
     sendResponse(res, resCode.badRequest)
     return;
   }
@@ -25,7 +25,7 @@ router.post("/competition", (req, res)=>{
 
     competitionsModel.add(user.id, title, (err, rows)=>{
       if(err){
-        console.log(err)
+         console.log(err)
         sendResponse(res, resCode.serverErrror)
         return
       }
@@ -61,7 +61,7 @@ router.put("/competition", (req, res)=>{
 
         competitionsModel.update(competition, (err)=>{
           if(err){
-            console.log(err)
+             console.log(err)
             sendResponse(res, resCode.serverErrror)
             return
           }
@@ -72,7 +72,7 @@ router.put("/competition", (req, res)=>{
       },
 
       (err)=>{
-        console.log(err)
+         console.log(err)
         sendResponse(res, resCode.serverErrror)
       }
 
@@ -107,7 +107,7 @@ router.get("/competition", (req, res)=>{
 
 router.get("/competitions", (req, res)=>{
 
-  console.log("get competitions requested")
+
 
   const params = {
     id : req.query.id,

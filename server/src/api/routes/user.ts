@@ -45,7 +45,7 @@ router.put("/user", (req, res)=>{
 
     userModel.update(updateUser, (err)=>{
       if(err){
-        console.log(err)
+         console.log(err)
         sendResponse(res, resCode.serverErrror);
         return
       }

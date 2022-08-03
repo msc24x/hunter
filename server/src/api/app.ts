@@ -7,6 +7,9 @@ import { writeFile, writeFileSync } from 'fs';
 import { database } from '../database/database';
 import { verify } from 'argon2';
 import { randomBytes } from 'crypto';
+import { authenticate } from './auth';
+import { Questions } from '../database/models/Questions';
+import { Competitions } from '../database/models/Competitions';
 
 const app = express();
 app.use(cookieParser())
@@ -15,6 +18,8 @@ app.use(bodyParser.json())
 app.use(require('./routes'))
 
 const dbConnection = database.getDataBase()
+const questionsModel = new Questions()
+const competitionsModel = new Competitions()
 
 const port = 8080;
 
@@ -45,35 +50,79 @@ function getFileName(hunterExecutable : HunterExecutable){
 }
 
 app.post("/execute", (req, res)=>{
+
   const hunterExecutable = req.body as HunterExecutable
 
   if(!isValidExecRequest(hunterExecutable)){
     sendResponse(res, resCode.badRequest)
     return
   }
-  console.log(getFileName(hunterExecutable))
-  writeFile(`src/database/files/${getFileName(hunterExecutable)}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w"}, (err)=>{
-    if(err){
-      console.log(err)
-      sendResponse(res, resCode.serverErrror)
-      return
-    }
-    exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang}`, (error, stdout, stderr)=>{
-      if(error){
-        console.log(stderr)
-        sendResponse(res, resCode.serverErrror)
-        return
+
+
+  authenticate(req, res, (req, res, user)=>{
+    questionsModel.findAll(
+      {
+        id : hunterExecutable.for.question_id,
+        competition_id : hunterExecutable.for.competition_id
+      },
+      (questions)=>{
+        if(questions.length == 0){
+          sendResponse(res, resCode.notFound)
+          return
+        }
+        competitionsModel.findAll(
+          {
+            id : hunterExecutable.for.competition_id
+          },
+          0,
+          true,
+          competitions=>{
+            if(competitions.length == 0){
+              sendResponse(res, resCode.notFound)
+              return
+            }
+
+            // the point where it is all okay
+            writeFile(`src/database/files/${getFileName(hunterExecutable)}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w"}, (err)=>{
+              if(err){
+                 console.log(err)
+                sendResponse(res, resCode.serverErrror)
+                return
+              }
+              exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang}`, (error, stdout, stderr)=>{
+                if(error){
+
+                  sendResponse(res, resCode.serverErrror)
+                  return
+                }
+                sendResponseJson(res, resCode.success, {output : stdout})
+
+
+              })
+            } )
+
+          },
+          err=>{
+            if(err){
+               console.log(err)
+              sendResponse(res, resCode.serverErrror)
+              return
+            }
+
+          }
+        )
       }
-      sendResponseJson(res, resCode.success, {output : stdout})
-    })
-  } )
+    )
+  })
+
+
 
 
 })
 
 
 export function sendResponse(res : any , code : number ,msg : string = "") {
-  console.log("sending rescode ", code)
+
   res.status(code).send(msg);
 }
 
@@ -92,5 +141,5 @@ export function sendResponseJson(res : any , code : number , body : {
 
 
 app.listen(port, ()=>{
-    console.log(`Listening for hunter at ${port}`);
+     console.log("Hunter started at port "+port)
 })

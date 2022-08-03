@@ -37,7 +37,7 @@ router.post("/question/upload", (req, res)=>{
 
   authenticate(req, res, (req, res, user)=>{
     questionsModel.findAll({id : req.body.id}, questions =>{
-      console.log(req.body.id)
+
 
       if(questions.length == 0){
         sendResponse(res, resCode.notFound)
@@ -50,7 +50,7 @@ router.post("/question/upload", (req, res)=>{
         }
 
         if(competitions[0].host_user_id != user.id){
-          console.log(competitions[0], user, req.query)
+
           sendResponse(res, resCode.forbidden)
           return
         }
@@ -58,7 +58,7 @@ router.post("/question/upload", (req, res)=>{
 
         writeFile(fileName, file, {flag : "w"}, err=>{
           if(err){
-            console.log(err)
+             console.log(err)
             sendResponse(res, resCode.serverErrror)
             return
           }
@@ -79,7 +79,7 @@ router.post("/question/delete", (req, res)=>{
 
   authenticate(req, res, (req, res, user)=>{
     questionsModel.findAll({id : req.body.id}, questions =>{
-      console.log(req.body.id)
+
 
       if(questions.length == 0){
         sendResponse(res, resCode.notFound)
@@ -92,7 +92,7 @@ router.post("/question/delete", (req, res)=>{
         }
 
         if(competitions[0].host_user_id != user.id){
-          console.log(competitions[0], user, req.query)
+
           sendResponse(res, resCode.forbidden)
           return
         }
@@ -134,14 +134,14 @@ router.post("/question", (req, res)=>{
             sendResponse(res, resCode.success)
           },
           (err)=>{
-            console.log(err)
+             console.log(err)
             sendResponse(res, resCode.serverErrror)
           }
         )
       },
 
       (err)=>{
-        console.log(err)
+         console.log(err)
         sendResponse(res, resCode.serverErrror)
       }
     )
@@ -151,7 +151,7 @@ router.post("/question", (req, res)=>{
 router.put("/question", (req, res)=>{
   var params = req.body
 
-  console.log(params)
+
 
   authenticate(req, res, (req, res, user)=>{
     questionsModel.findAll({id : params.id}, (questions)=>{
@@ -166,14 +166,14 @@ router.put("/question", (req, res)=>{
         }
 
         if(competitions[0].host_user_id != user.id){
-          console.log(competitions[0], user, req.query)
+
           sendResponse(res, resCode.forbidden)
           return
         }
 
         questionsModel.update(params, err =>{
           if(err){
-            console.log(err)
+             console.log(err)
             sendResponse(res, resCode.serverErrror)
             return
           }
