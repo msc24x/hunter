@@ -1,0 +1,34 @@
+@use "../../../assets/mixins" as *;
+@use "../../../assets/colors";
+
+#drop-down-list{
+  font-family: appFont;
+  background-color: colors.$text_black;
+  color: colors.$text_white;
+  padding: 4px;
+  min-width: 64px;
+  width: max-content;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  cursor: pointer;
+
+  div{
+    display: flex;
+    flex-direction: row;
+    margin-left: 24px;
+  }
+
+  li{
+    list-style: none;
+
+    padding-inline: 12px;
+  }
+
+  li:hover{
+    font-weight: bold;
+  }
+
+
+}
+
