@@ -47,7 +47,7 @@ export class AppBarComponent implements OnInit {
 
   sendLogoutRequest(){
     this.authService.logout().subscribe(res=>{
-      console.log(res)
+
       this.authService.user = {
         id : "",
         email : "",

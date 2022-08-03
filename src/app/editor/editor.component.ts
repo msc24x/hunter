@@ -110,7 +110,7 @@ export class EditorComponent implements OnInit {
       this.displayLog("File should be .txt < 1.5 Mb")
       return
     }
-    console.log(filen.toLowerCase())
+
     const label = document.getElementById(filen.toLowerCase()+"_file_label") as HTMLLabelElement
     label.innerText = "Uploading.. " + filen + " " + file[0].name
 
@@ -122,7 +122,7 @@ export class EditorComponent implements OnInit {
         fileType : filen.toLowerCase(),
         file : result
       }).subscribe(res=>{
-        console.log(res)
+
         this.displayLog("File for "+filen+" Uploaded")
         label.innerText = filen + " Uploaded"
       })
@@ -218,7 +218,7 @@ export class EditorComponent implements OnInit {
     this.competitionInfo.duration = duration.value as unknown as number
     this.competitionInfo.start_schedule = schedule.value
     this.competitionsData.putCompetitionInfo(this.competitionInfo).subscribe(res=>{
-      console.log(res);
+       ;
       this.displayLog("Competition changes saved")
     })
   }

@@ -31,7 +31,7 @@ export type HunterExecutable = {
   }
 
   solution : {
-    lang : "py" | "c" | "cpp" | "js",
+    lang : "py" | "c" | "cpp" | "js" | string,
     code : string
   }
 
