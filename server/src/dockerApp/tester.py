@@ -52,7 +52,7 @@ elif language == "py":
     processCode = os.system( "timeout 5 python3 " + filename + " < "+ codeInputfile + " > " + codeOutputfile)
 
 elif language == "js":
-  processCode = os.system( "timeout 5 nodejs " + filename + " < "+ codeInputfile + " > " + codeOutputfile )
+  processCode = os.system( "timeout 5 node " + filename + " < "+ codeInputfile + " > " + codeOutputfile )
 
 codeOutput = open(codeOutputfile, "r")
 codeOutput = codeOutput.readlines()
