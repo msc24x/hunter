@@ -1,0 +1,92 @@
+@use "../../../assets/fonts";
+@use "../../../assets/colors";
+@use "../../../assets/mixins" as *;
+
+
+.heading{
+  font-family: appFont;
+  font-weight: normal;
+  color: colors.$text_black;
+}
+
+#competitions_list{
+  padding-bottom: 24px;
+  border-radius: 12px;
+  margin-top: 24px;
+}
+
+@media only screen and (max-width : 1024px) {
+  #competitions_list{
+    margin-inline: 0.5%;
+  }
+  .flex_container{
+    justify-content: center;
+  }
+  #create_btn{
+    margin-left: 0px;
+  }
+}
+
+
+#list_end{
+  display: flex;
+  justify-content: center;
+  font-family: appFont;
+  font-style: italic;
+  font-weight: lighter;
+  font-size: 14px;
+}
+
+#competitions_list p.heading{
+  margin-inline: 16px;
+  padding-top: 12px;
+  font-size: 2.5rem;
+  font-weight: bolder;
+}
+
+#competitions_ol{
+  list-style-type: none;
+  padding-left: 0px;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  li{
+    border-width: 2px;
+    border-color: black;
+  }
+}
+
+.competition_card{
+  margin-left: 8px;
+  margin-right: 8px;
+  margin: 8px;
+  padding : 12px;
+  border-radius: 16px;
+  border-color: black;
+  border-width: 110px;
+  height: fit-content;
+  background-color: whitesmoke;
+  font-family: appFont;
+
+}
+
+.competition_card:hover{
+  cursor: pointer;
+  background-color: #d3d3d3;
+}
+
+#c_title{
+  font-weight: normal;
+  font-size: 20px;
+  word-break: break-word;
+
+}
+#c_date_created{
+  margin-left: 24px;
+  font-size: 14px;
+  font-weight: lighter;
+}
+
+#c_about{
+  font-size: 1em;
+  word-break: break-word;
+}

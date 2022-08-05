@@ -1,0 +1,114 @@
+@use "../../../assets/fonts";
+@use "../../../assets/colors";
+@use "../../../assets/mixins" as *;
+
+create-dialog{
+  display: none;
+}
+
+.heading{
+  font-family: appFont;
+  font-weight: normal;
+  color: colors.$text_black;
+}
+
+
+.flex_container{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#create_btn{
+  font-weight: bolder;
+  font-family: appFont;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  margin-top: 24px;
+  width: fit-content;
+
+  #plus_btn{
+    background-color: whitesmoke;
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+}
+#create_btn:hover{
+  cursor: pointer;
+  animation-name: outline;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  //box-shadow: 2px 2px 15px 1px #00000044;
+
+}
+@keyframes outline {
+  100%{
+    transform: scale(1.1);
+  }
+}
+
+
+#join_competition{
+  background-color: whitesmoke;
+  border-radius: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding : 6px;
+
+}
+
+
+#join_competition p.heading{
+  font-size: 20px;
+  font-weight: bolder;
+  text-align: center;
+  padding-inline: 12px;
+}
+
+#competition_id_text{
+    border-radius: 8px;
+    color: colors.$text_black;
+    background-color: colors.$text_white;
+    height: 28px;
+    border-width: 0px;
+    width: 212px;
+    font-family: appFont;
+    font-size: 16px;
+    text-align: left;
+    padding-left: 12px;
+}
+
+#btn_submit_compt_code{
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-top: 16px;
+  margin : 16px;
+  background-color: colors.$text_white;
+  color: colors.$text_black;
+  stroke-width: 0px;
+  border-width: 0px;
+  height: 28px;
+  width: 48px;
+  border-radius: 8px;
+  font-family: appFont;
+  font-weight: bold;
+}
+
+#btn_submit_compt_code:hover{
+  background-color: colors.$text_black;
+  color : colors.$text_white;
+}
+
+

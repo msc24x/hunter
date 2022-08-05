@@ -3,22 +3,22 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppBarComponent } from './app-bar/app-bar.component';
-import { RegisterComponent } from './register/register.component';
-import { HomeComponent } from './home/home.component';
-import { LoginDialogComponent } from './home/login-dialog/login-dialog.component';
-import { SigninDialogComponent } from './register/signin-dialog/signin-dialog.component';
-import { CompeteComponent } from './compete/compete.component';
-import { CompetitionComponent } from './competition/competition.component';
+import { AppBarComponent } from './components/app-bar/app-bar.component';
+import { RegisterComponent } from './views/register/register.component';
+import { HomeComponent } from './views/home/home.component';
+import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
+import { SigninDialogComponent } from './components/signin-dialog/signin-dialog.component';
+import { CompeteComponent } from './views/compete/compete.component';
+import { CompetitionComponent } from './views/competition/competition.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CreateDialogComponent } from './compete/create-dialog/create-dialog.component';
-import { EditorComponent } from './editor/editor.component';
-import { EditorMenuComponent } from './editor-menu/editor-menu.component';
-import { CompetitionsListComponent } from './compete/competitions-list/competitions-list.component';
+import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
+import { EditorComponent } from './views/editor/editor.component';
+import { EditorMenuComponent } from './views/editor-menu/editor-menu.component';
+import { CompetitionsListComponent } from './components/competitions-list/competitions-list.component';
 import { DatePipe } from '@angular/common';
-import { QuestionsListComponent } from './editor/questions-list/questions-list.component';
-import { DropDownListComponent } from './competition/drop-down-list/drop-down-list.component';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { QuestionsListComponent } from './components/questions-list/questions-list.component';
+import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
+import { NotFoundComponent } from './views/not-found/not-found.component';
 
 @NgModule({
   declarations: [
