@@ -5,7 +5,14 @@
     <li *ngFor="let com of this.competitionsList">
       <div class = "competition_card" routerLink="/{{this.route}}/{{com.id}}">
         <a id = "c_title">{{com.title}}</a>
-        <a id = "c_date_created">Created {{com.created_on | date}} <b>by {{com.host_user_id}}</b></a>
+        <a id = "c_date_created">Created {{com.created_on | date}} <b>by {{com.host_user_id | userInfoPipe | async}}</b></a>
+        <div id ="start_schedule"
+          [style.color]="isAfterNow(com.start_schedule) && isLive(com.start_schedule, com.duration) ? '#D2122Ebb' : 'colors.$text_black' "
+        >
+          Live from {{com.start_schedule | date : "full" : "IST"}}
+          &nbsp;
+          <div *ngIf="!isLive(com.start_schedule, com.duration)" ><b>Has Ended</b></div>
+        </div>
         <br>
         <p id = "c_about">{{com.description}}</p>
       </div>

@@ -67,6 +67,15 @@
   background-color: whitesmoke;
   font-family: appFont;
 
+  #start_schedule{
+    background-color: colors.$text_white;
+    border-radius: 16px;
+    padding: 4px;
+    padding-inline: 8px;
+    width: fit-content;
+    display: flex;
+  }
+
 }
 
 .competition_card:hover{
