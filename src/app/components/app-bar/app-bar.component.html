@@ -4,6 +4,7 @@
     <a id = "app_title_short">{{app_title_s}}</a>
     <button *ngIf="!isAuthenticated && showRegisterBtn" id = "register_btn" routerLink="/register">SIGN UP</button>
     <a *ngIf="isAuthenticated" id= "user_email" >{{user.email}}</a>
+    <a *ngIf="isAuthenticated" id= "user_name" >{{user.name}}</a>
     <a *ngIf="isAuthenticated" id = "logout_btn" (click)="sendLogoutRequest()">Logout</a>
   </div>
   <a id="navBarBtn" (click)="toggleNavBar()">EXPLORE

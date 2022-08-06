@@ -60,7 +60,7 @@ div.appBar{
       transform: scale(1.02);
       cursor: pointer;
     }
-    #user_email, #logout_btn{
+    #user_email, #logout_btn, #user_name{
       font-size: 0.8rem;
       background-color: colors.$text_white;
       border-radius: 12px;
@@ -69,7 +69,7 @@ div.appBar{
       margin-left: 12px;
       cursor: pointer;
     }
-    #user_email:hover, #logout_btn:hover{
+    #logout_btn:hover{
       background-color: white
     }
   }

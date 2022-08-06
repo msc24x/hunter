@@ -47,7 +47,8 @@ export const apiEndpoints = {
   question : environment.apiUrl+"/question",
   deleteQuestion :  environment.apiUrl+"/question/delete",
   postFile : environment.apiUrl+"/question/upload",
-  execute : environment.apiUrl+"/execute"
+  execute : environment.apiUrl+"/execute",
+  user : environment.apiUrl+"/user"
 }
 
 export const resCode = {

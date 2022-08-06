@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Console } from 'console';
 import { userInfo } from 'os';
 import { CompetitionInfo, UserInfo } from 'server/src/environments/environment';
+import { UserDataService } from 'src/app/services/data/user-data.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
 
@@ -23,7 +25,8 @@ export class EditorMenuComponent implements OnInit {
 
   constructor(
     private authService : AuthService,
-    private competitionsDataService : CompetitionsDataService
+    private competitionsDataService : CompetitionsDataService,
+    private userDataService : UserDataService
   ) {
 
     this.authService.isAuthenticated.subscribe(isAuth=>{
@@ -31,6 +34,19 @@ export class EditorMenuComponent implements OnInit {
       this.isAuthenticated = isAuth;
     })
 
+  }
+
+  updateUserInfo(){
+    let userInput = document.getElementById("user_name_input") as HTMLInputElement 
+    this.user.name = userInput.value
+    console.log(userInput)
+    this.userDataService.updateUserInfo({
+      id : this.user.id,
+      name : userInput.value,
+      email : this.user.email
+    }).subscribe(res=>{
+      console.log(res)
+    })
   }
 
   ngOnInit(): void {
