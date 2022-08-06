@@ -19,7 +19,7 @@ export class Questions{
     if(params.competition_id != null){
       query += `and competition_id = "${params.competition_id}" `
     }
-    if(params.id != null){
+    else if(params.id != null){
       query += `and id = "${params.id}" `
     }
     query += ";"
