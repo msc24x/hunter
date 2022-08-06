@@ -20,7 +20,7 @@ export class LoginDialogComponent implements OnInit {
   sendLoginRequest(){
     const email = (document.getElementsByClassName("textbox")[0] as HTMLInputElement).value;
     const password = (document.getElementsByClassName("textbox")[1] as HTMLInputElement).value;
-    const remember = (document.getElementById("keep_logged_check") as HTMLInputElement).checked;
+    const remember = true // (document.getElementById("keep_logged_check") as HTMLInputElement).checked;
 
     if(this.isEmail(email) && (password.length >= 6 && password.length <= 16)){
 
