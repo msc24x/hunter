@@ -19,6 +19,7 @@ import { DatePipe } from '@angular/common';
 import { QuestionsListComponent } from './components/questions-list/questions-list.component';
 import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
+import { UserInfoPipe } from './pipes/userInfoPipe';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { NotFoundComponent } from './views/not-found/not-found.component';
     CompetitionsListComponent,
     QuestionsListComponent,
     DropDownListComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    UserInfoPipe
 
   ],
   imports: [
