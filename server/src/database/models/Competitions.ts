@@ -27,7 +27,7 @@ export class Competitions{
   }
 
   add(host_user_id : string, title : string, callback : (err : mysql.MysqlError | null, rows : any) => void){
-    this.dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating, public) values( ${host_user_id}, "${title}", NOW() , 0, false )  ;`, (err)=>{
+    this.dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating, public, start_schedule) values( ${host_user_id}, "${title}", NOW() , 0, false, NOW() )  ;`, (err)=>{
       this.dbConnection.query(`select * from competitions where host_user_id = "${host_user_id}" order by created_on desc;`, (err, rows)=>{
         callback(err, rows);
       })
