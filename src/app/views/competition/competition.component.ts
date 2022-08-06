@@ -24,9 +24,14 @@ export class CompetitionComponent implements OnInit, OnDestroy {
   questionSelectedInfo = {} as QuestionInfo
   solutionOutput = ""
   languageSelected = "cpp"
+  timeRemaining = {
+    min : "∞",
+    sec : "∞"
+  }
 
   routerSubsc : Subscription | null = null
   subscriptions : Subscription[] = []
+  timeInterval
 
 
   constructor(
@@ -45,6 +50,17 @@ export class CompetitionComponent implements OnInit, OnDestroy {
       this.isAuthenticated = isAuth;
       this.fetchData()
     }))
+
+    this.timeInterval = setInterval(
+      ()=>{
+        
+        let seconds = (Date.parse(this.competition.start_schedule) + this.competition.duration * 60 * 1000 - Date.now())/1000
+        seconds = Math.floor(seconds)
+        this.timeRemaining.min = Math.floor(seconds/60)+""
+        this.timeRemaining.sec = seconds % 60+""
+      },
+      1000
+    )
 
 
   }
@@ -67,7 +83,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.router.navigate(["/home"])
       })
     )
-
+    
     this.unsubscribeAll()
 
   }
@@ -126,6 +142,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     this.subscriptions.push( this.competitionsService.getCompetitionInfo(this.c_id).subscribe({
       next : res=>{
         this.competition = res.body as CompetitionInfo
+        if(this.competition.duration == 0){
+          clearInterval(this.timeInterval)
+        }
         this.competitionsService.getQuestions({competition_id : this.c_id}).subscribe(res=>{
           this.competitionQuestions = res.body as QuestionInfo[]
         })
