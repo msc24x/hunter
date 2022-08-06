@@ -12,9 +12,9 @@ export class User{
 
   update(newUserInfo : UserInfo, callback : ( err : mysql.MysqlError | null)=>void){
     this.dbConnection.query(` update users set email = "${newUserInfo.email}", name = "${newUserInfo.name}" where id = ${newUserInfo.id} ; `,
-      (err)=>[
+      (err)=>{
         callback(err)
-      ]
+      }
     )
   }
 

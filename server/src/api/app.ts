@@ -3,10 +3,7 @@ import { CompetitionInfo, HunterExecutable, resCode, UserInfo } from '../environ
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { exec } from 'child_process';
-import { writeFile, writeFileSync } from 'fs';
-import { database } from '../database/database';
-import { verify } from 'argon2';
-import { randomBytes } from 'crypto';
+import { writeFile } from 'fs';
 import { authenticate } from './auth';
 import { Questions } from '../database/models/Questions';
 import { Competitions } from '../database/models/Competitions';
@@ -17,7 +14,6 @@ app.use(bodyParser.json())
 
 app.use(require('./routes'))
 
-const dbConnection = database.getDataBase()
 const questionsModel = new Questions()
 const competitionsModel = new Competitions()
 

@@ -23,7 +23,8 @@ router.get("/user", (req, res)=>{
         return
       }
 
-      sendResponseJson(res, resCode.found, rows[0])
+      rows[0].email = ""
+      sendResponseJson(res, resCode.success, rows[0])
     }
   )
 })

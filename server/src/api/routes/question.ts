@@ -188,6 +188,40 @@ router.put("/question", (req, res)=>{
   })
 
 })
+/**
+ * GET question
+ *  authenticate
+ *    get competition associated
+ *    private competition
+ *      if same host
+ *        send
+ *      if diff host
+ *        forbid
+ *    public competition
+ *      if same host
+ *        send
+ *      if diff host
+ *        if live
+ *          if duration 0
+ *            send
+ *          else if time < live + duration
+ *            send
+ *          else 
+ *            forbid
+ *        if not live
+ *          forbid
+ *      
+ *   
+ */
+
+function isLiveNow(date: string){
+  return Date.parse(date) < Date.now()
+}
+function hasNotEnded(date : string, duration : number){
+  if(duration == 0)
+    return true
+  return Date.now() < Date.parse(date) + duration * 60 * 1000
+}
 
 router.get("/question", (req, res)=>{
 
@@ -206,7 +240,58 @@ router.get("/question", (req, res)=>{
       id : id
     },
     (questions : Array<QuestionInfo>)=>{
-      sendResponseJson(res, resCode.success, questions)
+      
+      if(questions.length == 0){
+        sendResponseJson(res, resCode.success, questions)
+        return
+      }
+
+      competitionsModel.findAll(
+        {
+        id : questions[0].competition_id
+        },
+        0,
+        -1,
+        competitions=>{
+          if(competitions.length == 0){
+            // todo : delete all questions
+            sendResponse(res, resCode.notFound)
+            return
+          }
+
+          if(competitions[0].public){
+            if(competitions[0].host_user_id == user.id){
+              sendResponseJson(res, resCode.success, questions)
+            }else{
+              if(isLiveNow(competitions[0].start_schedule)){
+                if(competitions[0].duration == 0){
+                  sendResponseJson(res, resCode.success, questions)
+                }else{
+                  if(hasNotEnded(competitions[0].start_schedule, competitions[0].duration)){
+                    sendResponseJson(res, resCode.success, questions)
+                  }else{
+                    sendResponse(res, resCode.forbidden, "has ended")
+
+                  }
+                }
+              }
+              else{
+                sendResponse(res, resCode.forbidden, "is not live yet")
+              }
+            }
+          }else{
+            if(competitions[0].host_user_id == user.id){
+              sendResponseJson(res, resCode.success, questions)
+            }else{
+              sendResponse(res, resCode.forbidden, "not host")
+            }
+          }
+
+        },
+        err=>{
+
+        }
+      )
     })
 
   })
