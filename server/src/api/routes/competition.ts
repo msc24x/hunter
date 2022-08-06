@@ -48,13 +48,14 @@ router.put("/competition", (req, res)=>{
   authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
 
     const params = {
-      id : req.query.competition_id
+      id : competition.id
     }
 
     competitionsModel.findAll(params, 0, -1,
 
       (competitions)=>{
         if(competitions[0].host_user_id != competition.host_user_id || competitions[0].host_user_id != user.id){
+          console.log(competition, competitions[0], user)
           sendResponse(res, resCode.forbidden)
           return
         }
@@ -106,7 +107,6 @@ router.get("/competition", (req, res)=>{
 })
 
 router.get("/competitions", (req, res)=>{
-
 
 
   const params = {
