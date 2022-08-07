@@ -41,6 +41,8 @@ export class QuestionsListComponent implements OnInit {
 
 
   selectedQuestionElement() : HTMLLIElement | null {
+    if(this.questionSelected == -1)
+      return null
     let prevTarget = document.getElementById("questions_list")?.getElementsByTagName("li")[this.questionSelected]
     if(prevTarget){
       return prevTarget
@@ -52,7 +54,6 @@ export class QuestionsListComponent implements OnInit {
 
   selectQuestion({target} : any){
 
-    let index = (target.innerHTML as string).substring(1);
     if(this.questionSelected != -1){
       let prevTarget = this.selectedQuestionElement()
       if(prevTarget){
@@ -63,6 +64,14 @@ export class QuestionsListComponent implements OnInit {
       }
     }
 
+    if(target == null){
+      this.questionSelected = -1
+      this.questionSelectEmitter.emit(this.questionSelected)
+      return
+    }
+
+    let index = (target.innerHTML as string).substring(1);
+
     this.questionSelected = index as unknown as number
 
     target.style.background = "black"
@@ -72,18 +81,23 @@ export class QuestionsListComponent implements OnInit {
     this.questionSelectEmitter.emit(this.questionSelected)
   }
 
-
+  resetQuestionSelected(){
+    this.selectQuestion({target : null})
+  }
 
   delQuestion(){
     if(this.questionSelected != -1)
       this.competitionsData.deleteQuestion(this.questionsList[this.questionSelected].id).subscribe(res =>{
         this.displayLog("Question "+ this.questionSelected+ " deleted")
+        this.resetQuestionSelected()
         this.fetchRequired.emit()
+
       })
   }
 
   addQuestion(){
     this.competitionsData.postQuestion(this.competitionInfo.id).subscribe(res=>{
+      this.resetQuestionSelected()
       this.fetchRequired.emit()
       this.displayLog("New question inserted and saved")
     })

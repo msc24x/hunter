@@ -1,8 +1,8 @@
 <ol id="questions_list">
   <div>Questions</div>
   <li *ngFor="let question of this.questionsList" (click)="selectQuestion($event)">Q{{this.questionsList.indexOf(question)}}</li>
-  <div *ngIf="editable" id="create_question_btn" (click)="addQuestion(); fetchRequired.emit()">Add</div>
+  <div *ngIf="editable" id="create_question_btn" (click)="addQuestion();">Add</div>
   <div *ngIf="editable" id="save_question_btn" (click)="saveClicked.emit();">Save</div>
-  <div *ngIf="editable" id="delete_question_btn" (click)="delQuestion(); fetchRequired.emit()">Delete</div>
+  <div *ngIf="editable" id="delete_question_btn" (click)="delQuestion();">Delete</div>
 
 </ol>
