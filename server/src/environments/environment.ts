@@ -18,7 +18,12 @@ export const resCode = {
   found  : 302
 }
 
-
+export const resultCode = {
+  "Accepted" : 1,
+  "Wrong Answer" : 2,
+  "Runtime Error" : 3,
+  "Timeout" : 4
+}
 
 
 export type RegisterRequest = {
@@ -35,6 +40,14 @@ export type QuestionInfo = {
   tests_id : string,
   solutions_id : string,
   points : number,
+}
+
+export type Result = {
+  id : string,
+  user_id : string,
+  question_id :string,
+  competition_id : string,
+  result : string
 }
 
 export type UserInfo = {

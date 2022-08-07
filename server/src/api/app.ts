@@ -7,6 +7,7 @@ import { writeFile } from 'fs';
 import { authenticate } from './auth';
 import { Questions } from '../database/models/Questions';
 import { Competitions } from '../database/models/Competitions';
+import { Results } from '../database/models/Results';
 
 const app = express();
 app.use(cookieParser())
@@ -16,6 +17,7 @@ app.use(require('./routes'))
 
 const questionsModel = new Questions()
 const competitionsModel = new Competitions()
+const resultsModel = new Results()
 
 const port = 8080;
 
@@ -78,6 +80,11 @@ app.post("/execute", (req, res)=>{
               return
             }
 
+            if(!competitionsModel.isLiveNow(hunterExecutable.for.competition_id) || !competitionsModel.hasNotEnded(competitions[0].start_schedule, competitions[0].duration)){
+              sendResponse(res, resCode.forbidden, "Either the competition is not live or has ended")
+              return
+            }
+
             // the point where it is all okay
             writeFile(`src/database/files/${getFileName(hunterExecutable)}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w"}, (err)=>{
               if(err){
@@ -87,12 +94,53 @@ app.post("/execute", (req, res)=>{
               }
               exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang}`, (error, stdout, stderr)=>{
                 if(error){
-
+                  console.log(error)
                   sendResponse(res, resCode.serverErrror)
                   return
                 }
+
                 sendResponseJson(res, resCode.success, {output : stdout})
 
+                resultsModel.findAll(
+                  {
+                    user_id : user.id,
+                    question_id : hunterExecutable.for.question_id,
+                    competition_id : hunterExecutable.for.competition_id,
+                  },
+                  (rows, err)=>{
+                    if(err){
+                      console.log(err)
+                      return
+                    }
+
+                    if(rows.length == 0){
+                      resultsModel.post( 
+                        {
+                          user_id : user.id,
+                          question_id : hunterExecutable.for.question_id,
+                          competition_id : hunterExecutable.for.competition_id,
+                          result : stdout[0]
+                        },
+                        err=>{
+                          if(err){
+                            console.log(err)
+                            return
+                          }
+                        }
+                      )
+                    }else{
+                      if(rows[0].result != 1)
+                        resultsModel.update(rows[0].id, stdout[0], err=>{
+                          if(err){
+                            console.log(err)
+                            return
+                          }
+                        }
+                      )
+                    }
+
+                  }
+                )
 
               })
             } )

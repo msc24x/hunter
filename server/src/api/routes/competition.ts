@@ -81,19 +81,27 @@ router.put("/competition", (req, res)=>{
   })
 })
 
-router.get("/competition", (req, res)=>{
+router.get("/competition/:id", (req, res)=>{
+
+  if(req.params.id == ""){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
   competitionsModel.findAll(
     {
-      id : req.query.competition_id
+      id : req.params.id
     } , 0, -1,
 
     (competitions)=>{
 
+      if(competitions.length == 0){
+        sendResponse(res, resCode.notFound)
+        return
+      }
+
       authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
-        if(competitions.length == 0){
-          sendResponse(res, resCode.notFound)
-          return
-        }
+        
         if(competitions[0].host_user_id != user.id && !competitions[0].public){
           sendResponse(res, resCode.forbidden)
           return

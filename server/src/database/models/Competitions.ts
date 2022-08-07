@@ -9,6 +9,16 @@ export class Competitions{
   constructor(){
     this.dbConnection = database.getDataBase()
   }
+  
+  isLiveNow(date: string){
+    return Date.parse(date) < Date.now()
+  }
+  
+  hasNotEnded(date : string, duration : number){
+    if(duration == 0)
+      return true
+    return Date.now() < Date.parse(date) + duration * 60 * 1000
+  }
 
   update(newCompetition : any, callback : (err : mysql.MysqlError | null)=>void){
     let query = `update competitions set title = "${newCompetition.title}", description = "${newCompetition.description}", public = ${newCompetition.public}`
