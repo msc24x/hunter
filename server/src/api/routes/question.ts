@@ -1,5 +1,5 @@
 import express, {Request, Response} from "express"
-import { writeFile } from "fs"
+import { existsSync, fstat, open, openSync, readFile, writeFile } from "fs"
 import { Competitions } from "../../database/models/Competitions"
 import { Questions } from "../../database/models/Questions"
 import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from "../../environments/environment"
@@ -12,14 +12,88 @@ const competitionsModel = new Competitions()
 const questionsModel = new Questions()
 
 
-router.post("/question/upload", (req, res)=>{
-  if(!req.body.id){
+router.get("/question/:id/:fileType/:op?", (req, res)=>{
+
+  let id = req.params.id
+  let fileType = req.params.fileType
+
+  if(id == null){
     sendResponse(res, resCode.badRequest)
     return
   }
 
-  const fileType = req.body.fileType as string
+  authenticate(req, res,  (req : Request, res : Response, user :  UserInfo)=>{
+
+    questionsModel.findAll({
+      id : id
+    },
+    (questions : Array<QuestionInfo>)=>{
+      
+      if(questions.length == 0){
+        sendResponse(res, resCode.notFound)
+        return
+      }
+
+      competitionsModel.findAll(
+        {
+          id : questions[0].competition_id
+        },
+        0,
+        -1,
+        competitions=>{
+          if(competitions.length == 0){
+            // todo : delete all questions
+            sendResponse(res, resCode.notFound)
+            return
+          }
+
+          let fileName = `src/database/files/${competitions[0].id}_${id}_${fileType[0]}.txt`
+          console.log(fileName)
+
+          if(competitions[0].host_user_id == user.id){
+            if(req.params.op == "download"){
+              if(existsSync(fileName)){
+                readFile(fileName, {encoding : "utf-8"}, (err, data)=>{
+                  if(err){
+                    sendResponse(res, resCode.serverErrror)
+                    return
+                  }
+                  sendResponseJson(res, resCode.success, {exists : true, data : data})
+                })
+              }
+              else{
+                sendResponseJson(res, resCode.success, {exists : false})
+              }
+              
+            }
+            else{
+              sendResponseJson(res, resCode.success, {exists : existsSync(fileName)})
+            }
+          }
+          else{
+            sendResponse(res, resCode.forbidden)
+          }
+        },
+        err=>{
+
+        }
+      )
+    })
+
+  })
+
+})
+
+router.post("/question/:id/:fileType", (req, res)=>{
+  if(!req.params.id){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  const fileType = req.params.fileType
   const file = req.body.file
+
+  console.log(fileType)
 
   if(!file || !fileType){
     sendResponse(res, resCode.badRequest)
@@ -36,7 +110,7 @@ router.post("/question/upload", (req, res)=>{
   }
 
   authenticate(req, res, (req, res, user)=>{
-    questionsModel.findAll({id : req.body.id}, questions =>{
+    questionsModel.findAll({id : req.params.id}, questions =>{
 
 
       if(questions.length == 0){
@@ -71,14 +145,14 @@ router.post("/question/upload", (req, res)=>{
 
 })
 
-router.post("/question/delete", (req, res)=>{
-  if(!req.body.id){
+router.delete("/question/:id", (req, res)=>{
+  if(!req.params.id){
     sendResponse(res, resCode.badRequest)
     return
   }
 
   authenticate(req, res, (req, res, user)=>{
-    questionsModel.findAll({id : req.body.id}, questions =>{
+    questionsModel.findAll({id : req.params.id}, questions =>{
 
 
       if(questions.length == 0){
@@ -97,7 +171,7 @@ router.post("/question/delete", (req, res)=>{
           return
         }
 
-        questionsModel.drop(req.body.id as string, err =>{
+        questionsModel.drop(req.params.id as string, err =>{
           if(!err){
             sendResponse(res, resCode.success)
             return
@@ -214,14 +288,7 @@ router.put("/question", (req, res)=>{
  *   
  */
 
-function isLiveNow(date: string){
-  return Date.parse(date) < Date.now()
-}
-function hasNotEnded(date : string, duration : number){
-  if(duration == 0)
-    return true
-  return Date.now() < Date.parse(date) + duration * 60 * 1000
-}
+
 
 router.get("/question", (req, res)=>{
 
@@ -263,11 +330,11 @@ router.get("/question", (req, res)=>{
             if(competitions[0].host_user_id == user.id){
               sendResponseJson(res, resCode.success, questions)
             }else{
-              if(isLiveNow(competitions[0].start_schedule)){
+              if(competitionsModel.isLiveNow(competitions[0].start_schedule)){
                 if(competitions[0].duration == 0){
                   sendResponseJson(res, resCode.success, questions)
                 }else{
-                  if(hasNotEnded(competitions[0].start_schedule, competitions[0].duration)){
+                  if(competitionsModel.hasNotEnded(competitions[0].start_schedule, competitions[0].duration)){
                     sendResponseJson(res, resCode.success, questions)
                   }else{
                     sendResponse(res, resCode.forbidden, "has ended")
