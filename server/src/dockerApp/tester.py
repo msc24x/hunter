@@ -8,7 +8,7 @@ if len(sys.argv) < 2:
     exit()
 
 def postResult(code, message = ""):
-    print(codeMsg[code])
+    print(code , " - " , codeMsg[code])
     print(message)
 
 supported_langs = ["c", "cpp", "py", "js"]
@@ -64,7 +64,7 @@ if compilationCode > 0:
   exit()
 # Runtime error or timeout on 5sec
 elif processCode == 15:
-  postResult(4, message = "".join(codeOutput))
+  postResult(4, message = "")
   exit()
 elif processCode > 0:
   postResult(3, message = "".join(codeOutput))
