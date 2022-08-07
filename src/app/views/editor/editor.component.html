@@ -70,12 +70,16 @@
     Upload test cases test file...
   </label>
   <input class = "file_input" (change)="updateFile($event, 'TestCases')" id = "testcases_file" type="file" >
+  <a *ngIf="testExists" id = "testcases_download" (click)="downloadFile('testcases')">View TestCases</a>
+
 
   <label id = "solutions_file_label" class = "file_input" for="solutions_file">
     Upload test solutions file...
+    
   </label>
   <input class = "file_input" id = "solutions_file" type="file" (change)="updateFile($event, 'Solutions')">
-
+  <a *ngIf="solsExists" id = "solutions_download" (click)="downloadFile('solutions')">View Solutions</a>
+  
   <div id="question_points_lbl">Set Points <input id="question_points" type="number" min="0" [value]="questionSelectedInfo.points" ></div>
 
 

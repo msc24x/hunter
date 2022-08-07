@@ -167,6 +167,19 @@ input.file_input{
   display: none;
 }
 
+a{
+  background-color: whitesmoke;
+  border-radius: 24px;
+  font-family: appFont;
+  padding : 8px;
+  padding-inline: 16px;
+  cursor: pointer;
+}
+
+a:hover{
+  background-color: white;
+}
+
 #question_points{
   @include appTextArea;
   margin-left: 12px;

@@ -10,6 +10,14 @@ export class CompetitionsDataService {
 
   constructor(private authService : AuthService, private http : HttpClient) { }
 
+  getFileStatus(id : string, fileType :string){
+    return this.http.get(apiEndpoints.question + '/' + id + '/' + fileType, {
+      responseType : 'json',
+      withCredentials : true,
+      observe : "response"
+  })
+  }
+
   judgeSolution(exe : HunterExecutable){
     return this.http.post(apiEndpoints.execute, exe, {
       responseType : 'json',
@@ -27,7 +35,7 @@ export class CompetitionsDataService {
   }
 
   postFile(params : any){
-    return this.http.post(apiEndpoints.postFile, params, {
+    return this.http.post(apiEndpoints.question + '/' + params.id + '/' + params.fileType, {file : params.file}, {
       responseType : 'json',
       withCredentials : true,
       observe : "response"
@@ -35,7 +43,7 @@ export class CompetitionsDataService {
   }
 
   deleteQuestion(id : string){
-    return this.http.post(apiEndpoints.deleteQuestion, {id : id}, {
+    return this.http.delete(apiEndpoints.question + '/' + id, {
       responseType : 'json',
       withCredentials : true,
       observe : "response"
@@ -109,13 +117,10 @@ export class CompetitionsDataService {
   }
 
   getCompetitionInfo(id :  string){
-    let params = new HttpParams()
-    params = params.set("competition_id", id)
-
-    return this.http.get(apiEndpoints.competition,{
+    
+    return this.http.get(apiEndpoints.competition + '/' + id,{
       responseType : "json",
-      observe : "response",
-      params : params
+      observe : "response"
     })
   }
 

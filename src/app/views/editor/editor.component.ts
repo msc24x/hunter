@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { HtmlParser } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { time } from 'console';
 import { userInfo } from 'os';
-import { timestamp } from 'rxjs';
+import { BehaviorSubject, timestamp } from 'rxjs';
 import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
@@ -23,6 +23,8 @@ export class EditorComponent implements OnInit {
   competitionQuestions : Array<QuestionInfo> = []
   questionSelected = -1
   questionSelectedInfo = {} as QuestionInfo
+  testExists = false
+  solsExists = false
 
   isAuthenticated : boolean = false
   user = {} as UserInfo
@@ -62,6 +64,21 @@ export class EditorComponent implements OnInit {
 
   }
 
+  getFileStatus(fileType : string){
+    let exists = new BehaviorSubject(false)
+    this.competitionsData.getFileStatus(this.questionSelectedInfo.id, fileType).subscribe(res =>{
+      if(res.status == resCode.success){
+        exists.next((res.body as any).exists)
+      }
+    })
+
+    return exists.asObservable()
+  }
+
+  downloadFile(fileType : string){
+    window.open(`/api/question/${this.questionSelectedInfo.id}/${fileType}/download`)
+  }
+
   saveQuestion(){
 
     this.competitionsData.putQuestion({
@@ -88,7 +105,18 @@ export class EditorComponent implements OnInit {
   selectQuestion(index : number){
 
     this.questionSelected = index
-    this.questionSelectedInfo = this.competitionQuestions[index]
+    this.questionSelectedInfo = (index == -1) ? {} as QuestionInfo : this.competitionQuestions[index]
+
+    this.competitionsData.getFileStatus(this.questionSelectedInfo.id, "solutions").subscribe(res=>{
+      if(res.status == resCode.success){
+        this.solsExists = (res.body as any).exists
+      }
+    })
+    this.competitionsData.getFileStatus(this.questionSelectedInfo.id, "testcases").subscribe(res=>{
+      if(res.status == resCode.success){
+        this.testExists = (res.body as any).exists
+      }
+    })
 
   }
 
@@ -111,6 +139,8 @@ export class EditorComponent implements OnInit {
       return
     }
 
+    console.log(filen)
+
     const label = document.getElementById(filen.toLowerCase()+"_file_label") as HTMLLabelElement
     label.innerText = "Uploading.. " + filen + " " + file[0].name
 
@@ -125,6 +155,18 @@ export class EditorComponent implements OnInit {
 
         this.displayLog("File for "+filen+" Uploaded")
         label.innerText = filen + " Uploaded"
+
+        this.competitionsData.getFileStatus(this.questionSelectedInfo.id, "solutions").subscribe(res=>{
+          if(res.status == resCode.success){
+            this.solsExists = (res.body as any).exists
+          }
+        })
+        this.competitionsData.getFileStatus(this.questionSelectedInfo.id, "testcases").subscribe(res=>{
+          if(res.status == resCode.success){
+            this.testExists = (res.body as any).exists
+          }
+        })
+
       })
     })
 
@@ -137,7 +179,7 @@ export class EditorComponent implements OnInit {
       if(res.status == resCode.success){
         if(res.body)
           this.competitionQuestions = res.body
-          this.questionSelected = -1
+                   
       }
     })
   }
