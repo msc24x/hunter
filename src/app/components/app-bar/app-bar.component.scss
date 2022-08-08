@@ -13,7 +13,7 @@ div.appBar{
   flex-wrap: wrap;
   justify-items: center;
   align-items: center;
-  background-color: whitesmoke;
+  background-color: colors.$text_white;
 
   #app_title{
     color: colors.$text_black;
@@ -62,7 +62,7 @@ div.appBar{
     }
     #user_email, #logout_btn, #user_name{
       font-size: 0.8rem;
-      background-color: colors.$text_white;
+      background-color: whitesmoke;
       border-radius: 12px;
       padding-block: 4px;
       padding-inline: 16px;
