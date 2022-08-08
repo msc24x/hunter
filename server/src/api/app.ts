@@ -112,14 +112,18 @@ app.post("/execute", (req, res)=>{
                       console.log(err)
                       return
                     }
-
+                    let pts = 0
+                    if(stdout[0] == '1'){
+                      pts = questions[0].points
+                    }
                     if(rows.length == 0){
+                      
                       resultsModel.post( 
                         {
                           user_id : user.id,
                           question_id : hunterExecutable.for.question_id,
                           competition_id : hunterExecutable.for.competition_id,
-                          result : stdout[0]
+                          result : pts
                         },
                         err=>{
                           if(err){
@@ -129,8 +133,8 @@ app.post("/execute", (req, res)=>{
                         }
                       )
                     }else{
-                      if(rows[0].result != 1)
-                        resultsModel.update(rows[0].id, stdout[0], err=>{
+                      if(rows[0].result == 0)
+                        resultsModel.update(rows[0].id, pts+"", err=>{
                           if(err){
                             console.log(err)
                             return
