@@ -1,5 +1,11 @@
 @use "../../../assets/mixins" as *;
 
+.row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 #profile_editor{
     font-family: appFont;
     margin : 8px;

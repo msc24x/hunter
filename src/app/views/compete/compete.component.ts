@@ -90,14 +90,4 @@ export class CompeteComponent implements OnInit {
     this.router.navigate(["/hunt/"+id.valueAsNumber])
   }
 
-  showCreateDialog(show : boolean){
-    let createDialog = document.getElementsByTagName("create-dialog")[0] as HTMLDivElement
-    if(show){
-      createDialog.style.display = "block"
-    }else{
-      createDialog.style.display = "none"
-    }
-  }
-
-
 }

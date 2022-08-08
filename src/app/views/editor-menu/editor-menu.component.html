@@ -1,9 +1,16 @@
 <app-bar></app-bar>
-<div id="profile_editor">
-  <div id="label">Edit your public user name</div>
-  <input id = "user_name_input" type="text">
-  <div id = "save_btn" (click)="updateUserInfo()">Save</div>
+
+<div class="row">
+  <div id="profile_editor">
+    <div id="label">Edit your public user name</div>
+    <input id = "user_name_input" type="text">
+    <div id = "save_btn" (click)="updateUserInfo()">Save</div>
+  </div>
+  
+  <create-dialog></create-dialog>
 </div>
+
+
 
 <competitions-list
   heading="Your Competitions"

@@ -12,9 +12,7 @@ import { resCode } from 'src/environments/environment';
 })
 export class CreateDialogComponent implements OnInit {
 
-  @Output()
-  backgroundClick = new EventEmitter()
-
+  
   responseMessage : string = ""
 
   constructor(
@@ -24,11 +22,12 @@ export class CreateDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.showCreateDialog(false)
   }
 
-  hideSelf(event : Event){
-     if((event.target as HTMLInputElement).id == "dialog_box")
-      this.backgroundClick.emit()
+  dialogBoxClicked(event : any){
+    if(event.target.id == 'dialog_box')
+      this.showCreateDialog(false)
   }
 
   requestCreateCompetition(){
@@ -67,6 +66,15 @@ export class CreateDialogComponent implements OnInit {
       default:
         this.responseMessage = "*Unknown error occurred"
         break;
+    }
+  }
+
+  showCreateDialog(show : boolean){
+    let createDialog = document.getElementById("dialog_box") as HTMLDivElement
+    if(show){
+      createDialog.style.display = "block"
+    }else{
+      createDialog.style.display = "none"
     }
   }
 

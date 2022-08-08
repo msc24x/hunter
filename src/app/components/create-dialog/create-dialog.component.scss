@@ -2,10 +2,11 @@
 @use "../../../assets/mixins";
 
 #dialog_box{
-  max-width: 1440px;
   position: absolute;
   width: 100%;
-  height: 100%;
+  left: 0px;
+  top : 0px;
+  padding-top: 456px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,6 +16,7 @@
 
 #dialog{
   background-color: white;
+  margin-inline: auto;
   width: fit-content;
   height: fit-content;
   border-radius: 10px;
@@ -74,4 +76,41 @@
     color: colors.$text_white;
   }
 
+}
+
+#create_btn{
+  font-weight: bolder;
+  font-family: appFont;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  width: fit-content;
+
+  #plus_btn{
+    background-color: whitesmoke;
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+}
+#create_btn:hover{
+  cursor: pointer;
+  animation-name: outline;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  //box-shadow: 2px 2px 15px 1px #00000044;
+
+}
+
+
+@keyframes outline {
+  100%{
+    transform: scale(1.1);
+  }
 }
