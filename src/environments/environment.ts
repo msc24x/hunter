@@ -37,6 +37,21 @@ export type HunterExecutable = {
 
 }
 
+export type result = {
+  user_id : string,
+  score : string,
+  penalities : string
+}
+
+export type resultFull = {
+  id : string,
+  user_id : string,
+  question_id : string,
+  competition_id : string,
+  result : string,
+  penalities : string
+}
+
 export const apiEndpoints = {
   register : environment.apiUrl+"/register",
   login : environment.apiUrl+"/login",
@@ -48,7 +63,9 @@ export const apiEndpoints = {
   deleteQuestion :  environment.apiUrl+"/question/delete",
   postFile : environment.apiUrl+"/question/upload",
   execute : environment.apiUrl+"/execute",
-  user : environment.apiUrl+"/user"
+  user : environment.apiUrl+"/user",
+  results : environment.apiUrl+"/result/c/",
+  resultsAll : environment.apiUrl+"/result"
 }
 
 export const resCode = {
