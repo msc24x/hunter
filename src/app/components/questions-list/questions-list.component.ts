@@ -34,7 +34,10 @@ export class QuestionsListComponent implements OnInit {
   @Output()
   fetchRequired = new EventEmitter()
 
-  questionSelected = -1
+  @Input()
+  questionSelected : number = -1
+  @Output()
+  questionSelectedChange = new EventEmitter<number>()
 
   ngOnInit(): void {
   }
@@ -91,8 +94,9 @@ export class QuestionsListComponent implements OnInit {
         this.displayLog("Question "+ this.questionSelected+ " deleted")
         this.resetQuestionSelected()
         this.fetchRequired.emit()
-
       })
+    else
+      this.displayLog("No Question selected")
   }
 
   addQuestion(){
