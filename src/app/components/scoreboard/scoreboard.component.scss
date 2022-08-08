@@ -1,0 +1,62 @@
+@use "../../../assets/fonts";
+@use "../../../assets/colors";
+@use "../../../assets/mixins" as *;
+
+#score_board{
+    margin-top: 64px;
+   font-family: appFont;
+   width: inherit;
+
+    #sc_title{
+        font-size: 1.4rem;
+        font-weight: bold;
+        padding : 8px;
+    }
+
+    #scores_table{
+
+        font-size: 1.1rem;
+        height: 456px;
+
+        .table_heading{
+            font-weight: bold;
+            margin-bottom: 8px;
+            background-color: whitesmoke;
+        }
+
+        background-color: whitesmoke;
+        padding : 16px;
+        border-radius: 24px;
+
+        display: flex;
+        flex-direction: column;
+
+        div{
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            div{
+                width: 200px;
+                justify-content: center;
+            }
+
+            .score{
+                color : green;
+            }
+
+            .penalities{
+                color: darkred;
+            }
+        }
+
+        div:hover{
+            background-color: colors.$text_white;
+            border-radius: 24px;
+        }
+
+    }
+
+
+}
