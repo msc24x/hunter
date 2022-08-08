@@ -20,6 +20,7 @@ import { QuestionsListComponent } from './components/questions-list/questions-li
 import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { UserInfoPipe } from './pipes/userInfoPipe';
+import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { UserInfoPipe } from './pipes/userInfoPipe';
     QuestionsListComponent,
     DropDownListComponent,
     NotFoundComponent,
-    UserInfoPipe
+    UserInfoPipe,
+    ScoreboardComponent
 
   ],
   imports: [

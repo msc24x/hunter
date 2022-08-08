@@ -19,7 +19,12 @@ export class UserInfoPipe implements PipeTransform{
             let user = res.body as UserInfo
             if(!user.name)
                 user.name = user.email
-            userName.next(user.name + `(${user.id})`)
+            if(args[0] == "noId"){
+                userName.next(user.name)
+            }
+            else{
+                userName.next(user.name + `(${user.id})`)
+            }
         })
         return userName.asObservable()
     }
