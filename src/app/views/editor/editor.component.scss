@@ -45,7 +45,14 @@
     padding : 10px;
     cursor: pointer;
     text-align: center;
+    
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
   }
+
+
 }
 
 .vertical_flex{
@@ -102,12 +109,12 @@
 }
 
 #controls{
-  position: fixed;
+  position: absolute;
   bottom: 0px;
+  left: 0px;
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  max-width: 1440px;
   background-color: rgba(0, 0, 0, 0.295);
   backdrop-filter: blur(8px);
 
@@ -181,8 +188,15 @@ a:hover{
 }
 
 #question_points{
-  @include appTextArea;
-  margin-left: 12px;
+  background-color: whitesmoke;
+  border-radius: 24px;
+  font-family: appFont;
+  padding : 8px;
+  padding-inline: 16px;
+  border-width: 0px;
+  font-size: 1rem;
+  width: 50px;
+  font-family: appFont;
 }
 
 #question_points_lbl, #question_id{

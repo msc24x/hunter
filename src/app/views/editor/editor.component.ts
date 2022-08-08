@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { time } from 'console';
 import { userInfo } from 'os';
 import { BehaviorSubject, timestamp } from 'rxjs';
+import { CompetitionsListComponent } from 'src/app/components/competitions-list/competitions-list.component';
 import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
@@ -25,6 +26,7 @@ export class EditorComponent implements OnInit {
   questionSelectedInfo = {} as QuestionInfo
   testExists = false
   solsExists = false
+  elem : HTMLElement | null = null
 
   isAuthenticated : boolean = false
   user = {} as UserInfo
@@ -48,6 +50,9 @@ export class EditorComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.elem = document.getElementById("log")
+
+
     this.authService.authenticate_credentials().subscribe(res=>{
       if(res.status == 202){
         const body = res.body as UserInfo
@@ -61,6 +66,13 @@ export class EditorComponent implements OnInit {
     err=>{
       this.router.navigate(["/home"])
     })
+
+    document.onkeydown = (event)=>{
+      if(event.shiftKey && event.key == 'S' && !['INPUT', 'TEXTAREA'].includes((event.target as HTMLElement).tagName)){
+        this.saveQuestion()
+        this.saveChanges()
+      }
+    }
 
   }
 
@@ -80,6 +92,11 @@ export class EditorComponent implements OnInit {
   }
 
   saveQuestion(){
+
+    if(this.questionSelected == -1){
+      this.displayLog("No question selected")
+      return
+    }
 
     this.competitionsData.putQuestion({
       id : this.competitionQuestions[this.questionSelected].id,
@@ -179,7 +196,7 @@ export class EditorComponent implements OnInit {
       if(res.status == resCode.success){
         if(res.body)
           this.competitionQuestions = res.body
-                   
+          this.questionSelected = -1
       }
     })
   }
@@ -251,6 +268,7 @@ export class EditorComponent implements OnInit {
   }
 
   saveChanges(){
+    this.saveQuestion()
     const title = document.getElementById("text_title") as HTMLTextAreaElement
     const description = document.getElementById("text_description") as HTMLTextAreaElement
     const duration = document.getElementById("competition_duration") as HTMLInputElement
@@ -260,15 +278,13 @@ export class EditorComponent implements OnInit {
     this.competitionInfo.duration = duration.value as unknown as number
     this.competitionInfo.start_schedule = schedule.value
     this.competitionsData.putCompetitionInfo(this.competitionInfo).subscribe(res=>{
-       ;
-      this.displayLog("Competition changes saved")
+      this.displayLog("Competition changes saved");
     })
   }
 
   displayLog(msg : string){
-    const elem = document.getElementById("log")
-    if(elem)
-      elem.innerHTML = "Last Operation : " + msg
+    if(this.elem)
+      this.elem.innerHTML = "Last Operation : " + msg
   }
 
 }

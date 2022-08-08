@@ -48,6 +48,7 @@
   (questionSelectEmitter)="selectQuestion($event)"
   (saveClicked)="saveQuestion()"
   (fetchRequired)="fetchQuestions()"
+  [(questionSelected)]="questionSelected"
 >
 </questions-list>
 
@@ -87,8 +88,8 @@
 </div>
 
 <div class = "row_flex" id="controls">
-  <button (click)="refreshCompetitionInfo()">RESET</button>
-  <button (click)="this.saveChanges()">SAVE CHANGES</button>
+  <button (click)="refreshCompetitionInfo()">RESET UNSAVED CHANGES</button>
+  <button (click)="this.saveChanges()">SAVE CHANGES (Shift + S)</button>
   <button>GUIDE</button>
   <div id = "log">Welcome</div>
 </div>
