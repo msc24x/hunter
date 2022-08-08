@@ -28,6 +28,7 @@ export class SigninDialogComponent implements OnInit {
 
       this.authService.register(email, password).subscribe((res)=>{
         this.handleResponse(res);
+        this.authService.authenticate(email, password, true )
       },
       err=>{
         this.handleResponse(err)
