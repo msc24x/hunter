@@ -2,7 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, NavigationStart, Router } from '@angular/router';
 import * as ace from 'ace-builds';
 import { Subscription } from 'rxjs';
-import { CompetitionInfo, HunterExecutable, QuestionInfo, resCode, UserInfo } from 'src/environments/environment';
+import { ScoresDataService } from 'src/app/services/data/scores-data.service';
+import { CompetitionInfo, HunterExecutable, QuestionInfo, resCode, resultFull, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
 @Component({
@@ -18,12 +19,14 @@ export class CompetitionComponent implements OnInit, OnDestroy {
   isAuthenticated : boolean = false
   user = {} as UserInfo
   competition = {} as CompetitionInfo
+  evaluation : Array<resultFull> = []
 
   competitionQuestions : Array<QuestionInfo> = []
   questionSelected = -1
   questionSelectedInfo = {} as QuestionInfo
   solutionOutput = ""
   languageSelected = "cpp"
+
   timeRemaining = {
     min : "∞",
     sec : "∞"
@@ -38,7 +41,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     private route : ActivatedRoute,
     private authService : AuthService,
     private router : Router,
-    private competitionsService : CompetitionsDataService
+    private competitionsService : CompetitionsDataService,
+    private scoresDataService : ScoresDataService
   ) {
     const idParam = route.snapshot.paramMap.get("competition_id");
     if(idParam){
@@ -56,6 +60,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         
         let seconds = (Date.parse(this.competition.start_schedule) + this.competition.duration * 60 * 1000 - Date.now())/1000
         seconds = Math.floor(seconds)
+        if(seconds < 0){
+          this.timeRemaining = {min : '0', sec : '0'}
+          clearInterval(this.timeInterval)
+          return
+        }
         this.timeRemaining.min = Math.floor(seconds/60)+""
         this.timeRemaining.sec = seconds % 60+""
       },
@@ -83,6 +92,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.router.navigate(["/home"])
       })
     )
+
+    this.fetchEvaluation()
     
     this.unsubscribeAll()
 
@@ -131,10 +142,28 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         code : this.editor.getValue()
       }
     }).subscribe(res=>{
-
-      this.solutionOutput = ( res.body as {output : string}).output
-
+      if(res.status == resCode.success){
+        this.solutionOutput = ( res.body as {output : string}).output
+        this.fetchEvaluation()
+      }
+      else
+        this.solutionOutput == res.statusText
     })
+  }
+
+  fetchEvaluation(){
+    this.subscriptions.push(
+      this.scoresDataService.getScoresAll(
+        {
+          user_id : this.user.id,
+          competition_id : this.c_id
+        }
+      ).subscribe(res=>{
+        if(res.status == resCode.success){
+          this.evaluation = res.body? res.body as Array<resultFull> : []
+        }
+      })
+    ) 
   }
 
   fetchData(){

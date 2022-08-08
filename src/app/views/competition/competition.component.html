@@ -39,7 +39,35 @@
 
   <div id="submit_code_btn" (click)="postSolution()">Submit</div>
 
-  <div id="solution_output" [innerText]="solutionOutput"></div>
+  <div class="row sa">
+    <div id="output_label">Submission Output</div>
+    <div id="pts_desc_label">Evaluation</div>
+  </div>
+
+  <div id="output_points">
+
+    <div id="solution_output" [innerText]="solutionOutput"></div>
+
+    <div id="pts_desc">
+      
+      <div class="table_heading" >
+        <div>QuesId</div>
+        <div>Score</div>
+        <div style="color : darkred;">Penalities</div>
+      </div>
+      <div *ngFor="let row of evaluation" >
+        <div>{{row.question_id}}</div>
+        <div>{{row.result}}</div>
+        <div style="color : darkred;">{{row.penalities}}</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <scoreboard
+    [competition_id]="c_id"
+  ></scoreboard>
 
 
 </div>
