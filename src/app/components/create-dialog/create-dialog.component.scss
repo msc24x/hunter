@@ -1,17 +1,9 @@
+@use "../../../assets/fonts";
 @use "../../../assets/colors";
-@use "../../../assets/mixins";
+@use "../../../assets/mixins" as *;
 
 #dialog_box{
-  position: absolute;
-  width: 100%;
-  left: 0px;
-  top : 0px;
-  padding-top: 456px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.548);
-  box-shadow: 0 50px 9000px 900px rgba(0, 0, 0, 0.548);
+  @include popup;
 }
 
 #dialog{
@@ -54,7 +46,7 @@
   }
 
   input{
-    @include mixins.inputText;
+    @include inputText;
     background-color : colors.$dim_white;
     border-width: 1px;
     margin-inline: 20px;

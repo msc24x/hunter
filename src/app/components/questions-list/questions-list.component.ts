@@ -107,6 +107,21 @@ export class QuestionsListComponent implements OnInit {
     })
   }
 
+  handleDeleteConfirmation(event : string){
+    this.showDeleteConfirmation(false)
+    if(event == 'continue'){
+      this.delQuestion()
+    }
+  }
+
+  showDeleteConfirmation(f : boolean){
+    let e = document.getElementById("delete_confirm") as HTMLElement
+    if(f)
+      e.style.display = 'block'
+    else
+      e.style.display = 'none'
+  }
+
   // fetchQuestions(){
   //   this.competitionsData.getQuestions({competition_id : this.competitionInfo.id as string}).subscribe(res=>{
   //     if(res.status == resCode.success){
