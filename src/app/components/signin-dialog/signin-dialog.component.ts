@@ -19,23 +19,25 @@ export class SigninDialogComponent implements OnInit {
   }
 
   sendRegisterReq(){
-    const email = (document.getElementsByClassName("textbox")[0] as HTMLInputElement).value;
-    const password = (document.getElementsByClassName("textbox")[1] as HTMLInputElement).value;
 
-    if(this.isEmail(email) && (password.length >= 6 && password.length <= 16)){
+    const name = (document.getElementsByClassName("textbox")[0] as HTMLInputElement).value ?? "";
+    const email = (document.getElementsByClassName("textbox")[1] as HTMLInputElement).value;
+    const password = (document.getElementsByClassName("textbox")[2] as HTMLInputElement).value;
+
+    if(this.isEmail(email) && name.length <= 50 && (password.length >= 6 && password.length <= 16)){
 
       this.toggleSubmitButton(false);
 
-      this.authService.register(email, password).subscribe((res)=>{
+      this.authService.register({name : name, email : email, password : password}).subscribe((res)=>{
         this.handleResponse(res);
-        this.authService.authenticate(email, password, true )
+        this.authService.authenticate(email, password)
       },
       err=>{
         this.handleResponse(err)
       })
     }
     else{
-      this.registerResponseMessage = "*Either email or password (6 to 16 characters) is unacceptable";
+      this.registerResponseMessage = "*Either email, password (6-16 char) and/or Name (50 char) is unacceptable";
     }
   }
 
