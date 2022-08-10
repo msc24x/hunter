@@ -24,7 +24,7 @@ export class Results{
     update(id : string, result : string, callback : (err : MysqlError | null)=>void){
         let p = 0
 
-        if(result != '1')
+        if(result == '0')
             p = 1
 
         this.dbConnection.query(`update results set result = ?, penalities = penalities + ? where id = ? ;`, [result, p, id], err=>{
@@ -33,7 +33,7 @@ export class Results{
     }
 
     getCompetitionScores(id : string, callback : (rows : any, err : MysqlError | null)=>void ){
-        this.dbConnection.query(` select user_id, sum(result) as score, sum(penalities) as penalities from results where competition_id = ? group by user_id;`, [id], (err, rows)=>{
+        this.dbConnection.query(` select user_id, sum(result) as score, sum(penalities) as penalities from results where competition_id = ? group by user_id order by score, penalities;`, [id], (err, rows)=>{
             if(err){
                 callback(null, err)
                 return

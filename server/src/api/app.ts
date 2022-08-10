@@ -133,14 +133,15 @@ app.post("/execute", (req, res)=>{
                         }
                       )
                     }else{
-                      if(rows[0].result == 0)
-                        resultsModel.update(rows[0].id, pts+"", err=>{
-                          if(err){
-                            console.log(err)
-                            return
-                          }
+                      if(rows[0].result != '0' && pts == 0)
+                        pts = parseInt(rows[0].result)
+
+                      resultsModel.update(rows[0].id, pts+"", err=>{
+                        if(err){
+                          console.log(err)
+                          return
                         }
-                      )
+                      })
                     }
                   }
                 )
