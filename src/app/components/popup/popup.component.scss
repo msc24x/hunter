@@ -1,0 +1,41 @@
+@use "../../../assets/fonts";
+@use "../../../assets/colors";
+@use "../../../assets/mixins" as *;
+
+#bg{
+    @include popup;
+    font-family: appFont;
+}
+
+#dialog{
+    @include popupBox;
+
+    width: 456px;
+    padding: 24px;
+    font-size: 1.2rem;
+
+    #title{
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 24px;
+    }
+
+    .row{
+        margin-top: 24px;
+        display: flex;
+        justify-content: space-around;
+
+        div{
+            padding : 8px;
+            padding-inline: 16px;
+            background-color: colors.$text_white;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+
+        div:hover{
+            background-color: whitesmoke;
+
+        }
+    }
+}
