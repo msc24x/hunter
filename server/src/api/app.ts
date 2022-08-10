@@ -142,13 +142,11 @@ app.post("/execute", (req, res)=>{
                         }
                       )
                     }
-
                   }
                 )
-
               })
-            } )
-
+            } 
+          )
           },
           err=>{
             if(err){
@@ -156,16 +154,11 @@ app.post("/execute", (req, res)=>{
               sendResponse(res, resCode.serverErrror)
               return
             }
-
           }
         )
       }
     )
   })
-
-
-
-
 })
 
 

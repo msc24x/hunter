@@ -9,23 +9,28 @@ export class Questions{
   competitionsModel = new Competitions()
 
   drop(id : string, callback : (err : MysqlError | null)=>void){
-    this.dbConnection.query(`delete from questions where id = ${id};`, (err)=>{
+    this.dbConnection.query(`delete from questions where id = ?;`, [id], (err)=>{
       callback(err)
     })
   }
 
   findAll(params : any, callback : (questions : Array<QuestionInfo>)=>void){
+
     let query = "select * from questions where true = true "
+    let args =[]
+
     if(params.competition_id != null){
-      query += `and competition_id = "${params.competition_id}" `
+      query += `and competition_id = ? `
+      args.push(params.competition_id)
     }
     else if(params.id != null){
-      query += `and id = "${params.id}" `
+      query += `and id = ? `
+      args.push(params.id)
     }
     query += ";"
 
 
-    this.dbConnection.query(query, (err, rows)=>{
+    this.dbConnection.query(query, args, (err, rows)=>{
       if(err){
          console.log(err)
         return
@@ -52,12 +57,12 @@ export class Questions{
 
   add(competition_id : string, callback : (question_id : string)=>void, errCallback : (err : MysqlError | null)=>void){
 
-    this.dbConnection.query(` insert into questions (competition_id, date_created) values(${competition_id}, NOW()) ; `,err=>{
+    this.dbConnection.query(` insert into questions (competition_id, date_created) values(?, NOW()) ; `, [competition_id],err=>{
       if(err){
         errCallback(err)
         return
       }
-      this.dbConnection.query(` select * from questions where competition_id = "${competition_id}" order by date_created ;`, (err, rows)=>{
+      this.dbConnection.query(` select * from questions where competition_id = ? order by date_created ;`, [competition_id], (err, rows)=>{
         if(err || rows.length == 0){
           errCallback(err)
           return
@@ -70,19 +75,20 @@ export class Questions{
 
   update(newQuestion : any, callback : (err : MysqlError | null)=>void){
 
-    let query = `update questions set title = "${newQuestion.title}", statement = "${newQuestion.statement}"`
+    let args =[newQuestion.title, newQuestion.statement]
+
+    let query = `update questions set title = ?, statement = ?`
+    
     if(newQuestion.points){
-      query += `, points = "${newQuestion.points}"`
+      query += `, points = ?`
+      args.push(newQuestion.points)
     }
 
-    query += ` where id = "${newQuestion.id}" ; `
+    query += ` where id = ? ; `
+    args.push(newQuestion.id)
 
-    this.dbConnection.query(query, (err)=>{
+    this.dbConnection.query(query, args, (err)=>{
       callback(err)
     })
-
-    // this.dbConnection.query(`update questions set title = "${newQuestion.title}", statement = "${newQuestion.statement}", points = "${newQuestion.points}" where id = "${newQuestion.id}" ; `, (err)=>{
-    //   callback(err)
-    // })
   }
 }

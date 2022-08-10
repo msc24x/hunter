@@ -21,24 +21,34 @@ export class Competitions{
   }
 
   update(newCompetition : any, callback : (err : mysql.MysqlError | null)=>void){
-    let query = `update competitions set title = "${newCompetition.title}", description = "${newCompetition.description}", public = ${newCompetition.public}`
+
+    let args = [newCompetition.title, newCompetition.description, newCompetition.public]
+
+    let query = `update competitions set title = ?, description = ?, public = ?`
+
     if(newCompetition.duration){
-      query += `, duration = "${newCompetition.duration}"`
+      query += `, duration = ?`
+      args.push(newCompetition.duration)
     }
 
     if(newCompetition.start_schedule){
-      query += `, start_schedule = "${newCompetition.start_schedule}"`
+      query += `, start_schedule = ?`
+      args.push(newCompetition.start_schedule)
     }
-    query += ` where id = "${newCompetition.id}" ; `
+    
+    query += ` where id = ? ; `
+    args.push(newCompetition.id)
 
-    this.dbConnection.query(query, (err)=>{
+
+    this.dbConnection.query(query, args, (err)=>{
       callback(err)
     })
   }
 
   add(host_user_id : string, title : string, callback : (err : mysql.MysqlError | null, rows : any) => void){
-    this.dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating, public, start_schedule) values( ${host_user_id}, "${title}", NOW() , 0, false, NOW() )  ;`, (err)=>{
-      this.dbConnection.query(`select * from competitions where host_user_id = "${host_user_id}" order by created_on desc;`, (err, rows)=>{
+    
+    this.dbConnection.query(` insert into competitions( host_user_id, title, created_on, rating, public, start_schedule) values( ?, ?, NOW() , 0, false, NOW() )  ;`, [host_user_id, title], (err)=>{
+      this.dbConnection.query(`select * from competitions where host_user_id = ? order by created_on desc;`, [host_user_id], (err, rows)=>{
         callback(err, rows);
       })
     })
@@ -53,11 +63,16 @@ export class Competitions{
   ){
 
     let query = "select * from competitions where true = true "
+    let args = []
+
     if(params.id != null){
-      query += `and id = "${params.id}" `
+      query += `and id = ? `
+      args.push(params.id)
     }
+
     if(params.host_user_id != null){
-      query += `and host_user_id = "${params.host_user_id}" `
+      query += `and host_user_id = ? `
+      args.push(params.host_user_id)
     }
 
     if(isPublic != -1){
@@ -78,7 +93,7 @@ export class Competitions{
     query += ";"
 
 
-    this.dbConnection.query(query, (err, rows)=>{
+    this.dbConnection.query(query, args, (err, rows)=>{
       if(err){
          console.log(err)
         errCallback(err)

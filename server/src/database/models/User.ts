@@ -11,7 +11,8 @@ export class User{
   }
 
   update(newUserInfo : UserInfo, callback : ( err : mysql.MysqlError | null)=>void){
-    this.dbConnection.query(` update users set email = "${newUserInfo.email}", name = "${newUserInfo.name}" where id = ${newUserInfo.id} ; `,
+    this.dbConnection.query(` update users set name = ? where id = ? ; `,
+      [newUserInfo.name, newUserInfo.id],
       (err)=>{
         callback(err)
       }
@@ -20,18 +21,24 @@ export class User{
 
   findAll(params : any, callback : (err : MysqlError | null , rows : any)=>void ){
 
-    var query = "select * from users where true"
-    if(params.id)
-      query += ` and users.id = "${params.id}"`;
-    if(params.email)
-      query += ` and users.email = "${params.email}"`
-    if(params.name)
-      query += ` and user.name = "${params.name}"`
+    let query = "select * from users where true"
+    let args = []
+
+    if(params.id){
+      query += ` and users.id = ?`;
+      args.push(params.id)
+    }
+    if(params.email){
+      query += ` and users.email = ?`
+      args.push(params.email)
+    }
+    if(params.name){
+      query += ` and user.name = ?`
+      args.push(params.name)
+    }
     query += ";"
 
-
-
-    this.dbConnection.query(query, (err, rows)=>{
+    this.dbConnection.query(query, args, (err, rows)=>{
       callback(err,rows)
     })
 

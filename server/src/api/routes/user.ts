@@ -33,7 +33,7 @@ router.put("/user", (req, res)=>{
 
   const updateUser = req.body as UserInfo
 
-  if(updateUser.id == null){
+  if(updateUser.id == null || updateUser.name.length > 50){
     sendResponse(res, resCode.badRequest)
     return
   }
@@ -46,7 +46,7 @@ router.put("/user", (req, res)=>{
 
     userModel.update(updateUser, (err)=>{
       if(err){
-         console.log(err)
+        console.log(err)
         sendResponse(res, resCode.serverErrror);
         return
       }
