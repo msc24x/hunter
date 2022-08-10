@@ -6,6 +6,9 @@ import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import { CompetitionInfo, HunterExecutable, QuestionInfo, resCode, resultFull, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
+import katex from 'katex';
+
+
 @Component({
   selector: 'competition',
   templateUrl: './competition.component.html',
@@ -144,12 +147,25 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }).subscribe(res=>{
       if(res.status == resCode.success){
         this.solutionOutput = ( res.body as {output : string}).output
+        let outputBox = document.getElementById('solution_output');
+        if(outputBox){
+          if(this.solutionOutput[0] == '1'){
+            outputBox.style.backgroundColor = "#A3EBB133";
+            outputBox.style.borderColor = 'darkgreen'
+          }
+          else{
+            outputBox.style.backgroundColor = "#fff0f0";
+            outputBox.style.borderColor = 'darkred'
+          }
+        }
+        
         this.fetchEvaluation()
       }
       else
         this.solutionOutput == res.statusText
     })
   }
+
 
   fetchEvaluation(){
     this.subscriptions.push(
@@ -189,7 +205,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
   selectQuestion(index : number){
     this.questionSelected = index
     this.questionSelectedInfo = this.competitionQuestions[index]
-
   }
 
 
