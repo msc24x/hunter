@@ -1,5 +1,17 @@
 <app-bar></app-bar>
 
+<popup
+  title="Guide"
+  id="guide"
+  (closeEvent)="handleGuidePopupEvent($event)"
+>
+  You can write mathematical expressions in Question Statement <br>
+  For example,<br> write $\sqrt{{'{'}}p+q{{'}'}}$<br><br>
+  It would be rendered as <br>
+  <ng-katex equation="\sqrt{p+q}"></ng-katex> <br>
+  To learn more about the syntax, refer <a href="https://katex.org/docs/supported.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a>
+</popup>
+
 
 <div class="row_flex" style="margin-top: 16px;">
 
@@ -22,7 +34,7 @@
     <input type="number" min="0" id = "competition_duration"[value]="competitionInfo.duration" >
 
     <div id="schedule_label">Set Live on schedule</div>
-    <input type="datetime-local" id = "competition_schedule" [value]="competitionInfo.start_schedule | date : 'yyyy-MM-ddThh:mm'">
+    <input type="datetime-local" id = "competition_schedule" [value]="competitionInfo.start_schedule | date : 'yyyy-MM-ddTHH:mm'">
 
     <div id ="visbility_controller">
       <div id="id">
@@ -90,6 +102,6 @@
 <div class = "row_flex" id="controls">
   <button (click)="refreshCompetitionInfo()">RESET UNSAVED CHANGES</button>
   <button (click)="this.saveChanges()">SAVE CHANGES (Shift + S)</button>
-  <button>GUIDE</button>
-  <div id = "log">Welcome</div>
+  <button (click)="showGuide(true)">GUIDE</button>
+  <div id = "log" (click)="showLog()">Welcome</div>
 </div>

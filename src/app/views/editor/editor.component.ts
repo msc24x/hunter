@@ -4,7 +4,9 @@ import { HtmlParser } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { time } from 'console';
+import * as EventEmitter from 'events';
 import { userInfo } from 'os';
+import { stringify } from 'querystring';
 import { BehaviorSubject, timestamp } from 'rxjs';
 import { CompetitionsListComponent } from 'src/app/components/competitions-list/competitions-list.component';
 import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from 'src/environments/environment';
@@ -19,6 +21,8 @@ import { convert } from '../../utils/utils';
 })
 export class EditorComponent implements OnInit {
 
+  log = new Array<string>()
+
   competition_id : string
   competitionInfo : CompetitionInfo  = {} as CompetitionInfo
   competitionQuestions : Array<QuestionInfo> = []
@@ -30,6 +34,7 @@ export class EditorComponent implements OnInit {
 
   isAuthenticated : boolean = false
   user = {} as UserInfo
+  eventPopup = new BehaviorSubject<string>("")
 
   constructor(
     private router :  Router,
@@ -283,8 +288,26 @@ export class EditorComponent implements OnInit {
   }
 
   displayLog(msg : string){
+    this.log.push(msg)
     if(this.elem)
       this.elem.innerHTML = "Last Operation : " + msg
+  }
+
+  handleGuidePopupEvent(event : string){
+    this.eventPopup.next(event)
+    this.showGuide(false)
+  }
+
+  showLog(){
+    console.log(this.log)
+  }
+
+  showGuide(f : boolean){
+    let guide = document.getElementById("guide") as HTMLElement
+    if(f)
+      guide.style.display = 'block'
+    else
+      guide.style.display = 'none'
   }
 
 }

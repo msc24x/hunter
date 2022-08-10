@@ -2,6 +2,9 @@
 @use "../../../assets/colors";
 @use "../../../assets/mixins" as *;
 
+popup{
+  display: none;
+}
 
 #created_on{
   background-color: whitesmoke;
@@ -61,6 +64,12 @@
   justify-content: center;
   align-items: center;
   width: fit-content;
+
+  a{
+    background-color: transparent;
+    color : colors.$text_black;
+    width: fit-content;
+  }
 }
 
 .row_flex{
@@ -115,7 +124,7 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.295);
+  background-color: whitesmoke;
   backdrop-filter: blur(8px);
 
   button{
