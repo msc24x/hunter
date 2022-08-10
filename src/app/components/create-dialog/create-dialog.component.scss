@@ -7,65 +7,60 @@
 }
 
 #dialog{
-  background-color: white;
+  background-color: colors.$text_white;
   margin-inline: auto;
   width: fit-content;
   height: fit-content;
   border-radius: 10px;
   //box-shadow: 0 0 9000px 9000px rgba(0, 0, 0, 0.295);
   box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
+  padding : 24px;
 
-  p.h1{
+  .h1{
     font-family: appFont;
-    font-weight: bold;
     color: colors.$text_black;
     width: 100%;
-    text-align: center;
-    padding-top: 1rem;
+    text-align: left;
     font-size: 1.5rem;
   }
 
-  p.h2{
+  .h2{
     font-family: appFont;
     font-weight: normal;
     color: colors.$text_black;
     width: 100%;
     text-align: left;
     padding-top: 1rem;
-    padding-left: 20px;
-    font-size: 1rem;
+    font-size: 1.15rem;
   }
 
-  p.error{
+  .error{
     font-family: appFont;
     font-weight: normal;
     color: colors.$error;
     text-align: left;
-    padding: 20px;
     padding-top: 0px;
   }
 
-  input{
-    @include inputText;
-    background-color : colors.$dim_white;
-    border-width: 1px;
-    margin-inline: 20px;
-    margin-top: 0px;
+  textarea{
+    @include appTextArea;
+    margin-top: 24px;
+    margin-left: 0px;
   }
 
-  #create_btn{
+  #create{
     font-family: appFont;
-    font-weight: normal;
     font-size: 1.2rem;
-    border-width: 0px;
     border-radius: 24px;
-    padding: 16px;
-    margin : 16px;
+    border-width: 0px;
+    width: 100%;
+    background-color: whitesmoke;
+    padding : 8px;
+    margin-top: 24px;
   }
 
-  #create_btn:hover{
-    background-color: colors.$app_e;
-    color: colors.$text_white;
+  #create:hover{
+    background-color: white;
   }
 
 }

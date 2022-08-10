@@ -1,11 +1,10 @@
 <div id="dialog_box" (click)="dialogBoxClicked($event)">
   <div id = "dialog">
-    <p class="h1">Create Competition</p>
-    <p class="h2">Title (120 characters)</p>
-    <input id = "competition_title" type="text" maxlength="120">
+    <div class="h1">Enter The Title</div>
+    <textarea id = "competition_title" type="text" [rows]="2" maxlength="120"></textarea>
     <br>
-    <button id = "create_btn" (click)="requestCreateCompetition()">Build</button>
-    <p class = "error">{{responseMessage}}</p>
+    <button id = "create" (click)="requestCreateCompetition()">Build Competition</button>
+    <div class = "error">{{responseMessage}}</div>
   </div>
 </div>
 
