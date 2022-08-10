@@ -10,6 +10,8 @@ if len(sys.argv) < 2:
 def postResult(code, message = ""):
     print(code , " - " , codeMsg[code])
     print(message)
+    os.system("truncate -s 0 "+codeOutputfile)
+
 
 supported_langs = ["c", "cpp", "py", "js"]
 
@@ -39,12 +41,12 @@ if not os.path.isfile(filename):
   exit()
 
 if language == "c":
-  compilationCode = os.system("gcc " + filename + " -o "+exefile + " 2> " + codeOutputfile)
+  compilationCode = os.system("gcc " + filename + " -o "+exefile + " > " + codeOutputfile)
   if compilationCode == 0:
       processCode = os.system( "timeout 5 ./" + exefile + " < "+ codeInputfile + " > " + codeOutputfile)
 
 elif language == "cpp":
-  compilationCode = os.system("g++ " + filename + " -o "+exefile + " 2> " + codeOutputfile)
+  compilationCode = os.system("g++ " + filename + " -o "+exefile + " > " + codeOutputfile)
   if compilationCode == 0:
       processCode = os.system( "timeout 5 ./" + exefile + " < "+ codeInputfile + " > " + codeOutputfile)
 
