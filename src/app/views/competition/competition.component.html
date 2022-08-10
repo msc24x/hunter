@@ -19,14 +19,18 @@
     [questionsList]="competitionQuestions"
     [editable]="false"
     (questionSelectEmitter)="selectQuestion($event)"
+    [(questionSelected)]="questionSelected"
   ></questions-list>
 
-  <div id="question_title" [innerText]="">
+  <div id="question_title" [innerHTML]="questionSelectedInfo.title">
     Question ID : {{questionSelectedInfo.id}} for {{questionSelectedInfo.points}} pts
     <br>
     <b>{{questionSelectedInfo.title}}</b>
   </div>
-  <div id="question_statement" [innerText]="questionSelectedInfo.statement">
+
+    
+  <div id="question_statement">
+    <ng-katex-paragraph [paragraph]="questionSelectedInfo.statement ?? ''"></ng-katex-paragraph>
   </div>
 
   <drop-down-list

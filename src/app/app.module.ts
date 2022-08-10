@@ -21,6 +21,8 @@ import { DropDownListComponent } from './components/drop-down-list/drop-down-lis
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { UserInfoPipe } from './pipes/userInfoPipe';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
+import { KatexModule } from 'ng-katex';
+import { PopupComponent } from './components/popup/popup.component' 
 
 @NgModule({
   declarations: [
@@ -40,13 +42,14 @@ import { ScoreboardComponent } from './components/scoreboard/scoreboard.componen
     DropDownListComponent,
     NotFoundComponent,
     UserInfoPipe,
-    ScoreboardComponent
-
+    ScoreboardComponent,
+    PopupComponent    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    KatexModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
