@@ -23,22 +23,18 @@ export class AuthService {
   constructor(private http : HttpClient) {
    }
 
-  register(email : string, password : string) {
+  register(params : any) {
 
-    var params  = new HttpParams();
-    params = params.set("email", email);
-    params = params.set("password", password);
-
-    return this.http.get(apiEndpoints.register, {
+    return this.http.post(apiEndpoints.register, params, {
       responseType : "json",
       withCredentials : true,
-      observe : "response",
-      params : params
+      observe : "response"
     });
 
   }
 
-  authenticate(email : string, password : string, remember : boolean = false){
+  authenticate(email : string, password : string, remember : boolean = true){
+    
     var params  = new HttpParams();
     params = params.set("email", email);
     params = params.set("password", password);
