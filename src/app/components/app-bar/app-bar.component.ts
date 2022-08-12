@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth/auth.service';
 export class AppBarComponent implements OnInit {
 
   @Input()
-  app_title = "HUNTER_"
+  app_title = "Hunter"
   @Input()
   app_title_s = "H_"
 

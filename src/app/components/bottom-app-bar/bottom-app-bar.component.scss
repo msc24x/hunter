@@ -1,0 +1,49 @@
+@use "../../../assets/fonts";
+@use "../../../assets/colors";
+@use "../../../assets/mixins" as *;
+
+#bottom_app_bar{
+    background-color: whitesmoke;
+    position: absolute;
+    left: 0px;
+    margin-top: 120px;
+    height: fit-content;
+    padding-block: 64px;
+    width: 100%;
+    
+
+    .row{
+      font-family: appFont;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1024px;
+      padding-inline: 10%;
+
+
+      #site_logo{
+        font-weight: bold;
+        font-size: 2rem;
+        #site_info{
+          font-size: 1rem;
+          font-family: appFont;
+          font-weight: normal;
+          color : gray;
+        }
+      }
+
+      div{
+        cursor: default;
+      }
+
+      .button:hover{
+        font-weight: bolder;
+      }
+
+    }
+
+    
+
+  }
+  
