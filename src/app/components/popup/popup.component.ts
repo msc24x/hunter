@@ -13,6 +13,9 @@ export class PopupComponent implements OnInit {
   @Input()
   title = "Message"
 
+  @Input()
+  showControls = true
+
   constructor() { }
 
   bgClicked(event : any){

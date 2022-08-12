@@ -2,7 +2,7 @@
     <div id="dialog">
         <div id="title">{{title}}</div>
         <ng-content></ng-content>
-        <div class="row">
+        <div *ngIf="showControls" class="row">
             <div id="continue_btn" (click)="closeEvent.emit('continue')">Continue</div>
             <div id="cancel_btn" (click)="closeEvent.emit('cancel')">Cancel</div>
         </div>
