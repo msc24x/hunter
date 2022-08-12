@@ -1,5 +1,7 @@
 <app-bar></app-bar>
 
+<div id="settings_label">Account Settings</div>
+
 <div class="row">
   <div id="profile_editor">
     <div id="label">Edit your public user name</div>
@@ -15,5 +17,6 @@
 <competitions-list
   heading="Your Competitions"
   route="editor"
+  [host_user_id]="user.id"
   [competitionsList]="this.userCompetitions"
 ></competitions-list>

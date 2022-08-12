@@ -1,15 +1,26 @@
 @use "../../../assets/mixins" as *;
 
+
+#settings_label{
+    font-family: appFont;
+    font-weight: bold;
+    font-size: 2.5rem;
+    margin : 16px;
+}
+
 .row{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 84px;
 }
 
 #profile_editor{
     font-family: appFont;
     margin : 8px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     
     div{
@@ -17,7 +28,6 @@
     }
 
     #label{
-        font-weight: bold;
         font-size: 1.3rem;
     }
 
