@@ -171,7 +171,7 @@ router.delete("/question/:id", (req, res)=>{
           return
         }
 
-        questionsModel.drop(req.params.id as string, err =>{
+        questionsModel.delete({ id : req.params.id as string}, err =>{
           if(!err){
             sendResponse(res, resCode.success)
             return

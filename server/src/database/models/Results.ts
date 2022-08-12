@@ -33,7 +33,7 @@ export class Results{
     }
 
     getCompetitionScores(id : string, callback : (rows : any, err : MysqlError | null)=>void ){
-        this.dbConnection.query(` select user_id, sum(result) as score, sum(penalities) as penalities from results where competition_id = ? group by user_id order by score, penalities;`, [id], (err, rows)=>{
+        this.dbConnection.query(` select user_id, sum(result) as score, sum(penalities) as penalities from results where competition_id = ? group by user_id order by score desc, penalities;`, [id], (err, rows)=>{
             if(err){
                 callback(null, err)
                 return

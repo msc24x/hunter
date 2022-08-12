@@ -119,9 +119,21 @@ router.get("/competitions", (req, res)=>{
 
   const params = {
     id : req.query.id,
-    host_user_id : req.query.host_user_id
+    host_user_id : req.query.host_user_id,
+    title : req.query.title,
+    duration : req.query.duration,
+    live_status : req.query.liveStatus ?? "all"
   }
-  let isPublic : boolean | -1 = -1
+
+  if(params.title && (params.title as string).length > 50){
+    sendResponse(res, resCode.badRequest)
+    return
+  }
+
+  if(params.live_status == "always")
+    params.duration = "0"
+
+  let isPublic : boolean | -1 = true
   let dateOrder : 1 | 0| -1 = 0
   if(req.query.public == "false"){
     isPublic = false
@@ -129,12 +141,15 @@ router.get("/competitions", (req, res)=>{
   else if(req.query.public == "true"){
     isPublic = true
   }
+  else{
+    isPublic = -1
+  }
   if(req.query.dateOrder){
     if(req.query.dateOrder == "1"){
       dateOrder = 1
     }
-    else if(req.query.dateOrder == "0"){
-      dateOrder = 0
+    else if(req.query.dateOrder == "-1"){
+      dateOrder = -1
     }
   }
 
@@ -148,8 +163,9 @@ router.get("/competitions", (req, res)=>{
     competitionsModel.findAll(params, dateOrder, isPublic, (competitions : Array<CompetitionInfo>)=>{
       let filteredCompetitions : Array<CompetitionInfo> = new Array<CompetitionInfo>()
       for(let element of competitions){
-        if(element.host_user_id == user.id || element.public)
-          filteredCompetitions.push(element)
+        if((params.live_status == "all" || (params.live_status == "always" && competitionsModel.isLiveNow(element.start_schedule)) || (params.live_status == "upcoming" && !competitionsModel.isLiveNow(element.start_schedule)) || (params.live_status == "live" && competitionsModel.isLiveNow(element.start_schedule) && competitionsModel.hasNotEnded(element.start_schedule, element.duration))))
+          if(element.host_user_id == user.id || element.public)
+            filteredCompetitions.push(element)
       }
       sendResponseJson(res, resCode.success, filteredCompetitions)
       return 0
