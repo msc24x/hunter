@@ -97,14 +97,12 @@ export class CompetitionsDataService {
 
   }
 
-  getPublicCompetitions(params? : {
-    id? : string,
-    host_user_id? : string,
-    public? : boolean,
-    dateOrder? : 1 | 0 | -1
-  }){
+  getPublicCompetitions(params : any){
     let httpParams = new HttpParams()
     if(params?.id)  httpParams = httpParams.set("id", params.id)
+    if(params?.title)  httpParams = httpParams.set("title", params.title)
+    if(params?.duration)  httpParams = httpParams.set("duration", params.duration)
+    if(params?.liveStatus)  httpParams = httpParams.set("liveStatus", params.liveStatus)
     if(params?.dateOrder)  httpParams = httpParams.set("dateOrder", params.dateOrder)
     if(params?.public)  httpParams = httpParams.set("public", params.public)
     if(params?.host_user_id)  httpParams = httpParams.set("host_user_id", params.host_user_id)
