@@ -2,6 +2,7 @@ import { PrefixNot } from '@angular/compiler';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { AboutComponent } from './views/about/about.component';
 import { CompeteComponent } from './views/compete/compete.component';
 import { CompetitionComponent } from './views/competition/competition.component';
 import { EditorMenuComponent } from './views/editor-menu/editor-menu.component';
@@ -36,6 +37,10 @@ const routes: Routes = [{
 {
   "path" : "404",
   "component" : NotFoundComponent
+},
+{
+  "path" : "about",
+  "component" : AboutComponent
 },
 {
     "path"        : '**',

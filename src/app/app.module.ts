@@ -22,7 +22,10 @@ import { NotFoundComponent } from './views/not-found/not-found.component';
 import { UserInfoPipe } from './pipes/userInfoPipe';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { KatexModule } from 'ng-katex';
-import { PopupComponent } from './components/popup/popup.component' 
+import { PopupComponent } from './components/popup/popup.component';
+import { AboutComponent } from './views/about/about.component';
+import { TextInputComponent } from './components/text-input/text-input.component';
+import { BottomAppBarComponent } from './components/bottom-app-bar/bottom-app-bar.component' 
 
 @NgModule({
   declarations: [
@@ -43,7 +46,10 @@ import { PopupComponent } from './components/popup/popup.component'
     NotFoundComponent,
     UserInfoPipe,
     ScoreboardComponent,
-    PopupComponent    
+    PopupComponent,
+    AboutComponent,
+    TextInputComponent,
+    BottomAppBarComponent    
   ],
   imports: [
     BrowserModule,
