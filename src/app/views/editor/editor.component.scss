@@ -118,7 +118,7 @@ popup{
 }
 
 #controls{
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   left: 0px;
   justify-content: space-around;
@@ -137,6 +137,7 @@ popup{
     padding-inline: 16px;
     min-width: 156px;
     margin: 8px;
+    cursor: pointer;
     //border: solid colors.$text_white;
     //border-width: 1px;//0px 1px 0px 1px;
   }
@@ -150,7 +151,7 @@ popup{
 #question_editor{
   align-items: stretch;
   width: 100%;
-  margin-bottom: 5%;
+  margin-bottom: 256px;
 }
 
 #qtitle_label, #qstatement_label{
@@ -158,6 +159,7 @@ popup{
   font-weight: normal;
   margin-top: 16px;
   font-size: 1.2rem;
+  padding : 4px;
 }
 
 #text_qtitle, #text_statement{
@@ -226,6 +228,18 @@ a:hover{
   font-family: appFont;
   font-style: italic;
   color:black;
+}
+
+#delete_competition_btn{
+  font-family: appFont;
+  background-color: #fff0f0;
+  color : darkred;
+  width: fit-content;
+  border : 1px solid darkred;
+  border-radius: 24px;
+  padding : 8px;
+  padding-inline: 16px;
+  margin : 4px;
 }
 
 body{

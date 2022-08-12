@@ -1,18 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { HtmlParser } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { time } from 'console';
-import * as EventEmitter from 'events';
-import { userInfo } from 'os';
-import { stringify } from 'querystring';
-import { BehaviorSubject, timestamp } from 'rxjs';
-import { CompetitionsListComponent } from 'src/app/components/competitions-list/competitions-list.component';
+import { BehaviorSubject } from 'rxjs';
 import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
-import { convert } from '../../utils/utils';
 
 @Component({
   selector: 'editor',
@@ -202,6 +194,7 @@ export class EditorComponent implements OnInit {
         if(res.body)
           this.competitionQuestions = res.body
           this.questionSelected = -1
+          this.questionSelectedInfo = {} as QuestionInfo
       }
     })
   }
@@ -298,6 +291,13 @@ export class EditorComponent implements OnInit {
     this.showGuide(false)
   }
 
+  handlePrivacyConfirmPopupEvent(event : string){
+    if(event == "continue"){
+      this.toggleVisibility()
+    }
+    this.showPrivacyConfirm(false)
+  }
+
   showLog(){
     console.log(this.log)
   }
@@ -308,6 +308,25 @@ export class EditorComponent implements OnInit {
       guide.style.display = 'block'
     else
       guide.style.display = 'none'
+  }
+
+  showPrivacyConfirm(f : boolean){
+
+    let guide = document.getElementById("public_status_confirm") as HTMLElement
+    if(f)
+      guide.style.display = 'block'
+    else
+      guide.style.display = 'none'
+    
+  }
+
+  onClickVisibility(){
+    if(this.competitionInfo.public == false){
+      this.showPrivacyConfirm(true)
+    }
+    else{
+      this.toggleVisibility()
+    }
   }
 
 }

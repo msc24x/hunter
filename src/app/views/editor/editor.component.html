@@ -12,6 +12,14 @@
   To learn more about the syntax, refer <a href="https://katex.org/docs/supported.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a>
 </popup>
 
+<popup
+  title="Confirmation"
+  id="public_status_confirm"
+  (closeEvent)="handlePrivacyConfirmPopupEvent($event)"
+>
+  Are you sure to set this competition's visibility to public?
+</popup>
+
 
 <div class="row_flex" style="margin-top: 16px;">
 
@@ -41,7 +49,7 @@
         Code : <b>{{competition_id}}</b>
       </div>
       <div id="rating">Rating : <b>{{this.competitionInfo.rating}}</b></div>
-      <div id="visibility" (click)="toggleVisibility()">PUBLIC</div>
+      <div id="visibility" (click)="onClickVisibility()">PUBLIC</div>
     </div>
 
     <div id="created_on">
@@ -66,18 +74,19 @@
 
 
 <div class="vertical_flex" id="question_editor">
+<div id = "question_id">Question ID : {{this.questionSelectedInfo.id || "(No Question Selected)"}}</div>
+
  <div id="qtitle_label">
-   Question Title
+   Title
  </div>
   <textarea id = "text_qtitle" maxlength="150" rows="4" [value]="questionSelectedInfo.title"></textarea>
 
  <div id="qstatement_label">
-  Question Statement
+  Statement
   </div>
  <textarea id = "text_statement" maxlength="2048" rows="15" [value]="questionSelectedInfo.statement"></textarea>
 
  <div class="row_flex">
-  <div id = "question_id">Question ID : {{this.questionSelectedInfo.id}}</div>
 
   <label id ="testcases_file_label" class = "file_input" for="testcases_file">
     Upload test cases test file...
@@ -92,11 +101,18 @@
   </label>
   <input class = "file_input" id = "solutions_file" type="file" (change)="updateFile($event, 'Solutions')">
   <a *ngIf="solsExists" id = "solutions_download" (click)="downloadFile('solutions')">View Solutions</a>
-  
+
   <div id="question_points_lbl">Set Points <input id="question_points" type="number" min="0" [value]="questionSelectedInfo.points" ></div>
 
 
- </div>
+  <div id="delete_competition_btn">
+    Delete Competition
+  </div>
+  
+</div>
+
+
+
 </div>
 
 <div class = "row_flex" id="controls">
