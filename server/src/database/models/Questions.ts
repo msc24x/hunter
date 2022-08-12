@@ -8,10 +8,28 @@ export class Questions{
   dbConnection = database.getDataBase()
   competitionsModel = new Competitions()
 
-  drop(id : string, callback : (err : MysqlError | null)=>void){
-    this.dbConnection.query(`delete from questions where id = ?;`, [id], (err)=>{
+  delete(params : any, callback : (err : MysqlError | null)=>void){
+
+    let args = []
+    let query = "delete from questions where "
+
+    if(params.id){
+      query += " id = ?;"
+      args.push(params.id)
+    }
+    else if(params.competition_id){
+      query += " competition_id = ?;"
+      args.push(params.competition_id)
+    }
+    else{
+      callback(null)
+      return
+    }
+
+    this.dbConnection.query(query, args, err=>{
       callback(err)
     })
+
   }
 
   findAll(params : any, callback : (questions : Array<QuestionInfo>)=>void){

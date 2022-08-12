@@ -10,6 +10,30 @@ export class User{
     this.dbConnection = database.getDataBase()
   }
 
+  delete(params : any, callback : (err : MysqlError | null)=>void){
+
+    let args = []
+    let query = "delete from users where "
+
+    if(params.id){
+      query += " id = ?;"
+      args.push(params.id)
+    }
+    else if(params.email){
+      query += " email = ?;"
+      args.push(params.email)
+    }
+    else{
+      callback(null)
+      return
+    }
+
+    this.dbConnection.query(query, args, err=>{
+      callback(err)
+    })
+
+  }
+
   update(newUserInfo : UserInfo, callback : ( err : mysql.MysqlError | null)=>void){
     this.dbConnection.query(` update users set name = ? where id = ? ; `,
       [newUserInfo.name, newUserInfo.id],

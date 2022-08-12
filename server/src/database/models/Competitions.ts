@@ -62,17 +62,29 @@ export class Competitions{
     errCallback : (err : MysqlError)=>void
   ){
 
+    console.log(params)
+
     let query = "select * from competitions where true = true "
     let args = []
 
-    if(params.id != null){
+    if(params.id){
       query += `and id = ? `
       args.push(params.id)
     }
 
-    if(params.host_user_id != null){
+    if(params.title){
+      query += `and title LIKE ? `
+      args.push('%'+params.title+'%')
+    }
+
+    if(params.host_user_id){
       query += `and host_user_id = ? `
       args.push(params.host_user_id)
+    }
+
+    if(params.duration){
+      query += `and duration = ? `
+      args.push(params.duration)
     }
 
     if(isPublic != -1){
@@ -100,6 +112,30 @@ export class Competitions{
         return
       }
       callback(rows as Array<CompetitionInfo>);
+    })
+
+  }
+
+  delete(params : any, callback : (err : MysqlError | null)=>void){
+
+    let args = []
+    let query = "delete from competitions where "
+
+    if(params.id){
+      query += " id = ?;"
+      args.push(params.id)
+    }
+    else if(params.host_user_id){
+      query += " host_user_id = ?;"
+      args.push(params.host_user_id)
+    }
+    else{
+      callback(null)
+      return
+    }
+
+    this.dbConnection.query(query, args, err=>{
+      callback(err)
     })
 
   }
