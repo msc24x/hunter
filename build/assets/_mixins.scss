@@ -1,0 +1,52 @@
+@use "./colors";
+@use "./fonts";
+
+
+@mixin inputText {
+  border-radius: 24px;
+  color: colors.$text_black;
+  background-color: #E4E4E4;
+  border-width: 0px;
+  stroke-width: 0px;
+  height: 30px;
+  width: 259px;;
+  margin-left: 12px;
+  font-family: appFont;
+  font-size: 16px;
+  text-align: left;
+  padding-left: 12px;
+}
+
+@mixin appTextArea {
+  resize: none;
+  background-color: rgb(250, 250, 250);
+  border-radius: 24px;
+  font-family: appFont;
+  font-size: 1.2rem;
+  padding: 16px;
+  border-width: 0px;
+  border-color: gray;
+}
+
+@mixin popup {
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  top : 0px;
+  padding-top: 456px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.548);
+  box-shadow: 0 50px 9000px 900px rgba(0, 0, 0, 0.548);
+}
+
+@mixin  popupBox {
+  background-color: white;
+  margin-inline: auto;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 10px;
+  //box-shadow: 0 0 9000px 9000px rgba(0, 0, 0, 0.295);
+  box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
+}
