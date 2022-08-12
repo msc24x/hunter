@@ -83,16 +83,23 @@ drop-down-list{
   #solution_output{
     background-color: whitesmoke;
     width: 50%;
+    overflow: scroll;
+    max-height: 512px;
     padding: 16px;
     font-size: 1rem;
     border-radius: 24px;
     border: 1px solid whitesmoke;
     margin : 4px;
   }
+
+  #solution_output::-webkit-scrollbar{
+    display: none;
+  }
   
   #pts_desc{
     width: 50%;
     overflow: scroll;
+    max-height: 512px;
     display: flex;
     flex-direction: column;
     font-family: appFont;
