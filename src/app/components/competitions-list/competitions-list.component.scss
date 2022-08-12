@@ -3,6 +3,37 @@
 @use "../../../assets/mixins" as *;
 
 
+.row{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#filter_controls{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1.1rem;
+  font-family: appFont;
+
+  label{
+    margin-left: 4px;
+  }
+
+  select{
+    margin-left: 4px;
+    border-radius: 24px;
+    font-family: appFont;
+    border-width: 0px;
+    padding : 8px;
+    padding-inline: 16px;
+    background-color: whitesmoke;
+    
+  }
+}
+
 .heading{
   font-family: appFont;
   font-weight: normal;
@@ -12,6 +43,7 @@
 #competitions_list{
   padding-bottom: 24px;
   border-radius: 12px;
+  min-height: 1024px;
 }
 
 @media only screen and (max-width : 1024px) {

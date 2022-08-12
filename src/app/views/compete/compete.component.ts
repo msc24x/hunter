@@ -53,13 +53,11 @@ export class CompeteComponent implements OnInit {
     this.authService.isAuthenticated.subscribe(isAuth=>{
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
-    })
 
-    competitionsDataService.getPublicCompetitions({public : true}).subscribe(res=>{
-      this.publicCompetitions = res.body
-    },
-    err=>{
-      this.publicCompetitions = err.error
+      competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1"}).subscribe(res=>{
+        this.publicCompetitions = res.body
+      })
+
     })
 
   }
