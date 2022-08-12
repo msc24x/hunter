@@ -61,7 +61,7 @@ popup{
 .vertical_flex{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   width: fit-content;
 
@@ -74,7 +74,7 @@ popup{
 
 .row_flex{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -86,7 +86,7 @@ popup{
   text-align: left;
   width: 100%;
   margin-left: 16px;
-  margin-top: 6px;
+  margin-top: 8px;
   color: colors.$text_black;
 }
 
@@ -110,9 +110,55 @@ popup{
 }
 
 
-@media only screen and (max-width : 556px) {
-  #text_description, #text_title{
+@media only screen and (max-width : 1180px) {
+  #text_description{
+    width: 860px;
+    height: 120px;
+  }
+
+  #text_title{
+    width: 550px;
+    height: 120px;
+  }
+
+}
+
+@media only screen and (max-width : 990px) {
+  #text_description{
+    width: 660px;
+    height: 120px;
+  }
+
+  #text_title{
+    width: 660px;
+    height: 100px;
+  }
+
+}
+
+@media only screen and (max-width : 720px) {
+  #text_description{
+    width: 490px;
+    height: 120px;
+  }
+
+  #text_title{
+    width: 256px;
+    height: 180px;
+  }
+
+}
+
+
+@media only screen and (max-width : 580px) {
+  #text_description{
     width: 320px;
+    height: 180px;
+  }
+
+  #text_title{
+    width: 320px;
+    height: 120px;
   }
 
 }
@@ -244,7 +290,7 @@ a:hover{
 
 #delete_competition_btn:hover{
   cursor: pointer;
-  
+
 }
 
 body{

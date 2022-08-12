@@ -10,10 +10,9 @@
 
 .row{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
-    margin-bottom: 84px;
 }
 
 #profile_editor{
@@ -21,6 +20,7 @@
     margin : 8px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
     
     div{
@@ -43,10 +43,24 @@
        background-color: whitesmoke;
        border-radius: 24px;
        cursor: pointer;
-       padding : 16px
+       padding : 16px;
+       margin : 4px;
     }
 
     #save_btn:hover{
         background-color: white;
     }
+}
+
+
+@media only screen and (max-width : 620px) {
+
+    #user_input_name{
+        width: 156px;
+    }
+
+    create-dialog{
+        margin-top: 64px;
+    }
+    
 }

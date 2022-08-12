@@ -13,7 +13,7 @@
 #filter_controls{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   font-size: 1.1rem;
   font-family: appFont;
@@ -28,6 +28,7 @@
     font-family: appFont;
     border-width: 0px;
     padding : 8px;
+    margin : 4px;
     padding-inline: 16px;
     background-color: whitesmoke;
     
@@ -58,6 +59,31 @@
   }
 }
 
+@media only screen and (max-width : 620px) {
+  .competition_card{
+    font-size: 0.8rem;
+
+    #c_title{
+      font-size: 1rem;
+    }
+  }
+
+  #filter_controls{
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width : 500px) {
+  .competition_card{
+    font-size: 0.8rem;
+
+    #c_title{
+      font-size: 0.9rem;
+    }
+  };
+
+}
+
 
 #list_end{
   display: flex;
@@ -65,7 +91,7 @@
   font-family: appFont;
   font-style: italic;
   font-weight: lighter;
-  font-size: 14px;
+  font-size: 1rem;
 }
 
 #competitions_list p.heading{
@@ -116,18 +142,15 @@
 
 #c_title{
   font-weight: normal;
-  font-size: 20px;
   word-break: break-word;
-
+  font-size: 1.2rem;
 }
 #c_host_user{
   margin-left: 4px;
-  font-size: 14px;
   font-weight: lighter;
   padding : 4px
 }
 
 #c_about{
-  font-size: 1em;
   word-break: break-word;
 }

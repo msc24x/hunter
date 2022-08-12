@@ -5,20 +5,25 @@
 
       <text-input id="title_input" title="Filter By Title" (onChangeEvent)="title = $event; updateList()"></text-input>
 
-      <label for="status_select">Live Status</label>
-      <select id="status_select" Name="Live Status" (change)="updateLiveStatus($event)">
-        <option value="all" [defaultSelected]="true">All</option>
-        <option value="upcoming">Upcoming</option>
-        <option value="live">Live</option>
-        <option value="always">Always Live</option>
-      </select>
 
-      <label for="order_select">Order By</label>
-      <select id="order_select" (change)="updateOrderBy($event)">
-        <option value="any">Any</option>
-        <option value="latest" [defaultSelected]="true">Latest</option>
-        <option value="oldest">Oldest</option>
-      </select>
+      <div>
+        <label for="status_select">Live Status</label>
+        <select id="status_select" Name="Live Status" (change)="updateLiveStatus($event)">
+          <option value="all" [defaultSelected]="true">All</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="live">Live</option>
+          <option value="always">Always Live</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="order_select">Order By</label>
+        <select id="order_select" (change)="updateOrderBy($event)">
+          <option value="any">Any</option>
+          <option value="latest" [defaultSelected]="true">Latest</option>
+          <option value="oldest">Oldest</option>
+        </select>
+      </div>
 
     </div>
   </div>

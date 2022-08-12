@@ -21,7 +21,12 @@
 </popup>
 
 
-<div class="row_flex" style="margin-top: 16px;">
+<div class="row_flex" style="margin-top: 16px; ">
+
+  <div class="vertical_flex">
+    <div id = "desc_label">Competition Description</div>
+      <textarea maxlength="456" rows="7" id="text_description">{{this.competitionInfo.description}}</textarea>
+  </div>
 
   <div class="vertical_flex">
     <div class="vertical_flex">
@@ -29,12 +34,6 @@
       <textarea maxlength="120" rows="7" id="text_title">{{this.competitionInfo.title}}</textarea>
     </div>
   </div>
-
-  <div class="vertical_flex">
-    <div id = "desc_label">Competition Description</div>
-      <textarea maxlength="456" rows="7" id="text_description">{{this.competitionInfo.description}}</textarea>
-  </div>
-
 
   <div class="vertical_flex" style="align-items: stretch;">
 

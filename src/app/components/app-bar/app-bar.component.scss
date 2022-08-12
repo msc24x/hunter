@@ -24,43 +24,17 @@ div.appBar{
     display: flex;
     align-items: center;
 
-    @media only screen and (max-width : 686px) and (min-width : 390px) {
-      #app_title_full{
-        display: none;
-      }
-      #app_title_short{
-        display: initial;
-      }
-    }
-    @media only screen and (min-width : 686px) {
+    @media only screen and (max-width : 686px) and (min-width : 420px) {
       #app_title_full{
         display: initial;
+        font-size: 1.5rem;
       }
-      #app_title_short{
+      #user_name{
         display: none;
       }
     }
-    #register_btn{
-      background-color: colors.$text_black;
-      border-radius: 2px;
-      color: colors.$text_white;
-      font-family: appFont;
-      text-align: left;
-      font-weight: bold;
-      font-size: 12px;
-      border-width: 0px;
-      stroke-width: 0px;
-      padding-top: 10px;
-      height: 30px;
-      width: 120px;
-      margin-left: 24px;
-      vertical-align: middle;
-    }
-    #register_btn:hover{
-      transform: scale(1.02);
-      cursor: pointer;
-    }
-    #user_email, #logout_btn, #user_name{
+  
+    #user_email, #logout_btn, #user_name, #register_btn{
       font-size: 0.8rem;
       background-color: whitesmoke;
       border-radius: 12px;
@@ -84,13 +58,15 @@ div.appBar{
     }
   }
 
-  @media only screen and (max-width : 390px){
-    #app_title_short{
-      display: none;
-    }
+  @media only screen and (max-width : 420px){
     #app_title_full{
+      display: initial;
+      font-size: 1.6rem;
+    }
+    #user_name, #user_email{
       display: none;
     }
+
     #navBarBtn{
       background-color: colors.$text_black;
     }
