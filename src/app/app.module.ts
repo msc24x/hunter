@@ -25,7 +25,8 @@ import { KatexModule } from 'ng-katex';
 import { PopupComponent } from './components/popup/popup.component';
 import { AboutComponent } from './views/about/about.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
-import { BottomAppBarComponent } from './components/bottom-app-bar/bottom-app-bar.component' 
+import { BottomAppBarComponent } from './components/bottom-app-bar/bottom-app-bar.component';
+import { LoadingComponent } from './components/loading/loading.component' 
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { BottomAppBarComponent } from './components/bottom-app-bar/bottom-app-ba
     PopupComponent,
     AboutComponent,
     TextInputComponent,
-    BottomAppBarComponent    
+    BottomAppBarComponent,
+    LoadingComponent    
   ],
   imports: [
     BrowserModule,
