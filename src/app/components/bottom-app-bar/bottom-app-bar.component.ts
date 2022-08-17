@@ -12,4 +12,14 @@ export class BottomAppBarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showPopup(f : boolean, id : string){
+    let guide = document.getElementById(id) as HTMLElement
+    if(f){
+      guide.style.display = 'block'
+      window.scrollTo(0,0)
+    }
+    else
+      guide.style.display = 'none'
+  }
+
 }
