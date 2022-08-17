@@ -5,9 +5,17 @@
 div#signinDialog{
   background-color: colors.$dim_white;
   width: 300px;
-  height: 500px;
   border-radius: 30px;
   padding-top: 1px;
+  padding-bottom: 16px;
+
+  #legal{
+    font-family: appFont;
+    font-size: 0.7rem;
+    padding-inline : 16px;
+    margin : 8px;
+    color: gray;
+  }
 
 
   p.sectionHeading{
