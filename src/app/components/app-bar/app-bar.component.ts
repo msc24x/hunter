@@ -9,6 +9,8 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class AppBarComponent implements OnInit {
 
+  loading = false
+
   @Input()
   app_title = "Hunter"
   @Input()
@@ -46,6 +48,7 @@ export class AppBarComponent implements OnInit {
   }
 
   sendLogoutRequest(){
+    this.loading = true
     this.authService.logout().subscribe(res=>{
 
       this.authService.user = {
@@ -54,6 +57,7 @@ export class AppBarComponent implements OnInit {
         name : ""
       }
       this.authService.isAuthenticated.next(false)
+      this.loading = false
     })
   }
 

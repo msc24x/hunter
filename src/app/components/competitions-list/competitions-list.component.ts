@@ -11,6 +11,8 @@ import { CompetitionsDataService } from 'src/app/services/data/competitions-data
 })
 export class CompetitionsListComponent implements OnInit {
 
+  loading = false
+
   @Input()
   competitionsList : Array<CompetitionInfo> | null = null
 
@@ -56,12 +58,9 @@ export class CompetitionsListComponent implements OnInit {
   }
 
   updateList(){
-    console.log({
-      title : this.title,
-      dateOrder : this.orderByCode[this.orderBy],
-      liveStatus : this.liveStatus,
-      host_user_id : this.host_user_id
-    })
+
+    this.loading = true
+    
     this.competitionsDataService.getPublicCompetitions({
       title : this.title,
       dateOrder : this.orderByCode[this.orderBy],
@@ -69,6 +68,7 @@ export class CompetitionsListComponent implements OnInit {
       host_user_id : this.host_user_id+""
     }).subscribe(res=>{
       this.competitionsList = res.body
+      this.loading = false
     })
   }
 

@@ -13,6 +13,8 @@ import { CompetitionsDataService } from '../../services/data/competitions-data.s
 })
 export class EditorMenuComponent implements OnInit {
 
+  loading = false
+
   isAuthenticated : boolean = false
   user = {
     id : "",
@@ -39,12 +41,15 @@ export class EditorMenuComponent implements OnInit {
   updateUserInfo(){
     let userInput = document.getElementById("user_name_input") as HTMLInputElement 
     this.user.name = userInput.value
-    console.log(userInput)
+
+    this.loading = true
+    
     this.userDataService.updateUserInfo({
       id : this.user.id,
       name : userInput.value,
       email : this.user.email
     }).subscribe(res=>{
+      this.loading = false 
       console.log(res)
     })
   }

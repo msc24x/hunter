@@ -1,3 +1,5 @@
+<app-loading *ngIf="loading"></app-loading>
+
 <popup
   title="Destructive Action"
   id="delete_confirm"
@@ -11,5 +13,5 @@
   <li *ngFor="let question of this.questionsList;" (click)="selectQuestion($event)">Q{{this.questionsList.indexOf(question)}}</li>
   <div *ngIf="editable" id="create_question_btn" (click)="addQuestion();">Add</div>
   <div *ngIf="editable" id="save_question_btn" (click)="saveClicked.emit();">Save</div>
-  <div *ngIf="editable" id="delete_question_btn" (click)="displayLog('Warning : Double click to delete')" (dblclick) ="showDeleteConfirmation(true);">DELETE</div>
+  <div *ngIf="editable" id="delete_question_btn" (click) ="showDeleteConfirmation(true);">DELETE</div>
 </ol>

@@ -47,12 +47,12 @@ div.appBar{
       background-color: white
     }
   }
-  @media only screen and (max-width : 1200px) {
+  @media only screen and (max-width : 1280px) {
     #navBar{
       display: none;
     }
   }
-  @media only screen and (min-width : 1200px) {
+  @media only screen and (min-width : 1280px) {
     #navBarBtn{
       visibility: hidden;
     }

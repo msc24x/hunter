@@ -34,6 +34,8 @@ export class Competition{
 })
 export class CompeteComponent implements OnInit {
 
+  loading = false
+
   isAuthenticated : boolean = false
   user = {
     id : "",
@@ -54,8 +56,10 @@ export class CompeteComponent implements OnInit {
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
 
+      this.loading = true
       competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1"}).subscribe(res=>{
         this.publicCompetitions = res.body
+        this.loading = false
       })
 
     })
@@ -84,6 +88,7 @@ export class CompeteComponent implements OnInit {
   }
 
   routeToCompetition(){
+    this.loading = true
     const id = document.getElementById("competition_id_text") as HTMLInputElement
     this.router.navigate(["/hunt/"+id.valueAsNumber])
   }

@@ -9,6 +9,8 @@ import { CompetitionInfo, QuestionInfo, resCode } from 'src/environments/environ
 })
 export class QuestionsListComponent implements OnInit {
 
+  loading = false
+
   constructor(
     private competitionsData : CompetitionsDataService
   ) { }
@@ -90,20 +92,26 @@ export class QuestionsListComponent implements OnInit {
 
   delQuestion(){
     if(this.questionSelected != -1)
-      this.competitionsData.deleteQuestion(this.questionsList[this.questionSelected].id).subscribe(res =>{
-        this.displayLog("Question "+ this.questionSelected+ " deleted")
-        this.resetQuestionSelected()
-        this.fetchRequired.emit()
+    {   
+        this.loading = true
+        this.competitionsData.deleteQuestion(this.questionsList[this.questionSelected].id).subscribe(res =>{
+          this.displayLog("Question "+ this.questionSelected+ " deleted")
+          this.resetQuestionSelected()
+          this.fetchRequired.emit()
+          this.loading = false
       })
+    }
     else
       this.displayLog("No Question selected")
   }
 
   addQuestion(){
+    this.loading = true
     this.competitionsData.postQuestion(this.competitionInfo.id).subscribe(res=>{
       this.resetQuestionSelected()
       this.fetchRequired.emit()
       this.displayLog("New question inserted and saved")
+      this.loading = false
     })
   }
 
@@ -121,17 +129,6 @@ export class QuestionsListComponent implements OnInit {
     else
       e.style.display = 'none'
   }
-
-  // fetchQuestions(){
-  //   this.competitionsData.getQuestions({competition_id : this.competitionInfo.id as string}).subscribe(res=>{
-  //     if(res.status == resCode.success){
-  //       if(res.body)
-  //         this.questionsList = res.body
-  //         this.questionSelected = -1
-  //         this.questionSelectEmitter.emit(-1)
-  //     }
-  //   })
-  // }
 
   displayLog(msg : string){
     this.messageEmitter.emit(msg)
