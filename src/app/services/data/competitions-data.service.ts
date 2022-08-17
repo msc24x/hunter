@@ -10,6 +10,16 @@ export class CompetitionsDataService {
 
   constructor(private authService : AuthService, private http : HttpClient) { }
 
+  deleteCompetition(id : string){
+    return this.http.delete(apiEndpoints.competition+"/"+id,
+      {
+        responseType : 'json',
+        withCredentials : true,
+        observe : "response"
+      }
+    )
+  }
+
   getFileStatus(id : string, fileType :string){
     return this.http.get(apiEndpoints.question + '/' + id + '/' + fileType, {
       responseType : 'json',
