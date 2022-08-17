@@ -13,7 +13,10 @@ import { CompetitionsDataService } from '../../services/data/competitions-data.s
 })
 export class EditorComponent implements OnInit {
 
+  loading = false
+
   log = new Array<string>()
+  deleteCompMessage = ""
 
   competition_id : string
   competitionInfo : CompetitionInfo  = {} as CompetitionInfo
@@ -50,17 +53,20 @@ export class EditorComponent implements OnInit {
     this.elem = document.getElementById("log")
 
 
+    this.loading = true
     this.authService.authenticate_credentials().subscribe(res=>{
       if(res.status == 202){
         const body = res.body as UserInfo
         this.user = body
         this.authService.user = this.user
         this.authService.isAuthenticated.next(true)
+        this.loading = false
         this.fetchCompetitionInfo()
 
       }
     },
     err=>{
+      this.loading = false
       this.router.navigate(["/home"])
     })
 
@@ -95,6 +101,7 @@ export class EditorComponent implements OnInit {
       return
     }
 
+    this.loading = true
     this.competitionsData.putQuestion({
       id : this.competitionQuestions[this.questionSelected].id,
       title : (document.getElementById("text_qtitle") as HTMLTextAreaElement).value,
@@ -102,6 +109,7 @@ export class EditorComponent implements OnInit {
       points : (document.getElementById("question_points") as HTMLInputElement).valueAsNumber
     }).subscribe((res)=>{
       this.displayLog("Question Updated")
+      this.loading = false
       this.fetchQuestions()
     })
 
@@ -118,6 +126,8 @@ export class EditorComponent implements OnInit {
 
   selectQuestion(index : number){
 
+    this.loading = true
+
     this.questionSelected = index
     this.questionSelectedInfo = (index == -1) ? {} as QuestionInfo : this.competitionQuestions[index]
 
@@ -131,7 +141,7 @@ export class EditorComponent implements OnInit {
         this.testExists = (res.body as any).exists
       }
     })
-
+    this.loading = false
   }
 
 
@@ -153,7 +163,7 @@ export class EditorComponent implements OnInit {
       return
     }
 
-    console.log(filen)
+    this.loading = true
 
     const label = document.getElementById(filen.toLowerCase()+"_file_label") as HTMLLabelElement
     label.innerText = "Uploading.. " + filen + " " + file[0].name
@@ -180,7 +190,7 @@ export class EditorComponent implements OnInit {
             this.testExists = (res.body as any).exists
           }
         })
-
+        this.loading = false
       })
     })
 
@@ -189,17 +199,22 @@ export class EditorComponent implements OnInit {
   }
 
   fetchQuestions(){
+    this.loading = true
     this.competitionsData.getQuestions({competition_id : this.competitionInfo.id as string}).subscribe(res=>{
       if(res.status == resCode.success){
-        if(res.body)
+        if(res.body){
           this.competitionQuestions = res.body
           this.questionSelected = -1
           this.questionSelectedInfo = {} as QuestionInfo
+          this.loading = false
+        }
       }
+       
     })
   }
 
   fetchCompetitionInfo(){
+    this.loading =  true
     this.competitionsData.getCompetitionInfo(this.competition_id as string).subscribe(res=>{
       if(res.status == resCode.success){
         this.competitionInfo = res.body as CompetitionInfo
@@ -212,6 +227,7 @@ export class EditorComponent implements OnInit {
         }
 
         this.fetchQuestions()
+        this.loading = false
       }
     },
     err =>{
@@ -230,11 +246,13 @@ export class EditorComponent implements OnInit {
       else{
         this.router.navigate(["/home"])
       }
+      this.loading = false 
     })
   }
 
   refreshCompetitionInfo(){
     this.fetchCompetitionInfo()
+    this.loading = true
     const title = document.getElementById("text_title") as HTMLTextAreaElement
     const description = document.getElementById("text_description") as HTMLTextAreaElement
     const duration = document.getElementById("competition_duration") as HTMLInputElement
@@ -245,10 +263,12 @@ export class EditorComponent implements OnInit {
     description.value = this.competitionInfo.description as string
 
     this.displayLog("Data refreshed")
+    this.loading = false
 
   }
 
   toggleVisibility(){
+    this.loading = true
     const visBtn = document.getElementById("visibility") as HTMLDivElement
 
     if(this.competitionInfo?.public){
@@ -263,10 +283,12 @@ export class EditorComponent implements OnInit {
       visBtn.style.color = "white"
       visBtn.style.backgroundColor = "crimson"
     }
+    this.loading = false
   }
 
   saveChanges(){
     this.saveQuestion()
+    this.loading = true
     const title = document.getElementById("text_title") as HTMLTextAreaElement
     const description = document.getElementById("text_description") as HTMLTextAreaElement
     const duration = document.getElementById("competition_duration") as HTMLInputElement
@@ -277,6 +299,7 @@ export class EditorComponent implements OnInit {
     this.competitionInfo.start_schedule = schedule.value
     this.competitionsData.putCompetitionInfo(this.competitionInfo).subscribe(res=>{
       this.displayLog("Competition changes saved");
+      this.loading = false
     })
   }
 
@@ -288,41 +311,31 @@ export class EditorComponent implements OnInit {
 
   handleGuidePopupEvent(event : string){
     this.eventPopup.next(event)
-    this.showGuide(false)
+    this.showPopup(false, "guide")
   }
 
   handlePrivacyConfirmPopupEvent(event : string){
     if(event == "continue"){
       this.toggleVisibility()
     }
-    this.showPrivacyConfirm(false)
+    this.showPopup(false,"public_status_confirm")
   }
 
   showLog(){
     console.log(this.log)
   }
 
-  showGuide(f : boolean){
-    let guide = document.getElementById("guide") as HTMLElement
+  showPopup(f : boolean, id : string){
+    let guide = document.getElementById(id) as HTMLElement
     if(f)
       guide.style.display = 'block'
     else
       guide.style.display = 'none'
-  }
-
-  showPrivacyConfirm(f : boolean){
-
-    let guide = document.getElementById("public_status_confirm") as HTMLElement
-    if(f)
-      guide.style.display = 'block'
-    else
-      guide.style.display = 'none'
-    
   }
 
   onClickVisibility(){
     if(this.competitionInfo.public == false){
-      this.showPrivacyConfirm(true)
+      this.showPopup(true, "public_status_confirm")
     }
     else{
       this.toggleVisibility()

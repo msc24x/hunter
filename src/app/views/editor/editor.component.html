@@ -5,12 +5,82 @@
   id="guide"
   (closeEvent)="handleGuidePopupEvent($event)"
 >
-  You can write mathematical expressions in Question Statement <br>
+
+  <b>Saving</b> <br><br>
+  Always remember to save your changes by clicking the button SAVE CHANGES in
+  the bottom bar. You can also trigger this functionality by keyboard shortcut
+  Shift + S
+  <br><br><br>
+
+  <b>Duration</b> <br><br>
+  If you wish to set your competition live forever, set the duration to 0.
+  This practically gives unlimited time to participants.
+  <br><br><br>
+
+  <b>Visibility controller</b> <br><br>
+  The button next to Rating bounces between two values, PUBLIC and PRIVATE.
+  This is essential for the visibility of your competition. Even if the 
+  competition has been set to live due to the Schedule, a PRIVATE competition
+  would still not be accessible to the users. <br>
+  Moreover, a public competition would appear on the Compete page of the website,
+  which further will only show questions if and only if it is live.
+  <br><br><br>
+
+  <b>Questions List</b> <br><br>
+  To see or edit questions' related data, a question must be selected
+  from the list. All operations such as Add, Save & Delete would unselect
+  the question to avoid confusion.<br>
+  Note that the Save button in the list only saves the changes made to the question.
+  Though the Save Changes in bottom bar saves all changes.<br>
+  It is a must to acknowledge that the questions added would not have any specific order.
+  The index numbers in list is only for frontend purposes. Only question IDs 
+  distinguish between them.
+  <br><br><br>
+
+  <b>Latex in Question Statement</b> <br><br>
+  You can write Latex expressions in Question Statement wrapped with dollar signs ($)<br>
   For example,<br> write $\sqrt{{'{'}}p+q{{'}'}}$<br><br>
   It would be rendered as <br>
   <ng-katex equation="\sqrt{p+q}"></ng-katex> <br>
-  To learn more about the syntax, refer <a href="https://katex.org/docs/supported.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a>
-</popup>
+  To learn more about the syntax, refer
+  <a href="https://katex.org/docs/supported.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a>
+  <br><br><br>
+
+  <b>Guidelines for setting questions</b><br><br>
+  The online judge for Hunter accepts the user's code as a black box.
+  Test cases file is given as an input and the output is compared with your solutions file.<br>
+  The questions that would require the participants to complete a part of
+  the code is currently not supported. Hence, it is advised to keep your
+  questions' format as simple input-output style.<br><br>
+  e.g. test cases file<br>
+  2<br>
+  1 2 3<br>
+  4 5 6<br>
+  solutions file<br>
+  6<br>
+  15<br>
+  <br><br><br>
+
+  <b>Uploading files</b><br><br>
+  Only text files with less than 1.5Mb size are acceptable<br>
+  It is encouraged as it neccesary to format your test cases and solutions file
+  correctly. Always check those files against your correct code.<br>
+  It is the question setter's responsibility to verify the legitimacy of the
+  test cases and reliability of the solutions.
+  <br><br><br>
+
+  <b>Points</b><br><br>
+  This is the question points that would be accumulated in the total score of the
+  participants. The score is given if and only if they pass all the test cases.
+  <br><br><br>
+
+  <b>Deleting the competition</b><br><br>
+    <div id="delete_competition_btn" (click)="showPopup(true, 'delete_comp_popup'); showPopup(false, 'guide');">
+      Delete Competition
+    </div>
+  <br><br><br>
+  
+  </popup>
 
 <popup
   title="Confirmation"
@@ -103,10 +173,6 @@
 
   <div id="question_points_lbl">Set Points <input id="question_points" type="number" min="0" [value]="questionSelectedInfo.points" ></div>
 
-
-  <div id="delete_competition_btn">
-    Delete Competition
-  </div>
   
 </div>
 
@@ -117,6 +183,6 @@
 <div class = "row_flex" id="controls">
   <button (click)="refreshCompetitionInfo()">RESET UNSAVED CHANGES</button>
   <button (click)="this.saveChanges()">SAVE CHANGES (Shift + S)</button>
-  <button (click)="showGuide(true)">GUIDE</button>
+  <button (click)="showPopup(true, 'guide')">GUIDE</button>
   <div id = "log" (click)="showLog()">Welcome</div>
 </div>

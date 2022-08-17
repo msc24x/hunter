@@ -6,6 +6,36 @@ popup{
   display: none;
 }
 
+.red{
+  color: darkred;
+}
+
+.appTextInput{
+  @include appTextArea;
+}
+
+#input_competition_code{
+  border-width: 0px;
+  font-family: appFont;
+  width: 84px;
+  font-size: 1.1rem;
+  border-radius: 24px;
+  padding : 8px;
+  margin: 8px;
+}
+
+#delete_competition_btn_popup{
+  font-family: appFont;
+  font-size: 1.2rem;
+  padding : 8px;
+  padding-inline: 16px;
+  border-radius: 24px;
+  width: fit-content;
+  margin : 8px;
+  color: white;
+  background-color: darkred;
+}
+
 #created_on{
   background-color: whitesmoke;
   font-family: appFont;
@@ -232,7 +262,6 @@ input.file_input{
 }
 
 a{
-  background-color: whitesmoke;
   border-radius: 24px;
   font-family: appFont;
   padding : 8px;
@@ -278,6 +307,7 @@ a:hover{
 
 #delete_competition_btn{
   font-family: appFont;
+  font-size: 1rem;
   background-color: #fff0f0;
   color : darkred;
   width: fit-content;
