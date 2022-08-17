@@ -14,6 +14,9 @@ export class PopupComponent implements OnInit {
   title = "Message"
 
   @Input()
+  destructive = false
+
+  @Input()
   showControls = true
 
   constructor() { }
@@ -24,6 +27,14 @@ export class PopupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if(this.destructive){
+      let dialog = document.getElementById('dialog') as HTMLElement
+      dialog.style.backgroundColor = "#fff0f0"
+      dialog = document.getElementById('title') as HTMLElement
+      dialog.style.color = "darkred"
+
+    }
   }
 
 }

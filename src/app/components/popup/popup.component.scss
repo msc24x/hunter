@@ -7,10 +7,15 @@
     font-family: appFont;
 }
 
+
+#dialog::-webkit-scrollbar{
+    display: none
+}
+
 #dialog{
     @include popupBox;
-
-    width: 456px;
+    max-height: 890px;
+    overflow-y: scroll;
     padding: 24px;
     font-size: 1.2rem;
 
