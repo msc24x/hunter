@@ -12,6 +12,7 @@ import { resCode } from 'src/environments/environment';
 })
 export class CreateDialogComponent implements OnInit {
 
+  loading = false
   
   responseMessage : string = ""
 
@@ -31,6 +32,7 @@ export class CreateDialogComponent implements OnInit {
   }
 
   requestCreateCompetition(){
+    this.loading = true
     const title = (document.getElementById("competition_title") as HTMLInputElement).value;
     this.competitionsData.postCompetition(title)?.subscribe(res =>{
 
@@ -45,7 +47,7 @@ export class CreateDialogComponent implements OnInit {
 
   private handleResponse(res : HttpResponse<Object>){
     this.toggleSubmitButton(true);
-
+    this.loading = false
 
     switch (res.status) {
       case resCode.serverErrror:
@@ -70,7 +72,7 @@ export class CreateDialogComponent implements OnInit {
   }
 
   showCreateDialog(show : boolean){
-    let createDialog = document.getElementById("dialog_box") as HTMLDivElement
+    let createDialog = document.getElementById("create_dialog_popup") as HTMLDivElement
     if(show){
       createDialog.style.display = "block"
     }else{

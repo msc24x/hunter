@@ -1,12 +1,17 @@
-<div id="dialog_box" (click)="dialogBoxClicked($event)">
-  <div id = "dialog">
-    <div class="h1">Enter The Title</div>
-    <textarea id = "competition_title" type="text" [rows]="2" maxlength="120"></textarea>
-    <br>
-    <button id = "create" (click)="requestCreateCompetition()">Build Competition</button>
-    <div class = "error">{{responseMessage}}</div>
-  </div>
-</div>
+
+<app-loading *ngIf="loading"></app-loading>
+
+<popup
+  id="create_dialog_popup"
+  title="Enter The Title"
+  [showControls]="false"
+  (closeEvent)="showCreateDialog(false)"
+>
+  <textarea id = "competition_title" type="text" [rows]="2" maxlength="120"></textarea>
+  <br>
+  <button id = "create" (click)="requestCreateCompetition()">Build Competition</button>
+  <div class = "error">{{responseMessage}}</div>
+</popup>
 
 <div id = "create_btn" (click)="showCreateDialog(true)">
   <div id="plus_btn">+</div>

@@ -2,38 +2,9 @@
 @use "../../../assets/colors";
 @use "../../../assets/mixins" as *;
 
-#dialog_box{
-  @include popup;
-}
 
-#dialog{
-  background-color: colors.$text_white;
-  margin-inline: auto;
-  width: fit-content;
-  height: fit-content;
-  border-radius: 10px;
-  //box-shadow: 0 0 9000px 9000px rgba(0, 0, 0, 0.295);
-  box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
-  padding : 24px;
-
-  .h1{
-    font-family: appFont;
-    color: colors.$text_black;
-    width: 100%;
-    text-align: left;
-    font-size: 1.5rem;
-  }
-
-  .h2{
-    font-family: appFont;
-    font-weight: normal;
-    color: colors.$text_black;
-    width: 100%;
-    text-align: left;
-    padding-top: 1rem;
-    font-size: 1.15rem;
-  }
-
+#create_dialog_popup{
+  
   .error{
     font-family: appFont;
     font-weight: normal;
