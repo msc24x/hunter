@@ -1,5 +1,6 @@
 import express, {Request, Response} from "express"
 import { Competitions } from "../../database/models/Competitions"
+import { Questions } from "../../database/models/Questions"
 import { CompetitionInfo, UserInfo, resCode } from "../../environments/environment"
 import { sendResponse, sendResponseJson } from "../app"
 import { authenticate } from "../auth"
@@ -8,7 +9,42 @@ import { authenticate } from "../auth"
 var router = express.Router()
 
 const competitionsModel = new Competitions()
+const quesitonsModel = new Questions()
 
+
+router.delete("/competition/:id", (req, res)=>{
+  authenticate(req, res, (req, res, user)=>{
+    competitionsModel.findAll(
+      {id : req.params.id, host_user_id : user.id},
+      0,
+      -1,
+      competitions=>{
+        if(competitions.length == 0){
+          sendResponse(res, resCode.notFound)
+          return
+        }
+
+        competitionsModel.delete({id : req.params.id}, err=>{
+          if(err){
+            sendResponse(res, resCode.serverErrror)
+            return
+          }
+          sendResponse(res, resCode.success)
+          quesitonsModel.delete({competition_id : req.params.id}, err=>{
+            if(err){
+              console.log(err)
+            }
+          })
+  
+        })
+        
+      },
+      err=>{
+        sendResponse(res, resCode.serverErrror)
+      }
+    )
+  })
+})
 
 router.post("/competition", (req, res)=>{
 
