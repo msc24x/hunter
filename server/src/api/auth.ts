@@ -21,10 +21,13 @@ export function authenticate(req: Request, res : Response,
     password = req.body.password
   }
 
-  if(email && password){
+  console.log(email, password)
+  console.log(req.body.email, req.body.password)
+
+  if(email != null && password != null){
 
     if(!Sanitizer.isEmail(email as string) || !((password as string).length >= 6 && (password as string).length <= 16)){
-      sendResponse(res, resCode.badRequest);
+      sendResponse(res, resCode.badRequest, "invalid email or pass 2");
       return
     }
 
@@ -70,7 +73,7 @@ export function authenticate(req: Request, res : Response,
   else if(session_id){
 
     if(session_id.length !== 26){
-      sendResponse(res, resCode.badRequest)
+      sendResponse(res, resCode.badRequest, "wrong session id")
       return
     }
 
@@ -108,7 +111,7 @@ export function authenticate(req: Request, res : Response,
     })
   }
   else{
-    sendResponse(res, resCode.badRequest);
+    sendResponse(res, resCode.badRequest, "no session id");
   }
 
 }
