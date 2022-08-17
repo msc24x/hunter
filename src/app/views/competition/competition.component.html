@@ -22,14 +22,14 @@
     [(questionSelected)]="questionSelected"
   ></questions-list>
 
-  <div id="question_title">
+  <div *ngIf="questionSelected != -1" id="question_title">
     Question ID : {{questionSelectedInfo.id}} for {{questionSelectedInfo.points}} pts
     <br>
     <b>{{questionSelectedInfo.title}}</b>
   </div>
 
     
-  <div id="question_statement">
+  <div *ngIf="questionSelected != -1" id="question_statement">
     <ng-katex-paragraph [paragraph]="questionSelectedInfo.statement ?? ''"></ng-katex-paragraph>
   </div>
 
@@ -41,7 +41,7 @@
 
   <div id="editor"></div>
 
-  <div id="submit_code_btn" (click)="postSolution()">Submit</div>
+  <div *ngIf="questionSelected != -1" id="submit_code_btn" (click)="postSolution()">Submit</div>
 
   <div class="row sa">
     <div id="output_label">Submission Output</div>

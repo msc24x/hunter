@@ -95,8 +95,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.router.navigate(["/home"])
       })
     )
-
-    this.fetchEvaluation()
     
     this.unsubscribeAll()
 
@@ -183,6 +181,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
   }
 
   fetchData(){
+
+    this.fetchEvaluation()
 
     this.subscriptions.push( this.competitionsService.getCompetitionInfo(this.c_id).subscribe({
       next : res=>{
