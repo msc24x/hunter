@@ -1,5 +1,25 @@
 <app-bar></app-bar>
 
+<app-loading *ngIf="loading"></app-loading>
+
+<popup
+  title="Destructive Action"
+  id="delete_comp_popup"
+  (closeEvent)="handleDeleteCompPopupEvent($event)"
+  [showControls]="false"
+  [destructive]="true"
+>
+Deleting the competition is an irreversible operation. All the data
+associated with it will be immediatly lost forever and users will no longer be able to
+see or participate in it.<br>
+Remember : If you do not want others to see this competition, you can always
+make it private instead of deleting.<br><br>
+<b>Enter the current competition code</b>
+<input type="text" id="input_competition_code">
+<div class="red">{{deleteCompMessage}}</div>
+<div id="delete_competition_btn_popup" (click)="deleteCompetition()">Delete</div>
+</popup>
+
 <popup
   title="Guide"
   id="guide"

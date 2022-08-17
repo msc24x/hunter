@@ -309,6 +309,10 @@ export class EditorComponent implements OnInit {
       this.elem.innerHTML = "Last Operation : " + msg
   }
 
+  handleDeleteCompPopupEvent(event: string){
+    this.showPopup(false, "delete_comp_popup")
+  }
+
   handleGuidePopupEvent(event : string){
     this.eventPopup.next(event)
     this.showPopup(false, "guide")
@@ -339,6 +343,33 @@ export class EditorComponent implements OnInit {
     }
     else{
       this.toggleVisibility()
+    }
+  }
+
+  deleteCompetition(){
+    let input = document.getElementById("input_competition_code") as HTMLInputElement
+    console.log(input.value)
+    if(input.value != this.competitionInfo.id){
+      this.deleteCompMessage = "*Code does not match"
+    }
+    else{
+      this.deleteCompMessage = ""
+      this.loading = true
+      this.competitionsData.deleteCompetition(this.competitionInfo.id).subscribe(
+        {
+          next : res=>{
+            this.deleteCompMessage = "Deleted"
+            this.showPopup(false, "delete_comp_popup")
+            this.router.navigate(['/editor'])
+          },
+          error : err=>{
+            this.deleteCompMessage = err.status
+          },
+          complete : ()=>{
+            this.loading =false
+          }
+        }
+      )
     }
   }
 
