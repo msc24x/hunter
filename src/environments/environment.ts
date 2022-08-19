@@ -65,7 +65,16 @@ export const apiEndpoints = {
   execute : environment.apiUrl+"/execute",
   user : environment.apiUrl+"/user",
   results : environment.apiUrl+"/result/c/",
-  resultsAll : environment.apiUrl+"/result"
+  resultsAll : environment.apiUrl+"/result",
+  submission : environment.apiUrl+"/submission/"
+}
+
+export const templates = {
+  cpp : "#include <iostream>\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n\t//write code\n\treturn 0;\n}",
+  c : "#include\"stdio.h\"\n#include\"string.h\"\n#include\"math.h\"\n#include\"stdlib.h\"\n#include\"ctype.h\"\n#include\"limits.h\"\n#include\"time.h\"\n#include\"stdbool.h\"\n\nint main(){\n\t//write code\n\treturn 0;\n}",
+  py : "#write code",
+  js : "/*write code*/"
+  
 }
 
 export const resCode = {
@@ -84,8 +93,8 @@ export interface QuestionInfo{
   title : string,
   statement : string,
   created_on : string,
-  tests_id : string,
-  solutions_id : string,
+  sample_cases : string,
+  sample_sols : string,
   points : number,
 }
 /*

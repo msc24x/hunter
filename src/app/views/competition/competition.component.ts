@@ -3,7 +3,7 @@ import { ActivatedRoute, ActivationEnd, NavigationStart, Router } from '@angular
 import * as ace from 'ace-builds';
 import { Subscription } from 'rxjs';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
-import { CompetitionInfo, HunterExecutable, QuestionInfo, resCode, resultFull, UserInfo } from 'src/environments/environment';
+import { CompetitionInfo, HunterExecutable, QuestionInfo, resCode, resultFull, templates, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
 import katex from 'katex';
@@ -16,6 +16,9 @@ import katex from 'katex';
 })
 export class CompetitionComponent implements OnInit, OnDestroy {
 
+  loading = false
+  fetchSubmissionMsg = ""
+
   c_id : string = "";
   editor!: ace.Ace.Editor;
 
@@ -23,17 +26,17 @@ export class CompetitionComponent implements OnInit, OnDestroy {
   user = {} as UserInfo
   competition = {} as CompetitionInfo
   evaluation : Array<resultFull> = []
-
-  competitionQuestions : Array<QuestionInfo> = []
+  competitionQuestions = [] as Array<QuestionInfo>
   questionSelected = -1
   questionSelectedInfo = {} as QuestionInfo
   solutionOutput = ""
-  languageSelected = "cpp"
+  languageSelected  = "cpp"
 
   timeRemaining = {
     min : "∞",
     sec : "∞"
   }
+  hasEnded = false
 
   routerSubsc : Subscription | null = null
   subscriptions : Subscription[] = []
@@ -79,7 +82,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.initEditor()
 
     this.subscriptions.push(
       this.authService.authenticate_credentials().subscribe(res=>{
@@ -121,7 +123,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     })
   }
 
-  postSolution(){
+  postSolution(samples = false){
 
     if(this.questionSelected == -1){
       this.solutionOutput = "No question selected"
@@ -133,6 +135,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     this.solutionOutput = "Judging.... (This might take few seconds)"
+
+    this.subscriptions.push(
     this.competitionsService.judgeSolution({
       for : {
         competition_id : this.c_id,
@@ -142,7 +146,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         lang : this.languageSelected ,
         code : this.editor.getValue()
       }
-    }).subscribe(res=>{
+    }, samples).subscribe(res=>{
       if(res.status == resCode.success){
         this.solutionOutput = ( res.body as {output : string}).output
         let outputBox = document.getElementById('solution_output');
@@ -161,7 +165,32 @@ export class CompetitionComponent implements OnInit, OnDestroy {
       }
       else
         this.solutionOutput == res.statusText
-    })
+    }))
+  }
+
+
+  fetchLastSubmission(){
+
+    this.fetchSubmissionMsg = ""
+    this.loading = true
+    this.subscriptions.push(
+    this.competitionsService.getLastSubmission({
+      competition_id : this.competition.id,
+      question_id : this.questionSelectedInfo.id,
+      lang : this.languageSelected
+    }).subscribe(
+      {
+        next : res=>{
+          this.editor.setValue(res.body?.data ?? "" )
+          this.loading = false
+        },
+        error : err=>{
+          console.log(err)
+          this.loading = false
+          this.fetchSubmissionMsg = "* Not found any ."+this.languageSelected+" submission"
+        }
+      }
+    ))
   }
 
 
@@ -186,10 +215,26 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push( this.competitionsService.getCompetitionInfo(this.c_id).subscribe({
       next : res=>{
+
         this.competition = res.body as CompetitionInfo
+
         if(this.competition.duration == 0){
           clearInterval(this.timeInterval)
         }
+
+        if(Date.parse(this.competition.start_schedule) > Date.now()){
+          alert("Competition has not started yet")
+          this.router.navigate(['/compete'])
+        }
+        else
+          this.initEditor()
+
+
+        if(this.competition.duration != 0 && Date.now() >  Date.parse(this.competition.start_schedule)+ this.competition.duration*60*1000){
+          this.hasEnded = true
+        }
+
+
         this.competitionsService.getQuestions({competition_id : this.c_id}).subscribe(res=>{
           this.competitionQuestions = res.body as QuestionInfo[]
         })
@@ -207,17 +252,36 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     this.questionSelectedInfo = this.competitionQuestions[index]
   }
 
+  loadTemplate(){
+    this.editor.setValue(templates[this.languageSelected as "cpp" | "py" | "c" | "js"])
+  }
+
+  updateEditorMode(){
+    switch(this.languageSelected){
+      case "c":
+      case "cpp":
+        this.editor.session.setMode("ace/mode/c_cpp")
+        break
+      case "py":
+        this.editor.session.setMode("ace/mode/python")
+        break;
+      case "js":
+        this.editor.session.setMode("ace/mode/javascript")
+
+    }
+  }
+
 
   initEditor(){
     this.editor = ace.edit("editor")
-    ace.config.set("basePath", "https://unpkg.com/ace-builds@1.4.12/src-noconflict")
+    ace.config.set("basePath", "../assets/")
     /**
      * twilight
      * monokai
      * terminal
      */
     this.editor.setTheme("ace/theme/twilight")
-    this.editor.session.setMode("ace/mode/python")
+    this.editor.session.setMode('ace/mode/c_cpp')
   }
 
 }

@@ -20,6 +20,23 @@ export class CompetitionsDataService {
     )
   }
 
+  getLastSubmission(params : any){
+    let httpParams = new HttpParams()
+
+    if(params.competition_id)
+      httpParams = httpParams.set('competition_id', params.competition_id)
+    if(params.question_id)
+      httpParams = httpParams.set('question_id', params.question_id)
+    
+    return this.http.get<{data : string}>(apiEndpoints.submission+params.lang,
+      {
+        responseType : 'json',
+        withCredentials : true,
+        observe : "response",
+        params : httpParams
+      })
+  }
+
   getFileStatus(id : string, fileType :string){
     return this.http.get(apiEndpoints.question + '/' + id + '/' + fileType, {
       responseType : 'json',
@@ -28,8 +45,8 @@ export class CompetitionsDataService {
   })
   }
 
-  judgeSolution(exe : HunterExecutable){
-    return this.http.post(apiEndpoints.execute, exe, {
+  judgeSolution(exe : HunterExecutable, samples = false){
+    return this.http.post(apiEndpoints.execute, {exec : exe, samples : samples}, {
       responseType : 'json',
       withCredentials : true,
       observe : "response"

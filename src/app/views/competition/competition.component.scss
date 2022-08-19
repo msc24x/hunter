@@ -3,10 +3,6 @@
 @use "../../../assets/mixins" as *;
 
 
-drop-down-list{
-  margin-top: 7%;
-}
-
 #editor{
   height: 720px;
   font-size: 1rem;
@@ -46,7 +42,11 @@ drop-down-list{
   margin-bottom: 24px;
 }
 
-#submit_code_btn{
+#question_statement{
+  font-size: 1.05rem !important;
+}
+
+.button{
   @include appTextArea;
   cursor: pointer;
   width: fit-content;
@@ -54,7 +54,7 @@ drop-down-list{
   margin : 16px;
 }
 
-#submit_code_btn:hover{
+.button:hover{
   background-color: white;
 }
 
@@ -67,7 +67,23 @@ drop-down-list{
 
 .row{
   display: flex;
+  align-items: center;
+  font-family: appFont;
 }
+
+#load_template_btn{
+  height: fit-content;
+  color: white;
+  background-color: colors.$text_black;
+  margin-left: 4%;
+  padding: 4px;
+  cursor: pointer;
+}
+
+#load_template_btn:hover{
+  background-color: #494949;
+}
+
 
 .sa{
   justify-content: space-around;
