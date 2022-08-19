@@ -30,7 +30,7 @@ export class PopupComponent implements OnInit {
 
     if(this.destructive){
       let dialog = document.getElementById('dialog') as HTMLElement
-      dialog.style.backgroundColor = "#fff0f0"
+      
       dialog = document.getElementById('title') as HTMLElement
       dialog.style.color = "darkred"
 

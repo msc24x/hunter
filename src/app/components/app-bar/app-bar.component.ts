@@ -12,7 +12,7 @@ export class AppBarComponent implements OnInit {
   loading = false
 
   @Input()
-  app_title = "Hunter"
+  app_title = "HUNTER."
   @Input()
   app_title_s = "H_"
 

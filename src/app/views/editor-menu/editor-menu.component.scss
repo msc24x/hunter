@@ -10,7 +10,7 @@
 
 .row{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -20,7 +20,7 @@
     margin : 8px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     
     div{
@@ -52,6 +52,12 @@
     }
 }
 
+@media only screen and (max-width : 900px) {
+    create-dialog{
+        margin-top: 64px;
+        margin-inline: auto;
+    }
+}
 
 @media only screen and (max-width : 620px) {
 
@@ -59,8 +65,11 @@
         width: 156px;
     }
 
-    create-dialog{
-        margin-top: 64px;
+    #label{
+        font-size: 1.1rem !important;
     }
+    
+
+    
     
 }

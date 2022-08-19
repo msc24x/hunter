@@ -72,17 +72,21 @@ export class EditorMenuComponent implements OnInit {
         this.isAuthenticated = true
         this.authService.isAuthenticated.next(true)
 
+        this.loading = true
         // fetch user's all created competitions
         this.competitionsDataService.getPublicCompetitions({
           public : false,
           host_user_id : this.user.id
-        }).subscribe(res=>{
-          this.userCompetitions = res.body
-        },
-        err=>{
-          this.userCompetitions = err.error
-        })
-
+        }).subscribe({
+            next : res=>{
+                    this.loading = false
+                    this.userCompetitions = res.body
+                  },
+            error : err=>{
+                    this.loading = false
+                    this.userCompetitions = err.error
+                  }
+          })
       }
     })
 

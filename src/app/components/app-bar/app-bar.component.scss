@@ -58,17 +58,17 @@ div.appBar{
     }
   }
 
-  @media only screen and (max-width : 420px){
+  @media only screen and (max-width : 430px){
     #app_title_full{
       display: initial;
-      font-size: 1.6rem;
+      font-size: 1.7rem;
     }
     #user_name, #user_email{
       display: none;
     }
 
-    #navBarBtn{
-      background-color: colors.$text_black;
+    #logout_btn{
+      font-size: 0.7rem !important;
     }
   }
 
@@ -78,10 +78,11 @@ div.appBar{
     justify-content: right;
     align-items: flex-end;
     font-family: appFont;
+    font-size: 0.9rem;
     font-weight: bolder;
     background-color: colors.$text_white;
-    padding : 8px;
-    padding-top: 10px;
+    padding : 6px;
+    padding-inline: 8px;
     border-radius: 8px;
     margin-right: 12px;
     cursor: pointer;
@@ -101,6 +102,7 @@ div.appBar{
     margin-top: 14px;
     position: absolute;
     display: none;
+    font-size: 0.9rem;
 
     ul{
       padding : 5px;
@@ -108,7 +110,7 @@ div.appBar{
       backdrop-filter: blur(16px);
       border-radius: 16px;
       background-color: rgba(255, 255, 255, 0.411);
-      box-shadow: -2px 0px 15px 0px rgba(0, 0, 0, 0.219);
+      box-shadow: 0 0 100px 0px rgba(0, 0, 0, 0.247);
 
       li{
         text-align: left;

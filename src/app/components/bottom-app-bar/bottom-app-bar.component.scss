@@ -40,6 +40,7 @@ popup{
       div{
         cursor: default;
       }
+      
 
       .button:hover{
         font-weight: bolder;
@@ -47,7 +48,17 @@ popup{
 
     }
 
-    
-
+  }
+  @media only screen and (max-width : 1024px) {
+    #site_logo{
+      font-size: 1.2rem !important;
+      #site_info{
+        font-size: 0.6rem !important;
+      }
+      
+    }
+    .button{
+      font-size: 0.7rem !important;   
+    }
   }
   
