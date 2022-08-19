@@ -63,7 +63,7 @@ make it private instead of deleting.<br><br>
   It would be rendered as <br>
   <ng-katex equation="\sqrt{p+q}"></ng-katex> <br>
   To learn more about the syntax, refer
-  <a href="https://katex.org/docs/supported.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a>
+  <a href="https://katex.org/docs/support_table.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a>
   <br><br><br>
 
   <b>Guidelines for setting questions</b><br><br>
@@ -170,10 +170,34 @@ make it private instead of deleting.<br><br>
  </div>
   <textarea id = "text_qtitle" maxlength="150" rows="4" [value]="questionSelectedInfo.title"></textarea>
 
- <div id="qstatement_label">
-  Statement
+  <div class="flex">
+    <div id="qstatement_label">
+      Statement
+    </div>
+    <div id="toggle_preview_btn" (click)="togglePreview()">Toggle Preview</div>
   </div>
+ 
  <textarea id = "text_statement" maxlength="2048" rows="15" [value]="questionSelectedInfo.statement"></textarea>
+ <ng-katex-paragraph id="text_statement_preview" [paragraph]="questionSelectedInfo.statement ?? ''"></ng-katex-paragraph>
+
+
+ <div class="flex" id="sample_test_cases">
+   <div class="vertical_flex">
+     <div id="sample_cases_label">
+      Sample Tests Cases
+     </div>
+     <textarea id = "question_sample_cases" maxlength="250" rows="4" [value]="questionSelectedInfo.sample_cases"></textarea>
+   </div>
+  
+   <div class="vertical_flex">
+     <div id="sample_sols_label">
+       Solution to the samples
+      </div>
+      <textarea id = "question_sample_sols" maxlength="250" rows="4" [value]="questionSelectedInfo.sample_sols"></textarea>
+   </div>
+ </div>
+
+ 
 
  <div class="row_flex">
 
@@ -186,7 +210,6 @@ make it private instead of deleting.<br><br>
 
   <label id = "solutions_file_label" class = "file_input" for="solutions_file">
     Upload test solutions file...
-    
   </label>
   <input class = "file_input" id = "solutions_file" type="file" (change)="updateFile($event, 'Solutions')">
   <a *ngIf="solsExists" id = "solutions_download" (click)="downloadFile('solutions')">View Solutions</a>

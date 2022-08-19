@@ -22,6 +22,7 @@ popup{
   border-radius: 24px;
   padding : 8px;
   margin: 8px;
+  background-color: whitesmoke;
 }
 
 #delete_competition_btn_popup{
@@ -102,7 +103,16 @@ popup{
   }
 }
 
+
+.flex{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .row_flex{
+  font-family: appFont;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -137,6 +147,30 @@ popup{
   min-width: 0px;
   width: 512px;
   margin-top: 4px;
+}
+
+#sample_test_cases{
+  font-family: appFont;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-between;
+
+  .vertical_flex{
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+
+    #sample_cases_label, #sample_sols_label{
+      font-size: 1rem;
+    }
+
+    textarea{
+      @include appTextArea;
+      margin:  8px;
+      width: 80%;
+    }
+  }
 }
 
 
@@ -242,7 +276,15 @@ popup{
   @include appTextArea;
 }
 
-label.file_input{
+#text_statement_preview{
+  display: none;
+  @include appTextArea;
+  height: 344px;
+  font-size: 1.05rem !important;
+  overflow-y: scroll;
+}
+
+label.file_input, #toggle_preview_btn{
   font-family: appFont;
   font-weight: bold;
   color: colors.$text_black;
@@ -253,7 +295,7 @@ label.file_input{
   margin : 4px;
   cursor: default;
 }
-label.file_input:hover{
+label.file_input:hover, #toggle_preview_btn:hover{
   background-color: colors.$sweet_white;
 }
 
@@ -269,7 +311,7 @@ a{
   cursor: pointer;
 }
 
-a:hover{
+a:hover, #toggle_preview_btn:hover{
   background-color: white;
 }
 

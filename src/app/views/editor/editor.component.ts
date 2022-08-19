@@ -106,7 +106,9 @@ export class EditorComponent implements OnInit {
       id : this.competitionQuestions[this.questionSelected].id,
       title : (document.getElementById("text_qtitle") as HTMLTextAreaElement).value,
       statement : (document.getElementById("text_statement") as HTMLTextAreaElement).value,
-      points : (document.getElementById("question_points") as HTMLInputElement).valueAsNumber
+      points : (document.getElementById("question_points") as HTMLInputElement).valueAsNumber,
+      sample_cases : (document.getElementById("question_sample_cases") as HTMLInputElement).value,
+      sample_sols : (document.getElementById("question_sample_sols") as HTMLInputElement).value
     }).subscribe((res)=>{
       this.displayLog("Question Updated")
       this.loading = false
@@ -344,6 +346,21 @@ export class EditorComponent implements OnInit {
     else{
       this.toggleVisibility()
     }
+  }
+
+  togglePreview(){
+    let raw = document.getElementById('text_statement') as HTMLTextAreaElement
+    let prev = document.getElementById('text_statement_preview') as any
+    if(prev.style.display == 'none'){
+      prev.style.display = 'block'
+      raw.style.display = 'none'
+    }
+    else{
+      prev.style.display = 'none'
+      raw.style.display = 'block'  
+    }
+    this.questionSelectedInfo.statement = raw.value
+
   }
 
   deleteCompetition(){
