@@ -64,8 +64,8 @@ export class Questions{
             statement : row.statement,
             created_on : row.date_created,
             points : row.points,
-            solutions_id : row.solutions_id,
-            tests_id : row.tests_id
+            sample_cases : row.sample_cases,
+            sample_sols : row.sample_sols
           } as QuestionInfo
         )
       }
@@ -93,9 +93,9 @@ export class Questions{
 
   update(newQuestion : any, callback : (err : MysqlError | null)=>void){
 
-    let args =[newQuestion.title, newQuestion.statement]
+    let args =[newQuestion.title, newQuestion.statement, newQuestion.sample_cases, newQuestion.sample_sols]
 
-    let query = `update questions set title = ?, statement = ?`
+    let query = `update questions set title = ?, statement = ?, sample_cases = ?, sample_sols = ?`
     
     if(newQuestion.points){
       query += `, points = ?`

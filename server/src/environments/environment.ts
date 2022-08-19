@@ -37,8 +37,8 @@ export type QuestionInfo = {
   title : string,
   statement : string,
   created_on : string,
-  tests_id : string,
-  solutions_id : string,
+  sample_cases : string,
+  sample_sols : string,
   points : number,
 }
 

@@ -42,7 +42,6 @@ router.get("/question/:id/:fileType/:op?", (req, res)=>{
         -1,
         competitions=>{
           if(competitions.length == 0){
-            // todo : delete all questions
             sendResponse(res, resCode.notFound)
             return
           }
@@ -224,8 +223,6 @@ router.post("/question", (req, res)=>{
 
 router.put("/question", (req, res)=>{
   var params = req.body
-
-
 
   authenticate(req, res, (req, res, user)=>{
     questionsModel.findAll({id : params.id}, (questions)=>{
