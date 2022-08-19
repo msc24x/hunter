@@ -49,7 +49,7 @@ router.post("/register", (req, res) =>{
     return
   }
 
-  if(!Sanitizer.isEmail(email as string) || !((password as string).length >= 6 && (password as string).length <= 16)){
+  if(!Sanitizer.isEmail(email as string) || !((password as string).length >= 6 && (password as string).length <= 26)){
     sendResponse(res, resCode.badRequest);
     return
   }

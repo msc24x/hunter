@@ -22,7 +22,7 @@ export class LoginDialogComponent implements OnInit {
     const password = (document.getElementsByClassName("textbox")[1] as HTMLInputElement).value;
     const remember = true // (document.getElementById("keep_logged_check") as HTMLInputElement).checked;
 
-    if(this.isEmail(email) && (password.length >= 6 && password.length <= 16)){
+    if(this.isEmail(email) && (password.length >= 6 && password.length <= 26)){
 
       this.toggleSubmitButton(false);
 
@@ -34,7 +34,7 @@ export class LoginDialogComponent implements OnInit {
       })
     }
     else{
-      this.loginResponse = "*Either email or password (6 to 16 characters) is unacceptable";
+      this.loginResponse = "*Either email or password (6 to 26 characters) is unacceptable";
     }
   }
 
@@ -66,10 +66,10 @@ export class LoginDialogComponent implements OnInit {
         this.loginResponse = "*Server side exception, please try again later";
         break;
       case 403:
-        this.loginResponse = "*"+(res as unknown as HttpErrorResponse).error;
+        this.loginResponse = "*Invalid credentials";
         break;
-      case 406:
-        this.loginResponse = "*Either email or password is incorrect";
+      case 404:
+        this.loginResponse = "*Account does not exists";
         break;
       case 201:
         this.loginResponse = "*Registered successfully"

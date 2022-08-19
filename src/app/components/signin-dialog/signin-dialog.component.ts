@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { UserInfo } from 'src/environments/environment';
+import { resCode, UserInfo } from 'src/environments/environment';
 
 @Component({
   selector: 'signin-dialog',
@@ -36,8 +36,8 @@ export class SigninDialogComponent implements OnInit {
       return
     }
 
-    if(password.length < 6 || password.length > 16){
-      this.registerResponseMessage = "*Password should be of length 6-16 chars"
+    if(password.length < 6 || password.length > 26){
+      this.registerResponseMessage = "*Password should be of length 6-26 chars"
       return
     }
 
@@ -72,14 +72,14 @@ export class SigninDialogComponent implements OnInit {
     this.toggleSubmitButton(true);
 
     switch (res.status) {
-      case 503:
+      case resCode.serverErrror:
         this.registerResponseMessage = "*Server side exception, please try again later";
         break;
-      case 403:
-        this.registerResponseMessage = "*"+(res as unknown as HttpErrorResponse).error;
+      case resCode.forbidden:
+        this.registerResponseMessage = "*Invlid credentials";
         break;
-      case 406:
-        this.registerResponseMessage = "*Either email or password is incorrect";
+      case 404:
+        this.registerResponseMessage = "*Account does not exists";
         break;
       case 201:
         this.registerResponseMessage = "*Registered successfully"
