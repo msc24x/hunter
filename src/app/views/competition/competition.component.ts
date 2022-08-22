@@ -136,6 +136,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     this.solutionOutput = "Judging.... (This might take few seconds)"
 
+    this.loading = true
     this.subscriptions.push(
     this.competitionsService.judgeSolution({
       for : {
@@ -147,6 +148,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         code : this.editor.getValue()
       }
     }, samples).subscribe(res=>{
+      this.loading =false
       if(res.status == resCode.success){
         this.solutionOutput = ( res.body as {output : string}).output
         let outputBox = document.getElementById('solution_output');
