@@ -4,7 +4,7 @@
 
 export const environment = {
   production: true,
-  apiUrl : "http://localhost:4200/api"
+  apiUrl : "52.172.225.193:8080/"
 };
 
 export interface UserInfo{
