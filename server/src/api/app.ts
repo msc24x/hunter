@@ -103,7 +103,7 @@ app.post("/execute", (req, res)=>{
                 return
               }
 
-              exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang} ${samples} ${user.id} "${questions[0].sample_cases.replace('\n', "\\n")}" "${questions[0].sample_sols.replace('\n',"\\n")}"`, (error, stdout, stderr)=>{
+              exec(`src/scirpts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang} ${samples} ${user.id} "${questions[0].sample_cases.replace('\n', "\\n")}" "${questions[0].sample_sols.replace('\n',"\\n")}"`, (error, stdout, stderr)=>{
                 if(error){
                   console.log(error)
                   sendResponse(res, resCode.serverErrror)
@@ -250,7 +250,6 @@ export function sendResponseJson(res : any , code : number , body : {
 } | CompetitionInfo | Array<CompetitionInfo> | any) {
   res.status(code).send(body);
 }
-
 
 app.listen(port, ()=>{
      console.log("Hunter started at port "+port)
