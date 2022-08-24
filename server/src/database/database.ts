@@ -1,7 +1,7 @@
 import { MysqlError } from "mysql";
 import { Connection } from "mysql";
 import mysql, {Types} from 'mysql'
-import { stat } from "fs";
+import { readFileSync } from "fs";
 
 export class database{
   private static _dbConnection? : Connection
@@ -16,10 +16,15 @@ export class database{
       return database._dbConnection
 
     database._dbConnection = mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      password: "password",
-      database : "hunter_db"
+      host: "hunter-mysql.mysql.database.azure.com",
+      user: "msc24x",
+      password: process.env.password,
+      database : "hunter_db",
+      port : 3306,
+      ssl : {
+        ca : readFileSync("DigiCertGlobalRootCA.crt.pem")
+      }
+
     })
 
     database.inititalized = true
