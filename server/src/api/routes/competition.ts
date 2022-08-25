@@ -2,7 +2,7 @@ import express, {Request, Response} from "express"
 import { Competitions } from "../../database/models/Competitions"
 import { Questions } from "../../database/models/Questions"
 import { CompetitionInfo, UserInfo, resCode } from "../../environments/environment"
-import { sendResponse, sendResponseJson } from "../app"
+import { Util } from "../../util/util"
 import { authenticate } from "../auth"
 
 
@@ -20,16 +20,16 @@ router.delete("/competition/:id", (req, res)=>{
       -1,
       competitions=>{
         if(competitions.length == 0){
-          sendResponse(res, resCode.notFound)
+          Util.sendResponse(res, resCode.notFound)
           return
         }
 
         competitionsModel.delete({id : req.params.id}, err=>{
           if(err){
-            sendResponse(res, resCode.serverErrror)
+            Util.sendResponse(res, resCode.serverErrror)
             return
           }
-          sendResponse(res, resCode.success)
+          Util.sendResponse(res, resCode.success)
           quesitonsModel.delete({competition_id : req.params.id}, err=>{
             if(err){
               console.log(err)
@@ -40,7 +40,7 @@ router.delete("/competition/:id", (req, res)=>{
         
       },
       err=>{
-        sendResponse(res, resCode.serverErrror)
+        Util.sendResponse(res, resCode.serverErrror)
       }
     )
   })
@@ -52,7 +52,7 @@ router.post("/competition", (req, res)=>{
 
   if(title == null || (title as string).length > 120){
 
-    sendResponse(res, resCode.badRequest)
+    Util.sendResponse(res, resCode.badRequest)
     return;
   }
 
@@ -62,7 +62,7 @@ router.post("/competition", (req, res)=>{
     competitionsModel.add(user.id, title, (err, rows)=>{
       if(err){
          console.log(err)
-        sendResponse(res, resCode.serverErrror)
+        Util.sendResponse(res, resCode.serverErrror)
         return
       }
 
@@ -77,7 +77,7 @@ router.post("/competition", (req, res)=>{
 router.put("/competition", (req, res)=>{
   const competition = req.body as CompetitionInfo
   if(!competition.host_user_id || competition.title.length > 120 || competition.description.length > 456){
-    sendResponse(res, resCode.badRequest)
+    Util.sendResponse(res, resCode.badRequest)
     return
   }
 
@@ -92,17 +92,17 @@ router.put("/competition", (req, res)=>{
       (competitions)=>{
         if(competitions[0].host_user_id != competition.host_user_id || competitions[0].host_user_id != user.id){
           console.log(competition, competitions[0], user)
-          sendResponse(res, resCode.forbidden)
+          Util.sendResponse(res, resCode.forbidden)
           return
         }
 
         competitionsModel.update(competition, (err)=>{
           if(err){
              console.log(err)
-            sendResponse(res, resCode.serverErrror)
+            Util.sendResponse(res, resCode.serverErrror)
             return
           }
-          sendResponse(res, resCode.success)
+          Util.sendResponse(res, resCode.success)
 
         })
 
@@ -110,7 +110,7 @@ router.put("/competition", (req, res)=>{
 
       (err)=>{
          console.log(err)
-        sendResponse(res, resCode.serverErrror)
+        Util.sendResponse(res, resCode.serverErrror)
       }
 
     )
@@ -120,7 +120,7 @@ router.put("/competition", (req, res)=>{
 router.get("/competition/:id", (req, res)=>{
 
   if(req.params.id == ""){
-    sendResponse(res, resCode.badRequest)
+    Util.sendResponse(res, resCode.badRequest)
     return
   }
 
@@ -132,17 +132,17 @@ router.get("/competition/:id", (req, res)=>{
     (competitions)=>{
 
       if(competitions.length == 0){
-        sendResponse(res, resCode.notFound)
+        Util.sendResponse(res, resCode.notFound)
         return
       }
 
       authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
         
         if(competitions[0].host_user_id != user.id && !competitions[0].public){
-          sendResponse(res, resCode.forbidden)
+          Util.sendResponse(res, resCode.forbidden)
           return
         }
-        sendResponseJson(res, resCode.success, competitions[0])
+        Util.sendResponseJson(res, resCode.success, competitions[0])
       })
 
     },
@@ -162,7 +162,7 @@ router.get("/competitions", (req, res)=>{
   }
 
   if(params.title && (params.title as string).length > 50){
-    sendResponse(res, resCode.badRequest)
+    Util.sendResponse(res, resCode.badRequest)
     return
   }
 
@@ -190,7 +190,7 @@ router.get("/competitions", (req, res)=>{
   }
 
   let errCallback = ()=>{
-    sendResponse(res, resCode.serverErrror)
+    Util.sendResponse(res, resCode.serverErrror)
     return 0
   }
 
@@ -203,7 +203,7 @@ router.get("/competitions", (req, res)=>{
           if(element.host_user_id == user.id || element.public)
             filteredCompetitions.push(element)
       }
-      sendResponseJson(res, resCode.success, filteredCompetitions)
+      Util.sendResponseJson(res, resCode.success, filteredCompetitions)
       return 0
     }, errCallback)
   })
