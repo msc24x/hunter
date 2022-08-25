@@ -2,7 +2,7 @@ import express from "express";
 import { send } from "process";
 import { Results } from "../../database/models/Results";
 import { resCode } from "../../environments/environment";
-import { sendResponse, sendResponseJson } from "../app";
+import { Util } from '../../util/util';
 import { authenticate } from "../auth";
 
 var router = express.Router()
@@ -11,18 +11,18 @@ const resultsModel = new Results()
 router.get("/result/c/:id", (req, res)=>{
     
     if(req.params.id == null){
-        sendResponse(res, resCode.badRequest, "id not specified")
+        Util.sendResponse(res, resCode.badRequest, "id not specified")
         return
     }
 
     resultsModel.getCompetitionScores(req.params.id, (rows, err)=>{
         if(err){
             console.log(err)
-            sendResponse(res, resCode.serverErrror)
+            Util.sendResponse(res, resCode.serverErrror)
             return
         }
 
-        sendResponseJson(res, resCode.success, rows)
+        Util.sendResponseJson(res, resCode.success, rows)
 
     })
 
@@ -35,7 +35,7 @@ router.get("/result", (req, res)=>{
     let question_id = req.query.question_id
 
     if(!user_id && !competition_id  && !question_id){
-        sendResponse(res, resCode.badRequest)
+        Util.sendResponse(res, resCode.badRequest)
         return
     }
 
@@ -47,10 +47,10 @@ router.get("/result", (req, res)=>{
         },(rows, err)=>{
             if(err){
                 console.log(err)
-                sendResponse(res, resCode.serverErrror)
+                Util.sendResponse(res, resCode.serverErrror)
                 return
             }
-            sendResponseJson(res, resCode.success, rows)
+            Util.sendResponseJson(res, resCode.success, rows)
         })
     })
 })

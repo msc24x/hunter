@@ -9,6 +9,7 @@ import { Questions } from '../database/models/Questions';
 import { Competitions } from '../database/models/Competitions';
 import { Results } from '../database/models/Results';
 import { userInfo } from 'os';
+import { Util } from '../util/util';
 
 const app = express();
 app.use(cookieParser())
@@ -22,37 +23,13 @@ const resultsModel = new Results()
 
 const port = 8080;
 
-
-function isValidExecRequest(exec : HunterExecutable) : boolean{
-
-  const langs = ["c", "cpp", "py", "js"]
-
-  try {
-    if(
-      exec.for.competition_id &&
-      exec.for.question_id &&
-      exec.solution.code &&
-      langs.includes(exec.solution.lang)
-    ) return true
-
-  } catch (error) {
-    return false
-  }
-
-  return false;
-}
-
-function getFileName(hunterExecutable : HunterExecutable){
-  return `${hunterExecutable.for.competition_id}_${hunterExecutable.for.question_id}`
-}
-
 app.post("/execute", (req, res)=>{
 
   const hunterExecutable = req.body.exec as HunterExecutable
   const samples = req.body.samples as Boolean
 
-  if(!isValidExecRequest(hunterExecutable)){
-    sendResponse(res, resCode.badRequest)
+  if(!Util.isValidExecRequest(hunterExecutable)){
+    Util.sendResponse(res, resCode.badRequest)
     return
   }
 
@@ -64,7 +41,7 @@ app.post("/execute", (req, res)=>{
       },
       (questions)=>{
         if(questions.length == 0){
-          sendResponse(res, resCode.notFound)
+          Util.sendResponse(res, resCode.notFound)
           return
         }
         competitionsModel.findAll(
@@ -75,42 +52,42 @@ app.post("/execute", (req, res)=>{
           true,
           competitions=>{
             if(competitions.length == 0){
-              sendResponse(res, resCode.notFound)
+              Util.sendResponse(res, resCode.notFound)
               return
             }
 
             if(!competitionsModel.isLiveNow(hunterExecutable.for.competition_id) || !competitionsModel.hasNotEnded(competitions[0].start_schedule, competitions[0].duration)){
-              sendResponse(res, resCode.forbidden, "Either the competition is not live or has ended")
+              Util.sendResponse(res, resCode.forbidden, "Either the competition is not live or has ended")
               return
             }
 
             if(
               !samples 
               && (
-                  !existsSync(`src/database/files/${getFileName(hunterExecutable)}_s.txt`)
-                || !existsSync(`src/database/files/${getFileName(hunterExecutable)}_t.txt`)
+                  !existsSync(`src/database/files/${Util.getFileName(hunterExecutable)}_s.txt`)
+                || !existsSync(`src/database/files/${Util.getFileName(hunterExecutable)}_t.txt`)
                 )
             ){
-              sendResponseJson(res, resCode.success, {output : "HERR:No test cases has been set for this competitions"})
+              Util.sendResponseJson(res, resCode.success, {output : "HERR:No test cases has been set for this competitions"})
               return
             }
 
             // the point where it is all okay
-            writeFile(`src/database/files/${getFileName(hunterExecutable)}_${user.id}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w"}, (err)=>{
+            writeFile(`src/database/files/${Util.getFileName(hunterExecutable)}_${user.id}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w"}, (err)=>{
               if(err){
                  console.log(err)
-                sendResponse(res, resCode.serverErrror)
+                Util.sendResponse(res, resCode.serverErrror)
                 return
               }
 
-              exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${getFileName(hunterExecutable)} ${hunterExecutable.solution.lang} ${samples} ${user.id} "${questions[0].sample_cases.replace('\n', "\\n")}" "${questions[0].sample_sols.replace('\n',"\\n")}"`, (error, stdout, stderr)=>{
+              exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${Util.getFileName(hunterExecutable)} ${hunterExecutable.solution.lang} ${samples} ${user.id} "${questions[0].sample_cases.replace('\n', "\\n")}" "${questions[0].sample_sols.replace('\n',"\\n")}"`, (error, stdout, stderr)=>{
                 if(error){
                   console.log(error)
-                  sendResponse(res, resCode.serverErrror)
+                  Util.sendResponse(res, resCode.serverErrror)
                   return
                 }
 
-                sendResponseJson(res, resCode.success, {output : stdout})
+                Util.sendResponseJson(res, resCode.success, {output : stdout})
 
                 if(samples)
                   return
@@ -166,7 +143,7 @@ app.post("/execute", (req, res)=>{
           err=>{
             if(err){
                console.log(err)
-              sendResponse(res, resCode.serverErrror)
+              Util.sendResponse(res, resCode.serverErrror)
               return
             }
           }
@@ -183,73 +160,51 @@ app.get("/submission/:lang", (req, res)=>{
   const lang = req.params.lang
 
   if(!competition_id || !question_id || !["c", "cpp", "py", "js"].includes(lang)){
-    sendResponse(res, resCode.badRequest)
+    Util.sendResponse(res, resCode.badRequest)
     return
   }
 
   authenticate(req, res, (req, res, user)=>{
     questionsModel.findAll({id : question_id}, questions=>{
       if(questions.length == 0){
-        sendResponse(res, resCode.notFound, "no ques")
+        Util.sendResponse(res, resCode.notFound, "no ques")
         return
       }
   
       competitionsModel.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
         if(competitions.length == 0){
-          sendResponse(res, resCode.notFound, "no comp")
+          Util.sendResponse(res, resCode.notFound, "no comp")
           return
         }
   
         if(competitions[0].id != competition_id){
-          sendResponse(res, resCode.badRequest)
+          Util.sendResponse(res, resCode.badRequest)
           return
         }
   
         if(!competitions[0].public && competitions[0].host_user_id != user.id){
-          sendResponse(res, resCode.forbidden)
+          Util.sendResponse(res, resCode.forbidden)
           return
         }
 
         readFile(`src/database/files/${competition_id}_${question_id}_${user.id}.${lang}`, {encoding : 'utf-8'}, (err, data)=>{
           if(err){
             if(err.code == "ENOENT")
-              sendResponse(res, resCode.notFound)
+              Util.sendResponse(res, resCode.notFound)
             else
-              sendResponse(res, resCode.serverErrror)
+              Util.sendResponse(res, resCode.serverErrror)
             return
           }
-          sendResponseJson(res, resCode.success, { data : data})
+          Util.sendResponseJson(res, resCode.success, { data : data})
         })
   
-      }, err=>{sendResponse(res, resCode.forbidden)})
+      }, err=>{Util.sendResponse(res, resCode.forbidden)})
       
     })
   })
 
-  
-
-
-
 })
 
-
-export function sendResponse(res : any , code : number ,msg : string = "") {
-
-  res.status(code).send(msg);
-}
-
-export function sendResponseJson(res : any , code : number , body : {
-  id : string,
-  email : string,
-  name : string,
-  msg? : string
-} |
-{
-  id : string,
-  title : string
-} | CompetitionInfo | Array<CompetitionInfo> | any) {
-  res.status(code).send(body);
-}
 
 
 app.listen(port, ()=>{

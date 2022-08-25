@@ -3,10 +3,10 @@ import {resCode, UserInfo } from '../environments/environment';
 import { verify } from 'argon2';
 import { randomBytes } from 'crypto';
 import { Types } from 'mysql';
-import { sendResponse } from './app';
 import { database } from '../database/database';
 import { User } from '../database/models/User';
 import { Sanitizer } from '../sanitizer/sanitizer';
+import { Util } from '../util/util';
 
 export function authenticate(req: Request, res : Response,
   callback : (req : Request, res : Response, user :  UserInfo)=>void) {
@@ -27,7 +27,7 @@ export function authenticate(req: Request, res : Response,
   if(email != null && password != null){
 
     if(!Sanitizer.isEmail(email as string) || !((password as string).length >= 6 && (password as string).length <= 26)){
-      sendResponse(res, resCode.forbidden);
+      Util.sendResponse(res, resCode.forbidden);
       return
     }
 
@@ -37,11 +37,11 @@ export function authenticate(req: Request, res : Response,
     users.findAll(params, (err : any, rows : any)=>{
       if(err){
         console.log(err);
-        sendResponse(res, resCode.serverErrror);
+        Util.sendResponse(res, resCode.serverErrror);
         return
       }
       if(rows.length == 0){
-        sendResponse(res, resCode.notFound)
+        Util.sendResponse(res, resCode.notFound)
         return
       }
 
@@ -50,7 +50,7 @@ export function authenticate(req: Request, res : Response,
       verify(rows[0].password_hash as string,salt+password).then(same=>{
 
         if(!same){
-          sendResponse(res, resCode.forbidden)
+          Util.sendResponse(res, resCode.forbidden)
           return
         }
 
@@ -60,7 +60,7 @@ export function authenticate(req: Request, res : Response,
           dbConnection.query(` insert into session(id, user_id) values( ?, ? ); `, [session_id, rows[0].id], err=>{
             if(err){
               console.log(err);
-              sendResponse(res, resCode.serverErrror);
+              Util.sendResponse(res, resCode.serverErrror);
               return
             }
             res.cookie("session_id", session_id);
@@ -73,18 +73,18 @@ export function authenticate(req: Request, res : Response,
   else if(session_id){
 
     if(session_id.length !== 26){
-      sendResponse(res, resCode.badRequest)
+      Util.sendResponse(res, resCode.badRequest)
       return
     }
 
     dbConnection.query(` select * from session where id = ?;`, [session_id], (err, rows)=>{
       if(err){
         console.log(err);
-        sendResponse(res, resCode.serverErrror);
+        Util.sendResponse(res, resCode.serverErrror);
         return;
       }
       if(rows.length == 0){
-        sendResponse(res, resCode.forbidden);
+        Util.sendResponse(res, resCode.forbidden);
         return;
       }
 
@@ -96,12 +96,12 @@ export function authenticate(req: Request, res : Response,
 
         if(err){
           console.log(err)
-          sendResponse(res, resCode.serverErrror)
+          Util.sendResponse(res, resCode.serverErrror)
           return
         }
 
         if(rows.length == 0){
-          sendResponse(res, resCode.notFound)
+          Util.sendResponse(res, resCode.notFound)
           return
         }
         
@@ -111,7 +111,7 @@ export function authenticate(req: Request, res : Response,
     })
   }
   else{
-    sendResponse(res, resCode.badRequest);
+    Util.sendResponse(res, resCode.badRequest);
   }
 
 }
