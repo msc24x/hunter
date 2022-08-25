@@ -21,6 +21,8 @@ const questionsModel = new Questions()
 const competitionsModel = new Competitions()
 const resultsModel = new Results()
 
+var execRequests = new Map<string, boolean>()
+
 const port = 8080;
 
 app.post("/execute", (req, res)=>{
@@ -73,9 +75,18 @@ app.post("/execute", (req, res)=>{
             }
 
             // the point where it is all okay
+
+            if(execRequests.get(user.id)){
+              Util.sendResponse(res, resCode.success, "Already Proccessing!" )
+              console.log("duplicate")
+              return
+            }
+            execRequests.set(user.id, true)
+
             writeFile(`src/database/files/${Util.getFileName(hunterExecutable)}_${user.id}.${hunterExecutable.solution.lang}`, `${hunterExecutable.solution.code}`, {flag:"w"}, (err)=>{
               if(err){
-                 console.log(err)
+                console.log(err)
+                execRequests.set(user.id, false)
                 Util.sendResponse(res, resCode.serverErrror)
                 return
               }
@@ -83,11 +94,14 @@ app.post("/execute", (req, res)=>{
               exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${Util.getFileName(hunterExecutable)} ${hunterExecutable.solution.lang} ${samples} ${user.id} "${questions[0].sample_cases.replace('\n', "\\n")}" "${questions[0].sample_sols.replace('\n',"\\n")}"`, (error, stdout, stderr)=>{
                 if(error){
                   console.log(error)
+                  execRequests.set(user.id, false)
                   Util.sendResponse(res, resCode.serverErrror)
                   return
                 }
 
                 Util.sendResponseJson(res, resCode.success, {output : stdout})
+                execRequests.set(user.id, false)
+
 
                 if(samples)
                   return
