@@ -137,6 +137,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     this.solutionOutput = "Judging.... (This might take few seconds)"
 
     this.loading = true
+    this.enableSubmitControls(false)
     this.subscriptions.push(
     this.competitionsService.judgeSolution({
       for : {
@@ -147,26 +148,35 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         lang : this.languageSelected ,
         code : this.editor.getValue()
       }
-    }, samples).subscribe(res=>{
-      this.loading =false
-      if(res.status == resCode.success){
-        this.solutionOutput = ( res.body as {output : string}).output
-        let outputBox = document.getElementById('solution_output');
-        if(outputBox){
-          if(this.solutionOutput[0] == '1'){
-            outputBox.style.backgroundColor = "#A3EBB133";
-            outputBox.style.borderColor = 'darkgreen'
+    }, samples).subscribe({
+        next : res=>{
+          this.loading =false
+          this.enableSubmitControls(true)
+          if(res.status == resCode.success){
+            this.solutionOutput = ( res.body as {output : string}).output
+            let outputBox = document.getElementById('solution_output');
+            if(outputBox){
+              if(this.solutionOutput[0] == '1'){
+                outputBox.style.backgroundColor = "#A3EBB133";
+                outputBox.style.borderColor = 'darkgreen'
+              }
+              else{
+                outputBox.style.backgroundColor = "#fff0f0";
+                outputBox.style.borderColor = 'darkred'
+              }
+            }
+            
+            this.fetchEvaluation()
           }
-          else{
-            outputBox.style.backgroundColor = "#fff0f0";
-            outputBox.style.borderColor = 'darkred'
-          }
+          else
+            this.solutionOutput = res.statusText
+        },
+
+        error : err=>{
+          this.loading = false
+          this.enableSubmitControls(true)
+          this.solutionOutput = err.statusText
         }
-        
-        this.fetchEvaluation()
-      }
-      else
-        this.solutionOutput == res.statusText
     }))
   }
 
@@ -270,6 +280,19 @@ export class CompetitionComponent implements OnInit, OnDestroy {
       case "js":
         this.editor.session.setMode("ace/mode/javascript")
 
+    }
+  }
+
+  enableSubmitControls(enable : boolean){
+    let elem = document.getElementById("submit_controls") as HTMLDivElement
+
+    if(enable){
+      elem.style.pointerEvents = "initial"
+      elem.style.opacity = "1"
+    }
+    else{
+      elem.style.pointerEvents = "none"
+      elem.style.opacity = "0.5"
     }
   }
 
