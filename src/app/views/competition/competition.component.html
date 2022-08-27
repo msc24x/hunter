@@ -52,7 +52,7 @@
 
   <div *ngIf="!hasEnded" id="editor"></div>
 
-  <div *ngIf="questionSelected != -1" class="row">
+  <div id="submit_controls" *ngIf="questionSelected != -1" class="row">
     <div class="button" id="submit_code_btn" (click)="postSolution()">Submit</div>
     <div class="button"  id="submit_code_samples_btn" (click)="postSolution(true)">Run Sample Cases</div>
     <div class="button" id="fetch_last_submit" (click)="fetchLastSubmission()">Fetch Last Submission</div>
