@@ -83,6 +83,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+    if(/iPhone|iPad|iPod|Android|Opera Mini|IEMobile|BlackBerry|WPDesktop/i.test(navigator.userAgent)) {
+      alert("Participating in competitions is not recommended on mobile phones. Hunter is designed to be best viewed on desktops")
+    }
+
     this.subscriptions.push(
       this.authService.authenticate_credentials().subscribe(res=>{
         if(res.status == 202){
