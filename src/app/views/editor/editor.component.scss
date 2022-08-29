@@ -14,6 +14,36 @@ popup{
   @include appTextArea;
 }
 
+#editor_info{
+  font-family: appFont;
+  font-size: 1.1rem;
+  margin: 16px;
+  padding: 16px;
+  background-color: rgba(245, 222, 179, 0.589);
+  border-radius: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border : 1px solid rgba(255, 205, 111, 0);
+
+  &:hover{
+    border : 1px solid rgb(185, 135, 40);
+  }
+
+  #close_tip_btn > &{
+    pointer-events: none;
+  }
+
+  #close_tip_btn{
+    color : rgb(185, 135, 40);
+
+    &:hover{
+      color: rgb(110, 80, 25);
+    }
+  }
+}
+
 #input_competition_code{
   border-width: 0px;
   font-family: appFont;
@@ -234,18 +264,19 @@ popup{
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  background-color: whitesmoke;
+  background-color: rgba(245, 245, 245, 0.514);
   backdrop-filter: blur(8px);
+  padding-block: 8px;
 
   button{
     font-family: appFont;
-    font-weight: normal;
+    font-weight: bold;
     color: colors.$text_black;
     font-size: 1rem;
     background-color: transparent;
     border-width: 0px;
     padding-inline: 16px;
-    min-width: 156px;
+    min-width: 250px;
     margin: 8px;
     cursor: pointer;
     //border: solid colors.$text_white;
@@ -254,6 +285,12 @@ popup{
   button:hover{
     color: black;
     font-weight: 550;
+  }
+
+  div{
+    color: gray;
+    min-width: 250px;
+    text-align: center;
   }
 
 }

@@ -1,5 +1,6 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserInfo } from 'src/environments/environment';
 
@@ -12,7 +13,7 @@ export class LoginDialogComponent implements OnInit {
 
   loginResponse : string = ""
 
-  constructor(private authService : AuthService) { }
+  constructor(private authService : AuthService, private router : Router) { }
 
   ngOnInit(): void {
   }
@@ -79,6 +80,8 @@ export class LoginDialogComponent implements OnInit {
         const body = res.body as UserInfo
         this.authService.user = {id : body.id, email : body.email, name : body.name}
         this.authService.isAuthenticated.next(true)
+        this.router.navigate(["/home"])
+        window.scroll(0,0)
         break;
       default:
         this.loginResponse = "*Unknown error occurred"
