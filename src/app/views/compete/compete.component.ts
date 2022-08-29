@@ -57,7 +57,7 @@ export class CompeteComponent implements OnInit {
       this.isAuthenticated = isAuth;
 
       this.loading = true
-      competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1"}).subscribe(res=>{
+      competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1", public : true}).subscribe(res=>{
         this.publicCompetitions = res.body
         this.loading = false
       })

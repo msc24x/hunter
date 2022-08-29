@@ -63,6 +63,7 @@ export class CompetitionsListComponent implements OnInit {
     
     this.competitionsDataService.getPublicCompetitions({
       title : this.title,
+      public : true,
       dateOrder : this.orderByCode[this.orderBy],
       liveStatus : this.liveStatus,
       host_user_id : this.host_user_id+""
