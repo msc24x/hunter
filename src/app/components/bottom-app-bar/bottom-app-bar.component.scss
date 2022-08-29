@@ -34,6 +34,8 @@ popup{
           font-family: appFont;
           font-weight: normal;
           color : gray;
+          margin-right : 64px;
+          margin-bottom: 24px;
         }
       }
 
@@ -41,6 +43,9 @@ popup{
         cursor: default;
       }
       
+      .button{
+        margin-inline: 12px;
+      }
 
       .button:hover{
         font-weight: bolder;

@@ -333,8 +333,10 @@ export class EditorComponent implements OnInit {
 
   showPopup(f : boolean, id : string){
     let guide = document.getElementById(id) as HTMLElement
-    if(f)
+    if(f){
       guide.style.display = 'block'
+      window.scroll(0,0)
+    }
     else
       guide.style.display = 'none'
   }

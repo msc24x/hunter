@@ -132,7 +132,8 @@
   #tagline{
     margin-block: 156px;
     padding-left: 24px;
-    font-size: 3.5rem;
+    font-size: 3rem;
+    text-shadow: 0 84px 700px rgba(82, 177, 255, 0.795);
   }
 
   #ss1, #ss3{
@@ -167,12 +168,16 @@
 
   .app-img-b, .app-img-r{
     margin-top: 64px;
+    border: 1px solid gray;
+    border-radius: 125px;
+    
   }
 
   #tagline{
     margin-block: 156px;
-    padding-left: 24px;
-    font-size: 3rem;
+    padding-left: 12px;
+    font-size: 2.2rem;
+    text-shadow: 0 56px 100px rgba(82, 177, 255, 0.795);
   }
 
   #ss1, #ss3{
