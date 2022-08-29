@@ -5,6 +5,7 @@
 #bg{
     @include popup;
     font-family: appFont;
+    padding-top: 64px;
 }
 
 
@@ -13,12 +14,17 @@
 }
 
 #dialog{
-    @include popupBox;
-    max-height: 890px;
+    background-color: white;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 10px;
+    box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
+    max-height: 820px;
     overflow-y: scroll;
     padding: 24px;
     font-size: 1.2rem;
     margin-inline: 2%;
+    margin-block: auto;
 
     #title{
         font-size: 2rem;
@@ -44,4 +50,10 @@
 
         }
     }
+}
+
+@media only screen and (max-width : 456px) {
+    #dialog{
+        font-size: 1.05rem !important;
+    }    
 }

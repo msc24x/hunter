@@ -29,6 +29,7 @@
 
     #label{
         font-size: 1.3rem;
+        padding : 8px;
     }
 
     #user_name_input{
@@ -62,7 +63,7 @@
 @media only screen and (max-width : 620px) {
 
     #user_input_name{
-        width: 156px;
+        width: 125px;
     }
 
     #label{

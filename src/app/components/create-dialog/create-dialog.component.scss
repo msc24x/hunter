@@ -56,7 +56,7 @@
   }
 
 }
-#create_btn:hover{
+#create_btn:active{
   cursor: pointer;
   animation-name: outline;
   animation-duration: 0.2s;
@@ -69,6 +69,7 @@
 
 @keyframes outline {
   100%{
-    transform: scale(1.1);
+    transform: scale(0.9);
+    opacity: 0;
   }
 }
