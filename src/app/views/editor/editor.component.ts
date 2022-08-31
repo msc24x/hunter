@@ -308,7 +308,7 @@ export class EditorComponent implements OnInit {
   displayLog(msg : string){
     this.log.push(msg)
     if(this.elem)
-      this.elem.innerHTML = "&#x1F6C8; Last Operation : " + msg
+      this.elem.innerHTML = "&#x1F6C8; " + msg
   }
 
   handleDeleteCompPopupEvent(event: string){

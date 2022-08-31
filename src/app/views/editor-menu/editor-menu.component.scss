@@ -61,16 +61,11 @@
 }
 
 @media only screen and (max-width : 620px) {
-
-    #user_input_name{
-        width: 125px;
+    #user_name_input{
+        width: 150px !important;
     }
 
     #label{
         font-size: 1.1rem !important;
     }
-    
-
-    
-    
 }
