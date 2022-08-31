@@ -7,6 +7,7 @@ import { database } from '../database/database';
 import { User } from '../database/models/User';
 import { Sanitizer } from '../sanitizer/sanitizer';
 import { Util } from '../util/util';
+import axios from 'axios'
 
 export function authenticate(req: Request, res : Response,
   callback : (req : Request, res : Response, user :  UserInfo)=>void) {
@@ -113,7 +114,7 @@ export function authenticate(req: Request, res : Response,
     })
   }
   else if(githubOAToken){
-    const response = fetch(`https://github.com/login/oauth/access_token`, 
+    axios.post(`https://github.com/login/oauth/access_token`, 
       {
         method : "post",
         body: JSON.stringify({
@@ -122,11 +123,11 @@ export function authenticate(req: Request, res : Response,
           code : githubOAToken
         }),
 	      headers: {'Content-Type': 'application/json'}
+      }).then(res=>{
+        console.log(res)
+        Util.sendResponseJson(res, resCode.success, res)
       })
-      response.then(r=>{
-        console.log(r);
-        Util.sendResponseJson(res, resCode.success, r.body)
-    })
+      
   }
   else{
     Util.sendResponse(res, resCode.badRequest);
