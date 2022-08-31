@@ -7,11 +7,16 @@ import bodyParser from 'body-parser';
 import { authenticate } from '../auth';
 import { Sanitizer } from '../../sanitizer/sanitizer';
 import { Util } from '../../util/util';
+import { env } from 'process';
 
 var router = express.Router()
 router.use(bodyParser.json())
 
 var dbConnection = database.getDataBase()
+
+router.get("/oauth/github", (req, res)=>{
+  res.redirect(`https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.cid}`)
+})
 
 router.get("/authenticate", (req, res)=>{
   authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
