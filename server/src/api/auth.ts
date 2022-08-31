@@ -14,6 +14,8 @@ export function authenticate(req: Request, res : Response,
   let email = req.query.email;
   let password = req.query.password;
   const session_id = req.cookies.session_id
+  const githubOAToken = req.query.code
+  console.log(githubOAToken)
   const dbConnection = database.getDataBase()
 
   if(!(email && password)){
@@ -108,6 +110,22 @@ export function authenticate(req: Request, res : Response,
         callback(req, res, {id : rows[0].id, email : rows[0].email, name : rows[0].name})
         
       })
+    })
+  }
+  else if(githubOAToken){
+    const response = fetch(`https://github.com/login/oauth/access_token`, 
+      {
+        method : "post",
+        body: JSON.stringify({
+          client_id : process.env.cid,
+          client_secret : process.env.csec,
+          code : githubOAToken
+        }),
+	      headers: {'Content-Type': 'application/json'}
+      })
+      response.then(r=>{
+        console.log(r);
+        Util.sendResponseJson(res, resCode.success, r.body)
     })
   }
   else{
