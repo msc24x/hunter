@@ -5,7 +5,7 @@
   "main": "src/api/app.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon src/api/app.ts"
+    "start": "ts-node src/api/app.ts"
   },
   "author": "Maninderpal Singh (msc24x@gmail.com)",
   "license": "ISC",
