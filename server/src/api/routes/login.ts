@@ -8,6 +8,7 @@ import { authenticate } from '../auth';
 import { Sanitizer } from '../../sanitizer/sanitizer';
 import { Util } from '../../util/util';
 import { env } from 'process';
+import axios from 'axios';
 
 var router = express.Router()
 router.use(bodyParser.json())
@@ -15,13 +16,26 @@ router.use(bodyParser.json())
 var dbConnection = database.getDataBase()
 
 router.get("/oauth/github", (req, res)=>{
-  res.redirect(`https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.cid}`)
+  if(req.query.code){
+    axios.post("https://github.com/login/oauth/access_token", 
+    {
+      client_id : process.env.cid,
+      client_secret : process.env.csec,
+      code : req.query.code
+    }, {headers : { "Accept" : "application/json"}}).then(body =>{
+      console.log(body)
+      res.cookie("github_token", body.data.access_token)
+      res.redirect(`https://thehunter.tech/api/authenticate`)
+    })
+  }
+  else{
+    res.redirect(`https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.cid}`)
+  }
 })
 
 router.get("/authenticate", (req, res)=>{
   authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
     Util.sendResponseJson(res, resCode.accepted, user);
-
   })
 })
 

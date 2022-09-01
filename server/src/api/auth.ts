@@ -15,8 +15,7 @@ export function authenticate(req: Request, res : Response,
   let email = req.query.email;
   let password = req.query.password;
   const session_id = req.cookies.session_id
-  const githubOAToken = req.query.code
-  console.log(githubOAToken)
+  const github_token = req.cookies.github_token
   const dbConnection = database.getDataBase()
 
   if(!(email && password)){
@@ -113,21 +112,8 @@ export function authenticate(req: Request, res : Response,
       })
     })
   }
-  else if(githubOAToken){
-    axios.post(`https://github.com/login/oauth/access_token`, 
-      {
-        method : "post",
-        body: JSON.stringify({
-          client_id : process.env.cid,
-          client_secret : process.env.csec,
-          code : githubOAToken
-        }),
-	      headers: {'Content-Type': 'application/json'}
-      }).then(res=>{
-        console.log(res)
-        Util.sendResponseJson(res, resCode.success, res)
-      })
-      
+  else if(github_token){
+    console.log("we have the token "+ github_token)
   }
   else{
     Util.sendResponse(res, resCode.badRequest);
