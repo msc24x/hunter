@@ -18,6 +18,10 @@ export class SigninDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  redirectToGitHubOAuth(){
+    window.open("https://thehunter.tech/api/oauth/github")
+  }
+
   sendRegisterReq(){
 
     this.registerResponseMessage = ""

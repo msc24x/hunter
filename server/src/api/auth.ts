@@ -152,7 +152,7 @@ export function authenticate(req: Request, res : Response,
                   return
                 }
 
-                callback(req, res, rows[0])
+                callback(req, res, {id : rows[0].id, email : rows[0].email, name : rows[0].name})
 
               })
 
@@ -166,7 +166,7 @@ export function authenticate(req: Request, res : Response,
                 return
               }
 
-              callback(req, res, rows[0])
+              callback(req, res, {id : rows[0].id, email : rows[0].email, name : rows[0].name})
 
             })
           }

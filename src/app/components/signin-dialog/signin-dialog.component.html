@@ -19,6 +19,9 @@
   <button id="register_btn" (click)="sendRegisterReq()">
     Submit
   </button>
+  <div id="or">or</div>
+
+  <button (click)="redirectToGitHubOAuth()">Sign In Using GitHub</button>
 
   <p id="login_heading" routerLink="/home">Already have an account?</p>
   <p id="responseMessage">{{registerResponseMessage}}</p>

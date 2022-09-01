@@ -4,7 +4,8 @@
 
 export const environment = {
   production: true,
-  apiUrl : "https://thehunter.tech/api"
+  apiUrl : "https://thehunter.tech/api",
+  version : "v1.1.0-beta"
 };
 
 export interface UserInfo{

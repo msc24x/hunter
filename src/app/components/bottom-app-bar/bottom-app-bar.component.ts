@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'bottom-app-bar',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./bottom-app-bar.component.scss']
 })
 export class BottomAppBarComponent implements OnInit {
+
+  version = environment.version
 
   constructor() { }
 

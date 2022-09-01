@@ -25,7 +25,7 @@ router.get("/oauth/github", (req, res)=>{
     }, {headers : { "Accept" : "application/json"}}).then(body =>{
       console.log(body)
       res.cookie("github_token", body.data.access_token)
-      res.redirect(`https://thehunter.tech/api/authenticate`)
+      res.redirect(`https://thehunter.tech`)
     }).catch(err=>{
       console.log(err)
       Util.sendResponse(res, resCode.serverErrror, "Could not get access token")
@@ -48,19 +48,8 @@ router.post("/logout", (req, res)=>{
   const github_token = req.cookies.github_token
 
   if(github_token){
-    axios.delete(`https://api.github.com/applications/${process.env.cid}/token`,
-    {
-      data : {
-        client_id : process.env.cid,
-        access_token : github_token
-      }
-    }).then(data=>{
-      console.log("invalidating github access token responded with "+data)
-      res.clearCookie("github_token")
-      Util.sendResponse(res, resCode.success)
-    }).catch(err=>{
-      Util.sendResponse(res, resCode.serverErrror)
-    })
+    res.clearCookie("github_token")
+    Util.sendResponse(res, resCode.success)
   }
   else if(session_id){
     dbConnection.query(` delete from session where session.id = ? ; `, [session_id], (err)=>{

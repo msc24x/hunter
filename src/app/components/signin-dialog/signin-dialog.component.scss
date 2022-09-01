@@ -71,7 +71,14 @@ div#signinDialog{
   p.line:hover{
     cursor: pointer;
   }
-  #register_btn{
+  #or{
+    font-family: appFont;
+    font-size: 1rem;
+    text-align: center;
+    padding: 8px;
+    color: gray;
+  }
+  button{
     background-color: #ffffff;
     border-radius: 5px;
     color: colors.$text_black;
@@ -85,13 +92,13 @@ div#signinDialog{
     font-family: appFont;
     text-align: center;
   }
-  #register_btn:hover{
+  button:hover{
     animation: come_close;
     animation-duration: 0.5s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
   }
-  #register_btn:hover:active{
+  button:hover:active{
     animation: push;
     color: colors.$text_white;
     background-color: colors.$text_black;
