@@ -74,6 +74,11 @@ app.post("/execute", (req, res)=>{
               return
             }
 
+            if(samples && (!questions[0].sample_cases || !questions[0].sample_sols)){
+              Util.sendResponseJson(res, resCode.success, {output : "HERR:No sample test cases has been set for this competitions"})
+              return
+            }
+
             // the point where it is all okay
 
             if(execRequests.get(user.id)){
