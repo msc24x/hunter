@@ -26,6 +26,9 @@ router.get("/oauth/github", (req, res)=>{
       console.log(body)
       res.cookie("github_token", body.data.access_token)
       res.redirect(`https://thehunter.tech/api/authenticate`)
+    }).catch(err=>{
+      console.log(err)
+      Util.sendResponse(res, resCode.serverErrror, "Could not get access token")
     })
   }
   else{

@@ -113,7 +113,71 @@ export function authenticate(req: Request, res : Response,
     })
   }
   else if(github_token){
-    console.log("we have the token "+ github_token)
+    const usersModel = new User()
+
+    axios.get(`https://api.github.com/user/emails`,
+      {
+        headers : { "Accept" : "application/json", "Authorization" : `token ${github_token}`}
+      }
+    ).then(({data})=>{
+        let emails = data as Array<{email :string, primary : boolean, verified : boolean, visibility : string}>
+        let primaryEmails = emails.filter(val=> val.primary == true)
+
+        if(primaryEmails.length == 0){
+          Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, No primary email detected")
+          return
+        }
+
+        let userEmail = primaryEmails[0]
+
+        usersModel.findAll({email : userEmail.email}, (err, rows)=>{
+          if(err){
+            console.log(err)
+            Util.sendResponse(res, resCode.serverErrror)
+            return
+          }
+
+          if(rows == 0){
+            usersModel.add({email : userEmail.email}, (err)=>{
+              if(err){
+                console.log(err)
+                Util.sendResponse(res, resCode.serverErrror)
+                return
+              }
+
+              usersModel.findAll({email : userEmail.email}, (err, rows)=>{
+                if(err || (rows && rows.length == 0)){
+                  console.log(err)
+                  Util.sendResponse(res, resCode.serverErrror)
+                  return
+                }
+
+                callback(req, res, rows[0])
+
+              })
+
+            })
+          }
+          else{
+            usersModel.findAll({email : userEmail.email}, (err, rows)=>{
+              if(err || (rows && rows.length == 0)){
+                console.log(err)
+                Util.sendResponse(res, resCode.serverErrror)
+                return
+              }
+
+              callback(req, res, rows[0])
+
+            })
+          }
+
+        })
+
+
+    }).catch(err=>{
+      console.log(err)
+      Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, try signing in fresh")
+    })
   }
   else{
     Util.sendResponse(res, resCode.badRequest);
