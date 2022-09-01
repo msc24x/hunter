@@ -45,7 +45,24 @@ router.get("/authenticate", (req, res)=>{
 router.post("/logout", (req, res)=>{
 
   const session_id = req.cookies.session_id
-  if(session_id){
+  const github_token = req.cookies.github_token
+
+  if(github_token){
+    axios.delete(`https://api.github.com/applications/${process.env.cid}/token`,
+    {
+      data : {
+        client_id : process.env.cid,
+        access_token : github_token
+      }
+    }).then(data=>{
+      console.log("invalidating github access token responded with "+data)
+      res.clearCookie("github_token")
+      Util.sendResponse(res, resCode.success)
+    }).catch(err=>{
+      Util.sendResponse(res, resCode.serverErrror)
+    })
+  }
+  else if(session_id){
     dbConnection.query(` delete from session where session.id = ? ; `, [session_id], (err)=>{
       if(err){
          console.log(err)
