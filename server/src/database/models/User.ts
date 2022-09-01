@@ -10,6 +10,27 @@ export class User{
     this.dbConnection = database.getDataBase()
   }
 
+  add(params : any, callback : (err : MysqlError | null)=>void){
+    let query = "insert into users(email, name, password_hash, salt) values (?, ?, ?, ?);"
+    let args = [params.email, "", "", ""]
+
+    if(params.name){
+      args[1] = params.name
+    }
+
+    if(params.password_hash){
+      args[2] = params.password_hash
+    }
+
+    if(params.salt){
+      args[3] = params.salt
+    }
+
+    this.dbConnection.query(query, args, (err)=>{
+      callback(err)
+    })
+  }
+
   delete(params : any, callback : (err : MysqlError | null)=>void){
 
     let args = []
