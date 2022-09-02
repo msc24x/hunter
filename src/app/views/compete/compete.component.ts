@@ -56,6 +56,9 @@ export class CompeteComponent implements OnInit {
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
 
+      if(!isAuth)
+        router.navigate(['/home'])
+
       this.loading = true
       competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1", public : true}).subscribe(res=>{
         this.publicCompetitions = res.body
