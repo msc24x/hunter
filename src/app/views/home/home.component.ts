@@ -23,6 +23,11 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  scrollToBottom(){
+    let elem = document.getElementById("login_tag");
+    elem?.scrollIntoView();
+  }
+
   ngOnInit(): void {
 
     this.authService.authenticate_credentials().subscribe(res=>{

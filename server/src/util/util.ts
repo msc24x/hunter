@@ -1,4 +1,5 @@
-import { CompetitionInfo, HunterExecutable } from "../environments/environment";
+import { CompetitionInfo, HunterExecutable, UserInfo } from "../environments/environment";
+
 
 export class Util {
 

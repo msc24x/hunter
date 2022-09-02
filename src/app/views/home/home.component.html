@@ -3,6 +3,10 @@
 <!--div id="logo" class="app-line">Hunter <span>I</span></div-->
 
 <div id="tagline" class="app-line">Your Place To Host Programming Competitions.</div>
+<div id="tagline_small" class="app-line">Host your own designed coding questions with the convenience of a click.
+  Build, Maintain & Participate in them under one roof. </div>
+
+<div *ngIf="!isAuthenticated" id="getstarted" class="app-line" (click)="scrollToBottom()">Sign In to start using Hunter </div>
 
 <div class="row">
   <img id="ss1" class="app-img-r" src="../../../assets/ss1.png" width="640px" height="640px">

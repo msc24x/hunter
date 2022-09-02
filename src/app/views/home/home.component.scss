@@ -15,17 +15,6 @@
   }
 }
 
-@keyframes breathing {
-  50%{
-    opacity: 0;
-  }
-
-  100%{
-    opacity: 1;
-  }
-  
-}
-
 #login_tag{
   font-size: 4.5rem;
   text-align: right;
@@ -56,10 +45,32 @@
   box-shadow: 56px 0 700px 100px rgba(82, 177, 255, 0.425);
 }
 
-
 #tagline{
-  margin-block: 256px;
+  margin-top: 256px;
   font-size: 6rem;
+}
+
+#tagline_small{
+  color: rgb(88, 88, 88);
+  margin: 16px;
+  margin-bottom: 120px;
+}
+
+#getstarted{
+  margin : 16px;
+  text-decoration: underline;
+  cursor: pointer;
+  animation-name: attention;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 2;
+  animation-duration: 0.5s;
+  width: fit-content;
+}
+
+@keyframes attention {
+  50%{
+    transform: scale(1.1);
+  }
 }
 
 #ss1_tag, #ss3_tag{
@@ -121,7 +132,7 @@
 @media only screen and (max-width : 770px) {
 
   #tagline{
-    margin-block: 156px;
+    margin-top: 156px;
     font-size: 4rem;
   }
 
@@ -154,7 +165,7 @@
   }
 
   #tagline{
-    margin-block: 156px;
+    margin-top: 156px;
     padding-left: 24px;
     font-size: 3rem;
     text-shadow: 0 84px 700px rgba(82, 177, 255, 0.795);
@@ -195,7 +206,7 @@
   }
 
   #tagline{
-    margin-block: 156px;
+    margin-top: 156px;
     padding-left: 12px;
     font-size: 2.2rem;
     text-shadow: 0 56px 100px rgba(82, 177, 255, 0.795);

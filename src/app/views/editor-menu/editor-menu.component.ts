@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Console } from 'console';
 import { userInfo } from 'os';
 import { CompetitionInfo, UserInfo } from 'server/src/environments/environment';
@@ -28,10 +29,15 @@ export class EditorMenuComponent implements OnInit {
   constructor(
     private authService : AuthService,
     private competitionsDataService : CompetitionsDataService,
-    private userDataService : UserDataService
+    private userDataService : UserDataService,
+    private router : Router
   ) {
 
     this.authService.isAuthenticated.subscribe(isAuth=>{
+
+      if(!isAuth)
+        router.navigate(['/home'])
+
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
     })
@@ -75,16 +81,15 @@ export class EditorMenuComponent implements OnInit {
         this.loading = true
         // fetch user's all created competitions
         this.competitionsDataService.getPublicCompetitions({
-          public : false,
           host_user_id : this.user.id
         }).subscribe({
             next : res=>{
-                    this.loading = false
                     this.userCompetitions = res.body
+                    this.loading = false
                   },
             error : err=>{
-                    this.loading = false
                     this.userCompetitions = err.error
+                    this.loading = false
                   }
           })
       }
