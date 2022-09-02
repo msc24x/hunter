@@ -2,9 +2,25 @@
 <app-loading *ngIf="loading"></app-loading>
 <app-bar></app-bar>
 
-<div id="settings_label">Account Settings</div>
+<div id="settings_label">Account Data</div>
 
 <div class="row">
+
+  <div id="user_info">
+    <div id="user_info_h">Personal Info</div>
+    <table >
+      <tr>
+        <td>User ID &nbsp;</td> <td>- &nbsp; {{user.id}}</td>
+      </tr>
+      <tr>
+        <td>Full Name &nbsp;</td> <td>- &nbsp;{{user.name}}</td>
+      </tr>
+      <tr>
+        <td>Email &nbsp;</td> <td>- &nbsp;{{user.email}}</td>
+      </tr>
+    </table>
+  </div>
+
   <div id="profile_editor">
     <div id="label">Update public user name</div>
     <div class="row">
@@ -19,7 +35,7 @@
 
 
 <competitions-list
-  heading=""
+  heading="Your Competitions"
   route="editor"
   [host_user_id]="user.id"
   [competitionsList]="this.userCompetitions"
