@@ -56,9 +56,6 @@ export class CompeteComponent implements OnInit {
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
 
-      if(!isAuth)
-        router.navigate(['/home'])
-
       this.loading = true
       competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1", public : true}).subscribe(res=>{
         this.publicCompetitions = res.body
@@ -73,21 +70,27 @@ export class CompeteComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.authService.authenticate_credentials().subscribe(res=>{
-      if(res.status == 202){
-        const body = res.body as UserInfo
-        this.user = {
-          id :  body.id,
-          email : body.email,
-          name : body.name
+    this.authService.authenticate_credentials().subscribe(
+      {
+        next : res=>{
+          if(res.status == 202){
+            const body = res.body as UserInfo
+            this.user = {
+              id :  body.id,
+              email : body.email,
+              name : body.name
+            }
+            this.authService.user = this.user
+            this.isAuthenticated = true
+            this.authService.isAuthenticated.next(true)
+          }
+        },
+
+        error : err=>{
+          this.router.navigate(['/home'])
         }
-        this.authService.user = this.user
-        this.isAuthenticated = true
-        this.authService.isAuthenticated.next(true)
-
       }
-    })
-
+    )
   }
 
   routeToCompetition(){

@@ -84,20 +84,23 @@ export class CompetitionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.subscriptions.push(
-      this.authService.authenticate_credentials().subscribe(res=>{
-        if(res.status == 202){
-          const body = res.body as UserInfo
-          this.user = body
-          this.authService.user = this.user
-          this.authService.isAuthenticated.next(true)
-          this.fetchData()
-          if(/iPhone|iPad|iPod|Android|Opera Mini|IEMobile|BlackBerry|WPDesktop/i.test(navigator.userAgent)) {
-            alert("Participating in competitions is not recommended on mobile phones. Hunter is designed to be best viewed on desktops")
-          }
+      this.authService.authenticate_credentials().subscribe(
+        {
+          next : res=>{
+            if(res.status == 202){
+              const body = res.body as UserInfo
+              this.user = body
+              this.authService.user = this.user
+              this.authService.isAuthenticated.next(true)
+              this.fetchData()
+              if(/iPhone|iPad|iPod|Android|Opera Mini|IEMobile|BlackBerry|WPDesktop/i.test(navigator.userAgent)) {
+                alert("Participating in competitions is not recommended on mobile phones. Hunter is designed to be best viewed on desktops")
+              }
+            }
+          },
+        error : err=>{
+          this.router.navigate(["/home"])
         }
-      },
-      err=>{
-        this.router.navigate(["/home"])
       })
     )
     

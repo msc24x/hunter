@@ -34,10 +34,6 @@ export class EditorMenuComponent implements OnInit {
   ) {
 
     this.authService.isAuthenticated.subscribe(isAuth=>{
-
-      if(!isAuth)
-        router.navigate(['/home'])
-
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
     })
@@ -62,38 +58,45 @@ export class EditorMenuComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.authService.authenticate_credentials().subscribe(res=>{
-      if(res.status == 202){
-
-        // save user info
-        const body = res.body as UserInfo
-        this.user = {
-          id :  body.id,
-          email : body.email,
-          name : body.name
+    this.authService.authenticate_credentials().subscribe(
+      {
+        next : res=>{
+          if(res.status == 202){
+    
+            // save user info
+            const body = res.body as UserInfo
+            this.user = {
+              id :  body.id,
+              email : body.email,
+              name : body.name
+            }
+    
+            // save user info for all components subscribed to the service
+            this.authService.user = this.user
+            this.isAuthenticated = true
+            this.authService.isAuthenticated.next(true)
+    
+            this.loading = true
+            // fetch user's all created competitions
+            this.competitionsDataService.getPublicCompetitions({
+              host_user_id : this.user.id
+            }).subscribe({
+                next : res=>{
+                        this.userCompetitions = res.body
+                        this.loading = false
+                      },
+                error : err=>{
+                        this.userCompetitions = err.error
+                        this.loading = false
+                      }
+              })
+          }
+        },
+        error : err=>{
+          this.router.navigate(['/home'])
         }
-
-        // save user info for all components subscribed to the service
-        this.authService.user = this.user
-        this.isAuthenticated = true
-        this.authService.isAuthenticated.next(true)
-
-        this.loading = true
-        // fetch user's all created competitions
-        this.competitionsDataService.getPublicCompetitions({
-          host_user_id : this.user.id
-        }).subscribe({
-            next : res=>{
-                    this.userCompetitions = res.body
-                    this.loading = false
-                  },
-            error : err=>{
-                    this.userCompetitions = err.error
-                    this.loading = false
-                  }
-          })
       }
-    })
+      )
 
   }
 
