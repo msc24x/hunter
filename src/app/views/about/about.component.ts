@@ -23,6 +23,9 @@ export class AboutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    window.scroll(0,0)
+
     this.authService.authenticate_credentials().subscribe(res=>{
       if(res.status == 202){
         const body = res.body as UserInfo
