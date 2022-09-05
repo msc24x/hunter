@@ -18,6 +18,15 @@ export function authenticate(req: Request, res : Response,
   const github_token = req.cookies.github_token
   const dbConnection = database.getDataBase()
 
+  /**
+   * Authentication using passwords or session ids has been temporarily disabled due to a technical issue,
+   * and has been replaced with GitHub OAuth for now.
+   * 
+   * For the sake of developement and testing, to again enable this serverside, just uncomment the following code.
+   * 
+   */
+
+  /*
   if(!(email && password)){
     email = req.body.email
     password = req.body.password
@@ -112,7 +121,9 @@ export function authenticate(req: Request, res : Response,
       })
     })
   }
-  else if(github_token){
+  else
+  */
+  if(github_token){
     const usersModel = new User()
 
     axios.get(`https://api.github.com/user/emails`,
