@@ -58,13 +58,30 @@
 
 #getstarted{
   margin : 16px;
-  text-decoration: underline;
+  background-color: colors.$dim_white;
+  border-radius: 16px;
+  font-size: 1rem;
+  display: flex;
+  font-weight: bold;
+  padding : 16px;
+  padding-inline: 32px;
+  align-items: center;
+
   cursor: pointer;
   animation-name: attention;
   animation-fill-mode: forwards;
   animation-iteration-count: 2;
   animation-duration: 0.5s;
   width: fit-content;
+
+  img{
+    margin: 8px;
+    margin-left: 0px;
+  }
+
+  &:hover{
+    box-shadow: -25px 0 100px -25px rgb(147, 181, 255);
+  }
 }
 
 @keyframes attention {

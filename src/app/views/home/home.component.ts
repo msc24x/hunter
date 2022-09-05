@@ -27,6 +27,10 @@ export class HomeComponent implements OnInit {
     let elem = document.getElementById("login_tag");
     elem?.scrollIntoView();
   }
+  
+  redirectToGitHubOAuth(){
+    window.open("https://thehunter.tech/api/oauth/github")
+  }
 
   ngOnInit(): void {
 
