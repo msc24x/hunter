@@ -2,6 +2,7 @@
 
 ![](https://badgen.net/github/license/msc24x/hunter)
 ![](https://badgen.net/github/branches/msc24x/hunter)
+![](https://badgen.net/github/commits/msc24x/hunter/main)
 
 Built to simplify the daliy coding competitions hosting for general public. Hunter gives you the ability to create your own coding competitions similar to what you see on other competitive sites, but with a lot of easy, simplicity and least maintainance.
 
