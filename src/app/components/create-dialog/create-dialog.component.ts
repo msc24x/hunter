@@ -75,6 +75,7 @@ export class CreateDialogComponent implements OnInit {
     let createDialog = document.getElementById("create_dialog_popup") as HTMLDivElement
     if(show){
       createDialog.style.display = "block"
+      window.scroll(0,0)
     }else{
       createDialog.style.display = "none"
     }

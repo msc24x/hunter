@@ -124,8 +124,10 @@ export class QuestionsListComponent implements OnInit {
 
   showDeleteConfirmation(f : boolean){
     let e = document.getElementById("delete_confirm") as HTMLElement
-    if(f)
+    if(f){
       e.style.display = 'block'
+      window.scroll(0,0)
+    }
     else
       e.style.display = 'none'
   }
