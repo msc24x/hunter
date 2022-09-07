@@ -2,6 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { Util } from 'server/src/util/util';
+import { convert } from 'src/app/utils/utils';
 import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
@@ -300,7 +302,7 @@ export class EditorComponent implements OnInit {
     this.competitionInfo.title  = title.value
     this.competitionInfo.description = description.value
     this.competitionInfo.duration = duration.value as unknown as number
-    this.competitionInfo.start_schedule = schedule.value
+    this.competitionInfo.start_schedule = new Date(schedule.value).toISOString()
     this.competitionsData.putCompetitionInfo(this.competitionInfo).subscribe(res=>{
       this.displayLog("Competition changes saved");
       this.loading = false
