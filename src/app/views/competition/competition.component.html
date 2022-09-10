@@ -3,6 +3,20 @@
 
 <div class="body">
 
+  <app-info-card *ngIf="!hasEnded">
+    <b>Important Instructions To Follow </b> <br> 
+      <ul>
+        <li>The available questions are displayed in the 'Questions' list. Submission can be done only if one is selected.</li>
+        <li>Make sure that your are writing code in right selected language.</li>
+        <li>To check the correctness of your code, use Run Test Cases button to run your code against one sample test case. This won't result in any penality if some error occured.</li>
+        <li>Make sure to submit appropriate time before the competition ends, unless it is a live forever competition.</li>
+        <li>To Fetch Last Submission, you must have to make atleast one Submit or Run Test Cases. Be aware enough not to close the tab and loose your in progress code.</li>
+        <li>Every wrong submission results in penality and affects your Rank.</li>
+        <li>Once you have made any successfull submission, the points of the question will be accumulated in your total score. No penality would be counted after this.</li>
+
+      </ul>  
+  </app-info-card>
+
   <div id = "competition_info">
 
     <div>
@@ -10,7 +24,7 @@
       - {{this.competition.description}}
     </div>
 
-    <div id="duration_info">Time Remaining : <b>{{timeRemaining.min}}</b> mins <b>{{timeRemaining.sec}}</b> sec
+    <div *ngIf="!hasEnded" id="duration_info">Time Remaining : <b>{{timeRemaining.min}}</b> mins <b>{{timeRemaining.sec}}</b> sec
     </div>
 
   </div>
@@ -45,7 +59,7 @@
       (itemSelectedEvent)="languageSelected = $event; updateEditorMode()"
     ></drop-down-list>
 
-    <div id="load_template_btn" (click)="loadTemplate()">
+    <div *ngIf="!hasEnded" id="load_template_btn" (click)="loadTemplate()">
       Load Template
     </div>
   </div>
