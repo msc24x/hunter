@@ -26,7 +26,8 @@ import { PopupComponent } from './components/popup/popup.component';
 import { AboutComponent } from './views/about/about.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { BottomAppBarComponent } from './components/bottom-app-bar/bottom-app-bar.component';
-import { LoadingComponent } from './components/loading/loading.component' 
+import { LoadingComponent } from './components/loading/loading.component';
+import { InfoCardComponent } from './components/info-card/info-card.component' 
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { LoadingComponent } from './components/loading/loading.component'
     AboutComponent,
     TextInputComponent,
     BottomAppBarComponent,
-    LoadingComponent    
+    LoadingComponent,
+    InfoCardComponent    
   ],
   imports: [
     BrowserModule,
