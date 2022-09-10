@@ -148,8 +148,7 @@ make it private instead of deleting.<br><br>
 
 </div>
 
-<div id="editor_info" (click)="showPopup(true, 'guide')"> <i>Before you set up your contest and define the questions! It is highly recommended to take a look at the guide. </i> <b id="close_tip_btn" (click)="showPopup(false, 'editor_info'); showPopup(false, 'guide'); $event.stopPropagation()">&#10006;</b></div>
-
+<app-info-card (click)="showPopup(true, 'guide')" >Before you set up your contest and define the questions! It is highly recommended to take a look at the guide.</app-info-card>
 
 <questions-list
   [competitionInfo]="competitionInfo"
