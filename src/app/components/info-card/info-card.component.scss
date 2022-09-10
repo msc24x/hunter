@@ -1,0 +1,30 @@
+#card{
+    font-family: appFont;
+    font-size: 1.1rem;
+    margin: 16px;
+    padding: 16px;
+    background-color: rgba(245, 222, 179, 0.589);
+    border-radius: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border : 1px solid rgba(255, 205, 111, 0);
+  
+    &:hover{
+      border : 1px solid rgb(185, 135, 40);
+    }
+  
+    #close_tip_btn > &{
+      pointer-events: none;
+    }
+  
+    #close_tip_btn{
+      color : rgb(185, 135, 40);
+      padding : 16px;
+  
+      &:hover{
+        color: rgb(110, 80, 25);
+      }
+    }
+  }
