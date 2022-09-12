@@ -3,12 +3,14 @@
 
 <popup
   id="create_dialog_popup"
-  title="Set a title"
+  title="Create new"
   [showControls]="false"
   (closeEvent)="showCreateDialog(false)"
 >
+  <p> <br> *Set a descriptive title (optional) to let us initiate the Editor for your competition.</p>
   <textarea id = "competition_title" type="text" [rows]="2" maxlength="120"></textarea>
   <br>
+  <p>You will be redirected to the Hunter Editor. Be sure to read the Guide to create the best competition. Keep in mind that any poorly designed Public competition can be reported by the users.</p>
   <button id = "create" (click)="requestCreateCompetition()">Build Competition</button>
   <div class = "error">{{responseMessage}}</div>
 </popup>

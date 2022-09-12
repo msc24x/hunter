@@ -12,11 +12,17 @@
     text-align: left;
     padding-top: 0px;
   }
+  p{
+    color: gray;
+    font-size: 1rem;
+    max-width: 512px;
+  }
 
   textarea{
     @include appTextArea;
     margin-top: 24px;
     margin-left: 0px;
+    width: 90%;
   }
 
   #create{
@@ -26,7 +32,7 @@
     border-width: 0px;
     width: 100%;
     background-color: whitesmoke;
-    padding : 8px;
+    padding : 16px;
     margin-top: 24px;
   }
 
