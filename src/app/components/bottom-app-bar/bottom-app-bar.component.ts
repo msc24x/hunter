@@ -22,4 +22,8 @@ export class BottomAppBarComponent implements OnInit {
       guide.style.display = 'none'
   }
 
+  openGithub(){
+    window.open('https://github.com/msc24x/hunter', "_blank")
+  }
+
 }
