@@ -89,4 +89,16 @@ export class User{
 
   }
 
+  count(callback : (err : MysqlError | null , rows : any)=>void){
+    this.dbConnection.query(" select count(*) as count from users;", (err, rows)=>{
+      if(err){
+        console.log(err)
+        callback(err, null )
+        return
+      }
+
+      callback(null, rows)
+    })
+  }
+
 }
