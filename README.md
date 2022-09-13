@@ -10,6 +10,9 @@ Built to simplify the daliy coding competitions hosting for general public. Hunt
 ![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)
 ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
 
+![](https://badgen.net/https/thehunter.tech/api/status/users)
+![](https://badgen.net/https/thehunter.tech/api/status/competitions)
+
 The site is live and accessible at https://thehunter.tech
 
 ## Overview
