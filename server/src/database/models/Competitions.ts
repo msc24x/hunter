@@ -140,4 +140,16 @@ export class Competitions{
 
   }
 
+  count(callback : (err : MysqlError | null , rows : any)=>void){
+    this.dbConnection.query(" select count(*) as count from competitions;", (err, rows)=>{
+      if(err){
+        console.log(err)
+        callback(err, null )
+        return
+      }
+
+      callback(null, rows)
+    })
+  }
+
 }
