@@ -14,7 +14,7 @@ then
         printf "${tests}" > temp.txt
         docker cp temp.txt hunterjudge:/app/files/input.txt
 else
-        docker cp "src/database/files/${fileNumber}_t.txt" "hubterjudge:/app/files/input.txt"
+        docker cp "src/database/files/${fileNumber}_t.txt" "hunterjudge:/app/files/input.txt"
 fi
 
 if [ $samples = true ];
