@@ -96,7 +96,7 @@ app.post("/execute", (req, res)=>{
                 return
               }
 
-              exec(`D:/projects/RedocX/Hunter/server/src/scirpts/runTests.bat ${Util.getFileName(hunterExecutable)} ${hunterExecutable.solution.lang} ${samples} ${user.id} "${questions[0].sample_cases.replace('\n', "\\n")}" "${questions[0].sample_sols.replace('\n',"\\n")}"`, (error, stdout, stderr)=>{
+              exec(`D:/projects/RedocX/Hunter/server/src/scripts/runTests.bat ${Util.getFileName(hunterExecutable)} ${hunterExecutable.solution.lang} ${samples} ${user.id} "${questions[0].sample_cases.replace('\n', "\\n")}" "${questions[0].sample_sols.replace('\n',"\\n")}"`, (error, stdout, stderr)=>{
                 if(error){
                   console.log(error)
                   execRequests.set(user.id, false)
