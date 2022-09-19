@@ -1,4 +1,6 @@
 import express from 'express'
+import "reflect-metadata"
+
 var router = express.Router()
 
 router.use(require('./competition'))
@@ -7,5 +9,6 @@ router.use(require('./question'))
 router.use(require('./login'))
 router.use(require('./results'))
 router.use(require('./analytics'))
+router.use(require("./judge"))
 
 module.exports = router
