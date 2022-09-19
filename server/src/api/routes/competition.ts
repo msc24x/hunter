@@ -1,6 +1,10 @@
 import express, {Request, Response} from "express"
+import Container from "typedi"
+import models from "../../container/models"
 import { Competitions } from "../../database/models/Competitions"
 import { Questions } from "../../database/models/Questions"
+import { Results } from "../../database/models/Results"
+import { User } from "../../database/models/User"
 import { CompetitionInfo, UserInfo, resCode } from "../../environments/environment"
 import { Util } from "../../util/util"
 import { authenticate } from "../auth"
@@ -8,13 +12,10 @@ import { authenticate } from "../auth"
 
 var router = express.Router()
 
-const competitionsModel = new Competitions()
-const quesitonsModel = new Questions()
-
 
 router.delete("/competition/:id", (req, res)=>{
   authenticate(req, res, (req, res, user)=>{
-    competitionsModel.findAll(
+    models.competitions.findAll(
       {id : req.params.id, host_user_id : user.id},
       0,
       -1,
@@ -24,13 +25,13 @@ router.delete("/competition/:id", (req, res)=>{
           return
         }
 
-        competitionsModel.delete({id : req.params.id}, err=>{
+        models.competitions.delete({id : req.params.id}, err=>{
           if(err){
             Util.sendResponse(res, resCode.serverErrror)
             return
           }
           Util.sendResponse(res, resCode.success)
-          quesitonsModel.delete({competition_id : req.params.id}, err=>{
+          models.questions.delete({competition_id : req.params.id}, err=>{
             if(err){
               console.log(err)
             }
@@ -59,7 +60,7 @@ router.post("/competition", (req, res)=>{
   authenticate(req, res, (req : Request, res : Response, user : UserInfo)=>{
 
 
-    competitionsModel.add(user.id, title, (err, rows)=>{
+    models.competitions.add(user.id, title, (err, rows)=>{
       if(err){
          console.log(err)
         Util.sendResponse(res, resCode.serverErrror)
@@ -87,7 +88,7 @@ router.put("/competition", (req, res)=>{
       id : competition.id
     }
 
-    competitionsModel.findAll(params, 0, -1,
+    models.competitions.findAll(params, 0, -1,
 
       (competitions)=>{
         if(competitions[0].host_user_id != competition.host_user_id || competitions[0].host_user_id != user.id){
@@ -96,7 +97,7 @@ router.put("/competition", (req, res)=>{
           return
         }
 
-        competitionsModel.update(competition, (err)=>{
+        models.competitions.update(competition, (err)=>{
           if(err){
              console.log(err)
             Util.sendResponse(res, resCode.serverErrror)
@@ -124,7 +125,7 @@ router.get("/competition/:id", (req, res)=>{
     return
   }
 
-  competitionsModel.findAll(
+  models.competitions.findAll(
     {
       id : req.params.id
     } , 0, -1,
@@ -196,10 +197,10 @@ router.get("/competitions", (req, res)=>{
 
   authenticate(req, res, (req : Request, res : Response, user :  UserInfo)=>{
 
-    competitionsModel.findAll(params, dateOrder, isPublic, (competitions : Array<CompetitionInfo>)=>{
+    models.competitions.findAll(params, dateOrder, isPublic, (competitions : Array<CompetitionInfo>)=>{
       let filteredCompetitions : Array<CompetitionInfo> = new Array<CompetitionInfo>()
       for(let element of competitions){
-        if((params.live_status == "all" || (params.live_status == "always" && competitionsModel.isLiveNow(element.start_schedule)) || (params.live_status == "upcoming" && !competitionsModel.isLiveNow(element.start_schedule)) || (params.live_status == "live" && competitionsModel.isLiveNow(element.start_schedule) && competitionsModel.hasNotEnded(element.start_schedule, element.duration))))
+        if((params.live_status == "all" || (params.live_status == "always" && models.competitions.isLiveNow(element.start_schedule)) || (params.live_status == "upcoming" && !models.competitions.isLiveNow(element.start_schedule)) || (params.live_status == "live" && models.competitions.isLiveNow(element.start_schedule) && models.competitions.hasNotEnded(element.start_schedule, element.duration))))
           if(element.host_user_id == user.id || element.public)
             filteredCompetitions.push(element)
       }

@@ -1,12 +1,17 @@
 import express, { Router } from "express";
 import { Cache } from "memory-cache";
+import Container from "typedi";
+import models from "../../container/models";
 import { Competitions } from "../../database/models/Competitions";
+import { Questions } from "../../database/models/Questions";
+import { Results } from "../../database/models/Results";
 import { User } from "../../database/models/User";
 import { resCode } from "../../environments/environment";
 import { Util } from "../../util/util";
 
 var router = express.Router()
 var mcache = new Cache()
+
 
 router.get("/status/:subject",   (req, res)=>{
     let cachedReq = mcache.get(req.params.subject)
@@ -22,8 +27,7 @@ router.get("/status/:subject",   (req, res)=>{
     let subject = req.params.subject
 
     if(subject == "users"){
-        let usersModel = new User()
-        usersModel.count((err, rows)=>{
+        models.users.count((err, rows)=>{
             if(err){
                 console.log(err);
                 Util.sendResponse(res, resCode.serverErrror)
@@ -36,8 +40,7 @@ router.get("/status/:subject",   (req, res)=>{
         })
     }
     else if( subject == "competitions"){
-        let competitionsModel =  new Competitions()
-        competitionsModel.count((err, rows)=>{
+        models.competitions.count((err, rows)=>{
             if(err){
                 console.log(err);
                 Util.sendResponse(res, resCode.serverErrror)

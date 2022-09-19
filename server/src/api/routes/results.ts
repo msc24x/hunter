@@ -1,12 +1,16 @@
 import express from "express";
 import { send } from "process";
+import Container from "typedi";
+import models from "../../container/models";
+import { Competitions } from "../../database/models/Competitions";
+import { Questions } from "../../database/models/Questions";
 import { Results } from "../../database/models/Results";
+import { User } from "../../database/models/User";
 import { resCode } from "../../environments/environment";
 import { Util } from '../../util/util';
 import { authenticate } from "../auth";
 
 var router = express.Router()
-const resultsModel = new Results()
 
 router.get("/result/c/:id", (req, res)=>{
     
@@ -15,7 +19,7 @@ router.get("/result/c/:id", (req, res)=>{
         return
     }
 
-    resultsModel.getCompetitionScores(req.params.id, (rows, err)=>{
+    models.results.getCompetitionScores(req.params.id, (rows, err)=>{
         if(err){
             console.log(err)
             Util.sendResponse(res, resCode.serverErrror)
@@ -40,7 +44,7 @@ router.get("/result", (req, res)=>{
     }
 
     authenticate(req, res, (req, res, user)=>{
-        resultsModel.findAll({
+        models.results.findAll({
             user_id : user_id,
             competition_id : competition_id,
             question_id : question_id

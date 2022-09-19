@@ -1,18 +1,19 @@
 import express, { Request, Response } from 'express';
 import { hash, verify } from 'argon2';
 import { randomBytes } from 'crypto';
-import { database } from '../../database/database';
 import { resCode, UserInfo } from '../../environments/environment';
 import bodyParser from 'body-parser';
 import { authenticate } from '../auth';
 import { Sanitizer } from '../../sanitizer/sanitizer';
 import { Util } from '../../util/util';
 import { env } from 'process';
+import Container from 'typedi';
+import { DatabaseProvider } from '../../services/databaseProvider';
 
 var router = express.Router()
-router.use(bodyParser.json())
+const database = Container.get(DatabaseProvider).getInstance()
 
-var dbConnection = database.getDataBase()
+router.use(bodyParser.json())
 
 router.get("/oauth/github", (req, res)=>{
   res.redirect(`https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.cid}`)
@@ -29,7 +30,7 @@ router.post("/logout", (req, res)=>{
 
   const session_id = req.cookies.session_id
   if(session_id){
-    dbConnection.query(` delete from session where session.id = ? ; `, [session_id], (err)=>{
+    database.query(` delete from session where session.id = ? ; `, [session_id], (err)=>{
       if(err){
          console.log(err)
         Util.sendResponse(res, resCode.serverErrror)
@@ -68,7 +69,7 @@ router.post("/register", (req, res) =>{
 
   hash(salt + password).then(salted_hash=>{
 
-    dbConnection.query(` select * from users where email = ?; `, [email], (err, rows)=>{
+    database.query(` select * from users where email = ?; `, [email], (err, rows)=>{
       if(err){
         console.log(err)
         Util.sendResponse(res, resCode.serverErrror);
@@ -79,7 +80,7 @@ router.post("/register", (req, res) =>{
         return;
       }
 
-      dbConnection.query(` insert into users(name, email, password_hash, salt) values( ?, ?, ?, ? ); `, [name, email, salted_hash, salt], err=>{
+      database.query(` insert into users(name, email, password_hash, salt) values( ?, ?, ?, ? ); `, [name, email, salted_hash, salt], err=>{
         if(err){
           console.log(err);
           Util.sendResponse(res, resCode.serverErrror);

@@ -1,16 +1,16 @@
 import express, {Request, Response} from "express"
 import { existsSync, fstat, open, openSync, readFile, writeFile } from "fs"
+import Container from "typedi"
+import models from "../../container/models"
 import { Competitions } from "../../database/models/Competitions"
 import { Questions } from "../../database/models/Questions"
+import { Results } from "../../database/models/Results"
+import { User } from "../../database/models/User"
 import { CompetitionInfo, QuestionInfo, resCode, UserInfo } from "../../environments/environment"
 import { Util } from '../../util/util';
 import { authenticate } from "../auth"
 
 var router = express.Router()
-
-const competitionsModel = new Competitions()
-const questionsModel = new Questions()
-
 
 router.get("/question/:id/:fileType/:op?", (req, res)=>{
 
@@ -24,7 +24,7 @@ router.get("/question/:id/:fileType/:op?", (req, res)=>{
 
   authenticate(req, res,  (req : Request, res : Response, user :  UserInfo)=>{
 
-    questionsModel.findAll({
+    models.questions.findAll({
       id : id
     },
     (questions : Array<QuestionInfo>)=>{
@@ -34,7 +34,7 @@ router.get("/question/:id/:fileType/:op?", (req, res)=>{
         return
       }
 
-      competitionsModel.findAll(
+      models.competitions.findAll(
         {
           id : questions[0].competition_id
         },
@@ -109,14 +109,14 @@ router.post("/question/:id/:fileType", (req, res)=>{
   }
 
   authenticate(req, res, (req, res, user)=>{
-    questionsModel.findAll({id : req.params.id}, questions =>{
+    models.questions.findAll({id : req.params.id}, questions =>{
 
 
       if(questions.length == 0){
         Util.sendResponse(res, resCode.notFound)
         return
       }
-      competitionsModel.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
+      models.competitions.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
         if(competitions.length == 0){
           Util.sendResponse(res, resCode.notFound)
           return
@@ -151,14 +151,14 @@ router.delete("/question/:id", (req, res)=>{
   }
 
   authenticate(req, res, (req, res, user)=>{
-    questionsModel.findAll({id : req.params.id}, questions =>{
+    models.questions.findAll({id : req.params.id}, questions =>{
 
 
       if(questions.length == 0){
         Util.sendResponse(res, resCode.notFound)
         return
       }
-      competitionsModel.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
+      models.competitions.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
         if(competitions.length == 0){
           Util.sendResponse(res, resCode.notFound)
           return
@@ -170,7 +170,7 @@ router.delete("/question/:id", (req, res)=>{
           return
         }
 
-        questionsModel.delete({ id : req.params.id as string}, err =>{
+        models.questions.delete({ id : req.params.id as string}, err =>{
           if(!err){
             Util.sendResponse(res, resCode.success)
             return
@@ -186,7 +186,7 @@ router.delete("/question/:id", (req, res)=>{
 
 router.post("/question", (req, res)=>{
   authenticate(req, res, (req : Request, res : Response, user :  UserInfo)=>{
-    competitionsModel.findAll(
+    models.competitions.findAll(
       {id : req.body.competition_id},
       0,
       -1,
@@ -201,7 +201,7 @@ router.post("/question", (req, res)=>{
           Util.sendResponse(res, resCode.forbidden);
           return
         }
-        questionsModel.add(
+        models.questions.add(
           competition.id,
           (question_id)=>{
             Util.sendResponse(res, resCode.success)
@@ -225,12 +225,12 @@ router.put("/question", (req, res)=>{
   var params = req.body
 
   authenticate(req, res, (req, res, user)=>{
-    questionsModel.findAll({id : params.id}, (questions)=>{
+    models.questions.findAll({id : params.id}, (questions)=>{
       if(questions.length == 0){
         Util.sendResponse(res, resCode.notFound)
         return
       }
-      competitionsModel.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
+      models.competitions.findAll({id : questions[0].competition_id}, 0, -1, competitions=>{
         if(competitions.length == 0){
           Util.sendResponse(res, resCode.notFound)
           return
@@ -242,7 +242,7 @@ router.put("/question", (req, res)=>{
           return
         }
 
-        questionsModel.update(params, err =>{
+        models.questions.update(params, err =>{
           if(err){
              console.log(err)
             Util.sendResponse(res, resCode.serverErrror)
@@ -299,7 +299,7 @@ router.get("/question", (req, res)=>{
 
   authenticate(req, res,  (req : Request, res : Response, user :  UserInfo)=>{
 
-    questionsModel.findAll({
+    models.questions.findAll({
       competition_id : competition_id,
       id : id
     },
@@ -310,7 +310,7 @@ router.get("/question", (req, res)=>{
         return
       }
 
-      competitionsModel.findAll(
+      models.competitions.findAll(
         {
         id : questions[0].competition_id
         },
@@ -327,11 +327,11 @@ router.get("/question", (req, res)=>{
             if(competitions[0].host_user_id == user.id){
               Util.sendResponseJson(res, resCode.success, questions)
             }else{
-              if(competitionsModel.isLiveNow(competitions[0].start_schedule)){
+              if(models.competitions.isLiveNow(competitions[0].start_schedule)){
                 if(competitions[0].duration == 0){
                   Util.sendResponseJson(res, resCode.success, questions)
                 }else{
-                  if(competitionsModel.hasNotEnded(competitions[0].start_schedule, competitions[0].duration)){
+                  if(models.competitions.hasNotEnded(competitions[0].start_schedule, competitions[0].duration)){
                     Util.sendResponseJson(res, resCode.success, questions)
                   }else{
                     Util.sendResponse(res, resCode.forbidden, "has ended")

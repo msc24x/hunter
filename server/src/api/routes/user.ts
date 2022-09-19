@@ -1,4 +1,9 @@
 import express, {Request, Response} from "express"
+import Container from "typedi";
+import models from "../../container/models";
+import { Competitions } from "../../database/models/Competitions";
+import { Questions } from "../../database/models/Questions";
+import { Results } from "../../database/models/Results";
 import { User } from "../../database/models/User"
 import { resCode, UserInfo } from "../../environments/environment"
 import { Util } from '../../util/util';
@@ -7,10 +12,8 @@ import { authenticate } from "../auth"
 
 var router = express.Router()
 
-const userModel = new User()
-
 router.get("/user", (req, res)=>{
-  userModel.findAll(
+  models.users.findAll(
     {id : req.query.id, email : req.query.email},
     (err, rows : UserInfo[])=>{
       if(err){
@@ -44,7 +47,7 @@ router.put("/user", (req, res)=>{
       return
     }
 
-    userModel.update(updateUser, (err)=>{
+    models.users.update(updateUser, (err)=>{
       if(err){
         console.log(err)
         Util.sendResponse(res, resCode.serverErrror);

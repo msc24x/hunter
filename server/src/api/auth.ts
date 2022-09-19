@@ -3,20 +3,24 @@ import {resCode, UserInfo } from '../environments/environment';
 import { verify } from 'argon2';
 import { randomBytes } from 'crypto';
 import { Types } from 'mysql';
-import { database } from '../database/database';
 import { User } from '../database/models/User';
 import { Sanitizer } from '../sanitizer/sanitizer';
 import { Util } from '../util/util';
+import Container from 'typedi';
+import { DatabaseProvider } from '../services/databaseProvider';
+import models from '../container/models';
+
 
 export function authenticate(req: Request, res : Response,
   callback : (req : Request, res : Response, user :  UserInfo)=>void) {
+
+    const database = Container.get(DatabaseProvider).getInstance()
 
   let email = req.query.email;
   let password = req.query.password;
   const session_id = req.cookies.session_id
   const githubOAToken = req.query.code
   console.log(githubOAToken)
-  const dbConnection = database.getDataBase()
 
   if(!(email && password)){
     email = req.body.email
@@ -33,10 +37,9 @@ export function authenticate(req: Request, res : Response,
       return
     }
 
-    const users = new User()
     const params = {id : null, email : email}
 
-    users.findAll(params, (err : any, rows : any)=>{
+    models.users.findAll(params, (err : any, rows : any)=>{
       if(err){
         console.log(err);
         Util.sendResponse(res, resCode.serverErrror);
@@ -58,8 +61,8 @@ export function authenticate(req: Request, res : Response,
 
         const session_id = randomBytes(12).toString("hex")+rows[0].id;
 
-        dbConnection.query(` delete from session where user_id = ? ; `, [rows[0].id], err=>{
-          dbConnection.query(` insert into session(id, user_id) values( ?, ? ); `, [session_id, rows[0].id], err=>{
+        database.query(` delete from session where user_id = ? ; `, [rows[0].id], err=>{
+          database.query(` insert into session(id, user_id) values( ?, ? ); `, [session_id, rows[0].id], err=>{
             if(err){
               console.log(err);
               Util.sendResponse(res, resCode.serverErrror);
@@ -79,7 +82,7 @@ export function authenticate(req: Request, res : Response,
       return
     }
 
-    dbConnection.query(` select * from session where id = ?;`, [session_id], (err, rows)=>{
+    database.query(` select * from session where id = ?;`, [session_id], (err, rows)=>{
       if(err){
         console.log(err);
         Util.sendResponse(res, resCode.serverErrror);
@@ -90,11 +93,9 @@ export function authenticate(req: Request, res : Response,
         return;
       }
 
-      const userModel = new User()
-
       const params = { id : rows[0].user_id, email : req.query.email }
 
-      userModel.findAll(params, (err, rows)=>{
+      models.users.findAll(params, (err, rows)=>{
 
         if(err){
           console.log(err)
