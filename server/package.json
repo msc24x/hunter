@@ -2,10 +2,10 @@
   "name": "hunterapi",
   "version": "1.0.0",
   "description": "Hunter server",
-  "main": "src/api/app.ts",
+  "main": "src/app.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon src/api/app.ts"
+    "start": "nodemon src/app.ts"
   },
   "author": "Maninderpal Singh (msc24x@gmail.com)",
   "license": "ISC",
@@ -32,6 +32,7 @@
     "mailgun-js": "^0.22.0",
     "memory-cache": "^0.2.0",
     "tsc": "^2.0.3",
+    "typedi": "^0.10.0",
     "typescript": "^4.7.4"
   }
 }

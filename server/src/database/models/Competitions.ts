@@ -1,13 +1,16 @@
 import mysql, { MysqlError } from 'mysql'
-import { database } from '../database'
 import { CompetitionInfo } from '../../environments/environment'
+import { DatabaseProvider } from '../../services/databaseProvider'
+import Container, { Inject, Service } from 'typedi'
 
 export class Competitions{
 
-  dbConnection : mysql.Connection
+  dbConnection
+  dbService : DatabaseProvider = Container.get(DatabaseProvider)
 
+ 
   constructor(){
-    this.dbConnection = database.getDataBase()
+    this.dbConnection = this.dbService.getInstance()
   }
   
   isLiveNow(date: string){

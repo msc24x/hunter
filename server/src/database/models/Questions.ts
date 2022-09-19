@@ -1,12 +1,18 @@
-import { MysqlError } from "mysql";
-import { database } from "../database";
+import { Connection, MysqlError } from "mysql";
 import { QuestionInfo } from "../../environments/environment";
 import { Competitions } from "./Competitions";
+import Container, { Inject, Service } from "typedi";
+import { DatabaseProvider } from "../../services/databaseProvider";
 
 export class Questions{
 
-  dbConnection = database.getDataBase()
-  competitionsModel = new Competitions()
+  dbConnection
+  dbService : DatabaseProvider = Container.get(DatabaseProvider)
+
+ 
+  constructor( ){
+    this.dbConnection = this.dbService.getInstance()
+  }
 
   delete(params : any, callback : (err : MysqlError | null)=>void){
 

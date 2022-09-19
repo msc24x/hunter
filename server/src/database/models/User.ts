@@ -1,13 +1,16 @@
 import mysql, { MysqlError } from 'mysql'
-import { database } from '../database'
 import { UserInfo } from '../../environments/environment'
+import Container, { Inject, Service } from 'typedi'
+import { DatabaseProvider } from '../../services/databaseProvider'
 
 export class User{
 
-  dbConnection : mysql.Connection
+  dbConnection
 
-  constructor(){
-    this.dbConnection = database.getDataBase()
+  dbService: DatabaseProvider = Container.get(DatabaseProvider)
+  
+  constructor(  ){
+    this.dbConnection = this.dbService.getInstance()
   }
 
   add(params : any, callback : (err : MysqlError | null)=>void){

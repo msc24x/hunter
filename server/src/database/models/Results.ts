@@ -1,9 +1,16 @@
 import { MysqlError } from "mysql";
+import Container, { Inject, Service } from "typedi";
 import { Result } from "../../environments/environment";
-import { database } from "../database";
+import { DatabaseProvider } from "../../services/databaseProvider";
 
 export class Results{
-    dbConnection = database.getDataBase()
+    dbConnection
+ 
+    dbService : DatabaseProvider = Container.get(DatabaseProvider)
+
+    constructor( ){
+        this.dbConnection = this.dbService.getInstance()
+    }
 
     
     post(params : any, callback : (err : MysqlError | null)=>void){
@@ -13,7 +20,8 @@ export class Results{
         if(params.result == 0)
             p = 1
 
-        this.dbConnection.query(`insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, ?);`,
+        console.log("penaliti " + p)
+        this.dbConnection.query(`insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, penalities + ?);`,
             [params.user_id, params.question_id, params.competition_id, params.result, p],
             err=>{
                 callback(err)
