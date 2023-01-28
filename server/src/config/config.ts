@@ -5,5 +5,6 @@ export default {
         user: "root",
         password: "password",
         database : "hunter_db"
-}
+    },
+    
 }

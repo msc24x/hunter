@@ -20,8 +20,7 @@ export class Results{
         if(params.result == 0)
             p = 1
 
-        console.log("penaliti " + p)
-        this.dbConnection.query(`insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, penalities + ?);`,
+        this.dbConnection.query(`insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, ?);`,
             [params.user_id, params.question_id, params.competition_id, params.result, p],
             err=>{
                 callback(err)

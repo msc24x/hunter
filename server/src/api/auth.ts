@@ -4,7 +4,7 @@ import { verify } from 'argon2';
 import { randomBytes } from 'crypto';
 import { Types } from 'mysql';
 import { User } from '../database/models/User';
-import { Sanitizer } from '../sanitizer/sanitizer';
+import { Sanitizer } from '../util/sanitizer/sanitizer';
 import { Util } from '../util/util';
 import Container from 'typedi';
 import { DatabaseProvider } from '../services/databaseProvider';

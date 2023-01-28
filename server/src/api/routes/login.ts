@@ -4,7 +4,7 @@ import { randomBytes } from 'crypto';
 import { resCode, UserInfo } from '../../environments/environment';
 import bodyParser from 'body-parser';
 import { authenticate } from '../auth';
-import { Sanitizer } from '../../sanitizer/sanitizer';
+import { Sanitizer } from '../../util/sanitizer/sanitizer';
 import { Util } from '../../util/util';
 import { env } from 'process';
 import Container from 'typedi';
