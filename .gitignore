@@ -2363,3 +2363,4 @@ server/src/database/files/c83_75.cpp
 server/src/database/files/c8375.cpp
 server/src/database/files
 server/temp.txt
+server/.env

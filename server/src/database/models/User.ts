@@ -1,107 +1,110 @@
-import mysql, { MysqlError } from 'mysql'
-import { UserInfo } from '../../environments/environment'
-import Container, { Inject, Service } from 'typedi'
-import { DatabaseProvider } from '../../services/databaseProvider'
+import mysql, { MysqlError } from 'mysql';
+import { UserInfo } from '../../config/types';
+import Container, { Inject, Service } from 'typedi';
+import { DatabaseProvider } from '../../services/databaseProvider';
 
-export class User{
+export class User {
+	dbConnection;
 
-  dbConnection
+	dbService: DatabaseProvider = Container.get(DatabaseProvider);
 
-  dbService: DatabaseProvider = Container.get(DatabaseProvider)
-  
-  constructor(  ){
-    this.dbConnection = this.dbService.getInstance()
-  }
+	constructor() {
+		this.dbConnection = this.dbService.getInstance();
+	}
 
-  add(params : any, callback : (err : MysqlError | null)=>void){
-    let query = "insert into users(email, name, password_hash, salt) values (?, ?, ?, ?);"
-    let args = [params.email, "", "", ""]
+	add(params: any, callback: (err: MysqlError | null) => void) {
+		let query =
+			'insert into users(email, name, password_hash, salt) values (?, ?, ?, ?);';
+		let args = [params.email, '', '', ''];
 
-    if(params.name){
-      args[1] = params.name
-    }
+		if (params.name) {
+			args[1] = params.name;
+		}
 
-    if(params.password_hash){
-      args[2] = params.password_hash
-    }
+		if (params.password_hash) {
+			args[2] = params.password_hash;
+		}
 
-    if(params.salt){
-      args[3] = params.salt
-    }
+		if (params.salt) {
+			args[3] = params.salt;
+		}
 
-    this.dbConnection.query(query, args, (err)=>{
-      callback(err)
-    })
-  }
+		this.dbConnection.query(query, args, (err) => {
+			callback(err);
+		});
+	}
 
-  delete(params : any, callback : (err : MysqlError | null)=>void){
+	delete(params: any, callback: (err: MysqlError | null) => void) {
+		let args = [];
+		let query = 'delete from users where ';
 
-    let args = []
-    let query = "delete from users where "
+		if (params.id) {
+			query += ' id = ?;';
+			args.push(params.id);
+		} else if (params.email) {
+			query += ' email = ?;';
+			args.push(params.email);
+		} else {
+			callback(null);
+			return;
+		}
 
-    if(params.id){
-      query += " id = ?;"
-      args.push(params.id)
-    }
-    else if(params.email){
-      query += " email = ?;"
-      args.push(params.email)
-    }
-    else{
-      callback(null)
-      return
-    }
+		this.dbConnection.query(query, args, (err) => {
+			callback(err);
+		});
+	}
 
-    this.dbConnection.query(query, args, err=>{
-      callback(err)
-    })
+	update(
+		newUserInfo: UserInfo,
+		callback: (err: mysql.MysqlError | null) => void
+	) {
+		this.dbConnection.query(
+			` update users set name = ? where id = ? ; `,
+			[newUserInfo.name, newUserInfo.id],
+			(err) => {
+				callback(err);
+			}
+		);
+	}
 
-  }
+	findAll(
+		params: any,
+		callback: (err: MysqlError | null, rows: any) => void
+	) {
+		let query = 'select * from users where true';
+		let args = [];
 
-  update(newUserInfo : UserInfo, callback : ( err : mysql.MysqlError | null)=>void){
-    this.dbConnection.query(` update users set name = ? where id = ? ; `,
-      [newUserInfo.name, newUserInfo.id],
-      (err)=>{
-        callback(err)
-      }
-    )
-  }
+		if (params.id) {
+			query += ` and users.id = ?`;
+			args.push(params.id);
+		}
+		if (params.email) {
+			query += ` and users.email = ?`;
+			args.push(params.email);
+		}
+		if (params.name) {
+			query += ` and user.name = ?`;
+			args.push(params.name);
+		}
+		query += ';';
 
-  findAll(params : any, callback : (err : MysqlError | null , rows : any)=>void ){
+		this.dbConnection.query(query, args, (err, rows) => {
+			callback(err, rows);
+		});
+	}
 
-    let query = "select * from users where true"
-    let args = []
+	count(callback: (err: MysqlError | null, rows: any) => void) {
+		this.dbConnection.query(
+			' select count(*) as count from users;',
+			(err, rows) => {
+				if (err) {
+					console.log(err);
+					callback(err, null);
+					return;
+				}
 
-    if(params.id){
-      query += ` and users.id = ?`;
-      args.push(params.id)
-    }
-    if(params.email){
-      query += ` and users.email = ?`
-      args.push(params.email)
-    }
-    if(params.name){
-      query += ` and user.name = ?`
-      args.push(params.name)
-    }
-    query += ";"
-
-    this.dbConnection.query(query, args, (err, rows)=>{
-      callback(err,rows)
-    })
-
-  }
-
-  count(callback : (err : MysqlError | null , rows : any)=>void){
-    this.dbConnection.query(" select count(*) as count from users;", (err, rows)=>{
-      if(err){
-        console.log(err)
-        callback(err, null )
-        return
-      }
-
-      callback(null, rows)
-    })
-  }
-
+				callback(null, rows);
+			}
+		);
+	}
 }

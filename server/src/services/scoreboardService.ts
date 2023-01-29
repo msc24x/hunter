@@ -1,58 +1,57 @@
-import { Service } from "typedi";
-import models from "../container/models";
-import { User } from "../database/models/User";
-import { HunterExecutable, UserInfo } from "../environments/environment";
-
+import { Service } from 'typedi';
+import models from '../database/containers/models';
+import { User } from '../database/models/User';
+import { HunterExecutable, UserInfo } from '../config/types';
 
 @Service()
-export class ScoreboardService{
+export class ScoreboardService {
+	async updateResult(
+		user: UserInfo,
+		hunterExecutable: HunterExecutable,
+		accepted: boolean,
+		points: number
+	) {
+		models.results.findAll(
+			{
+				user_id: user.id,
+				question_id: hunterExecutable.for.question_id,
+				competition_id: hunterExecutable.for.competition_id,
+			},
 
-    async updateResult(user : UserInfo, hunterExecutable : HunterExecutable, accepted : boolean, points : number){
-        
-        models.results.findAll({
-              user_id : user.id,
-              question_id : hunterExecutable.for.question_id,
-              competition_id : hunterExecutable.for.competition_id,
-            },
+			(rows, err) => {
+				if (err) {
+					console.log(err);
+					return;
+				}
 
-            (rows, err)=>{
-              if(err){
-                console.log(err)
-                return
-              }
+				let pts = accepted ? points : 0;
 
-              let pts = accepted ? points : 0
-        console.log("new result ")
-            
-              if(rows.length == 0){
-                models.results.post( 
-                  {
-                    user_id : user.id,
-                    question_id : hunterExecutable.for.question_id,
-                    competition_id : hunterExecutable.for.competition_id,
-                    result : pts
-                  },
-                  err=>{ 
-                    if(err){
-                      console.log(err)
-                      return
-                    }
-                  }
-                )
-              }
-              else{
-                if(rows[0].result == '0'){
-                    
-                    models.results.update(rows[0].id, pts+"", err=>{
-                        if(err){
-                            console.log(err)
-                            return
-                        }
-                    })
-                }
-              }
-            }
-        )
-    }
-
+				if (rows.length == 0) {
+					models.results.post(
+						{
+							user_id: user.id,
+							question_id: hunterExecutable.for.question_id,
+							competition_id: hunterExecutable.for.competition_id,
+							result: pts,
+						},
+						(err) => {
+							if (err) {
+								console.log(err);
+								return;
+							}
+						}
+					);
+				} else {
+					if (rows[0].result == '0') {
+						models.results.update(rows[0].id, pts + '', (err) => {
+							if (err) {
+								console.log(err);
+								return;
+							}
+						});
+					}
+				}
+			}
+		);
+	}
 }

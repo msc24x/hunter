@@ -5,3 +5,4 @@ RUN apk add --no-cache --update nodejs npm
 RUN mkdir app
 RUN wget https://raw.githubusercontent.com/msc24x/Hunter/main/server/src/dockerApp/tester.py > app/tester.py
 RUN mkdir app/files
+COPY judge.py app/judge.py
