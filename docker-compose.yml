@@ -6,14 +6,11 @@ services:
     container_name: hunter-judge
     profiles:
       - services
-    labels:
-      - com.host.description=label
     build: 
       context: judge
       dockerfile: Dockerfile
-    environment:
-      - ENV=local
-  
+    tty : true
+    
   hunter-backend:
     image: hunter-backend
     container_name: hunter-backend
@@ -24,6 +21,8 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - hunter-judge
+    command: "npm run start-${ENV}"
     volumes:
       - ./backend:/home/app
+  
     
