@@ -1,0 +1,29 @@
+version: '1.0.0'
+
+services:
+  hunter-judge:
+    image: hunter-judge
+    container_name: hunter-judge
+    profiles:
+      - services
+    labels:
+      - com.host.description=label
+    build: 
+      context: judge
+      dockerfile: Dockerfile
+    environment:
+      - ENV=local
+  
+  hunter-backend:
+    image: hunter-backend
+    container_name: hunter-backend
+    profiles:
+      - services
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    depends_on:
+      - hunter-judge
+    volumes:
+      - ./backend:/home/app
+    

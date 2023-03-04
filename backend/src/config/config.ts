@@ -1,8 +1,7 @@
-import dotenv from 'dotenv';
 
-dotenv.config({
-	path: `.env/.env.${process.env.ENV}`,
-});
+// dotenv.config({
+// 	path: `.env/.env.${process.env.ENV}`,
+// });
 
 export default {
 	env: process.env.ENV,

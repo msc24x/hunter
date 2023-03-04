@@ -1,5 +1,4 @@
 import express from 'express'
-import "reflect-metadata"
 
 var router = express.Router()
 
