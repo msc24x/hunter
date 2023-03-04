@@ -2441,3 +2441,5 @@ backend/src/database/files/107_164_s.txt
 backend/src/database/files/107_164_t.txt
 backend/src/database/files/c83_75.cpp
 backend/src/database/files/c8375.cpp
+.env/.env.local
+.env/.env.prod
