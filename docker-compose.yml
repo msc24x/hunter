@@ -24,5 +24,7 @@ services:
     command: "npm run start-${ENV}"
     volumes:
       - ./backend:/home/app
+    ports:
+      - "8080:8080"
   
     
