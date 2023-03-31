@@ -1,0 +1,28 @@
+@use "../../../assets/mixins" as *;
+
+:host{
+    @include basicBack;
+    width: 256px;
+    // opacity: 0.9;
+    border-radius: 2rem;
+    margin : 0.2rem;
+
+    div{
+        height: 100%;
+
+        .title{
+            font-weight: bold;
+            font-size: 3rem;
+            text-align: end;
+        }
+    
+        .message{
+            font-size: 1.4rem;
+        }
+    
+        // &:hover{
+        //     opacity: 1;
+        // }
+    }
+
+}

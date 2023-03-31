@@ -237,6 +237,7 @@ popup{
   background-color: rgba(245, 245, 245, 0.514);
   backdrop-filter: blur(8px);
   padding-block: 8px;
+  z-index: 5;
 
   button{
     font-family: appFont;

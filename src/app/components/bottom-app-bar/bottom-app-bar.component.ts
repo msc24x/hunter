@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { showPopup } from 'src/app/utils/utils';
 
 @Component({
   selector: 'bottom-app-bar',
@@ -12,14 +13,8 @@ export class BottomAppBarComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  showPopup(f : boolean, id : string){
-    let guide = document.getElementById(id) as HTMLElement
-    if(f){
-      guide.style.display = 'block'
-      window.scrollTo(0,0)
-    }
-    else
-      guide.style.display = 'none'
+  showPrivacyPolicy(f : boolean){
+    showPopup(f, "privacy_policy")
   }
 
   openGithub(){

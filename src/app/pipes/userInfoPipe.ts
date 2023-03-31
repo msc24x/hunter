@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, pipe } from "rxjs";
 import { resCode, UserInfo } from "src/environments/environment";
 import { UserDataService } from "../services/data/user-data.service";
+import { isLive } from "../utils/utils";
 
 @Pipe({
     name : "userInfoPipe"
@@ -36,5 +37,14 @@ export class UserInfoPipe implements PipeTransform{
            
         )
         return userName.asObservable()
+    }
+}
+
+@Pipe({
+    name : "isLiveStatusPipe"
+})
+export class IsLiveStatusPipe implements PipeTransform{
+    transform(value: string, ...args: any[]) {
+        return isLive(value, args[0])
     }
 }

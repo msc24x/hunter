@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserDataService } from 'src/app/services/data/user-data.service';
+import { isLive, showPopup } from 'src/app/utils/utils';
 import { CompetitionInfo, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../services/auth/auth.service';
 import { CompetitionsDataService } from '../../services/data/competitions-data.service';
@@ -21,6 +22,11 @@ export class EditorMenuComponent implements OnInit {
 	};
 
 	userCompetitions: Array<CompetitionInfo> | null = null;
+	competitionsMetaData  = {
+		total: 0,
+		live: 0,
+		public : 0,
+	}
 
 	constructor(
 		private authService: AuthService,
@@ -32,6 +38,38 @@ export class EditorMenuComponent implements OnInit {
 			this.user = this.authService.user;
 			this.isAuthenticated = isAuth;
 		});
+	}
+	showEditProfileForm(f: boolean) {
+		showPopup(f, "edit_profile_popup")
+	}
+
+	calculateCompetitionsMetaData() {
+
+		let data = {
+			total: 0,
+			live: 0,
+			public : 0,
+		}
+
+		if (this.userCompetitions == null) {
+			this.competitionsMetaData = data
+			return
+		}
+
+		data.total = this.userCompetitions?.length || 0
+		
+		for (let competition of this.userCompetitions) {
+			if (isLive(competition.start_schedule, competition.duration)) {
+				data.live += 1;
+			}
+			if (competition.public) {
+				data.public += 1;
+			}
+		}
+
+		this.competitionsMetaData = data
+		return
+
 	}
 
 	updateUserInfo() {
@@ -79,6 +117,7 @@ export class EditorMenuComponent implements OnInit {
 						.subscribe({
 							next: (res) => {
 								this.userCompetitions = res.body;
+								this.calculateCompetitionsMetaData()
 								this.loading = false;
 							},
 							error: (err) => {

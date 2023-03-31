@@ -19,7 +19,7 @@ import { DatePipe } from '@angular/common';
 import { QuestionsListComponent } from './components/questions-list/questions-list.component';
 import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
-import { UserInfoPipe } from './pipes/userInfoPipe';
+import { IsLiveStatusPipe, UserInfoPipe } from './pipes/userInfoPipe';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { KatexModule } from 'ng-katex';
 import { PopupComponent } from './components/popup/popup.component';
@@ -27,7 +27,8 @@ import { AboutComponent } from './views/about/about.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { BottomAppBarComponent } from './components/bottom-app-bar/bottom-app-bar.component';
 import { LoadingComponent } from './components/loading/loading.component';
-import { InfoCardComponent } from './components/info-card/info-card.component' 
+import { InfoCardComponent } from './components/info-card/info-card.component';
+import { DashboardCardComponent } from './components/dashboard-card/dashboard-card.component' 
 
 @NgModule({
   declarations: [
@@ -47,13 +48,15 @@ import { InfoCardComponent } from './components/info-card/info-card.component'
     DropDownListComponent,
     NotFoundComponent,
     UserInfoPipe,
+    IsLiveStatusPipe,
     ScoreboardComponent,
     PopupComponent,
     AboutComponent,
     TextInputComponent,
     BottomAppBarComponent,
     LoadingComponent,
-    InfoCardComponent    
+    InfoCardComponent,
+    DashboardCardComponent    
   ],
   imports: [
     BrowserModule,

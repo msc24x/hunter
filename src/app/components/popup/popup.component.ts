@@ -17,9 +17,13 @@ export class PopupComponent implements OnInit {
   destructive = false
 
   @Input()
+  visible = false
+
+  @Input()
   showControls = true
 
-  constructor() { }
+  constructor() {
+  }
 
   bgClicked(event : any){
     if(event.target.id == 'bg')
@@ -27,6 +31,8 @@ export class PopupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.visible)
+      this.closeEvent.emit("cancel")
 
     if(this.destructive){
       let dialog = document.getElementById('dialog') as HTMLElement

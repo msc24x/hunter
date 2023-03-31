@@ -2,8 +2,6 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { Util } from 'server/src/util/util';
-import { convert } from 'src/app/utils/utils';
 import {
 	CompetitionInfo,
 	QuestionInfo,

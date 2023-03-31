@@ -34,13 +34,7 @@ export class CompetitionsListComponent implements OnInit {
 		return Date.parse(date) < Date.now();
 	}
 
-	isLive(date: string, duration: number) {
-		let parsedDate = Date.parse(date);
-		return (
-			Date.now() > parsedDate &&
-			(Date.now() < parsedDate + duration * 60 * 1000 || duration == 0)
-		);
-	}
+	
 
 	ngOnInit(): void {}
 

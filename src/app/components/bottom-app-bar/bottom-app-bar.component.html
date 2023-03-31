@@ -1,7 +1,7 @@
 <popup
   id="privacy_policy"
   title=""
-  (closeEvent)="showPopup(false, 'privacy_policy')"
+  (closeEvent)="showPrivacyPolicy(false)"
 >
 <h1>Privacy Policy of Hunter</h1>
 
@@ -68,7 +68,7 @@
       </div>
       <div class="button" routerLink="/about" id="about">About</div>
       <div class="button" (click)="openGithub()" id="github_id">GitHub</div>
-      <div class="button"  id="privacy_policy" (click)="showPopup(true, 'privacy_policy')">Privacy Policy</div>
+      <div class="button"  id="privacy_policy" (click)="showPrivacyPolicy(true)">Privacy Policy</div>
       <!--div class="button"  id="terms" (click)="showPopup(true, 'terms')">Terms & Conditions</div-->
     </div>   
 </div>

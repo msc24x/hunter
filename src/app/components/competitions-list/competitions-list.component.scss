@@ -124,6 +124,17 @@
   background-color: whitesmoke;
   font-family: appFont;
 
+  &:hover{
+    cursor: pointer;
+    box-shadow: 0 1rem 2rem -2rem black;
+    transform: translateY(-0.2rem);
+    transition: 200ms;
+  }
+
+  &:not(:hover){
+    transition: 200ms;
+  }
+
   #start_schedule{
     background-color: colors.$text_white;
     border-radius: 16px;
@@ -135,10 +146,6 @@
 
 }
 
-.competition_card:hover{
-  cursor: pointer;
-  background-color: #d3d3d3;
-}
 
 #c_title{
   font-weight: normal;

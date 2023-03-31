@@ -36,11 +36,11 @@
         <div id = "c_title">{{com.title}}</div>
         <div id = "c_host_user">By {{com.host_user_id | userInfoPipe | async}}</div>
         <div id ="start_schedule"
-          [style.color]="isAfterNow(com.start_schedule) && isLive(com.start_schedule, com.duration) ? '#D2122Ebb' : 'colors.$text_black' "
+          [style.color]="(com.start_schedule | isLiveStatusPipe : com.duration) ? '#D2122Ebb' : 'colors.$text_black' "
         >
           Live from {{com.start_schedule | date : "full" : "IST"}}
           &nbsp;
-          <div *ngIf="isAfterNow(com.start_schedule) && !isLive(com.start_schedule, com.duration)" ><b>Has Ended</b></div>
+          <div *ngIf="isAfterNow(com.start_schedule) && !(com.start_schedule | isLiveStatusPipe : com.duration)" ><b>Has Ended</b></div>
         </div>
         <p id = "c_about">{{com.description}}</p>
       </div>
