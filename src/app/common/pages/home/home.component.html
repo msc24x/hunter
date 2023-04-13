@@ -6,7 +6,9 @@
 <div id="tagline_small" class="app-line">Host your own designed coding questions with the convenience of a click.
   Build, Maintain & Participate in them under one roof. </div>
 
-<div *ngIf="!isAuthenticated" id="getstarted" class="app-line" (click)="scrollToBottom()">Sign In to start using Hunter </div>
+<div *ngIf="!isAuthenticated" id="getstarted" class="app-line" (click)="getStarted()">
+  <img *ngIf="prod" src="../../../../assets/gh_logo.png" height="28px" width="28px" alt="github_logo"
+  >Sign In to start using Hunter </div>
 
 <div class="row">
   <img id="ss1" class="app-img-r" src="../../../assets/ss1.png" width="640px" height="640px">
@@ -23,7 +25,7 @@
   <div id="ss3_tag" class="app-line">Compile & Execute On Hunter's Servers.</div>
 </div>
 
-<div *ngIf="!isAuthenticated" class="row">
+<div *ngIf="!isAuthenticated && !prod" class="row">
   <div id="login_tag" class="app-line">Login Into Your Account</div>
   <login-dialog></login-dialog>
 </div>

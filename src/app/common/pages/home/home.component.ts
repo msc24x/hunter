@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserInfo } from 'src/environments/environment';
+import { UserInfo, environment } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
@@ -10,6 +10,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 export class HomeComponent implements OnInit {
 
   isAuthenticated : boolean = false
+  prod : boolean = environment.production
   user = {
     id : "",
     email : "",
@@ -23,9 +24,22 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  getStarted() {
+    if (this.prod) {
+      this.redirectToGitHubOAuth()
+    }
+    else {
+      this.scrollToBottom()
+    }
+  }
+
   scrollToBottom(){
     let elem = document.getElementById("login_tag");
     elem?.scrollIntoView();
+  }
+
+  redirectToGitHubOAuth(){
+    window.open("https://thehunter.tech/api/oauth/github")
   }
 
   ngOnInit(): void {

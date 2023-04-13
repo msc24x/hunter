@@ -58,6 +58,12 @@
 
 #getstarted{
   margin : 16px;
+  @include basicBack;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  opacity: 0.8;
   text-decoration: underline;
   cursor: pointer;
   animation-name: attention;
@@ -65,6 +71,12 @@
   animation-iteration-count: 2;
   animation-duration: 0.5s;
   width: fit-content;
+  &:hover{
+    opacity: 1;
+  }
+  img{
+    padding-right: 1rem;
+  }
 }
 
 @keyframes attention {
