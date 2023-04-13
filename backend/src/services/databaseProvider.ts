@@ -16,7 +16,6 @@ export class DatabaseProvider {
 	public loaded = false;
 
 	constructor() {
-		console.log(this._connectionConfig)
 		if (config.env === "prod") {
 			this._dbConnection = mysql.createConnection({
 				host: this._connectionConfig.host,
