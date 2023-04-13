@@ -1,11 +1,16 @@
+import dotenv from 'dotenv';
 
-// dotenv.config({
-// 	path: `.env/.env.${process.env.ENV}`,
-// });
+if (process.env.ENV === "local") {
+	
+	dotenv.config({
+		path: `../.env/.env.${process.env.ENV}`,
+	});
+	
+}
 
 export default {
 	env: process.env.ENV,
-	port: process.env.DB_PORT,
+	port: process.env.API_PORT,
 	dbConnectionConfig: {
 		host: process.env.DB_HOST,
 		user: process.env.DB_USER,

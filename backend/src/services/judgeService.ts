@@ -47,7 +47,7 @@ export class JudgeService {
 					}
 
 					exec(
-						`D:/projects/RedocX/Hunter/server/src/scripts/runTests.bat ${Util.getFileName(
+						`src/scripts/runTests.bat ${Util.getFileName(
 							hunterExecutable
 						)} ${hunterExecutable.solution.lang} ${samples} ${
 							user.id
