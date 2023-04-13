@@ -5,6 +5,7 @@ import config from '../config/config';
 import { Competitions } from '../database/models/Competitions';
 import { Results } from '../database/models/Results';
 import { User } from '../database/models/User';
+import { readFileSync } from 'fs';
 
 @Service({ global: true })
 export class DatabaseProvider {
@@ -15,7 +16,24 @@ export class DatabaseProvider {
 	public loaded = false;
 
 	constructor() {
-		this._dbConnection = mysql.createConnection(this._connectionConfig);
+		console.log(this._connectionConfig)
+		if (config.env === "prod") {
+			this._dbConnection = mysql.createConnection({
+				host: this._connectionConfig.host,
+				user: this._connectionConfig.user,
+				password: this._connectionConfig.password,
+				database: this._connectionConfig.database,
+				ssl : this._connectionConfig.ssl || {}
+			});
+		}
+		else {
+			this._dbConnection = mysql.createConnection({
+				host: this._connectionConfig.host,
+				user: this._connectionConfig.user,
+				password: this._connectionConfig.password,
+				database: this._connectionConfig.database,
+			});
+		}
 		this._dbConnection.connect((err) => {
 			if (err) {
 				console.log(err);
