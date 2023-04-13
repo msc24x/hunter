@@ -16,12 +16,36 @@ const database = Container.get(DatabaseProvider).getInstance();
 router.use(bodyParser.json());
 
 router.get('/oauth/github', (req, res) => {
-	res.redirect(
-		`https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.cid}`
-	);
+	if(req.query.code){
+		fetch("https://github.com/login/oauth/access_token", {
+			method: "POST",
+			body : JSON.stringify({
+				client_id : process.env.cid,
+				client_secret : process.env.csec,
+				code : req.query.code
+				}),
+			headers : { "Accept" : "application/json"}
+			
+		}).then(res => {
+			return res.json()
+		}).then(body =>{
+			console.log(body)
+			res.cookie("github_token", body.data.access_token)
+			res.redirect(`https://thehunter.tech`)
+		}).catch(err=>{
+			console.log(err)
+			Util.sendResponse(res, resCode.serverErrror, "Could not get access token")
+		})
+	}
+	else {
+		res.redirect(
+			`https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.cid}`
+		);
+	}
 });
 
 router.get('/authenticate', (req, res) => {
+	
 	authenticate(req, res, (req: Request, res: Response, user: UserInfo) => {
 		Util.sendResponseJson(res, resCode.accepted, user);
 	});

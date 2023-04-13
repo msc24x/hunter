@@ -21,7 +21,7 @@ export function authenticate(
 	let email = req.query.email;
 	let password = req.query.password;
 	const session_id = req.cookies.session_id;
-	const githubOAToken = req.query.code;
+	const githubOAToken = req.cookies.github_token;
 
 	if (!(email && password)) {
 		email = req.body.email;
@@ -137,18 +137,73 @@ export function authenticate(
 			}
 		);
 	} else if (githubOAToken) {
-		const response = fetch(`https://github.com/login/oauth/access_token`, {
-			method: 'post',
-			body: JSON.stringify({
-				client_id: process.env.cid,
-				client_secret: process.env.csec,
-				code: githubOAToken,
-			}),
-			headers: { 'Content-Type': 'application/json' },
-		});
-		response.then((r) => {
-			Util.sendResponseJson(res, resCode.success, r.body);
-		});
+		const usersModel = new User()
+
+		fetch(`https://api.github.com/user/emails`,
+		{
+			headers : { "Accept" : "application/json", "Authorization" : `token ${githubOAToken}`}
+		}
+		).then(res => {
+			return res.json()
+		}).then((res)=>{
+			let emails = res as Array<{email :string, primary : boolean, verified : boolean, visibility : string}>
+			let primaryEmails = emails.filter(val=> val.primary == true)
+
+			if(primaryEmails.length == 0){
+				Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, No primary email detected")
+				return
+			}
+
+			let userEmail = primaryEmails[0]
+
+			usersModel.findAll({email : userEmail.email}, (err, rows)=>{
+				if(err){
+					console.log(err)
+					Util.sendResponse(res, resCode.serverErrror)
+					return
+				}
+
+				if(rows == 0){
+					usersModel.add({email : userEmail.email}, (err)=>{
+					if(err){
+						console.log(err)
+						Util.sendResponse(res, resCode.serverErrror)
+						return
+					}
+
+					usersModel.findAll({email : userEmail.email}, (err, rows)=>{
+						if(err || (rows && rows.length == 0)){
+							console.log(err)
+							Util.sendResponse(res, resCode.serverErrror)
+							return
+						}
+
+						callback(req, res, {id : rows[0].id, email : rows[0].email, name : rows[0].name})
+
+					})
+
+					})
+				}
+				else{
+					usersModel.findAll({email : userEmail.email}, (err, rows)=>{
+						if(err || (rows && rows.length == 0)){
+							console.log(err)
+							Util.sendResponse(res, resCode.serverErrror)
+							return
+						}
+
+						callback(req, res, {id : rows[0].id, email : rows[0].email, name : rows[0].name})
+
+					})
+				}
+
+			})
+
+
+		}).catch(err=>{
+		console.log(err)
+		Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, try signing in fresh")
+		})
 	} else {
 		Util.sendResponse(res, resCode.badRequest);
 	}
