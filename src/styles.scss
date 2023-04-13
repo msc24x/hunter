@@ -8,6 +8,8 @@ html{
 
 }
 
+
+
 body{
   background-color: colors.$text_white;
   // background: linear-gradient(165deg, colors.$text_white,colors.$purple_high);
@@ -29,6 +31,10 @@ body{
   background-color: white;
   border-radius: 1rem;
   cursor: pointer;
+  
+  &:not(:hover){
+    transition: 300ms;
+  }
 
   &:hover{
     transform: scale(1.07);

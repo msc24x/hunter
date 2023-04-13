@@ -1,15 +1,13 @@
-import { PrefixNot } from '@angular/compiler';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { AboutComponent } from './views/about/about.component';
-import { CompeteComponent } from './views/compete/compete.component';
-import { CompetitionComponent } from './views/competition/competition.component';
-import { EditorMenuComponent } from './views/editor-menu/editor-menu.component';
-import { EditorComponent } from './views/editor/editor.component';
-import { HomeComponent } from './views/home/home.component';
-import { NotFoundComponent } from './views/not-found/not-found.component';
-import { RegisterComponent } from './views/register/register.component';
+import { CompetitionComponent } from './compete/pages/competition/competition.component';
+import { EditorMenuComponent } from './editor/pages/editor-menu/editor-menu.component';
+import { HomeComponent } from './common/pages/home/home.component';
+import { AboutComponent } from './common/pages/about/about.component';
+import { CompeteComponent } from './common/pages/compete/compete.component';
+import { NotFoundComponent } from './common/pages/not-found/not-found.component';
+import { RegisterComponent } from './common/pages/register/register.component';
+import { EditorComponent } from './editor/pages/editor/editor.component';
 
 const routes: Routes = [{
   "path" : "",

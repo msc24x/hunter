@@ -1,0 +1,84 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+#questions_list::-webkit-scrollbar{
+  display: none;
+}
+
+#delete_confirm{
+  display: none;
+}
+
+#questions_list{
+  margin-top: 56px;
+  list-style: none;
+  padding: 0px;
+  display: flex;
+  overflow: scroll;
+  border-radius: 12px;
+  font-family: appFont;
+  scroll-behavior: smooth;
+  
+
+  div{
+    background-color: white;
+    border-radius: 12px;
+    padding : 16px;
+    font-weight: bold;
+    width: max-content;
+    text-align: center;
+    margin-right: 16px;
+    cursor: default;
+
+  }
+
+  div#create_question_btn{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+  }
+
+  div#delete_question_btn{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 56px;
+
+    color : darkred;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+  }
+
+  li{
+    background-color: colors.$grey;
+    border-radius: 12px;
+    padding : 16px;
+    font-weight: bold;
+    width: max-content;
+    text-align: center;
+    margin-right: 6px;
+    cursor: pointer;
+  }
+
+  #delete_question_btn:hover{
+    background-color: darkred;
+    color : whitesmoke
+  }
+
+  #delete_question_btn:active{
+    transform: scale(0.95);
+  }
+
+  li:hover, div#create_question_btn:hover, div#save_question_btn:hover{
+    background-color: colors.$text_black !important;
+    color : colors.$text_white !important;
+  }
+}
