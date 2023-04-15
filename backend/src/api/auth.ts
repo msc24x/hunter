@@ -143,10 +143,10 @@ export function authenticate(
 		{
 			headers : { "Accept" : "application/json", "Authorization" : `token ${githubOAToken}`}
 		}
-		).then(res => {
-			return res.json()
-		}).then((res)=>{
-			let emails = res as Array<{email :string, primary : boolean, verified : boolean, visibility : string}>
+		).then(body => {
+			return body.json()
+		}).then((body)=>{
+			let emails = body as Array<{email :string, primary : boolean, verified : boolean, visibility : string}>
 			let primaryEmails = emails.filter(val=> val.primary == true)
 
 			if(primaryEmails.length == 0){
@@ -201,8 +201,8 @@ export function authenticate(
 
 
 		}).catch(err=>{
-		console.log(err)
-		Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, try signing in fresh")
+			console.log(err)
+			Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, try signing in fresh")
 		})
 	} else {
 		Util.sendResponse(res, resCode.badRequest);
