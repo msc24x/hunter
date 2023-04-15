@@ -2,10 +2,13 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+export const protocol = "https"
+export const domainName = "thehunter.tech"
+
 export const environment = {
   production: true,
-  apiUrl: "http://localhost:4200/api",
-  version : "v1.9.1"
+  apiUrl: `${protocol}://${domainName}/api`,
+  version : "v1.9.3"
 };
 
 export interface UserInfo{
