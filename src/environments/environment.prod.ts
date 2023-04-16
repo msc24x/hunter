@@ -8,7 +8,7 @@ export const domainName = "thehunter.tech"
 export const environment = {
   production: true,
   apiUrl: `${protocol}://${domainName}/api`,
-  version : "v1.9.3"
+  version : "v1.9.4"
 };
 
 export interface UserInfo{

@@ -9,6 +9,7 @@ services:
     build: 
       context: judge
       dockerfile: Dockerfile
+    restart: always
     tty : true
     
   hunter-backend:
@@ -22,6 +23,7 @@ services:
     depends_on:
       - hunter-judge
     command: "npm run start-${ENV}"
+    restart: always
     volumes:
       - ./backend:/home/app
     ports:
