@@ -130,13 +130,23 @@ router.get('/competition/:id', (req, res) => {
 				return;
 			}
 
+			// send the competition right away if its public
+			if (competitions[0].public) {
+				Util.sendResponseJson(
+					res,
+					resCode.success,
+					competitions[0]
+				);
+				return;
+			}
+
+			// authenticate in case of not public
 			authenticate(
 				req,
 				res,
 				(req: Request, res: Response, user: UserInfo) => {
 					if (
-						competitions[0].host_user_id != user.id &&
-						!competitions[0].public
+						competitions[0].host_user_id != user.id
 					) {
 						Util.sendResponse(res, resCode.forbidden);
 						return;
@@ -191,47 +201,45 @@ router.get('/competitions', (req, res) => {
 		return 0;
 	};
 
-	authenticate(req, res, (req: Request, res: Response, user: UserInfo) => {
-		models.competitions.findAll(
-			params,
-			dateOrder,
-			isPublic,
-			(competitions: Array<CompetitionInfo>) => {
-				let filteredCompetitions: Array<CompetitionInfo> =
-					new Array<CompetitionInfo>();
-				for (let element of competitions) {
-					if (
-						params.live_status == 'all' ||
-						(params.live_status == 'always' &&
-							models.competitions.isLiveNow(
-								element.start_schedule
-							)) ||
-						(params.live_status == 'upcoming' &&
-							!models.competitions.isLiveNow(
-								element.start_schedule
-							)) ||
-						(params.live_status == 'live' &&
-							models.competitions.isLiveNow(
-								element.start_schedule
-							) &&
-							models.competitions.hasNotEnded(
-								element.start_schedule,
-								element.duration
-							))
-					)
-						if (element.host_user_id == user.id || element.public)
-							filteredCompetitions.push(element);
-				}
-				Util.sendResponseJson(
-					res,
-					resCode.success,
-					filteredCompetitions
-				);
-				return 0;
-			},
-			errCallback
-		);
-	});
+	models.competitions.findAll(
+		params,
+		dateOrder,
+		isPublic,
+		(competitions: Array<CompetitionInfo>) => {
+			let filteredCompetitions: Array<CompetitionInfo> =
+				new Array<CompetitionInfo>();
+			for (let element of competitions) {
+				if (
+					params.live_status == 'all' ||
+					(params.live_status == 'always' &&
+						models.competitions.isLiveNow(
+							element.start_schedule
+						)) ||
+					(params.live_status == 'upcoming' &&
+						!models.competitions.isLiveNow(
+							element.start_schedule
+						)) ||
+					(params.live_status == 'live' &&
+						models.competitions.isLiveNow(
+							element.start_schedule
+						) &&
+						models.competitions.hasNotEnded(
+							element.start_schedule,
+							element.duration
+						))
+				)
+					if (element.public)
+						filteredCompetitions.push(element);
+			}
+			Util.sendResponseJson(
+				res,
+				resCode.success,
+				filteredCompetitions
+			);
+			return 0;
+		},
+		errCallback
+	);
 });
 
 module.exports = router;

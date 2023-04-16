@@ -17,7 +17,7 @@
         <li routerLink="/compete">
           COMPETITIONS
         </li>
-        <li routerLink="/editor">
+        <li *ngIf="isAuthenticated" routerLink="/editor">
           EDITOR
         </li>
         <li routerLink="/about">
@@ -35,7 +35,7 @@
       <li routerLink="/compete">
         COMPETITIONS
       </li>
-      <li routerLink="/editor">
+      <li *ngIf="isAuthenticated" routerLink="/editor">
         EDITOR
       </li>
       <li routerLink="/about">

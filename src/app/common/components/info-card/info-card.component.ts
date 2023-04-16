@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-info-card',
@@ -7,13 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InfoCardComponent implements OnInit {
 
+  @Input()
+  persist = false
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  hideSelf(){
-    let self = document.getElementById("card") as HTMLElement
+  hideSelf(event : Event){
+    let self = event.target as HTMLElement
+    self = self.parentElement || self
     self.style.display = "none"
   }
 

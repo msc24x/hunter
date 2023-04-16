@@ -56,7 +56,7 @@ export class CompeteComponent implements OnInit {
       this.isAuthenticated = isAuth;
 
       this.loading = true
-      competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1", public : true}).subscribe(res=>{
+      this.competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1", public : true}).subscribe(res=>{
         this.publicCompetitions = res.body
         this.loading = false
       })
@@ -84,10 +84,6 @@ export class CompeteComponent implements OnInit {
             this.authService.isAuthenticated.next(true)
           }
         },
-
-        error : err=>{
-          this.router.navigate(['/home'])
-        }
       }
     )
   }

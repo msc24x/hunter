@@ -109,10 +109,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 							);
 						}
 					}
-				},
-				error: (err) => {
-					this.router.navigate(['/home']);
-				},
+				}
 			})
 		);
 

@@ -6,7 +6,7 @@ export const protocol = "http"
 export const domainName = "localhost:4200"
 
 export const environment = {
-  production: true,
+  production: false,
   apiUrl: `${protocol}://${domainName}/api`,
   version : "v1.9.4"
 };

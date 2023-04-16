@@ -3,6 +3,15 @@
 
 <div class="body">
 
+  <app-info-card [persist]="true" *ngIf="!hasEnded">
+    <b>Do a quick sign in & participate in the competition.</b> <br>
+  </app-info-card>
+
+  <app-info-card *ngIf="hasEnded" [persist]="true">
+    Oops! looks like you have missed the opportunity to participate in the competition.
+    Meantime, you can practice other live competitions.
+  </app-info-card>
+
   <app-info-card *ngIf="!hasEnded">
     <b>Important Instructions To Follow </b> <br> 
       <ul>
@@ -15,7 +24,6 @@
         <li>Once you have made any successfull submission, the points of the question will be accumulated in your total score. No penality would be counted after this.</li>
         <li>If the host had not uploaded the files for test cases or the sample test cases, Output will return an error describing the same. In this case you can wait for host to update the competition or contact the Hunter team to report the comptition.</li>
         <li>Hunter being truly open for everyone to host, we respect the reliability for the participants. Kindly report any bad competition to the Hunter immediately.</li>
-
       </ul>  
   </app-info-card>
 
@@ -26,13 +34,13 @@
       - {{this.competition.description}}
     </div>
 
-    <div *ngIf="!hasEnded" id="duration_info">Time Remaining : <b>{{timeRemaining.min}}</b> mins <b>{{timeRemaining.sec}}</b> sec
+    <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">Time Remaining : <b>{{timeRemaining.min}}</b> mins <b>{{timeRemaining.sec}}</b> sec
     </div>
 
   </div>
 
   <questions-list
-    *ngIf="!hasEnded"
+    *ngIf="!hasEnded && isAuthenticated"
     [competitionInfo]="competition"
     [questionsList]="competitionQuestions"
     [editable]="false"
@@ -40,19 +48,19 @@
     [(questionSelected)]="questionSelected"
   ></questions-list>
 
-  <div *ngIf="questionSelected != -1" id="question_title">
+  <div *ngIf="questionSelected != -1 && isAuthenticated" id="question_title">
     Question ID : {{questionSelectedInfo.id}} for {{questionSelectedInfo.points}} pts
     <br><br>
     <b>{{questionSelectedInfo.title}}</b>
   </div>
 
     
-  <div *ngIf="questionSelected != -1" id="question_statement">
-    <ng-katex-paragraph [paragraph]="questionSelectedInfo.statement ?? ''"></ng-katex-paragraph>
+  <div *ngIf="questionSelected != -1 && isAuthenticated" id="question_statement">
+    <ng-katex-paragraph [paragraph]="questionSelectedInfo.statement || ''"></ng-katex-paragraph>
   </div>
 
   
-  <div class="row">
+  <div *ngIf="isAuthenticated" class="row">
     
     <drop-down-list
       *ngIf="!hasEnded" 
@@ -66,21 +74,21 @@
     </div>
   </div>
 
-  <div *ngIf="!hasEnded" id="editor"></div>
+  <div *ngIf="!hasEnded && isAuthenticated" id="editor"></div>
 
-  <div id="submit_controls" *ngIf="questionSelected != -1" class="row">
+  <div id="submit_controls" *ngIf="questionSelected != -1  && isAuthenticated" class="row">
     <div class="button" id="submit_code_btn" (click)="postSolution()">Submit</div>
     <div class="button"  id="submit_code_samples_btn" (click)="postSolution(true)">Run Sample Cases</div>
     <div class="button" id="fetch_last_submit" (click)="fetchLastSubmission()">Fetch Last Submission</div>
     <div>{{fetchSubmissionMsg}}</div>
   </div>
 
-  <div class="row sa">
+  <div *ngIf="isAuthenticated && !hasEnded" class="row sa">
     <div id="output_label">Submission Output</div>
     <div id="pts_desc_label">Evaluation</div>
   </div>
 
-  <div id="output_points">
+  <div  *ngIf="isAuthenticated && !hasEnded" id="output_points">
 
     <div id="solution_output" [innerText]="solutionOutput"></div>
 
