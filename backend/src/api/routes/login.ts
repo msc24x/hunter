@@ -24,13 +24,15 @@ router.get('/oauth/github', (req, res) => {
 				client_secret : process.env.csec,
 				code : req.query.code
 				}),
-			headers : { "Accept" : "application/json"}
+			headers: {
+				"Accept": "application/json",
+				"Content-Type" : "application/json"
+			}
 			
 		}).then(res => {
 			return res.json()
 		}).then(body =>{
-			console.log(body)
-			res.cookie("github_token", body.data.access_token)
+			res.cookie("github_token", body.access_token)
 			res.redirect(`https://thehunter.tech`)
 		}).catch(err=>{
 			console.log(err)

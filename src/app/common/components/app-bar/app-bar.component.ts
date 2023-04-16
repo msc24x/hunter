@@ -47,6 +47,10 @@ export class AppBarComponent implements OnInit {
     }
   }
 
+  redirectToGitHubOAuth(){
+    window.open("https://thehunter.tech/api/oauth/github")
+  }
+
   sendLogoutRequest(){
     this.loading = true
     this.authService.logout().subscribe(res=>{

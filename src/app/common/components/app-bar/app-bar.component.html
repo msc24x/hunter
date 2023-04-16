@@ -3,7 +3,7 @@
 <div class="appBar">
   <div id="app_title">
     <a id = "app_title_full">{{app_title}}</a>
-    <div *ngIf="!isAuthenticated && showRegisterBtn" id = "register_btn" routerLink="/register">SIGN IN</div>
+    <div *ngIf="!isAuthenticated && showRegisterBtn" id = "register_btn" (click)="redirectToGitHubOAuth()">SIGN IN</div>
     <div *ngIf="isAuthenticated" id= "user_email" routerLink="/editor" >{{user.email}}</div>
     <div *ngIf="isAuthenticated && user.name" id= "user_name" routerLink="/editor" >{{user.name}}</div>
     <a *ngIf="isAuthenticated" id = "logout_btn" (click)="sendLogoutRequest()">Logout</a>
