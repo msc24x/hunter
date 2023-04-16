@@ -1,12 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, ɵresetJitOptions } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { apiEndpoints, CompetitionInfo, environment, UserInfo } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { apiEndpoints, environment, UserInfo } from 'src/environments/environment';
 
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn:"root"
 })
 export class AuthService {
 

@@ -1,6 +1,14 @@
+// This file can be replaced during build by using the `fileReplacements` array.
+// `ng build` replaces `environment.ts` with `environment.prod.ts`.
+// The list of file replacements can be found in `angular.json`.
+
+export const protocol = "https"
+export const domainName = "thehunter.tech"
+
 export const environment = {
   production: true,
-  apiUrl : "http://localhost:4200/api"
+  apiUrl: `${protocol}://${domainName}/api`,
+  version : "v1.9.5"
 };
 
 export interface UserInfo{
@@ -61,7 +69,16 @@ export const apiEndpoints = {
   execute : environment.apiUrl+"/execute",
   user : environment.apiUrl+"/user",
   results : environment.apiUrl+"/result/c/",
-  resultsAll : environment.apiUrl+"/result"
+  resultsAll : environment.apiUrl+"/result",
+  submission : environment.apiUrl+"/submission/"
+}
+
+export const templates = {
+  cpp : "#include <iostream>\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n\t//write code\n\treturn 0;\n}",
+  c : "#include\"stdio.h\"\n#include\"string.h\"\n#include\"math.h\"\n#include\"stdlib.h\"\n#include\"ctype.h\"\n#include\"limits.h\"\n#include\"time.h\"\n#include\"stdbool.h\"\n\nint main(){\n\t//write code\n\treturn 0;\n}",
+  py : "#write code",
+  js : "/*write code*/"
+  
 }
 
 export const resCode = {
@@ -80,7 +97,15 @@ export interface QuestionInfo{
   title : string,
   statement : string,
   created_on : string,
-  tests_id : string,
-  solutions_id : string,
+  sample_cases : string,
+  sample_sols : string,
   points : number,
 }
+/*
+ * For easier debugging in development mode, you can import the following file
+ * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+ *
+ * This import should be commented out in production mode because it will have a negative impact
+ * on performance if an error is thrown.
+ */
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

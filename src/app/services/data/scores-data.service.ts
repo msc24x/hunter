@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { apiEndpoints } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class ScoresDataService {
 

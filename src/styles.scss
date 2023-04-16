@@ -1,4 +1,5 @@
 @use "./assets/colors";
+@use "./assets/fonts";
 
 /*160deg*/
 
@@ -6,6 +7,8 @@ html{
   scroll-behavior: smooth;
 
 }
+
+
 
 body{
   background-color: colors.$text_white;
@@ -17,5 +20,68 @@ body{
   max-width: 1440px;
   padding-inline: 2%;
   margin-inline: auto;
+}
+
+.largeButton {
+  font-family: appFont;
+  padding: 0.8rem;
+  padding-inline: 1.6rem;
+  color: colors.$text_black;
+  font-size: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+  cursor: pointer;
+  
+  &:not(:hover){
+    transition: 300ms;
+  }
+
+  &:hover{
+    transform: scale(1.07);
+    background-color: colors.$text_black;
+    font-weight: bold;
+    color: white;
+    transition: 300ms;
+  }
+}
+
+.flex {
+  display: flex;
+
+  &-row{
+    @extend .flex;
+    flex-direction: row;
+  }
+
+  &-col{
+    @extend .flex;
+    flex-direction: column;
+  }
+}
+
+.justify{
+  &-center{
+    justify-content: center;
+  }
+  &-sb{
+    justify-content: space-between;
+  }
+}
+
+.align{
+  &-center{
+    align-items: center;
+  }
+  &-stretch{
+    align-items: stretch;
+  }
+}
+
+.wrap{
+  flex-wrap: wrap;
+
+  &-rev{
+    flex-wrap: wrap-reverse;
+  }
 }
 

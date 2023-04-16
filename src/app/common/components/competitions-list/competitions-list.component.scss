@@ -1,0 +1,163 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+
+.row{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#filter_controls{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 1.1rem;
+  font-family: appFont;
+
+  label{
+    margin-left: 4px;
+  }
+
+  select{
+    margin-left: 4px;
+    border-radius: 24px;
+    font-family: appFont;
+    border-width: 0px;
+    padding : 8px;
+    margin : 4px;
+    padding-inline: 16px;
+    background-color: whitesmoke;
+    
+  }
+}
+
+.heading{
+  font-family: appFont;
+  font-weight: normal;
+  color: colors.$text_black;
+}
+
+#competitions_list{
+  padding-bottom: 24px;
+  border-radius: 12px;
+  min-height: 1024px;
+}
+
+@media only screen and (max-width : 1024px) {
+  #competitions_list{
+    margin-inline: 0.5%;
+  }
+  .flex_container{
+    justify-content: center;
+  }
+  #create_btn{
+    margin-left: 0px;
+  }
+}
+
+@media only screen and (max-width : 620px) {
+  .competition_card{
+    font-size: 0.8rem;
+
+    #c_title{
+      font-size: 1rem;
+    }
+  }
+
+  #filter_controls{
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width : 500px) {
+  .competition_card{
+    font-size: 0.8rem;
+
+    #c_title{
+      font-size: 0.9rem;
+    }
+  }
+
+}
+
+
+#list_end{
+  display: flex;
+  justify-content: center;
+  font-family: appFont;
+  font-style: italic;
+  font-weight: lighter;
+  font-size: 1rem;
+}
+
+#competitions_list p.heading{
+  margin-inline: 16px;
+  padding-top: 12px;
+  font-size: 2.2rem;
+  font-weight: bolder;
+}
+
+#competitions_ol{
+  list-style-type: none;
+  padding-left: 0px;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  li{
+    border-width: 2px;
+    border-color: black;
+  }
+}
+
+.competition_card{
+  margin-left: 8px;
+  margin-right: 8px;
+  margin: 8px;
+  padding : 12px;
+  border-radius: 16px;
+  border-color: black;
+  border-width: 110px;
+  height: fit-content;
+  background-color: whitesmoke;
+  font-family: appFont;
+
+  &:hover{
+    cursor: pointer;
+    box-shadow: 0 1rem 2rem -2rem black;
+    transform: translateY(-0.2rem);
+    transition: 200ms;
+  }
+
+  &:not(:hover){
+    transition: 200ms;
+  }
+
+  #start_schedule{
+    background-color: colors.$text_white;
+    border-radius: 16px;
+    padding: 4px;
+    padding-inline: 8px;
+    width: fit-content;
+    display: flex;
+  }
+
+}
+
+
+#c_title{
+  font-weight: normal;
+  word-break: break-word;
+  font-size: 1.2rem;
+}
+#c_host_user{
+  margin-left: 4px;
+  font-weight: lighter;
+  padding : 4px
+}
+
+#c_about{
+  word-break: break-word;
+}

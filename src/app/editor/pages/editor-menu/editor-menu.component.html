@@ -1,0 +1,40 @@
+
+<app-loading *ngIf="loading"></app-loading>
+<app-bar></app-bar>
+
+<popup id="edit_profile_popup" [showControls]="false" title="Manage Account" (closeEvent)="showEditProfileForm(false)">
+  <div id="profile_editor">
+    <div id="label">Update public user name</div>
+    <div class="row">
+      <input id = "user_name_input" type="text" maxlength="50">
+      <div id = "save_btn" (click)="updateUserInfo()">Update</div>
+    </div>
+  </div>
+</popup>
+
+<div id="settings_label" class="flex-row justify-sb wrap">
+  Workbench for {{user.name || user.email}}
+  <div class="largeButton" (click)="showEditProfileForm(true)">Edit Profile</div>
+
+</div>
+
+<div class="row">
+
+  <div class="flex-row align-stretch wrap justify-center">
+    <dashboard-card title="{{competitionsMetaData.total}}" message="Total Competitions Built"></dashboard-card>
+    <dashboard-card title="{{competitionsMetaData.live}}" message="Competitions Live Right Now"></dashboard-card>
+    <dashboard-card title="{{competitionsMetaData.public}}" message="Number of Public Competitions"></dashboard-card>
+  </div>
+    
+
+  <create-dialog></create-dialog>
+</div>
+
+
+
+<competitions-list
+  heading="Your Competitions"
+  route="editor"
+  [host_user_id]="user.id"
+  [competitionsList]="this.userCompetitions"
+></competitions-list>
