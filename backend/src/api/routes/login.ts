@@ -55,6 +55,7 @@ router.get('/authenticate', (req, res) => {
 
 router.post('/logout', (req, res) => {
 	const session_id = req.cookies.session_id;
+	const github_token = req.cookies.github_token;
 	if (session_id) {
 		database.query(
 			` delete from session where session.id = ? ; `,
@@ -65,10 +66,13 @@ router.post('/logout', (req, res) => {
 					Util.sendResponse(res, resCode.serverErrror);
 					return;
 				}
-				res = res.clearCookie('session_id');
+				res.clearCookie('session_id');
 				Util.sendResponse(res, resCode.success);
 			}
 		);
+	} else if (github_token) {
+		res.clearCookie("github_token")
+		Util.sendResponse(res, resCode.success);
 	} else {
 		Util.sendResponse(res, resCode.badRequest);
 	}
