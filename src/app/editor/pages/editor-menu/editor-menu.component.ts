@@ -12,7 +12,7 @@ import { UserDataService } from 'src/app/services/user-data/user-data.service';
 	styleUrls: ['./editor-menu.component.scss'],
 })
 export class EditorMenuComponent implements OnInit {
-	loading = false;
+	loading = 0;
 
 	isAuthenticated: boolean = false;
 	user = {
@@ -78,7 +78,7 @@ export class EditorMenuComponent implements OnInit {
 		) as HTMLInputElement;
 		this.user.name = userInput.value;
 
-		this.loading = true;
+		this.loading += 1;
 
 		this.userDataService
 			.updateUserInfo({
@@ -87,7 +87,7 @@ export class EditorMenuComponent implements OnInit {
 				email: this.user.email,
 			})
 			.subscribe((res) => {
-				this.loading = false;
+				this.loading -= 1;
 			});
 	}
 
@@ -108,7 +108,7 @@ export class EditorMenuComponent implements OnInit {
 					this.isAuthenticated = true;
 					this.authService.isAuthenticated.next(true);
 
-					this.loading = true;
+					this.loading += 1;
 					// fetch user's all created competitions
 					this.competitionsDataService
 						.getPublicCompetitions({
@@ -118,11 +118,11 @@ export class EditorMenuComponent implements OnInit {
 							next: (res) => {
 								this.userCompetitions = res.body;
 								this.calculateCompetitionsMetaData()
-								this.loading = false;
+								this.loading -= 1;
 							},
 							error: (err) => {
 								this.userCompetitions = err.error;
-								this.loading = false;
+								this.loading -= 1;
 							},
 						});
 				}

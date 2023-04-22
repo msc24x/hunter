@@ -1,6 +1,5 @@
-
-<app-loading *ngIf="loading"></app-loading>
 <app-bar></app-bar>
+<app-loading *ngIf="loading !== 0"></app-loading>
 
 <popup id="edit_profile_popup" [showControls]="false" title="Manage Account" (closeEvent)="showEditProfileForm(false)">
   <div id="profile_editor">
