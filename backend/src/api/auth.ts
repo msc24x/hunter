@@ -14,7 +14,8 @@ import { resCode } from '../config/settings';
 export function authenticate(
 	req: Request,
 	res: Response,
-	callback: (req: Request, res: Response, user: UserInfo) => void
+	callback: (req: Request, res: Response, user: UserInfo) => void,
+	failSilent=false
 ) {
 	const database = Container.get(DatabaseProvider).getInstance();
 
@@ -36,6 +37,8 @@ export function authenticate(
 				(password as string).length <= 26
 			)
 		) {
+			if (failSilent)
+				callback(req, res, {id:"-1",email:"",name:""})
 			Util.sendResponse(res, resCode.forbidden);
 			return;
 		}
@@ -45,10 +48,14 @@ export function authenticate(
 		models.users.findAll(params, (err: any, rows: any) => {
 			if (err) {
 				console.log(err);
+				if (failSilent)
+					callback(req, res, {id:"-1",email:"",name:""})
 				Util.sendResponse(res, resCode.serverErrror);
 				return;
 			}
 			if (rows.length == 0) {
+				if (failSilent)
+					callback(req, res, {id:"-1",email:"",name:""})
 				Util.sendResponse(res, resCode.notFound);
 				return;
 			}
@@ -58,6 +65,8 @@ export function authenticate(
 			verify(rows[0].password_hash as string, salt + password).then(
 				(same) => {
 					if (!same) {
+						if (failSilent)
+							callback(req, res, {id:"-1",email:"",name:""})
 						Util.sendResponse(res, resCode.forbidden);
 						return;
 					}
@@ -75,6 +84,8 @@ export function authenticate(
 								(err) => {
 									if (err) {
 										console.log(err);
+										if (failSilent)
+											callback(req, res, {id:"-1",email:"",name:""})
 										Util.sendResponse(
 											res,
 											resCode.serverErrror
@@ -96,6 +107,8 @@ export function authenticate(
 		});
 	} else if (session_id) {
 		if (session_id.length !== 26) {
+			if (failSilent)
+				callback(req, res, {id:"-1",email:"",name:""})
 			Util.sendResponse(res, resCode.badRequest);
 			return;
 		}
@@ -106,10 +119,14 @@ export function authenticate(
 			(err, rows) => {
 				if (err) {
 					console.log(err);
+					if (failSilent)
+						callback(req, res, {id:"-1",email:"",name:""})
 					Util.sendResponse(res, resCode.serverErrror);
 					return;
 				}
 				if (rows.length == 0) {
+					if (failSilent)
+						callback(req, res, {id:"-1",email:"",name:""})
 					Util.sendResponse(res, resCode.forbidden);
 					return;
 				}
@@ -119,11 +136,15 @@ export function authenticate(
 				models.users.findAll(params, (err, rows) => {
 					if (err) {
 						console.log(err);
+						if (failSilent)
+							callback(req, res, {id:"-1",email:"",name:""})
 						Util.sendResponse(res, resCode.serverErrror);
 						return;
 					}
 
 					if (rows.length == 0) {
+						if (failSilent)
+							callback(req, res, {id:"-1",email:"",name:""})
 						Util.sendResponse(res, resCode.notFound);
 						return;
 					}
@@ -149,7 +170,9 @@ export function authenticate(
 			let emails = body as Array<{email :string, primary : boolean, verified : boolean, visibility : string}>
 			let primaryEmails = emails.filter(val=> val.primary == true)
 
-			if(primaryEmails.length == 0){
+			if (primaryEmails.length == 0) {
+				if (failSilent)
+					callback(req, res, {id:"-1",email:"",name:""})
 				Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, No primary email detected")
 				return
 			}
@@ -159,6 +182,8 @@ export function authenticate(
 			usersModel.findAll({email : userEmail.email}, (err, rows)=>{
 				if(err){
 					console.log(err)
+					if (failSilent)
+						callback(req, res, {id:"-1",email:"",name:""})
 					Util.sendResponse(res, resCode.serverErrror)
 					return
 				}
@@ -167,6 +192,8 @@ export function authenticate(
 					usersModel.add({email : userEmail.email}, (err)=>{
 					if(err){
 						console.log(err)
+						if (failSilent)
+							callback(req, res, {id:"-1",email:"",name:""})
 						Util.sendResponse(res, resCode.serverErrror)
 						return
 					}
@@ -174,6 +201,8 @@ export function authenticate(
 					usersModel.findAll({email : userEmail.email}, (err, rows)=>{
 						if(err || (rows && rows.length == 0)){
 							console.log(err)
+							if (failSilent)
+								callback(req, res, {id:"-1",email:"",name:""})
 							Util.sendResponse(res, resCode.serverErrror)
 							return
 						}
@@ -188,6 +217,8 @@ export function authenticate(
 					usersModel.findAll({email : userEmail.email}, (err, rows)=>{
 						if(err || (rows && rows.length == 0)){
 							console.log(err)
+							if (failSilent)
+								callback(req, res, {id:"-1",email:"",name:""})
 							Util.sendResponse(res, resCode.serverErrror)
 							return
 						}
@@ -202,9 +233,13 @@ export function authenticate(
 
 		}).catch(err=>{
 			console.log(err)
+			if (failSilent)
+				callback(req, res, {id:"-1",email:"",name:""})
 			Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, try signing in fresh")
 		})
 	} else {
+		if (failSilent)
+			callback(req, res, {id:"-1",email:"",name:""})
 		Util.sendResponse(res, resCode.badRequest);
 	}
 }

@@ -201,7 +201,8 @@ router.get('/competitions', (req, res) => {
 		return 0;
 	};
 
-	models.competitions.findAll(
+	function sendCompetitions(user : UserInfo) {
+		models.competitions.findAll(
 		params,
 		dateOrder,
 		isPublic,
@@ -228,8 +229,11 @@ router.get('/competitions', (req, res) => {
 							element.duration
 						))
 				)
-					if (element.public)
+					if(element.public)
 						filteredCompetitions.push(element);
+					else if ( user.id === element.host_user_id) {
+						filteredCompetitions.push(element)
+					}
 			}
 			Util.sendResponseJson(
 				res,
@@ -240,6 +244,14 @@ router.get('/competitions', (req, res) => {
 		},
 		errCallback
 	);
+	}
+
+	if (isPublic != false) {
+		authenticate(req, res, (req, res, user) => {
+			sendCompetitions(user)
+		}, true)
+	}
+	
 });
 
 module.exports = router;
