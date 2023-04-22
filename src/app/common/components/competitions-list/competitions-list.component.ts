@@ -20,6 +20,9 @@ export class CompetitionsListComponent implements OnInit {
 	heading: string = 'Competitions';
 
 	@Input()
+	public: boolean = true;
+
+	@Input()
 	route: string = 'editor';
 
 	title = '';
@@ -56,7 +59,7 @@ export class CompetitionsListComponent implements OnInit {
 		this.competitionsDataService
 			.getPublicCompetitions({
 				title: this.title,
-				public: true,
+				public: this.public,
 				dateOrder: this.orderByCode[this.orderBy],
 				liveStatus: this.liveStatus,
 				host_user_id: this.host_user_id + '',
