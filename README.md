@@ -6,6 +6,7 @@
 
 Built to simplify the daliy coding competitions hosting for general public. Hunter gives you the ability to create your own coding competitions similar to what you see on other competitive sites, but with a lot of easy, simplicity and least maintainance.
 
+### Latest: The site will now be available at https://hunter.cambo.in instead of https://thehunter.tech
 ### **I regret to inform you that I will be discontinuing this hobby project of mine in upcoming days due to some technical reasons. Hunter was a fun and challenging project that I enjoyed working on, but unfortunately I can no longer maintain it. I hope to resume it someday, but on a different domain. You will be notified here and on my Linkedin profile if and when that happens. Thank you for your support and interest in Hunter.**
 
 
