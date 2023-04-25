@@ -8,7 +8,7 @@ export const domainName = "localhost:4200"
 export const environment = {
   production: false,
   apiUrl: `${protocol}://${domainName}/api`,
-  version : "v1.9.6"
+  version : "v1.9.7"
 };
 
 

@@ -8,7 +8,7 @@ export const domainName = "hunter.cambo.in"
 export const environment = {
   production: true,
   apiUrl: `${protocol}://${domainName}/api`,
-  version : "v1.9.6"
+  version : "v1.9.7"
 };
 
 export interface UserInfo{
