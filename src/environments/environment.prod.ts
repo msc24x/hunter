@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const protocol = "https"
-export const domainName = "thehunter.tech"
+export const domainName = "hunter.cambo.in"
 
 export const environment = {
   production: true,
