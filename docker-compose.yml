@@ -1,17 +1,6 @@
 version: '1.0.0'
 
-services:
-  hunter-judge:
-    image: hunter-judge
-    container_name: hunter-judge
-    profiles:
-      - services
-    build: 
-      context: judge
-      dockerfile: Dockerfile
-    restart: always
-    tty : true
-    
+services:    
   hunter-backend:
     image: hunter-backend
     container_name: hunter-backend
@@ -20,8 +9,6 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    depends_on:
-      - hunter-judge
     command: "npm run start-${ENV}"
     restart: always
     volumes:
