@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
   }
 
   redirectToGitHubOAuth(){
-    window.open("https://thehunter.tech/api/oauth/github")
+    window.open("https://hunter.cambo.in/api/oauth/github")
   }
 
   ngOnInit(): void {

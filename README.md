@@ -13,10 +13,10 @@ Built to simplify the daliy coding competitions hosting for general public. Hunt
 ![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)
 ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
 
-![](https://badgen.net/https/thehunter.tech/api/status/users)
-![](https://badgen.net/https/thehunter.tech/api/status/competitions)
+![](https://badgen.net/https/hunter.cambo.in/api/status/users)
+![](https://badgen.net/https/hunter.cambo.in/api/status/competitions)
 
-The site is live and accessible at https://thehunter.tech
+The site is live and accessible at https://hunter.cambo.in
 
 ## Overview
 Users can initiate with the free account and start creating competitions. Competitions are create on the basis of meta data users provide, such as title, description, length of competition, and more parameters. Host can add as many questions they like.
