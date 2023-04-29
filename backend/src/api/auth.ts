@@ -38,7 +38,7 @@ export function authenticate(
 			)
 		) {
 			if (failSilent)
-				callback(req, res, {id:"-1",email:"",name:""})
+				{callback(req, res, {id:"-1",email:"",name:""}); return;}
 			Util.sendResponse(res, resCode.forbidden);
 			return;
 		}
@@ -49,13 +49,13 @@ export function authenticate(
 			if (err) {
 				console.log(err);
 				if (failSilent)
-					callback(req, res, {id:"-1",email:"",name:""})
+					{callback(req, res, {id:"-1",email:"",name:""}); return;}
 				Util.sendResponse(res, resCode.serverErrror);
 				return;
 			}
 			if (rows.length == 0) {
 				if (failSilent)
-					callback(req, res, {id:"-1",email:"",name:""})
+					{callback(req, res, {id:"-1",email:"",name:""}); return;}
 				Util.sendResponse(res, resCode.notFound);
 				return;
 			}
@@ -66,7 +66,7 @@ export function authenticate(
 				(same) => {
 					if (!same) {
 						if (failSilent)
-							callback(req, res, {id:"-1",email:"",name:""})
+							{callback(req, res, {id:"-1",email:"",name:""}); return;}
 						Util.sendResponse(res, resCode.forbidden);
 						return;
 					}
@@ -85,7 +85,7 @@ export function authenticate(
 									if (err) {
 										console.log(err);
 										if (failSilent)
-											callback(req, res, {id:"-1",email:"",name:""})
+											{callback(req, res, {id:"-1",email:"",name:""}); return;}
 										Util.sendResponse(
 											res,
 											resCode.serverErrror
@@ -108,7 +108,7 @@ export function authenticate(
 	} else if (session_id) {
 		if (session_id.length !== 26) {
 			if (failSilent)
-				callback(req, res, {id:"-1",email:"",name:""})
+				{callback(req, res, {id:"-1",email:"",name:""}); return;}
 			Util.sendResponse(res, resCode.badRequest);
 			return;
 		}
@@ -120,13 +120,13 @@ export function authenticate(
 				if (err) {
 					console.log(err);
 					if (failSilent)
-						callback(req, res, {id:"-1",email:"",name:""})
+						{callback(req, res, {id:"-1",email:"",name:""}); return;}
 					Util.sendResponse(res, resCode.serverErrror);
 					return;
 				}
 				if (rows.length == 0) {
 					if (failSilent)
-						callback(req, res, {id:"-1",email:"",name:""})
+						{callback(req, res, {id:"-1",email:"",name:""}); return;}
 					Util.sendResponse(res, resCode.forbidden);
 					return;
 				}
@@ -137,14 +137,14 @@ export function authenticate(
 					if (err) {
 						console.log(err);
 						if (failSilent)
-							callback(req, res, {id:"-1",email:"",name:""})
+							{callback(req, res, {id:"-1",email:"",name:""}); return;}
 						Util.sendResponse(res, resCode.serverErrror);
 						return;
 					}
 
 					if (rows.length == 0) {
 						if (failSilent)
-							callback(req, res, {id:"-1",email:"",name:""})
+							{callback(req, res, {id:"-1",email:"",name:""}); return;}
 						Util.sendResponse(res, resCode.notFound);
 						return;
 					}
@@ -172,7 +172,7 @@ export function authenticate(
 
 			if (primaryEmails.length == 0) {
 				if (failSilent)
-					callback(req, res, {id:"-1",email:"",name:""})
+					{callback(req, res, {id:"-1",email:"",name:""}); return;}
 				Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, No primary email detected")
 				return
 			}
@@ -183,7 +183,7 @@ export function authenticate(
 				if(err){
 					console.log(err)
 					if (failSilent)
-						callback(req, res, {id:"-1",email:"",name:""})
+						{callback(req, res, {id:"-1",email:"",name:""}); return;}
 					Util.sendResponse(res, resCode.serverErrror)
 					return
 				}
@@ -193,7 +193,7 @@ export function authenticate(
 					if(err){
 						console.log(err)
 						if (failSilent)
-							callback(req, res, {id:"-1",email:"",name:""})
+							{callback(req, res, {id:"-1",email:"",name:""}); return;}
 						Util.sendResponse(res, resCode.serverErrror)
 						return
 					}
@@ -202,7 +202,7 @@ export function authenticate(
 						if(err || (rows && rows.length == 0)){
 							console.log(err)
 							if (failSilent)
-								callback(req, res, {id:"-1",email:"",name:""})
+								{callback(req, res, {id:"-1",email:"",name:""}); return;}
 							Util.sendResponse(res, resCode.serverErrror)
 							return
 						}
@@ -218,7 +218,7 @@ export function authenticate(
 						if(err || (rows && rows.length == 0)){
 							console.log(err)
 							if (failSilent)
-								callback(req, res, {id:"-1",email:"",name:""})
+								{callback(req, res, {id:"-1",email:"",name:""}); return;}
 							Util.sendResponse(res, resCode.serverErrror)
 							return
 						}
@@ -234,12 +234,12 @@ export function authenticate(
 		}).catch(err=>{
 			console.log(err)
 			if (failSilent)
-				callback(req, res, {id:"-1",email:"",name:""})
+				{callback(req, res, {id:"-1",email:"",name:""}); return;}
 			Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, try signing in fresh")
 		})
 	} else {
 		if (failSilent)
-			callback(req, res, {id:"-1",email:"",name:""})
+			{callback(req, res, {id:"-1",email:"",name:""}); return;}
 		Util.sendResponse(res, resCode.badRequest);
 	}
 }

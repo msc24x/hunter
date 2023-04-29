@@ -246,11 +246,9 @@ router.get('/competitions', (req, res) => {
 	);
 	}
 
-	if (isPublic != false) {
-		authenticate(req, res, (req, res, user) => {
-			sendCompetitions(user)
-		}, true)
-	}
+	authenticate(req, res, (req, res, user) => {
+		sendCompetitions(user)
+	}, true)
 	
 });
 
