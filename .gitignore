@@ -2445,3 +2445,4 @@ backend/src/database/files/c8375.cpp
 .env/.env.prod
 backend/.env/.env.local
 backend/.env/.env.prod
+backend/.env/.env.azure

@@ -16,23 +16,14 @@ export class DatabaseProvider {
 	public loaded = false;
 
 	constructor() {
-		if (config.env === "prod") {
-			this._dbConnection = mysql.createConnection({
-				host: this._connectionConfig.host,
-				user: this._connectionConfig.user,
-				password: this._connectionConfig.password,
-				database: this._connectionConfig.database,
-				ssl : this._connectionConfig.ssl || {}
-			});
-		}
-		else {
-			this._dbConnection = mysql.createConnection({
-				host: this._connectionConfig.host,
-				user: this._connectionConfig.user,
-				password: this._connectionConfig.password,
-				database: this._connectionConfig.database,
-			});
-		}
+		
+		this._dbConnection = mysql.createConnection({
+			host: this._connectionConfig.host,
+			user: this._connectionConfig.user,
+			password: this._connectionConfig.password,
+			database: this._connectionConfig.database,
+		});
+		
 		this._dbConnection.connect((err) => {
 			if (err) {
 				console.log(err);

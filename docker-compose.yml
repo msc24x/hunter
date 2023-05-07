@@ -1,6 +1,14 @@
 version: '1.0.0'
 
-services:    
+services:  
+  hunter-database:
+    container_name: hunter-database
+    image: mysql
+    restart: always
+    profiles:
+      - services
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
   hunter-backend:
     image: hunter-backend
     container_name: hunter-backend
@@ -11,8 +19,8 @@ services:
       dockerfile: Dockerfile
     command: "npm run start-${ENV}"
     restart: always
-    volumes:
-      - ./backend:/home/app
+    depends_on:
+      - hunter-database
     ports:
       - "8080:8080"
   
