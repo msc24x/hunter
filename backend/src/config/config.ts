@@ -15,8 +15,9 @@ export default {
 		user: process.env.DB_USER,
 		password: process.env.DB_PASSWORD,
 		database: process.env.DB_NAME,
-		ssl : process.env.ENV === "prod" ? {
-			ca :  readFileSync("DigiCertGlobalRootCA.crt.pem")
-		} : null
+		db_url : process.env.DATABASE_URL
+		// ssl : process.env.ENV === "prod" ? {
+		// 	ca :  readFileSync("DigiCertGlobalRootCA.crt.pem")
+		// } : null
 	},
 };

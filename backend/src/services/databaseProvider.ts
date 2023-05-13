@@ -22,6 +22,9 @@ export class DatabaseProvider {
 			user: this._connectionConfig.user,
 			password: this._connectionConfig.password,
 			database: this._connectionConfig.database,
+			ssl: {
+				rejectUnauthorized : true
+			}
 		});
 		
 		this._dbConnection.connect((err) => {
