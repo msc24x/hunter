@@ -11,8 +11,8 @@ Built to simplify the daliy coding competitions hosting for general public. Hunt
 
 
 ## Live Status
-![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)
-![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
+![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=Oracle&logoColor=white)
+![PlanetScale](https://img.shields.io/badge/planetscale-%23000000.svg?style=for-the-badge&logo=planetscale&logoColor=white)
 
 ![](https://badgen.net/https/hunter.cambo.in/api/status/users)
 ![](https://badgen.net/https/hunter.cambo.in/api/status/competitions)

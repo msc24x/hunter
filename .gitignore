@@ -2451,3 +2451,5 @@ backend/.env/presets/.env.azure
 backend/.env/presets/.env.planetscale.dev
 backend/.env/presets/.env.planetscale.prod
 backend/.env/presets/.env.self
+.ssh/private.key
+push-envs.bat
