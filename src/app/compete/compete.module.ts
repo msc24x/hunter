@@ -7,6 +7,7 @@ import { CompetitionComponent } from './pages/competition/competition.component'
 import { KatexModule } from 'ng-katex';
 import { RouterModule } from '@angular/router';
 import { EditorModule } from '../editor/editor.module';
+import { CompeteRoutingModule } from './compete-routing.module';
 
 
 
@@ -21,7 +22,8 @@ import { EditorModule } from '../editor/editor.module';
     HunterCommonModule,
     EditorModule,
     KatexModule,
-    RouterModule
+    RouterModule,
+    CompeteRoutingModule
   ],
 })
 export class CompeteModule { }

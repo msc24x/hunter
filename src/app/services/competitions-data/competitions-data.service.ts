@@ -5,7 +5,7 @@ import { AuthService } from '../auth/auth.service';
 import { CommonModule } from 'src/app/common/common.module';
 
 @Injectable({
-  providedIn:CommonModule
+  providedIn:"root"
 })
 export class CompetitionsDataService {
 

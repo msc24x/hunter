@@ -7,8 +7,8 @@ import { CreateDialogComponent } from './components/create-dialog/create-dialog.
 import { DashboardCardComponent } from './components/dashboard-card/dashboard-card.component';
 import { QuestionsListComponent } from './components/questions-list/questions-list.component';
 import { KatexModule } from 'ng-katex';
-import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { EditorRoutingModule } from './editor-routing.module';
 
 
 
@@ -24,8 +24,8 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     HunterCommonModule,
     KatexModule,
-    BrowserModule,
-    RouterModule
+    RouterModule,
+    EditorRoutingModule,
   ],
   exports: [
     QuestionsListComponent

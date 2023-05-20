@@ -12,10 +12,10 @@ import { TextInputComponent } from './components/text-input/text-input.component
 import { AboutComponent } from './pages/about/about.component';
 import { CompeteComponent } from './pages/compete/compete.component';
 import { HomeComponent } from './pages/home/home.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { IsLiveStatusPipe, UserInfoPipe } from './pipes/userInfoPipe';
 import { RouterModule } from '@angular/router';
+import { CommonRoutingModule } from './common-routing.module';
 
 
 
@@ -33,14 +33,14 @@ import { RouterModule } from '@angular/router';
     AboutComponent,
     CompeteComponent,
     HomeComponent,
-    NotFoundComponent,
     RegisterComponent,
     UserInfoPipe,
     IsLiveStatusPipe
   ],
   imports: [
     AngularCommonModule,
-    RouterModule
+    RouterModule,
+    CommonRoutingModule,
   ],
   exports: [
     AppBarComponent,
@@ -55,7 +55,6 @@ import { RouterModule } from '@angular/router';
     AboutComponent,
     CompeteComponent,
     HomeComponent,
-    NotFoundComponent,
     RegisterComponent,
     UserInfoPipe,
     IsLiveStatusPipe

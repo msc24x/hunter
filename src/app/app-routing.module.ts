@@ -1,44 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CompetitionComponent } from './compete/pages/competition/competition.component';
-import { EditorMenuComponent } from './editor/pages/editor-menu/editor-menu.component';
-import { HomeComponent } from './common/pages/home/home.component';
-import { AboutComponent } from './common/pages/about/about.component';
-import { CompeteComponent } from './common/pages/compete/compete.component';
 import { NotFoundComponent } from './common/pages/not-found/not-found.component';
-import { RegisterComponent } from './common/pages/register/register.component';
-import { EditorComponent } from './editor/pages/editor/editor.component';
 
-const routes: Routes = [{
+const routes: Routes = [
+  {
   "path" : "",
-  component : HomeComponent
-},{
-  "path" : "home",
-  "component" : HomeComponent
-},{
-  "path" : "register",
-  "component" : RegisterComponent
-},{
-  "path" : "compete",
-  "component" : CompeteComponent
-},{
-  "path" : "hunt/:competition_id",
-  "component" : CompetitionComponent
-},{
-  "path" : "editor/:competition_id",
-  "component" : EditorComponent
-},
+  "loadChildren": () => import('./common/common.module').then(m => m.CommonModule)
+  },
+  {
+  "path": "editor",
+    "loadChildren": () => import('./editor/editor.module').then(m => m.EditorModule),
+  },
 {
-  "path" : "editor",
-  "component" : EditorMenuComponent
+  "path": "hunt",
+  "loadChildren": () => import('./compete/compete.module').then(m => m.CompeteModule)
+  
 },
-{
-  "path" : "404",
-  "component" : NotFoundComponent
-},
-{
-  "path" : "about",
-  "component" : AboutComponent
+  
+  {
+    "path"        : '404',
+    "pathMatch"   : 'full',
+    "component"   : NotFoundComponent
 },
 {
     "path"        : '**',
@@ -48,7 +30,7 @@ const routes: Routes = [{
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {enableTracing: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

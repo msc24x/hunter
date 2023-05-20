@@ -6,17 +6,19 @@ import { EditorModule } from './editor/editor.module';
 import { CompeteModule } from './compete/compete.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from './common/common.module';
+import { NotFoundComponent } from './common/pages/not-found/not-found.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NotFoundComponent
   ],
   imports: [
     CommonModule,
-    EditorModule,
-    CompeteModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserModule,
   ],
   bootstrap: [AppComponent],
 })
