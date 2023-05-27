@@ -24,6 +24,18 @@ div.appBar{
     display: flex;
     align-items: center;
 
+    #app_title_full{
+      cursor: pointer;
+
+      &:hover{
+        transform: translateX(-4px) rotateZ(-2deg);
+        transition: 400ms;
+      }
+      &:not(:hover){
+        transition: 400ms;
+      }
+    }
+
     @media only screen and (max-width : 686px) and (min-width : 420px) {
       #app_title_full{
         display: initial;
@@ -44,7 +56,8 @@ div.appBar{
       cursor: pointer;
     }
     #logout_btn:hover{
-      background-color: white
+      background-color: rgb(255, 244, 244);
+      color: darkred;
     }
   }
   @media only screen and (max-width : 1400px) {
