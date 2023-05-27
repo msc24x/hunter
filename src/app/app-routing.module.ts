@@ -5,26 +5,26 @@ import { NotFoundComponent } from './common/pages/not-found/not-found.component'
 const routes: Routes = [
   {
   "path" : "",
-  "loadChildren": () => import('./common/common.module').then(m => m.CommonModule)
+    "loadChildren": () => import('./common/common.module').then(m => m.CommonModule),
+
   },
   {
   "path": "editor",
     "loadChildren": () => import('./editor/editor.module').then(m => m.EditorModule),
+
   },
 {
-  "path": "hunt",
+  "path": "compete",
   "loadChildren": () => import('./compete/compete.module').then(m => m.CompeteModule)
   
 },
   
   {
     "path"        : '404',
-    "pathMatch"   : 'full',
     "component"   : NotFoundComponent
 },
 {
     "path"        : '**',
-    "pathMatch"   : 'full',
     "component"   : NotFoundComponent
 }
 ];

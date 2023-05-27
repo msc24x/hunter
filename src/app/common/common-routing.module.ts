@@ -7,8 +7,8 @@ import { RegisterComponent } from './pages/register/register.component';
 
 const routes: Routes = [{
   "path" : "",
-    "component": HomeComponent,
-  "pathMatch" : "full"
+  "component": HomeComponent,
+  "pathMatch" : "full",
 },{
   "path" : "home",
   "component" : HomeComponent

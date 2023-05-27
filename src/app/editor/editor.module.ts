@@ -6,7 +6,6 @@ import { EditorMenuComponent } from './pages/editor-menu/editor-menu.component';
 import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
 import { DashboardCardComponent } from './components/dashboard-card/dashboard-card.component';
 import { QuestionsListComponent } from './components/questions-list/questions-list.component';
-import { KatexModule } from 'ng-katex';
 import { RouterModule } from '@angular/router';
 import { EditorRoutingModule } from './editor-routing.module';
 
@@ -23,7 +22,6 @@ import { EditorRoutingModule } from './editor-routing.module';
   imports: [
     CommonModule,
     HunterCommonModule,
-    KatexModule,
     RouterModule,
     EditorRoutingModule,
   ],

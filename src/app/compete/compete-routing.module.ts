@@ -4,8 +4,9 @@ import { CompetitionComponent } from './pages/competition/competition.component'
 
 const routes: Routes = [
 {
-    "path" : ":competition_id",
+    "path" : "p/:competition_id",
     "component": CompetitionComponent,
+
 },
 
 ];

@@ -61,9 +61,9 @@ make it private instead of deleting.<br><br>
   You can write Latex expressions in Question Statement wrapped with dollar signs ($)<br>
   For example,<br> write $\sqrt{{'{'}}p+q{{'}'}}$<br><br>
   It would be rendered as <br>
-  <ng-katex equation="\sqrt{p+q}"></ng-katex> <br>
+  <!-- <ng-katex equation="\sqrt{p+q}"></ng-katex> <br> -->
   To learn more about the syntax, refer
-  <a href="https://katex.org/docs/support_table.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a>
+  <!-- <a href="https://katex.org/docs/support_table.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a> -->
   <br><br><br>
 
   <b>Guidelines for setting questions</b><br><br>
@@ -178,7 +178,7 @@ make it private instead of deleting.<br><br>
   </div>
  
  <textarea id = "text_statement" maxlength="2048" rows="15" [value]="questionSelectedInfo.statement"></textarea>
- <ng-katex-paragraph id="text_statement_preview" [paragraph]="questionSelectedInfo.statement ?? ''"></ng-katex-paragraph>
+ <!-- <ng-katex-paragraph id="text_statement_preview" [paragraph]="questionSelectedInfo.statement ?? ''"></ng-katex-paragraph> -->
 
 
  <div class="flex" id="sample_test_cases">

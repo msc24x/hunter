@@ -51,7 +51,7 @@ export class CompeteComponent implements OnInit {
     private router : Router
   ) {
 
-    this.authService.isAuthenticated.subscribe(isAuth=>{
+    this.authService.isAuthenticated.subscribe((isAuth : boolean)=>{
       this.user = this.authService.user
       this.isAuthenticated = isAuth;
 

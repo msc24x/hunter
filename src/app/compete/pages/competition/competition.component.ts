@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
 	ActivatedRoute,
-	ActivationEnd,
 	NavigationStart,
 	Router,
 } from '@angular/router';
@@ -10,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import {
 	CompetitionInfo,
-	HunterExecutable,
 	QuestionInfo,
 	resCode,
 	resultFull,
@@ -59,13 +57,13 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 		private competitionsService: CompetitionsDataService,
 		private scoresDataService: ScoresDataService
 	) {
-		const idParam = route.snapshot.paramMap.get('competition_id');
+		const idParam = this.route.snapshot.paramMap.get('competition_id');
 		if (idParam) {
 			this.c_id = idParam;
 		}
 
 		this.subscriptions.push(
-			this.authService.isAuthenticated.subscribe((isAuth) => {
+			this.authService.isAuthenticated.subscribe((isAuth:boolean) => {
 				this.user = this.authService.user;
 				this.isAuthenticated = isAuth;
 				this.fetchData();

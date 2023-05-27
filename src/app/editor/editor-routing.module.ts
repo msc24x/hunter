@@ -5,13 +5,13 @@ import { EditorComponent } from './pages/editor/editor.component';
 
 const routes: Routes = [
 {
-    "path" : "",
-        "component": EditorMenuComponent,
-    "pathMatch" : "full"
+    "path" : "workbench",
+    "component": EditorMenuComponent,
   
 },{
     "path" : ":competition_id",
     "component": EditorComponent,
+
 },
 
 ];

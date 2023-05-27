@@ -42,7 +42,7 @@ export class EditorComponent implements OnInit {
 		private competitionsData: CompetitionsDataService,
 		private datePipe: DatePipe
 	) {
-		this.competition_id = activatedRoute.snapshot.paramMap.get(
+		this.competition_id = this.activatedRoute.snapshot.paramMap.get(
 			'competition_id'
 		) as string;
 

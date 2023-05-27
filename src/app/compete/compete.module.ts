@@ -4,7 +4,6 @@ import { CommonModule as HunterCommonModule } from 'src/app/common/common.module
 import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { CompetitionComponent } from './pages/competition/competition.component';
-import { KatexModule } from 'ng-katex';
 import { RouterModule } from '@angular/router';
 import { EditorModule } from '../editor/editor.module';
 import { CompeteRoutingModule } from './compete-routing.module';
@@ -21,9 +20,10 @@ import { CompeteRoutingModule } from './compete-routing.module';
     CommonModule,
     HunterCommonModule,
     EditorModule,
-    KatexModule,
+    CompeteRoutingModule,
     RouterModule,
-    CompeteRoutingModule
   ],
+  providers : [DatePipe]
+
 })
 export class CompeteModule { }
