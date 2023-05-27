@@ -8,6 +8,7 @@ import { DashboardCardComponent } from './components/dashboard-card/dashboard-ca
 import { QuestionsListComponent } from './components/questions-list/questions-list.component';
 import { RouterModule } from '@angular/router';
 import { EditorRoutingModule } from './editor-routing.module';
+import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
 
 
 
@@ -17,7 +18,8 @@ import { EditorRoutingModule } from './editor-routing.module';
     EditorMenuComponent,
     CreateDialogComponent,
     DashboardCardComponent,
-    QuestionsListComponent
+    QuestionsListComponent,
+    NgKatexComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +28,8 @@ import { EditorRoutingModule } from './editor-routing.module';
     EditorRoutingModule,
   ],
   exports: [
-    QuestionsListComponent
+    QuestionsListComponent,
+    NgKatexComponent
   ],
 })
 export class EditorModule { }

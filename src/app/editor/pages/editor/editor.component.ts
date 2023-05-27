@@ -18,7 +18,7 @@ import {
 })
 export class EditorComponent implements OnInit {
 	loading = false;
-
+	preview_mode = false;
 	log = new Array<string>();
 	deleteCompMessage = '';
 
@@ -419,18 +419,17 @@ export class EditorComponent implements OnInit {
 	}
 
 	togglePreview() {
-		let raw = document.getElementById(
+		
+		// Saving the text area content into questions statement
+		// so that the user do not loose the written content 
+		let text_statement = document.getElementById(
 			'text_statement'
 		) as HTMLTextAreaElement;
-		let prev = document.getElementById('text_statement_preview') as any;
-		if (prev.style.display == 'none') {
-			prev.style.display = 'block';
-			raw.style.display = 'none';
-		} else {
-			prev.style.display = 'none';
-			raw.style.display = 'block';
-		}
-		this.questionSelectedInfo.statement = raw.value;
+		
+		if (text_statement)
+			this.questionSelectedInfo.statement = text_statement.value;
+			
+		this.preview_mode = !this.preview_mode
 	}
 
 	deleteCompetition() {

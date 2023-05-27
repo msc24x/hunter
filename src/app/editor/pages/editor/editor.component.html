@@ -61,9 +61,9 @@ make it private instead of deleting.<br><br>
   You can write Latex expressions in Question Statement wrapped with dollar signs ($)<br>
   For example,<br> write $\sqrt{{'{'}}p+q{{'}'}}$<br><br>
   It would be rendered as <br>
-  <!-- <ng-katex equation="\sqrt{p+q}"></ng-katex> <br> -->
+  <ng-katex data="$\sqrt{p+q}$"></ng-katex> <br>
   To learn more about the syntax, refer
-  <!-- <a href="https://katex.org/docs/support_table.html" target="_blank"><ng-katex equation="\KaTeX"></ng-katex></a> -->
+  <a href="https://katex.org/docs/support_table.html" target="_blank"><ng-katex data="$\KaTeX$"></ng-katex></a> 
   <br><br><br>
 
   <b>Guidelines for setting questions</b><br><br>
@@ -174,11 +174,13 @@ make it private instead of deleting.<br><br>
     <div id="qstatement_label">
       Statement
     </div>
-    <div id="toggle_preview_btn" (click)="togglePreview()">Toggle Preview</div>
+    <div id="toggle_preview_btn" (click)="togglePreview()">
+      {{ preview_mode? "LaTeX" : "Preview" }}
+    </div>
   </div>
  
- <textarea id = "text_statement" maxlength="2048" rows="15" [value]="questionSelectedInfo.statement"></textarea>
- <!-- <ng-katex-paragraph id="text_statement_preview" [paragraph]="questionSelectedInfo.statement ?? ''"></ng-katex-paragraph> -->
+ <textarea *ngIf="!preview_mode" id = "text_statement" maxlength="2048" rows="15" [value]="questionSelectedInfo.statement"></textarea>
+ <ng-katex *ngIf="preview_mode" id="text_statement_preview" [data]="questionSelectedInfo.statement"></ng-katex>
 
 
  <div class="flex" id="sample_test_cases">

@@ -56,7 +56,7 @@
 
     
   <div *ngIf="questionSelected != -1 && isAuthenticated" id="question_statement">
-    <div> {{questionSelectedInfo.statement || ''}}</div>
+    <ng-katex [data]="questionSelectedInfo.statement || ''"></ng-katex>
   </div>
 
   

@@ -285,7 +285,6 @@ popup{
 }
 
 #text_statement_preview{
-  display: none;
   @include appTextArea;
   height: 344px;
   font-size: 1.05rem !important;
