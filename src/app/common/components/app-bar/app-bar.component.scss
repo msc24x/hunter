@@ -78,11 +78,11 @@ div.appBar{
     justify-content: right;
     align-items: flex-end;
     font-family: appFont;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: bolder;
-    background-color: colors.$text_white;
+    background-color: white;
     padding : 6px;
-    padding-inline: 8px;
+    padding-inline: 12px;
     border-radius: 8px;
     margin-right: 12px;
     cursor: pointer;
@@ -126,9 +126,11 @@ div.appBar{
         //backdrop-filter: blur(5px);
       }
       li:hover{
-        animation: rightSlide 0.25s;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
+        transform: translateX(5px);
+        transition: 400ms;
+      }
+      li:not(:hover){
+        transition: 400ms;
       }
       @keyframes rightSlide {
         100%{
