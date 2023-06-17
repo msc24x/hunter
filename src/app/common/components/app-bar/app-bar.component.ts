@@ -36,12 +36,33 @@ export class AppBarComponent implements OnInit {
   ngOnInit(): void {
     const navBar = document.getElementById("navBarCompact") as HTMLElement;
     navBar.style.display = "none"
+
+    let handleNavbarCollapse = (event: Event) => {
+        let target = event.target as HTMLElement
+        if (target.id !== "navBarBtn")
+          this.collapseNavBar()
+      }
+
+    document.addEventListener("click", handleNavbarCollapse)
+    document.addEventListener("scroll", handleNavbarCollapse)
   }
 
-  toggleNavBar(){
+  collapseNavBar() {
+    // hide if visible
     const navBar = document.getElementById("navBarCompact") as HTMLElement;
+    if (navBar.style.display !== "none") {
+      this.toggleNavBar(true)
+    }
+  }
+
+  toggleNavBar(hide=false){
+    const navBar = document.getElementById("navBarCompact") as HTMLElement;
+    if (hide) {
+      navBar.style.display = "none"
+      return
+    }
     if(navBar.style.display == "none"){
-      navBar.style.display = "initial"
+      navBar.style.display = "block"
     }else{
       navBar.style.display = "none"
     }

@@ -3,12 +3,10 @@
 <div class="appBar">
   <div id="app_title">
     <span id = "app_title_full" routerLink="/home">{{app_title}}</span>
-    <div *ngIf="!isAuthenticated && showRegisterBtn" id = "register_btn" (click)="redirectToGitHubOAuth()">SIGN IN</div>
-    <div *ngIf="isAuthenticated" id= "user_email" routerLink="/editor/workbench" >{{user.email}}</div>
-    <div *ngIf="isAuthenticated && user.name" id= "user_name" routerLink="/editor/workbench" >{{user.name}}</div>
-    <a *ngIf="isAuthenticated" id = "logout_btn" (click)="sendLogoutRequest()">Logout</a>
+    <div *ngIf="!isAuthenticated && showRegisterBtn" id = "register_btn" (click)="redirectToGitHubOAuth()">Sign In</div>
+    <div *ngIf="isAuthenticated" id= "user_name" routerLink="/editor/workbench" >{{user.name || user.email}}</div>
   </div>
-  <a id="navBarBtn" (click)="toggleNavBar()">EXPLORE
+  <a id="navBarBtn" (click)="toggleNavBar()">Menu
     <div id="navBarCompact">
       <ul>
         <li routerLink="/home">
@@ -22,6 +20,9 @@
         </li>
         <li routerLink="/about">
           ABOUT
+        </li>
+        <li >
+          <a *ngIf="isAuthenticated" id = "logout_btn" (click)="sendLogoutRequest()">Sign Out</a>
         </li>
       </ul>
     </div>
@@ -40,6 +41,9 @@
       </li>
       <li routerLink="/about">
         ABOUT
+      </li>
+      <li>
+        <a *ngIf="isAuthenticated" id = "logout_btn" (click)="sendLogoutRequest()">Sign Out</a>
       </li>
     </ul>
   </div>

@@ -15,6 +15,16 @@ div.appBar{
   align-items: center;
   background-color: colors.$text_white;
 
+  #logout_btn{
+    background-color: rgb(255, 244, 244);
+    color: darkred;
+    border-radius: 12px;
+    padding-block: 4px;
+    padding-inline: 16px;
+    text-align: end;
+    cursor: pointer;
+  }
+
   #app_title{
     color: colors.$text_black;
     font-family: appFont;
@@ -46,19 +56,17 @@ div.appBar{
       }
     }
   
-    #user_email, #logout_btn, #user_name, #register_btn{
+    #user_email, #user_name, #register_btn{
       font-size: 0.8rem;
-      background-color: whitesmoke;
+      background-color: colors.$text_black;
+      color: colors.$text_white;
       border-radius: 12px;
       padding-block: 4px;
       padding-inline: 16px;
       margin-left: 12px;
       cursor: pointer;
     }
-    #logout_btn:hover{
-      background-color: rgb(255, 244, 244);
-      color: darkred;
-    }
+
   }
   @media only screen and (max-width : 1400px) {
     #navBar{
