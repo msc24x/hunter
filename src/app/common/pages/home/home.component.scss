@@ -2,6 +2,31 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
+.vanish{
+  opacity: 0 !important;
+  pointer-events: none;
+  transition: 200ms;
+}
+
+.inview{
+  &_slide{
+    &__active{
+      animation: slide 600ms ease-out 0ms 1 normal forwards;
+    }
+  }
+}
+
+@keyframes slide {
+  0%{
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100%{
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
 
 #logo{
   font-size: 9rem;

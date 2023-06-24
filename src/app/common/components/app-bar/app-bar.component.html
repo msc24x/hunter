@@ -42,8 +42,8 @@
       <li routerLink="/about">
         ABOUT
       </li>
-      <li>
-        <a *ngIf="isAuthenticated" id = "logout_btn" (click)="sendLogoutRequest()">Sign Out</a>
+      <li *ngIf="isAuthenticated">
+        <a id = "logout_btn" (click)="sendLogoutRequest()">Sign Out</a>
       </li>
     </ul>
   </div>

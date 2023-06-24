@@ -42,7 +42,20 @@ export class HomeComponent implements OnInit {
     window.open("https://hunter.cambo.in/api/oauth/github")
   }
 
+  animateInView() {
+    let targets = document.getElementsByClassName("inview_slide")
+
+    for (let target of targets) {
+      const observer = new IntersectionObserver(entries => {
+        target.classList.toggle( 'inview_slide__active', entries[0].isIntersecting );
+      });
+      observer.observe(target)
+    }
+
+  }
+
   ngOnInit(): void {
+    this.animateInView()
 
     this.authService.authenticate_credentials().subscribe(res=>{
       if(res.status == 202){
