@@ -2,15 +2,14 @@ version: '1.0.0'
 
 services:  
   hunter-backend:
-    image: hunter-backend
+    image: msc24x/hunter-backend:${ENV}
     container_name: hunter-backend
-    profiles:
-      - services
+
     build:
       context: backend
+      args:
+        ENV: ${ENV}
       dockerfile: Dockerfile
-    command: "npm run start-${ENV}"
-    ports:
-      - "8080:8080"
+
   
     
