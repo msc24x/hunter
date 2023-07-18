@@ -7,7 +7,7 @@
     "build": "rm -rf /build && ng build --output-path build/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build-image": "docker compose --env-file backend/.env/.env.prod -f docker-compose.yml build && docker push msc24x/hunter-backend:prod",
+    "push-image": "docker compose --env-file backend/.env/.env.prod -f docker-compose.yml build && docker push msc24x/hunter-backend:prod",
     "serve-image": "sshgo \" sudo docker stop hunter-backend 2> /dev/null && sudo docker rm hunter-backend 2> /dev/null && sudo docker pull msc24x/hunter-backend:prod && sudo docker run --name hunter-backend -dp 8080:8080 msc24x/hunter-backend:prod \""
   },
   "private": true,
