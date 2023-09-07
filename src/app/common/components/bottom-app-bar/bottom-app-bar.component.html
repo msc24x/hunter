@@ -60,15 +60,16 @@
 
 <div id="bottom_app_bar">
     <div class="row">
-      <div id="site_logo">
-        Hunter
-        <div id="site_info">
-          Hunter &copy;2023 ({{version}}) <br> A Project By Maninderpal Singh<br>Simplify the daily coding competitions hosting
-        </div>
-      </div>
       <div class="button" routerLink="/about" id="about">About</div>
-      <div class="button" (click)="openGithub()" id="github_id">GitHub</div>
+      <div class="button" (click)="href('https://cambo.in')" id="about">Creator</div>
+      <div class="button" (click)="openGithub()" id="github_id">Open Source</div>
       <div class="button"  id="privacy_policy" (click)="showPrivacyPolicy(true)">Privacy Policy</div>
       <!--div class="button"  id="terms" (click)="showPopup(true, 'terms')">Terms & Conditions</div-->
-    </div>   
+    </div> 
+    <div id="site_logo">
+        Hunter {{version}}
+        <div id="site_info">
+            Designed & Developed by Maninderpal Singh
+        </div>
+      </div>  
 </div>

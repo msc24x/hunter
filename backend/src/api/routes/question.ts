@@ -52,7 +52,7 @@ router.get('/question/:id/:fileType/:op?', (req, res) => {
 											if (err) {
 												Util.sendResponse(
 													res,
-													resCode.serverErrror
+													resCode.serverError
 												);
 												return;
 											}
@@ -134,7 +134,7 @@ router.post('/question/:id/:fileType', (req, res) => {
 					writeFile(fileName, file, { flag: 'w' }, (err) => {
 						if (err) {
 							console.log(err);
-							Util.sendResponse(res, resCode.serverErrror);
+							Util.sendResponse(res, resCode.serverError);
 							return;
 						}
 						Util.sendResponse(res, resCode.success);
@@ -213,14 +213,14 @@ router.post('/question', (req, res) => {
 					},
 					(err) => {
 						console.log(err);
-						Util.sendResponse(res, resCode.serverErrror);
+						Util.sendResponse(res, resCode.serverError);
 					}
 				);
 			},
 
 			(err) => {
 				console.log(err);
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 			}
 		);
 	});
@@ -253,7 +253,7 @@ router.put('/question', (req, res) => {
 					models.questions.update(params, (err) => {
 						if (err) {
 							console.log(err);
-							Util.sendResponse(res, resCode.serverErrror);
+							Util.sendResponse(res, resCode.serverError);
 							return;
 						}
 

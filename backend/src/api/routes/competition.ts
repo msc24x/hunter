@@ -21,7 +21,7 @@ router.delete('/competition/:id', (req, res) => {
 
 				models.competitions.delete({ id: req.params.id }, (err) => {
 					if (err) {
-						Util.sendResponse(res, resCode.serverErrror);
+						Util.sendResponse(res, resCode.serverError);
 						return;
 					}
 					Util.sendResponse(res, resCode.success);
@@ -36,7 +36,7 @@ router.delete('/competition/:id', (req, res) => {
 				});
 			},
 			(err) => {
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 			}
 		);
 	});
@@ -54,7 +54,7 @@ router.post('/competition', (req, res) => {
 		models.competitions.add(user.id, title, (err, rows) => {
 			if (err) {
 				console.log(err);
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 				return;
 			}
 
@@ -96,7 +96,7 @@ router.put('/competition', (req, res) => {
 				models.competitions.update(competition, (err) => {
 					if (err) {
 						console.log(err);
-						Util.sendResponse(res, resCode.serverErrror);
+						Util.sendResponse(res, resCode.serverError);
 						return;
 					}
 					Util.sendResponse(res, resCode.success);
@@ -105,7 +105,7 @@ router.put('/competition', (req, res) => {
 
 			(err) => {
 				console.log(err);
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 			}
 		);
 	});
@@ -197,7 +197,7 @@ router.get('/competitions', (req, res) => {
 	}
 
 	let errCallback = () => {
-		Util.sendResponse(res, resCode.serverErrror);
+		Util.sendResponse(res, resCode.serverError);
 		return 0;
 	};
 

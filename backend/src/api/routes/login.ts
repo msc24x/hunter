@@ -20,8 +20,8 @@ router.get('/oauth/github', (req, res) => {
 		fetch("https://github.com/login/oauth/access_token", {
 			method: "POST",
 			body : JSON.stringify({
-				client_id : process.env.cid,
-				client_secret : process.env.csec,
+				client_id : process.env.CID,
+				client_secret : process.env.CSEC,
 				code : req.query.code
 				}),
 			headers: {
@@ -36,12 +36,12 @@ router.get('/oauth/github', (req, res) => {
 			res.redirect(`https://hunter.cambo.in`)
 		}).catch(err=>{
 			console.log(err)
-			Util.sendResponse(res, resCode.serverErrror, "Could not get access token")
+			Util.sendResponse(res, resCode.serverError, "Could not get access token")
 		})
 	}
 	else {
 		res.redirect(
-			`https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.cid}`
+			`https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.CID}`
 		);
 	}
 });
@@ -63,7 +63,7 @@ router.post('/logout', (req, res) => {
 			(err) => {
 				if (err) {
 					console.log(err);
-					Util.sendResponse(res, resCode.serverErrror);
+					Util.sendResponse(res, resCode.serverError);
 					return;
 				}
 				res.clearCookie('session_id');
@@ -110,7 +110,7 @@ router.post('/register', (req, res) => {
 			(err, rows) => {
 				if (err) {
 					console.log(err);
-					Util.sendResponse(res, resCode.serverErrror);
+					Util.sendResponse(res, resCode.serverError);
 					return;
 				}
 				if (rows.length != 0) {
@@ -128,7 +128,7 @@ router.post('/register', (req, res) => {
 					(err) => {
 						if (err) {
 							console.log(err);
-							Util.sendResponse(res, resCode.serverErrror);
+							Util.sendResponse(res, resCode.serverError);
 							return;
 						}
 						authenticate(

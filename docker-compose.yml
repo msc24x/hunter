@@ -4,12 +4,16 @@ services:
   hunter-backend:
     image: msc24x/hunter-backend:${ENV}
     container_name: hunter-backend
-
+    ports:
+      - 8080:8080
+    restart: always
+    
     build:
       context: backend
       args:
         ENV: ${ENV}
       dockerfile: Dockerfile
+      
 
   
     

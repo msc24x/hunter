@@ -47,7 +47,13 @@ export class HomeComponent implements OnInit {
 
     for (let target of targets) {
       const observer = new IntersectionObserver(entries => {
-        target.classList.toggle( 'inview_slide__active', entries[0].isIntersecting );
+          for (let entry of entries) {
+              if(entry.isIntersecting)
+                target.classList.add( 'inview_slide__active' );
+            else
+                target.classList.remove( 'inview_slide__active' );
+              
+        }
       });
       observer.observe(target)
     }

@@ -39,7 +39,10 @@
     animation-iteration-count: infinite;
   }
 }
-
+.inview_slide{
+    opacity: 0;
+    transition-duration: 300ms;
+}
 #login_tag{
   font-size: 4.5rem;
   text-align: right;
@@ -72,7 +75,7 @@
 
 #tagline{
   margin-top: 256px;
-  font-size: 6rem;
+  font-size: 5rem;
 }
 
 #tagline_small{
@@ -202,7 +205,7 @@
   }
 
   #tagline{
-    margin-top: 156px;
+    margin-top: 120px;
     padding-left: 24px;
     font-size: 3rem;
     text-shadow: 0 84px 700px rgba(82, 177, 255, 0.795);
@@ -247,7 +250,7 @@
   }
 
   #tagline{
-    margin-top: 156px;
+    margin-top: 90px;
     padding-left: 12px;
     font-size: 2.2rem;
     text-shadow: 0 56px 100px rgba(82, 177, 255, 0.795);

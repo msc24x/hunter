@@ -8,7 +8,7 @@ export const domainName = "hunter.cambo.in"
 export const environment = {
   production: true,
   apiUrl: `${protocol}://${domainName}/api`,
-  version : "v1.9.8"
+  version : "v1.9.9"
 };
 
 export interface UserInfo{
@@ -82,7 +82,7 @@ export const templates = {
 }
 
 export const resCode = {
-  serverErrror : 503,
+  serverError : 503,
   success : 200,
   accepted : 202,
   created : 201,

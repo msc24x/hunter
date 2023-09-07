@@ -12,7 +12,7 @@ router.get('/user', (req, res) => {
 		{ id: req.query.id, email: req.query.email },
 		(err, rows: UserInfo[]) => {
 			if (err) {
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 				return;
 			}
 
@@ -44,7 +44,7 @@ router.put('/user', (req, res) => {
 		models.users.update(updateUser, (err) => {
 			if (err) {
 				console.log(err);
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 				return;
 			}
 			Util.sendResponse(res, resCode.success);

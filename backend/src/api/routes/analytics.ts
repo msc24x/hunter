@@ -25,7 +25,7 @@ router.get('/status/:subject', (req, res) => {
 		models.users.count((err, rows) => {
 			if (err) {
 				console.log(err);
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 				return;
 			}
 
@@ -41,7 +41,7 @@ router.get('/status/:subject', (req, res) => {
 		models.competitions.count((err, rows) => {
 			if (err) {
 				console.log(err);
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 				return;
 			}
 

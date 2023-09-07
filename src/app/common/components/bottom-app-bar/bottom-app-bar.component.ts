@@ -22,6 +22,10 @@ export class BottomAppBarComponent implements OnInit {
 
   openGithub(){
     window.open('https://github.com/msc24x/hunter', "_blank")
+}
+    
+    href(link : string){
+    window.open(link, "_blank")
   }
 
 }

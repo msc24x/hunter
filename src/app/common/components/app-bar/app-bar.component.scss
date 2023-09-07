@@ -5,15 +5,12 @@
 div.appBar{
   padding-block: 24px;
   width: 100%;
-  position: absolute;
-  left: 0px;
-  top : 0px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   justify-items: center;
   align-items: center;
-  background-color: colors.$text_white;
+  margin-bottom: 7rem;
 
   #logout_btn{
     background-color: rgb(255, 244, 244);
@@ -36,7 +33,7 @@ div.appBar{
 
     #app_title_full{
       cursor: pointer;
-
+      font-size: 2.5rem;
       &:hover{
         transform: translateX(-4px) rotateZ(-2deg);
         transition: 400ms;

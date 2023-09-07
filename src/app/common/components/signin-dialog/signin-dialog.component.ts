@@ -72,7 +72,7 @@ export class SigninDialogComponent implements OnInit {
     this.toggleSubmitButton(true);
 
     switch (res.status) {
-      case resCode.serverErrror:
+      case resCode.serverError:
         this.registerResponseMessage = "*Server side exception, please try again later";
         break;
       case resCode.forbidden:

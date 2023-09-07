@@ -11,7 +11,7 @@
   </div>
 </popup>
 
-<div id="settings_label" class="flex-row justify-sb wrap">
+<div id="settings_label" class="flex-row wrap">
   Workbench for {{user.name || user.email}}
   <div class="largeButton" (click)="showEditProfileForm(true)">Edit Profile</div>
 
@@ -24,8 +24,6 @@
     <dashboard-card title="{{competitionsMetaData.live}}" message="Competitions Live Right Now"></dashboard-card>
     <dashboard-card title="{{competitionsMetaData.public}}" message="Number of Public Competitions"></dashboard-card>
   </div>
-    
-
   <create-dialog></create-dialog>
 </div>
 

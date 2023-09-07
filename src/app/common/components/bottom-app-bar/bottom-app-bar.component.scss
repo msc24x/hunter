@@ -14,10 +14,29 @@ popup{
     height: fit-content;
     padding-block: 64px;
     width: 100%;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap-reverse;
+    gap: 2rem;
+    font-family: appFont;
+
+     #site_logo{
+        font-weight: bold;
+        font-size: 2rem;
+        #site_info{
+          font-size: 1rem;
+          font-family: appFont;
+          font-weight: 100;
+          color : gray;
+          margin-right : 64px;
+          margin-bottom: 24px;
+        }
+      }
     
 
     .row{
-      font-family: appFont;
+      
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -26,29 +45,20 @@ popup{
       padding-inline: 10%;
 
 
-      #site_logo{
-        font-weight: bold;
-        font-size: 2rem;
-        #site_info{
-          font-size: 1rem;
-          font-family: appFont;
-          font-weight: normal;
-          color : gray;
-          margin-right : 64px;
-          margin-bottom: 24px;
-        }
-      }
+     
 
       div{
         cursor: default;
       }
       
       .button{
+        opacity: 0.8;
         margin-inline: 12px;
+        cursor: pointer;
       }
 
       .button:hover{
-        font-weight: bolder;
+        text-decoration: underline;
       }
 
     }

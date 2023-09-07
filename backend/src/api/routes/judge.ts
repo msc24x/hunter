@@ -114,13 +114,13 @@ router.post('/execute', (req, res) => {
 							});
 						} catch (err) {
 							console.log(err);
-							Util.sendResponse(res, resCode.serverErrror);
+							Util.sendResponse(res, resCode.serverError);
 						}
 					},
 					(err) => {
 						if (err) {
 							console.log(err);
-							Util.sendResponse(res, resCode.serverErrror);
+							Util.sendResponse(res, resCode.serverError);
 							return;
 						}
 					}
@@ -184,7 +184,7 @@ router.get('/submission/:lang', (req, res) => {
 								else
 									Util.sendResponse(
 										res,
-										resCode.serverErrror
+										resCode.serverError
 									);
 								return;
 							}

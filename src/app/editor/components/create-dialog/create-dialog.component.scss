@@ -49,13 +49,15 @@
   align-items: center;
   font-size: 1.5rem;
   width: fit-content;
+  margin: 2rem;
   cursor: pointer;
-
+  
   #plus_btn{
-    background-color: whitesmoke;
-    width: 55px;
-    height: 55px;
+      background-color: whitesmoke;
+      transition: 300ms;
     font-size: 24px;
+    padding: 1rem;
+    padding-inline: 2rem;
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -74,20 +76,12 @@
 
 #create_btn:hover{
   #plus_btn{
-    animation-name: elivate;
-    animation-duration: 0.2s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-  }
-}
-
-@keyframes elivate {
-  100%{
     transform: scale(1.1);
     background-color: black;
     color : whitesmoke;
   }
 }
+
 
 @keyframes outline {
   100%{

@@ -50,7 +50,7 @@ export function authenticate(
 				console.log(err);
 				if (failSilent)
 					{callback(req, res, {id:"-1",email:"",name:""}); return;}
-				Util.sendResponse(res, resCode.serverErrror);
+				Util.sendResponse(res, resCode.serverError);
 				return;
 			}
 			if (rows.length == 0) {
@@ -88,7 +88,7 @@ export function authenticate(
 											{callback(req, res, {id:"-1",email:"",name:""}); return;}
 										Util.sendResponse(
 											res,
-											resCode.serverErrror
+											resCode.serverError
 										);
 										return;
 									}
@@ -121,7 +121,7 @@ export function authenticate(
 					console.log(err);
 					if (failSilent)
 						{callback(req, res, {id:"-1",email:"",name:""}); return;}
-					Util.sendResponse(res, resCode.serverErrror);
+					Util.sendResponse(res, resCode.serverError);
 					return;
 				}
 				if (rows.length == 0) {
@@ -138,7 +138,7 @@ export function authenticate(
 						console.log(err);
 						if (failSilent)
 							{callback(req, res, {id:"-1",email:"",name:""}); return;}
-						Util.sendResponse(res, resCode.serverErrror);
+						Util.sendResponse(res, resCode.serverError);
 						return;
 					}
 
@@ -173,7 +173,7 @@ export function authenticate(
 			if (primaryEmails.length == 0) {
 				if (failSilent)
 					{callback(req, res, {id:"-1",email:"",name:""}); return;}
-				Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, No primary email detected")
+				Util.sendResponse(res, resCode.serverError, "Some error occurred while logging in using github, No primary email detected")
 				return
 			}
 
@@ -184,7 +184,7 @@ export function authenticate(
 					console.log(err)
 					if (failSilent)
 						{callback(req, res, {id:"-1",email:"",name:""}); return;}
-					Util.sendResponse(res, resCode.serverErrror)
+					Util.sendResponse(res, resCode.serverError)
 					return
 				}
 
@@ -194,7 +194,7 @@ export function authenticate(
 						console.log(err)
 						if (failSilent)
 							{callback(req, res, {id:"-1",email:"",name:""}); return;}
-						Util.sendResponse(res, resCode.serverErrror)
+						Util.sendResponse(res, resCode.serverError)
 						return
 					}
 
@@ -203,7 +203,7 @@ export function authenticate(
 							console.log(err)
 							if (failSilent)
 								{callback(req, res, {id:"-1",email:"",name:""}); return;}
-							Util.sendResponse(res, resCode.serverErrror)
+							Util.sendResponse(res, resCode.serverError)
 							return
 						}
 
@@ -219,7 +219,7 @@ export function authenticate(
 							console.log(err)
 							if (failSilent)
 								{callback(req, res, {id:"-1",email:"",name:""}); return;}
-							Util.sendResponse(res, resCode.serverErrror)
+							Util.sendResponse(res, resCode.serverError)
 							return
 						}
 
@@ -235,7 +235,7 @@ export function authenticate(
 			console.log(err)
 			if (failSilent)
 				{callback(req, res, {id:"-1",email:"",name:""}); return;}
-			Util.sendResponse(res, resCode.serverErrror, "Some error occured while logging in using github, try signing in fresh")
+			Util.sendResponse(res, resCode.serverError, "Some error occurred while logging in using github, try signing in fresh")
 		})
 	} else {
 		if (failSilent)

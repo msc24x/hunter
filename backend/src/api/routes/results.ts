@@ -15,7 +15,7 @@ router.get('/result/c/:id', (req, res) => {
 	models.results.getCompetitionScores(req.params.id, (rows, err) => {
 		if (err) {
 			console.log(err);
-			Util.sendResponse(res, resCode.serverErrror);
+			Util.sendResponse(res, resCode.serverError);
 			return;
 		}
 
@@ -43,7 +43,7 @@ router.get('/result', (req, res) => {
 			(rows, err) => {
 				if (err) {
 					console.log(err);
-					Util.sendResponse(res, resCode.serverErrror);
+					Util.sendResponse(res, resCode.serverError);
 					return;
 				}
 				Util.sendResponseJson(res, resCode.success, rows);

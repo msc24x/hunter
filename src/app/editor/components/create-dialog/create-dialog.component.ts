@@ -50,7 +50,7 @@ export class CreateDialogComponent implements OnInit {
     this.loading = false
 
     switch (res.status) {
-      case resCode.serverErrror:
+      case resCode.serverError:
         this.responseMessage = "*Server side exception, please try again later";
         break;
       case resCode.forbidden:

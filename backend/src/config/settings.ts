@@ -6,7 +6,7 @@ export const execCode = {
 	memoryExceeded: 5,
 };
 export const resCode = {
-	serverErrror: 503,
+	serverError: 503,
 	success: 200,
 	accepted: 202,
 	created: 201,
