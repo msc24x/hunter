@@ -29,8 +29,7 @@ export class DatabaseProvider {
 		
 		this._dbConnection.connect((err) => {
 			if (err) {
-				console.log(err);
-				return;
+				throw err;
 			}
 			console.log(
 				`Connection to database '${this._connectionConfig.database}' : Initialized`
