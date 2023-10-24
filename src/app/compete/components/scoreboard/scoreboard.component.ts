@@ -29,5 +29,9 @@ export class ScoreboardComponent implements OnInit {
       this.scores = res.body as Array<result>
     })
   }
+  
+  ngOnDestroy(): void {
+    clearInterval(this.interval10s)
+  }
 
 }
