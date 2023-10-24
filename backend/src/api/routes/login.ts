@@ -33,7 +33,7 @@ router.get('/oauth/github', (req, res) => {
 			return res.json()
 		}).then(body =>{
 			res.cookie("github_token", body.access_token)
-			res.redirect(`https://hunter.cambo.in`)
+			res.redirect(`${process.env.PROTOCOL}://${process.env.DOMAIN}`)
 		}).catch(err=>{
 			console.log(err)
 			Util.sendResponse(res, resCode.serverError, "Could not get access token")

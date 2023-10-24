@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserInfo } from 'src/environments/environment';
+import { UserInfo, domainName, protocol } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
@@ -69,7 +69,7 @@ export class AppBarComponent implements OnInit {
   }
 
   redirectToGitHubOAuth(){
-    window.open("https://hunter.cambo.in/api/oauth/github")
+    window.open(`${protocol}://${domainName}/api/oauth/github`)
   }
 
   sendLogoutRequest(){

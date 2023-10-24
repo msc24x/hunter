@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserInfo, environment } from 'src/environments/environment';
+import { UserInfo, domainName, environment, protocol } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
   }
 
   redirectToGitHubOAuth(){
-    window.open("https://hunter.cambo.in/api/oauth/github")
+    window.open(`${protocol}://${domainName}/api/oauth/github`)
   }
 
   animateInView() {

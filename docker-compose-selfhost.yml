@@ -6,6 +6,8 @@ services:
     image: mysql
     profiles:
       - services
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
       - "${DB_PORT}:${DB_PORT}"
   hunter-backend:
@@ -16,9 +18,10 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    command: "npm run start-${ENV}"
     depends_on:
       - hunter-database
+    environment:
+      - ENV=${ENV}
     ports:
       - "8080:8080"
   

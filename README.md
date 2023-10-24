@@ -40,6 +40,28 @@ Any successful or wrong submissions are evaluated, whose results the participant
 
 The results of all the questions are accumulated for all the participants in the live scoreboard that rank wise displays their performance.
 
+## Self-host instructions
+1. Download the latest source.
+2. Have an `.env` file present. Here is an example.
+	```
+	ENV=local
+	PROTOCOL=http
+	DOMAIN=localhost:8080
+	API_PORT=8080
+	DB_HOST=hunter-database
+	DB_USER=<root_or_any_other_user>
+	DB_PORT=3306
+	DB_PASSWORD=<set_a_password>
+	MYSQL_ROOT_PASSWORD=<set_a_password>
+	DB_NAME=hunter
+	CID=<your_github_client_id>
+	CSEC=<your_github_client_secret>
+	```
+3. `cd` into project root directory, and run `docker compose --env-file <path_to_env_file> -f docker-compose-selfhost.yml up hunter-database -d`
+4. Database should be up. Open a terminal into the container, create a database named `hunter` and restore the schemas from `backend/schemas/`
+5. Run backend `docker compose --env-file <path_to_env_file> -f docker-compose-selfhost.yml up hunter-backend -d`
+6. Run frontend `npm install` and `npm run start`
+
 ## Contribute
 ![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)

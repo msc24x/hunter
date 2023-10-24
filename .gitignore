@@ -2453,3 +2453,5 @@ backend/.env/presets/.env.planetscale.prod
 backend/.env/presets/.env.self
 .ssh/private.key
 push-envs.bat
+.env/.env.selfhost
+backend/.env/presets/.env.selfhost
