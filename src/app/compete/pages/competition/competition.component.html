@@ -76,6 +76,7 @@
 
   <div *ngIf="!hasEnded && isAuthenticated" id="editor"></div>
 
+  <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card>
   <div id="submit_controls" *ngIf="questionSelected != -1  && isAuthenticated" class="row">
     <div class="button" id="submit_code_btn" (click)="postSolution()">Submit</div>
     <div class="button"  id="submit_code_samples_btn" (click)="postSolution(true)">Run Sample Cases</div>
