@@ -3,18 +3,12 @@
     font-size: 1.1rem;
     margin: 16px;
     padding: 16px;
-    background-color: rgba(245, 222, 179, 0.589);
     border-radius: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    border : 1px solid rgba(255, 205, 111, 0);
-  
-    &:hover{
-      border : 1px solid rgb(185, 135, 40);
-    }
-  
+    
     #close_tip_btn > &{
       pointer-events: none;
     }
@@ -28,3 +22,23 @@
       }
     }
   }
+
+.default-type {
+  background-color: rgba(245, 222, 179, 0.589);
+    border : 1px solid rgba(255, 205, 111, 0);
+  
+    &:hover{
+      border : 1px solid rgb(185, 135, 40);
+    }
+  
+}
+
+.red-type {
+background-color: rgba(245, 190, 179, 0.589);
+    border : 1px solid rgba(255, 205, 111, 0);
+  
+    &:hover{
+      border : 1px solid rgb(185, 81, 40);
+    }
+  
+}

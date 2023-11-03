@@ -32,6 +32,10 @@ export class AppBarComponent implements OnInit {
       this.isAuthenticated = val
     })
   }
+  
+  href(link : string){
+    window.open(link, "_blank")
+  }
 
   ngOnInit(): void {
     const navBar = document.getElementById("navBarCompact") as HTMLElement;

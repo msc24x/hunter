@@ -10,6 +10,9 @@ export class InfoCardComponent implements OnInit {
   @Input()
   persist = false
 
+  @Input()
+  type : "default" | "red" = "default"
+
   constructor() { }
 
   ngOnInit(): void {
