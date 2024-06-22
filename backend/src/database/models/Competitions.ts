@@ -137,7 +137,6 @@ export class Competitions {
 				delete row.host_user__name
 				return row
 			})
-			console.log(rows)
 			callback(rows as Array<CompetitionInfo>);
 		});
 	}
