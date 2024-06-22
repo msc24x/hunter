@@ -2455,3 +2455,4 @@ backend/.env/presets/.env.self
 push-envs.bat
 .env/.env.selfhost
 backend/.env/presets/.env.selfhost
+static-update.bat

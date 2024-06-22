@@ -179,7 +179,7 @@ make it private instead of deleting.<br><br>
     </div>
   </div>
  
- <textarea *ngIf="!preview_mode" id = "text_statement" maxlength="2048" rows="15" [value]="questionSelectedInfo.statement"></textarea>
+ <textarea [hidden]="preview_mode" id = "text_statement" maxlength="2048" rows="15" [value]="questionSelectedInfo.statement"></textarea>
  <ng-katex *ngIf="preview_mode" id="text_statement_preview" [data]="questionSelectedInfo.statement"></ng-katex>
 
 

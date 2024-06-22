@@ -95,7 +95,7 @@ export class CompeteComponent implements OnInit {
   routeToCompetition(){
     this.loading = true
     const id = document.getElementById("competition_id_text") as HTMLInputElement
-    this.router.navigate(["/hunt/"+id.valueAsNumber])
+    this.router.navigate(["/compete/p/"+id.valueAsNumber])
   }
 
 }

@@ -17,7 +17,8 @@ export interface UserInfo{
 
 export interface CompetitionInfo{
   id : string,
-  host_user_id : string,
+  host_user_id: string,
+  host_user_info?: UserInfo,
   title : string,
   description : string,
   created_on : string,
