@@ -24,7 +24,11 @@ export class AboutComponent implements OnInit {
 
   ngOnInit(): void {
 
-    window.scroll(0,0)
+    window.scroll(0, 0)
+    
+    if (this.isAuthenticated) {
+      return
+    }
 
     this.authService.authenticate_credentials().subscribe(res=>{
       if(res.status == 202){

@@ -34,7 +34,7 @@
     <li *ngFor="let com of this.competitionsList">
       <div class = "competition_card" routerLink="/{{this.route}}/{{com.id}}">
         <div id = "c_title">{{com.title}}</div>
-        <div id = "c_host_user">By {{com.host_user_id | userInfoPipe | async}}</div>
+        <div id = "c_host_user">By {{com.host_user_info?.name || "Anonymous"}} (User ID: {{com.host_user_id}})</div>
         <div id ="start_schedule"
           [style.color]="(com.start_schedule | isLiveStatusPipe : com.duration) ? '#D2122Ebb' : 'colors.$text_black' "
         >
@@ -45,6 +45,8 @@
         <p id = "c_about">{{com.description}}</p>
       </div>
     </li>
-    <li><div id="list_end">No more competitions available!</div></li>
+    
+    <li *ngIf="!loading && competitionsList !== null"><div id="list_end">No more competitions available!</div></li>
+    <li *ngIf="loading || competitionsList === null"><div id="list_end">Loading competitions...</div></li>
   </ul>
 </div>

@@ -57,23 +57,27 @@ export class EditorComponent implements OnInit {
 
 		this.elem = document.getElementById('log');
 
-		this.loading = true;
-		this.authService.authenticate_credentials().subscribe(
-			(res) => {
-				if (res.status == 202) {
-					const body = res.body as UserInfo;
-					this.user = body;
-					this.authService.user = this.user;
-					this.authService.isAuthenticated.next(true);
+		if (!this.isAuthenticated) {
+			this.loading = true;
+			this.authService.authenticate_credentials().subscribe(
+				(res) => {
+					if (res.status == 202) {
+						const body = res.body as UserInfo;
+						this.user = body;
+						this.authService.user = this.user;
+						this.authService.isAuthenticated.next(true);
+						this.loading = false;
+						this.fetchCompetitionInfo();
+					}
+				},
+				(err) => {
 					this.loading = false;
-					this.fetchCompetitionInfo();
+					this.router.navigate(['/home']);
 				}
-			},
-			(err) => {
-				this.loading = false;
-				this.router.navigate(['/home']);
-			}
-		);
+			);
+		} else {
+			this.fetchCompetitionInfo();
+		}
 
 		document.onkeydown = (event) => {
 			if (

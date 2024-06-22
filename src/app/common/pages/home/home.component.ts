@@ -63,6 +63,10 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.animateInView()
 
+    if (this.isAuthenticated) {
+      return
+    }
+
     this.authService.authenticate_credentials().subscribe(res=>{
       if(res.status == 202){
         const body = res.body as UserInfo

@@ -23,7 +23,7 @@ export class DatabaseProvider {
 			password: this._connectionConfig.password,
 			database: this._connectionConfig.database,
 			ssl: {
-				rejectUnauthorized : true
+				rejectUnauthorized : false
 			}
 		});
 		

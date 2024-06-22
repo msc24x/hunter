@@ -88,6 +88,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
+		if (this.isAuthenticated) {
+			return
+		}
 		this.subscriptions.push(
 			this.authService.authenticate_credentials().subscribe({
 				next: (res) => {
@@ -103,7 +106,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 							)
 						) {
 							alert(
-								'Participating in competitions is not recommended on mobile phones. Hunter is designed to be best viewed on desktops'
+								'Participating in competitions is not recommended on your device. Hunter is designed to be best viewed on desktops'
 							);
 						}
 					}

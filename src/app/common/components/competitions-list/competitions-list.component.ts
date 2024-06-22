@@ -28,6 +28,7 @@ export class CompetitionsListComponent implements OnInit {
 	title = '';
 	liveStatus = 'all';
 	orderBy: 'any' | 'latest' | 'oldest' = 'latest';
+	debounceTimeout?: NodeJS.Timeout
 
 	orderByCode = { any: 0, latest: -1, oldest: 1 };
 
@@ -53,9 +54,7 @@ export class CompetitionsListComponent implements OnInit {
 		this.updateList();
 	}
 
-	updateList() {
-		this.loading = true;
-
+	_updateList() {
 		this.competitionsDataService
 			.getPublicCompetitions({
 				title: this.title,
@@ -68,5 +67,15 @@ export class CompetitionsListComponent implements OnInit {
 				this.competitionsList = res.body;
 				this.loading = false;
 			});
+	}
+
+	updateList() {
+		this.loading = true;
+
+		clearTimeout(this.debounceTimeout)
+		this.debounceTimeout = setTimeout(() => {
+			this._updateList()
+		}, 300)
+		
 	}
 }

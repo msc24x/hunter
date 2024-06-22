@@ -69,6 +69,10 @@ export class CompeteComponent implements OnInit {
 
   ngOnInit(): void {
 
+    if (this.isAuthenticated) {
+      return
+    }
+
     this.authService.authenticate_credentials().subscribe(
       {
         next : res=>{

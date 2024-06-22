@@ -71,7 +71,7 @@ export class User {
 		params: any,
 		callback: (err: MysqlError | null, rows: any) => void
 	) {
-		let query = 'select * from users where true';
+		let query = 'select id, email, name from users where true';
 		let args = [];
 
 		if (params.id) {

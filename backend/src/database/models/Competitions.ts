@@ -77,11 +77,17 @@ export class Competitions {
 		callback: (competitions: Array<CompetitionInfo>) => void,
 		errCallback: (err: MysqlError) => void
 	) {
-		let query = 'select * from competitions where true = true ';
+		let query =
+			`select
+				competitions.*,
+				users.id as host_user__id, users.name as host_user__name
+				from competitions
+					inner join users on users.id = competitions.host_user_id
+				where true = true `;
 		let args = [];
 
 		if (params.id) {
-			query += `and id = ? `;
+			query += `and competitions.id = ? `;
 			args.push(params.id);
 		}
 
@@ -121,6 +127,17 @@ export class Competitions {
 				errCallback(err);
 				return;
 			}
+			rows = (rows).map((row: any) => {
+				row.host_user_info = {
+					id: row.host_user__id,
+					name: row.host_user__name,
+					email: ""
+				}
+				delete row.host_user__id
+				delete row.host_user__name
+				return row
+			})
+			console.log(rows)
 			callback(rows as Array<CompetitionInfo>);
 		});
 	}

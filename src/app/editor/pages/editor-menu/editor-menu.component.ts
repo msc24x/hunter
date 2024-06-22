@@ -92,44 +92,53 @@ export class EditorMenuComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.authService.authenticate_credentials().subscribe({
-			next: (res) => {
-				if (res.status == 202) {
-					// save user info
-					const body = res.body as UserInfo;
-					this.user = {
-						id: body.id,
-						email: body.email,
-						name: body.name,
-					};
 
-					// save user info for all components subscribed to the service
-					this.authService.user = this.user;
-					this.isAuthenticated = true;
-					this.authService.isAuthenticated.next(true);
-
-					this.loading += 1;
-					// fetch user's all created competitions
-					this.competitionsDataService
-						.getPublicCompetitions({
-							host_user_id: this.user.id,
-						})
-						.subscribe({
-							next: (res) => {
-								this.userCompetitions = res.body;
-								this.calculateCompetitionsMetaData()
-								this.loading -= 1;
-							},
-							error: (err) => {
-								this.userCompetitions = err.error;
-								this.loading -= 1;
-							},
-						});
-				}
-			},
-			error: (err) => {
-				this.router.navigate(['/home']);
-			},
-		});
+		const fetchData = () => {
+			this.loading += 1;
+			// fetch user's all created competitions
+			this.competitionsDataService
+				.getPublicCompetitions({
+					host_user_id: this.user.id,
+				})
+				.subscribe({
+					next: (res) => {
+						this.userCompetitions = res.body;
+						this.calculateCompetitionsMetaData()
+						this.loading -= 1;
+					},
+					error: (err) => {
+						this.userCompetitions = err.error;
+						this.loading -= 1;
+					},
+				});
+		}
+		
+		if (!this.isAuthenticated) {
+			this.authService.authenticate_credentials().subscribe({
+				next: (res) => {
+					if (res.status == 202) {
+						// save user info
+						const body = res.body as UserInfo;
+						this.user = {
+							id: body.id,
+							email: body.email,
+							name: body.name,
+						};
+	
+						// save user info for all components subscribed to the service
+						this.authService.user = this.user;
+						this.isAuthenticated = true;
+						this.authService.isAuthenticated.next(true);
+						fetchData()
+						
+					}
+				},
+				error: (err) => {
+					this.router.navigate(['/home']);
+				},
+			});
+		} else {
+			fetchData()
+		}
 	}
 }

@@ -166,7 +166,7 @@ export function authenticate(
 		}
 		).then(body => {
 			return body.json()
-		}).then((body)=>{
+		}).then((body) => {
 			let emails = body as Array<{email :string, primary : boolean, verified : boolean, visibility : string}>
 			let primaryEmails = emails.filter(val=> val.primary == true)
 
