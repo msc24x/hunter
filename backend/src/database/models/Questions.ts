@@ -1,4 +1,4 @@
-import { Connection, MysqlError } from 'mysql';
+import { Connection, QueryError } from 'mysql2';
 import { QuestionInfo } from '../../config/types';
 import { Competitions } from './Competitions';
 import Container, { Inject, Service } from 'typedi';
@@ -12,7 +12,7 @@ export class Questions {
 		this.dbConnection = this.dbService.getInstance();
 	}
 
-	delete(params: any, callback: (err: MysqlError | null) => void) {
+	delete(params: any, callback: (err: QueryError | null) => void) {
 		let args = [];
 		let query = 'delete from questions where ';
 
@@ -51,19 +51,8 @@ export class Questions {
 				return;
 			}
 
-			let questions: Array<QuestionInfo> = [];
-			for (const row of rows) {
-				questions.push({
-					id: row.id,
-					competition_id: row.competition_id,
-					title: row.title,
-					statement: row.statement,
-					created_on: row.date_created,
-					points: row.points,
-					sample_cases: row.sample_cases,
-					sample_sols: row.sample_sols,
-				} as QuestionInfo);
-			}
+			let questions = rows as Array<QuestionInfo>;
+
 			callback(questions);
 		});
 	}
@@ -71,7 +60,7 @@ export class Questions {
 	add(
 		competition_id: string,
 		callback: (question_id: string) => void,
-		errCallback: (err: MysqlError | null) => void
+		errCallback: (err: QueryError | null) => void
 	) {
 		this.dbConnection.query(
 			` insert into questions (competition_id, date_created) values(?, NOW()) ; `,
@@ -85,19 +74,21 @@ export class Questions {
 					` select * from questions where competition_id = ? order by date_created ;`,
 					[competition_id],
 					(err, rows) => {
-						if (err || rows.length == 0) {
+						var questions = rows as Array<QuestionInfo>;
+
+						if (err || questions.length == 0) {
 							errCallback(err);
 							return;
 						}
 
-						callback(rows[0].id);
+						callback(questions[0].id);
 					}
 				);
 			}
 		);
 	}
 
-	update(newQuestion: any, callback: (err: MysqlError | null) => void) {
+	update(newQuestion: any, callback: (err: QueryError | null) => void) {
 		let args = [
 			newQuestion.title,
 			newQuestion.statement,

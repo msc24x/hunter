@@ -1,4 +1,4 @@
-import mysql, { MysqlError } from 'mysql';
+import mysql, { QueryError } from 'mysql2';
 import { CompetitionInfo } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import Container, { Inject, Service } from 'typedi';
@@ -22,7 +22,7 @@ export class Competitions {
 
 	update(
 		newCompetition: any,
-		callback: (err: mysql.MysqlError | null) => void
+		callback: (err: QueryError | null) => void
 	) {
 		let args = [
 			newCompetition.title,
@@ -53,7 +53,7 @@ export class Competitions {
 	add(
 		host_user_id: string,
 		title: string,
-		callback: (err: mysql.MysqlError | null, rows: any) => void
+		callback: (err: QueryError | null, rows: any) => void
 	) {
 		this.dbConnection.query(
 			` insert into competitions( host_user_id, title, created_on, rating, public, start_schedule) values( ?, ?, NOW() , 0, false, NOW() )  ;`,
@@ -75,7 +75,7 @@ export class Competitions {
 		dateOrder: 1 | 0 | -1,
 		isPublic: true | false | -1,
 		callback: (competitions: Array<CompetitionInfo>) => void,
-		errCallback: (err: MysqlError) => void
+		errCallback: (err: QueryError) => void
 	) {
 		let query =
 			`select
@@ -127,7 +127,9 @@ export class Competitions {
 				errCallback(err);
 				return;
 			}
-			rows = (rows).map((row: any) => {
+			var competitions = rows as Array<CompetitionInfo>
+
+			rows = (competitions).map((row: any) => {
 				row.host_user_info = {
 					id: row.host_user__id,
 					name: row.host_user__name,
@@ -137,11 +139,11 @@ export class Competitions {
 				delete row.host_user__name
 				return row
 			})
-			callback(rows as Array<CompetitionInfo>);
+			callback(competitions);
 		});
 	}
 
-	delete(params: any, callback: (err: MysqlError | null) => void) {
+	delete(params: any, callback: (err: QueryError | null) => void) {
 		let args = [];
 		let query = 'delete from competitions where ';
 
@@ -161,7 +163,7 @@ export class Competitions {
 		});
 	}
 
-	count(callback: (err: MysqlError | null, rows: any) => void) {
+	count(callback: (err: QueryError | null, rows: any) => void) {
 		this.dbConnection.query(
 			' select count(*) as count from competitions;',
 			(err, rows) => {

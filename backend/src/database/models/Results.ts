@@ -1,4 +1,4 @@
-import { MysqlError } from 'mysql';
+import { QueryError } from 'mysql2';
 import Container, { Inject, Service } from 'typedi';
 import { Result } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
@@ -12,7 +12,7 @@ export class Results {
 		this.dbConnection = this.dbService.getInstance();
 	}
 
-	post(params: any, callback: (err: MysqlError | null) => void) {
+	post(params: any, callback: (err: QueryError | null) => void) {
 		let p = 0;
 
 		if (params.result == 0) p = 1;
@@ -35,7 +35,7 @@ export class Results {
 	update(
 		id: string,
 		result: string,
-		callback: (err: MysqlError | null) => void
+		callback: (err: QueryError | null) => void
 	) {
 		let p = 0;
 
@@ -52,7 +52,7 @@ export class Results {
 
 	getCompetitionScores(
 		id: string,
-		callback: (rows: any, err: MysqlError | null) => void
+		callback: (rows: any, err: QueryError | null) => void
 	) {
 		this.dbConnection.query(
 			` select user_id, sum(result) as score, sum(penalities) as penalities from results where competition_id = ? group by user_id order by score desc, penalities;`,
@@ -69,7 +69,7 @@ export class Results {
 
 	findAll(
 		params: any,
-		callback: (rows: any, err: MysqlError | null) => void
+		callback: (rows: any, err: QueryError | null) => void
 	) {
 		let query = 'select * from results where true ';
 		let args = [];

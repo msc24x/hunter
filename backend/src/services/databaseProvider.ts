@@ -1,11 +1,10 @@
 import Container, { Service } from 'typedi';
-import mysql, { Connection } from 'mysql';
+import mysql, { Connection } from 'mysql2';
 import { Questions } from '../database/models/Questions';
 import config from '../config/config';
 import { Competitions } from '../database/models/Competitions';
 import { Results } from '../database/models/Results';
 import { User } from '../database/models/User';
-import { readFileSync } from 'fs';
 
 @Service({ global: true })
 export class DatabaseProvider {
@@ -16,7 +15,6 @@ export class DatabaseProvider {
 	public loaded = false;
 
 	constructor() {
-		
 		this._dbConnection = mysql.createConnection({
 			host: this._connectionConfig.host,
 			user: this._connectionConfig.user,

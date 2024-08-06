@@ -8,7 +8,7 @@ export type QuestionInfo = {
 	competition_id: string;
 	title: string;
 	statement: string;
-	created_on: string;
+	date_created: string;
 	sample_cases: string;
 	sample_sols: string;
 	points: number;
