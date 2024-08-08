@@ -7,6 +7,7 @@ import { CompetitionComponent } from './pages/competition/competition.component'
 import { RouterModule } from '@angular/router';
 import { EditorModule } from '../editor/editor.module';
 import { CompeteRoutingModule } from './compete-routing.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -22,6 +23,7 @@ import { CompeteRoutingModule } from './compete-routing.module';
     EditorModule,
     CompeteRoutingModule,
     RouterModule,
+    FontAwesomeModule,
   ],
   providers : [DatePipe]
 

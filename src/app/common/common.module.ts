@@ -16,6 +16,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { IsLiveStatusPipe, UserInfoPipe } from './pipes/userInfoPipe';
 import { RouterModule } from '@angular/router';
 import { CommonRoutingModule } from './common-routing.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 

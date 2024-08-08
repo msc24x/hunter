@@ -2,14 +2,16 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-#drop-down-list{
+.drop-down-list{
   font-family: appFont;
   background-color: colors.$text_black;
   color: colors.$text_white;
-  padding: 4px;
+  padding-inline: 8px;
+  height: 1.8rem;
   min-width: 64px;
   width: max-content;
   display: flex;
+  align-items: center;
   flex-direction: row;
   text-align: center;
   cursor: pointer;
@@ -22,18 +24,19 @@
 
   li{
     list-style: none;
-
+    height: 1.8rem;
     padding-inline: 12px;
+    display: flex !important;
+    align-items: center;
   }
 
   li:hover{
-    background-color: rgb(44, 44, 44);
+    background-color: rgb(22, 22, 22);
   }
-
 
 }
 
-#drop-down-list:hover{
+.drop-down-list:hover{
   background-color: #3f3f3f;
 }
 

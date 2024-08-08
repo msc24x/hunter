@@ -16,6 +16,9 @@ export interface UserInfo{
   id : string, email : string, name : string
 }
 
+export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go'
+
+
 export interface CompetitionInfo{
   id : string,
   host_user_id: string,
@@ -42,6 +45,14 @@ export type HunterExecutable = {
   }
 
 }
+
+export type ExecutionInfo = {
+  success: boolean,
+  output: string,
+  expected: string,
+  meta: string
+}
+
 
 export type result = {
   user_id : string,
@@ -78,9 +89,10 @@ export const apiEndpoints = {
 export const templates = {
   cpp : "#include <iostream>\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n\t//write code\n\treturn 0;\n}",
   c : "#include\"stdio.h\"\n#include\"string.h\"\n#include\"math.h\"\n#include\"stdlib.h\"\n#include\"ctype.h\"\n#include\"limits.h\"\n#include\"time.h\"\n#include\"stdbool.h\"\n\nint main(){\n\t//write code\n\treturn 0;\n}",
-  py : "#write code",
-  js : "/*write code*/"
-  
+  py : "# write code",
+  js : "/*write code*/",
+  ts: "/*write code*/",
+  go : "package main\nimport \"fmt\"\nfunc main() {\n  fmt.Println(\"Hello, World!\")\n}"
 }
 
 export const resCode = {

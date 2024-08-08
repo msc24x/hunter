@@ -48,7 +48,7 @@ export type HunterExecutable = {
 	};
 
 	solution: {
-		lang: 'py' | 'c' | 'cpp' | 'js';
+		lang: 'py' | 'c' | 'cpp' | 'js' | 'ts' | 'go';
 		code: string;
 	};
 };

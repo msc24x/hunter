@@ -15,6 +15,8 @@ export interface UserInfo{
   id : string, email : string, name : string
 }
 
+export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go'
+
 export interface CompetitionInfo{
   id : string,
   host_user_id: string,
@@ -40,6 +42,13 @@ export type HunterExecutable = {
     code : string
   }
 
+}
+
+export type ExecutionInfo = {
+  success: boolean,
+  output: string,
+  expected: string,
+  meta: string
 }
 
 export type result = {

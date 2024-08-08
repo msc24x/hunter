@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import {
 	CompetitionInfo,
+	ExecutionInfo,
+	HunterLanguage,
 	QuestionInfo,
 	resCode,
 	resultFull,
@@ -17,6 +19,7 @@ import {
 } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
+import { faArrowRightArrowLeft, faTableColumns } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'competition',
@@ -24,11 +27,14 @@ import { CompetitionsDataService } from 'src/app/services/competitions-data/comp
 	styleUrls: ['./competition.component.scss'],
 })
 export class CompetitionComponent implements OnInit, OnDestroy {
+	layoutIcon = faTableColumns
+
 	loading = false;
 	fetchSubmissionMsg = '';
 
 	c_id: string = '';
 	editor!: ace.Ace.Editor;
+	hrlayout: boolean = true;
 
 	isAuthenticated: boolean = false;
 	user = {} as UserInfo;
@@ -37,8 +43,13 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 	competitionQuestions = [] as Array<QuestionInfo>;
 	questionSelected = -1;
 	questionSelectedInfo = {} as QuestionInfo;
-	solutionOutput = '';
-	languageSelected = 'cpp';
+	solutionOutput: ExecutionInfo = {
+		expected: "",
+		output: "",
+		success: false,
+		meta: ""
+	};
+	languageSelected : HunterLanguage = 'cpp';
 
 	timeRemaining = {
 		min: '∞',
@@ -135,17 +146,25 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 		});
 	}
 
+	clearOutput() {
+		this.solutionOutput = {
+			expected: "", meta: "", output : "", success: false
+		}
+	}
+
 	postSolution(samples = false) {
+		this.clearOutput()
+
 		if (this.questionSelected == -1) {
-			this.solutionOutput = 'No question selected';
+			this.solutionOutput.output = 'No question selected';
 			return;
 		}
 		if (!this.editor.getValue()) {
-			this.solutionOutput = 'Empty solution';
+			this.solutionOutput.output = 'Empty solution';
 			return;
 		}
 
-		this.solutionOutput = 'Judging.... (This might take few seconds)';
+		this.solutionOutput.output = 'Judging.... (This might take few seconds)';
 
 		this.loading = true;
 		this.enableSubmitControls(false);
@@ -172,12 +191,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 						this.enableSubmitControls(true);
 						if (res.status == resCode.success) {
 							this.solutionOutput = (
-								res.body as { output: string }
-							).output;
+								res.body as ExecutionInfo
+							);
 							let outputBox =
 								document.getElementById('solution_output');
 							if (outputBox) {
-								if (this.solutionOutput[0] == '1') {
+								if (this.solutionOutput.success) {
 									outputBox.style.backgroundColor =
 										'#A3EBB133';
 									outputBox.style.borderColor = 'darkgreen';
@@ -188,7 +207,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 							}
 
 							this.fetchEvaluation();
-						} else this.solutionOutput = res.statusText;
+						} else {
+							this.solutionOutput.output = res.statusText;
+						}
 					},
 
 					error: (err) => {
@@ -277,6 +298,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 						.subscribe((res) => {
 							this.competitionQuestions =
 								res.body as QuestionInfo[];
+							if (this.competitionQuestions) {
+								this.selectQuestion(0);
+							}
 						});
 				},
 				error: (err) => {
@@ -295,11 +319,13 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
 	loadTemplate() {
 		this.editor.setValue(
-			templates[this.languageSelected as 'cpp' | 'py' | 'c' | 'js']
+			templates[this.languageSelected as HunterLanguage]
 		);
 	}
 
-	updateEditorMode() {
+	updateEditorMode(lang: string) {
+		this.languageSelected = lang as HunterLanguage;
+
 		switch (this.languageSelected) {
 			case 'c':
 			case 'cpp':
@@ -310,7 +336,19 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 				break;
 			case 'js':
 				this.editor.session.setMode('ace/mode/javascript');
+				break;
+			case 'ts':
+				this.editor.session.setMode('ace/mode/typescript');
+				break;
+			case 'go':
+				this.editor.session.setMode('ace/mode/golang');
+				break;
 		}
+	}
+
+	toggleLayout() {
+		console.log("dfkj")
+		this.hrlayout = !this.hrlayout
 	}
 
 	enableSubmitControls(enable: boolean) {
@@ -325,6 +363,39 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	getPrettyRuntimeInfo(info: string) : any[] {
+		var prettyArr: any[] = [];
+		info.split('\n').forEach(infoKey => {
+			const [itemName, itemVal] = infoKey.split(':');
+			
+			switch (itemName) {
+				case "cg-mem":
+					prettyArr.push([
+						"Memory", itemVal + " kb"
+					])
+					break;
+				case "status":
+					const msgMap: any = {
+						"RE": "Runtime error",
+						"SG": "Died on signal",
+						"TO": "Timed out",
+						"XX": "Internal error"
+					}
+					prettyArr.push(["Message", itemVal + ": " + (msgMap[itemVal] || '')])
+					break;
+				case "time":
+					prettyArr.push([
+						"CPU time", itemVal + " sec"
+					])
+					break;
+				case "time-wall":
+					prettyArr.push(["Total time", itemVal+" sec"])
+			}
+		})
+
+		return prettyArr;
+	}
+
 	initEditor() {
 		this.editor = ace.edit('editor');
 		ace.config.set('basePath', 'assets/');
@@ -335,5 +406,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 		 */
 		this.editor.setTheme('ace/theme/twilight');
 		this.editor.session.setMode('ace/mode/c_cpp');
+		this.editor.setAutoScrollEditorIntoView(true)
 	}
 }

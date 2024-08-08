@@ -19,7 +19,7 @@ router.post('/execute', (req, res) => {
 	const samples = req.body.samples as Boolean;
 
 	if (!Util.isValidExecRequest(hunterExecutable)) {
-		Util.sendResponse(res, resCode.badRequest);
+		Util.sendResponse(res, resCode.badRequest, "executable is not valid");
 		return;
 	}
 
@@ -66,12 +66,12 @@ router.post('/execute', (req, res) => {
 						if (
 							!samples &&
 							(!existsSync(
-								`src/database/files/${Util.getFileName(
+								`${judgeService.filesPath}${Util.getFileName(
 									hunterExecutable
 								)}_s.txt`
 							) ||
 								!existsSync(
-									`src/database/files/${Util.getFileName(
+									`${judgeService.filesPath}${Util.getFileName(
 										hunterExecutable
 									)}_t.txt`
 								))
@@ -94,7 +94,7 @@ router.post('/execute', (req, res) => {
 						}
 
 						try {
-							let stdout = await judgeService.execute(
+							let resInfo = await judgeService.execute(
 								hunterExecutable,
 								samples,
 								questions[0],
@@ -105,13 +105,11 @@ router.post('/execute', (req, res) => {
 								scoreboardService.updateResult(
 									user,
 									hunterExecutable,
-									stdout[0] == '1',
+									resInfo.success,
 									questions[0].points
 								);
 
-							Util.sendResponseJson(res, resCode.success, {
-								output: stdout,
-							});
+							Util.sendResponseJson(res, resCode.success, resInfo);
 						} catch (err) {
 							console.log(err);
 							Util.sendResponse(res, resCode.serverError);
@@ -175,7 +173,7 @@ router.get('/submission/:lang', (req, res) => {
 					}
 
 					readFile(
-						`src/database/files/${competition_id}_${question_id}_${user.id}.${lang}`,
+						`${judgeService.filesPath}${competition_id}_${question_id}_${user.id}.${lang}`,
 						{ encoding: 'utf-8' },
 						(err, data) => {
 							if (err) {

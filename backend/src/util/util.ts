@@ -27,7 +27,7 @@ export class Util {
 	}
 
 	static isValidExecRequest(exec: HunterExecutable): boolean {
-		const langs = ['c', 'cpp', 'py', 'js'];
+		const langs = ['c', 'cpp', 'py', 'js', 'ts', 'go'];
 
 		try {
 			if (

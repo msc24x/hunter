@@ -1,16 +1,20 @@
 import { exec } from 'child_process';
-import { writeFile } from 'fs';
+import { readFile, readFileSync, writeFile } from 'fs';
 import { Service } from 'typedi';
 import { HunterExecutable, QuestionInfo, UserInfo } from '../config/types';
 import { Util } from '../util/util';
-import  config  from '../config/config';
+import config from '../config/config';
+
+type ExeInfo = { success: boolean, meta: string, output: string, expected: string };
 
 @Service({ global: true })
 export class JudgeService {
 	private isProcessingUserMap = new Map<string, boolean>();
 	private entries = 0;
 	private gatewayPath: string;
-	private filesPath: string = "src/database/files/";
+	private showdownJudgeUrl = process.env.SHOWDOWN_URL!
+	
+	public filesPath: string = "files/";
 
 	constructor() {
 		if (config.env == "prod") {
@@ -30,6 +34,7 @@ export class JudgeService {
 		this.isProcessingUserMap.set(id, false);
 		this.entries--;
 	}
+
 
 	private _cmd(
 		hunterExecutable: HunterExecutable,
@@ -66,41 +71,75 @@ export class JudgeService {
 		samples: Boolean,
 		question: QuestionInfo,
 		user: UserInfo
-	): Promise<String> {
-		return new Promise((resolve, reject) => {
+	): Promise<ExeInfo> {
+		return new Promise(async (resolve, reject) => {
 			if (this.isProcessingUserMap.get(user.id))
 				reject('Already processing for this user');
 			else this.saveEntry(user);
 
-			writeFile(
-				this.buildFilePath(hunterExecutable, user),
-				hunterExecutable.solution.code,
-				{ flag: 'w' },
-				(err) => {
-					if (err) {
-						this.remEntry(user);
-						reject(err);
-					}
+			var programInput = "";
+			var programOutput = "";
 
-					const cmd = this._cmd(
-						hunterExecutable,
-						samples,
-						question,
-						user
-					);
+			if (samples) {
+				programInput = question.sample_cases;
+				programOutput = question.sample_sols;
+			} else {
+				const internalFileName = Util.getFileName(hunterExecutable);
+				programInput = readFileSync(internalFileName+"_s.txt", "utf-8")
+				programOutput = readFileSync(internalFileName+"_t.txt", "utf-8")
+			}
 
-					exec(cmd,
-						(error, stdout, stderr) => {
-							if (error) {
-								this.remEntry(user);
-								reject(err);
-							}
-							this.remEntry(user);
-							resolve(stdout);
-						}
-					);
+			const headers = new Headers({
+					"Access-Token": process.env.SHOWDOWN_ACCESS_TOKEN!,
+					"Content-Type": "application/json"
 				}
-			);
+			)
+
+			console.log(headers)
+			console.log(this.showdownJudgeUrl)
+
+			var payload = {
+				judge_params: {
+					collectmeta: true,
+					donotjudge: false,
+					limits: [
+						{
+							"time": 18,
+							"wall_time": 18,
+							"memory": 512 * 1024,
+							"stack": 512 * 1024
+						},
+						{
+							"time": 4,
+							"wall_time": 6,
+							"memory": 512 * 1024,
+							"stack": 512 * 1024
+						}
+					]
+				},
+				exe: {
+					language: hunterExecutable.solution.lang,
+					code: hunterExecutable.solution.code,
+					input: programInput,
+					output: programOutput
+				}
+			}
+
+			var showdownResponse = await fetch(this.showdownJudgeUrl, {
+				headers: headers,
+				body: JSON.stringify(payload),
+				method: "POST",
+			})
+
+			var showdownResponseJson = await showdownResponse.json() as ExeInfo
+
+			this.remEntry(user)
+			resolve({
+				expected: showdownResponseJson.expected,
+				meta: showdownResponseJson.meta,
+				output: showdownResponseJson.output,
+				success: showdownResponseJson.success
+			})
 		});
 	}
 }
