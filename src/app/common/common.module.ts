@@ -17,49 +17,53 @@ import { IsLiveStatusPipe, UserInfoPipe } from './pipes/userInfoPipe';
 import { RouterModule } from '@angular/router';
 import { CommonRoutingModule } from './common-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { InfotipComponent } from './components/infotip/infotip.component';
 
 @NgModule({
-  declarations: [
-    AppBarComponent,
-    BottomAppBarComponent,
-    CompetitionsListComponent,
-    InfoCardComponent,
-    LoadingComponent,
-    LoginDialogComponent,
-    PopupComponent,
-    SigninDialogComponent,
-    TextInputComponent,
-    AboutComponent,
-    CompeteComponent,
-    HomeComponent,
-    RegisterComponent,
-    UserInfoPipe,
-    IsLiveStatusPipe
-  ],
-  imports: [
-    AngularCommonModule,
-    RouterModule,
-    CommonRoutingModule,
-  ],
-  exports: [
-    AppBarComponent,
-    BottomAppBarComponent,
-    CompetitionsListComponent,
-    InfoCardComponent,
-    LoadingComponent,
-    LoginDialogComponent,
-    PopupComponent,
-    SigninDialogComponent,
-    TextInputComponent,
-    AboutComponent,
-    CompeteComponent,
-    HomeComponent,
-    RegisterComponent,
-    UserInfoPipe,
-    IsLiveStatusPipe
-  ],
-  providers : [DatePipe]
+    declarations: [
+        AppBarComponent,
+        BottomAppBarComponent,
+        CompetitionsListComponent,
+        InfoCardComponent,
+        LoadingComponent,
+        LoginDialogComponent,
+        PopupComponent,
+        SigninDialogComponent,
+        TextInputComponent,
+        AboutComponent,
+        CompeteComponent,
+        HomeComponent,
+        RegisterComponent,
+        UserInfoPipe,
+        IsLiveStatusPipe,
+        InfotipComponent,
+    ],
+    imports: [
+        AngularCommonModule,
+        RouterModule,
+        CommonRoutingModule,
+        FontAwesomeModule,
+        MatTooltipModule,
+    ],
+    exports: [
+        AppBarComponent,
+        BottomAppBarComponent,
+        CompetitionsListComponent,
+        InfoCardComponent,
+        LoadingComponent,
+        LoginDialogComponent,
+        PopupComponent,
+        SigninDialogComponent,
+        TextInputComponent,
+        AboutComponent,
+        CompeteComponent,
+        HomeComponent,
+        RegisterComponent,
+        UserInfoPipe,
+        IsLiveStatusPipe,
+        InfotipComponent,
+    ],
+    providers: [DatePipe],
 })
-export class CommonModule { }
+export class CommonModule {}

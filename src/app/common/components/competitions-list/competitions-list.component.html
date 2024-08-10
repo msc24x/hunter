@@ -1,52 +1,94 @@
 <app-loading *ngIf="loading"></app-loading>
 
-<div id = "competitions_list">
-  <div class="row">
-    <p class = "heading">{{this.heading}}</p>
-    <div id="filter_controls">
+<div id="competitions_list">
+    <div class="row">
+        <p class="heading">{{ this.heading }}</p>
+        <div id="filter_controls">
+            <text-input
+                id="title_input"
+                title="Filter By Title"
+                (onChangeEvent)="title = $event; updateList()"
+            ></text-input>
 
-      <text-input id="title_input" title="Filter By Title" (onChangeEvent)="title = $event; updateList()"></text-input>
+            <div>
+                <label for="status_select">Live Status</label>
+                <select
+                    id="status_select"
+                    Name="Live Status"
+                    (change)="updateLiveStatus($event)"
+                >
+                    <option value="all" [defaultSelected]="true">All</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="live">Live</option>
+                    <option value="always">Always Live</option>
+                </select>
+            </div>
 
-
-      <div>
-        <label for="status_select">Live Status</label>
-        <select id="status_select" Name="Live Status" (change)="updateLiveStatus($event)">
-          <option value="all" [defaultSelected]="true">All</option>
-          <option value="upcoming">Upcoming</option>
-          <option value="live">Live</option>
-          <option value="always">Always Live</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="order_select">Order By</label>
-        <select id="order_select" (change)="updateOrderBy($event)">
-          <option value="any">Any</option>
-          <option value="latest" [defaultSelected]="true">Latest</option>
-          <option value="oldest">Oldest</option>
-        </select>
-      </div>
-
-    </div>
-  </div>
-
-  <ul id="competitions_ol">
-    <li *ngFor="let com of this.competitionsList">
-      <div class = "competition_card" routerLink="/{{this.route}}/{{com.id}}">
-        <div id = "c_title">{{com.title}}</div>
-        <div id = "c_host_user">By {{com.host_user_info?.name || "Anonymous"}} (User ID: {{com.host_user_id}})</div>
-        <div id ="start_schedule"
-          [style.color]="(com.start_schedule | isLiveStatusPipe : com.duration) ? '#D2122Ebb' : 'colors.$text_black' "
-        >
-          Live from {{com.start_schedule | date : "full" : "IST"}}
-          &nbsp;
-          <div *ngIf="isAfterNow(com.start_schedule) && !(com.start_schedule | isLiveStatusPipe : com.duration)" ><b>Has Ended</b></div>
+            <div>
+                <label for="order_select">Order By</label>
+                <select id="order_select" (change)="updateOrderBy($event)">
+                    <option value="any">Any</option>
+                    <option value="latest" [defaultSelected]="true">
+                        Latest
+                    </option>
+                    <option value="oldest">Oldest</option>
+                </select>
+            </div>
         </div>
-        <p id = "c_about">{{com.description}}</p>
-      </div>
-    </li>
-    
-    <li *ngIf="!loading && competitionsList !== null"><div id="list_end">No more competitions available!</div></li>
-    <li *ngIf="loading || competitionsList === null"><div id="list_end">Loading competitions...</div></li>
-  </ul>
+    </div>
+
+    <ul id="competitions_ol">
+        <li *ngFor="let com of this.competitionsList">
+            <div
+                class="competition_card"
+                routerLink="/{{ this.route }}/{{ com.id }}"
+            >
+                <div id="c_title">{{ com.title }}</div>
+                <div id="c_host_user">
+                    By
+                    {{ com.host_user_info?.name || "Anonymous" }}
+                    &nbsp;
+                    <span
+                        *ngIf="com.host_user_id == '1'"
+                        matTooltip="Official competition by Hunter"
+                    >
+                        <fa-icon [icon]="officialIcon"></fa-icon>
+                    </span>
+                    <span *ngIf="com.host_user_id != '1'">
+                        (ID:{{ com.host_user_id }})
+                    </span>
+                </div>
+                <div
+                    id="start_schedule"
+                    [style.color]="
+                        (com.start_schedule | isLiveStatusPipe : com.duration)
+                            ? '#D2122Ebb'
+                            : 'colors.$text_black'
+                    "
+                >
+                    Live from {{ com.start_schedule | date : "full" : "IST" }}
+                    &nbsp;
+                    <div
+                        *ngIf="
+                            isAfterNow(com.start_schedule) &&
+                            !(
+                                com.start_schedule
+                                | isLiveStatusPipe : com.duration
+                            )
+                        "
+                    >
+                        <b>Has Ended</b>
+                    </div>
+                </div>
+                <p id="c_about">{{ com.description }}</p>
+            </div>
+        </li>
+
+        <li *ngIf="!loading && competitionsList !== null">
+            <div id="list_end">No more competitions available!</div>
+        </li>
+        <li *ngIf="loading || competitionsList === null">
+            <div id="list_end">Loading competitions...</div>
+        </li>
+    </ul>
 </div>

@@ -2,21 +2,19 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-#bg{
+#bg {
     @include popup;
-    font-family: appFont;
-    padding-top: 64px;
+    z-index: 100;
 }
 
-
-#dialog::-webkit-scrollbar{
-    display: none
+#dialog::-webkit-scrollbar {
+    display: none;
 }
 
-#dialog{
+#dialog {
     background-color: colors.$text_white;
-    width: fit-content;
-    height: fit-content;
+    width: 80%;
+    height: 60%;
     border-radius: 10px;
     box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
     max-height: 820px;
@@ -26,34 +24,33 @@
     margin-inline: 2%;
     margin-block: auto;
 
-    #title{
+    #title {
         font-size: 2rem;
         font-weight: bold;
         margin-bottom: 24px;
     }
 
-    .row{
+    .row {
         margin-top: 24px;
         display: flex;
         justify-content: space-around;
 
-        div{
-            padding : 8px;
+        div {
+            padding: 8px;
             padding-inline: 16px;
             background-color: colors.$text_white;
             cursor: pointer;
             border-radius: 12px;
         }
 
-        div:hover{
+        div:hover {
             background-color: whitesmoke;
-
         }
     }
 }
 
-@media only screen and (max-width : 456px) {
-    #dialog{
+@media only screen and (max-width: 456px) {
+    #dialog {
         font-size: 1.05rem !important;
-    }    
+    }
 }

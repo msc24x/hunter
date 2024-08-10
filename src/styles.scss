@@ -3,98 +3,98 @@
 
 /*160deg*/
 
-html{
-  scroll-behavior: smooth;
+html {
+    font-weight: 200;
+}
 
+a {
+    text-decoration: none;
 }
 
 .table_heading {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 .hsection {
-  background-color: whitesmoke;
-  border-radius: 24px;
-  padding : 10px;
+    background-color: whitesmoke;
+    border-radius: 24px;
+    padding: 10px;
 }
 
 .pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
 
-
-body{
-  background-color: colors.$text_white;
-  // background: linear-gradient(165deg, colors.$text_white,colors.$purple_high);
-  // background-repeat: no-repeat;
-  // background-attachment: fixed;
-  margin : 0px;
-  max-width: 1440px;
-  padding-inline: 2%;
-  margin-inline: auto;
-  font-family: appFont;
-
+body {
+    background-color: colors.$text_white;
+    // background: linear-gradient(165deg, colors.$text_white,colors.$purple_high);
+    // background-repeat: no-repeat;
+    // background-attachment: fixed;
+    margin: 0px;
+    max-width: 1836px;
+    padding-inline: 2%;
+    margin-inline: auto;
+    font-family: appFont;
 }
 
 .largeButton {
-  padding: 0.8rem;
-  padding-inline: 1.6rem;
-  color: colors.$text_black;
-  font-size: 1rem;
-  background-color: white;
-  border-radius: 1rem;
-  cursor: pointer;
-  
-  &:not(:hover){
-    transition: 300ms;
-  }
+    padding: 0.8rem;
+    padding-inline: 1.6rem;
+    color: colors.$text_black;
+    font-size: 1rem;
+    background-color: white;
+    border-radius: 1rem;
+    cursor: pointer;
 
-  &:hover{
-    transform: scale(1.07);
-    background-color: colors.$text_black;
-    font-weight: bold;
-    color: white;
-    transition: 300ms;
-  }
+    &:not(:hover) {
+        transition: 300ms;
+    }
+
+    &:hover {
+        transform: scale(1.07);
+        background-color: colors.$text_black;
+        font-weight: bold;
+        color: white;
+        transition: 300ms;
+    }
 }
 
 .flex {
-  display: flex;
+    display: flex;
 
-  &-row{
-    @extend .flex;
-    flex-direction: row;
-  }
+    &-row {
+        @extend .flex;
+        flex-direction: row;
+    }
 
-  &-col{
-    @extend .flex;
-    flex-direction: column;
-  }
+    &-col {
+        @extend .flex;
+        flex-direction: column;
+    }
 }
 
-.justify{
-  &-center{
-    justify-content: center;
-  }
-  &-sb{
-    justify-content: space-between;
-  }
+.justify {
+    &-center {
+        justify-content: center;
+    }
+    &-sb {
+        justify-content: space-between;
+    }
 }
 
-.align{
-  &-center{
-    align-items: center;
-  }
-  &-stretch{
-    align-items: stretch;
-  }
+.align {
+    &-center {
+        align-items: center;
+    }
+    &-stretch {
+        align-items: stretch;
+    }
 }
 
-.wrap{
-  flex-wrap: wrap;
+.wrap {
+    flex-wrap: wrap;
 
-  &-rev{
-    flex-wrap: wrap-reverse;
-  }
+    &-rev {
+        flex-wrap: wrap-reverse;
+    }
 }
-

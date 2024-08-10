@@ -9,27 +9,26 @@ import { QuestionsListComponent } from './components/questions-list/questions-li
 import { RouterModule } from '@angular/router';
 import { EditorRoutingModule } from './editor-routing.module';
 import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
-
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
-  declarations: [
-    EditorComponent,
-    EditorMenuComponent,
-    CreateDialogComponent,
-    DashboardCardComponent,
-    QuestionsListComponent,
-    NgKatexComponent
-  ],
-  imports: [
-    CommonModule,
-    HunterCommonModule,
-    RouterModule,
-    EditorRoutingModule,
-  ],
-  exports: [
-    QuestionsListComponent,
-    NgKatexComponent
-  ],
+    declarations: [
+        EditorComponent,
+        EditorMenuComponent,
+        CreateDialogComponent,
+        DashboardCardComponent,
+        QuestionsListComponent,
+        NgKatexComponent,
+    ],
+    imports: [
+        CommonModule,
+        HunterCommonModule,
+        RouterModule,
+        EditorRoutingModule,
+        MatTooltipModule,
+        FontAwesomeModule,
+    ],
+    exports: [QuestionsListComponent, NgKatexComponent],
 })
-export class EditorModule { }
+export class EditorModule {}

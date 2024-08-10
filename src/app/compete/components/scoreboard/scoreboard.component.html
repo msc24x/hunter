@@ -1,28 +1,27 @@
-
-  <div id="score_board">
+<div id="score_board">
     <div id="sc_title">Live Scoreboard</div>
     <div id="scores_table">
-      <div class="table_heading">
-        <div >Rank</div>
-        <div >User ID</div>
-        <div >User Name</div>
-        <div class="score" >Aggregate Score</div>
-        <div class="penalities" >Penalities</div>
-      </div>
-      <div *ngFor="let score of scores; let i = index">
-        <div >{{i+1}}</div>
-        <div >{{score.user_id}}</div>
-        <div >{{score.user_id | userInfoPipe : "noId" | async}}</div>
-        <div class="score" >{{score.score}}</div>
-        <div class="penalities" >{{score.penalities}}</div>
-      </div>
+        <div class="table_heading">
+            <div>Rank</div>
+            <div>User ID</div>
+            <div>User Name</div>
+            <div class="score">Aggregate Score</div>
+            <div class="penalities">Penalities</div>
+        </div>
+        <div *ngFor="let score of scores; let i = index">
+            <div>{{ i + 1 }}</div>
+            <div>{{ score.user_id }}</div>
+            <div>{{ score.name }}</div>
+            <div class="score">{{ score.score }}</div>
+            <div class="penalities">{{ score.penalities }}</div>
+        </div>
 
-      <div>
-        <div >-</div>
-        <div >-</div>
-        <div >-</div>
-        <div class="score" >-</div>
-        <div class="penalities" >-</div>
-      </div>
+        <div>
+            <div>-</div>
+            <div>-</div>
+            <div>-</div>
+            <div class="score">-</div>
+            <div class="penalities">-</div>
+        </div>
     </div>
-  </div>
+</div>

@@ -2,8 +2,14 @@
 <app-loading *ngIf="loading"></app-loading>
 
 <div class="body">
-    <app-info-card [persist]="true" *ngIf="!isAuthenticated">
-        <b>Do a quick sign in & participate in the competition.</b> <br />
+    <app-info-card
+        [persist]="true"
+        *ngIf="!isAuthenticated"
+        (click)="redirectToGitHubOAuth()"
+    >
+        <fa-icon [icon]="loginIcon" size="2x"></fa-icon>
+        <h3>Want to test your skills? Do a quick sign in to participant!</h3>
+        <br />
     </app-info-card>
 
     <app-info-card *ngIf="hasEnded" [persist]="true">
@@ -11,7 +17,7 @@
         competition. Meantime, you can practice other live competitions.
     </app-info-card>
 
-    <app-info-card *ngIf="!hasEnded">
+    <app-info-card *ngIf="!hasEnded && isAuthenticated">
         <b>Important Instructions To Follow </b> <br />
         <ul>
             <li>
@@ -24,31 +30,31 @@
             <li>
                 To check the correctness of your code, use Run Test Cases button
                 to run your code against one sample test case. This won't result
-                in any penality if some error occured.
+                in any penalty if some error occurred.
             </li>
             <li>
                 Make sure to submit appropriate time before the competition
                 ends, unless it is a live forever competition.
             </li>
             <li>
-                To Fetch Last Submission, you must have to make atleast one
+                To Fetch Last Submission, you must have to make at least one
                 Submit or Run Test Cases. Be aware enough not to close the tab
                 and loose your in progress code.
             </li>
             <li>
-                Every wrong submission results in penality and affects your
-                Rank.
+                Every wrong submission results in penalty and affects your Rank.
             </li>
             <li>
-                Once you have made any successfull submission, the points of the
-                question will be accumulated in your total score. No penality
+                Once you have made any successful submission, the points of the
+                question will be accumulated in your total score. No penalty
                 would be counted after this.
             </li>
             <li>
                 If the host had not uploaded the files for test cases or the
                 sample test cases, Output will return an error describing the
                 same. In this case you can wait for host to update the
-                competition or contact the Hunter team to report the comptition.
+                competition or contact the Hunter team to report the
+                competition.
             </li>
             <li>
                 Hunter being truly open for everyone to host, we respect the
@@ -58,7 +64,7 @@
         </ul>
     </app-info-card>
 
-    <div id="competition_info">
+    <div *ngIf="isAuthenticated" id="competition_info">
         <div>
             <b>{{ this.competition.title }}</b>
             - {{ this.competition.description }}
@@ -70,10 +76,13 @@
         </div>
     </div>
 
-    <div [ngClass]="{ 'row compete-hr-layout': hrlayout }">
+    <div
+        [ngClass]="{ 'row compete-hr-layout': hrlayout }"
+        *ngIf="!hasEnded && isAuthenticated && questionSelected !== -1"
+    >
+        <!-- Questions -->
         <div>
             <questions-list
-                *ngIf="!hasEnded && isAuthenticated"
                 [competitionInfo]="competition"
                 [questionsList]="competitionQuestions"
                 [editable]="false"
@@ -81,18 +90,15 @@
                 [(questionSelected)]="questionSelected"
             ></questions-list>
 
-            <div
-                *ngIf="questionSelected != -1 && isAuthenticated"
-                id="question_title"
-            >
+            <div id="question_title">
                 Question ID : {{ questionSelectedInfo.id }} for
                 {{ questionSelectedInfo.points }} pts <br /><br />
                 <b>{{ questionSelectedInfo.title }}</b>
             </div>
             <label
-                *ngIf="questionSelected != -1 && isAuthenticated"
                 for="toggle-layout"
                 class="hsection pointer toggle-layout-label"
+                matTooltip="Toggle the editor layout"
                 >Layout
                 <fa-icon
                     [ngClass]="{ 'active': hrlayout }"
@@ -108,20 +114,19 @@
                 (change)="toggleLayout()"
             />
 
-            <div
-                *ngIf="questionSelected != -1 && isAuthenticated"
-                id="question_statement"
-            >
+            <div id="question_statement">
                 <ng-katex
                     [data]="questionSelectedInfo.statement || ''"
                 ></ng-katex>
             </div>
         </div>
 
+        <!-- Code editor -->
         <div class="ace-editor">
-            <div *ngIf="isAuthenticated" class="row">
+            <div class="row hunter-conf">
                 <div
-                    *ngIf="!hasEnded"
+                    matTooltip="Load the boilerplate template for the selected language"
+                    matTooltipPosition="above"
                     class="row"
                     id="load_template_btn"
                     (click)="loadTemplate()"
@@ -130,14 +135,13 @@
                 </div>
 
                 <drop-down-list
-                    *ngIf="!hasEnded"
                     listType="Language"
                     [items]="['cpp', 'c', 'py', 'js', 'ts', 'go']"
                     (itemSelectedEvent)="updateEditorMode($event)"
                 ></drop-down-list>
             </div>
 
-            <div *ngIf="!hasEnded && isAuthenticated" id="editor"></div>
+            <div id="editor"></div>
         </div>
     </div>
 
@@ -147,15 +151,21 @@
         *ngIf="questionSelected != -1 && isAuthenticated"
         class="row"
     >
-        <div class="button" id="submit_code_btn" (click)="postSolution()">
+        <div
+            matTooltip="Only submit when you're ready, to avoid penalities"
+            class="button"
+            id="submit_code_btn"
+            (click)="postSolution()"
+        >
             Submit
         </div>
         <div
             class="button"
             id="submit_code_samples_btn"
             (click)="postSolution(true)"
+            [matTooltip]="'Test samples (Shift + Alt + J)'"
         >
-            Run Sample Cases
+            Test Sample Cases
         </div>
         <div
             class="button"
@@ -196,13 +206,35 @@
         </div>
 
         <div id="solution_output">
-            <b *ngIf="solutionOutput.output">Output<br /></b>
-            <pre [innerText]="solutionOutput.output"></pre>
+            <div class="loading" *ngIf="judgeInProgress">
+                <fa-icon
+                    [icon]="judgeLoadingIcon"
+                    [spin]="true"
+                    [pulse]="true"
+                ></fa-icon>
+                &nbsp;&nbsp; Judging... this may take a few seconds
+            </div>
+            <div *ngIf="solutionOutput.output">
+                <h3>Output<br /></h3>
+                <pre [innerText]="solutionOutput.output"></pre>
+            </div>
 
-            <b *ngIf="solutionOutput.expected">Expected<br /></b>
-            <pre [innerText]="solutionOutput.expected"></pre>
+            <div *ngIf="solutionOutput.expected">
+                <h3>Expected<br /></h3>
+                <pre [innerText]="solutionOutput.expected"></pre>
+            </div>
 
-            <div *ngIf="solutionOutput.meta" class="solution-meta">
+            <p class="showdown-branding">
+                Runtime powered by <b>Showdown</b> <br />
+                An <a href="https://showdown.cambo.in">open source</a> remote
+                code execution engine built by Maninderpal Singh
+            </p>
+
+            <div
+                matTooltip="Runtime information of the submitted code, provided by Showdown"
+                *ngIf="solutionOutput.meta"
+                class="solution-meta"
+            >
                 <div
                     *ngFor="
                         let infoItem of getPrettyRuntimeInfo(
@@ -215,18 +247,18 @@
                     <span>{{ infoItem[1] }}</span>
                 </div>
                 <div>
-                    <b>Accepted</b>
+                    <b>Status</b>
                     <br />
-                    <span>{{ solutionOutput.success ? "Yes" : "No" }}</span>
+                    <span
+                        [style.color]="
+                            solutionOutput.success ? 'darkgreen' : 'darkred'
+                        "
+                        >{{
+                            solutionOutput.success ? "Accepted" : "Not Accepted"
+                        }}</span
+                    >
                 </div>
             </div>
-
-            <br />
-            <p>
-                Runtime powered by <b>Showdown</b> <br />
-                An <a href="https://showdown.cambo.in">open source</a> remote
-                code execution engine built by Maninderpal Singh
-            </p>
         </div>
     </div>
 

@@ -1,17 +1,47 @@
 <app-loading *ngIf="loading"></app-loading>
 
 <popup
-  title="Destructive Action"
-  id="delete_confirm"
-  (closeEvent)="handleDeleteConfirmation($event)"
+    title="Destructive Action"
+    id="delete_confirm"
+    (closeEvent)="handleDeleteConfirmation($event)"
 >
-  You are about to delete the question. This is an irreversible action.
+    You are about to delete the question. This is an irreversible action.
 </popup>
 
 <ol id="questions_list">
-  <div>Questions</div>
-  <li *ngFor="let question of this.questionsList;" (click)="selectQuestion($event)">Q{{this.questionsList.indexOf(question)}}</li>
-  <div *ngIf="editable" id="create_question_btn" (click)="addQuestion();">Add</div>
-  <div *ngIf="editable" id="save_question_btn" (click)="saveClicked.emit();">Save</div>
-  <div *ngIf="editable" id="delete_question_btn" (click) ="showDeleteConfirmation(true);">DELETE</div>
+    <div>Questions</div>
+    <li
+        *ngFor="let question of this.questionsList; index as i"
+        [ngClass]="{ 'selected-question': questionSelected == i }"
+        (click)="selectQuestion($event)"
+    >
+        Q
+        <span>
+            {{ this.questionsList.indexOf(question) }}
+        </span>
+    </li>
+    <div
+        matTooltip="Insert one new question"
+        *ngIf="editable"
+        id="create_question_btn"
+        (click)="addQuestion()"
+    >
+        Add
+    </div>
+    <div
+        matTooltip="Save changes for the selected question"
+        *ngIf="editable"
+        id="save_question_btn"
+        (click)="saveClicked.emit()"
+    >
+        Save
+    </div>
+    <div
+        matTooltip="Delete the selected question"
+        *ngIf="editable"
+        id="delete_question_btn"
+        (click)="showDeleteConfirmation(true)"
+    >
+        DELETE
+    </div>
 </ol>

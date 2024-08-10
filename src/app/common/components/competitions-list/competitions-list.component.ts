@@ -1,81 +1,83 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {
+    faCheckDouble,
+    faCircleCheck,
+} from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import { CompetitionInfo } from 'src/environments/environment';
 
 @Component({
-	selector: 'competitions-list',
-	templateUrl: './competitions-list.component.html',
-	styleUrls: ['./competitions-list.component.scss'],
+    selector: 'competitions-list',
+    templateUrl: './competitions-list.component.html',
+    styleUrls: ['./competitions-list.component.scss'],
 })
 export class CompetitionsListComponent implements OnInit {
-	loading = false;
+    loading = false;
+    officialIcon = faCircleCheck;
 
-	@Input()
-	competitionsList: Array<CompetitionInfo> | null = null;
+    @Input()
+    competitionsList: Array<CompetitionInfo> | null = null;
 
-	@Input()
-	host_user_id = '';
+    @Input()
+    host_user_id = '';
 
-	@Input()
-	heading: string = 'Competitions';
+    @Input()
+    heading: string = 'Competitions';
 
-	@Input()
-	public: boolean = true;
+    @Input()
+    public: boolean = true;
 
-	@Input()
-	route: string = 'editor';
+    @Input()
+    route: string = 'editor';
 
-	title = '';
-	liveStatus = 'all';
-	orderBy: 'any' | 'latest' | 'oldest' = 'latest';
-	debounceTimeout?: NodeJS.Timeout
+    title = '';
+    liveStatus = 'all';
+    orderBy: 'any' | 'latest' | 'oldest' = 'latest';
+    debounceTimeout?: NodeJS.Timeout;
 
-	orderByCode = { any: 0, latest: -1, oldest: 1 };
+    orderByCode = { any: 0, latest: -1, oldest: 1 };
 
-	constructor(private competitionsDataService: CompetitionsDataService) {}
+    constructor(private competitionsDataService: CompetitionsDataService) {}
 
-	isAfterNow(date: string) {
-		return Date.parse(date) < Date.now();
-	}
+    isAfterNow(date: string) {
+        return Date.parse(date) < Date.now();
+    }
 
-	
+    ngOnInit(): void {}
 
-	ngOnInit(): void {}
+    updateLiveStatus(event: Event) {
+        let select = event.target as HTMLSelectElement;
+        this.liveStatus = select.value;
+        this.updateList();
+    }
 
-	updateLiveStatus(event: Event) {
-		let select = event.target as HTMLSelectElement;
-		this.liveStatus = select.value;
-		this.updateList();
-	}
+    updateOrderBy(event: Event) {
+        let select = event.target as HTMLSelectElement;
+        this.orderBy = select.value as 'any' | 'latest' | 'oldest';
+        this.updateList();
+    }
 
-	updateOrderBy(event: Event) {
-		let select = event.target as HTMLSelectElement;
-		this.orderBy = select.value as 'any' | 'latest' | 'oldest';
-		this.updateList();
-	}
+    _updateList() {
+        this.competitionsDataService
+            .getPublicCompetitions({
+                title: this.title,
+                public: this.public,
+                dateOrder: this.orderByCode[this.orderBy],
+                liveStatus: this.liveStatus,
+                host_user_id: this.host_user_id + '',
+            })
+            .subscribe((res) => {
+                this.competitionsList = res.body;
+                this.loading = false;
+            });
+    }
 
-	_updateList() {
-		this.competitionsDataService
-			.getPublicCompetitions({
-				title: this.title,
-				public: this.public,
-				dateOrder: this.orderByCode[this.orderBy],
-				liveStatus: this.liveStatus,
-				host_user_id: this.host_user_id + '',
-			})
-			.subscribe((res) => {
-				this.competitionsList = res.body;
-				this.loading = false;
-			});
-	}
+    updateList() {
+        this.loading = true;
 
-	updateList() {
-		this.loading = true;
-
-		clearTimeout(this.debounceTimeout)
-		this.debounceTimeout = setTimeout(() => {
-			this._updateList()
-		}, 300)
-		
-	}
+        clearTimeout(this.debounceTimeout);
+        this.debounceTimeout = setTimeout(() => {
+            this._updateList();
+        }, 300);
+    }
 }
