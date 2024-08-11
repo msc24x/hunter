@@ -19,6 +19,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     faAddressCard,
+    faHourglassHalf,
     faSpinner,
     faTableColumns,
 } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +33,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     layoutIcon = faTableColumns;
     judgeLoadingIcon = faSpinner;
     loginIcon = faAddressCard;
+    timerIcon = faHourglassHalf;
+
+    showInstructionP = false;
 
     loading = false;
     fetchSubmissionMsg = '';
@@ -57,8 +61,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     languageSelected: HunterLanguage = 'cpp';
 
     timeRemaining = {
-        min: '∞',
-        sec: '∞',
+        min: '',
+        sec: '',
     };
     hasEnded = false;
 

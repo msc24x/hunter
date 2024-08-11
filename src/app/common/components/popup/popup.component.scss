@@ -13,8 +13,8 @@
 
 #dialog {
     background-color: colors.$text_white;
-    width: 80%;
-    height: 60%;
+    max-width: 80%;
+    max-height: 60%;
     border-radius: 10px;
     box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
     max-height: 820px;

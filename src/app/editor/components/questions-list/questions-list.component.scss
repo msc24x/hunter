@@ -11,7 +11,6 @@
 }
 
 #questions_list {
-    margin-top: 56px;
     list-style: none;
     padding: 0px;
     display: flex;
@@ -19,6 +18,7 @@
     border-radius: 12px;
     font-family: appFont;
     scroll-behavior: smooth;
+    margin: 0;
 
     div {
         background-color: white;

@@ -17,8 +17,11 @@
         competition. Meantime, you can practice other live competitions.
     </app-info-card>
 
-    <app-info-card *ngIf="!hasEnded && isAuthenticated">
-        <b>Important Instructions To Follow </b> <br />
+    <popup
+        [hidden]="!showInstructionP"
+        (closeEvent)="showInstructionP = false"
+        title="Important Instructions To Follow"
+    >
         <ul>
             <li>
                 The available questions are displayed in the 'Questions' list.
@@ -62,17 +65,29 @@
                 competition to the Hunter immediately.
             </li>
         </ul>
-    </app-info-card>
+    </popup>
 
     <div *ngIf="isAuthenticated" id="competition_info">
         <div>
             <b>{{ this.competition.title }}</b>
-            - {{ this.competition.description }}
+            <infotip
+                message="Instructions to follow"
+                (click)="showInstructionP = true"
+                [svgSize]="'sm'"
+            ></infotip>
+
+            <p>
+                {{ this.competition.description }}
+            </p>
         </div>
 
         <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">
-            Time Remaining : <b>{{ timeRemaining.min }}</b> mins
-            <b>{{ timeRemaining.sec }}</b> sec
+            <!-- <span class="label">Time left</span> -->
+            <!-- <br /> -->
+            <fa-icon [icon]="timerIcon"></fa-icon>
+            &nbsp;
+            <b>{{ timeRemaining.min || "&infin;" }}</b> mins
+            <b>{{ timeRemaining.sec || "&infin;" }}</b> s
         </div>
     </div>
 
@@ -81,38 +96,41 @@
         *ngIf="!hasEnded && isAuthenticated && questionSelected !== -1"
     >
         <!-- Questions -->
-        <div>
-            <questions-list
-                [competitionInfo]="competition"
-                [questionsList]="competitionQuestions"
-                [editable]="false"
-                (questionSelectEmitter)="selectQuestion($event)"
-                [(questionSelected)]="questionSelected"
-            ></questions-list>
+        <div class="question-section">
+            <div class="row questions-container">
+                <questions-list
+                    [competitionInfo]="competition"
+                    [questionsList]="competitionQuestions"
+                    [editable]="false"
+                    (questionSelectEmitter)="selectQuestion($event)"
+                    [(questionSelected)]="questionSelected"
+                ></questions-list>
+
+                <div>
+                    <label
+                        for="toggle-layout"
+                        class="hsection pointer toggle-layout-label"
+                        matTooltip="Toggle the editor layout"
+                        [ngClass]="{ 'active': hrlayout }"
+                    >
+                        <fa-icon [icon]="layoutIcon"></fa-icon>
+                    </label>
+
+                    <input
+                        id="toggle-layout"
+                        type="checkbox"
+                        name="hrlayout"
+                        hidden
+                        (change)="toggleLayout()"
+                    />
+                </div>
+            </div>
 
             <div id="question_title">
                 Question ID : {{ questionSelectedInfo.id }} for
                 {{ questionSelectedInfo.points }} pts <br /><br />
                 <b>{{ questionSelectedInfo.title }}</b>
             </div>
-            <label
-                for="toggle-layout"
-                class="hsection pointer toggle-layout-label"
-                matTooltip="Toggle the editor layout"
-                >Layout
-                <fa-icon
-                    [ngClass]="{ 'active': hrlayout }"
-                    [icon]="layoutIcon"
-                ></fa-icon>
-            </label>
-
-            <input
-                id="toggle-layout"
-                type="checkbox"
-                name="hrlayout"
-                hidden
-                (change)="toggleLayout()"
-            />
 
             <div id="question_statement">
                 <ng-katex

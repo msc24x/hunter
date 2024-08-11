@@ -2,10 +2,6 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-popup {
-    display: none;
-}
-
 #bottom_app_bar {
     background-color: whitesmoke;
     position: absolute;

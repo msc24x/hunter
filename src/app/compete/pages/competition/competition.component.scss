@@ -29,14 +29,22 @@
     }
 }
 
-.toggle-layout-label {
-    display: inline-block;
-    width: 6rem;
-    text-align: center;
+.questions-container {
+    align-items: end;
+    justify-content: space-between;
     margin-bottom: 1rem;
 
-    fa-icon {
-        margin-left: 0.4rem;
+    .toggle-layout-label {
+        text-align: center;
+        font-size: 1.2rem;
+        padding: 1rem;
+        border-radius: 12px;
+        width: max-content;
+
+        &.active {
+            background-color: colors.$text_black;
+            color: colors.$text_white;
+        }
     }
 }
 
@@ -56,26 +64,48 @@
     }
 
     #question_statement {
-        height: 512px;
         overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    .question-section {
+        height: 818px;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+        flex-basis: 45%;
     }
 }
 
 #competition_info {
     font-family: appFont;
-    margin-top: 56px;
+    margin-bottom: 3rem;
     font-size: 1.3rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    infotip {
+        margin-left: 0.4rem;
+
+        svg {
+            font-size: 1.2rem;
+        }
+    }
 
     #duration_info {
         background-color: whitesmoke;
         border-radius: 24px;
         padding: 10px;
         margin: 24px;
+        margin-right: 0;
         padding-inline: 24px;
-        min-width: 300px;
+        min-width: 10rem;
+        text-align: start;
+
+        .label {
+            font-size: 1rem;
+        }
     }
 }
 
