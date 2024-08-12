@@ -2,6 +2,46 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
+.bottom-section {
+    @include basicBack;
+    @include hideSrollbar;
+    z-index: 50;
+    border-radius: 1.5rem;
+    position: fixed;
+    top: 97%;
+    left: 10%;
+    right: 10%;
+    bottom: -10%;
+    opacity: 0.5;
+    transition: opacity 100ms, top 200ms;
+    box-shadow: -1px 0px 6px 0px rgba(128, 128, 128, 0.5);
+    padding-top: 0;
+
+    &:hover {
+        opacity: 0.7;
+        top: 96.5%;
+    }
+
+    &.full {
+        opacity: 1;
+        top: 50%;
+        box-shadow: inset;
+        overflow-y: auto;
+
+        .section-toggle {
+            rotate: 180deg;
+        }
+    }
+
+    .section-toggle {
+        height: 2.5rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 .ace-editor {
     .hunter-conf {
         width: 100%;
@@ -50,6 +90,11 @@
 
 #submit_controls {
     justify-content: end !important;
+
+    .button {
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
 }
 
 .compete-hr-layout {
@@ -102,6 +147,8 @@
         padding-inline: 24px;
         min-width: 10rem;
         text-align: start;
+        display: flex;
+        justify-content: space-between;
 
         .label {
             font-size: 1rem;
@@ -182,6 +229,7 @@
         border-radius: 24px;
         border: 1px solid whitesmoke;
         margin: 4px;
+        transition: height 200ms;
 
         .showdown-branding {
             font-weight: 200;

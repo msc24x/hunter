@@ -2,283 +2,302 @@
 <app-loading *ngIf="loading"></app-loading>
 
 <div class="body">
-    <app-info-card
-        [persist]="true"
-        *ngIf="!isAuthenticated"
-        (click)="redirectToGitHubOAuth()"
-    >
-        <fa-icon [icon]="loginIcon" size="2x"></fa-icon>
-        <h3>Want to test your skills? Do a quick sign in to participant!</h3>
-        <br />
-    </app-info-card>
+    <div class="main">
+        <app-info-card
+            [persist]="true"
+            *ngIf="!isAuthenticated"
+            (click)="redirectToGitHubOAuth()"
+        >
+            <fa-icon [icon]="loginIcon" size="2x"></fa-icon>
+            <h3>
+                Want to test your skills? Do a quick sign in to participant!
+            </h3>
+            <br />
+        </app-info-card>
 
-    <app-info-card *ngIf="hasEnded" [persist]="true">
-        Oops! looks like you have missed the opportunity to participate in the
-        competition. Meantime, you can practice other live competitions.
-    </app-info-card>
+        <app-info-card *ngIf="hasEnded" [persist]="true">
+            Oops! looks like you have missed the opportunity to participate in
+            the competition. Meantime, you can practice other live competitions.
+        </app-info-card>
 
-    <popup
-        [hidden]="!showInstructionP"
-        (closeEvent)="showInstructionP = false"
-        title="Important Instructions To Follow"
-    >
-        <ul>
-            <li>
-                The available questions are displayed in the 'Questions' list.
-                Submission can be done only if one is selected.
-            </li>
-            <li>
-                Make sure that your are writing code in right selected language.
-            </li>
-            <li>
-                To check the correctness of your code, use Run Test Cases button
-                to run your code against one sample test case. This won't result
-                in any penalty if some error occurred.
-            </li>
-            <li>
-                Make sure to submit appropriate time before the competition
-                ends, unless it is a live forever competition.
-            </li>
-            <li>
-                To Fetch Last Submission, you must have to make at least one
-                Submit or Run Test Cases. Be aware enough not to close the tab
-                and loose your in progress code.
-            </li>
-            <li>
-                Every wrong submission results in penalty and affects your Rank.
-            </li>
-            <li>
-                Once you have made any successful submission, the points of the
-                question will be accumulated in your total score. No penalty
-                would be counted after this.
-            </li>
-            <li>
-                If the host had not uploaded the files for test cases or the
-                sample test cases, Output will return an error describing the
-                same. In this case you can wait for host to update the
-                competition or contact the Hunter team to report the
-                competition.
-            </li>
-            <li>
-                Hunter being truly open for everyone to host, we respect the
-                reliability for the participants. Kindly report any bad
-                competition to the Hunter immediately.
-            </li>
-        </ul>
-    </popup>
+        <popup
+            [hidden]="!showInstructionP"
+            (closeEvent)="showInstructionP = false"
+            [showControls]="false"
+            title="Important Instructions To Follow"
+        >
+            <ul>
+                <li>
+                    The available questions are displayed in the 'Questions'
+                    list. Submission can be done only if one is selected.
+                </li>
+                <li>
+                    Make sure that your are writing code in right selected
+                    language.
+                </li>
+                <li>
+                    To check the correctness of your code, use Run Test Cases
+                    button to run your code against one sample test case. This
+                    won't result in any penalty if some error occurred.
+                </li>
+                <li>
+                    Make sure to submit appropriate time before the competition
+                    ends, unless it is a live forever competition.
+                </li>
+                <li>
+                    To Fetch Last Submission, you must have to make at least one
+                    Submit or Run Test Cases. Be aware enough not to close the
+                    tab and loose your in progress code.
+                </li>
+                <li>
+                    Every wrong submission results in penalty and affects your
+                    Rank.
+                </li>
+                <li>
+                    Once you have made any successful submission, the points of
+                    the question will be accumulated in your total score. No
+                    penalty would be counted after this.
+                </li>
+                <li>
+                    If the host had not uploaded the files for test cases or the
+                    sample test cases, Output will return an error describing
+                    the same. In this case you can wait for host to update the
+                    competition or contact the Hunter team to report the
+                    competition.
+                </li>
+                <li>
+                    Hunter being truly open for everyone to host, we respect the
+                    reliability for the participants. Kindly report any bad
+                    competition to the Hunter immediately.
+                </li>
+            </ul>
+        </popup>
 
-    <div *ngIf="isAuthenticated" id="competition_info">
-        <div>
-            <b>{{ this.competition.title }}</b>
-            <infotip
-                message="Instructions to follow"
-                (click)="showInstructionP = true"
-                [svgSize]="'sm'"
-            ></infotip>
+        <div *ngIf="isAuthenticated" id="competition_info">
+            <div>
+                <b>{{ this.competition.title }}</b>
+                <infotip
+                    message="Click to read instructions"
+                    (click)="showInstructionP = true"
+                    [svgSize]="'sm'"
+                ></infotip>
 
-            <p>
-                {{ this.competition.description }}
-            </p>
+                <p>
+                    {{ this.competition.description }}
+                </p>
+            </div>
+
+            <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">
+                <!-- <span class="label">Time left</span> -->
+                <!-- <br /> -->
+                <fa-icon [icon]="timerIcon"></fa-icon>
+                &nbsp;
+                <b>{{ timeRemaining.min || "&infin;" }}</b> mins
+                <b>{{ timeRemaining.sec || "&infin;" }}</b> s
+            </div>
         </div>
 
-        <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">
-            <!-- <span class="label">Time left</span> -->
-            <!-- <br /> -->
-            <fa-icon [icon]="timerIcon"></fa-icon>
-            &nbsp;
-            <b>{{ timeRemaining.min || "&infin;" }}</b> mins
-            <b>{{ timeRemaining.sec || "&infin;" }}</b> s
-        </div>
-    </div>
+        <div
+            [ngClass]="{ 'row compete-hr-layout': hrlayout }"
+            *ngIf="!hasEnded && isAuthenticated && questionSelected !== -1"
+        >
+            <!-- Questions -->
+            <div class="question-section">
+                <div class="row questions-container">
+                    <questions-list
+                        [competitionInfo]="competition"
+                        [questionsList]="competitionQuestions"
+                        [editable]="false"
+                        (questionSelectEmitter)="selectQuestion($event)"
+                        [(questionSelected)]="questionSelected"
+                    ></questions-list>
 
-    <div
-        [ngClass]="{ 'row compete-hr-layout': hrlayout }"
-        *ngIf="!hasEnded && isAuthenticated && questionSelected !== -1"
-    >
-        <!-- Questions -->
-        <div class="question-section">
-            <div class="row questions-container">
-                <questions-list
-                    [competitionInfo]="competition"
-                    [questionsList]="competitionQuestions"
-                    [editable]="false"
-                    (questionSelectEmitter)="selectQuestion($event)"
-                    [(questionSelected)]="questionSelected"
-                ></questions-list>
+                    <div>
+                        <label
+                            for="toggle-layout"
+                            class="hsection pointer toggle-layout-label"
+                            matTooltip="Toggle the editor layout"
+                            [ngClass]="{ 'active': hrlayout }"
+                        >
+                            <fa-icon [icon]="layoutIcon"></fa-icon>
+                        </label>
 
-                <div>
-                    <label
-                        for="toggle-layout"
-                        class="hsection pointer toggle-layout-label"
-                        matTooltip="Toggle the editor layout"
-                        [ngClass]="{ 'active': hrlayout }"
+                        <input
+                            id="toggle-layout"
+                            type="checkbox"
+                            name="hrlayout"
+                            hidden
+                            (change)="toggleLayout()"
+                        />
+                    </div>
+                </div>
+
+                <div id="question_title">
+                    Question ID : {{ questionSelectedInfo.id }} for
+                    {{ questionSelectedInfo.points }} pts <br /><br />
+                    <b>{{ questionSelectedInfo.title }}</b>
+                </div>
+
+                <div id="question_statement">
+                    <ng-katex
+                        [data]="questionSelectedInfo.statement || ''"
+                    ></ng-katex>
+                </div>
+            </div>
+
+            <!-- Code editor -->
+            <div class="ace-editor">
+                <div class="row hunter-conf">
+                    <div
+                        matTooltip="Load the boilerplate template for the selected language"
+                        matTooltipPosition="above"
+                        class="row"
+                        id="load_template_btn"
+                        (click)="loadTemplate()"
                     >
-                        <fa-icon [icon]="layoutIcon"></fa-icon>
-                    </label>
+                        Load Template
+                    </div>
 
-                    <input
-                        id="toggle-layout"
-                        type="checkbox"
-                        name="hrlayout"
-                        hidden
-                        (change)="toggleLayout()"
-                    />
-                </div>
-            </div>
-
-            <div id="question_title">
-                Question ID : {{ questionSelectedInfo.id }} for
-                {{ questionSelectedInfo.points }} pts <br /><br />
-                <b>{{ questionSelectedInfo.title }}</b>
-            </div>
-
-            <div id="question_statement">
-                <ng-katex
-                    [data]="questionSelectedInfo.statement || ''"
-                ></ng-katex>
-            </div>
-        </div>
-
-        <!-- Code editor -->
-        <div class="ace-editor">
-            <div class="row hunter-conf">
-                <div
-                    matTooltip="Load the boilerplate template for the selected language"
-                    matTooltipPosition="above"
-                    class="row"
-                    id="load_template_btn"
-                    (click)="loadTemplate()"
-                >
-                    Load Template
+                    <drop-down-list
+                        listType="Language"
+                        [items]="['cpp', 'c', 'py', 'js', 'ts', 'go']"
+                        (itemSelectedEvent)="updateEditorMode($event)"
+                    ></drop-down-list>
                 </div>
 
-                <drop-down-list
-                    listType="Language"
-                    [items]="['cpp', 'c', 'py', 'js', 'ts', 'go']"
-                    (itemSelectedEvent)="updateEditorMode($event)"
-                ></drop-down-list>
+                <div id="editor"></div>
             </div>
+        </div>
 
-            <div id="editor"></div>
-        </div>
-    </div>
-
-    <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
-    <div
-        id="submit_controls"
-        *ngIf="questionSelected != -1 && isAuthenticated"
-        class="row"
-    >
+        <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
         <div
-            matTooltip="Only submit when you're ready, to avoid penalities"
-            class="button"
-            id="submit_code_btn"
-            (click)="postSolution()"
+            id="submit_controls"
+            *ngIf="questionSelected != -1 && isAuthenticated"
+            class="row"
         >
-            Submit
+            <div
+                matTooltip="Only submit when you're ready, to avoid penalities"
+                class="button"
+                id="submit_code_btn"
+                (click)="postSolution()"
+            >
+                Submit
+            </div>
+            <div
+                class="button"
+                id="submit_code_samples_btn"
+                (click)="postSolution(true)"
+                [matTooltip]="'Test samples (Shift + Alt + J)'"
+            >
+                Test Sample Cases
+            </div>
+            <div
+                class="button"
+                id="fetch_last_submit"
+                (click)="fetchLastSubmission()"
+            >
+                Fetch Last Submission
+            </div>
+            <div>{{ fetchSubmissionMsg }}</div>
         </div>
-        <div
-            class="button"
-            id="submit_code_samples_btn"
-            (click)="postSolution(true)"
-            [matTooltip]="'Test samples (Shift + Alt + J)'"
-        >
-            Test Sample Cases
-        </div>
-        <div
-            class="button"
-            id="fetch_last_submit"
-            (click)="fetchLastSubmission()"
-        >
-            Fetch Last Submission
-        </div>
-        <div>{{ fetchSubmissionMsg }}</div>
     </div>
 
     <br />
 
-    <div *ngIf="isAuthenticated && !hasEnded" class="row sa">
-        <div id="pts_desc_label">Evaluation</div>
-        <div id="output_label">Submission Output</div>
-    </div>
-
-    <div *ngIf="isAuthenticated && !hasEnded" id="output_points">
-        <div id="pts_desc" class="btable">
-            <div class="table_heading">
-                <div>QuesId</div>
-                <div>Score</div>
-
-                <div style="color: darkred">Penalities</div>
-            </div>
-            <div *ngFor="let row of evaluation">
-                <div>{{ row.question_id }}</div>
-                <div>{{ row.result }}</div>
-                <div style="color: darkred">{{ row.penalities }}</div>
-            </div>
-
-            <div>
-                <div>-</div>
-                <div>-</div>
-                <div style="color: darkred">-</div>
-            </div>
+    <div class="bottom-section" [ngClass]="{ 'full': bottomSection }">
+        <div
+            class="section-toggle"
+            (click)="bottomSection = !bottomSection"
+            matTooltip="Toggle the judge panel"
+        >
+            <fa-icon [icon]="upIcon"></fa-icon>
         </div>
+        <!-- <div *ngIf="isAuthenticated && !hasEnded" class="row sa">
+            <div id="pts_desc_label">Evaluation</div>
+            <div id="output_label">Submission Output</div>
+        </div> -->
 
-        <div id="solution_output">
-            <div class="loading" *ngIf="judgeInProgress">
-                <fa-icon
-                    [icon]="judgeLoadingIcon"
-                    [spin]="true"
-                    [pulse]="true"
-                ></fa-icon>
-                &nbsp;&nbsp; Judging... this may take a few seconds
-            </div>
-            <div *ngIf="solutionOutput.output">
-                <h3>Output<br /></h3>
-                <pre [innerText]="solutionOutput.output"></pre>
-            </div>
+        <div *ngIf="isAuthenticated && !hasEnded" id="output_points">
+            <div id="pts_desc" class="btable">
+                <div class="table_heading">
+                    <div>QuesId</div>
+                    <div>Score</div>
 
-            <div *ngIf="solutionOutput.expected">
-                <h3>Expected<br /></h3>
-                <pre [innerText]="solutionOutput.expected"></pre>
-            </div>
-
-            <p class="showdown-branding">
-                Runtime powered by <b>Showdown</b> <br />
-                An <a href="https://showdown.cambo.in">open source</a> remote
-                code execution engine built by Maninderpal Singh
-            </p>
-
-            <div
-                matTooltip="Runtime information of the submitted code, provided by Showdown"
-                *ngIf="solutionOutput.meta"
-                class="solution-meta"
-            >
-                <div
-                    *ngFor="
-                        let infoItem of getPrettyRuntimeInfo(
-                            solutionOutput.meta
-                        )
-                    "
-                >
-                    <b>{{ infoItem[0] }}</b>
-                    <br />
-                    <span>{{ infoItem[1] }}</span>
+                    <div style="color: darkred">Penalities</div>
                 </div>
+                <div *ngFor="let row of evaluation">
+                    <div>{{ row.question_id }}</div>
+                    <div>{{ row.result }}</div>
+                    <div style="color: darkred">{{ row.penalities }}</div>
+                </div>
+
                 <div>
-                    <b>Status</b>
-                    <br />
-                    <span
-                        [style.color]="
-                            solutionOutput.success ? 'darkgreen' : 'darkred'
+                    <div>-</div>
+                    <div>-</div>
+                    <div style="color: darkred">-</div>
+                </div>
+            </div>
+
+            <div id="solution_output">
+                <div class="loading" *ngIf="judgeInProgress">
+                    <fa-icon
+                        [icon]="judgeLoadingIcon"
+                        [spin]="true"
+                        [pulse]="true"
+                    ></fa-icon>
+                    &nbsp;&nbsp; Judging... this may take a few seconds
+                </div>
+                <div *ngIf="solutionOutput.output">
+                    <h3>Output<br /></h3>
+                    <pre [innerText]="solutionOutput.output"></pre>
+                </div>
+
+                <div *ngIf="solutionOutput.expected">
+                    <h3>Expected<br /></h3>
+                    <pre [innerText]="solutionOutput.expected"></pre>
+                </div>
+
+                <p class="showdown-branding">
+                    Runtime powered by <b>Showdown</b> <br />
+                    An
+                    <a href="https://showdown.cambo.in">open source</a> remote
+                    code execution engine built by Maninderpal Singh
+                </p>
+
+                <div
+                    matTooltip="Runtime information of the submitted code, provided by Showdown"
+                    *ngIf="solutionOutput.meta"
+                    class="solution-meta"
+                >
+                    <div
+                        *ngFor="
+                            let infoItem of getPrettyRuntimeInfo(
+                                solutionOutput.meta
+                            )
                         "
-                        >{{
-                            solutionOutput.success ? "Accepted" : "Not Accepted"
-                        }}</span
                     >
+                        <b>{{ infoItem[0] }}</b>
+                        <br />
+                        <span>{{ infoItem[1] }}</span>
+                    </div>
+                    <div>
+                        <b>Status</b>
+                        <br />
+                        <span
+                            [style.color]="
+                                solutionOutput.success ? 'darkgreen' : 'darkred'
+                            "
+                            >{{
+                                solutionOutput.success
+                                    ? "Accepted"
+                                    : "Not Accepted"
+                            }}</span
+                        >
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <scoreboard [competition_id]="c_id"></scoreboard>
+        <scoreboard [competition_id]="c_id"></scoreboard>
+    </div>
 </div>

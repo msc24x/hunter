@@ -19,6 +19,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     faAddressCard,
+    faChevronUp,
     faHourglassHalf,
     faSpinner,
     faTableColumns,
@@ -34,6 +35,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     judgeLoadingIcon = faSpinner;
     loginIcon = faAddressCard;
     timerIcon = faHourglassHalf;
+    upIcon = faChevronUp;
 
     showInstructionP = false;
 
@@ -42,7 +44,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     c_id: string = '';
     editor!: ace.Ace.Editor;
+
     hrlayout: boolean = true;
+    bottomSection = false;
 
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
@@ -103,9 +107,30 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        document
+            .getElementsByTagName('bottom-app-bar')[0]
+            .classList.add('hidden');
+
+        document.addEventListener('click', (event) => {
+            const inBottomSection = (event.target as HTMLElement).closest(
+                '.bottom-section'
+            );
+            const inSubmitControls = (event.target as HTMLElement).closest(
+                '#submit_controls'
+            );
+
+            if (!inBottomSection && !inSubmitControls) {
+                this.bottomSection = false;
+            }
+        });
+
         document.onkeydown = (event) => {
             if (event.shiftKey && event.altKey && event.key == 'J') {
                 this.postSolution(true);
+            }
+
+            if (event.key == 'enter') {
+                this.bottomSection = false;
             }
         };
 
@@ -172,6 +197,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     postSolution(samples = false) {
         this.clearOutput();
+        this.bottomSection = true;
 
         if (this.questionSelected == -1) {
             this.solutionOutput.output = 'No question selected';
@@ -182,12 +208,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             return;
         }
 
-        setTimeout(() => {
-            document.getElementById('solution_output')?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-            });
-        });
+        // setTimeout(() => {
+        //     document.getElementById('solution_output')?.scrollIntoView({
+        //         behavior: 'smooth',
+        //         block: 'nearest',
+        //     });
+        // });
 
         this.solutionOutput.output = '';
         this.judgeInProgress = true;

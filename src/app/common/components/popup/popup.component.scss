@@ -13,7 +13,7 @@
 
 #dialog {
     background-color: colors.$text_white;
-    max-width: 80%;
+    max-width: 60%;
     max-height: 60%;
     border-radius: 10px;
     box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
@@ -38,13 +38,13 @@
         div {
             padding: 8px;
             padding-inline: 16px;
-            background-color: colors.$text_white;
+            background-color: whitesmoke;
             cursor: pointer;
             border-radius: 12px;
         }
 
         div:hover {
-            background-color: whitesmoke;
+            background-color: white;
         }
     }
 }
