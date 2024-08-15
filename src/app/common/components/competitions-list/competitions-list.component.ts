@@ -2,8 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
     faCheckDouble,
     faCircleCheck,
+    faLock,
 } from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
+import { isLive } from 'src/app/utils/utils';
 import { CompetitionInfo } from 'src/environments/environment';
 
 @Component({
@@ -14,6 +16,7 @@ import { CompetitionInfo } from 'src/environments/environment';
 export class CompetitionsListComponent implements OnInit {
     loading = false;
     officialIcon = faCircleCheck;
+    privateIcon = faLock;
 
     @Input()
     competitionsList: Array<CompetitionInfo> | null = null;
@@ -25,22 +28,37 @@ export class CompetitionsListComponent implements OnInit {
     heading: string = 'Competitions';
 
     @Input()
-    public: boolean = true;
+    includeSelf: boolean = false;
 
     @Input()
     route: string = 'editor';
 
-    title = '';
+    query = '';
     liveStatus = 'all';
-    orderBy: 'any' | 'latest' | 'oldest' = 'latest';
+    orderBy: '' | 'asc' | 'desc' = 'desc';
     debounceTimeout?: NodeJS.Timeout;
+    timeLeftFlag = false;
 
-    orderByCode = { any: 0, latest: -1, oldest: 1 };
+    constructor(private competitionsDataService: CompetitionsDataService) {
+        setInterval(() => {
+            this.timeLeftFlag = !this.timeLeftFlag;
+        }, 30 * 1000);
+    }
 
-    constructor(private competitionsDataService: CompetitionsDataService) {}
+    isAfterNow(date: Date) {
+        return date.getTime() < Date.now();
+    }
 
-    isAfterNow(date: string) {
-        return Date.parse(date) < Date.now();
+    isClosedNow(com: CompetitionInfo) {
+        return (
+            this.isAfterNow(com.scheduled_at) &&
+            !isLive(com.scheduled_at, com.duration)
+        );
+    }
+
+    timeLeft(com: CompetitionInfo, f: boolean) {
+        const endTime = com.scheduled_at.getTime() + com.duration * 60 * 1000;
+        return Math.ceil((endTime - Date.now()) / 1000 / 60);
     }
 
     ngOnInit(): void {}
@@ -53,21 +71,20 @@ export class CompetitionsListComponent implements OnInit {
 
     updateOrderBy(event: Event) {
         let select = event.target as HTMLSelectElement;
-        this.orderBy = select.value as 'any' | 'latest' | 'oldest';
+        this.orderBy = select.value as '' | 'asc' | 'desc';
         this.updateList();
     }
 
     _updateList() {
         this.competitionsDataService
-            .getPublicCompetitions({
-                title: this.title,
-                public: this.public,
-                dateOrder: this.orderByCode[this.orderBy],
+            .getCompetitions({
+                query: this.query,
+                includeSelf: this.includeSelf,
+                orderBy: this.orderBy,
                 liveStatus: this.liveStatus,
-                host_user_id: this.host_user_id + '',
             })
-            .subscribe((res) => {
-                this.competitionsList = res.body;
+            .then((res) => {
+                this.competitionsList = res;
                 this.loading = false;
             });
     }

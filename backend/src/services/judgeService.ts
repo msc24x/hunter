@@ -14,7 +14,7 @@ type ExeInfo = {
 
 @Service({ global: true })
 export class JudgeService {
-    private isProcessingUserMap = new Map<string, boolean>();
+    private isProcessingUserMap = new Map<number, boolean>();
     private entries = 0;
     private gatewayPath: string;
     private showdownJudgeUrl = process.env.SHOWDOWN_URL!;

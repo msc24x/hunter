@@ -91,7 +91,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         this.timeInterval = setInterval(() => {
             let seconds =
-                (Date.parse(this.competition.start_schedule) +
+                (this.competition.scheduled_at.getTime() +
                     this.competition.duration * 60 * 1000 -
                     Date.now()) /
                 1000;
@@ -129,7 +129,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 this.postSolution(true);
             }
 
-            if (event.key == 'enter') {
+            if (event.key.startsWith('Esc')) {
                 this.bottomSection = false;
             }
         };
@@ -165,6 +165,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        document
+            .getElementsByTagName('bottom-app-bar')[0]
+            .classList.remove('hidden');
+
         this.unsubscribeAll();
         this.routerSubsc?.unsubscribe();
     }
@@ -313,14 +317,15 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.competitionsService.getCompetitionInfo(this.c_id).subscribe({
                 next: (res) => {
                     this.competition = res.body as CompetitionInfo;
+                    this.competitionsService.parseCompetitionTypes(
+                        this.competition
+                    );
 
                     if (this.competition.duration == 0) {
                         clearInterval(this.timeInterval);
                     }
 
-                    if (
-                        Date.parse(this.competition.start_schedule) > Date.now()
-                    ) {
+                    if (this.competition.scheduled_at.getTime() > Date.now()) {
                         alert('Competition has not started yet');
                         this.router.navigate(['/compete']);
                     }
@@ -328,7 +333,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                     if (
                         this.competition.duration != 0 &&
                         Date.now() >
-                            Date.parse(this.competition.start_schedule) +
+                            this.competition.scheduled_at.getTime() +
                                 this.competition.duration * 60 * 1000
                     ) {
                         this.hasEnded = true;

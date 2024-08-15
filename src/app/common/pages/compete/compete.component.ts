@@ -4,98 +4,89 @@ import { CompetitionInfo, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 
-export class Question{
-  constructor(
-    public title : string,
-    public description : string,
-    public value : number
-  ){}
-
+export class Question {
+    constructor(
+        public title: string,
+        public description: string,
+        public value: number
+    ) {}
 }
 
-export class Competition{
-  constructor(
-    public id : number,
-    public title : string,
-    public about : string,
-    public dateCreated : number,
-    public duration : number,
-    public questions : Array<Question>,
-    public isPublic : Boolean
-  ){}
-
+export class Competition {
+    constructor(
+        public id: number,
+        public title: string,
+        public about: string,
+        public dateCreated: number,
+        public duration: number,
+        public questions: Array<Question>,
+        public isPublic: Boolean
+    ) {}
 }
 
 @Component({
-  selector: 'compete',
-  templateUrl: './compete.component.html',
-  styleUrls: ['./compete.component.scss']
+    selector: 'compete',
+    templateUrl: './compete.component.html',
+    styleUrls: ['./compete.component.scss'],
 })
 export class CompeteComponent implements OnInit {
+    loading = false;
 
-  loading = false
+    isAuthenticated: boolean = false;
+    user = {
+        id: '',
+        email: '',
+        name: '',
+    };
 
-  isAuthenticated : boolean = false
-  user = {
-    id : "",
-    email : "",
-    name : ""
-  }
+    publicCompetitions: Array<CompetitionInfo> | null = null;
 
-  publicCompetitions : Array<CompetitionInfo> | null = null
+    constructor(
+        private authService: AuthService,
+        private competitionsDataService: CompetitionsDataService,
+        private router: Router
+    ) {
+        this.authService.isAuthenticated.subscribe((isAuth: boolean) => {
+            this.user = this.authService.user;
+            this.isAuthenticated = isAuth;
 
-
-  constructor(
-    private authService : AuthService,
-    private competitionsDataService : CompetitionsDataService,
-    private router : Router
-  ) {
-
-    this.authService.isAuthenticated.subscribe((isAuth : boolean)=>{
-      this.user = this.authService.user
-      this.isAuthenticated = isAuth;
-
-      this.loading = true
-      this.competitionsDataService.getPublicCompetitions({ title : "", dateOrder : "-1", public : true}).subscribe(res=>{
-        this.publicCompetitions = res.body
-        this.loading = false
-      })
-
-    })
-
-  }
-
-
-
-  ngOnInit(): void {
-
-    if (this.isAuthenticated) {
-      return
+            this.loading = true;
+            this.competitionsDataService
+                .getCompetitions({ title: '', dateOrder: '-1', public: true })
+                .then((res) => {
+                    this.publicCompetitions = res;
+                    this.loading = false;
+                });
+        });
     }
 
-    this.authService.authenticate_credentials().subscribe(
-      {
-        next : res=>{
-          if(res.status == 202){
-            const body = res.body as UserInfo
-            this.user = {
-              id :  body.id,
-              email : body.email,
-              name : body.name
-            }
-            this.authService.user = this.user
-            this.isAuthenticated = true
-            this.authService.isAuthenticated.next(true)
-          }
-        },
-      }
-    )
-  }
+    ngOnInit(): void {
+        if (this.isAuthenticated) {
+            return;
+        }
 
-  routeToCompetition(){
-    this.loading = true
-    const id = document.getElementById("competition_id_text") as HTMLInputElement
-    this.router.navigate(["/compete/p/"+id.valueAsNumber])
-  }
+        this.authService.authenticate_credentials().subscribe({
+            next: (res) => {
+                if (res.status == 202) {
+                    const body = res.body as UserInfo;
+                    this.user = {
+                        id: body.id,
+                        email: body.email,
+                        name: body.name,
+                    };
+                    this.authService.user = this.user;
+                    this.isAuthenticated = true;
+                    this.authService.isAuthenticated.next(true);
+                }
+            },
+        });
+    }
 
+    routeToCompetition() {
+        this.loading = true;
+        const id = document.getElementById(
+            'competition_id_text'
+        ) as HTMLInputElement;
+        this.router.navigate(['/compete/p/' + id.valueAsNumber]);
+    }
 }

@@ -323,7 +323,7 @@ export class EditorComponent implements OnInit {
         ) as HTMLInputElement;
         duration.value = this.competitionInfo.duration as unknown as string;
         schedule.value = this.datePipe.transform(
-            this.competitionInfo.start_schedule,
+            this.competitionInfo.scheduled_at,
             'yyyy-MM-ddThh:mm'
         )!;
         title.value = this.competitionInfo.title as string;
@@ -369,9 +369,7 @@ export class EditorComponent implements OnInit {
         this.competitionInfo.title = title.value;
         this.competitionInfo.description = description.value;
         this.competitionInfo.duration = duration.value as unknown as number;
-        this.competitionInfo.start_schedule = new Date(
-            schedule.value
-        ).toISOString();
+        this.competitionInfo.scheduled_at = new Date(schedule.value);
         this.competitionsData
             .putCompetitionInfo(this.competitionInfo)
             .subscribe((res) => {

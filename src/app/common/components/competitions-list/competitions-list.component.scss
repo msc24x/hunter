@@ -132,11 +132,13 @@
         transition: 200ms;
     }
 
-    #start_schedule {
+    .detail-tag {
+        float: left;
         background-color: colors.$text_white;
         border-radius: 16px;
         padding: 4px;
-        padding-inline: 8px;
+        padding-inline: 12px;
+        margin-right: 4px;
         width: fit-content;
         display: flex;
     }

@@ -157,7 +157,7 @@
         <input
             type="datetime-local"
             id="competition_schedule"
-            [value]="competitionInfo.start_schedule | date : 'yyyy-MM-ddTHH:mm'"
+            [value]="competitionInfo.scheduled_at | date : 'yyyy-MM-ddTHH:mm'"
         />
 
         <div id="visbility_controller">
@@ -180,8 +180,8 @@
             </div>
         </div>
 
-        <div id="created_on">
-            {{ this.competitionInfo.created_on | date : "medium" }}
+        <div id="created_at">
+            {{ this.competitionInfo.created_at | date : "medium" }}
         </div>
     </div>
 </div>

@@ -14,17 +14,19 @@
     "license": "ISC",
     "devDependencies": {
         "@types/cookie-parser": "^1.4.2",
-        "@types/express": "^4.17.13",
+        "@types/express": "^4.17.21",
         "@types/mailgun-js": "^0.22.12",
         "@types/memory-cache": "^0.2.2",
         "@types/mysql": "^2.15.20",
         "@types/node": "^17.0.8",
-        "express": "^4.17.2",
+        "express": "^4.19.2",
         "mysql": "^2.18.1",
         "nodemon": "^2.0.15",
+        "prisma": "^5.18.0",
         "ts-node": "^10.9.1"
     },
     "dependencies": {
+        "@prisma/client": "^5.18.0",
         "argon2": "^0.30.3",
         "body-parser": "^1.19.1",
         "cookie-parser": "^1.4.6",

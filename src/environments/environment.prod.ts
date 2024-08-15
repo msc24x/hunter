@@ -22,10 +22,13 @@ export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go';
 export interface CompetitionInfo {
     id: string;
     host_user_id: string;
-    host_user_info?: UserInfo;
+    host_user?: UserInfo;
     title: string;
     description: string;
-    created_on: string;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date;
+    scheduled_at: Date;
     rating: number;
     public: boolean;
     duration: number;

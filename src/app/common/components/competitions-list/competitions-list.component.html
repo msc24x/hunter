@@ -6,8 +6,8 @@
         <div id="filter_controls">
             <text-input
                 id="title_input"
-                title="Filter By Title"
-                (onChangeEvent)="title = $event; updateList()"
+                title="Search"
+                (onChangeEvent)="query = $event; updateList()"
             ></text-input>
 
             <div>
@@ -27,11 +27,11 @@
             <div>
                 <label for="order_select">Order By</label>
                 <select id="order_select" (change)="updateOrderBy($event)">
-                    <option value="any">Any</option>
-                    <option value="latest" [defaultSelected]="true">
+                    <option value="">Any</option>
+                    <option value="desc" [defaultSelected]="true">
                         Latest
                     </option>
-                    <option value="oldest">Oldest</option>
+                    <option value="asc">Oldest</option>
                 </select>
             </div>
         </div>
@@ -46,7 +46,10 @@
                 <div id="c_title">{{ com.title }}</div>
                 <div id="c_host_user">
                     By
-                    {{ com.host_user_info?.name || "Anonymous" }}
+                    {{ com.host_user?.name || "Anonymous" }}
+                    <span *ngIf="com.host_user_id != '1'">
+                        #{{ com.host_user_id }}
+                    </span>
                     &nbsp;
                     <span
                         *ngIf="com.host_user_id == '1'"
@@ -54,32 +57,48 @@
                     >
                         <fa-icon [icon]="officialIcon"></fa-icon>
                     </span>
-                    <span *ngIf="com.host_user_id != '1'">
-                        (ID:{{ com.host_user_id }})
+
+                    &nbsp;
+                    <span
+                        *ngIf="!com.public"
+                        matTooltip="Private competition, only visible to you"
+                    >
+                        <fa-icon [icon]="privateIcon"></fa-icon>
                     </span>
                 </div>
                 <div
                     id="start_schedule"
+                    class="detail-tag"
                     [style.color]="
-                        (com.start_schedule | isLiveStatusPipe : com.duration)
+                        (com.scheduled_at | isLiveStatusPipe : com.duration)
                             ? '#D2122Ebb'
                             : 'colors.$text_black'
                     "
                 >
-                    Live from {{ com.start_schedule | date : "full" : "IST" }}
-                    &nbsp;
-                    <div
-                        *ngIf="
-                            isAfterNow(com.start_schedule) &&
-                            !(
-                                com.start_schedule
-                                | isLiveStatusPipe : com.duration
-                            )
-                        "
+                    <span
+                        [matTooltip]="com.scheduled_at.toLocaleString()"
+                        *ngIf="com.duration !== 0 && !isClosedNow(com)"
                     >
-                        <b>Has Ended</b>
-                    </div>
+                        Live from
+                        {{ com.scheduled_at | date : "MMM d, h:mm a" : "IST" }}
+                    </span>
+                    <span *ngIf="com.duration === 0"> Always Live </span>
+                    &nbsp;
+                    <span *ngIf="isClosedNow(com)">
+                        <b>Submissions Closed</b>
+                    </span>
                 </div>
+                <div
+                    *ngIf="
+                        com.duration !== 0 &&
+                        !isClosedNow(com) &&
+                        isAfterNow(com.scheduled_at)
+                    "
+                    class="detail-tag"
+                >
+                    {{ timeLeft(com, timeLeftFlag) }} mins left
+                </div>
+                <br />
                 <p id="c_about">{{ com.description }}</p>
             </div>
         </li>
