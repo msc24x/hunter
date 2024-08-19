@@ -14,6 +14,36 @@ popup {
     @include appTextArea;
 }
 
+.c-insights {
+    max-width: 370px;
+    .participant-link {
+        font-family: monospace;
+        background-color: papayawhip;
+        display: flex;
+        border-radius: 16px;
+        width: calc(100% - 32px);
+        justify-content: space-between;
+
+        .link-text {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding-right: 6px;
+        }
+
+        fa-icon {
+            color: rgb(30, 30, 30);
+        }
+    }
+
+    .insight-details {
+        border-radius: 16px;
+
+        background-color: papayawhip;
+        margin-top: 1rem;
+    }
+}
+
 #input_competition_code {
     border-width: 0px;
     font-family: appFont;
@@ -116,10 +146,7 @@ popup {
     flex-wrap: wrap;
 }
 
-#title_label,
-#desc_label,
-#duration_label,
-#schedule_label {
+.label {
     font-family: appFont;
     font-size: 1.1rem;
     text-align: left;
@@ -129,8 +156,7 @@ popup {
     color: colors.$text_black;
 }
 
-#competition_duration,
-#competition_schedule {
+.text-area {
     @include appTextArea;
     font-size: 1rem;
 }
@@ -143,6 +169,7 @@ popup {
 
 #text_description {
     @include appTextArea();
+    @include hideSrollbar();
     min-width: 0px;
     width: 512px;
     margin-top: 4px;
@@ -336,6 +363,7 @@ a:hover,
 #question_id {
     font-family: appFont;
     font-size: 1.2rem;
+    margin: 1rem;
 }
 
 .info_text {

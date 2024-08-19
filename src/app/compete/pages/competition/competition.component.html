@@ -91,9 +91,12 @@
                 <!-- <span class="label">Time left</span> -->
                 <!-- <br /> -->
                 <fa-icon [icon]="timerIcon"></fa-icon>
-                &nbsp;
-                <b>{{ timeRemaining.min || "&infin;" }}</b> mins
-                <b>{{ timeRemaining.sec || "&infin;" }}</b> s
+                <span style="width: max-content">
+                    &nbsp; &nbsp;
+                    {{ timeRemaining }}
+                </span>
+                <!-- <b>{{ timeRemaining.min || "&infin;" }}</b> mins
+                <b>{{ timeRemaining.sec || "&infin;" }}</b> s -->
             </div>
         </div>
 
@@ -106,7 +109,7 @@
                 <div class="row questions-container">
                     <questions-list
                         [competitionInfo]="competition"
-                        [questionsList]="competitionQuestions"
+                        [questionsList]="competition.questions || []"
                         [editable]="false"
                         (questionSelectEmitter)="selectQuestion($event)"
                         [(questionSelected)]="questionSelected"

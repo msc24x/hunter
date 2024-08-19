@@ -54,7 +54,7 @@ router.post('/execute', authenticate, loginRequired, (req, res) => {
                         ) ||
                         !models.competitions.hasNotEnded(
                             competitions[0].scheduled_at,
-                            competitions[0].duration
+                            competitions[0].scheduled_end_at
                         )
                     ) {
                         Util.sendResponse(

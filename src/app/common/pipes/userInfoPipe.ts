@@ -35,7 +35,7 @@ export class UserInfoPipe implements PipeTransform {
     name: 'isLiveStatusPipe',
 })
 export class IsLiveStatusPipe implements PipeTransform {
-    transform(value: Date, ...args: any[]) {
+    transform(value: Date | null, ...args: any[]) {
         return isLive(value, args[0]);
     }
 }

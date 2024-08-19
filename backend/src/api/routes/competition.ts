@@ -50,6 +50,7 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
                 public: false,
                 created_at: new Date(),
                 host_user_id: res.locals.user.id,
+                updated_at: new Date(),
             },
         })
         .then((competition) => {
@@ -99,8 +100,12 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                         description: competitionBody.description,
                         title: competitionBody.title,
                         public: competitionBody.public,
-                        scheduled_at: new Date(competitionBody.scheduled_at),
-                        duration: parseInt(competitionBody.duration),
+                        scheduled_at: competitionBody.scheduled_at
+                            ? new Date(competitionBody.scheduled_at)
+                            : null,
+                        scheduled_end_at: competitionBody.scheduled_end_at
+                            ? new Date(competitionBody.scheduled_end_at)
+                            : null,
                         updated_at: new Date(),
                     },
                 })
@@ -222,10 +227,8 @@ router.get('/competitions', authenticate, (req, res) => {
         .then((competitions) => {
             if (params.liveStatus === 'live') {
                 competitions = competitions.filter((comp) => {
-                    if (comp.duration === 0) return true;
-                    var endTime = comp.scheduled_at!;
-                    endTime.setMinutes(endTime.getMinutes() + comp.duration!);
-                    return new Date() < endTime;
+                    if (!comp.scheduled_end_at) return true;
+                    return new Date() < comp.scheduled_end_at;
                 });
             }
             Util.sendResponseJson(res, resCode.success, competitions);

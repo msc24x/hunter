@@ -43,10 +43,9 @@ export type CompetitionInfo = {
     updated_at: Date;
     deleted_at: Date;
     scheduled_at: Date;
+    scheduled_end_at: Date;
     rating: number;
     public: boolean;
-    duration: number;
-    start_schedule: string;
 };
 
 export type HunterExecutable = {

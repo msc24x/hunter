@@ -24,6 +24,7 @@ import {
     faSpinner,
     faTableColumns,
 } from '@fortawesome/free-solid-svg-icons';
+import { prettyDuration } from 'src/app/utils/utils';
 
 @Component({
     selector: 'competition',
@@ -42,7 +43,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     loading = false;
     fetchSubmissionMsg = '';
 
-    c_id: string = '';
+    c_id: number = 0;
     editor!: ace.Ace.Editor;
 
     hrlayout: boolean = true;
@@ -52,7 +53,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     user = {} as UserInfo;
     competition = {} as CompetitionInfo;
     evaluation: Array<resultFull> = [];
-    competitionQuestions = [] as Array<QuestionInfo>;
     questionSelected = -1;
     questionSelectedInfo = {} as QuestionInfo;
     judgeInProgress = false;
@@ -64,10 +64,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     };
     languageSelected: HunterLanguage = 'cpp';
 
-    timeRemaining = {
-        min: '',
-        sec: '',
-    };
+    timeRemaining = 'Unlimited';
     hasEnded = false;
 
     routerSubsc: Subscription | null = null;
@@ -81,7 +78,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         private competitionsService: CompetitionsDataService,
         private scoresDataService: ScoresDataService
     ) {
-        const idParam = this.route.snapshot.paramMap.get('competition_id');
+        const idParam = parseInt(
+            this.route.snapshot.paramMap.get('competition_id') || ''
+        );
         if (idParam) {
             this.c_id = idParam;
         }
@@ -89,21 +88,20 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.user = this.authService.user;
         this.isAuthenticated = this.authService.isAuthenticated.value;
 
-        this.timeInterval = setInterval(() => {
-            let seconds =
-                (this.competition.scheduled_at.getTime() +
-                    this.competition.duration * 60 * 1000 -
-                    Date.now()) /
-                1000;
-            seconds = Math.floor(seconds);
-            if (seconds < 0) {
-                this.timeRemaining = { min: '0', sec: '0' };
-                clearInterval(this.timeInterval);
-                return;
-            }
-            this.timeRemaining.min = Math.floor(seconds / 60) + '';
-            this.timeRemaining.sec = (seconds % 60) + '';
-        }, 1000);
+        if (this.competition.scheduled_end_at !== null) {
+            this.timeInterval = setInterval(() => {
+                let seconds =
+                    (this.competition.scheduled_end_at!.getTime() -
+                        Date.now()) /
+                    1000;
+                if (seconds < 0) {
+                    this.timeRemaining = 'Closed';
+                    clearInterval(this.timeInterval);
+                    return;
+                }
+                this.timeRemaining = prettyDuration(seconds);
+            }, 1000);
+        }
     }
 
     ngOnInit(): void {
@@ -231,8 +229,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         for: {
                             competition_id: this.c_id,
                             question_id:
-                                this.competitionQuestions[this.questionSelected]
-                                    .id,
+                                this.competition.questions![
+                                    this.questionSelected
+                                ].id,
                         },
                         solution: {
                             lang: this.languageSelected,
@@ -314,56 +313,53 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.fetchEvaluation();
 
         this.subscriptions.push(
-            this.competitionsService.getCompetitionInfo(this.c_id).subscribe({
-                next: (res) => {
-                    this.competition = res.body as CompetitionInfo;
-                    this.competitionsService.parseCompetitionTypes(
-                        this.competition
-                    );
+            this.competitionsService
+                .getQuestions({ competition_id: this.c_id })
+                .subscribe({
+                    next: (res) => {
+                        this.competition = res.body as CompetitionInfo;
+                        this.competitionsService.parseCompetitionTypes(
+                            this.competition
+                        );
 
-                    if (this.competition.duration == 0) {
-                        clearInterval(this.timeInterval);
-                    }
+                        if (!this.competition.scheduled_end_at) {
+                            clearInterval(this.timeInterval);
+                        }
 
-                    if (this.competition.scheduled_at.getTime() > Date.now()) {
-                        alert('Competition has not started yet');
-                        this.router.navigate(['/compete']);
-                    }
+                        if (
+                            this.competition.scheduled_at &&
+                            this.competition.scheduled_at.getTime() > Date.now()
+                        ) {
+                            alert('Competition has not started yet');
+                            this.router.navigate(['/compete']);
+                        }
 
-                    if (
-                        this.competition.duration != 0 &&
-                        Date.now() >
-                            this.competition.scheduled_at.getTime() +
-                                this.competition.duration * 60 * 1000
-                    ) {
-                        this.hasEnded = true;
-                    }
+                        if (
+                            this.competition.scheduled_end_at &&
+                            new Date() > this.competition.scheduled_end_at
+                        ) {
+                            this.hasEnded = true;
+                        }
 
-                    this.competitionsService
-                        .getQuestions({ competition_id: this.c_id })
-                        .subscribe((res) => {
-                            this.competitionQuestions =
-                                res.body as QuestionInfo[];
-                            if (this.competitionQuestions) {
-                                this.selectQuestion(0);
-                                setTimeout(() => {
-                                    this.initEditor();
-                                });
-                            }
-                        });
-                },
-                error: (err) => {
-                    if (err.status == resCode.notFound) {
-                        this.router.navigate(['/404']);
-                    }
-                },
-            })
+                        if (this.competition.questions) {
+                            this.selectQuestion(0);
+                            setTimeout(() => {
+                                this.initEditor();
+                            });
+                        }
+                    },
+                    error: (err) => {
+                        if (err.status == resCode.notFound) {
+                            this.router.navigate(['/404']);
+                        }
+                    },
+                })
         );
     }
 
     selectQuestion(index: number) {
         this.questionSelected = index;
-        this.questionSelectedInfo = this.competitionQuestions[index];
+        this.questionSelectedInfo = this.competition.questions![index];
     }
 
     loadTemplate() {

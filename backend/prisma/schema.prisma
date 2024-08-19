@@ -13,14 +13,13 @@ model competitions {
   host_user      users       @relation(fields: [host_user_id], references: [id], onDelete: NoAction)
   title          String?     @db.VarChar(120)
   description    String?     @db.VarChar(456)
-  created_at     DateTime?    @db.DateTime(0)
+  created_at     DateTime    @db.DateTime(0)
   deleted_at     DateTime?    @db.DateTime(0)
-  updated_at     DateTime?    @db.DateTime(0)
-  rating         Int?        @default(0)
+  updated_at     DateTime    @db.DateTime(0)
+  rating         Int         @default(0)
   public         Boolean?
-  duration       Int?        @default(0)
-  start_schedule String?     @db.VarChar(30)
   scheduled_at   DateTime?    @db.DateTime(0)
+  scheduled_end_at   DateTime?    @db.DateTime(0)
   questions      questions[]
 }
 
@@ -35,7 +34,7 @@ model questions {
   title          String?      @db.VarChar(150)
   statement      String?      @db.VarChar(2048)
   points         Int?         @default(0)
-  created_at     DateTime?    @db.DateTime(0)
+  created_at     DateTime    @db.DateTime(0)
   deleted_at     DateTime?    @db.DateTime(0)
   sample_cases   String?      @db.VarChar(250)
   sample_sols    String?      @db.VarChar(250)

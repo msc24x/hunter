@@ -16,9 +16,9 @@ export class Competitions {
         return date < new Date();
     }
 
-    hasNotEnded(date: Date, duration: number) {
-        if (duration == 0) return true;
-        return Date.now() < date.getTime() + duration * 60 * 1000;
+    hasNotEnded(date: Date, endDate: Date | null) {
+        if (!endDate) return true;
+        return new Date() < endDate;
     }
 
     update(data: CompetitionInfo, callback: (err: any) => void) {

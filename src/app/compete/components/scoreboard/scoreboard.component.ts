@@ -3,35 +3,37 @@ import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import { result } from 'src/environments/environment';
 
 @Component({
-  selector: 'scoreboard',
-  templateUrl: './scoreboard.component.html',
-  styleUrls: ['./scoreboard.component.scss']
+    selector: 'scoreboard',
+    templateUrl: './scoreboard.component.html',
+    styleUrls: ['./scoreboard.component.scss'],
 })
 export class ScoreboardComponent implements OnInit {
+    scores: Array<result> = [];
 
-  scores : Array<result> = []
+    @Input()
+    competition_id: number = 0;
 
-  @Input()
-  competition_id : string = ""
+    interval10s;
 
-  interval10s
+    constructor(private scoresDataService: ScoresDataService) {
+        this.interval10s = setInterval(() => {
+            scoresDataService
+                .getScoreboard(this.competition_id)
+                .subscribe((res) => {
+                    this.scores = res.body as Array<result>;
+                });
+        }, 1000 * 10);
+    }
 
-  constructor(private scoresDataService : ScoresDataService) {
-    this.interval10s = setInterval(()=>{
-      scoresDataService.getScoreboard(this.competition_id).subscribe(res=>{
-        this.scores = res.body as Array<result>
-      })
-    }, 1000 * 10 )
-  }
+    ngOnInit(): void {
+        this.scoresDataService
+            .getScoreboard(this.competition_id)
+            .subscribe((res) => {
+                this.scores = res.body as Array<result>;
+            });
+    }
 
-  ngOnInit(): void {
-    this.scoresDataService.getScoreboard(this.competition_id).subscribe(res=>{
-      this.scores = res.body as Array<result>
-    })
-  }
-  
-  ngOnDestroy(): void {
-    clearInterval(this.interval10s)
-  }
-
+    ngOnDestroy(): void {
+        clearInterval(this.interval10s);
+    }
 }

@@ -5,7 +5,7 @@ import {
     faLock,
 } from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
-import { isLive } from 'src/app/utils/utils';
+import { isLive, prettyDuration } from 'src/app/utils/utils';
 import { CompetitionInfo } from 'src/environments/environment';
 
 @Component({
@@ -45,20 +45,31 @@ export class CompetitionsListComponent implements OnInit {
         }, 30 * 1000);
     }
 
-    isAfterNow(date: Date) {
+    isAfterNow(date: Date | null) {
+        if (date === null) {
+            return true;
+        }
         return date.getTime() < Date.now();
     }
 
     isClosedNow(com: CompetitionInfo) {
-        return (
-            this.isAfterNow(com.scheduled_at) &&
-            !isLive(com.scheduled_at, com.duration)
-        );
+        console.log(com.scheduled_end_at);
+        if (com.scheduled_end_at === null) {
+            return false;
+        }
+        return this.isAfterNow(com.scheduled_end_at);
     }
 
     timeLeft(com: CompetitionInfo, f: boolean) {
-        const endTime = com.scheduled_at.getTime() + com.duration * 60 * 1000;
-        return Math.ceil((endTime - Date.now()) / 1000 / 60);
+        const endTime = com.scheduled_end_at;
+
+        if (endTime === null) {
+            return 'unlimited';
+        }
+
+        const minutes = Math.ceil((endTime.getTime() - Date.now()) / 1000 / 60);
+
+        return prettyDuration(minutes * 60);
     }
 
     ngOnInit(): void {}

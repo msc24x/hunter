@@ -13,10 +13,47 @@ export function showPopup(f: boolean, id: string) {
     } else elem.style.display = 'none';
 }
 
-export function isLive(date: Date, duration: number) {
-    let parsedDate = date.getTime();
+export function isLive(date: Date | null, endDate: Date | null) {
+    let parsedDate = date?.getTime();
     return (
-        Date.now() > parsedDate &&
-        (Date.now() < parsedDate + duration * 60 * 1000 || duration == 0)
+        (!parsedDate || Date.now() > parsedDate) &&
+        (!endDate || (endDate && new Date() < endDate))
     );
+}
+
+export function format(str: string, ...args: string[]) {
+    var res = str;
+    for (var arg in args) {
+        res = res.replace('{' + arg + '}', args[arg]);
+    }
+    return res;
+}
+
+export function prettyDuration(seconds: number) {
+    const minutes = Math.floor(seconds / 60);
+
+    if (!minutes) return `${seconds % 60} sec`;
+
+    const hours = Math.floor(minutes / 60);
+
+    if (!hours) return `${minutes % 60} min ${seconds % 60} sec`;
+
+    const days = Math.floor(hours / 12);
+
+    if (!days) return `${hours % 12} hr ${minutes % 60} min`;
+
+    const weeks = Math.floor(days / 7);
+
+    if (!weeks) return `${days % 7} days ${hours % 12} hr ${minutes % 60} min`;
+
+    const years = Math.floor(weeks / 52);
+
+    if (!years)
+        return `${weeks % 52} weeks ${days % 7} days ${hours % 12} hr ${
+            minutes % 60
+        } min`;
+
+    return `${years} yrs ${weeks % 52} weeks ${days % 7} days ${
+        hours % 12
+    } hr ${minutes % 60} min`;
 }

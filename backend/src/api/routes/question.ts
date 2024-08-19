@@ -7,97 +7,68 @@ import { authenticate, loginRequired } from '../auth';
 import { resCode } from '../../config/settings';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
+import path from 'path';
 
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
 
 router.get(
-    '/question/:id/:fileType/:op?',
+    '/competitions/:comp_id/questions/:id/:fileType/:op?',
     authenticate,
     loginRequired,
     (req, res) => {
-        let id = req.params.id;
-        let fileType = req.params.fileType;
+        const fileType = req.params.fileType;
+        const comp_id = parseInt(req.params.comp_id);
+        const ques_id = parseInt(req.params.id);
         const user: UserInfo = res.locals.user;
 
-        if (id == null) {
-            Util.sendResponse(res, resCode.badRequest);
-            return;
-        }
-
-        models.questions.findAll(
-            {
-                id: id,
-            },
-            (questions: Array<QuestionInfo>) => {
-                if (questions.length == 0) {
+        client.questions
+            .findUnique({
+                where: {
+                    id: ques_id,
+                    competition_id: comp_id,
+                    competitions: {
+                        host_user_id: user.id,
+                        deleted_at: null,
+                    },
+                    deleted_at: null,
+                },
+                select: { id: true },
+            })
+            .then((question) => {
+                if (!question) {
                     Util.sendResponse(res, resCode.notFound);
                     return;
                 }
 
-                models.competitions.findAll(
-                    {
-                        id: questions[0].competition_id,
-                    },
-                    0,
-                    -1,
-                    (competitions) => {
-                        if (competitions.length == 0) {
-                            Util.sendResponse(res, resCode.notFound);
-                            return;
-                        }
-
-                        let fileName = `src/database/files/${competitions[0].id}_${id}_${fileType[0]}.txt`;
-
-                        if (competitions[0].host_user_id == user.id) {
-                            if (req.params.op == 'download') {
-                                if (existsSync(fileName)) {
-                                    readFile(
-                                        fileName,
-                                        { encoding: 'utf-8' },
-                                        (err, data) => {
-                                            if (err) {
-                                                Util.sendResponse(
-                                                    res,
-                                                    resCode.serverError
-                                                );
-                                                return;
-                                            }
-                                            Util.sendResponseJson(
-                                                res,
-                                                resCode.success,
-                                                {
-                                                    exists: true,
-                                                    data: data,
-                                                }
-                                            );
-                                        }
-                                    );
-                                } else {
-                                    Util.sendResponseJson(
-                                        res,
-                                        resCode.success,
-                                        { exists: false }
-                                    );
-                                }
-                            } else {
-                                Util.sendResponseJson(res, resCode.success, {
-                                    exists: existsSync(fileName),
-                                });
-                            }
-                        } else {
-                            Util.sendResponse(res, resCode.forbidden);
-                        }
-                    },
-                    (err) => {}
+                const fileName = path.join(
+                    __dirname,
+                    './files',
+                    `${comp_id}_${ques_id}_${fileType[0]}.txt`
                 );
-            }
-        );
+
+                if (req.params.op == 'download') {
+                    if (existsSync(fileName)) {
+                        res.sendFile(fileName, (err) => {
+                            Util.sendResponse(res, resCode.serverError);
+                        });
+                    } else {
+                        Util.sendResponseJson(res, resCode.success, {
+                            exists: false,
+                        });
+                    }
+                } else {
+                    Util.sendResponseJson(res, resCode.success, {
+                        exists: existsSync(fileName),
+                    });
+                }
+            })
+            .catch((err) => Util.sendResponse(res, resCode.badRequest, err));
     }
 );
 
 router.post(
-    '/question/:id/:fileType',
+    '/competitions/:comp_id/questions/:id/:fileType',
     authenticate,
     loginRequired,
     (req, res) => {
@@ -106,8 +77,10 @@ router.post(
             return;
         }
 
-        const fileType = req.params.fileType;
         const file = req.body.file;
+        const fileType = req.params.fileType;
+        const comp_id = parseInt(req.params.comp_id);
+        const ques_id = parseInt(req.params.id);
         const user: UserInfo = res.locals.user;
 
         if (!file || !fileType) {
@@ -119,164 +92,150 @@ router.post(
             return;
         }
 
-        if (file.length > 1572864) {
+        if (file.length > 1.5 * 1024 * 1024) {
             Util.sendResponse(res, resCode.badRequest);
             return;
         }
 
-        models.questions.findAll({ id: req.params.id }, (questions) => {
-            if (questions.length == 0) {
-                Util.sendResponse(res, resCode.notFound);
-                return;
-            }
-            models.competitions.findAll(
-                { id: questions[0].competition_id },
-                0,
-                -1,
-                (competitions) => {
-                    if (competitions.length == 0) {
-                        Util.sendResponse(res, resCode.notFound);
-                        return;
-                    }
-
-                    if (competitions[0].host_user_id != user.id) {
-                        Util.sendResponse(res, resCode.forbidden);
-                        return;
-                    }
-                    let fileName = `src/database/files/${competitions[0].id}_${questions[0].id}_${fileType[0]}.txt`;
-
-                    writeFile(fileName, file, { flag: 'w' }, (err) => {
-                        if (err) {
-                            console.log(err);
-                            Util.sendResponse(res, resCode.serverError);
-                            return;
-                        }
-                        Util.sendResponse(res, resCode.success);
-                    });
+        client.questions
+            .findUnique({
+                where: {
+                    id: ques_id,
+                    competition_id: comp_id,
+                    competitions: {
+                        host_user_id: user.id,
+                        deleted_at: null,
+                    },
+                    deleted_at: null,
                 },
-                () => {}
-            );
-        });
-    }
-);
-
-router.delete('/question/:id', authenticate, loginRequired, (req, res) => {
-    if (!req.params.id) {
-        Util.sendResponse(res, resCode.badRequest);
-        return;
-    }
-    const user: UserInfo = res.locals.user;
-
-    models.questions.findAll({ id: req.params.id }, (questions) => {
-        if (questions.length == 0) {
-            Util.sendResponse(res, resCode.notFound);
-            return;
-        }
-        models.competitions.findAll(
-            { id: questions[0].competition_id },
-            0,
-            -1,
-            (competitions) => {
-                if (competitions.length == 0) {
+                select: { id: true },
+            })
+            .then((question) => {
+                if (!question) {
                     Util.sendResponse(res, resCode.notFound);
                     return;
                 }
 
-                if (competitions[0].host_user_id != user.id) {
-                    Util.sendResponse(res, resCode.forbidden);
-                    return;
-                }
-
-                models.questions.delete(
-                    { id: req.params.id as string },
-                    (err) => {
-                        if (!err) {
-                            Util.sendResponse(res, resCode.success);
-                            return;
-                        }
-                    }
+                const fileName = path.join(
+                    __dirname,
+                    './files',
+                    `${comp_id}_${ques_id}_${fileType[0]}.txt`
                 );
-            },
-            () => {}
-        );
-    });
-});
 
-router.post('/question', authenticate, loginRequired, (req, res) => {
-    const user: UserInfo = res.locals.user;
-
-    models.competitions.findAll(
-        { id: req.body.competition_id },
-        0,
-        -1,
-        (competitions) => {
-            if (competitions.length == 0) {
-                Util.sendResponse(res, resCode.notFound);
-                return;
-            }
-
-            const competition = competitions[0];
-            if (competition.host_user_id != user.id) {
-                Util.sendResponse(res, resCode.forbidden);
-                return;
-            }
-            models.questions.add(
-                competition.id,
-                (question_id) => {
-                    Util.sendResponse(res, resCode.success);
-                },
-                (err) => {
-                    console.log(err);
-                    Util.sendResponse(res, resCode.serverError);
-                }
-            );
-        },
-
-        (err) => {
-            console.log(err);
-            Util.sendResponse(res, resCode.serverError);
-        }
-    );
-});
-
-router.put('/question', authenticate, loginRequired, (req, res) => {
-    var params = req.body;
-    const user: UserInfo = res.locals.user;
-
-    models.questions.findAll({ id: params.id }, (questions) => {
-        if (questions.length == 0) {
-            Util.sendResponse(res, resCode.notFound);
-            return;
-        }
-        models.competitions.findAll(
-            { id: questions[0].competition_id },
-            0,
-            -1,
-            (competitions) => {
-                if (competitions.length == 0) {
-                    Util.sendResponse(res, resCode.notFound);
-                    return;
-                }
-
-                if (competitions[0].host_user_id != user.id) {
-                    Util.sendResponse(res, resCode.forbidden);
-                    return;
-                }
-
-                models.questions.update(params, (err) => {
+                writeFile(fileName, file, { flag: 'w' }, (err) => {
                     if (err) {
                         console.log(err);
                         Util.sendResponse(res, resCode.serverError);
                         return;
                     }
-
                     Util.sendResponse(res, resCode.success);
                 });
-            },
-            () => {}
-        );
-    });
-});
+            })
+            .catch((err) => Util.sendResponse(res, resCode.badRequest, err));
+    }
+);
+
+router.delete(
+    '/competitions/:comp_id/questions/:id',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const comp_id = parseInt(req.params.comp_id);
+        const id = parseInt(req.params.id);
+        const user: UserInfo = res.locals.user;
+
+        client.questions
+            .update({
+                where: {
+                    id: id,
+                    competition_id: comp_id,
+                    competitions: {
+                        host_user_id: user.id,
+                        deleted_at: null,
+                    },
+                    deleted_at: null,
+                },
+                data: {
+                    deleted_at: new Date(),
+                },
+            })
+            .then((question) => {
+                if (!question) {
+                    Util.sendResponse(res, resCode.notFound);
+                    return;
+                }
+                Util.sendResponse(res, resCode.success);
+            })
+            .catch((err) => Util.sendResponse(res, resCode.badRequest, err));
+    }
+);
+
+router.post(
+    '/competitions/:comp_id/questions',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const comp_id = parseInt(req.params.comp_id);
+        const user: UserInfo = res.locals.user;
+
+        client.competitions
+            .findUnique({
+                where: { id: comp_id },
+            })
+            .then((competition) => {
+                if (!competition || competition?.host_user_id !== user.id) {
+                    Util.sendResponse(res, resCode.forbidden);
+                    return;
+                }
+
+                client.questions
+                    .create({
+                        data: {
+                            competition_id: competition.id,
+                            created_at: new Date(),
+                        },
+                    })
+                    .then((question) =>
+                        Util.sendResponseJson(res, resCode.success, question)
+                    )
+                    .catch((err) =>
+                        Util.sendResponse(res, resCode.serverError, err)
+                    );
+            })
+            .catch((err) => Util.sendResponse(res, resCode.serverError, err));
+    }
+);
+
+router.put(
+    '/competitions/:comp_id/questions/:id',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const comp_id = parseInt(req.params.comp_id);
+        const id = parseInt(req.params.id);
+        var params = req.body as QuestionInfo;
+        const user: UserInfo = res.locals.user;
+
+        client.questions
+            .update({
+                where: {
+                    id: id,
+                    competition_id: comp_id,
+                    competitions: { host_user_id: user.id },
+                    deleted_at: null,
+                },
+                data: {
+                    title: params.title,
+                    statement: params.statement,
+                    points: params.points,
+                },
+            })
+            .then((question) =>
+                Util.sendResponseJson(res, resCode.success, question)
+            )
+            .catch((err) => Util.sendResponse(res, resCode.serverError, err));
+    }
+);
 /**
  * GET question
  *  authenticate
@@ -303,107 +262,72 @@ router.put('/question', authenticate, loginRequired, (req, res) => {
  *
  */
 
-router.get('/question', authenticate, loginRequired, (req, res) => {
-    var competition_id: string | null = req.query.competition_id as string;
-    var id: string | null = req.query.id as string;
-    const user: UserInfo = res.locals.user;
+router.get(
+    '/competitions/:comp_id/questions/:id?',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const competition_id: number = parseInt(req.params.comp_id);
+        const ques_id: number | '' = req.params.id && parseInt(req.params.id);
+        const user: UserInfo = res.locals.user;
 
-    if (competition_id == null && id == null) {
-        Util.sendResponse(res, resCode.badRequest);
-        return;
-    }
-
-    models.questions.findAll(
-        {
-            competition_id: competition_id,
-            id: id,
-        },
-        (questions: Array<QuestionInfo>) => {
-            if (questions.length == 0) {
-                Util.sendResponseJson(res, resCode.success, questions);
-                return;
-            }
-
-            models.competitions.findAll(
-                {
-                    id: questions[0].competition_id,
-                },
-                0,
-                -1,
-                (competitions) => {
-                    if (competitions.length == 0) {
-                        // todo : delete all questions
-                        Util.sendResponse(res, resCode.notFound);
-                        return;
-                    }
-
-                    if (competitions[0].public) {
-                        if (competitions[0].host_user_id == user.id) {
-                            Util.sendResponseJson(
-                                res,
-                                resCode.success,
-                                questions
-                            );
-                        } else {
-                            if (
-                                models.competitions.isLiveNow(
-                                    competitions[0].scheduled_at
-                                )
-                            ) {
-                                if (competitions[0].duration == 0) {
-                                    Util.sendResponseJson(
-                                        res,
-                                        resCode.success,
-                                        questions
-                                    );
-                                } else {
-                                    if (
-                                        models.competitions.hasNotEnded(
-                                            competitions[0].scheduled_at,
-                                            competitions[0].duration
-                                        )
-                                    ) {
-                                        Util.sendResponseJson(
-                                            res,
-                                            resCode.success,
-                                            questions
-                                        );
-                                    } else {
-                                        Util.sendResponse(
-                                            res,
-                                            resCode.forbidden,
-                                            'has ended'
-                                        );
-                                    }
-                                }
-                            } else {
-                                Util.sendResponse(
-                                    res,
-                                    resCode.forbidden,
-                                    'is not live yet'
-                                );
-                            }
-                        }
-                    } else {
-                        if (competitions[0].host_user_id == user.id) {
-                            Util.sendResponseJson(
-                                res,
-                                resCode.success,
-                                questions
-                            );
-                        } else {
-                            Util.sendResponse(
-                                res,
-                                resCode.forbidden,
-                                'not host'
-                            );
-                        }
-                    }
-                },
-                (err) => {}
-            );
+        if (isNaN(competition_id)) {
+            Util.sendResponse(res, resCode.badRequest);
+            return;
         }
-    );
-});
+
+        client.competitions
+            .findUnique({
+                where: {
+                    id: competition_id,
+                    deleted_at: null,
+                },
+                include: {
+                    questions: {
+                        where: {
+                            deleted_at: null,
+                            ...(ques_id !== '' && { id: ques_id }),
+                        },
+                    },
+                },
+            })
+            .then((competition) => {
+                if (!competition) {
+                    Util.sendResponse(res, resCode.notFound);
+                    return;
+                }
+
+                if (competition.host_user_id === user.id) {
+                    Util.sendResponseJson(res, resCode.success, competition);
+                    return;
+                }
+
+                const now = new Date();
+                const endDate = competition.scheduled_end_at;
+
+                if (
+                    !competition.public ||
+                    (competition.scheduled_at &&
+                        competition.scheduled_at > now) ||
+                    (endDate && endDate < now)
+                ) {
+                    competition.questions = competition.questions.map(
+                        (ques) => {
+                            ques.statement = '';
+                            ques.title = '';
+                            ques.sample_cases = '';
+                            ques.sample_sols = '';
+                            return ques;
+                        }
+                    );
+                }
+
+                Util.sendResponseJson(res, resCode.success, competition);
+            })
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
+    }
+);
 
 module.exports = router;

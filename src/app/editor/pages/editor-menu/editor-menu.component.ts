@@ -16,7 +16,7 @@ export class EditorMenuComponent implements OnInit {
 
     isAuthenticated: boolean = false;
     user = {
-        id: '',
+        id: 0,
         email: '',
         name: '',
     };
@@ -58,7 +58,9 @@ export class EditorMenuComponent implements OnInit {
         data.total = this.userCompetitions?.length || 0;
 
         for (let competition of this.userCompetitions) {
-            if (isLive(competition.scheduled_at, competition.duration)) {
+            if (
+                isLive(competition.scheduled_at, competition.scheduled_end_at)
+            ) {
                 data.live += 1;
             }
             if (competition.public) {
@@ -110,12 +112,7 @@ export class EditorMenuComponent implements OnInit {
                 next: (res) => {
                     if (res.status == 202) {
                         // save user info
-                        const body = res.body as UserInfo;
-                        this.user = {
-                            id: body.id,
-                            email: body.email,
-                            name: body.name,
-                        };
+                        this.user = res.body as UserInfo;
 
                         // save user info for all components subscribed to the service
                         this.authService.user = this.user;

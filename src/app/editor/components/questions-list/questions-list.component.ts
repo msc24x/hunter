@@ -76,7 +76,10 @@ export class QuestionsListComponent implements OnInit {
         if (this.questionSelected != -1) {
             this.loading = true;
             this.competitionsData
-                .deleteQuestion(this.questionsList[this.questionSelected].id)
+                .deleteQuestion({
+                    id: this.questionsList[this.questionSelected].id,
+                    competition_id: this.competitionInfo.id,
+                })
                 .subscribe(() => {
                     this.displayLog(
                         'Question ' + this.questionSelected + ' deleted'
@@ -91,7 +94,7 @@ export class QuestionsListComponent implements OnInit {
     addQuestion() {
         this.loading = true;
         this.competitionsData
-            .postQuestion(this.competitionInfo.id)
+            .postQuestion({ competition_id: this.competitionInfo.id })
             .subscribe(() => {
                 this.resetQuestionSelected();
                 this.fetchRequired.emit();

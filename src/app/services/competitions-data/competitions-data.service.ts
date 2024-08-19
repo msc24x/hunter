@@ -8,6 +8,7 @@ import {
 } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { CommonModule } from 'src/app/common/common.module';
+import { format } from 'src/app/utils/utils';
 
 @Injectable({
     providedIn: 'root',
@@ -15,7 +16,7 @@ import { CommonModule } from 'src/app/common/common.module';
 export class CompetitionsDataService {
     constructor(private authService: AuthService, private http: HttpClient) {}
 
-    deleteCompetition(id: string) {
+    deleteCompetition(id: number) {
         return this.http.delete(apiEndpoints.competition + '/' + id, {
             responseType: 'json',
             withCredentials: true,
@@ -45,7 +46,7 @@ export class CompetitionsDataService {
         );
     }
 
-    getFileStatus(id: string, fileType: string) {
+    getFileStatus(id: number, fileType: string) {
         return this.http.get(
             apiEndpoints.question + '/' + id + '/' + fileType,
             {
@@ -68,10 +69,15 @@ export class CompetitionsDataService {
         );
     }
 
-    postQuestion(competition_id: string) {
-        return this.http.post(
+    postQuestion(params: { competition_id: number }) {
+        const endpoint = format(
             apiEndpoints.question,
-            { competition_id: competition_id },
+            params.competition_id.toString()!,
+            ''
+        );
+        return this.http.post(
+            endpoint,
+            { competition_id: params.competition_id },
             {
                 withCredentials: true,
                 observe: 'response',
@@ -79,10 +85,20 @@ export class CompetitionsDataService {
         );
     }
 
-    postFile(params: any) {
+    postFile(params: {
+        competition_id: number;
+        id: number;
+        fileType: string;
+        file: string;
+    }) {
+        const endpoint = format(
+            apiEndpoints.question,
+            params.competition_id.toString()!,
+            params.id.toString() || ''
+        );
         return this.http.post(
-            apiEndpoints.question + '/' + params.id + '/' + params.fileType,
-            { file: params.file },
+            endpoint + '/' + params.fileType,
+            // { file: params.file },
             {
                 responseType: 'json',
                 withCredentials: true,
@@ -91,36 +107,44 @@ export class CompetitionsDataService {
         );
     }
 
-    deleteQuestion(id: string) {
-        return this.http.delete(apiEndpoints.question + '/' + id, {
+    deleteQuestion(params: { competition_id: number; id: number }) {
+        const endpoint = format(
+            apiEndpoints.question,
+            params.competition_id.toString()!,
+            params.id.toString() || ''
+        );
+        return this.http.delete(endpoint, {
             responseType: 'json',
             withCredentials: true,
             observe: 'response',
         });
     }
 
-    putQuestion(params: any) {
-        return this.http.put(apiEndpoints.question, params, {
+    putQuestion(params: QuestionInfo) {
+        const endpoint = format(
+            apiEndpoints.question,
+            params.competition_id.toString()!,
+            params.id.toString() || ''
+        );
+
+        return this.http.put(endpoint, params, {
             responseType: 'json',
             withCredentials: true,
             observe: 'response',
         });
     }
 
-    getQuestions(params: { competition_id?: string; id?: string }) {
-        let httpParams = new HttpParams();
-        if (params.competition_id != null)
-            httpParams = httpParams.set(
-                'competition_id',
-                params.competition_id
-            );
-        if (params.id != null) httpParams = httpParams.set('id', params.id);
+    getQuestions(params: { competition_id: number; id?: number }) {
+        const endpoint = format(
+            apiEndpoints.question,
+            params.competition_id.toString()!,
+            params.id?.toString() || ''
+        );
 
-        return this.http.get<Array<QuestionInfo>>(apiEndpoints.question, {
+        return this.http.get<CompetitionInfo>(endpoint, {
             responseType: 'json',
             withCredentials: true,
             observe: 'response',
-            params: httpParams,
         });
     }
 
@@ -149,10 +173,24 @@ export class CompetitionsDataService {
     }
 
     parseCompetitionTypes(comp: CompetitionInfo) {
-        comp.created_at = new Date(comp.created_at as unknown as string);
-        comp.updated_at = new Date(comp.updated_at as unknown as string);
-        comp.deleted_at = new Date(comp.deleted_at as unknown as string);
-        comp.scheduled_at = new Date(comp.scheduled_at as unknown as string);
+        const dateOrNull = (date: any) => {
+            if (date === null) {
+                return null;
+            }
+            return new Date(date as unknown as string);
+        };
+        comp.created_at = dateOrNull(comp.created_at)!;
+        comp.updated_at = dateOrNull(comp.updated_at)!;
+        comp.deleted_at = dateOrNull(comp.deleted_at);
+        comp.scheduled_at = dateOrNull(comp.scheduled_at);
+        comp.scheduled_end_at = dateOrNull(comp.scheduled_end_at);
+
+        comp.questions = comp.questions?.map((ques) => {
+            ques.created_at = new Date(ques.created_at as unknown as string);
+            ques.updated_at = new Date(ques.updated_at as unknown as string);
+            ques.deleted_at = dateOrNull(ques.deleted_at);
+            return ques;
+        });
     }
 
     getCompetitions(params: any) {

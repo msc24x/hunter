@@ -12,7 +12,7 @@ export const environment = {
 };
 
 export interface UserInfo {
-    id: string;
+    id: number;
     email: string;
     name: string;
 }
@@ -20,25 +20,25 @@ export interface UserInfo {
 export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go';
 
 export interface CompetitionInfo {
-    id: string;
-    host_user_id: string;
+    id: number;
+    host_user_id: number;
     host_user?: UserInfo;
     title: string;
     description: string;
     created_at: Date;
     updated_at: Date;
-    deleted_at: Date;
-    scheduled_at: Date;
+    deleted_at: Date | null;
+    scheduled_at: Date | null;
+    scheduled_end_at: Date | null;
     rating: number;
     public: boolean;
-    duration: number;
-    start_schedule: string;
+    questions?: QuestionInfo[];
 }
 
 export type HunterExecutable = {
     for: {
-        competition_id: string;
-        question_id: string;
+        competition_id: number;
+        question_id: number;
     };
 
     solution: {
@@ -56,16 +56,16 @@ export type ExecutionInfo = {
 
 export type result = {
     name: string;
-    user_id: string;
+    user_id: number;
     score: string;
     penalities: string;
 };
 
 export type resultFull = {
-    id: string;
-    user_id: string;
-    question_id: string;
-    competition_id: string;
+    id: number;
+    user_id: number;
+    question_id: number;
+    competition_id: number;
     result: string;
     penalities: string;
 };
@@ -77,7 +77,7 @@ export const apiEndpoints = {
     logout: environment.apiUrl + '/logout',
     competition: environment.apiUrl + '/competition',
     getCompetitions: environment.apiUrl + '/competitions',
-    question: environment.apiUrl + '/question',
+    question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',
     postFile: environment.apiUrl + '/question/upload',
     execute: environment.apiUrl + '/execute',
@@ -107,11 +107,13 @@ export const resCode = {
     found: 302,
 };
 export interface QuestionInfo {
-    id: string;
-    competition_id: string;
+    id: number;
+    competition_id: number;
     title: string;
     statement: string;
-    created_on: string;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date | null;
     sample_cases: string;
     sample_sols: string;
     points: number;

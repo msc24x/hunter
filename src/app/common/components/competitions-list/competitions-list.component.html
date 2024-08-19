@@ -47,12 +47,12 @@
                 <div id="c_host_user">
                     By
                     {{ com.host_user?.name || "Anonymous" }}
-                    <span *ngIf="com.host_user_id != '1'">
+                    <span *ngIf="com.host_user_id != 1">
                         #{{ com.host_user_id }}
                     </span>
                     &nbsp;
                     <span
-                        *ngIf="com.host_user_id == '1'"
+                        *ngIf="com.host_user_id == 1"
                         matTooltip="Official competition by Hunter"
                     >
                         <fa-icon [icon]="officialIcon"></fa-icon>
@@ -70,19 +70,28 @@
                     id="start_schedule"
                     class="detail-tag"
                     [style.color]="
-                        (com.scheduled_at | isLiveStatusPipe : com.duration)
+                        (com.scheduled_at
+                        | isLiveStatusPipe : com.scheduled_end_at)
                             ? '#D2122Ebb'
                             : 'colors.$text_black'
                     "
                 >
                     <span
-                        [matTooltip]="com.scheduled_at.toLocaleString()"
-                        *ngIf="com.duration !== 0 && !isClosedNow(com)"
+                        *ngIf="
+                            (com.scheduled_at || com.scheduled_end_at) &&
+                            !isClosedNow(com) &&
+                            isAfterNow(com.scheduled_at)
+                        "
                     >
-                        Live from
-                        {{ com.scheduled_at | date : "MMM d, h:mm a" : "IST" }}
+                        Live {{ com.scheduled_at ? "from" : "until" }}
+                        {{
+                            com.scheduled_at || com.scheduled_end_at
+                                | date : "MMM d, h:mm a" : "IST"
+                        }}
                     </span>
-                    <span *ngIf="com.duration === 0"> Always Live </span>
+                    <span *ngIf="!com.scheduled_at && !com.scheduled_end_at">
+                        Always Live
+                    </span>
                     &nbsp;
                     <span *ngIf="isClosedNow(com)">
                         <b>Submissions Closed</b>
@@ -90,13 +99,13 @@
                 </div>
                 <div
                     *ngIf="
-                        com.duration !== 0 &&
+                        com.scheduled_end_at &&
                         !isClosedNow(com) &&
                         isAfterNow(com.scheduled_at)
                     "
                     class="detail-tag"
                 >
-                    {{ timeLeft(com, timeLeftFlag) }} mins left
+                    {{ timeLeft(com, timeLeftFlag) }} left
                 </div>
                 <br />
                 <p id="c_about">{{ com.description }}</p>

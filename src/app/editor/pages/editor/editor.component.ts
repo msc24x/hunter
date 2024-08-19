@@ -1,12 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faShare, faSquareShareNodes } from '@fortawesome/free-solid-svg-icons';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     CompetitionInfo,
+    domainName,
+    protocol,
     QuestionInfo,
     resCode,
     UserInfo,
@@ -18,14 +20,15 @@ import {
     styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit {
+    shareIcon = faSquareShareNodes;
+
     loading = false;
     preview_mode = false;
     log = new Array<string>();
     deleteCompMessage = '';
 
-    competition_id: string;
+    competition_id: number;
     competitionInfo: CompetitionInfo = {} as CompetitionInfo;
-    competitionQuestions: Array<QuestionInfo> = [];
     questionSelected = -1;
     questionSelectedInfo = {} as QuestionInfo;
     testExists = false;
@@ -43,9 +46,9 @@ export class EditorComponent implements OnInit {
         private competitionsData: CompetitionsDataService,
         private datePipe: DatePipe
     ) {
-        this.competition_id = this.activatedRoute.snapshot.paramMap.get(
-            'competition_id'
-        ) as string;
+        this.competition_id = parseInt(
+            this.activatedRoute.snapshot.paramMap.get('competition_id') || ''
+        );
 
         this.authService.isAuthenticated.subscribe((isAuth) => {
             this.user = this.authService.user;
@@ -54,6 +57,9 @@ export class EditorComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        document
+            .getElementsByTagName('bottom-app-bar')[0]
+            .classList.add('hidden');
         window.scroll(0, 0);
 
         this.elem = document.getElementById('log');
@@ -68,7 +74,7 @@ export class EditorComponent implements OnInit {
                         this.authService.user = this.user;
                         this.authService.isAuthenticated.next(true);
                         this.loading = false;
-                        this.fetchCompetitionInfo();
+                        this.fetchQuestions();
                     }
                 },
                 (err) => {
@@ -77,7 +83,7 @@ export class EditorComponent implements OnInit {
                 }
             );
         } else {
-            this.fetchCompetitionInfo();
+            this.fetchQuestions();
         }
 
         document.onkeydown = (event) => {
@@ -92,6 +98,20 @@ export class EditorComponent implements OnInit {
                 this.saveChanges();
             }
         };
+    }
+
+    shareAction() {
+        navigator.share({
+            title: `Invitation to ${this.competitionInfo.title}`,
+            url: this.getParticipationLink(),
+            text: `You are invited to participate in the competition created by ${
+                this.user.name || 'a user'
+            } on https://hunter.cambo.in`,
+        });
+    }
+
+    getParticipationLink() {
+        return `${protocol}://${domainName}/compete/p/${this.competition_id}`;
     }
 
     getFileStatus(fileType: string) {
@@ -122,7 +142,8 @@ export class EditorComponent implements OnInit {
         this.loading = true;
         this.competitionsData
             .putQuestion({
-                id: this.competitionQuestions[this.questionSelected].id,
+                id: this.competitionInfo.questions![this.questionSelected].id,
+                competition_id: this.competitionInfo.id,
                 title: (
                     document.getElementById(
                         'text_qtitle'
@@ -148,7 +169,9 @@ export class EditorComponent implements OnInit {
                         'question_sample_sols'
                     ) as HTMLInputElement
                 ).value,
-            })
+                created_at: this.competitionInfo.created_at,
+                updated_at: new Date(),
+            } as QuestionInfo)
             .subscribe((res) => {
                 this.displayLog('Question Updated');
                 this.loading = false;
@@ -172,7 +195,7 @@ export class EditorComponent implements OnInit {
         this.questionSelectedInfo =
             index == -1
                 ? ({} as QuestionInfo)
-                : this.competitionQuestions[index];
+                : this.competitionInfo.questions![index];
 
         this.competitionsData
             .getFileStatus(this.questionSelectedInfo.id, 'solutions')
@@ -224,6 +247,7 @@ export class EditorComponent implements OnInit {
                     id: this.questionSelectedInfo.id,
                     fileType: filen.toLowerCase(),
                     file: result,
+                    competition_id: this.competitionInfo.id,
                 })
                 .subscribe((res) => {
                     this.displayLog('File for ' + filen + ' Uploaded');
@@ -257,57 +281,42 @@ export class EditorComponent implements OnInit {
     fetchQuestions() {
         this.loading = true;
         this.competitionsData
-            .getQuestions({ competition_id: this.competitionInfo.id as string })
+            .getQuestions({ competition_id: this.competition_id })
             .subscribe((res) => {
                 if (res.status == resCode.success) {
                     if (res.body) {
-                        this.competitionQuestions = res.body;
+                        this.competitionInfo = res.body as CompetitionInfo;
+                        this.toggleVisibility();
+                        this.toggleVisibility();
                         this.loading = false;
                     }
                 }
             });
     }
 
-    fetchCompetitionInfo() {
-        this.loading = true;
-        this.competitionsData
-            .getCompetitionInfo(this.competition_id as string)
-            .subscribe(
-                (res) => {
-                    if (res.status == resCode.success) {
-                        this.competitionInfo = res.body as CompetitionInfo;
-                        this.toggleVisibility();
-                        this.toggleVisibility();
+    // fetchCompetitionInfo() {
+    //     this.loading = true;
+    //     this.competitionsData
+    //         .getCompetitionInfo(this.competition_id as string)
+    //         .subscribe((res) => {
+    //             if (res.status == resCode.success) {
+    //                 this.competitionInfo = res.body as CompetitionInfo;
 
-                        if (this.competitionInfo.host_user_id != this.user.id) {
-                            this.router.navigate(['/home']);
-                        }
+    //                 this.toggleVisibility();
+    //                 this.toggleVisibility();
 
-                        this.fetchQuestions();
-                        this.loading = false;
-                    }
-                },
-                (err) => {
-                    if (err.status == resCode.success) {
-                        this.competitionInfo = err.error as CompetitionInfo;
-                        this.toggleVisibility();
-                        this.toggleVisibility();
+    //                 if (this.competitionInfo.host_user_id != this.user.id) {
+    //                     this.router.navigate(['/home']);
+    //                 }
 
-                        if (this.competitionInfo.host_user_id != this.user.id) {
-                            this.router.navigate(['/home']);
-                        }
-
-                        this.fetchQuestions();
-                    } else {
-                        this.router.navigate(['/home']);
-                    }
-                    this.loading = false;
-                }
-            );
-    }
+    //                 this.fetchQuestions();
+    //                 this.loading = false;
+    //             }
+    //         });
+    // }
 
     refreshCompetitionInfo() {
-        this.fetchCompetitionInfo();
+        this.fetchQuestions();
         this.loading = true;
         const title = document.getElementById(
             'text_title'
@@ -321,7 +330,6 @@ export class EditorComponent implements OnInit {
         const schedule = document.getElementById(
             'competition_schedule'
         ) as HTMLInputElement;
-        duration.value = this.competitionInfo.duration as unknown as string;
         schedule.value = this.datePipe.transform(
             this.competitionInfo.scheduled_at,
             'yyyy-MM-ddThh:mm'
@@ -366,9 +374,12 @@ export class EditorComponent implements OnInit {
         const schedule = document.getElementById(
             'competition_schedule'
         ) as HTMLInputElement;
+        const schedule_end = document.getElementById(
+            'competition_schedule_end'
+        ) as HTMLInputElement;
         this.competitionInfo.title = title.value;
         this.competitionInfo.description = description.value;
-        this.competitionInfo.duration = duration.value as unknown as number;
+        this.competitionInfo.scheduled_end_at = new Date(schedule_end.value);
         this.competitionInfo.scheduled_at = new Date(schedule.value);
         this.competitionsData
             .putCompetitionInfo(this.competitionInfo)
@@ -436,7 +447,7 @@ export class EditorComponent implements OnInit {
         let input = document.getElementById(
             'input_competition_code'
         ) as HTMLInputElement;
-        if (input.value != this.competitionInfo.id) {
+        if (parseInt(input.value) != this.competitionInfo.id) {
             this.deleteCompMessage = '*Code does not match';
         } else {
             this.deleteCompMessage = '';

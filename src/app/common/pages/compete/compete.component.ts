@@ -34,7 +34,7 @@ export class CompeteComponent implements OnInit {
 
     isAuthenticated: boolean = false;
     user = {
-        id: '',
+        id: 0,
         email: '',
         name: '',
     };
