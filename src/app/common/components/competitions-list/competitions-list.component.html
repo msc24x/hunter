@@ -63,7 +63,10 @@
                         *ngIf="!com.public"
                         matTooltip="Private competition, only visible to you"
                     >
-                        <fa-icon [icon]="privateIcon"></fa-icon>
+                        <fa-icon
+                            [icon]="privateIcon"
+                            style="color: gray"
+                        ></fa-icon>
                     </span>
                 </div>
                 <div
@@ -79,11 +82,17 @@
                     <span
                         *ngIf="
                             (com.scheduled_at || com.scheduled_end_at) &&
-                            !isClosedNow(com) &&
-                            isAfterNow(com.scheduled_at)
+                            !isClosedNow(com)
                         "
                     >
-                        Live {{ com.scheduled_at ? "from" : "until" }}
+                        Live
+                        {{
+                            !isAfterNow(com.scheduled_at)
+                                ? "at"
+                                : com.scheduled_at
+                                ? "since"
+                                : "until"
+                        }}
                         {{
                             com.scheduled_at || com.scheduled_end_at
                                 | date : "MMM d, h:mm a" : "IST"

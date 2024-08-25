@@ -25,6 +25,7 @@ import {
     faTableColumns,
 } from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
+import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
     selector: 'competition',
@@ -64,12 +65,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     };
     languageSelected: HunterLanguage = 'cpp';
 
-    timeRemaining = 'Unlimited';
+    timeRemaining = '(-_-)';
     hasEnded = false;
 
     routerSubsc: Subscription | null = null;
     subscriptions: Subscription[] = [];
-    timeInterval;
+    timeInterval: any = null;
 
     constructor(
         private route: ActivatedRoute,
@@ -87,21 +88,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         this.user = this.authService.user;
         this.isAuthenticated = this.authService.isAuthenticated.value;
-
-        if (this.competition.scheduled_end_at !== null) {
-            this.timeInterval = setInterval(() => {
-                let seconds =
-                    (this.competition.scheduled_end_at!.getTime() -
-                        Date.now()) /
-                    1000;
-                if (seconds < 0) {
-                    this.timeRemaining = 'Closed';
-                    clearInterval(this.timeInterval);
-                    return;
-                }
-                this.timeRemaining = prettyDuration(seconds);
-            }, 1000);
-        }
     }
 
     ngOnInit(): void {
@@ -339,6 +325,23 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             new Date() > this.competition.scheduled_end_at
                         ) {
                             this.hasEnded = true;
+                        }
+
+                        if (this.competition.scheduled_end_at !== null) {
+                            this.timeInterval = setInterval(() => {
+                                let seconds =
+                                    (this.competition.scheduled_end_at!.getTime() -
+                                        Date.now()) /
+                                    1000;
+                                if (seconds < 0) {
+                                    this.timeRemaining = 'Closed';
+                                    clearInterval(this.timeInterval);
+                                    return;
+                                }
+                                this.timeRemaining = prettyDuration(seconds);
+                            }, 1000);
+                        } else {
+                            this.timeRemaining = 'Unlimited';
                         }
 
                         if (this.competition.questions) {

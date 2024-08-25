@@ -15,7 +15,8 @@ popup {
 }
 
 .c-insights {
-    max-width: 370px;
+    max-width: 320px;
+
     .participant-link {
         font-family: monospace;
         background-color: papayawhip;
@@ -74,7 +75,7 @@ popup {
     width: fit-content;
     padding: 10px;
     margin-inline: auto;
-    border-radius: 0px 0px 24px 24px;
+    border-radius: 0px 0px 1rem 1rem;
 }
 
 #visbility_controller {
@@ -86,7 +87,7 @@ popup {
 
     #id {
         background-color: white;
-        border-radius: 24px 0px 0px 24px;
+        border-radius: 1rem 0px 0px 1rem;
         font-family: appFont;
         width: fit-content;
         padding: 10px;
@@ -102,7 +103,7 @@ popup {
     #visibility {
         background-color: rgb(20, 220, 120);
         color: rgb(0, 0, 0);
-        border-radius: 0px 24px 24px 0px;
+        border-radius: 0px 1rem 1rem 0px;
         font-family: appFont;
         font-weight: bold;
         width: 64px;
@@ -163,90 +164,115 @@ popup {
 
 #text_title {
     @include appTextArea();
-    width: 246px;
+    // width: 246px;
     margin-top: 4px;
 }
 
 #text_description {
     @include appTextArea();
     @include hideSrollbar();
-    min-width: 0px;
-    width: 512px;
+    // width: 512px;
+    width: 100%;
     margin-top: 4px;
 }
 
-#sample_test_cases {
+#evaluation-section {
     font-family: appFont;
-    margin-top: 24px;
     flex-wrap: wrap;
+    flex-direction: column;
     align-items: stretch;
     justify-content: space-between;
+    @include basicBack;
+    background-color: whitesmoke;
+    flex-basis: 100%;
 
-    .vertical_flex {
-        width: 50%;
+    .sample-cases-container {
         justify-content: center;
         align-items: center;
+        display: flex;
 
         #sample_cases_label,
         #sample_sols_label {
             font-size: 1rem;
+            font-weight: normal;
         }
 
         textarea {
             @include appTextArea;
             margin: 8px;
             width: 80%;
+            font-family: monospace;
+            font-size: large;
+            background-color: white;
+        }
+    }
+
+    .eval-panel {
+        align-items: stretch;
+
+        .sample-cases-container {
+            width: 100%;
+            display: flex;
+            justify-content: stretch;
+
+            div {
+                flex-grow: 1;
+
+                textarea {
+                    width: calc(100% - 3rem);
+                }
+            }
         }
     }
 }
 
-@media only screen and (max-width: 1180px) {
-    #text_description {
-        width: 860px;
-        height: 120px;
-    }
+// @media only screen and (max-width: 1180px) {
+//     #text_description {
+//         width: 860px;
+//         height: 120px;
+//     }
 
-    #text_title {
-        width: 550px;
-        height: 120px;
-    }
-}
+//     #text_title {
+//         width: 550px;
+//         height: 120px;
+//     }
+// }
 
-@media only screen and (max-width: 990px) {
-    #text_description {
-        width: 660px;
-        height: 120px;
-    }
+// @media only screen and (max-width: 990px) {
+//     #text_description {
+//         width: 660px;
+//         height: 120px;
+//     }
 
-    #text_title {
-        width: 660px;
-        height: 100px;
-    }
-}
+//     #text_title {
+//         width: 660px;
+//         height: 100px;
+//     }
+// }
 
-@media only screen and (max-width: 720px) {
-    #text_description {
-        width: 490px;
-        height: 120px;
-    }
+// @media only screen and (max-width: 720px) {
+//     #text_description {
+//         width: 490px;
+//         height: 120px;
+//     }
 
-    #text_title {
-        width: 256px;
-        height: 180px;
-    }
-}
+//     #text_title {
+//         width: 256px;
+//         height: 180px;
+//     }
+// }
 
-@media only screen and (max-width: 580px) {
-    #text_description {
-        width: 320px;
-        height: 180px;
-    }
+// @media only screen and (max-width: 580px) {
+//     #text_description {
+//         width: 320px;
+//         height: 180px;
+//     }
 
-    #text_title {
-        width: 320px;
-        height: 120px;
-    }
-}
+//     #text_title {
+//         width: 320px;
+//         height: 120px;
+//     }
+// }
 
 #controls {
     position: fixed;
@@ -286,7 +312,7 @@ popup {
     }
 }
 
-.question_editor {
+.full-stretch {
     align-items: stretch;
     width: 100%;
     margin-bottom: 256px;
@@ -304,30 +330,50 @@ popup {
 #text_qtitle,
 #text_statement {
     @include appTextArea;
+    font-family: monospace;
+    font-size: large;
+    font-weight: normal;
+    width: 100%;
+}
+
+#text_statement,
+#text_statement_preview {
+    width: auto;
+    height: 360px;
+    overflow-y: scroll;
 }
 
 #text_statement_preview {
     @include appTextArea;
-    height: 344px;
     font-size: 1.05rem !important;
-    overflow-y: scroll;
 }
 
-label.file_input,
-#toggle_preview_btn {
-    font-family: appFont;
-    font-weight: bold;
+label.file_input {
     color: colors.$text_black;
     background-color: colors.$dim_white;
-    border-radius: 24px;
-    width: fit-content;
-    padding: 12px;
-    margin: 4px;
-    cursor: default;
+    border-radius: 1rem;
+    padding: 1rem;
+    padding-inline: 3rem;
+    cursor: pointer;
+    display: block;
+    margin-block: 1rem;
+    text-align: center;
+
+    border-width: 2px;
+    border-style: dashed;
+    border-color: gray;
 }
 label.file_input:hover,
 #toggle_preview_btn:hover {
     background-color: colors.$sweet_white;
+}
+
+#toggle_preview_btn {
+    @include basicBack;
+    cursor: pointer;
+    margin-block: 1rem;
+    width: 1rem;
+    text-align: center;
 }
 
 input.file_input {
@@ -347,16 +393,17 @@ a:hover,
     background-color: white;
 }
 
-#question_points {
-    background-color: whitesmoke;
-    border-radius: 24px;
-    font-family: appFont;
+#question_points,
+#question_npoints {
+    background-color: white;
+    border-radius: 1rem;
     padding: 8px;
     padding-inline: 16px;
     border-width: 0px;
-    font-size: 1rem;
-    width: 50px;
-    font-family: appFont;
+    margin-inline: 0.3rem;
+    font-size: 1.2rem;
+    width: 2.2rem;
+    color: colors.$text_black;
 }
 
 #question_points_lbl,
@@ -400,4 +447,38 @@ a:hover,
 
 body {
     margin: 0px;
+}
+
+.questions-list {
+    margin-top: 2rem;
+}
+
+.editor-first-panel {
+    gap: 2rem;
+
+    .desc-panel {
+        flex-grow: 1;
+        margin-left: 16px;
+    }
+
+    .title-panel {
+        flex-grow: 0.5;
+        margin-left: 16px;
+        .label,
+        .vertical_flex,
+        textarea {
+            width: 100%;
+        }
+    }
+}
+
+.editor-second-panel {
+    .title-eval-container {
+        align-items: stretch;
+        flex-wrap: nowrap;
+        gap: 2rem;
+    }
+}
+
+.marks-section {
 }

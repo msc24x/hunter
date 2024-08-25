@@ -29,14 +29,19 @@ export function format(str: string, ...args: string[]) {
     return res;
 }
 
-export function prettyDuration(seconds: number) {
+export function prettyDuration(seconds: number, showSeconds = true) {
+    seconds = Math.floor(seconds);
+
     const minutes = Math.floor(seconds / 60);
 
-    if (!minutes) return `${seconds % 60} sec`;
+    if (!minutes) return showSeconds ? `${seconds % 60} sec` : '0 min';
 
     const hours = Math.floor(minutes / 60);
 
-    if (!hours) return `${minutes % 60} min ${seconds % 60} sec`;
+    if (!hours)
+        return (
+            `${minutes % 60} min` + (showSeconds ? ` ${seconds % 60} sec` : '')
+        );
 
     const days = Math.floor(hours / 12);
 

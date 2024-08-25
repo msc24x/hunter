@@ -69,7 +69,7 @@ export class CompetitionsListComponent implements OnInit {
 
         const minutes = Math.ceil((endTime.getTime() - Date.now()) / 1000 / 60);
 
-        return prettyDuration(minutes * 60);
+        return prettyDuration(minutes * 60, false);
     }
 
     ngOnInit(): void {}

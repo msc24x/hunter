@@ -1,7 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faShare, faSquareShareNodes } from '@fortawesome/free-solid-svg-icons';
+import {
+    faEye,
+    faEyeSlash,
+    faPenToSquare,
+    faShare,
+    faSquareShareNodes,
+} from '@fortawesome/free-solid-svg-icons';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -19,8 +25,10 @@ import {
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
     shareIcon = faSquareShareNodes;
+    viewIcon = faEye;
+    writeIcon = faEyeSlash;
 
     loading = false;
     preview_mode = false;
@@ -54,6 +62,12 @@ export class EditorComponent implements OnInit {
             this.user = this.authService.user;
             this.isAuthenticated = isAuth;
         });
+    }
+
+    ngOnDestroy(): void {
+        document
+            .getElementsByTagName('bottom-app-bar')[0]
+            .classList.remove('hidden');
     }
 
     ngOnInit(): void {

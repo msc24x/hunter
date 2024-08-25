@@ -59,7 +59,7 @@ div.appBar {
             background-color: colors.$text_black;
             color: colors.$text_white;
             border-radius: 12px;
-            padding-block: 4px;
+            padding-block: 6px;
             padding-inline: 16px;
             margin-left: 12px;
             cursor: pointer;
@@ -175,8 +175,7 @@ div.appBar {
                 font-weight: bolder;
                 color: rgb(71, 71, 71);
                 cursor: pointer;
-                padding-top: 4px;
-                padding-bottom: 4px;
+                padding-block: 6px;
             }
             a:hover {
                 animation: forwards;

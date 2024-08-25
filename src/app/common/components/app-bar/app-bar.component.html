@@ -24,6 +24,8 @@
             routerLink="/editor/workbench"
             matTooltip="Configure your account"
         >
+            <fa-icon [icon]="userIcon"></fa-icon>
+            &nbsp;
             {{ user.name || user.email }}
         </a>
     </div>
