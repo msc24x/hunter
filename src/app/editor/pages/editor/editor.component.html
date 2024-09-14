@@ -3,6 +3,21 @@
 <app-loading *ngIf="loading"></app-loading>
 
 <popup
+    id="code-tester"
+    (closeEvent)="showPopup(false, 'code-tester')"
+    title="Verify Participation"
+    [showControls]="false"
+    [destructive]="false"
+>
+    <code-tester
+        *ngIf="questionSelectedInfo.competition_id && questionSelectedInfo.id"
+        [competition_id]="questionSelectedInfo.competition_id"
+        [question_id]="questionSelectedInfo.id"
+        (lastVerificationChange)="verificationResult = $event"
+    ></code-tester>
+</popup>
+
+<popup
     title="Destructive Action"
     id="delete_comp_popup"
     (closeEvent)="handleDeleteCompPopupEvent($event)"
@@ -122,9 +137,11 @@
     recommended to take a look at the guide.</app-info-card
 >
 
+<h2>Competition Info</h2>
+
 <div class="row_flex editor-first-panel" style="margin-top: 16px">
     <div class="vertical_flex desc-panel">
-        <div id="desc_label" class="label">Competition Description</div>
+        <div id="desc_label" class="label">Description</div>
         <textarea maxlength="456" rows="7" id="text_description">{{
             this.competitionInfo.description
         }}</textarea>
@@ -132,7 +149,7 @@
 
     <div class="vertical_flex title-panel">
         <div class="vertical_flex">
-            <div id="title_label" class="label">Competition Title</div>
+            <div id="title_label" class="label">Title</div>
             <textarea maxlength="120" rows="7" id="text_title">{{
                 this.competitionInfo.title
             }}</textarea>
@@ -223,6 +240,10 @@
     </div>
 </div>
 
+<br />
+<br />
+<h2>Questions</h2>
+
 <div class="questions-list">
     <questions-list
         [competitionInfo]="competitionInfo"
@@ -246,20 +267,39 @@
     </div>
 
     <div class="vertical_flex full-stretch" *ngIf="questionSelected !== -1">
-        <div id="qtitle_label">Question Title</div>
-
         <div class="flex title-eval-container">
-            <textarea
-                id="text_qtitle"
-                maxlength="150"
-                rows="4"
-                [value]="questionSelectedInfo.title"
-            ></textarea>
-
             <div id="evaluation-section">
-                <h3>Evaluation Criteria</h3>
-
                 <div class="flex eval-panel">
+                    <div class="sample-cases-container">
+                        <div>
+                            <div id="sample_cases_label" class="clabel">
+                                Sample Tests Cases
+                                <infotip
+                                    message="Small test cases for participants to test their code against without actually submitting for evaluation. These will be visible to the participants"
+                                ></infotip>
+                            </div>
+                            <textarea
+                                id="question_sample_cases"
+                                maxlength="250"
+                                rows="6"
+                                [value]="questionSelectedInfo.sample_cases"
+                            ></textarea>
+                        </div>
+
+                        <div>
+                            <div id="sample_sols_label" class="clabel">
+                                Solution to the samples<infotip
+                                    message="Solution to the test cases provided above. These will be visible to the participants"
+                                ></infotip>
+                            </div>
+                            <textarea
+                                id="question_sample_sols"
+                                maxlength="250"
+                                rows="6"
+                                [value]="questionSelectedInfo.sample_sols"
+                            ></textarea>
+                        </div>
+                    </div>
                     <div style="width: 100%">
                         <div class="flex">
                             <div class="points-container">
@@ -281,11 +321,13 @@
                                 <p>
                                     Cut
                                     <input
-                                        id="question_npoints"
+                                        id="question_neg_points"
                                         type="number"
                                         min="0"
                                         [max]="4"
-                                        [value]="questionSelectedInfo.points"
+                                        [value]="
+                                            questionSelectedInfo.neg_points
+                                        "
                                     />
                                     points for each wrong submission
                                     <infotip
@@ -293,89 +335,120 @@
                                     ></infotip>
                                 </p>
                             </div>
-
-                            <div class="file-uploaders">
-                                <label
-                                    id="testcases_file_label"
-                                    class="file_input"
-                                    for="testcases_file"
-                                    matTooltip="Upload a text file to define evaluation test cases for this question. These test cases will not be shown to the participants. Hunter will use this to test participants' code"
-                                >
-                                    Upload test cases
-                                </label>
-                                <input
-                                    class="file_input"
-                                    (change)="updateFile($event, 'TestCases')"
-                                    id="testcases_file"
-                                    type="file"
-                                />
-                                <a
-                                    *ngIf="testExists"
-                                    id="testcases_download"
-                                    (click)="downloadFile('testcases')"
-                                    >View TestCases</a
-                                >
-                                <label
-                                    id="solutions_file_label"
-                                    class="file_input"
-                                    for="solutions_file"
-                                    matTooltip="Upload a text file to define the expected output from participants code when test cases are supplied to them"
-                                >
-                                    Upload test solutions
-                                </label>
-                                <input
-                                    class="file_input"
-                                    id="solutions_file"
-                                    type="file"
-                                    (change)="updateFile($event, 'Solutions')"
-                                />
-                                <a
-                                    *ngIf="solsExists"
-                                    id="solutions_download"
-                                    (click)="downloadFile('solutions')"
-                                    >View Solutions</a
-                                >
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sample-cases-container">
-                        <div>
-                            <h3 id="sample_cases_label">
-                                Sample Tests Cases
-                                <infotip
-                                    message="Small test cases for participants to test their code against without actually submitting for evaluation. These will be visible to the participants"
-                                ></infotip>
-                            </h3>
-                            <textarea
-                                id="question_sample_cases"
-                                maxlength="250"
-                                rows="6"
-                                [value]="questionSelectedInfo.sample_cases"
-                            ></textarea>
-                        </div>
-
-                        <div>
-                            <h3 id="sample_sols_label">
-                                Solution to the samples<infotip
-                                    message="Solution to the test cases provided above. These will be visible to the participants"
-                                ></infotip>
-                            </h3>
-                            <textarea
-                                id="question_sample_sols"
-                                maxlength="250"
-                                rows="6"
-                                [value]="questionSelectedInfo.sample_sols"
-                            ></textarea>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="vertical_flex title-container">
+                <div class="clabel">Title</div>
+
+                <textarea
+                    id="text_qtitle"
+                    maxlength="150"
+                    rows="3"
+                    [value]="questionSelectedInfo.title"
+                ></textarea>
+
+                <div class="file-uploaders">
+                    <div class="io-files">
+                        <label
+                            id="testcases_file_label"
+                            class="file_input"
+                            for="testcases_file"
+                            matTooltipPosition="left"
+                            matTooltip="Upload a text file to define evaluation test cases for this question. These test cases will not be shown to the participants. Hunter will use this to test participants' code"
+                        >
+                            Test Cases
+
+                            <a
+                                [href]="downloadFileUrl('testcases')"
+                                [download]="
+                                    questionSelectedInfo.id + '_testcases.txt'
+                                "
+                            >
+                                <fa-icon
+                                    *ngIf="testExists"
+                                    matTooltip="Download existing test cases file"
+                                    [icon]="downloadIcon"
+                                ></fa-icon>
+                            </a>
+                        </label>
+                        <input
+                            class="file_input"
+                            (change)="updateFile($event, 'testcases')"
+                            id="testcases_file"
+                            type="file"
+                        />
+
+                        <label
+                            id="solutions_file_label"
+                            class="file_input"
+                            for="solutions_file"
+                            matTooltipPosition="left"
+                            matTooltip="Upload a text file to define the expected output from participants code when test cases are supplied to them"
+                        >
+                            Solution to tests
+                            <a
+                                [href]="downloadFileUrl('solutions')"
+                                [download]="
+                                    questionSelectedInfo.id + '_solutions.txt'
+                                "
+                            >
+                                <fa-icon
+                                    *ngIf="solsExists"
+                                    [icon]="downloadIcon"
+                                    matTooltip="Download existing solution to test cases file"
+                                ></fa-icon>
+                            </a>
+                        </label>
+                        <input
+                            class="file_input"
+                            id="solutions_file"
+                            type="file"
+                            (change)="updateFile($event, 'solutions')"
+                        />
+                    </div>
+                    <div class="solution-code-file">
+                        <label
+                            id="code_file_label"
+                            class="file_input"
+                            (click)="showPopup(true, 'code-tester')"
+                        >
+                            *Verify Participation
+                            <fa-icon
+                                *ngIf="verificationResult?.success === true"
+                                [icon]="checkIcon"
+                                style="color: green"
+                                [matTooltip]="
+                                    'Verification was successful at ' +
+                                    verificationResult?.created_at?.toLocaleString()
+                                "
+                            ></fa-icon>
+
+                            <fa-icon
+                                *ngIf="verificationResult?.success === false"
+                                [icon]="crossIcon"
+                                style="color: red"
+                                [matTooltip]="
+                                    'Verification failed at ' +
+                                    verificationResult?.created_at?.toLocaleString()
+                                "
+                            ></fa-icon>
+                        </label>
+                    </div>
+                </div>
+                <p>
+                    * You must upload the both test cases and solution to your
+                    test cases files, to test the correctness of your
+                    competition and ensure it is solvable. If you don't do this,
+                    participants will see that your competition is unverified.
+                </p>
+            </div>
         </div>
 
         <div class="flex">
-            <div id="qstatement_label">
-                Question Statement
+            <div class="clabel">
+                Statement
                 <infotip
                     message="The statement body supports Latex by default, learn more about the typesetting at katex.org"
                 ></infotip>
@@ -385,16 +458,9 @@
                 matTooltip="Click to toggle LaTeX preview"
                 (click)="togglePreview()"
             >
-                <fa-icon
-                    *ngIf="!preview_mode"
-                    [icon]="viewIcon"
-                    [size]="'1x'"
-                ></fa-icon>
-                <fa-icon
-                    *ngIf="preview_mode"
-                    [icon]="writeIcon"
-                    [size]="'1x'"
-                ></fa-icon>
+                Toggle Preview
+                <fa-icon *ngIf="preview_mode" [icon]="viewIcon"></fa-icon>
+                <fa-icon *ngIf="!preview_mode" [icon]="writeIcon"></fa-icon>
             </div>
         </div>
 

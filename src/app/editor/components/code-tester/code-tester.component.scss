@@ -1,0 +1,22 @@
+@use "../../../../assets/colors";
+@use "../../../../assets/fonts";
+@use "../../../../assets/mixins" as *;
+
+:host {
+    .last-verification-res {
+        @include basicBack;
+        .failure-reason {
+            pre {
+                width: 100%;
+                overflow: scroll;
+                font-weight: 100;
+            }
+        }
+    }
+    .test-solution-btn {
+        @include basicBack;
+        width: fit-content;
+        cursor: pointer;
+        margin: 1rem;
+    }
+}

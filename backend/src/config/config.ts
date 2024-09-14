@@ -6,6 +6,7 @@ dotenv.config({
 });
 
 export default {
+    filesPath: 'files/',
     env: process.env.ENV,
     port: process.env.API_PORT,
     dbConnectionConfig: {

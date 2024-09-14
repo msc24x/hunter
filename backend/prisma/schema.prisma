@@ -41,8 +41,20 @@ model questions {
   sample_sols    String?      @db.VarChar(250)
   competitions   competitions @relation(fields: [competition_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_cid")
   results       results[]
+  question_verifications       question_verification[]
 
   @@index([competition_id], map: "fk_cid")
+}
+
+model question_verification {
+  id             Int          @id @default(autoincrement())
+  question_id    Int          @unique
+  question       questions     @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  submission    String        @db.Text
+  language      String        @db.VarChar(20) @default("")
+  success       Boolean
+  reason        String?       @db.Text
+  created_at     DateTime    @db.DateTime(0)
 }
 
 model results {
@@ -53,7 +65,9 @@ model results {
   question       questions     @relation(fields: [question_id], references: [id])
   result         Int
   submission     String?       @db.Text
+  language      String        @db.VarChar(20) @default("")
   meta           String?       @db.VarChar(200)
+  created_at     DateTime    @db.DateTime(0) @default(now())
 }
 
 model session {

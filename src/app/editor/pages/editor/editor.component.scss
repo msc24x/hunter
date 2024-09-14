@@ -182,8 +182,6 @@ popup {
     flex-direction: column;
     align-items: stretch;
     justify-content: space-between;
-    @include basicBack;
-    background-color: whitesmoke;
     flex-basis: 100%;
 
     .sample-cases-container {
@@ -203,8 +201,12 @@ popup {
             width: 80%;
             font-family: monospace;
             font-size: large;
-            background-color: white;
+            // background-color: white;
         }
+    }
+
+    .points-container {
+        padding: 1rem;
     }
 
     .eval-panel {
@@ -315,32 +317,30 @@ popup {
 .full-stretch {
     align-items: stretch;
     width: 100%;
-    margin-bottom: 256px;
+    margin-bottom: 56px;
 }
 
-#qtitle_label,
-#qstatement_label {
-    font-family: appFont;
-    font-weight: normal;
+.clabel {
     margin-top: 16px;
     font-size: 1.2rem;
     padding: 4px;
+    width: 100%;
 }
 
 #text_qtitle,
 #text_statement {
     @include appTextArea;
-    font-family: monospace;
     font-size: large;
     font-weight: normal;
-    width: 100%;
 }
 
 #text_statement,
 #text_statement_preview {
+    width: 100%;
     width: auto;
     height: 360px;
     overflow-y: scroll;
+    font-family: monospace;
 }
 
 #text_statement_preview {
@@ -350,30 +350,34 @@ popup {
 
 label.file_input {
     color: colors.$text_black;
-    background-color: colors.$dim_white;
+    background-color: whitesmoke;
     border-radius: 1rem;
     padding: 1rem;
-    padding-inline: 3rem;
+    width: 18rem;
     cursor: pointer;
     display: block;
     margin-block: 1rem;
     text-align: center;
-
-    border-width: 2px;
+    border-width: 1px;
     border-style: dashed;
     border-color: gray;
 }
-label.file_input:hover,
 #toggle_preview_btn:hover {
-    background-color: colors.$sweet_white;
+    background-color: whitesmoke;
 }
 
 #toggle_preview_btn {
     @include basicBack;
     cursor: pointer;
     margin-block: 1rem;
-    width: 1rem;
+    display: flex;
+    justify-content: space-between;
     text-align: center;
+    gap: 1rem;
+
+    fa-icon {
+        width: 1rem;
+    }
 }
 
 input.file_input {
@@ -394,8 +398,7 @@ a:hover,
 }
 
 #question_points,
-#question_npoints {
-    background-color: white;
+#question_neg_points {
     border-radius: 1rem;
     padding: 8px;
     padding-inline: 16px;
@@ -450,10 +453,12 @@ body {
 }
 
 .questions-list {
+    @include blackBack;
     margin-top: 2rem;
 }
 
 .editor-first-panel {
+    @include blackBack;
     gap: 2rem;
 
     .desc-panel {
@@ -474,9 +479,51 @@ body {
 
 .editor-second-panel {
     .title-eval-container {
+        @include blackBack;
+
+        margin-top: 1rem;
         align-items: stretch;
         flex-wrap: nowrap;
         gap: 2rem;
+
+        .title-container {
+            width: 60%;
+            justify-content: space-between;
+
+            #text_qtitle {
+                width: calc(100% - 2rem);
+            }
+        }
+    }
+}
+
+.file-uploaders {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 2rem;
+    width: 100%;
+
+    label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    a {
+        padding: 0;
+        margin-inline: 0.3rem;
+    }
+
+    .solution-code-file {
+        #code_file_label {
+            height: 5.5rem;
+            font-size: larger;
+        }
+
+        fa-icon {
+            margin-left: 0.3rem;
+        }
     }
 }
 

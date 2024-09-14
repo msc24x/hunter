@@ -61,12 +61,12 @@ export type result = {
 };
 
 export type resultFull = {
-    id: string;
-    user_id: string;
-    question_id: string;
-    competition_id: string;
-    result: string;
-    penalities: string;
+    id: number;
+    user: UserInfo;
+    question_id: number;
+    result: number;
+    submission?: string;
+    meta?: string;
 };
 
 export const apiEndpoints = {

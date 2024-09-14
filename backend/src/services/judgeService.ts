@@ -1,16 +1,14 @@
 import { exec } from 'child_process';
 import { readFile, readFileSync, writeFile } from 'fs';
 import { Service } from 'typedi';
-import { HunterExecutable, QuestionInfo, UserInfo } from '../config/types';
+import {
+    ExeInfo,
+    HunterExecutable,
+    QuestionInfo,
+    UserInfo,
+} from '../config/types';
 import { Util } from '../util/util';
 import config from '../config/config';
-
-type ExeInfo = {
-    success: boolean;
-    meta: string;
-    output: string;
-    expected: string;
-};
 
 @Service({ global: true })
 export class JudgeService {
@@ -39,26 +37,6 @@ export class JudgeService {
         this.entries--;
     }
 
-    private _cmd(
-        hunterExecutable: HunterExecutable,
-        samples: Boolean,
-        question: QuestionInfo,
-        user: UserInfo
-    ) {
-        return `${this.gatewayPath} ${Util.getFileName(hunterExecutable)} ${
-            hunterExecutable.solution.lang
-        } ${samples} ${user.id} "${question.sample_cases.replace(
-            '\n',
-            '\\n'
-        )}" "${question.sample_sols.replace('\n', '\\n')}"`;
-    }
-
-    private buildFilePath(hunterExecutable: HunterExecutable, user: UserInfo) {
-        return `${this.filesPath}${Util.getFileName(hunterExecutable)}_${
-            user.id
-        }.${hunterExecutable.solution.lang}`;
-    }
-
     getNumberOfEntries = () => {
         return this.entries;
     };
@@ -66,30 +44,31 @@ export class JudgeService {
     async execute(
         hunterExecutable: HunterExecutable,
         samples: boolean,
-        question: QuestionInfo,
-        user: UserInfo
+        question: QuestionInfo | null,
+        user: UserInfo | null
     ): Promise<ExeInfo> {
         return new Promise((resolve, reject) => {
-            if (this.isProcessingUserMap.get(user.id))
-                resolve({
-                    'output': 'Already processing for this user',
-                } as ExeInfo);
-            else this.saveEntry(user);
+            if (user) {
+                if (this.isProcessingUserMap.get(user.id))
+                    resolve({
+                        'output': 'Already processing for this user',
+                    } as ExeInfo);
+                else this.saveEntry(user);
+            }
 
             let programInput = '';
             let programOutput = '';
 
             if (samples) {
-                programInput = question.sample_cases;
-                programOutput = question.sample_sols;
+                programInput = question?.sample_cases || '';
+                programOutput = question?.sample_sols || '';
             } else {
-                const internalFileName = Util.getFileName(hunterExecutable);
                 programInput = readFileSync(
-                    internalFileName + '_s.txt',
+                    Util.getFileName(hunterExecutable, 'testcases'),
                     'utf-8'
                 );
                 programOutput = readFileSync(
-                    internalFileName + '_t.txt',
+                    Util.getFileName(hunterExecutable, 'solutions'),
                     'utf-8'
                 );
             }
@@ -127,7 +106,9 @@ export class JudgeService {
             };
 
             const fulfillSolution = (res: ExeInfo) => {
-                this.remEntry(user);
+                if (user) {
+                    this.remEntry(user);
+                }
                 resolve(res);
             };
 
@@ -143,9 +124,9 @@ export class JudgeService {
                 .then(
                     (res) => {
                         fulfillSolution({
-                            expected: res.expected,
+                            expected: samples ? res.expected : '',
+                            output: samples ? res.output : '',
                             meta: res.meta,
-                            output: res.output,
                             success: res.success,
                         });
                     },

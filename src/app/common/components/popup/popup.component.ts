@@ -24,17 +24,11 @@ export class PopupComponent implements OnInit {
     constructor() {}
 
     bgClicked(event: any) {
-        if (event.target.id == 'bg') this.closeEvent.emit('cancel');
+        if (event.target.classList.contains('bg'))
+            this.closeEvent.emit('cancel');
     }
 
     ngOnInit(): void {
         if (!this.visible) this.closeEvent.emit('cancel');
-
-        if (this.destructive) {
-            let dialog = document.getElementById('dialog') as HTMLElement;
-
-            dialog = document.getElementById('title') as HTMLElement;
-            dialog.style.color = 'darkred';
-        }
     }
 }

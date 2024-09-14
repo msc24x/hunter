@@ -10,8 +10,13 @@
     scrollbar-width: none; /* Firefox */
 }
 
+@mixin blackBack {
+    background: #0000000d;
+    padding: 1rem;
+    border-radius: 2rem;
+}
+
 @mixin basicBackZ {
-    font-family: appFont;
     color: colors.$text_black;
     font-size: 1rem;
     background-color: white;
@@ -19,7 +24,6 @@
 }
 
 @mixin basicBack {
-    font-family: appFont;
     padding: 0.8rem;
     padding-inline: 1.6rem;
     color: colors.$text_black;

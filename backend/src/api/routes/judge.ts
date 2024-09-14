@@ -1,6 +1,6 @@
 import express from 'express';
 import models from '../../database/containers/models';
-import { HunterExecutable, UserInfo } from '../../config/types';
+import { HunterExecutable, QuestionInfo, UserInfo } from '../../config/types';
 import { Util } from '../../util/util';
 import { existsSync, readFile, writeFile } from 'fs';
 import { authenticate, loginRequired } from '../auth';
@@ -26,107 +26,88 @@ router.post('/execute', authenticate, loginRequired, (req, res) => {
         return;
     }
 
-    models.questions.findAll(
-        {
-            id: hunterExecutable.for.question_id,
-            competition_id: hunterExecutable.for.competition_id,
-        },
-        (questions) => {
-            if (questions.length == 0) {
+    client.questions
+        .findUnique({
+            where: {
+                id: hunterExecutable.for.question_id,
+                competition_id: hunterExecutable.for.competition_id,
+                competitions: {
+                    public: true,
+                    deleted_at: null,
+                },
+                deleted_at: null,
+            },
+            include: {
+                competitions: true,
+            },
+        })
+        .then(async (question) => {
+            if (
+                !question ||
+                !question?.competitions ||
+                question?.competitions?.deleted_at
+            ) {
                 Util.sendResponse(res, resCode.notFound);
                 return;
             }
-            models.competitions.findAll(
-                {
-                    id: hunterExecutable.for.competition_id,
-                },
-                0,
-                true,
-                async (competitions) => {
-                    if (competitions.length == 0) {
-                        Util.sendResponse(res, resCode.notFound);
-                        return;
-                    }
 
-                    if (
-                        !models.competitions.isLiveNow(
-                            competitions[0].scheduled_at
-                        ) ||
-                        !models.competitions.hasNotEnded(
-                            competitions[0].scheduled_at,
-                            competitions[0].scheduled_end_at
-                        )
-                    ) {
-                        Util.sendResponse(
-                            res,
-                            resCode.forbidden,
-                            'Either the competition is not live or has ended'
-                        );
-                        return;
-                    }
+            if (
+                !models.competitions.isLiveNow(
+                    question.competitions.scheduled_at
+                ) ||
+                !models.competitions.hasNotEnded(
+                    question.competitions.scheduled_end_at
+                )
+            ) {
+                Util.sendResponse(
+                    res,
+                    resCode.forbidden,
+                    'Either the competition is not live or has ended'
+                );
+                return;
+            }
 
-                    if (
-                        !samples &&
-                        (!existsSync(
-                            `${judgeService.filesPath}${Util.getFileName(
-                                hunterExecutable
-                            )}_s.txt`
-                        ) ||
-                            !existsSync(
-                                `${judgeService.filesPath}${Util.getFileName(
-                                    hunterExecutable
-                                )}_t.txt`
-                            ))
-                    ) {
-                        Util.sendResponseJson(res, resCode.success, {
-                            output: 'HERR:No test cases has been set for this competitions',
-                        });
-                        return;
-                    }
+            if (!samples && !Util.doesTestFilesExist(hunterExecutable)) {
+                Util.sendResponseJson(res, resCode.success, {
+                    output: 'HERR:No test cases has been set for this competitions',
+                });
+                return;
+            }
 
-                    if (
-                        samples &&
-                        (!questions[0].sample_cases ||
-                            !questions[0].sample_sols)
-                    ) {
-                        Util.sendResponseJson(res, resCode.success, {
-                            output: 'HERR:No sample test cases has been set for this competitions',
-                        });
-                        return;
-                    }
+            if (samples && (!question.sample_cases || !question.sample_sols)) {
+                Util.sendResponseJson(res, resCode.success, {
+                    output: 'HERR:No sample test cases has been set for this competitions',
+                });
+                return;
+            }
 
-                    try {
-                        const resInfo = await judgeService.execute(
-                            hunterExecutable,
-                            samples,
-                            questions[0],
-                            user
-                        );
+            try {
+                const resInfo = await judgeService.execute(
+                    hunterExecutable,
+                    samples,
+                    question as QuestionInfo,
+                    user
+                );
 
-                        if (!samples)
-                            scoreboardService.updateResult(
-                                user,
-                                hunterExecutable,
-                                resInfo.success,
-                                questions[0].points
-                            );
+                if (!samples)
+                    scoreboardService.updateResult(
+                        user,
+                        hunterExecutable,
+                        resInfo,
+                        question as QuestionInfo
+                    );
 
-                        Util.sendResponseJson(res, resCode.success, resInfo);
-                    } catch (err) {
-                        console.log(err);
-                        Util.sendResponse(res, resCode.serverError);
-                    }
-                },
-                (err) => {
-                    if (err) {
-                        console.log(err);
-                        Util.sendResponse(res, resCode.serverError);
-                        return;
-                    }
-                }
-            );
-        }
-    );
+                Util.sendResponseJson(res, resCode.success, resInfo);
+            } catch (err) {
+                console.log(err);
+                Util.sendResponse(res, resCode.serverError);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            Util.sendResponse(res, resCode.serverError);
+            return;
+        });
 });
 
 router.get('/submission/:lang', authenticate, loginRequired, (req, res) => {

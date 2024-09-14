@@ -27,10 +27,12 @@
     },
     "dependencies": {
         "@prisma/client": "^5.18.0",
+        "@types/express-fileupload": "^1.5.1",
         "argon2": "^0.30.3",
         "body-parser": "^1.19.1",
         "cookie-parser": "^1.4.6",
         "dotenv": "^16.0.3",
+        "express-fileupload": "^1.5.1",
         "fs": "^0.0.1-security",
         "jsonwebtoken": "^8.5.1",
         "memory-cache": "^0.2.0",

@@ -53,7 +53,6 @@ export class CompetitionsListComponent implements OnInit {
     }
 
     isClosedNow(com: CompetitionInfo) {
-        console.log(com.scheduled_end_at);
         if (com.scheduled_end_at === null) {
             return false;
         }

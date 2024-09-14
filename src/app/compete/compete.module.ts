@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { CommonModule as HunterCommonModule } from 'src/app/common/common.module';
-import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { CompetitionComponent } from './pages/competition/competition.component';
 import { RouterModule } from '@angular/router';
@@ -11,11 +10,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-    declarations: [
-        DropDownListComponent,
-        ScoreboardComponent,
-        CompetitionComponent,
-    ],
+    declarations: [ScoreboardComponent, CompetitionComponent],
     imports: [
         CommonModule,
         HunterCommonModule,

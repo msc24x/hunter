@@ -115,24 +115,22 @@
                         [(questionSelected)]="questionSelected"
                     ></questions-list>
 
-                    <div>
-                        <label
-                            for="toggle-layout"
-                            class="hsection pointer toggle-layout-label"
-                            matTooltip="Toggle the editor layout"
-                            [ngClass]="{ 'active': hrlayout }"
-                        >
-                            <fa-icon [icon]="layoutIcon"></fa-icon>
-                        </label>
+                    <label
+                        for="toggle-layout"
+                        class="hsection pointer toggle-layout-label"
+                        matTooltip="Toggle the editor layout"
+                        [ngClass]="{ 'active': hrlayout }"
+                    >
+                        <fa-icon [icon]="layoutIcon"></fa-icon>
+                    </label>
 
-                        <input
-                            id="toggle-layout"
-                            type="checkbox"
-                            name="hrlayout"
-                            hidden
-                            (change)="toggleLayout()"
-                        />
-                    </div>
+                    <input
+                        id="toggle-layout"
+                        type="checkbox"
+                        name="hrlayout"
+                        hidden
+                        (change)="toggleLayout()"
+                    />
                 </div>
 
                 <div id="question_title">
@@ -149,27 +147,8 @@
             </div>
 
             <!-- Code editor -->
-            <div class="ace-editor">
-                <div class="row hunter-conf">
-                    <div
-                        matTooltip="Load the boilerplate template for the selected language"
-                        matTooltipPosition="above"
-                        class="row"
-                        id="load_template_btn"
-                        (click)="loadTemplate()"
-                    >
-                        Load Template
-                    </div>
-
-                    <drop-down-list
-                        listType="Language"
-                        [items]="['cpp', 'c', 'py', 'js', 'ts', 'go']"
-                        (itemSelectedEvent)="updateEditorMode($event)"
-                    ></drop-down-list>
-                </div>
-
-                <div id="editor"></div>
-            </div>
+            <code-editor class="ace-editor" [(code)]="codeWritten">
+            </code-editor>
         </div>
 
         <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
@@ -179,7 +158,7 @@
             class="row"
         >
             <div
-                matTooltip="Only submit when you're ready, to avoid penalities"
+                matTooltip="Only submit when you're ready, to avoid negative marking"
                 class="button"
                 id="submit_code_btn"
                 (click)="postSolution()"
@@ -231,7 +210,7 @@
                 <div *ngFor="let row of evaluation">
                     <div>{{ row.question_id }}</div>
                     <div>{{ row.result }}</div>
-                    <div style="color: darkred">{{ row.penalities }}</div>
+                    <div style="color: darkred">{{ "-" }}</div>
                 </div>
 
                 <div>
@@ -260,44 +239,10 @@
                     <pre [innerText]="solutionOutput.expected"></pre>
                 </div>
 
-                <p class="showdown-branding">
-                    Runtime powered by <b>Showdown</b> <br />
-                    An
-                    <a href="https://showdown.cambo.in">open source</a> remote
-                    code execution engine built by Maninderpal Singh
-                </p>
-
-                <div
-                    matTooltip="Runtime information of the submitted code, provided by Showdown"
-                    *ngIf="solutionOutput.meta"
-                    class="solution-meta"
-                >
-                    <div
-                        *ngFor="
-                            let infoItem of getPrettyRuntimeInfo(
-                                solutionOutput.meta
-                            )
-                        "
-                    >
-                        <b>{{ infoItem[0] }}</b>
-                        <br />
-                        <span>{{ infoItem[1] }}</span>
-                    </div>
-                    <div>
-                        <b>Status</b>
-                        <br />
-                        <span
-                            [style.color]="
-                                solutionOutput.success ? 'darkgreen' : 'darkred'
-                            "
-                            >{{
-                                solutionOutput.success
-                                    ? "Accepted"
-                                    : "Not Accepted"
-                            }}</span
-                        >
-                    </div>
-                </div>
+                <pretty-meta
+                    [meta]="solutionOutput.meta"
+                    [success]="solutionOutput.success"
+                ></pretty-meta>
             </div>
         </div>
 

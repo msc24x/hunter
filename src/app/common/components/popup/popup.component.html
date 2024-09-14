@@ -1,10 +1,19 @@
-<div id="bg" (click)="bgClicked($event)">
-    <div id="dialog">
-        <div id="title">{{title}}</div>
+<div class="bg" (click)="bgClicked($event)">
+    <div class="dialog">
+        <div
+            class="title"
+            [ngStyle]="{ 'color': destructive ? 'darkred' : 'initial' }"
+        >
+            {{ title }}
+        </div>
         <ng-content></ng-content>
         <div *ngIf="showControls" class="row">
-            <div id="continue_btn" (click)="closeEvent.emit('continue')">Continue</div>
-            <div id="cancel_btn" (click)="closeEvent.emit('cancel')">Cancel</div>
+            <div class="continue_btn" (click)="closeEvent.emit('continue')">
+                Continue
+            </div>
+            <div class="cancel_btn" (click)="closeEvent.emit('cancel')">
+                Cancel
+            </div>
         </div>
     </div>
 </div>

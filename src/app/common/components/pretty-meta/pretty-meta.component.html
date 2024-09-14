@@ -1,0 +1,24 @@
+<p class="showdown-branding">
+    Runtime powered by <b>Showdown</b> <br />An
+    <a href="https://showdown.cambo.in">open source</a> remote code execution
+    engine built by Maninderpal Singh
+</p>
+
+<div
+    matTooltip="Runtime information of the submitted code, provided by Showdown"
+    *ngIf="meta"
+    class="solution-meta"
+>
+    <div *ngFor="let infoItem of getPrettyRuntimeInfo(meta)">
+        <b>{{ infoItem[0] }}</b>
+        <br />
+        <span>{{ infoItem[1] }}</span>
+    </div>
+    <div>
+        <b>Status</b>
+        <br />
+        <span [style.color]="success ? 'darkgreen' : 'darkred'">{{
+            success ? "Accepted" : "Not Accepted"
+        }}</span>
+    </div>
+</div>

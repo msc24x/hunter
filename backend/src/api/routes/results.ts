@@ -4,8 +4,12 @@ import models from '../../database/containers/models';
 import { Util } from '../../util/util';
 import { authenticate, loginRequired } from '../auth';
 import { UserInfo } from '../../config/types';
+import Container from 'typedi';
+import { DatabaseProvider } from '../../services/databaseProvider';
 
 const router = express.Router();
+
+const client = Container.get(DatabaseProvider).client();
 
 router.get('/result/c/:id', authenticate, loginRequired, (req, res) => {
     if (req.params.id == null) {

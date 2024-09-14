@@ -46,9 +46,53 @@ export class CompetitionsDataService {
         );
     }
 
-    getFileStatus(id: number, fileType: string) {
-        return this.http.get(
-            apiEndpoints.question + '/' + id + '/' + fileType,
+    getFileStatus(params: {
+        competition_id: number;
+        question_id: number;
+        file_type: string;
+    }) {
+        const endpoint =
+            format(
+                apiEndpoints.question,
+                params.competition_id.toString()!,
+                params.question_id.toString() || ''
+            ) +
+            '/' +
+            params.file_type;
+
+        return this.http.get(endpoint, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
+    }
+
+    fetchVerification(params: { competition_id: number; question_id: number }) {
+        const endpoint =
+            format(
+                apiEndpoints.question,
+                params.competition_id.toString()!,
+                params.question_id.toString()!
+            ) + '/verification';
+
+        return this.http.get(endpoint, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
+    }
+
+    verifySolution(exe: HunterExecutable) {
+        const endpoint =
+            format(
+                apiEndpoints.question,
+                exe.for.competition_id.toString()!,
+                exe.for.question_id.toString()!
+            ) + '/verification';
+
+        return this.http.post(
+            endpoint,
+            { solution: exe.solution },
             {
                 responseType: 'json',
                 withCredentials: true,
@@ -89,22 +133,22 @@ export class CompetitionsDataService {
         competition_id: number;
         id: number;
         fileType: string;
-        file: string;
+        file: File;
     }) {
         const endpoint = format(
             apiEndpoints.question,
             params.competition_id.toString()!,
             params.id.toString() || ''
         );
-        return this.http.post(
-            endpoint + '/' + params.fileType,
-            // { file: params.file },
-            {
-                responseType: 'json',
-                withCredentials: true,
-                observe: 'response',
-            }
-        );
+
+        const data = new FormData();
+        data.append('file', params.file);
+
+        return this.http.post(endpoint + '/' + params.fileType, data, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
     }
 
     deleteQuestion(params: { competition_id: number; id: number }) {

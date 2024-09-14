@@ -7,6 +7,17 @@
     display: none;
 }
 
+.no-click {
+    &:active {
+        pointer-events: none;
+    }
+}
+
+.disabled {
+    cursor: not-allowed !important;
+    opacity: 0.9;
+}
+
 html {
     font-weight: 200;
 }
@@ -75,6 +86,13 @@ body {
         @extend .flex;
         flex-direction: column;
     }
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    font-family: appFont;
+    flex-wrap: wrap;
 }
 
 .justify {

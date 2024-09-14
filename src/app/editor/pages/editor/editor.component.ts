@@ -2,11 +2,15 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+    faCircleCheck,
+    faCircleXmark,
+    faDownload,
     faEye,
     faEyeSlash,
     faPenToSquare,
     faShare,
     faSquareShareNodes,
+    faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -16,6 +20,7 @@ import {
     domainName,
     protocol,
     QuestionInfo,
+    QuestionVerification,
     resCode,
     UserInfo,
 } from 'src/environments/environment';
@@ -29,6 +34,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     shareIcon = faSquareShareNodes;
     viewIcon = faEye;
     writeIcon = faEyeSlash;
+    checkIcon = faCircleCheck;
+    crossIcon = faCircleXmark;
+
+    uploadIcon = faUpload;
+    downloadIcon = faDownload;
 
     loading = false;
     preview_mode = false;
@@ -41,6 +51,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     questionSelectedInfo = {} as QuestionInfo;
     testExists = false;
     solsExists = false;
+    verificationResult: QuestionVerification | null = null;
     elem: HTMLElement | null = null;
 
     isAuthenticated: boolean = false;
@@ -131,7 +142,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     getFileStatus(fileType: string) {
         let exists = new BehaviorSubject(false);
         this.competitionsData
-            .getFileStatus(this.questionSelectedInfo.id, fileType)
+            .getFileStatus({
+                competition_id: this.questionSelectedInfo.competition_id,
+                question_id: this.questionSelectedInfo.id,
+                file_type: fileType,
+            })
             .subscribe((res) => {
                 if (res.status == resCode.success) {
                     exists.next((res.body as any).exists);
@@ -141,10 +156,12 @@ export class EditorComponent implements OnInit, OnDestroy {
         return exists.asObservable();
     }
 
+    downloadFileUrl(fileType: string) {
+        return `/api/competitions/${this.questionSelectedInfo.competition_id}/questions/${this.questionSelectedInfo.id}/${fileType}/download`;
+    }
+
     downloadFile(fileType: string) {
-        window.open(
-            `/api/question/${this.questionSelectedInfo.id}/${fileType}/download`
-        );
+        window.open(this.downloadFileUrl(fileType));
     }
 
     saveQuestion() {
@@ -171,6 +188,11 @@ export class EditorComponent implements OnInit, OnDestroy {
                 points: (
                     document.getElementById(
                         'question_points'
+                    ) as HTMLInputElement
+                ).valueAsNumber,
+                neg_points: (
+                    document.getElementById(
+                        'question_neg_points'
                     ) as HTMLInputElement
                 ).valueAsNumber,
                 sample_cases: (
@@ -202,7 +224,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         } else return null;
     }
 
-    selectQuestion(index: number) {
+    selectQuestion(index: number, force: boolean = false) {
         this.loading = true;
 
         this.questionSelected = index;
@@ -211,20 +233,12 @@ export class EditorComponent implements OnInit, OnDestroy {
                 ? ({} as QuestionInfo)
                 : this.competitionInfo.questions![index];
 
-        this.competitionsData
-            .getFileStatus(this.questionSelectedInfo.id, 'solutions')
-            .subscribe((res) => {
-                if (res.status == resCode.success) {
-                    this.solsExists = (res.body as any).exists;
-                }
-            });
-        this.competitionsData
-            .getFileStatus(this.questionSelectedInfo.id, 'testcases')
-            .subscribe((res) => {
-                if (res.status == resCode.success) {
-                    this.testExists = (res.body as any).exists;
-                }
-            });
+        this.getFileStatus('solutions').subscribe((res) => {
+            this.solsExists = res;
+        });
+        this.getFileStatus('testcases').subscribe((res) => {
+            this.testExists = res;
+        });
         this.loading = false;
     }
 
@@ -247,49 +261,31 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
 
         this.loading = true;
+        this.displayLog('Uploading.. ' + filen + ' ' + file[0].name);
 
-        const label = document.getElementById(
-            filen.toLowerCase() + '_file_label'
-        ) as HTMLLabelElement;
-        label.innerText = 'Uploading.. ' + filen + ' ' + file[0].name;
+        this.competitionsData
+            .postFile({
+                id: this.questionSelectedInfo.id,
+                fileType: filen.toLowerCase(),
+                file: file[0],
+                competition_id: this.competitionInfo.id,
+            })
+            .subscribe((res) => {
+                if (res.status !== 200) {
+                    this.displayLog('Upload failed');
+                    return;
+                }
 
-        const contents = file[0].text();
+                this.displayLog('File for ' + filen + ' Uploaded');
 
-        contents.then((result) => {
-            this.competitionsData
-                .postFile({
-                    id: this.questionSelectedInfo.id,
-                    fileType: filen.toLowerCase(),
-                    file: result,
-                    competition_id: this.competitionInfo.id,
-                })
-                .subscribe((res) => {
-                    this.displayLog('File for ' + filen + ' Uploaded');
-                    label.innerText = filen + ' Uploaded';
+                if (filen === 'testcases') {
+                    this.testExists = true;
+                } else if (filen === 'solutions') {
+                    this.solsExists = true;
+                }
 
-                    this.competitionsData
-                        .getFileStatus(
-                            this.questionSelectedInfo.id,
-                            'solutions'
-                        )
-                        .subscribe((res) => {
-                            if (res.status == resCode.success) {
-                                this.solsExists = (res.body as any).exists;
-                            }
-                        });
-                    this.competitionsData
-                        .getFileStatus(
-                            this.questionSelectedInfo.id,
-                            'testcases'
-                        )
-                        .subscribe((res) => {
-                            if (res.status == resCode.success) {
-                                this.testExists = (res.body as any).exists;
-                            }
-                        });
-                    this.loading = false;
-                });
-        });
+                this.loading = false;
+            });
     }
 
     fetchQuestions() {

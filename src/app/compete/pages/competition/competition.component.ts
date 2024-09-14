@@ -45,7 +45,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     fetchSubmissionMsg = '';
 
     c_id: number = 0;
-    editor!: ace.Ace.Editor;
 
     hrlayout: boolean = true;
     bottomSection = false;
@@ -64,6 +63,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         meta: '',
     };
     languageSelected: HunterLanguage = 'cpp';
+    codeWritten: string = '';
 
     timeRemaining = '(-_-)';
     hasEnded = false;
@@ -191,7 +191,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.solutionOutput.output = 'No question selected';
             return;
         }
-        if (!this.editor.getValue()) {
+        if (!this.codeWritten) {
             this.solutionOutput.output = 'Empty solution';
             return;
         }
@@ -221,7 +221,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         },
                         solution: {
                             lang: this.languageSelected,
-                            code: this.editor.getValue(),
+                            code: this.codeWritten,
                         },
                     },
                     samples
@@ -263,7 +263,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 })
                 .subscribe({
                     next: (res) => {
-                        this.editor.setValue(res.body?.data ?? '');
+                        this.codeWritten = res.body?.data ?? '';
                         this.loading = false;
                     },
                     error: (err) => {
@@ -346,9 +346,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
                         if (this.competition.questions) {
                             this.selectQuestion(0);
-                            setTimeout(() => {
-                                this.initEditor();
-                            });
+                            // setTimeout(() => {
+                            //     this.initEditor();
+                            // });
                         }
                     },
                     error: (err) => {
@@ -365,34 +365,34 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.questionSelectedInfo = this.competition.questions![index];
     }
 
-    loadTemplate() {
-        this.editor.setValue(
-            templates[this.languageSelected as HunterLanguage]
-        );
-    }
+    // loadTemplate() {
+    //     this.editor.setValue(
+    //         templates[this.languageSelected as HunterLanguage]
+    //     );
+    // }
 
-    updateEditorMode(lang: string) {
-        this.languageSelected = lang as HunterLanguage;
+    // updateEditorMode(lang: string) {
+    //     this.languageSelected = lang as HunterLanguage;
 
-        switch (this.languageSelected) {
-            case 'c':
-            case 'cpp':
-                this.editor.session.setMode('ace/mode/c_cpp');
-                break;
-            case 'py':
-                this.editor.session.setMode('ace/mode/python');
-                break;
-            case 'js':
-                this.editor.session.setMode('ace/mode/javascript');
-                break;
-            case 'ts':
-                this.editor.session.setMode('ace/mode/typescript');
-                break;
-            case 'go':
-                this.editor.session.setMode('ace/mode/golang');
-                break;
-        }
-    }
+    //     switch (this.languageSelected) {
+    //         case 'c':
+    //         case 'cpp':
+    //             this.editor.session.setMode('ace/mode/c_cpp');
+    //             break;
+    //         case 'py':
+    //             this.editor.session.setMode('ace/mode/python');
+    //             break;
+    //         case 'js':
+    //             this.editor.session.setMode('ace/mode/javascript');
+    //             break;
+    //         case 'ts':
+    //             this.editor.session.setMode('ace/mode/typescript');
+    //             break;
+    //         case 'go':
+    //             this.editor.session.setMode('ace/mode/golang');
+    //             break;
+    //     }
+    // }
 
     toggleLayout() {
         this.hrlayout = !this.hrlayout;
@@ -408,50 +408,5 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             elem.style.pointerEvents = 'none';
             elem.style.opacity = '0.5';
         }
-    }
-
-    getPrettyRuntimeInfo(info: string): any[] {
-        const prettyArr: any[] = [];
-        const msgMap: any = {
-            'RE': 'Runtime error',
-            'SG': 'Died on signal',
-            'TO': 'Timed out',
-            'XX': 'Internal error',
-        };
-
-        info.split('\n').forEach((infoKey) => {
-            const [itemName, itemVal] = infoKey.split(':');
-
-            switch (itemName) {
-                case 'cg-mem':
-                    prettyArr.push(['Memory', itemVal + ' kb']);
-                    break;
-                case 'status':
-                    prettyArr.push([
-                        'Message',
-                        itemVal + ': ' + (msgMap[itemVal] || ''),
-                    ]);
-                    break;
-                case 'time':
-                    prettyArr.push(['CPU time', itemVal + ' sec']);
-                    break;
-                case 'time-wall':
-                    prettyArr.push(['Total time', itemVal + ' sec']);
-            }
-        });
-
-        return prettyArr;
-    }
-
-    initEditor() {
-        this.editor = ace.edit('editor');
-        ace.config.set('basePath', 'assets/');
-        /**
-         * twilight
-         * monokai
-         * terminal
-         */
-        this.editor.setTheme('ace/theme/twilight');
-        this.editor.session.setMode('ace/mode/c_cpp');
     }
 }

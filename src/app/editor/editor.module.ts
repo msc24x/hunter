@@ -11,6 +11,7 @@ import { EditorRoutingModule } from './editor-routing.module';
 import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CodeTesterComponent } from './components/code-tester/code-tester.component';
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         DashboardCardComponent,
         QuestionsListComponent,
         NgKatexComponent,
+        CodeTesterComponent,
     ],
     imports: [
         CommonModule,

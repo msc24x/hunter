@@ -14,5 +14,5 @@ export class InfotipComponent {
     message: string = 'Info';
 
     @Input()
-    svgSize: SizeProp = '1x';
+    svgSize: SizeProp = 'sm';
 }

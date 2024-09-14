@@ -11,12 +11,17 @@ export type SessionInfo = {
 export type QuestionInfo = {
     id: number;
     competition_id: number;
-    title: string;
+    title: string | null;
     statement: string;
-    date_created: string;
+    created_at: Date;
+    deleted_at: Date | null;
     sample_cases: string;
     sample_sols: string;
     points: number;
+    neg_points: number;
+    test_cases_file?: boolean;
+    sol_cases_file?: boolean;
+    sol_code_file?: boolean;
 };
 
 export type Result = {
@@ -50,12 +55,19 @@ export type CompetitionInfo = {
 
 export type HunterExecutable = {
     for: {
-        competition_id: string;
-        question_id: string;
+        competition_id: number;
+        question_id: number;
     };
 
     solution: {
         lang: 'py' | 'c' | 'cpp' | 'js' | 'ts' | 'go';
         code: string;
     };
+};
+
+export type ExeInfo = {
+    success: boolean;
+    meta: string;
+    output: string;
+    expected: string;
 };

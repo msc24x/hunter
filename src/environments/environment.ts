@@ -19,6 +19,16 @@ export interface UserInfo {
 
 export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go';
 
+export type QuestionVerification = {
+    id: number;
+    created_at: Date;
+    submission: string;
+    language: string;
+    reason: string;
+    success: boolean;
+    question_id: number;
+};
+
 export interface CompetitionInfo {
     id: number;
     host_user_id: number;
@@ -57,17 +67,18 @@ export type ExecutionInfo = {
 export type result = {
     name: string;
     user_id: number;
-    score: string;
-    penalities: string;
+    result: number;
+    submission?: string;
+    meta?: string;
 };
 
 export type resultFull = {
     id: number;
-    user_id: number;
+    user: UserInfo;
     question_id: number;
-    competition_id: number;
-    result: string;
-    penalities: string;
+    result: number;
+    submission?: string;
+    meta?: string;
 };
 
 export const apiEndpoints = {
@@ -117,6 +128,10 @@ export interface QuestionInfo {
     sample_cases: string;
     sample_sols: string;
     points: number;
+    neg_points: number;
+    test_cases_file?: boolean;
+    sol_cases_file?: boolean;
+    sol_code_file?: boolean;
 }
 /*
  * For easier debugging in development mode, you can import the following file

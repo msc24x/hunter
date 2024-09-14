@@ -2,16 +2,16 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-#bg {
+.bg {
     @include popup;
     z-index: 100;
 }
 
-#dialog::-webkit-scrollbar {
-    display: none;
-}
+// .dialog::-webkit-scrollbar {
+//     display: none;
+// }
 
-#dialog {
+.dialog {
     background-color: colors.$text_white;
     max-width: 60%;
     max-height: 60%;
@@ -24,7 +24,7 @@
     margin-inline: 2%;
     margin-block: auto;
 
-    #title {
+    .title {
         font-size: 2rem;
         font-weight: bold;
         margin-bottom: 24px;
@@ -50,7 +50,7 @@
 }
 
 @media only screen and (max-width: 456px) {
-    #dialog {
+    .dialog {
         font-size: 1.05rem !important;
     }
 }

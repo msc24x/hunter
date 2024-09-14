@@ -19,6 +19,9 @@ import { CommonRoutingModule } from './common-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { InfotipComponent } from './components/infotip/infotip.component';
+import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
+import { CodeEditorComponent } from './components/code-editor/code-editor.component';
+import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +41,9 @@ import { InfotipComponent } from './components/infotip/infotip.component';
         UserInfoPipe,
         IsLiveStatusPipe,
         InfotipComponent,
+        DropDownListComponent,
+        CodeEditorComponent,
+        PrettyMetaComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -63,6 +69,9 @@ import { InfotipComponent } from './components/infotip/infotip.component';
         UserInfoPipe,
         IsLiveStatusPipe,
         InfotipComponent,
+        DropDownListComponent,
+        CodeEditorComponent,
+        PrettyMetaComponent,
     ],
     providers: [DatePipe],
 })

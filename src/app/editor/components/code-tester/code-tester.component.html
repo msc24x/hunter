@@ -1,0 +1,29 @@
+<div *ngIf="lastVerification" class="last-verification-res">
+    <pretty-meta
+        *ngIf="lastVerification"
+        [meta]="lastVerification.reason"
+        [success]="lastVerification.success"
+    ></pretty-meta>
+    <br />
+    <i
+        >Last verification attempted at
+        {{ lastVerification.created_at.toLocaleString() }}</i
+    >
+</div>
+
+<p>
+    Use the code tester to verify that your created competition is valid and is
+    solvable. To proceed please select desired language and write correct code
+    for the solution of this question. We will verify if your solution works.
+</p>
+
+<div
+    [ngClass]="{
+        'no-click disabled': verificationInProgress,
+        'test-solution-btn': true
+    }"
+    (click)="verifySolution()"
+>
+    Submit for a new verification
+</div>
+<code-editor [(code)]="code" [(languageSelected)]="language"> </code-editor>

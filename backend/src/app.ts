@@ -5,11 +5,13 @@ import bodyParser from 'body-parser';
 import config from './config/config';
 import { DatabaseProvider } from './services/databaseProvider';
 import Container from 'typedi';
+import fileUpload from 'express-fileupload';
 
 const app = express();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 app.use(require('./api/routes'));
 

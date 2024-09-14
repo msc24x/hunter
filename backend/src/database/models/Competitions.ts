@@ -12,11 +12,15 @@ export class Competitions {
         this.dbConnection = this.db.getInstance();
     }
 
-    isLiveNow(date: Date) {
+    isLiveNow(date: Date | null) {
+        if (!date) {
+            return true;
+        }
+
         return date < new Date();
     }
 
-    hasNotEnded(date: Date, endDate: Date | null) {
+    hasNotEnded(endDate: Date | null) {
         if (!endDate) return true;
         return new Date() < endDate;
     }

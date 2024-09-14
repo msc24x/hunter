@@ -1,4 +1,7 @@
+import path from 'path';
 import { CompetitionInfo, HunterExecutable, UserInfo } from '../config/types';
+import { existsSync } from 'fs';
+import config from '../config/config';
 
 export class Util {
     static sendResponse(res: any, code: number, msg: string = '') {
@@ -48,7 +51,30 @@ export class Util {
         return false;
     }
 
-    static getFileName(hunterExecutable: HunterExecutable) {
-        return `${hunterExecutable.for.competition_id}_${hunterExecutable.for.question_id}`;
+    static getFileName(hunterExecutable: HunterExecutable, file_type: string) {
+        return this.getAbsoluteFilePath(
+            hunterExecutable.for.competition_id,
+            hunterExecutable.for.question_id,
+            file_type
+        );
+    }
+
+    static getAbsoluteFilePath(
+        comp_id: number,
+        ques_id: number,
+        file_type: string
+    ) {
+        return path.join(
+            __dirname,
+            '../../files',
+            `${comp_id}_${ques_id}_${file_type}`
+        );
+    }
+
+    static doesTestFilesExist(hunterExecutable: HunterExecutable) {
+        return (
+            existsSync(`${Util.getFileName(hunterExecutable, 'solutions')}`) &&
+            existsSync(`${Util.getFileName(hunterExecutable, 'testcases')}`)
+        );
     }
 }
