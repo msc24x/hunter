@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { format } from 'src/app/utils/utils';
 import { apiEndpoints } from 'src/environments/environment';
 
 @Injectable({
@@ -8,35 +9,30 @@ import { apiEndpoints } from 'src/environments/environment';
 export class ScoresDataService {
     constructor(private http: HttpClient) {}
 
-    getScoreboard(competition_id: number) {
-        return this.http.get(apiEndpoints.results + competition_id, {
+    getQuestionScores(params: { comp_id: number; ques_id: number }) {
+        var endpoint = format(
+            apiEndpoints.results,
+            params.comp_id.toString(),
+            params.ques_id.toString()
+        );
+
+        return this.http.get(endpoint, {
             observe: 'response',
             responseType: 'json',
             withCredentials: true,
         });
     }
 
-    getScoresAll(params: any) {
-        let httpParams = new HttpParams();
+    getScoresAll(params: { comp_id: number }) {
+        var endpoint = format(
+            apiEndpoints.resultsAll,
+            params.comp_id.toString()
+        );
 
-        if (params.user_id) {
-            httpParams = httpParams.set('user_id', params.user_id);
-        }
-        if (params.question_id) {
-            httpParams = httpParams.set('question_id', params.question_id);
-        }
-        if (params.competition_id) {
-            httpParams = httpParams.set(
-                'competition_id',
-                params.competition_id
-            );
-        }
-
-        return this.http.get(apiEndpoints.resultsAll, {
+        return this.http.get(endpoint, {
             observe: 'response',
             responseType: 'json',
             withCredentials: true,
-            params: httpParams,
         });
     }
 }

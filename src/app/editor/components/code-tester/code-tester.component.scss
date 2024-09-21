@@ -5,6 +5,9 @@
 :host {
     .last-verification-res {
         @include basicBack;
+        margin-bottom: 3rem;
+        margin-inline: auto;
+
         .failure-reason {
             pre {
                 width: 100%;
@@ -17,6 +20,6 @@
         @include basicBack;
         width: fit-content;
         cursor: pointer;
-        margin: 1rem;
+        margin-block: 1rem;
     }
 }

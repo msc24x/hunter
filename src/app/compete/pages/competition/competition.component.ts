@@ -11,6 +11,7 @@ import {
     protocol,
     QuestionInfo,
     resCode,
+    result,
     resultFull,
     templates,
     UserInfo,
@@ -20,6 +21,7 @@ import { CompetitionsDataService } from 'src/app/services/competitions-data/comp
 import {
     faAddressCard,
     faChevronUp,
+    faFileCode,
     faHourglassHalf,
     faSpinner,
     faTableColumns,
@@ -38,8 +40,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     loginIcon = faAddressCard;
     timerIcon = faHourglassHalf;
     upIcon = faChevronUp;
+    codeIcon = faFileCode;
 
     showInstructionP = false;
+    showSubmissionP = false;
 
     loading = false;
     fetchSubmissionMsg = '';
@@ -49,10 +53,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     hrlayout: boolean = true;
     bottomSection = false;
 
+    viewSubmissionResult: result | undefined;
+
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
     competition = {} as CompetitionInfo;
-    evaluation: Array<resultFull> = [];
+    evaluation: Array<result> = [];
     questionSelected = -1;
     questionSelectedInfo = {} as QuestionInfo;
     judgeInProgress = false;
@@ -108,7 +114,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             }
         });
 
-        document.onkeydown = (event) => {
+        document.addEventListener('keydown', (event) => {
             if (event.shiftKey && event.altKey && event.key == 'J') {
                 this.postSolution(true);
             }
@@ -116,7 +122,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             if (event.key.startsWith('Esc')) {
                 this.bottomSection = false;
             }
-        };
+        });
 
         if (this.isAuthenticated) {
             this.fetchData();
@@ -168,6 +174,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    viewSubmission(result: result) {
+        this.showSubmissionP = true;
+        this.bottomSection = false;
+        this.viewSubmissionResult = result;
     }
 
     clearOutput() {
@@ -281,14 +293,14 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     fetchEvaluation() {
         this.subscriptions.push(
             this.scoresDataService
-                .getScoresAll({
-                    user_id: this.user.id,
-                    competition_id: this.c_id,
+                .getQuestionScores({
+                    comp_id: this.c_id,
+                    ques_id: this.questionSelectedInfo.id,
                 })
                 .subscribe((res) => {
                     if (res.status == resCode.success) {
                         this.evaluation = res.body
-                            ? (res.body as Array<resultFull>)
+                            ? (res.body as Array<result>)
                             : [];
                     }
                 })
@@ -296,8 +308,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     fetchData() {
-        this.fetchEvaluation();
-
         this.subscriptions.push(
             this.competitionsService
                 .getQuestions({ competition_id: this.c_id })
@@ -346,6 +356,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
                         if (this.competition.questions) {
                             this.selectQuestion(0);
+
                             // setTimeout(() => {
                             //     this.initEditor();
                             // });
@@ -363,6 +374,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     selectQuestion(index: number) {
         this.questionSelected = index;
         this.questionSelectedInfo = this.competition.questions![index];
+
+        this.fetchEvaluation();
     }
 
     // loadTemplate() {

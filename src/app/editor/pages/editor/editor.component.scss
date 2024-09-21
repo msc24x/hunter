@@ -83,7 +83,8 @@ popup {
     margin-top: 16px;
     font-family: appFont;
     cursor: default;
-    border-radius: 24px;
+    border-radius: 1rem;
+    @include sweetBorder();
 
     #id {
         background-color: white;
@@ -350,7 +351,7 @@ popup {
 
 label.file_input {
     color: colors.$text_black;
-    background-color: whitesmoke;
+    background-color: white;
     border-radius: 1rem;
     padding: 1rem;
     width: 18rem;
@@ -407,6 +408,8 @@ a:hover,
     font-size: 1.2rem;
     width: 2.2rem;
     color: colors.$text_black;
+
+    @include sweetBorder();
 }
 
 #question_points_lbl,
@@ -446,10 +449,6 @@ a:hover,
 
 #delete_competition_btn:hover {
     cursor: pointer;
-}
-
-body {
-    margin: 0px;
 }
 
 .questions-list {

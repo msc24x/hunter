@@ -8,6 +8,7 @@ import {
     SimpleChanges,
 } from '@angular/core';
 import * as ace from 'ace-builds';
+import { BehaviorSubject } from 'rxjs';
 import { HunterLanguage, templates } from 'src/environments/environment';
 
 @Component({
@@ -19,6 +20,9 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     editor!: ace.Ace.Editor;
     emittedChanges = false;
 
+    editorInitialized = new BehaviorSubject<boolean>(false);
+
+    @Input() editable: boolean = true;
     @Input() languageSelected: HunterLanguage = 'cpp';
     @Output() languageSelectedChange = new EventEmitter<HunterLanguage>();
 
@@ -30,8 +34,20 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (this.emittedChanges || !this.editor) {
+        if (this.emittedChanges) {
             this.emittedChanges = false;
+            return;
+        }
+
+        if (!this.editor) {
+            this.editorInitialized.subscribe((val) => {
+                if (val) {
+                    this.editor.setValue(this.code, 1);
+                    this._updateEditorMode();
+                    this.editorInitialized.unsubscribe();
+                }
+            });
+
             return;
         }
 
@@ -41,6 +57,7 @@ export class CodeEditorComponent implements OnInit, OnChanges {
 
     initEditor() {
         this.editor = ace.edit('editor');
+        this.editor.setReadOnly(!this.editable);
         ace.config.set('basePath', 'assets/');
         /**
          * twilight
@@ -54,6 +71,8 @@ export class CodeEditorComponent implements OnInit, OnChanges {
             this.emittedChanges = true;
             this.codeChange.emit(this.editor.getValue());
         });
+
+        this.editorInitialized.next(true);
     }
 
     loadTemplate() {

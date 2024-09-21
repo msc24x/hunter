@@ -1,28 +1,31 @@
-#text_input_body{
+@use "../../../../assets/mixins" as *;
+@use "../../../../assets/colors";
+@use "../../../../assets/fonts";
+
+#text_input_body {
     display: flex;
     align-items: center;
     background-color: transparent;
-    padding : 4px;
+    padding: 4px;
     padding-inline: 16px;
     border-radius: 24px;
-    input{
-      border : none;
-      outline: none;
-      background-color: whitesmoke;
-      padding : 8px;
-      padding-inline: 16px;
-      width: 150px;
-      font-family: appFont;
-      font-size: 1.1rem;
-      margin-inline: 4px;
-      border-radius: 24px;
+    input {
+        border: none;
+        outline: none;
+        background-color: whitesmoke;
+        padding: 8px;
+        padding-inline: 16px;
+        width: 150px;
+        font-family: appFont;
+        font-size: 1.1rem;
+        margin-inline: 4px;
+        border-radius: 24px;
+        @include sweetBorder();
     }
-    input:active{
-      border : none;
-      outline: none;
+    input:active {
+        outline: none;
     }
-    #trunc_title_btn{
+    #trunc_title_btn {
         cursor: pointer;
     }
-    
-  }
+}

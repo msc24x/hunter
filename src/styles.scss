@@ -27,7 +27,7 @@ a {
 }
 
 .table_heading {
-    pointer-events: none;
+    // pointer-events: none;
 }
 
 .hsection {
@@ -46,10 +46,12 @@ body {
     // background-repeat: no-repeat;
     // background-attachment: fixed;
     margin: 0px;
-    max-width: 1836px;
+    max-width: 1720px;
     padding-inline: 2%;
     margin-inline: auto;
     font-family: appFont;
+    // background: linear-gradient(45deg, rgb(214, 214, 214), rgb(224, 224, 224));
+    // background-attachment: fixed;
 }
 
 .largeButton {

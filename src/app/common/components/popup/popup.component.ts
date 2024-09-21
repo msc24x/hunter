@@ -30,5 +30,11 @@ export class PopupComponent implements OnInit {
 
     ngOnInit(): void {
         if (!this.visible) this.closeEvent.emit('cancel');
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key.startsWith('Esc')) {
+                this.closeEvent.emit('cancel');
+            }
+        });
     }
 }

@@ -137,6 +137,8 @@
     font-family: appFont;
     font-size: 1.2rem;
     margin-bottom: 24px;
+
+    @include sweetBorder();
 }
 
 #question_statement {
@@ -173,6 +175,18 @@
     align-items: stretch;
     font-family: appFont;
 
+    .view-submission {
+        cursor: pointer;
+
+        fa-icon {
+            color: colors.$text_black;
+        }
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
     #solution_output {
         background-color: whitesmoke;
         width: 50%;
@@ -184,6 +198,8 @@
         border: 1px solid whitesmoke;
         margin: 4px;
         transition: height 200ms;
+
+        @include sweetBorder();
 
         .loading {
             font-size: 1.2rem;
@@ -224,11 +240,13 @@
     max-height: 512px;
     display: flex;
     flex-direction: column;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     background-color: whitesmoke;
     padding: 16px;
-    border-radius: 24px;
+    border-radius: 1rem;
     margin: 4px;
+
+    @include sweetBorder();
 
     .table_heading {
         font-weight: bold;
@@ -237,16 +255,34 @@
 
     div {
         display: flex;
-        justify-content: space-around;
+        justify-content: start;
 
         div {
-            width: 50px;
             text-align: center;
+            flex-basis: 33%;
+            padding: 0.3rem;
         }
     }
-    div:hover {
+
+    & > div:not(.table_heading):hover {
+        border-radius: 0.3rem;
         background-color: colors.$text_white;
-        border-radius: 24px;
+    }
+}
+
+.view-submission-container {
+    code-editor {
+        // @include basicBack;
+        display: block;
+        width: 860px;
+        margin-block: 1rem;
+        // overflow: scroll;
+    }
+
+    pretty-meta {
+        display: block;
+        padding: 1rem;
+        @include basicBackZ;
     }
 }
 

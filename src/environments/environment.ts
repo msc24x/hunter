@@ -65,9 +65,12 @@ export type ExecutionInfo = {
 };
 
 export type result = {
-    name: string;
     user_id: number;
+    user_name: number;
     result: number;
+    created_at?: string;
+    language?: HunterLanguage;
+    final_result?: number;
     submission?: string;
     meta?: string;
 };
@@ -93,8 +96,8 @@ export const apiEndpoints = {
     postFile: environment.apiUrl + '/question/upload',
     execute: environment.apiUrl + '/execute',
     user: environment.apiUrl + '/user',
-    results: environment.apiUrl + '/result/c/',
-    resultsAll: environment.apiUrl + '/result',
+    results: environment.apiUrl + '/competitions/{0}/results/{1}',
+    resultsAll: environment.apiUrl + '/competitions/{0}/results',
     submission: environment.apiUrl + '/submission/',
 };
 

@@ -4,15 +4,15 @@
 
 :host {
     .hunter-conf {
-        width: 100%;
+        width: calc(100% - 42px);
         background-color: colors.$text_black;
         border-radius: 24px 24px 0 0;
         overflow: hidden;
         height: 42px;
+        padding-left: 42px;
 
         #load_template_btn {
             height: 1.8rem;
-            margin-left: 42px;
             padding-inline: 8px;
             color: white;
             background-color: colors.$text_black;

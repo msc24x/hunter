@@ -9,6 +9,15 @@
         >Last verification attempted at
         {{ lastVerification.created_at.toLocaleString() }}</i
     >
+    <div
+        [ngClass]="{
+            'no-click disabled': verificationInProgress,
+            'test-solution-btn': true
+        }"
+        (click)="verifySolution()"
+    >
+        Submit New Verification Request
+    </div>
 </div>
 
 <p>
@@ -17,13 +26,4 @@
     for the solution of this question. We will verify if your solution works.
 </p>
 
-<div
-    [ngClass]="{
-        'no-click disabled': verificationInProgress,
-        'test-solution-btn': true
-    }"
-    (click)="verifySolution()"
->
-    Submit for a new verification
-</div>
 <code-editor [(code)]="code" [(languageSelected)]="language"> </code-editor>

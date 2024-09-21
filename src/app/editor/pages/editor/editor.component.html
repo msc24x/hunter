@@ -132,10 +132,10 @@
     Are you sure to set this competition's visibility to public?
 </popup>
 
-<app-info-card (click)="showPopup(true, 'guide')"
+<!-- <app-info-card (click)="showPopup(true, 'guide')"
     >Before you set up your contest and define the questions! It is highly
     recommended to take a look at the guide.</app-info-card
->
+> -->
 
 <h2>Competition Info</h2>
 
@@ -413,6 +413,14 @@
                             id="code_file_label"
                             class="file_input"
                             (click)="showPopup(true, 'code-tester')"
+                            [matTooltip]="
+                                !testExists || !solsExists
+                                    ? 'You must upload both test cases files to test your competition'
+                                    : ''
+                            "
+                            [ngClass]="{
+                                'no-click disabled': !testExists || !solsExists
+                            }"
                         >
                             *Verify Participation
                             <fa-icon

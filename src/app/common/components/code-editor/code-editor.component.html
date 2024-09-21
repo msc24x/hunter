@@ -1,5 +1,6 @@
 <div class="row hunter-conf">
     <div
+        *ngIf="editable"
         matTooltip="Load the boilerplate template for the selected language"
         matTooltipPosition="above"
         class="row"
@@ -10,6 +11,7 @@
     </div>
 
     <drop-down-list
+        [editable]="editable"
         listType="Language"
         [items]="['cpp', 'c', 'py', 'js', 'ts', 'go']"
         [itemSelected]="languageSelected"

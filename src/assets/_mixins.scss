@@ -10,10 +10,18 @@
     scrollbar-width: none; /* Firefox */
 }
 
+@mixin sweetBorder {
+    border-width: 1px;
+    border-color: rgba(128, 128, 128, 0.4);
+    border-style: solid;
+}
+
 @mixin blackBack {
-    background: #0000000d;
+    // background: #0000000d;
+    background-color: whitesmoke;
     padding: 1rem;
     border-radius: 2rem;
+    @include sweetBorder();
 }
 
 @mixin basicBackZ {
@@ -21,6 +29,7 @@
     font-size: 1rem;
     background-color: white;
     border-radius: 1rem;
+    @include sweetBorder();
 }
 
 @mixin basicBack {
@@ -30,6 +39,7 @@
     font-size: 1rem;
     background-color: white;
     border-radius: 1rem;
+    @include sweetBorder();
 }
 
 @mixin inputText {
@@ -45,6 +55,7 @@
     font-size: 16px;
     text-align: left;
     padding-left: 12px;
+    @include sweetBorder();
 }
 
 @mixin appTextArea {
@@ -57,6 +68,7 @@
     border-width: 0px;
     border-color: gray;
     color: colors.$text_black;
+    @include sweetBorder();
 }
 
 @mixin popup {

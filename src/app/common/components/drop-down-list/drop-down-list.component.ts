@@ -9,6 +9,8 @@ export class DropDownListComponent implements OnInit {
     @Input()
     items: string[] = [];
 
+    @Input() editable: boolean = true;
+
     @Input()
     listType: string = '';
 
@@ -31,6 +33,10 @@ export class DropDownListComponent implements OnInit {
     }
 
     expandList() {
+        if (!this.editable) {
+            return;
+        }
+
         this.hover = !this.hover;
     }
 }

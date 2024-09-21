@@ -50,7 +50,6 @@ export class CodeTesterComponent implements OnInit, OnChanges {
         this.language = this.lastVerification.language as HunterLanguage;
 
         this.lastVerificationChange.emit(this.lastVerification);
-        console.log('emmit', this.lastVerification);
     }
 
     verifySolution() {
@@ -67,10 +66,16 @@ export class CodeTesterComponent implements OnInit, OnChanges {
                     lang: this.language,
                 },
             })
-            .subscribe((res) => {
-                this.parseVerificationBody(res);
-                this.verificationInProgress = false;
-            });
+            .subscribe(
+                (res) => {
+                    this.parseVerificationBody(res);
+                    this.verificationInProgress = false;
+                },
+                (err) => {
+                    this.lastVerificationChange.emit(null);
+                    this.verificationInProgress = false;
+                }
+            );
     }
 
     fetchLastVerification() {
@@ -80,9 +85,15 @@ export class CodeTesterComponent implements OnInit, OnChanges {
                 competition_id: this.competition_id,
                 question_id: this.question_id,
             })
-            .subscribe((res) => {
-                this.parseVerificationBody(res);
-                this.verificationInProgress = false;
-            });
+            .subscribe(
+                (res) => {
+                    this.parseVerificationBody(res);
+                    this.verificationInProgress = false;
+                },
+                (err) => {
+                    this.lastVerificationChange.emit(null);
+                    this.verificationInProgress = false;
+                }
+            );
     }
 }

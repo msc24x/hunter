@@ -55,7 +55,31 @@ export class Results {
         callback: (rows: any, err: QueryError | null) => void
     ) {
         this.dbConnection.query(
-            ` select results.user_id, users.name, sum(results.result) as score, sum(results.penalities) as penalities from results inner join users on users.id = results.user_id where competition_id = ? group by results.user_id order by score desc, penalities;`,
+            `SELECT 
+                    r.user_id, 
+                    u.name AS user_name,
+                    MAX(r.created_at) AS created_at,
+                    SUM(case when r.result > 0 then r.result else 0 end) AS result,
+                    SUM(r.result) AS final_result
+                FROM 
+                    results r
+                JOIN 
+                    questions q ON r.question_id = q.id
+                JOIN 
+                    competitions c ON q.competition_id = c.id
+                JOIN 
+                    users u ON r.user_id = u.id
+                WHERE 
+                    q.deleted_at IS NULL 
+                    AND c.deleted_at IS NULL 
+                    AND q.competition_id = ?
+                GROUP BY 
+                    r.user_id, u.name
+                ORDER BY
+                    final_result DESC,
+                    result DESC,
+                    created_at ASC;
+                `,
             [id],
             (err, rows) => {
                 if (err) {

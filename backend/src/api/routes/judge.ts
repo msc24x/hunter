@@ -69,14 +69,14 @@ router.post('/execute', authenticate, loginRequired, (req, res) => {
 
             if (!samples && !Util.doesTestFilesExist(hunterExecutable)) {
                 Util.sendResponseJson(res, resCode.success, {
-                    output: 'HERR:No test cases has been set for this competitions',
+                    output: 'HERR:No test cases has been set for this question',
                 });
                 return;
             }
 
             if (samples && (!question.sample_cases || !question.sample_sols)) {
                 Util.sendResponseJson(res, resCode.success, {
-                    output: 'HERR:No sample test cases has been set for this competitions',
+                    output: 'HERR:No sample test cases has been set for this question',
                 });
                 return;
             }

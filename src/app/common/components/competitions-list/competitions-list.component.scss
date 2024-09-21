@@ -31,6 +31,7 @@
         padding-inline: 16px;
         background-color: whitesmoke;
         color: colors.$text_black;
+        @include sweetBorder();
     }
 }
 
@@ -103,6 +104,7 @@
     padding-left: 0px;
     overflow: hidden;
     scroll-behavior: smooth;
+
     li {
         border-width: 2px;
         border-color: black;
@@ -120,6 +122,8 @@
     height: fit-content;
     background-color: whitesmoke;
     font-family: appFont;
+
+    @include sweetBorder();
 
     &:hover {
         cursor: pointer;

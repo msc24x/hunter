@@ -18,16 +18,16 @@ export class ScoreboardComponent implements OnInit {
     constructor(private scoresDataService: ScoresDataService) {
         this.interval10s = setInterval(() => {
             scoresDataService
-                .getScoreboard(this.competition_id)
+                .getScoresAll({ comp_id: this.competition_id })
                 .subscribe((res) => {
                     this.scores = res.body as Array<result>;
                 });
-        }, 1000 * 10);
+        }, 1000 * 60);
     }
 
     ngOnInit(): void {
         this.scoresDataService
-            .getScoreboard(this.competition_id)
+            .getScoresAll({ comp_id: this.competition_id })
             .subscribe((res) => {
                 this.scores = res.body as Array<result>;
             });

@@ -2,62 +2,80 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-#score_board{
+#score_board {
     margin-top: 64px;
-   font-family: appFont;
-   width: inherit;
+    font-family: appFont;
+    width: inherit;
 
-    #sc_title{
+    #sc_title {
         font-size: 1.4rem;
         font-weight: bold;
-        padding : 8px;
+        padding: 8px;
     }
 
-    #scores_table{
-
+    #scores_table {
         font-size: 1.1rem;
         height: 456px;
 
-        .table_heading{
+        .table_heading {
             font-weight: bold;
             margin-bottom: 8px;
             background-color: whitesmoke;
         }
 
         background-color: whitesmoke;
-        padding : 16px;
-        border-radius: 24px;
+        padding: 16px;
+        border-radius: 1rem;
+        @include sweetBorder();
 
         display: flex;
         flex-direction: column;
 
-        div{
+        div {
             text-align: center;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0.3rem;
 
-            div{
+            div {
                 width: 200px;
-                word-break: break-all ;
-                justify-content: center;
+                word-break: break-all;
             }
 
-            .score{
-                color : green;
+            .rank-col {
+                flex-basis: 5%;
+                text-align: center;
             }
 
-            .penalities{
+            .name-col {
+                flex-basis: 45%;
+            }
+
+            .time-col {
+                flex-basis: 30%;
+            }
+
+            .score-p {
+                color: darkcyan;
+                flex-basis: 10%;
+                overflow: visible;
+            }
+
+            .score {
+                color: green;
+                flex-basis: 10%;
+            }
+
+            .penalities {
                 color: darkred;
+                flex-basis: 5%;
             }
         }
 
-        div:hover{
+        & > div:not(.table_heading):hover {
             background-color: colors.$text_white;
-            border-radius: 24px;
+            border-radius: 0.3rem;
         }
-
     }
-
-
 }
