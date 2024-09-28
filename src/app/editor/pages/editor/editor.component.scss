@@ -283,15 +283,16 @@ popup {
     left: 0px;
     justify-content: space-around;
     align-items: center;
-    width: 100%;
-    background-color: rgba(245, 245, 245, 0.514);
-    backdrop-filter: blur(8px);
+    margin: 0.3rem;
+    width: calc(100% - 0.6rem);
+    background-color: rgba(193, 193, 193, 0.501);
+    backdrop-filter: blur(0.5rem);
     padding-block: 8px;
     z-index: 5;
+    border-radius: 1rem;
+    @include sweetBorder;
 
     button {
-        font-family: appFont;
-        font-weight: bold;
         color: colors.$text_black;
         font-size: 1rem;
         background-color: transparent;
@@ -300,12 +301,6 @@ popup {
         min-width: 250px;
         margin: 8px;
         cursor: pointer;
-        //border: solid colors.$text_white;
-        //border-width: 1px;//0px 1px 0px 1px;
-    }
-    button:hover {
-        color: black;
-        font-weight: 550;
     }
 
     div {
@@ -479,11 +474,11 @@ a:hover,
 .editor-second-panel {
     .title-eval-container {
         @include blackBack;
-
+        padding-inline: 2rem;
         margin-top: 1rem;
         align-items: stretch;
         flex-wrap: nowrap;
-        gap: 2rem;
+        gap: 5rem;
 
         .title-container {
             width: 60%;

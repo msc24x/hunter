@@ -65,9 +65,11 @@ export type ExecutionInfo = {
 };
 
 export type result = {
+    id: number;
     user_id: number;
     user_name: number;
     result: number;
+    accepted: boolean;
     created_at?: string;
     language?: HunterLanguage;
     final_result?: number;
@@ -84,6 +86,12 @@ export type resultFull = {
     meta?: string;
 };
 
+export type QuestionProgress = {
+    question_id: number;
+    total: number;
+    accepted: boolean;
+};
+
 export const apiEndpoints = {
     register: environment.apiUrl + '/register',
     login: environment.apiUrl + '/login',
@@ -98,6 +106,7 @@ export const apiEndpoints = {
     user: environment.apiUrl + '/user',
     results: environment.apiUrl + '/competitions/{0}/results/{1}',
     resultsAll: environment.apiUrl + '/competitions/{0}/results',
+    progress: environment.apiUrl + '/competitions/{0}/progress',
     submission: environment.apiUrl + '/submission/',
 };
 

@@ -22,6 +22,7 @@ import { InfotipComponent } from './components/infotip/infotip.component';
 import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
 import { CodeEditorComponent } from './components/code-editor/code-editor.component';
 import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.component';
+import { GreenredComponent } from './greenred/greenred.component';
 
 @NgModule({
     declarations: [
@@ -44,6 +45,7 @@ import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.compon
         DropDownListComponent,
         CodeEditorComponent,
         PrettyMetaComponent,
+        GreenredComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -72,6 +74,7 @@ import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.compon
         DropDownListComponent,
         CodeEditorComponent,
         PrettyMetaComponent,
+        GreenredComponent,
     ],
     providers: [DatePipe],
 })

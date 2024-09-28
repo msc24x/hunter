@@ -1,6 +1,6 @@
 import { QueryError } from 'mysql2';
 import Container, { Inject, Service } from 'typedi';
-import { Result } from '../../config/types';
+import { Result, UserInfo } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
 
 export class Results {

@@ -24,7 +24,7 @@
 
     &.full {
         opacity: 1;
-        top: 50%;
+        top: 35%;
         box-shadow: inset;
         overflow-y: auto;
 
@@ -39,6 +39,38 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .progress-container {
+        display: flex;
+        align-items: stretch;
+
+        .progress-box {
+            font-size: 1.3rem;
+            background-color: whitesmoke;
+            padding: 1rem;
+            padding-right: 1.3rem;
+            width: fit-content;
+            display: inline-block;
+            margin-right: 1rem;
+            border-radius: 1rem;
+            @include sweetBorder;
+
+            .progress-num {
+                font-weight: bold;
+                font-size: 1.4rem;
+                margin-right: 0.5rem;
+            }
+
+            greenred {
+                margin-top: 0.3rem;
+            }
+
+            &.score-box {
+                display: flex;
+                align-items: center;
+            }
+        }
     }
 }
 
@@ -163,6 +195,7 @@
     font-size: 1.3rem;
     font-weight: bold;
     padding: 8px;
+    max-height: 512px;
 }
 
 .sa {
@@ -172,8 +205,34 @@
 #output_points {
     display: flex;
     justify-content: stretch;
-    align-items: stretch;
-    font-family: appFont;
+    align-items: start;
+
+    .points-time-col {
+        flex-basis: 60%;
+    }
+
+    .evaluation-next-prev {
+        display: flex;
+        gap: 1rem;
+        margin: 1rem;
+        justify-content: end;
+
+        &:hover {
+            background-color: initial;
+        }
+
+        & > div {
+            border-radius: 0.6rem;
+            flex-basis: 20%;
+            justify-content: center;
+            @include sweetBorder;
+            cursor: pointer;
+
+            &:hover {
+                background-color: white;
+            }
+        }
+    }
 
     .view-submission {
         cursor: pointer;
@@ -183,7 +242,9 @@
         }
 
         &:hover {
-            text-decoration: underline;
+            span {
+                text-decoration: underline;
+            }
         }
     }
 

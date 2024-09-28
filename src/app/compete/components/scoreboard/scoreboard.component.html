@@ -1,5 +1,5 @@
 <div id="score_board">
-    <div id="sc_title">Competition Scoreboard</div>
+    <h2>Competition Scoreboard</h2>
     <div id="scores_table">
         <div class="table_heading">
             <div class="rank-col">#</div>
@@ -22,7 +22,7 @@
                 {{ score.user_name }}#{{ score.user_id }}
             </div>
             <div class="time-col">
-                {{ score.created_at | date : "yyyy, MM, dd 'at' hh:mm aa" }}
+                {{ score.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
             </div>
 
             <div class="score-p">&nbsp;&nbsp;{{ score.result }}</div>

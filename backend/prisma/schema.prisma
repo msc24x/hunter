@@ -64,6 +64,7 @@ model results {
   question_id    Int
   question       questions     @relation(fields: [question_id], references: [id])
   result         Int
+  accepted      Boolean       @default(false)
   submission     String?       @db.Text
   language      String        @db.VarChar(20) @default("")
   meta           String?       @db.VarChar(200)

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import {
     CompetitionInfo,
+    QuestionProgress,
     domainName,
     ExecutionInfo,
     HunterLanguage,
@@ -54,11 +55,16 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     bottomSection = false;
 
     viewSubmissionResult: result | undefined;
+    questionsProgress: Array<QuestionProgress> = [];
 
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
     competition = {} as CompetitionInfo;
+
+    evaluationAfterPages: number[] = [];
     evaluation: Array<result> = [];
+    acceptedEvaluation: number = 0;
+    rejectedEvaluation: number = 0;
     questionSelected = -1;
     questionSelectedInfo = {} as QuestionInfo;
     judgeInProgress = false;
@@ -191,6 +197,34 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         };
     }
 
+    getAcceptedSubmissions() {
+        return this.evaluation.filter((ev) => ev.accepted).length;
+    }
+
+    getRejectedSubmissions() {
+        return this.evaluation.filter((ev) => !ev.accepted).length;
+    }
+
+    getAcceptedSolutions() {
+        return this.questionsProgress.filter((qp) => qp.accepted).length;
+    }
+
+    getTotalScore() {
+        var total = 0;
+
+        this.questionsProgress.forEach((qp) => (total += qp.total));
+        return total;
+    }
+
+    getPositiveScore() {
+        var total = 0;
+
+        // this.questionsProgress.forEach((qp) => {
+        //     if (qp.)
+        // });
+        return total;
+    }
+
     redirectToGitHubOAuth() {
         window.open(`${protocol}://${domainName}/api/oauth/github`);
     }
@@ -290,18 +324,38 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         );
     }
 
+    prevEvaluations() {
+        this.evaluationAfterPages.pop();
+        this.fetchEvaluation();
+    }
+
+    nextEvaluations() {
+        this.evaluationAfterPages.push(
+            this.evaluation[this.evaluation.length - 1].id
+        );
+        this.fetchEvaluation();
+    }
+
     fetchEvaluation() {
+        this.loading = true;
         this.subscriptions.push(
             this.scoresDataService
                 .getQuestionScores({
                     comp_id: this.c_id,
                     ques_id: this.questionSelectedInfo.id,
+                    after: this.evaluationAfterPages[
+                        this.evaluationAfterPages.length - 1
+                    ],
                 })
                 .subscribe((res) => {
+                    this.loading = false;
+
                     if (res.status == resCode.success) {
-                        this.evaluation = res.body
-                            ? (res.body as Array<result>)
+                        this.evaluation = res.body?.results
+                            ? (res.body.results as Array<result>)
                             : [];
+                        this.acceptedEvaluation = res.body!.accepted_count;
+                        this.rejectedEvaluation = res.body!.rejected_count;
                     }
                 })
         );
@@ -367,6 +421,13 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             this.router.navigate(['/404']);
                         }
                     },
+                }),
+            this.scoresDataService
+                .getProgress({ comp_id: this.c_id })
+                .subscribe({
+                    next: (res) => {
+                        this.questionsProgress = res.body || [];
+                    },
                 })
         );
     }
@@ -374,6 +435,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     selectQuestion(index: number) {
         this.questionSelected = index;
         this.questionSelectedInfo = this.competition.questions![index];
+        this.evaluationAfterPages = [];
+        this.acceptedEvaluation = 0;
+        this.rejectedEvaluation = 0;
 
         this.fetchEvaluation();
     }

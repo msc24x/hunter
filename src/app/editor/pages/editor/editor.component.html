@@ -137,7 +137,7 @@
     recommended to take a look at the guide.</app-info-card
 > -->
 
-<h2>Competition Info</h2>
+<h2>Competition Data</h2>
 
 <div class="row_flex editor-first-panel" style="margin-top: 16px">
     <div class="vertical_flex desc-panel">
@@ -242,7 +242,7 @@
 
 <br />
 <br />
-<h2>Questions</h2>
+<h2>Questions Data</h2>
 
 <div class="questions-list">
     <questions-list
@@ -268,77 +268,6 @@
 
     <div class="vertical_flex full-stretch" *ngIf="questionSelected !== -1">
         <div class="flex title-eval-container">
-            <div id="evaluation-section">
-                <div class="flex eval-panel">
-                    <div class="sample-cases-container">
-                        <div>
-                            <div id="sample_cases_label" class="clabel">
-                                Sample Tests Cases
-                                <infotip
-                                    message="Small test cases for participants to test their code against without actually submitting for evaluation. These will be visible to the participants"
-                                ></infotip>
-                            </div>
-                            <textarea
-                                id="question_sample_cases"
-                                maxlength="250"
-                                rows="6"
-                                [value]="questionSelectedInfo.sample_cases"
-                            ></textarea>
-                        </div>
-
-                        <div>
-                            <div id="sample_sols_label" class="clabel">
-                                Solution to the samples<infotip
-                                    message="Solution to the test cases provided above. These will be visible to the participants"
-                                ></infotip>
-                            </div>
-                            <textarea
-                                id="question_sample_sols"
-                                maxlength="250"
-                                rows="6"
-                                [value]="questionSelectedInfo.sample_sols"
-                            ></textarea>
-                        </div>
-                    </div>
-                    <div style="width: 100%">
-                        <div class="flex">
-                            <div class="points-container">
-                                <p>
-                                    Reward
-                                    <input
-                                        id="question_points"
-                                        type="number"
-                                        min="0"
-                                        [max]="9"
-                                        [value]="questionSelectedInfo.points"
-                                    />
-                                    points for first correct submission
-                                    <infotip
-                                        message="This is the weighage the question holds. Participants will be awarded this many points to their first correct submission. A maximum of 9 points can be set for one question"
-                                    ></infotip>
-                                </p>
-
-                                <p>
-                                    Cut
-                                    <input
-                                        id="question_neg_points"
-                                        type="number"
-                                        min="0"
-                                        [max]="4"
-                                        [value]="
-                                            questionSelectedInfo.neg_points
-                                        "
-                                    />
-                                    points for each wrong submission
-                                    <infotip
-                                        message="Set this to any non-zero value (1-4) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
-                                    ></infotip>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="vertical_flex title-container">
                 <div class="clabel">Title</div>
 
@@ -451,6 +380,77 @@
                     competition and ensure it is solvable. If you don't do this,
                     participants will see that your competition is unverified.
                 </p>
+            </div>
+            <div id="evaluation-section">
+                <div class="flex eval-panel">
+                    <div class="sample-cases-container">
+                        <div>
+                            <div id="sample_cases_label" class="clabel">
+                                Sample Tests Cases
+                                <infotip
+                                    message="Small test cases for participants to test their code against without actually submitting for evaluation. These will be visible to the participants"
+                                ></infotip>
+                            </div>
+                            <textarea
+                                id="question_sample_cases"
+                                maxlength="250"
+                                rows="6"
+                                [value]="questionSelectedInfo.sample_cases"
+                            ></textarea>
+                        </div>
+
+                        <div>
+                            <div id="sample_sols_label" class="clabel">
+                                Solution to the samples<infotip
+                                    message="Solution to the test cases provided above. These will be visible to the participants"
+                                ></infotip>
+                            </div>
+                            <textarea
+                                id="question_sample_sols"
+                                maxlength="250"
+                                rows="6"
+                                [value]="questionSelectedInfo.sample_sols"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div style="width: 100%">
+                        <div class="flex">
+                            <div class="points-container">
+                                <p>
+                                    Reward
+                                    <input
+                                        id="question_points"
+                                        type="number"
+                                        min="0"
+                                        [max]="9"
+                                        [value]="questionSelectedInfo.points"
+                                    />
+                                    points for first correct submission
+                                    <infotip
+                                        message="This is the weighage the question holds. Participants will be awarded this many points to their first correct submission. A maximum of 9 points can be set for one question"
+                                    ></infotip>
+                                </p>
+
+                                <p>
+                                    Cut
+                                    <input
+                                        id="question_neg_points"
+                                        type="number"
+                                        min="0"
+                                        [max]="4"
+                                        [value]="
+                                            questionSelectedInfo.neg_points
+                                        "
+                                    />
+                                    points for each wrong submission
+                                    <infotip
+                                        message="Set this to any non-zero value (1-4) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
+                                    ></infotip>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

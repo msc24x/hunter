@@ -1,6 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+    faCheckCircle,
+    faCircleCheck,
+    faCircleXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
-import { CompetitionInfo, QuestionInfo } from 'src/environments/environment';
+import {
+    CompetitionInfo,
+    QuestionInfo,
+    QuestionProgress,
+} from 'src/environments/environment';
 
 @Component({
     selector: 'questions-list',
@@ -9,11 +18,16 @@ import { CompetitionInfo, QuestionInfo } from 'src/environments/environment';
 })
 export class QuestionsListComponent implements OnInit {
     loading = false;
+    checkIcon = faCircleCheck;
+    crossIcon = faCircleXmark;
 
     constructor(private competitionsData: CompetitionsDataService) {}
 
     @Input()
     editable = true;
+
+    @Input()
+    questionsProgress: Array<QuestionProgress> = [];
 
     @Input()
     questionsList: Array<QuestionInfo> = [];
@@ -39,6 +53,10 @@ export class QuestionsListComponent implements OnInit {
     questionSelectedChange = new EventEmitter<number>();
 
     ngOnInit(): void {}
+
+    getQuestionProgress(ques_id: number) {
+        return this.questionsProgress.find((qp) => qp.question_id === ques_id);
+    }
 
     selectedQuestionElement(): HTMLLIElement | null {
         if (this.questionSelected == -1) return null;

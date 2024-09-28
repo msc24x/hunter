@@ -132,6 +132,7 @@
                         [editable]="false"
                         (questionSelectEmitter)="selectQuestion($event)"
                         [(questionSelected)]="questionSelected"
+                        [questionsProgress]="questionsProgress"
                     ></questions-list>
 
                     <label
@@ -153,9 +154,19 @@
                 </div>
 
                 <div id="question_title">
-                    Question ID : {{ questionSelectedInfo.id }} for
-                    {{ questionSelectedInfo.points }} pts <br /><br />
-                    <b>{{ questionSelectedInfo.title }}</b>
+                    Correct Submission:
+                    <b>{{ questionSelectedInfo.points }} </b> points
+                    <br />
+                    <span *ngIf="!questionSelectedInfo.neg_points">
+                        No negative marking
+                    </span>
+                    <span *ngIf="questionSelectedInfo.neg_points">
+                        Each incorrect submission:
+                        <b>-{{ questionSelectedInfo.neg_points }} </b> points
+                    </span>
+
+                    <br /><br />
+                    {{ questionSelectedInfo.title }}
                 </div>
 
                 <div id="question_statement">
@@ -218,7 +229,7 @@
             <div id="output_label">Submission Output</div>
         </div> -->
 
-        <h2>Evaluation</h2>
+        <h2>Question Evaluation</h2>
 
         <div *ngIf="isAuthenticated && !hasEnded" id="output_points">
             <div id="pts_desc" class="btable">
@@ -226,7 +237,7 @@
                     <div>Submission</div>
                     <div>Points (+/-)</div>
 
-                    <div>Time</div>
+                    <div class="points-time-col">Time</div>
                 </div>
                 <div *ngFor="let row of evaluation">
                     <div>
@@ -235,21 +246,63 @@
                             (click)="viewSubmission(row)"
                         >
                             <fa-icon [icon]="codeIcon" [size]="'sm'"></fa-icon>
-                            &nbsp; View Code</a
+                            &nbsp; <span>View Code</span></a
                         >
                     </div>
                     <div>{{ row.result }}</div>
-                    <div>
+                    <div class="points-time-col">
                         {{
-                            row.created_at | date : "yyyy, MM, dd 'at' hh:mm aa"
+                            row.created_at | date : "yyyy MMM dd 'at' hh:mm aa"
                         }}
                     </div>
                 </div>
 
-                <div>
+                <div *ngIf="evaluation.length === 0">
                     <div>-</div>
                     <div>-</div>
-                    <div>-</div>
+                    <div class="points-time-col">-</div>
+                </div>
+
+                <br />
+
+                <p>
+                    You have submitted
+                    {{ acceptedEvaluation + rejectedEvaluation }} solutions for
+                    this question
+                </p>
+                <greenred
+                    *ngIf="evaluation.length !== 0"
+                    [green_number]="acceptedEvaluation"
+                    [red_number]="rejectedEvaluation"
+                    green_label="Submissions Accepted"
+                    red_label="Submissions Not Accepted"
+                ></greenred>
+
+                <div
+                    [ngClass]="{
+                        'evaluation-next-prev': true
+                    }"
+                >
+                    <div
+                        [ngClass]="{
+                            'no-click disabled':
+                                loading || evaluationAfterPages.length === 0,
+                            'evaluation-prev': true
+                        }"
+                        (click)="prevEvaluations()"
+                    >
+                        View Newer
+                    </div>
+                    <div
+                        [ngClass]="{
+                            'no-click disabled':
+                                loading || evaluation.length < 10,
+                            'evaluation-next': true
+                        }"
+                        (click)="nextEvaluations()"
+                    >
+                        View Older
+                    </div>
                 </div>
             </div>
 
@@ -276,6 +329,52 @@
                     [meta]="solutionOutput.meta"
                     [success]="solutionOutput.success"
                 ></pretty-meta>
+            </div>
+        </div>
+
+        <br />
+        <h2 *ngIf="competition.questions">Your Overall Progress</h2>
+
+        <div *ngIf="competition.questions" class="progress-container">
+            <div class="progress-box">
+                <span class="progress-num">
+                    {{ questionsProgress.length }} of
+                    {{ competition.questions.length }}
+                </span>
+                Questions Attempted
+                <greenred
+                    [green_number]="questionsProgress.length"
+                    [red_number]="
+                        (competition.questions.length || 1) -
+                        questionsProgress.length
+                    "
+                    green_label="Attempted"
+                    red_label="Unattempted"
+                ></greenred>
+            </div>
+
+            <div class="progress-box">
+                <span class="progress-num">
+                    {{ getAcceptedSolutions() }} of
+                    {{ questionsProgress.length }}
+                </span>
+                Questions Accepted
+                <greenred
+                    [green_number]="getAcceptedSolutions()"
+                    [red_number]="
+                        questionsProgress.length - getAcceptedSolutions()
+                    "
+                    green_label="Accepted"
+                    red_label="Not Accepted"
+                ></greenred>
+            </div>
+
+            <div class="progress-box score-box">
+                You aggregated a total of &nbsp;
+                <span class="progress-num">
+                    {{ getTotalScore() }}
+                </span>
+                points
             </div>
         </div>
 

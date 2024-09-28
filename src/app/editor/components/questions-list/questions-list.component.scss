@@ -14,13 +14,14 @@
     list-style: none;
     padding: 0px;
     display: flex;
-    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: show;
     border-radius: 12px;
     font-family: appFont;
     scroll-behavior: smooth;
     margin: 0;
 
-    div {
+    & > div {
         background-color: white;
         border-radius: 1rem;
         padding: 16px;
@@ -29,6 +30,7 @@
         text-align: center;
         margin-right: 16px;
         cursor: default;
+        @include sweetBorder;
     }
 
     div#create_question_btn {
@@ -56,7 +58,7 @@
     }
 
     li {
-        background-color: colors.$grey;
+        background-color: whitesmoke;
         border-radius: 1rem;
         padding: 16px;
         font-weight: bold;
@@ -64,10 +66,23 @@
         text-align: center;
         margin-right: 6px;
         cursor: pointer;
+        position: relative;
+        @include sweetBorder;
 
         &.selected-question {
-            background-color: black;
+            background-color: colors.$text_black;
             color: whitesmoke;
+        }
+
+        .question-progress {
+            position: absolute;
+            top: 0rem;
+            left: -0.5rem;
+            font-size: 1.3rem;
+            background: colors.$text_white;
+            border-radius: 1.3rem;
+            height: 1.3rem;
+            display: block;
         }
     }
 

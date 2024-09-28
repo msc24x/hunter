@@ -16,7 +16,7 @@ export class BottomAppBarComponent implements OnInit {
 
     getYear() {
         const date = new Date();
-        return date.getFullYear() % 2000;
+        return date.getFullYear();
     }
 
     showPrivacyPolicy(f: boolean) {

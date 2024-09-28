@@ -1,14 +1,18 @@
 <app-loading *ngIf="loading"></app-loading>
 
 <div id="competitions_list">
-    <div class="row">
-        <p class="heading">{{ this.heading }}</p>
+    <p class="heading">{{ this.heading }}</p>
+
+    <div class="competitions-block">
         <div id="filter_controls">
-            <text-input
-                id="title_input"
-                title="Search"
-                (onChangeEvent)="query = $event; updateList()"
-            ></text-input>
+            <div class="filters-heading">Filters</div>
+            <div>
+                <text-input
+                    id="title_input"
+                    title="Search"
+                    (onChangeEvent)="query = $event; updateList()"
+                ></text-input>
+            </div>
 
             <div>
                 <label for="status_select">Live Status</label>
@@ -35,97 +39,98 @@
                 </select>
             </div>
         </div>
-    </div>
-
-    <ul id="competitions_ol">
-        <li *ngFor="let com of this.competitionsList">
-            <div
-                class="competition_card"
-                routerLink="/{{ this.route }}/{{ com.id }}"
-            >
-                <div id="c_title">{{ com.title }}</div>
-                <div id="c_host_user">
-                    By
-                    {{ com.host_user?.name || "Anonymous" }}
-                    <span *ngIf="com.host_user_id != 1">
-                        #{{ com.host_user_id }}
-                    </span>
-                    &nbsp;
-                    <span
-                        *ngIf="com.host_user_id == 1"
-                        matTooltip="Official by Hunter"
-                    >
-                        <fa-icon [icon]="officialIcon"></fa-icon>
-                    </span>
-
-                    &nbsp;
-                    <span
-                        *ngIf="!com.public"
-                        matTooltip="Private, only visible to you"
-                    >
-                        <fa-icon
-                            [icon]="privateIcon"
-                            style="color: gray"
-                        ></fa-icon>
-                    </span>
-                </div>
+        <ul id="competitions_ol">
+            <li *ngFor="let com of this.competitionsList">
                 <div
-                    id="start_schedule"
-                    class="detail-tag"
-                    [style.color]="
-                        (com.scheduled_at
-                        | isLiveStatusPipe : com.scheduled_end_at)
-                            ? '#D2122Ebb'
-                            : 'colors.$text_black'
-                    "
+                    class="competition_card"
+                    routerLink="/{{ this.route }}/{{ com.id }}"
                 >
-                    <span
-                        *ngIf="
-                            (com.scheduled_at || com.scheduled_end_at) &&
-                            !isClosedNow(com)
+                    <div id="c_title">{{ com.title }}</div>
+                    <div id="c_host_user">
+                        By
+                        {{ com.host_user?.name || "Anonymous" }}
+                        <span *ngIf="com.host_user_id != 1">
+                            #{{ com.host_user_id }}
+                        </span>
+                        &nbsp;
+                        <span
+                            *ngIf="com.host_user_id == 1"
+                            matTooltip="Official by Hunter"
+                        >
+                            <fa-icon [icon]="officialIcon"></fa-icon>
+                        </span>
+
+                        &nbsp;
+                        <span
+                            *ngIf="!com.public"
+                            matTooltip="Private, only visible to you"
+                        >
+                            <fa-icon
+                                [icon]="privateIcon"
+                                style="color: gray"
+                            ></fa-icon>
+                        </span>
+                    </div>
+                    <div
+                        id="start_schedule"
+                        class="detail-tag"
+                        [style.color]="
+                            (com.scheduled_at
+                            | isLiveStatusPipe : com.scheduled_end_at)
+                                ? '#D2122Ebb'
+                                : 'colors.$text_black'
                         "
                     >
-                        Live
-                        {{
-                            !isAfterNow(com.scheduled_at)
-                                ? "at"
-                                : com.scheduled_at
-                                ? "since"
-                                : "until"
-                        }}
-                        {{
-                            com.scheduled_at || com.scheduled_end_at
-                                | date : "MMM d, h:mm a" : "IST"
-                        }}
-                    </span>
-                    <span *ngIf="!com.scheduled_at && !com.scheduled_end_at">
-                        Always Live
-                    </span>
-                    &nbsp;
-                    <span *ngIf="isClosedNow(com)">
-                        <b>Submissions Closed</b>
-                    </span>
+                        <span
+                            *ngIf="
+                                (com.scheduled_at || com.scheduled_end_at) &&
+                                !isClosedNow(com)
+                            "
+                        >
+                            Live
+                            {{
+                                !isAfterNow(com.scheduled_at)
+                                    ? "at"
+                                    : com.scheduled_at
+                                    ? "since"
+                                    : "until"
+                            }}
+                            {{
+                                com.scheduled_at || com.scheduled_end_at
+                                    | date : "MMM d, h:mm a" : "IST"
+                            }}
+                        </span>
+                        <span
+                            *ngIf="!com.scheduled_at && !com.scheduled_end_at"
+                        >
+                            Always Live
+                        </span>
+                        &nbsp;
+                        <span *ngIf="isClosedNow(com)">
+                            <b>Submissions Closed</b>
+                        </span>
+                    </div>
+                    <div
+                        *ngIf="
+                            com.scheduled_end_at &&
+                            !isClosedNow(com) &&
+                            isAfterNow(com.scheduled_at)
+                        "
+                        class="detail-tag"
+                    >
+                        {{ timeLeft(com, timeLeftFlag) }} left
+                    </div>
+                    <br />
+                    <p id="c_about">{{ com.description }}</p>
                 </div>
-                <div
-                    *ngIf="
-                        com.scheduled_end_at &&
-                        !isClosedNow(com) &&
-                        isAfterNow(com.scheduled_at)
-                    "
-                    class="detail-tag"
-                >
-                    {{ timeLeft(com, timeLeftFlag) }} left
-                </div>
-                <br />
-                <p id="c_about">{{ com.description }}</p>
-            </div>
-        </li>
+            </li>
 
-        <li *ngIf="!loading && competitionsList !== null">
-            <div id="list_end">No more competitions available!</div>
-        </li>
-        <li *ngIf="loading || competitionsList === null">
-            <div id="list_end">Loading competitions...</div>
-        </li>
-    </ul>
+            <li *ngIf="!loading && competitionsList !== null">
+                <div id="list_end">No more competitions available!</div>
+            </li>
+            <li *ngIf="loading || competitionsList === null">
+                <div id="list_end">Loading competitions...</div>
+            </li>
+        </ul>
+    </div>
 </div>

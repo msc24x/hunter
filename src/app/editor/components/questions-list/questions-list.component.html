@@ -16,6 +16,17 @@
         (click)="selectQuestion($event)"
     >
         Q
+        <fa-icon
+            *ngIf="getQuestionProgress(question.id) as quesProgress"
+            [icon]="quesProgress.accepted ? checkIcon : crossIcon"
+            [style]="
+                quesProgress.accepted ? 'color: darkgreen' : 'color: darkred'
+            "
+            class="question-progress"
+            [matTooltip]="quesProgress.total + ' points'"
+            matTooltipPosition="above"
+        ></fa-icon>
+
         <span>
             {{ this.questionsList.indexOf(question) }}
         </span>

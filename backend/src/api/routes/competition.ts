@@ -198,7 +198,7 @@ router.get('/competitions', authenticate, (req, res) => {
         });
     } else if (params.liveStatus === 'always') {
         andParams.push({
-            duration: 0,
+            scheduled_end_at: null,
         });
     }
 

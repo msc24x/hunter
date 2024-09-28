@@ -1,0 +1,25 @@
+:host {
+    height: 0.6rem;
+    border-radius: 0.3rem;
+    overflow: hidden;
+    display: flex;
+
+    .green-part,
+    .red-part {
+        height: 100%;
+        width: 100%;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    .green-part {
+        background-color: darkgreen;
+    }
+
+    .red-part {
+        background-color: darkred;
+    }
+}

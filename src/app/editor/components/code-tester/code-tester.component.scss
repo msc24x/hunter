@@ -18,6 +18,7 @@
     }
     .test-solution-btn {
         @include basicBack;
+        background-color: whitesmoke;
         width: fit-content;
         cursor: pointer;
         margin-block: 1rem;

@@ -7,13 +7,36 @@
     title="Manage Account"
     (closeEvent)="showEditProfileForm(false)"
 >
-    <div id="profile_editor">
-        <div id="label">Update public user name</div>
-        <div class="row">
-            <input id="user_name_input" type="text" maxlength="50" />
-            <div id="save_btn" (click)="updateUserInfo()">Update</div>
+    <div class="account-field">
+        <div class="field-row">
+            <div id="label">Display Name</div>
+            <div class="row">
+                <input
+                    id="user_name_input"
+                    type="text"
+                    maxlength="50"
+                    [value]="user.name"
+                />
+            </div>
         </div>
+        <p class="field-note">
+            Your name is currently displayed as
+            <span
+                style="
+                    background-color: white;
+                    border-radius: 0.5rem;
+                    font-size: 0.9rem;
+                    padding: 0.2rem;
+                    padding-inline: 0.4rem;
+                    margin-left: 0.3rem;
+                "
+                matTooltip="Hunter users' name will have a suffix, which will be their user id"
+            >
+                {{ user.name || "Anonymous" }}#{{ user.id }}
+            </span>
+        </p>
     </div>
+    <div id="profile_save_btn" (click)="updateUserInfo()">Update</div>
 </popup>
 
 <div id="settings_label" class="flex-row justify-sb wrap">
