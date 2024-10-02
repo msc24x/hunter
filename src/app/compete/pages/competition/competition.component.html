@@ -267,8 +267,9 @@
 
                 <p>
                     You have submitted
-                    {{ acceptedEvaluation + rejectedEvaluation }} solutions for
-                    this question
+                    <b>{{ acceptedEvaluation + rejectedEvaluation }}</b>
+                    solutions for this question, for a total of
+                    <b>{{ getTotalScore(questionSelectedInfo.id) }}</b> points.
                 </p>
                 <greenred
                     *ngIf="evaluation.length !== 0"

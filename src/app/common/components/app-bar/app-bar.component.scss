@@ -18,8 +18,10 @@ div.appBar {
         border-radius: 12px;
         padding-block: 4px;
         padding-inline: 16px;
-        text-align: end;
+        min-width: 4rem !important;
         cursor: pointer;
+
+        @include sweetBorder();
     }
 
     #app_title {

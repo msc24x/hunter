@@ -304,27 +304,6 @@ export class EditorComponent implements OnInit, OnDestroy {
             });
     }
 
-    // fetchCompetitionInfo() {
-    //     this.loading = true;
-    //     this.competitionsData
-    //         .getCompetitionInfo(this.competition_id as string)
-    //         .subscribe((res) => {
-    //             if (res.status == resCode.success) {
-    //                 this.competitionInfo = res.body as CompetitionInfo;
-
-    //                 this.toggleVisibility();
-    //                 this.toggleVisibility();
-
-    //                 if (this.competitionInfo.host_user_id != this.user.id) {
-    //                     this.router.navigate(['/home']);
-    //                 }
-
-    //                 this.fetchQuestions();
-    //                 this.loading = false;
-    //             }
-    //         });
-    // }
-
     refreshCompetitionInfo() {
         this.fetchQuestions();
         this.loading = true;

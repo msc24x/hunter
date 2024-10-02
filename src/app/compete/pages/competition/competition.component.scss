@@ -79,11 +79,15 @@
     justify-content: space-between;
     margin-bottom: 1rem;
 
+    questions-list {
+        max-width: calc(100% - 4rem);
+    }
+
     .toggle-layout-label {
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         padding: 1rem;
-        border-radius: 12px;
+        border-radius: 1rem;
         width: max-content;
 
         &.active {

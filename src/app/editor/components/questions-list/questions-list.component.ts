@@ -80,7 +80,7 @@ export class QuestionsListComponent implements OnInit {
         const index = (target as HTMLElement)
             .closest('li')
             ?.getElementsByTagName('span')[0].innerText;
-        this.questionSelected = index as unknown as number;
+        this.questionSelected = (index as unknown as number) - 1;
 
         this.displayLog('Question ' + this.questionSelected + ' selected');
         this.questionSelectEmitter.emit(this.questionSelected);

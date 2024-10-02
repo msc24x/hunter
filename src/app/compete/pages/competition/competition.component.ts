@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import * as ace from 'ace-builds';
-import { Subscription } from 'rxjs';
+import { last, Subscription } from 'rxjs';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import {
     CompetitionInfo,
@@ -128,6 +128,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             if (event.key.startsWith('Esc')) {
                 this.bottomSection = false;
             }
+
+            this.lastEditorContent(true);
         });
 
         if (this.isAuthenticated) {
@@ -209,19 +211,16 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         return this.questionsProgress.filter((qp) => qp.accepted).length;
     }
 
-    getTotalScore() {
+    getTotalScore(question_id?: number) {
         var total = 0;
 
-        this.questionsProgress.forEach((qp) => (total += qp.total));
-        return total;
-    }
+        this.questionsProgress.forEach((qp) => {
+            if (question_id && qp.question_id !== question_id) {
+                return;
+            }
 
-    getPositiveScore() {
-        var total = 0;
-
-        // this.questionsProgress.forEach((qp) => {
-        //     if (qp.)
-        // });
+            total += qp.total;
+        });
         return total;
     }
 
@@ -241,13 +240,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.solutionOutput.output = 'Empty solution';
             return;
         }
-
-        // setTimeout(() => {
-        //     document.getElementById('solution_output')?.scrollIntoView({
-        //         behavior: 'smooth',
-        //         block: 'nearest',
-        //     });
-        // });
 
         this.solutionOutput.output = '';
         this.judgeInProgress = true;
@@ -410,10 +402,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
                         if (this.competition.questions) {
                             this.selectQuestion(0);
-
-                            // setTimeout(() => {
-                            //     this.initEditor();
-                            // });
                         }
                     },
                     error: (err) => {
@@ -440,36 +428,22 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.rejectedEvaluation = 0;
 
         this.fetchEvaluation();
+        this.lastEditorContent();
     }
 
-    // loadTemplate() {
-    //     this.editor.setValue(
-    //         templates[this.languageSelected as HunterLanguage]
-    //     );
-    // }
+    lastEditorContent(save?: boolean) {
+        const storageKey = `code-c${this.questionSelectedInfo.competition_id}-q${this.questionSelectedInfo.id}`;
 
-    // updateEditorMode(lang: string) {
-    //     this.languageSelected = lang as HunterLanguage;
+        if (save) {
+            localStorage.setItem(storageKey, this.codeWritten);
+        } else {
+            const lastContent = localStorage.getItem(storageKey);
 
-    //     switch (this.languageSelected) {
-    //         case 'c':
-    //         case 'cpp':
-    //             this.editor.session.setMode('ace/mode/c_cpp');
-    //             break;
-    //         case 'py':
-    //             this.editor.session.setMode('ace/mode/python');
-    //             break;
-    //         case 'js':
-    //             this.editor.session.setMode('ace/mode/javascript');
-    //             break;
-    //         case 'ts':
-    //             this.editor.session.setMode('ace/mode/typescript');
-    //             break;
-    //         case 'go':
-    //             this.editor.session.setMode('ace/mode/golang');
-    //             break;
-    //     }
-    // }
+            if (lastContent) {
+                this.codeWritten = lastContent;
+            }
+        }
+    }
 
     toggleLayout() {
         this.hrlayout = !this.hrlayout;

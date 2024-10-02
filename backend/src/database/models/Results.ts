@@ -8,6 +8,33 @@ export class Results {
 
     dbService: DatabaseProvider = Container.get(DatabaseProvider);
 
+    scoresQuery = `
+        SELECT
+            r.user_id, 
+            u.name AS user_name,
+            MAX(r.created_at) AS created_at,
+            SUM(case when r.result > 0 then r.result else 0 end) AS result,
+            SUM(r.result) AS final_result,
+            @curRank := @curRank + 1 AS user_rank
+        FROM
+            (SELECT @curRank := 0) currRankTable,
+            results r
+        JOIN 
+            questions q ON r.question_id = q.id
+        JOIN 
+            competitions c ON q.competition_id = c.id
+        JOIN 
+            users u ON r.user_id = u.id
+        WHERE
+            q.deleted_at IS NULL 
+            AND c.deleted_at IS NULL 
+            AND q.competition_id = ?
+        GROUP BY 
+            r.user_id, u.name
+        ORDER BY
+            user_rank ASC
+    `;
+
     constructor() {
         this.dbConnection = this.dbService.getInstance();
     }
@@ -51,44 +78,54 @@ export class Results {
     }
 
     getCompetitionScores(
+        callback: (
+            res: { user_details: any; rows: any } | null,
+            err: QueryError | null
+        ) => void,
         id: string,
-        callback: (rows: any, err: QueryError | null) => void
+        user?: UserInfo
     ) {
-        this.dbConnection.query(
-            `SELECT 
-                    r.user_id, 
-                    u.name AS user_name,
-                    MAX(r.created_at) AS created_at,
-                    SUM(case when r.result > 0 then r.result else 0 end) AS result,
-                    SUM(r.result) AS final_result
-                FROM 
-                    results r
-                JOIN 
-                    questions q ON r.question_id = q.id
-                JOIN 
-                    competitions c ON q.competition_id = c.id
-                JOIN 
-                    users u ON r.user_id = u.id
-                WHERE 
-                    q.deleted_at IS NULL 
-                    AND c.deleted_at IS NULL 
-                    AND q.competition_id = ?
-                GROUP BY 
-                    r.user_id, u.name
-                ORDER BY
-                    final_result DESC,
-                    result DESC,
-                    created_at ASC;
-                `,
-            [id],
-            (err, rows) => {
-                if (err) {
-                    callback(null, err);
-                    return;
-                }
-                callback(rows, err);
+        this.dbConnection.query(`${this.scoresQuery};`, [id], (err, rows) => {
+            if (err) {
+                callback(null, err);
+                return;
             }
-        );
+
+            if (!user?.id) {
+                callback({ user_details: null, rows }, null);
+                return;
+            }
+
+            this.dbConnection.query(
+                `
+                    SELECT
+                        user_id,
+                        user_name,
+                        user_rank,
+                        created_at,
+                        result,
+                        final_result
+                    FROM (
+                        ${this.scoresQuery}
+                    ) ranked_users
+                    WHERE
+                        user_id = ?
+                    ORDER BY
+                        user_rank ASC;`,
+                [id, user?.id],
+                (err, rank_rows) => {
+                    if (err) {
+                        callback(null, err);
+                        return;
+                    }
+
+                    callback(
+                        { user_details: (rank_rows as Array<Result>)[0], rows },
+                        err
+                    );
+                }
+            );
+        });
     }
 
     findAll(

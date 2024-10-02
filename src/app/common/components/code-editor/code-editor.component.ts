@@ -34,7 +34,7 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (this.emittedChanges) {
+        if (this.editor?.getValue() === this.code) {
             this.emittedChanges = false;
             return;
         }

@@ -14,12 +14,18 @@
             </div>
             <!-- <div class="penalities">Penalities</div> -->
         </div>
-        <div *ngFor="let score of scores; let i = index">
+        <div
+            *ngFor="let score of scores; let i = index"
+            [ngClass]="{
+                'user-rank-row':
+                    user_details && user_details.user_id === score.user_id
+            }"
+        >
             <div class="rank-col">
-                <b>{{ i + 1 }}</b>
+                <b>{{ score.user_rank }}</b>
             </div>
             <div class="name-col">
-                {{ score.user_name }}#{{ score.user_id }}
+                {{ score.user_name || "Anonymous" }}#{{ score.user_id }}
             </div>
             <div class="time-col">
                 {{ score.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
@@ -30,7 +36,24 @@
             <!-- <div class="penalities">{{ score.penalities }}</div> -->
         </div>
 
-        <div>
+        <div *ngIf="user_details && uiShowUserRow()" class="user-rank-row">
+            <div class="rank-col">
+                <b>{{ user_details.user_rank }}</b>
+            </div>
+            <div class="name-col">
+                {{ user_details.user_name || "Anonymous" }}
+            </div>
+            <div class="time-col">
+                {{
+                    user_details.created_at | date : "yyyy MMM dd 'at' hh:mm aa"
+                }}
+            </div>
+            <div class="score-p">{{ user_details.result }}</div>
+            <div class="score">{{ user_details.final_result }}</div>
+            <!-- <div class="penalities">-</div> -->
+        </div>
+
+        <div *ngIf="scores.length === 0">
             <div class="rank-col">-</div>
             <div class="name-col">-</div>
             <div class="time-col">-</div>

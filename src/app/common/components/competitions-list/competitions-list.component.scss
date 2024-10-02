@@ -19,6 +19,7 @@
     justify-content: stretch;
     background-color: colors.$dim_white;
     border-radius: 1rem;
+    margin: 0.3rem;
     padding: 1rem;
     position: sticky;
     top: 2rem;
@@ -81,8 +82,26 @@
         }
     }
 
-    #filter_controls {
+    s {
         font-size: 1rem;
+    }
+
+    .competitions-block {
+        flex-wrap: wrap;
+    }
+
+    #competitions_ol,
+    #filter_controls {
+        flex-basis: unset !important;
+    }
+
+    #filter_controls {
+        font-size: 0.8rem;
+        position: initial;
+
+        .filters-heading {
+            font-size: 1rem;
+        }
     }
 }
 
@@ -107,7 +126,7 @@
 #competitions_list p.heading {
     margin-inline: 16px;
     padding-top: 12px;
-    font-size: 2.2rem;
+    font-size: 2rem;
     font-weight: bolder;
 }
 
@@ -156,14 +175,14 @@
     }
 
     .detail-tag {
-        float: left;
         background-color: colors.$text_white;
         border-radius: 1rem;
+        margin-block: 0.3rem;
         padding: 4px;
         padding-inline: 12px;
         margin-right: 4px;
         width: fit-content;
-        display: flex;
+        display: inline-flex;
     }
 }
 

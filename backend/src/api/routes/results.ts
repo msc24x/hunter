@@ -6,8 +6,6 @@ import { authenticate, loginRequired } from '../auth';
 import { UserInfo } from '../../config/types';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
-import { Sql } from '@prisma/client/runtime/library';
-import { Prisma } from '@prisma/client';
 
 const router = express.Router();
 
@@ -19,14 +17,18 @@ router.get('/competitions/:id/results', authenticate, (req, res) => {
         return;
     }
 
-    models.results.getCompetitionScores(req.params.id, (rows, err) => {
-        if (err) {
-            Util.sendResponse(res, resCode.serverError, err.message);
-            return;
-        }
+    models.results.getCompetitionScores(
+        (rows, err) => {
+            if (err) {
+                Util.sendResponse(res, resCode.serverError, err.message);
+                return;
+            }
 
-        Util.sendResponseJson(res, resCode.success, rows);
-    });
+            Util.sendResponseJson(res, resCode.success, rows);
+        },
+        req.params.id,
+        res.locals.user
+    );
 });
 
 router.get(
@@ -73,6 +75,69 @@ router.get(
     }
 );
 
+async function fetchUserSubmissions(
+    user: UserInfo,
+    competition_id: string,
+    question_id: string,
+    after_id?: string
+) {
+    const question_filters = {
+        deleted_at: null,
+        competitions: {
+            deleted_at: null,
+            id: parseInt(competition_id),
+        },
+        id: parseInt(question_id),
+    };
+
+    var cursor_params;
+
+    if (after_id) {
+        cursor_params = {
+            skip: 1,
+            cursor: {
+                id: parseInt(after_id.toString()),
+            },
+        };
+    }
+
+    const results = await client.results.findMany({
+        where: {
+            user_id: user.id,
+            question: question_filters,
+        },
+        orderBy: {
+            created_at: 'desc',
+        },
+        take: 10,
+        ...(after_id && cursor_params),
+    });
+
+    const accepted_count = await client.results.count({
+        where: {
+            user_id: user.id,
+            question: question_filters,
+            accepted: true,
+        },
+    });
+
+    const rejected_count = await client.results.count({
+        where: {
+            user_id: user.id,
+            question: question_filters,
+            accepted: false,
+        },
+    });
+
+    const final_res = {
+        results: results,
+        accepted_count: accepted_count,
+        rejected_count: rejected_count,
+    };
+
+    return final_res;
+}
+
 router.get(
     '/competitions/:id/results/:ques_id',
     authenticate,
@@ -81,78 +146,25 @@ router.get(
         const user: UserInfo = res.locals.user;
         const competition_id = req.params.id;
         const question_id = req.params.ques_id;
-
         const after_id = req.query.after;
-        var cursor_params;
-
-        if (after_id) {
-            cursor_params = {
-                skip: 1,
-                cursor: {
-                    id: parseInt(after_id.toString()),
-                },
-            };
-        }
 
         if (!competition_id && !question_id) {
             Util.sendResponse(res, resCode.badRequest);
             return;
         }
 
-        const question_filters = {
-            deleted_at: null,
-            competitions: {
-                deleted_at: null,
-                id: parseInt(competition_id),
-            },
-            id: parseInt(question_id),
-        };
-
-        client.results
-            .findMany({
-                where: {
-                    user_id: user.id,
-                    question: question_filters,
-                },
-                orderBy: {
-                    created_at: 'desc',
-                },
-                take: 10,
-                ...(after_id && cursor_params),
+        fetchUserSubmissions(
+            user,
+            competition_id,
+            question_id,
+            after_id?.toString()
+        )
+            .then((result) => {
+                Util.sendResponseJson(res, resCode.success, result);
             })
-            .then((results) => {
-                client.results
-                    .count({
-                        where: {
-                            user_id: user.id,
-                            question: question_filters,
-                            accepted: true,
-                        },
-                    })
-                    .then((accepted_count) => {
-                        client.results
-                            .count({
-                                where: {
-                                    user_id: user.id,
-                                    question: question_filters,
-                                    accepted: false,
-                                },
-                            })
-                            .then((rejected_count) => {
-                                const final_res = {
-                                    results: results,
-                                    accepted_count: accepted_count,
-                                    rejected_count: rejected_count,
-                                };
-                                Util.sendResponseJson(
-                                    res,
-                                    resCode.success,
-                                    final_res
-                                );
-                            });
-                    });
-            })
-            .catch((err) => Util.sendResponse(res, resCode.serverError, err));
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
     }
 );
 

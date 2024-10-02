@@ -15,7 +15,7 @@ popup {
 }
 
 .c-insights {
-    max-width: 320px;
+    max-width: 280px;
 
     .participant-link {
         font-family: monospace;
@@ -241,17 +241,11 @@ popup {
 //     }
 // }
 
-// @media only screen and (max-width: 990px) {
-//     #text_description {
-//         width: 660px;
-//         height: 120px;
-//     }
-
-//     #text_title {
-//         width: 660px;
-//         height: 100px;
-//     }
-// }
+@media only screen and (max-width: 990px) {
+    .title-eval-container {
+        flex-wrap: wrap !important;
+    }
+}
 
 // @media only screen and (max-width: 720px) {
 //     #text_description {
@@ -288,7 +282,7 @@ popup {
     background-color: rgba(193, 193, 193, 0.501);
     backdrop-filter: blur(0.5rem);
     padding-block: 8px;
-    z-index: 5;
+    z-index: 50;
     border-radius: 1rem;
     @include sweetBorder;
 
@@ -349,14 +343,12 @@ label.file_input {
     background-color: white;
     border-radius: 1rem;
     padding: 1rem;
-    width: 18rem;
     cursor: pointer;
     display: block;
     margin-block: 1rem;
     text-align: center;
-    border-width: 1px;
-    border-style: dashed;
-    border-color: gray;
+
+    @include sweetBorder();
 }
 #toggle_preview_btn:hover {
     background-color: whitesmoke;
@@ -457,12 +449,12 @@ a:hover,
 
     .desc-panel {
         flex-grow: 1;
-        margin-left: 16px;
+        margin-inline: 16px;
     }
 
     .title-panel {
         flex-grow: 0.5;
-        margin-left: 16px;
+        margin-inline: 16px;
         .label,
         .vertical_flex,
         textarea {
@@ -477,23 +469,28 @@ a:hover,
         padding-inline: 2rem;
         margin-top: 1rem;
         align-items: stretch;
+        justify-content: center;
         flex-wrap: nowrap;
         gap: 5rem;
 
         .title-container {
-            width: 60%;
             justify-content: space-between;
+            // max-width: 40%;
 
             #text_qtitle {
                 width: calc(100% - 2rem);
             }
+        }
+
+        #evaluation-section {
+            // max-width: 50%;
         }
     }
 }
 
 .file-uploaders {
     display: flex;
-    justify-content: center;
+    justify-content: stretch;
     align-items: stretch;
     gap: 2rem;
     width: 100%;
@@ -518,6 +515,11 @@ a:hover,
         fa-icon {
             margin-left: 0.3rem;
         }
+    }
+
+    .io-files,
+    .solution-code-file {
+        flex-grow: 0.5;
     }
 }
 

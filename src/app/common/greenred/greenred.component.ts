@@ -24,8 +24,5 @@ export class GreenredComponent implements OnChanges {
         this.green_ratio = Math.round(
             (this.green_number * 100) / (this.green_number + this.red_number)
         );
-        console.log(this.green_ratio, 'sdf');
-        console.log(this.green_number);
-        console.log(this.red_number);
     }
 }

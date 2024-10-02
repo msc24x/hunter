@@ -2,7 +2,7 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-#questions_list::-webkit-scrollbar {
+.questions_list::-webkit-scrollbar {
     display: none;
 }
 
@@ -10,16 +10,23 @@
     display: none;
 }
 
-#questions_list {
+.questions_list {
     list-style: none;
     padding: 0px;
     display: flex;
     overflow-x: scroll;
     overflow-y: show;
-    border-radius: 12px;
+    border-radius: 1rem;
     font-family: appFont;
     scroll-behavior: smooth;
     margin: 0;
+
+    .list-heading {
+        position: sticky;
+        left: 0rem;
+        text-wrap: nowrap;
+        z-index: 10;
+    }
 
     & > div {
         background-color: white;
@@ -48,7 +55,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-left: 56px;
 
         color: darkred;
         -webkit-user-select: none; /* Safari */
@@ -67,6 +73,7 @@
         margin-right: 6px;
         cursor: pointer;
         position: relative;
+        text-wrap: nowrap;
         @include sweetBorder;
 
         &.selected-question {

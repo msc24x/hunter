@@ -8,8 +8,8 @@
     You are about to delete the question. This is an irreversible action.
 </popup>
 
-<ol id="questions_list">
-    <div>Questions</div>
+<ol class="questions_list">
+    <div class="list-heading">{{ questionsList.length }} Questions</div>
     <li
         *ngFor="let question of this.questionsList; index as i"
         [ngClass]="{ 'selected-question': questionSelected == i }"
@@ -28,7 +28,7 @@
         ></fa-icon>
 
         <span>
-            {{ this.questionsList.indexOf(question) }}
+            {{ this.questionsList.indexOf(question) + 1 }}
         </span>
     </li>
     <div
@@ -41,7 +41,7 @@
     </div>
     <div
         matTooltip="Save changes for the selected question"
-        *ngIf="editable"
+        *ngIf="editable && questionSelected !== -1"
         id="save_question_btn"
         (click)="saveClicked.emit()"
     >
@@ -49,7 +49,7 @@
     </div>
     <div
         matTooltip="Delete the selected question"
-        *ngIf="editable"
+        *ngIf="editable && questionSelected !== -1"
         id="delete_question_btn"
         (click)="showDeleteConfirmation(true)"
     >

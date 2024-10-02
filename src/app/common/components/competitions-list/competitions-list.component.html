@@ -126,9 +126,11 @@
             </li>
 
             <li *ngIf="!loading && competitionsList !== null">
+                <br />
                 <div id="list_end">No more competitions available!</div>
             </li>
             <li *ngIf="loading || competitionsList === null">
+                <br />
                 <div id="list_end">Loading competitions...</div>
             </li>
         </ul>

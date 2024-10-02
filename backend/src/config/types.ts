@@ -26,10 +26,13 @@ export type QuestionInfo = {
 
 export type Result = {
     id: number;
-    user_id: string;
+    user_id: number;
+    user_name: string;
     question_id: string;
     competition_id: string;
-    result: string;
+    result: number;
+    final_result: number;
+    user_rank: number;
 };
 
 export type UserInfo = {

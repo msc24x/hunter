@@ -45,11 +45,14 @@ export class ScoresDataService {
             params.comp_id.toString()
         );
 
-        return this.http.get(endpoint, {
-            observe: 'response',
-            responseType: 'json',
-            withCredentials: true,
-        });
+        return this.http.get<{ user_details: result; rows: result[] }>(
+            endpoint,
+            {
+                observe: 'response',
+                responseType: 'json',
+                withCredentials: true,
+            }
+        );
     }
 
     getProgress(params: { comp_id: number }) {

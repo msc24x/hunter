@@ -41,6 +41,8 @@
             background-color: whitesmoke;
             cursor: pointer;
             border-radius: 12px;
+
+            @include sweetBorder();
         }
 
         div:hover {

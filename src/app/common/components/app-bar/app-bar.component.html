@@ -39,14 +39,12 @@
                     EDITOR
                 </a>
                 <a routerLink="/about">ABOUT</a>
-                <li>
-                    <a
-                        *ngIf="isAuthenticated"
-                        id="logout_btn"
-                        (click)="sendLogoutRequest()"
-                        >Sign Out</a
-                    >
-                </li>
+                <a
+                    *ngIf="isAuthenticated"
+                    id="logout_btn"
+                    (click)="sendLogoutRequest()"
+                    >Sign Out</a
+                >
             </ul>
         </div>
     </a>
@@ -59,8 +57,12 @@
                 EDITOR
             </a>
             <a routerLink="/about">ABOUT</a>
-            <a *ngIf="isAuthenticated">
-                <a id="logout_btn" (click)="sendLogoutRequest()">Sign Out</a>
+            <a
+                *ngIf="isAuthenticated"
+                id="logout_btn"
+                (click)="sendLogoutRequest()"
+            >
+                Sign Out
             </a>
         </ul>
     </div>

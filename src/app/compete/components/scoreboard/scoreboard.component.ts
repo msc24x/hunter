@@ -9,31 +9,37 @@ import { result } from 'src/environments/environment';
 })
 export class ScoreboardComponent implements OnInit {
     scores: Array<result> = [];
+    user_details: result | undefined;
 
     @Input()
     competition_id: number = 0;
 
-    interval10s;
+    scoresApiInterval;
 
     constructor(private scoresDataService: ScoresDataService) {
-        this.interval10s = setInterval(() => {
-            scoresDataService
-                .getScoresAll({ comp_id: this.competition_id })
-                .subscribe((res) => {
-                    this.scores = res.body as Array<result>;
-                });
-        }, 1000 * 60);
+        this.scoresApiInterval = setInterval(this.fetchScores, 1000 * 60);
     }
 
     ngOnInit(): void {
-        this.scoresDataService
-            .getScoresAll({ comp_id: this.competition_id })
-            .subscribe((res) => {
-                this.scores = res.body as Array<result>;
-            });
+        this.fetchScores();
     }
 
     ngOnDestroy(): void {
-        clearInterval(this.interval10s);
+        clearInterval(this.scoresApiInterval);
+    }
+
+    fetchScores() {
+        this.scoresDataService
+            .getScoresAll({ comp_id: this.competition_id })
+            .subscribe((res) => {
+                this.scores = res.body?.rows as Array<result>;
+                this.user_details = res.body?.user_details;
+            });
+    }
+
+    uiShowUserRow() {
+        return !this.scores.find(
+            (sc) => sc.user_id === this.user_details?.user_id
+        );
     }
 }

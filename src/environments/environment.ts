@@ -67,7 +67,8 @@ export type ExecutionInfo = {
 export type result = {
     id: number;
     user_id: number;
-    user_name: number;
+    user_name: string;
+    user_rank: number;
     result: number;
     accepted: boolean;
     created_at?: string;

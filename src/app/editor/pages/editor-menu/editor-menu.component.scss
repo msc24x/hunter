@@ -49,9 +49,9 @@
         font-family: appFont;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
         align-items: center;
-        min-width: 36rem;
+        justify-content: space-between;
+        gap: 1rem;
 
         #user_name_input {
             background-color: whitesmoke;
