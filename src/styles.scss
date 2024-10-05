@@ -1,5 +1,6 @@
 @use "./assets/colors";
 @use "./assets/fonts";
+@use "./assets/mixins" as *;
 
 /*160deg*/
 
@@ -19,7 +20,7 @@ html {
 
 .disabled {
     cursor: not-allowed !important;
-    opacity: 0.9;
+    opacity: 0.7;
 }
 
 html {
@@ -124,5 +125,40 @@ body {
 
     &-rev {
         flex-wrap: wrap-reverse;
+    }
+}
+
+.btable {
+    overflow: scroll;
+    max-height: 512px;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.1rem;
+    background-color: whitesmoke;
+    padding: 16px;
+    border-radius: 1rem;
+    margin: 4px;
+
+    @include sweetBorder();
+
+    .table_heading {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    div {
+        display: flex;
+        justify-content: start;
+
+        div {
+            text-align: center;
+            flex-basis: 33%;
+            padding: 0.3rem;
+        }
+    }
+
+    & > div:not(.table_heading):hover {
+        border-radius: 0.3rem;
+        background-color: colors.$text_white;
     }
 }

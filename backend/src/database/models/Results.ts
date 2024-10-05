@@ -8,32 +8,48 @@ export class Results {
 
     dbService: DatabaseProvider = Container.get(DatabaseProvider);
 
-    scoresQuery = `
-        SELECT
-            r.user_id, 
-            u.name AS user_name,
-            MAX(r.created_at) AS created_at,
-            SUM(case when r.result > 0 then r.result else 0 end) AS result,
-            SUM(r.result) AS final_result,
-            @curRank := @curRank + 1 AS user_rank
-        FROM
-            (SELECT @curRank := 0) currRankTable,
-            results r
-        JOIN 
-            questions q ON r.question_id = q.id
-        JOIN 
-            competitions c ON q.competition_id = c.id
-        JOIN 
-            users u ON r.user_id = u.id
-        WHERE
-            q.deleted_at IS NULL 
-            AND c.deleted_at IS NULL 
-            AND q.competition_id = ?
-        GROUP BY 
-            r.user_id, u.name
-        ORDER BY
-            user_rank ASC
-    `;
+    getScoresQuery(filterQuestion = false) {
+        const scoresQuery = `
+            SELECT
+                s.*,
+                @curRank := @curRank + 1 AS user_rank
+            FROM
+                (SELECT @curRank := 0) currRankTable,
+                (
+                    SELECT
+                        r.user_id, 
+                        u.name AS user_name,
+                        MAX(r.created_at) AS created_at,
+                        SUM(case when r.result > 0 then r.result else 0 end) AS result,
+                        SUM(r.result) AS final_result
+                    FROM
+                        results r
+                    JOIN 
+                        questions q ON r.question_id = q.id
+                    JOIN 
+                        competitions c ON q.competition_id = c.id
+                    JOIN 
+                        users u ON r.user_id = u.id
+                    WHERE
+                        q.deleted_at IS NULL 
+                        AND c.deleted_at IS NULL 
+                        AND q.competition_id = ?
+                        ${filterQuestion ? 'AND q.id = ?' : ''}
+                    GROUP BY 
+                        r.user_id
+                    ORDER BY
+                        final_result DESC,
+                        result DESC,
+                        created_at DESC
+                ) s
+            ORDER BY
+                user_rank ASC
+            LIMIT
+                ?, 10
+        `;
+
+        return scoresQuery;
+    }
 
     constructor() {
         this.dbConnection = this.dbService.getInstance();
@@ -77,55 +93,131 @@ export class Results {
         );
     }
 
+    getCompetitionScoresCount(
+        callback: (res: any | null, err: QueryError | null) => void,
+        id: string,
+        question_id?: number
+    ) {
+        var params = [id];
+
+        if (question_id) {
+            params.push(question_id.toString());
+        }
+
+        this.dbConnection.query(
+            `
+            SELECT
+                COUNT(DISTINCT r.user_id) as total_count
+            FROM
+                results r
+            JOIN 
+                questions q ON r.question_id = q.id
+            JOIN 
+                competitions c ON q.competition_id = c.id
+            JOIN 
+                users u ON r.user_id = u.id
+            WHERE
+                q.deleted_at IS NULL 
+                AND c.deleted_at IS NULL 
+                AND q.competition_id = ?
+                ${question_id ? 'AND q.id = ?' : ''}
+                ;
+            `,
+            params,
+            (err, rows) => {
+                if (err) {
+                    callback(null, err);
+                    return;
+                }
+
+                callback((rows as Array<any>)[0].total_count, null);
+            }
+        );
+    }
+
     getCompetitionScores(
         callback: (
-            res: { user_details: any; rows: any } | null,
+            res: { meta: any; rows: any } | null,
             err: QueryError | null
         ) => void,
         id: string,
-        user?: UserInfo
+        user?: UserInfo,
+        after?: number,
+        question_id?: number
     ) {
-        this.dbConnection.query(`${this.scoresQuery};`, [id], (err, rows) => {
-            if (err) {
-                callback(null, err);
-                return;
-            }
+        after = after || 0;
 
-            if (!user?.id) {
-                callback({ user_details: null, rows }, null);
-                return;
-            }
+        var queryParams = [id, after];
 
-            this.dbConnection.query(
-                `
-                    SELECT
-                        user_id,
-                        user_name,
-                        user_rank,
-                        created_at,
-                        result,
-                        final_result
-                    FROM (
-                        ${this.scoresQuery}
-                    ) ranked_users
-                    WHERE
-                        user_id = ?
-                    ORDER BY
-                        user_rank ASC;`,
-                [id, user?.id],
-                (err, rank_rows) => {
-                    if (err) {
-                        callback(null, err);
-                        return;
-                    }
+        if (question_id) {
+            queryParams = [id, question_id, after];
+        }
 
-                    callback(
-                        { user_details: (rank_rows as Array<Result>)[0], rows },
-                        err
-                    );
+        this.dbConnection.query(
+            `${this.getScoresQuery(Boolean(question_id))};`,
+            queryParams,
+            (err, rows) => {
+                if (err) {
+                    callback(null, err);
+                    return;
                 }
-            );
-        });
+
+                this.getCompetitionScoresCount(
+                    (total_count, err) => {
+                        if (err) {
+                            callback(null, err);
+                            return;
+                        }
+
+                        var meta: any = {
+                            total: total_count,
+                            user_details: null,
+                        };
+
+                        if (!user?.id) {
+                            callback({ meta, rows }, null);
+                            return;
+                        }
+
+                        this.dbConnection.query(
+                            `
+                        SELECT
+                            ranked_users.*
+                        FROM (
+                            ${this.getScoresQuery(Boolean(question_id))}
+                        ) ranked_users
+                        WHERE
+                            user_id = ?;`,
+                            [
+                                ...queryParams.slice(0, queryParams.length - 1),
+                                0,
+                                user?.id,
+                            ],
+                            (err, rank_rows) => {
+                                if (err) {
+                                    callback(null, err);
+                                    return;
+                                }
+
+                                meta.user_details = (
+                                    rank_rows as Array<Result>
+                                )[0];
+
+                                callback(
+                                    {
+                                        meta,
+                                        rows,
+                                    },
+                                    err
+                                );
+                            }
+                        );
+                    },
+                    id,
+                    question_id
+                );
+            }
+        );
     }
 
     findAll(

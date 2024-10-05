@@ -41,10 +41,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     loginIcon = faAddressCard;
     timerIcon = faHourglassHalf;
     upIcon = faChevronUp;
-    codeIcon = faFileCode;
 
     showInstructionP = false;
-    showSubmissionP = false;
 
     loading = false;
     fetchSubmissionMsg = '';
@@ -61,10 +59,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     user = {} as UserInfo;
     competition = {} as CompetitionInfo;
 
-    evaluationAfterPages: number[] = [];
     evaluation: Array<result> = [];
-    acceptedEvaluation: number = 0;
-    rejectedEvaluation: number = 0;
+
     questionSelected = -1;
     questionSelectedInfo = {} as QuestionInfo;
     judgeInProgress = false;
@@ -184,12 +180,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         });
     }
 
-    viewSubmission(result: result) {
-        this.showSubmissionP = true;
-        this.bottomSection = false;
-        this.viewSubmissionResult = result;
-    }
-
     clearOutput() {
         this.solutionOutput = {
             expected: '',
@@ -272,7 +262,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
                         if (res.status == resCode.success) {
                             this.solutionOutput = res.body as ExecutionInfo;
-                            this.fetchEvaluation();
                         } else {
                             this.solutionOutput.output = res.statusText;
                         }
@@ -312,43 +301,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             this.languageSelected +
                             ' submission';
                     },
-                })
-        );
-    }
-
-    prevEvaluations() {
-        this.evaluationAfterPages.pop();
-        this.fetchEvaluation();
-    }
-
-    nextEvaluations() {
-        this.evaluationAfterPages.push(
-            this.evaluation[this.evaluation.length - 1].id
-        );
-        this.fetchEvaluation();
-    }
-
-    fetchEvaluation() {
-        this.loading = true;
-        this.subscriptions.push(
-            this.scoresDataService
-                .getQuestionScores({
-                    comp_id: this.c_id,
-                    ques_id: this.questionSelectedInfo.id,
-                    after: this.evaluationAfterPages[
-                        this.evaluationAfterPages.length - 1
-                    ],
-                })
-                .subscribe((res) => {
-                    this.loading = false;
-
-                    if (res.status == resCode.success) {
-                        this.evaluation = res.body?.results
-                            ? (res.body.results as Array<result>)
-                            : [];
-                        this.acceptedEvaluation = res.body!.accepted_count;
-                        this.rejectedEvaluation = res.body!.rejected_count;
-                    }
                 })
         );
     }
@@ -423,11 +375,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     selectQuestion(index: number) {
         this.questionSelected = index;
         this.questionSelectedInfo = this.competition.questions![index];
-        this.evaluationAfterPages = [];
-        this.acceptedEvaluation = 0;
-        this.rejectedEvaluation = 0;
 
-        this.fetchEvaluation();
         this.lastEditorContent();
     }
 

@@ -1,12 +1,12 @@
-<div *ngIf="lastVerification" class="last-verification-res">
+<div class="last-verification-res">
     <pretty-meta
         *ngIf="lastVerification"
         [meta]="lastVerification.reason"
         [success]="lastVerification.success"
     ></pretty-meta>
-    <br />
-    <i
-        >Last verification attempted at
+
+    <i *ngIf="lastVerification">
+        <br />Last verification attempted at
         {{ lastVerification.created_at.toLocaleString() }}</i
     >
     <div

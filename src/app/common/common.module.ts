@@ -23,6 +23,11 @@ import { DropDownListComponent } from './components/drop-down-list/drop-down-lis
 import { CodeEditorComponent } from './components/code-editor/code-editor.component';
 import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.component';
 import { GreenredComponent } from './greenred/greenred.component';
+import { InsightsComponent } from '../editor/components/insights/insights.component';
+import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
+import { EditorModule } from '../editor/editor.module';
+import { QuestionsListComponent } from './questions-list/questions-list.component';
+import { QuestionEvaluationComponent } from './components/question-evaluation/question-evaluation.component';
 
 @NgModule({
     declarations: [
@@ -46,6 +51,9 @@ import { GreenredComponent } from './greenred/greenred.component';
         CodeEditorComponent,
         PrettyMetaComponent,
         GreenredComponent,
+        ScoreboardComponent,
+        QuestionsListComponent,
+        QuestionEvaluationComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -75,6 +83,9 @@ import { GreenredComponent } from './greenred/greenred.component';
         CodeEditorComponent,
         PrettyMetaComponent,
         GreenredComponent,
+        ScoreboardComponent,
+        QuestionsListComponent,
+        QuestionEvaluationComponent,
     ],
     providers: [DatePipe],
 })

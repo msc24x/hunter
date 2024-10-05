@@ -1,0 +1,84 @@
+<popup
+    id="view-submission-popup"
+    [hidden]="!showSubmissionP"
+    (closeEvent)="showSubmissionP = false; viewSubmissionResult = undefined"
+    [showControls]="false"
+    title="Your Submission"
+>
+    <div class="view-submission-container" *ngIf="viewSubmissionResult">
+        <pretty-meta [meta]="viewSubmissionResult.meta!"></pretty-meta>
+
+        <code-editor
+            [editable]="false"
+            [code]="viewSubmissionResult.submission!"
+            [languageSelected]="viewSubmissionResult.language!"
+        ></code-editor>
+        <!-- <pre [innerText]="viewSubmissionResult.submission"></pre> -->
+    </div>
+</popup>
+
+<div id="pts_desc" class="btable">
+    <div class="table_heading">
+        <div>Submission</div>
+        <div>Points (+/-)</div>
+
+        <div class="points-time-col">Time</div>
+    </div>
+    <div *ngFor="let row of evaluation">
+        <div>
+            <a class="view-submission" (click)="viewSubmission(row)">
+                <fa-icon [icon]="codeIcon" [size]="'sm'"></fa-icon>
+                &nbsp; <span>View Code</span></a
+            >
+        </div>
+        <div>{{ row.result }}</div>
+        <div class="points-time-col">
+            {{ row.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
+        </div>
+    </div>
+
+    <div *ngIf="evaluation.length === 0">
+        <div>-</div>
+        <div>-</div>
+        <div class="points-time-col">-</div>
+    </div>
+
+    <br />
+
+    <p>
+        Submitted
+        <b>{{ acceptedEvaluation + rejectedEvaluation }}</b>
+        solutions for this question,
+        <!-- for a total of
+            <b>{{ getTotalScore(questionSelectedInfo.id) }}</b> points. -->
+    </p>
+    <greenred
+        *ngIf="evaluation.length !== 0"
+        [green_number]="acceptedEvaluation"
+        [red_number]="rejectedEvaluation"
+        green_label="Submissions Accepted"
+        red_label="Submissions Not Accepted"
+    ></greenred>
+
+    <div class="next-prev-options">
+        <div
+            [ngClass]="{
+                'no-click disabled':
+                    loading || evaluationAfterPages.length === 0,
+                'option-prev': true
+            }"
+            (click)="prevEvaluations()"
+        >
+            View Newer
+        </div>
+        <div
+            [ngClass]="{
+                'no-click disabled': loading || evaluation.length < 10,
+                'option-next': true
+            }"
+            (click)="nextEvaluations()"
+        >
+            View Older
+        </div>
+    </div>
+</div>

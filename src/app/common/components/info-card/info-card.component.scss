@@ -1,44 +1,40 @@
-#card{
-    font-family: appFont;
-    font-size: 1.1rem;
-    margin: 16px;
+#card {
     padding: 16px;
-    border-radius: 24px;
+    border-radius: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    cursor: pointer;
-    
-    #close_tip_btn > &{
-      pointer-events: none;
+    margin-block: 0.5rem;
+
+    #close_tip_btn > & {
+        pointer-events: none;
     }
-  
-    #close_tip_btn{
-      color : rgb(185, 135, 40);
-      padding : 16px;
-  
-      &:hover{
-        color: rgb(110, 80, 25);
-      }
+
+    #close_tip_btn {
+        color: rgb(185, 135, 40);
+        padding: 16px;
+
+        &:hover {
+            color: rgb(110, 80, 25);
+        }
     }
-  }
+}
 
 .default-type {
-  background-color: rgba(245, 222, 179, 0.589);
-    border : 1px solid rgba(255, 205, 111, 0);
-  
-    &:hover{
-      border : 1px solid rgb(185, 135, 40);
+    background-color: rgba(245, 222, 179, 0.589);
+    border: 1px solid rgba(255, 205, 111, 0);
+
+    &:hover,
+    &.persist {
+        border: 1px solid rgb(185, 135, 40);
     }
-  
 }
 
 .red-type {
-background-color: rgba(245, 190, 179, 0.589);
-    border : 1px solid rgba(255, 205, 111, 0);
-  
-    &:hover{
-      border : 1px solid rgb(185, 81, 40);
+    background-color: rgba(245, 190, 179, 0.589);
+    border: 1px solid rgba(255, 205, 111, 0);
+
+    &:hover {
+        border: 1px solid rgb(185, 81, 40);
     }
-  
 }

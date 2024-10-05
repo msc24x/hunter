@@ -1,7 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UserInfo, domainName, protocol } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
-import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import {
+    faBars,
+    faCircleUser,
+    faCompass,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-bar',
@@ -10,6 +14,7 @@ import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 })
 export class AppBarComponent implements OnInit {
     userIcon = faCircleUser;
+    exploreIcon = faBars;
     loading = false;
 
     @Input()

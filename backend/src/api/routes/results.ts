@@ -27,7 +27,9 @@ router.get('/competitions/:id/results', authenticate, (req, res) => {
             Util.sendResponseJson(res, resCode.success, rows);
         },
         req.params.id,
-        res.locals.user
+        res.locals.user,
+        parseInt(req.query.after?.toString() || '0'),
+        parseInt(req.query.question?.toString() || 'null')
     );
 });
 

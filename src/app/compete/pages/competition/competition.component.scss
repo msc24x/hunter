@@ -11,7 +11,7 @@
     top: 97%;
     left: 10%;
     right: 10%;
-    bottom: -10%;
+    bottom: -2rem;
     opacity: 0.5;
     transition: opacity 100ms, top 200ms;
     box-shadow: -1px 0px 6px 0px rgba(128, 128, 128, 0.5);
@@ -112,7 +112,7 @@
     gap: 1rem;
 
     .ace-editor,
-    #editor {
+    .editor-instance {
         width: 100%;
         flex-basis: 65%;
     }
@@ -193,8 +193,7 @@
     background-color: white;
 }
 
-#output_label,
-#pts_desc_label {
+#output_label {
     font-family: appFont;
     font-size: 1.3rem;
     font-weight: bold;
@@ -210,46 +209,10 @@
     display: flex;
     justify-content: stretch;
     align-items: start;
+    gap: 3rem;
 
-    .points-time-col {
-        flex-basis: 60%;
-    }
-
-    .evaluation-next-prev {
-        display: flex;
-        gap: 1rem;
-        margin: 1rem;
-        justify-content: end;
-
-        &:hover {
-            background-color: initial;
-        }
-
-        & > div {
-            border-radius: 0.6rem;
-            flex-basis: 20%;
-            justify-content: center;
-            @include sweetBorder;
-            cursor: pointer;
-
-            &:hover {
-                background-color: white;
-            }
-        }
-    }
-
-    .view-submission {
-        cursor: pointer;
-
-        fa-icon {
-            color: colors.$text_black;
-        }
-
-        &:hover {
-            span {
-                text-decoration: underline;
-            }
-        }
+    question-evaluation {
+        width: 50%;
     }
 
     #solution_output {
@@ -299,75 +262,14 @@
     }
 }
 
-.btable {
-    width: 50%;
-    overflow: scroll;
-    max-height: 512px;
-    display: flex;
-    flex-direction: column;
-    font-size: 1.1rem;
-    background-color: whitesmoke;
-    padding: 16px;
-    border-radius: 1rem;
-    margin: 4px;
-
-    @include sweetBorder();
-
-    .table_heading {
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    div {
-        display: flex;
-        justify-content: start;
-
-        div {
-            text-align: center;
-            flex-basis: 33%;
-            padding: 0.3rem;
-        }
-    }
-
-    & > div:not(.table_heading):hover {
-        border-radius: 0.3rem;
-        background-color: colors.$text_white;
-    }
-}
-
-.view-submission-container {
-    code-editor {
-        // @include basicBack;
-        display: block;
-        width: 860px;
-        margin-block: 1rem;
-        // overflow: scroll;
-    }
-
-    pretty-meta {
-        display: block;
-        padding: 1rem;
-        @include basicBackZ;
-    }
-}
-
-#pts_desc::-webkit-scrollbar {
-    display: none;
-}
-
 @media only screen and (max-width: 720px) {
     #competition_info {
         flex-direction: column-reverse;
     }
 
-    #pts_desc_label {
-        display: none;
-    }
-
     #output_points {
         flex-direction: column;
-        #solution_output,
-        #pts_desc {
+        #solution_output {
             width: 91% !important;
         }
     }

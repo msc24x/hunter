@@ -1,6 +1,30 @@
 @use "./colors";
 @use "./fonts";
 
+@mixin nextPrevControls {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem;
+    justify-content: end !important;
+
+    &:hover {
+        background-color: initial !important;
+    }
+
+    & > div {
+        border-radius: 0.6rem;
+        max-width: 10rem;
+        flex-basis: 20%;
+        justify-content: center !important;
+        @include sweetBorder;
+        cursor: pointer;
+
+        &:hover {
+            background-color: white;
+        }
+    }
+}
+
 @mixin hideSrollbar {
     /* Hide scrollbar for Chrome, Safari, and Opera */
     &::-webkit-scrollbar {

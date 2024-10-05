@@ -39,20 +39,38 @@ export class ScoresDataService {
         });
     }
 
-    getScoresAll(params: { comp_id: number }) {
+    getScoresAll(params: {
+        comp_id: number;
+        ques_id?: number;
+        after?: number;
+    }) {
         var endpoint = format(
             apiEndpoints.resultsAll,
             params.comp_id.toString()
         );
 
-        return this.http.get<{ user_details: result; rows: result[] }>(
-            endpoint,
-            {
-                observe: 'response',
-                responseType: 'json',
-                withCredentials: true,
-            }
-        );
+        var queryParams: string[] = [];
+
+        if (params.after) {
+            queryParams.push(`after=${params.after}`);
+        }
+
+        if (params.ques_id) {
+            queryParams.push(`question=${params.ques_id}`);
+        }
+
+        if (queryParams) {
+            endpoint += '?' + queryParams.join('&');
+        }
+
+        return this.http.get<{
+            meta: { user_details: result; total: number };
+            rows: result[];
+        }>(endpoint, {
+            observe: 'response',
+            responseType: 'json',
+            withCredentials: true,
+        });
     }
 
     getProgress(params: { comp_id: number }) {

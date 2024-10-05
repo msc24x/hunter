@@ -24,6 +24,7 @@ popup {
         border-radius: 16px;
         width: calc(100% - 32px);
         justify-content: space-between;
+        @include sweetBorder();
 
         .link-text {
             white-space: nowrap;
@@ -39,7 +40,7 @@ popup {
 
     .insight-details {
         border-radius: 16px;
-
+        cursor: pointer;
         background-color: papayawhip;
         margin-top: 1rem;
     }

@@ -27,6 +27,9 @@ export class QuestionsListComponent implements OnInit {
     editable = true;
 
     @Input()
+    clearable = false;
+
+    @Input()
     questionsProgress: Array<QuestionProgress> = [];
 
     @Input()
@@ -80,10 +83,17 @@ export class QuestionsListComponent implements OnInit {
         const index = (target as HTMLElement)
             .closest('li')
             ?.getElementsByTagName('span')[0].innerText;
-        this.questionSelected = (index as unknown as number) - 1;
+        var newSelection = (index as unknown as number) - 1;
+
+        if (this.clearable && newSelection === this.questionSelected) {
+            newSelection = -1;
+        }
+
+        this.questionSelected = newSelection;
 
         this.displayLog('Question ' + this.questionSelected + ' selected');
         this.questionSelectEmitter.emit(this.questionSelected);
+        this.questionSelectedChange.emit(this.questionSelected);
     }
 
     resetQuestionSelected() {

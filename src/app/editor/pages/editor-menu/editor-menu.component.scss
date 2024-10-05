@@ -35,7 +35,6 @@
 
     overflow-x: scroll;
     max-width: 350px;
-    font-family: appFont;
     font-size: 1rem;
     padding: 16px;
     margin: 8px;
@@ -65,6 +64,15 @@
     }
     .field-note {
         font-size: 0.8rem;
+    }
+
+    .name-preview {
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        padding: 0.2rem;
+        padding-inline: 0.4rem;
+        margin-left: 0.3rem;
+        @include sweetBorder;
     }
 }
 #profile_save_btn {

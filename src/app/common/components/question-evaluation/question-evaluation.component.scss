@@ -1,0 +1,52 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+.points-time-col {
+    flex-basis: 60%;
+}
+
+.next-prev-options {
+    @include nextPrevControls;
+}
+
+.view-submission {
+    cursor: pointer;
+
+    fa-icon {
+        color: colors.$text_black;
+    }
+
+    &:hover {
+        span {
+            text-decoration: underline;
+        }
+    }
+}
+
+#pts_desc::-webkit-scrollbar {
+    display: none;
+}
+
+code-editor {
+    // @include basicBack;
+    display: block;
+    width: 860px;
+    margin-block: 1rem;
+    // overflow: scroll;
+}
+
+pretty-meta {
+    display: block;
+    padding: 1rem;
+    @include basicBackZ;
+}
+
+@media only screen and (max-width: 720px) {
+    #output_points {
+        flex-direction: column;
+        #pts_desc {
+            width: 91% !important;
+        }
+    }
+}

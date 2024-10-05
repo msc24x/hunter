@@ -1,20 +1,35 @@
-
 <app-loading *ngIf="loading"></app-loading>
 
 <popup
-  id="create_dialog_popup"
-  title="Create new"
-  [showControls]="false"
-  (closeEvent)="showCreateDialog(false)"
+    id="create_dialog_popup"
+    title="Create new"
+    [showControls]="false"
+    (closeEvent)="showCreateDialog(false)"
 >
-  <p> <br> *Set a descriptive title (optional) to let us initiate the Editor for your competition.</p>
-  <textarea id = "competition_title" type="text" [rows]="2" maxlength="120"></textarea>
-  <br>
-  <p>You will be redirected to the Hunter Editor. Be sure to read the Guide to create the best competition. Keep in mind that any poorly designed Public competition can be reported by the users.</p>
-  <button id = "create" (click)="requestCreateCompetition()">Build Competition</button>
-  <div class = "error">{{responseMessage}}</div>
+    <p>
+        <br />
+        *Set a descriptive title to let us initiate the Editor for your
+        competition. (You can always change it later)
+    </p>
+    <textarea
+        id="competition_title"
+        type="text"
+        [rows]="2"
+        maxlength="120"
+        placeholder="Example: Winter Challenge Wave-II"
+    ></textarea>
+    <br />
+    <p>
+        You will be redirected to the Hunter Editor. Be sure to read the Guide
+        to create the best competition. Keep in mind that any poorly designed
+        Public competition can be reported by the users.
+    </p>
+    <button id="create" (click)="requestCreateCompetition()">
+        Build Private Competition
+    </button>
+    <div class="error">{{ responseMessage }}</div>
 </popup>
 
-<div id = "create_btn" (click)="showCreateDialog(true)">
-  <div id="plus_btn">+ Create New</div>
+<div id="create_btn" (click)="showCreateDialog(true)">
+    <div id="plus_btn">+ Create New</div>
 </div>

@@ -1,6 +1,6 @@
-@use "../../../../assets/fonts";
-@use "../../../../assets/colors";
-@use "../../../../assets/mixins" as *;
+@use "../../../assets/fonts";
+@use "../../../assets/colors";
+@use "../../../assets/mixins" as *;
 
 .questions_list::-webkit-scrollbar {
     display: none;
@@ -79,6 +79,10 @@
         &.selected-question {
             background-color: colors.$text_black;
             color: whitesmoke;
+
+            &:hover {
+                opacity: 1;
+            }
         }
 
         .question-progress {
@@ -90,6 +94,10 @@
             border-radius: 1.3rem;
             height: 1.3rem;
             display: block;
+        }
+
+        &:active {
+            scale: 0.95;
         }
     }
 
@@ -107,5 +115,6 @@
     div#save_question_btn:hover {
         background-color: colors.$text_black !important;
         color: colors.$text_white !important;
+        opacity: 0.8;
     }
 }

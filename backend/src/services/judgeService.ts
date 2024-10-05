@@ -116,22 +116,19 @@ export class JudgeService {
                 headers: headers,
                 body: JSON.stringify(payload),
                 method: 'POST',
-            })
-                .then(
-                    (res) => res.json(),
-                    (err) => fulfillSolution({ output: err } as ExeInfo)
-                )
-                .then(
-                    (res) => {
+            }).then(
+                (res) => {
+                    return res.json().then((res_json) => {
                         fulfillSolution({
-                            expected: samples ? res.expected : '',
-                            output: samples ? res.output : '',
-                            meta: res.meta,
-                            success: res.success,
+                            expected: samples ? res_json.expected : '',
+                            output: samples ? res_json.output : '',
+                            meta: res_json.meta,
+                            success: res_json.success,
                         });
-                    },
-                    (err) => fulfillSolution({ output: err } as ExeInfo)
-                );
+                    });
+                },
+                (err) => fulfillSolution({ output: err } as ExeInfo)
+            );
         });
     }
 }

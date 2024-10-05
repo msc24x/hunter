@@ -29,8 +29,12 @@
             {{ user.name || user.email }}
         </a>
     </div>
-    <a id="navBarBtn" (click)="toggleNavBar()"
-        >Menu
+    <a id="navBarBtn" (click)="toggleNavBar()">
+        <fa-icon
+            [icon]="exploreIcon"
+            size="2xl"
+            (click)="toggleNavBar()"
+        ></fa-icon>
         <div id="navBarCompact">
             <ul>
                 <a routerLink="/home">HOME</a>

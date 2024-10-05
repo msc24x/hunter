@@ -8,7 +8,7 @@ import {
     SimpleChanges,
 } from '@angular/core';
 import * as ace from 'ace-builds';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, timeout } from 'rxjs';
 import { HunterLanguage, templates } from 'src/environments/environment';
 
 @Component({
@@ -19,6 +19,8 @@ import { HunterLanguage, templates } from 'src/environments/environment';
 export class CodeEditorComponent implements OnInit, OnChanges {
     editor!: ace.Ace.Editor;
     emittedChanges = false;
+
+    created_at = new Date().getTime();
 
     editorInitialized = new BehaviorSubject<boolean>(false);
 
@@ -56,23 +58,25 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     }
 
     initEditor() {
-        this.editor = ace.edit('editor');
-        this.editor.setReadOnly(!this.editable);
-        ace.config.set('basePath', 'assets/');
-        /**
-         * twilight
-         * monokai
-         * terminal
-         */
-        this.editor.setTheme('ace/theme/twilight');
-        this.editor.session.setMode('ace/mode/c_cpp');
+        setTimeout(() => {
+            this.editor = ace.edit(`editor-${this.created_at}`);
+            this.editor.setReadOnly(!this.editable);
+            ace.config.set('basePath', 'assets/');
+            /**
+             * twilight
+             * monokai
+             * terminal
+             */
+            this.editor.setTheme('ace/theme/twilight');
+            this.editor.session.setMode('ace/mode/c_cpp');
 
-        this.editor.on('change', (delta) => {
-            this.emittedChanges = true;
-            this.codeChange.emit(this.editor.getValue());
+            this.editor.on('change', (delta) => {
+                this.emittedChanges = true;
+                this.codeChange.emit(this.editor.getValue());
+            });
+
+            this.editorInitialized.next(true);
         });
-
-        this.editorInitialized.next(true);
     }
 
     loadTemplate() {

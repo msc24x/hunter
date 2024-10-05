@@ -2,10 +2,18 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
+#view-submissions-list-popup {
+    width: 34rem;
+}
+
 #score_board {
     margin-top: 64px;
     font-family: appFont;
     width: inherit;
+
+    .next-prev-options {
+        @include nextPrevControls;
+    }
 
     #sc_title {
         font-size: 1.4rem;
@@ -15,7 +23,12 @@
 
     #scores_table {
         font-size: 1.1rem;
-        height: 456px;
+
+        &.question-scoreboard {
+            & > div:not(.table_heading) {
+                cursor: pointer;
+            }
+        }
 
         .table_heading {
             font-weight: bold;
@@ -27,12 +40,6 @@
             background-color: rgb(220, 231, 245);
             border-radius: 0.3rem;
             @include sweetBorder();
-
-            .name-col::after {
-                padding-left: 0.5rem;
-                font-style: italic;
-                content: "(You)";
-            }
         }
 
         background-color: whitesmoke;
@@ -63,6 +70,11 @@
             .name-col {
                 flex-basis: 45%;
                 justify-content: start;
+
+                .ahead-statement {
+                    font-size: 0.8rem;
+                    font-weight: bold;
+                }
             }
 
             .time-col {
@@ -78,6 +90,7 @@
             .score {
                 color: green;
                 flex-basis: 10%;
+                text-wrap: nowrap;
             }
 
             .penalities {

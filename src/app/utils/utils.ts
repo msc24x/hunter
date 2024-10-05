@@ -43,22 +43,22 @@ export function prettyDuration(seconds: number, showSeconds = true) {
             `${minutes % 60} min` + (showSeconds ? ` ${seconds % 60} sec` : '')
         );
 
-    const days = Math.floor(hours / 12);
+    const days = Math.floor(hours / 24);
 
-    if (!days) return `${hours % 12} hr ${minutes % 60} min`;
+    if (!days) return `${hours % 24} hr ${minutes % 60} min`;
 
     const weeks = Math.floor(days / 7);
 
-    if (!weeks) return `${days % 7} days ${hours % 12} hr ${minutes % 60} min`;
+    if (!weeks) return `${days % 7} days ${hours % 24} hr ${minutes % 60} min`;
 
     const years = Math.floor(weeks / 52);
 
     if (!years)
-        return `${weeks % 52} weeks ${days % 7} days ${hours % 12} hr ${
+        return `${weeks % 52} weeks ${days % 7} days ${hours % 24} hr ${
             minutes % 60
         } min`;
 
     return `${years} yrs ${weeks % 52} weeks ${days % 7} days ${
-        hours % 12
+        hours % 24
     } hr ${minutes % 60} min`;
 }

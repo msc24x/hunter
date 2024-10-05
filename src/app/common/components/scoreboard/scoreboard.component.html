@@ -1,0 +1,168 @@
+<popup
+    id="view-submissions-list-popup"
+    [hidden]="!showSubmissionsListP"
+    (closeEvent)="showSubmissionsListP = false"
+    [showControls]="false"
+    title="User Submissions"
+>
+    <question-evaluation
+        *ngIf="competitionInfo.questions?.[questionSelected]"
+        [questionSelectedInfo]="competitionInfo.questions![questionSelected]"
+    ></question-evaluation>
+</popup>
+
+<div id="score_board">
+    <h2 *ngIf="question_list">Select Question</h2>
+    <questions-list
+        *ngIf="question_list"
+        [competitionInfo]="competitionInfo"
+        [questionsList]="competitionInfo.questions || []"
+        [questionSelected]="questionSelected"
+        (questionSelectedChange)="handleQuestionChange($event)"
+        [editable]="false"
+        [clearable]="true"
+    ></questions-list>
+    <h2>
+        {{ questionSelected === -1 ? "Competition" : "Question" }} Scoreboard
+    </h2>
+    <p>
+        Scoreboard displays the aggregate scores of all participants for this
+        contest{{ questionSelected !== -1 ? "'s selected question" : "" }}.
+        <br />So far, <b>{{ meta?.total }} participants</b> have submitted their
+        code for this contest.
+    </p>
+
+    <app-info-card *ngIf="questionSelected !== -1" [persist]="true">
+        You can click any participant from below table, to view their
+        submissions for selected question.
+    </app-info-card>
+
+    <div
+        id="scores_table"
+        [ngClass]="{ 'question-scoreboard': questionSelected !== -1 }"
+    >
+        <div class="table_heading">
+            <div class="rank-col">Rank</div>
+            <div class="name-col">User Name</div>
+            <div class="time-col">Last Submission</div>
+            <div class="score-p">Points</div>
+            <div class="score">
+                Final Points
+                <infotip
+                    message="Effective points after negative marking for penalities done"
+                ></infotip>
+            </div>
+            <!-- <div class="penalities">Penalities</div> -->
+        </div>
+
+        <div
+            *ngIf="meta?.user_details && uiShowUserRow()"
+            class="user-rank-row"
+            matTooltip="Click to view submissions"
+            matTooltipPosition="before"
+            [matTooltipDisabled]="questionSelected === -1"
+            (click)="showSubmissionList()"
+        >
+            <div class="rank-col">
+                <b>{{ meta!.user_details!.user_rank }}</b>
+                <fa-icon
+                    [icon]="faMedal"
+                    *ngIf="uiMedalColor(meta!.user_details!.user_rank)"
+                    [ngStyle]="{
+                        color: uiMedalColor(meta!.user_details!.user_rank)
+                    }"
+                ></fa-icon>
+            </div>
+            <div class="name-col">
+                {{ meta?.user_details?.user_name || "Anonymous" }}#{{
+                    meta?.user_details?.user_id
+                }}
+                &nbsp;
+
+                <i class="ahead-statement"> Ahead of {{ calcAheadOf() }}% </i>
+            </div>
+            <div class="time-col">
+                {{
+                    meta?.user_details?.created_at
+                        | date : "yyyy MMM dd 'at' hh:mm aa"
+                }}
+            </div>
+            <div class="score-p">{{ meta?.user_details?.result }}</div>
+            <div class="score">{{ meta?.user_details?.final_result }}</div>
+            <!-- <div class="penalities">-</div> -->
+        </div>
+
+        <div
+            *ngFor="let score of scores; let i = index"
+            matTooltip="Click to view submissions"
+            matTooltipPosition="before"
+            [matTooltipDisabled]="questionSelected === -1"
+            (click)="showSubmissionList()"
+            [ngClass]="{
+                'user-rank-row':
+                    meta?.user_details &&
+                    meta?.user_details?.user_id === score.user_id
+            }"
+        >
+            <div class="rank-col">
+                <b>{{ score.user_rank }}</b>
+
+                <fa-icon
+                    [icon]="faMedal"
+                    *ngIf="uiMedalColor(score.user_rank)"
+                    [ngStyle]="{ color: uiMedalColor(score.user_rank) }"
+                ></fa-icon>
+            </div>
+            <div class="name-col">
+                {{ score.user_name || "Anonymous" }}#{{ score.user_id }}
+                &nbsp;
+                <i
+                    class="ahead-statement"
+                    *ngIf="
+                        meta?.user_details &&
+                        meta?.user_details?.user_id === score.user_id
+                    "
+                >
+                    Ahead of
+                    {{ calcAheadOf() }}%
+                </i>
+            </div>
+            <div class="time-col">
+                {{ score.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
+            </div>
+
+            <div class="score-p">&nbsp;&nbsp;{{ score.result }}</div>
+            <div class="score">&nbsp;&nbsp;{{ score.final_result }}</div>
+            <!-- <div class="penalities">{{ score.penalities }}</div> -->
+        </div>
+
+        <div *ngIf="scores.length === 0">
+            <div class="rank-col">-</div>
+            <div class="name-col">-</div>
+            <div class="time-col">-</div>
+            <div class="score-p">&nbsp;&nbsp;-</div>
+            <div class="score">&nbsp;&nbsp;-</div>
+            <!-- <div class="penalities">-</div> -->
+        </div>
+        <div class="next-prev-options">
+            <div
+                [ngClass]="{
+                    'no-click disabled': loading || pages.length === 0,
+                    'option-prev': true
+                }"
+                (click)="fetchPrevPage()"
+            >
+                View Prev
+            </div>
+            <div
+                [ngClass]="{
+                    'no-click disabled': loading || scores.length < 10,
+                    'option-next': true
+                }"
+                (click)="fetchNextPage()"
+            >
+                View Next
+            </div>
+        </div>
+    </div>
+</div>

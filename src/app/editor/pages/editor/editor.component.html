@@ -3,6 +3,16 @@
 <app-loading *ngIf="loading"></app-loading>
 
 <popup
+    id="competition-insights"
+    title="Insights"
+    [showControls]="false"
+    [destructive]="false"
+    (closeEvent)="showPopup(false, 'competition-insights')"
+>
+    <insights [competitionInfo]="competitionInfo"></insights>
+</popup>
+
+<popup
     id="code-tester"
     (closeEvent)="showPopup(false, 'code-tester')"
     title="Verify Participation"
@@ -30,7 +40,7 @@
     Remember : If you do not want others to see this competition, you can always
     make it private instead of deleting.<br /><br />
     <b>Enter the current competition code</b>
-    <input type="text" id="input_competition_code" />
+    <input type="text" id="input_competition_code" placeholder="342" />
     <div class="red">{{ deleteCompMessage }}</div>
     <div id="delete_competition_btn_popup" (click)="deleteCompetition()">
         Delete
@@ -142,17 +152,25 @@
 <div class="row_flex editor-first-panel" style="margin-top: 16px">
     <div class="vertical_flex desc-panel">
         <div id="desc_label" class="label">Description</div>
-        <textarea maxlength="456" rows="7" id="text_description">{{
-            this.competitionInfo.description
-        }}</textarea>
+        <textarea
+            maxlength="456"
+            rows="7"
+            id="text_description"
+            placeholder="Example: This challenge consists of ...."
+            >{{ this.competitionInfo.description }}</textarea
+        >
     </div>
 
     <div class="vertical_flex title-panel">
         <div class="vertical_flex">
             <div id="title_label" class="label">Title</div>
-            <textarea maxlength="120" rows="7" id="text_title">{{
-                this.competitionInfo.title
-            }}</textarea>
+            <textarea
+                maxlength="120"
+                rows="7"
+                id="text_title"
+                placeholder="Example: University Club Tie-breaker Challenge"
+                >{{ this.competitionInfo.title }}</textarea
+            >
         </div>
     </div>
 
@@ -160,15 +178,22 @@
         <div class="label">Insights</div>
         <div class="text-area c-insights">
             <div class="label">Share link to participants</div>
-            <a class="participant-link" (click)="shareAction()">
+            <a
+                class="participant-link"
+                (click)="shareAction()"
+                matTooltip="Click to share the participation link"
+            >
                 <span class="link-text">{{ getParticipationLink() }}</span>
                 <span>
                     <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
                 </span>
             </a>
-            <div class="text-area insight-details">
-                You got <b>17 Submissions</b> by <b>5 Participants</b
-                ><br />Click here to see the data report.
+            <div
+                class="text-area insight-details"
+                (click)="showPopup(true, 'competition-insights')"
+            >
+                Click here to see the participation insights for this
+                competition
             </div>
         </div>
     </div>
@@ -276,6 +301,7 @@
                     maxlength="150"
                     rows="3"
                     [value]="questionSelectedInfo.title"
+                    placeholder="Example: Write a program to flip the string."
                 ></textarea>
 
                 <div class="file-uploaders">
@@ -396,6 +422,7 @@
                                 maxlength="250"
                                 rows="6"
                                 [value]="questionSelectedInfo.sample_cases"
+                                placeholder="Example: dice car club winter"
                             ></textarea>
                         </div>
 
@@ -410,6 +437,7 @@
                                 maxlength="250"
                                 rows="6"
                                 [value]="questionSelectedInfo.sample_sols"
+                                placeholder="Example: ecid rac bulc retniw"
                             ></textarea>
                         </div>
                     </div>
@@ -477,6 +505,7 @@
             id="text_statement"
             maxlength="2046"
             [value]="questionSelectedInfo.statement"
+            placeholder="Example: You are given a list of strings separated by a space..."
         ></textarea>
         <ng-katex
             *ngIf="preview_mode"

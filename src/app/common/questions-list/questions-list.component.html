@@ -14,6 +14,8 @@
         *ngFor="let question of this.questionsList; index as i"
         [ngClass]="{ 'selected-question': questionSelected == i }"
         (click)="selectQuestion($event)"
+        matTooltip="Click to unselect"
+        [matTooltipDisabled]="questionSelected !== i || !clearable"
     >
         Q
         <fa-icon

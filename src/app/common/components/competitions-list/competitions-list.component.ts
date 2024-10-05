@@ -59,16 +59,14 @@ export class CompetitionsListComponent implements OnInit {
         return this.isAfterNow(com.scheduled_end_at);
     }
 
-    timeLeft(com: CompetitionInfo, f: boolean) {
-        const endTime = com.scheduled_end_at;
-
-        if (endTime === null) {
+    timeLeft(targetTime: Date, f: boolean) {
+        if (targetTime === null) {
             return 'unlimited';
         }
 
-        const minutes = Math.ceil((endTime.getTime() - Date.now()) / 1000 / 60);
+        const seconds = Math.ceil((targetTime.getTime() - Date.now()) / 1000);
 
-        return prettyDuration(minutes * 60, false);
+        return prettyDuration(seconds, false);
     }
 
     ngOnInit(): void {}

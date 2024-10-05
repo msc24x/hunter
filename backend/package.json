@@ -8,7 +8,8 @@
         "start-local": "ENV=local nodemon -L src/app.ts",
         "start-prod": "ENV=prod ts-node src/app.ts",
         "start": "nodemon -L src/app.ts",
-        "win-start-prod": "set ENV=prod&& ts-node src/app.ts"
+        "win-start-prod": "set ENV=prod&& ts-node src/app.ts",
+        "shell": "ts-node shell.ts"
     },
     "author": "Maninderpal Singh (msc24x@gmail.com)",
     "license": "ISC",
