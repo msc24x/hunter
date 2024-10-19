@@ -12,33 +12,43 @@ export const environment = {
 };
 
 export interface UserInfo {
-    id: string;
+    id: number;
     email: string;
     name: string;
 }
 
 export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go';
 
+export type QuestionVerification = {
+    id: number;
+    created_at: Date;
+    submission: string;
+    language: string;
+    reason: string;
+    success: boolean;
+    question_id: number;
+};
+
 export interface CompetitionInfo {
-    id: string;
-    host_user_id: string;
+    id: number;
+    host_user_id: number;
     host_user?: UserInfo;
     title: string;
     description: string;
     created_at: Date;
     updated_at: Date;
-    deleted_at: Date;
-    scheduled_at: Date;
+    deleted_at: Date | null;
+    scheduled_at: Date | null;
+    scheduled_end_at: Date | null;
     rating: number;
     public: boolean;
-    duration: number;
-    start_schedule: string;
+    questions?: QuestionInfo[];
 }
 
 export type HunterExecutable = {
     for: {
-        competition_id: string;
-        question_id: string;
+        competition_id: number;
+        question_id: number;
     };
 
     solution: {
@@ -55,9 +65,17 @@ export type ExecutionInfo = {
 };
 
 export type result = {
-    user_id: string;
-    score: string;
-    penalities: string;
+    id: number;
+    user_id: number;
+    user_name: string;
+    user_rank: number;
+    result: number;
+    accepted: boolean;
+    created_at?: string;
+    language?: HunterLanguage;
+    final_result?: number;
+    submission?: string;
+    meta?: string;
 };
 
 export type resultFull = {
@@ -69,6 +87,12 @@ export type resultFull = {
     meta?: string;
 };
 
+export type QuestionProgress = {
+    question_id: number;
+    total: number;
+    accepted: boolean;
+};
+
 export const apiEndpoints = {
     register: environment.apiUrl + '/register',
     login: environment.apiUrl + '/login',
@@ -76,21 +100,24 @@ export const apiEndpoints = {
     logout: environment.apiUrl + '/logout',
     competition: environment.apiUrl + '/competition',
     getCompetitions: environment.apiUrl + '/competitions',
-    question: environment.apiUrl + '/question',
+    question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',
     postFile: environment.apiUrl + '/question/upload',
     execute: environment.apiUrl + '/execute',
     user: environment.apiUrl + '/user',
-    results: environment.apiUrl + '/result/c/',
-    resultsAll: environment.apiUrl + '/result',
+    results: environment.apiUrl + '/competitions/{0}/results/{1}',
+    resultsAll: environment.apiUrl + '/competitions/{0}/results',
+    progress: environment.apiUrl + '/competitions/{0}/progress',
     submission: environment.apiUrl + '/submission/',
 };
 
 export const templates = {
     cpp: '#include <iostream>\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n\t//write code\n\treturn 0;\n}',
     c: '#include"stdio.h"\n#include"string.h"\n#include"math.h"\n#include"stdlib.h"\n#include"ctype.h"\n#include"limits.h"\n#include"time.h"\n#include"stdbool.h"\n\nint main(){\n\t//write code\n\treturn 0;\n}',
-    py: '#write code',
+    py: '# write code',
     js: '/*write code*/',
+    ts: '/*write code*/',
+    go: 'package main\nimport "fmt"\nfunc main() {\n  fmt.Println("Hello, World!")\n}',
 };
 
 export const resCode = {
@@ -104,14 +131,20 @@ export const resCode = {
     found: 302,
 };
 export interface QuestionInfo {
-    id: string;
-    competition_id: string;
+    id: number;
+    competition_id: number;
     title: string;
     statement: string;
-    created_on: string;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date | null;
     sample_cases: string;
     sample_sols: string;
     points: number;
+    neg_points: number;
+    test_cases_file?: boolean;
+    sol_cases_file?: boolean;
+    sol_code_file?: boolean;
 }
 /*
  * For easier debugging in development mode, you can import the following file

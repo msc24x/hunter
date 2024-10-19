@@ -4,4 +4,14 @@
 	"html.format.enable": true,
 	"prettier.tabWidth": 4,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[properties]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
+	},
+	"[nginx]": {
+		"editor.defaultFormatter": "ahmadalli.vscode-nginx-conf",
+		"editor.formatOnSave": true
+	},
+	"[dotenv]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
+	},
 }

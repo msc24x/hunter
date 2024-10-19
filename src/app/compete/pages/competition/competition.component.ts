@@ -16,6 +16,7 @@ import {
     resultFull,
     templates,
     UserInfo,
+    environment,
 } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -215,7 +216,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     redirectToGitHubOAuth() {
-        window.open(`${protocol}://${domainName}/api/oauth/github`);
+        window.open(`${environment.apiUrl}/oauth/github`);
     }
 
     postSolution(samples = false) {

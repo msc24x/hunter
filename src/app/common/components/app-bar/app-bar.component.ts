@@ -1,5 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserInfo, domainName, protocol } from 'src/environments/environment';
+import {
+    UserInfo,
+    domainName,
+    environment,
+    protocol,
+} from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import {
     faBars,
@@ -78,7 +83,7 @@ export class AppBarComponent implements OnInit {
     }
 
     redirectToGitHubOAuth() {
-        window.open(`${protocol}://${domainName}/api/oauth/github`);
+        window.open(`${environment.apiUrl}/oauth/github`);
     }
 
     sendLogoutRequest() {

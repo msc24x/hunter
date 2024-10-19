@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
     }
 
     redirectToGitHubOAuth() {
-        window.open(`${protocol}://${domainName}/api/oauth/github`);
+        window.open(`${environment.apiUrl}/oauth/github`);
     }
 
     animateInView() {

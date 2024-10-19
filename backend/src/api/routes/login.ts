@@ -104,8 +104,8 @@ router.get('/oauth/github', (req, res) => {
                 'Content-Type': 'application/json',
             },
         })
-            .then((res) => {
-                return res.json();
+            .then((github_res) => {
+                return github_res.json();
             })
             .then((body) => {
                 fetch(`https://api.github.com/user/emails`, {
@@ -124,18 +124,15 @@ router.get('/oauth/github', (req, res) => {
                         }>;
 
                         const email = emails.find((val) => val.primary)?.email;
-                        console.log(email);
 
                         getOrCreateUser(email!).then((user) => {
                             if (!user) {
                                 res.sendStatus(400);
                                 return;
                             }
-                            console.log(user);
 
                             getOrCreateSession(user)
                                 .then((session) => {
-                                    console.log(session);
                                     res.cookie('session', session.id);
                                     res.redirect(
                                         `${process.env.PROTOCOL}://${process.env.DOMAIN}`

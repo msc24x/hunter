@@ -9,7 +9,10 @@
         "start-prod": "ENV=prod ts-node src/app.ts",
         "start": "nodemon -L src/app.ts",
         "win-start-prod": "set ENV=prod&& ts-node src/app.ts",
-        "shell": "ts-node shell.ts"
+        "shell": "ts-node shell.ts",
+        "lint": "eslint src/**/*.{ts,tsx}",
+        "check-types": "tsc --noemit",
+        "eslint": "eslint"
     },
     "author": "Maninderpal Singh (msc24x@gmail.com)",
     "license": "ISC",
@@ -29,6 +32,7 @@
     "dependencies": {
         "@prisma/client": "^5.18.0",
         "@types/express-fileupload": "^1.5.1",
+        "prisma": "^5.18.0",
         "argon2": "^0.30.3",
         "body-parser": "^1.19.1",
         "cookie-parser": "^1.4.6",

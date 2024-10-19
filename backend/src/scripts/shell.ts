@@ -1,5 +1,5 @@
 import { exit } from 'process';
-import { DatabaseProvider } from './src/services/databaseProvider';
+import { DatabaseProvider } from '../services/databaseProvider';
 
 var client = new DatabaseProvider().client();
 

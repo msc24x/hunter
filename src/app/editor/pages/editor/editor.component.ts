@@ -18,6 +18,7 @@ import { CompetitionsDataService } from 'src/app/services/competitions-data/comp
 import {
     CompetitionInfo,
     domainName,
+    environment,
     protocol,
     QuestionInfo,
     QuestionVerification,
@@ -157,7 +158,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     downloadFileUrl(fileType: string) {
-        return `/api/competitions/${this.questionSelectedInfo.competition_id}/questions/${this.questionSelectedInfo.id}/${fileType}/download`;
+        return `${environment.apiUrl}/competitions/${this.questionSelectedInfo.competition_id}/questions/${this.questionSelectedInfo.id}/${fileType}/download`;
     }
 
     downloadFile(fileType: string) {
