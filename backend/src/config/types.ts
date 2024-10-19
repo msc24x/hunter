@@ -4,7 +4,7 @@ export type RegisterRequest = {
 };
 
 export type SessionInfo = {
-    id: number;
+    id: string;
     user_id: number;
 };
 

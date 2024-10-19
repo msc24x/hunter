@@ -48,7 +48,7 @@ popup {
 
 #input_competition_code {
     border-width: 0px;
-    font-family: appFont;
+
     width: 84px;
     font-size: 1.1rem;
     border-radius: 24px;
@@ -58,7 +58,6 @@ popup {
 }
 
 #delete_competition_btn_popup {
-    font-family: appFont;
     font-size: 1.2rem;
     padding: 8px;
     padding-inline: 16px;
@@ -71,7 +70,7 @@ popup {
 
 #created_at {
     background-color: whitesmoke;
-    font-family: appFont;
+
     font-size: 0.8rem;
     width: fit-content;
     padding: 10px;
@@ -82,7 +81,7 @@ popup {
 #visbility_controller {
     display: flex;
     margin-top: 16px;
-    font-family: appFont;
+
     cursor: default;
     border-radius: 1rem;
     @include sweetBorder();
@@ -90,14 +89,14 @@ popup {
     #id {
         background-color: white;
         border-radius: 1rem 0px 0px 1rem;
-        font-family: appFont;
+
         width: fit-content;
         padding: 10px;
     }
 
     #rating {
         background-color: whitesmoke;
-        font-family: appFont;
+
         width: fit-content;
         padding: 10px;
     }
@@ -106,7 +105,7 @@ popup {
         background-color: rgb(20, 220, 120);
         color: rgb(0, 0, 0);
         border-radius: 0px 1rem 1rem 0px;
-        font-family: appFont;
+
         font-weight: bold;
         width: 64px;
         padding: 10px;
@@ -142,7 +141,6 @@ popup {
 }
 
 .row_flex {
-    font-family: appFont;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -150,7 +148,6 @@ popup {
 }
 
 .label {
-    font-family: appFont;
     font-size: 1.1rem;
     text-align: left;
     width: 100%;
@@ -179,7 +176,6 @@ popup {
 }
 
 #evaluation-section {
-    font-family: appFont;
     flex-wrap: wrap;
     flex-direction: column;
     align-items: stretch;
@@ -375,7 +371,7 @@ input.file_input {
 
 a {
     border-radius: 24px;
-    font-family: appFont;
+
     padding: 8px;
     padding-inline: 16px;
     cursor: pointer;
@@ -402,14 +398,13 @@ a:hover,
 
 #question_points_lbl,
 #question_id {
-    font-family: appFont;
     font-size: 1.2rem;
     margin: 1rem;
 }
 
 .info_text {
     text-align: center;
-    font-family: appFont;
+
     color: white;
     font-style: italic;
     text-decoration: underline;
@@ -417,13 +412,11 @@ a:hover,
 }
 
 #log {
-    font-family: appFont;
     font-style: italic;
     color: black;
 }
 
 #delete_competition_btn {
-    font-family: appFont;
     font-size: 1rem;
     background-color: #fff0f0;
     color: darkred;

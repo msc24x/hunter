@@ -152,7 +152,7 @@
 
                 <div id="question_statement">
                     <ng-katex
-                        [data]="questionSelectedInfo.statement || ''"
+                        [data]="getQuestionStatement(questionSelectedInfo)"
                     ></ng-katex>
                 </div>
             </div>

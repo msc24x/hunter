@@ -1,7 +1,6 @@
 @use "../../../../assets/mixins" as *;
 
 #settings_label {
-    font-family: appFont;
     font-size: 2.2rem;
     margin: 16px;
     gap: 2rem;
@@ -45,7 +44,6 @@
 
 .account-field {
     .field-row {
-        font-family: appFont;
         display: flex;
         flex-wrap: wrap;
         align-items: center;

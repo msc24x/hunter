@@ -398,6 +398,22 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.hrlayout = !this.hrlayout;
     }
 
+    getQuestionStatement(questionInfo: QuestionInfo) {
+        var final = `$\\textbf{Statement}$\n\n` + questionInfo.statement || '';
+
+        if (questionInfo.sample_cases) {
+            final +=
+                `\n\n$\\textbf{Sample Cases}$\n\n` + questionInfo.sample_cases;
+        }
+
+        if (questionInfo.sample_sols) {
+            final +=
+                `\n\n$\\textbf{Sample Output}$\n\n` + questionInfo.sample_sols;
+        }
+
+        return final;
+    }
+
     enableSubmitControls(enable: boolean) {
         let elem = document.getElementById('submit_controls') as HTMLDivElement;
 

@@ -26,7 +26,6 @@ div.appBar {
 
     #app_title {
         color: colors.$text_black;
-        font-family: appFont;
         font-weight: bold;
         font-size: 3em;
         display: flex;
@@ -98,7 +97,7 @@ div.appBar {
         flex-direction: column;
         justify-content: right;
         align-items: flex-end;
-        font-family: appFont;
+
         font-size: 0.8rem;
         font-weight: bolder;
         background-color: white;
@@ -118,7 +117,6 @@ div.appBar {
     }
 
     #navBarCompact {
-        font-family: appFont;
         font-weight: bold;
         margin-top: 14px;
         position: absolute;
@@ -166,7 +164,7 @@ div.appBar {
     #navBar {
         ul {
             color: colors.$text_black;
-            font-family: appFont;
+
             font-weight: normal;
             display: flex;
             flex-wrap: wrap;

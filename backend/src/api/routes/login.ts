@@ -147,7 +147,9 @@ router.get('/oauth/github', (req, res) => {
                                 );
                         });
                     })
-                    .catch(() => res.sendStatus(400));
+                    .catch((err) =>
+                        Util.sendResponse(res, resCode.serverError, err)
+                    );
             })
             .catch((err) => {
                 console.log(err);
@@ -173,25 +175,21 @@ router.get('/authenticate', authenticate, (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-    const session_id = req.cookies.session_id;
+    const session_id = req.cookies.session;
+    res.clearCookie('session');
 
-    if (session_id) {
-        database.query(
-            ` delete from session where session.id = ? ; `,
-            [session_id],
-            (err) => {
-                if (err) {
-                    console.log(err);
-                    Util.sendResponse(res, resCode.serverError);
-                    return;
-                }
-                res.clearCookie('session_id');
-                Util.sendResponse(res, resCode.success);
-            }
-        );
-    } else {
-        Util.sendResponse(res, resCode.badRequest);
-    }
+    client.session
+        .delete({
+            where: {
+                id: session_id,
+            },
+        })
+        .then((session) => {
+            Util.sendResponse(res, resCode.success);
+        })
+        .catch((err) => {
+            Util.sendResponse(res, resCode.badRequest);
+        });
 });
 
 module.exports = router;

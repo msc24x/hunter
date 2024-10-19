@@ -16,7 +16,7 @@ export function loginRequired(req: Request, res: Response, next: NextFunction) {
 }
 
 export function authenticate(req: Request, res: Response, next: NextFunction) {
-    const session_id = parseInt(req.cookies.session);
+    const session_id = req.cookies.session;
     res.locals.isAuthenticated = false;
 
     if (session_id) {

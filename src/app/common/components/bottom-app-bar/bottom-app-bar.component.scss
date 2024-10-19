@@ -15,17 +15,16 @@
     align-items: center;
     flex-wrap: wrap-reverse;
     gap: 2rem;
-    font-family: appFont;
 
     #site_logo {
         font-weight: bold;
         font-size: 2rem;
+        margin-bottom: 4rem;
+
         #site_info {
             font-size: 1rem;
             font-weight: 100;
             color: gray;
-            margin-right: 64px;
-            margin-bottom: 24px;
         }
 
         .site-version {
@@ -67,7 +66,7 @@
     #site_logo {
         font-size: 1.2rem !important;
         #site_info {
-            font-size: 0.6rem !important;
+            font-size: 1rem !important;
         }
     }
     .button {

@@ -56,3 +56,4 @@ backend/files/*
 .ssh/*
 push-envs.bat
 static-update.bat
+server-update.bat
