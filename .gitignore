@@ -57,3 +57,5 @@ backend/files/*
 push-envs.bat
 static-update.bat
 server-update.bat
+backend-update.bat
+frontend-update.bat
