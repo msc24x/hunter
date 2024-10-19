@@ -1,0 +1,22 @@
+<div class="row hunter-conf">
+    <div
+        *ngIf="editable"
+        matTooltip="Load the boilerplate template for the selected language"
+        matTooltipPosition="above"
+        class="row"
+        id="load_template_btn"
+        (click)="loadTemplate()"
+    >
+        Load Template
+    </div>
+
+    <drop-down-list
+        [editable]="editable"
+        listType="Language"
+        [items]="['cpp', 'c', 'py', 'js', 'ts', 'go']"
+        [itemSelected]="languageSelected"
+        (itemSelectedChange)="updateEditorMode($event)"
+    ></drop-down-list>
+</div>
+
+<div [id]="'editor-' + created_at" class="editor-instance"></div>

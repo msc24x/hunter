@@ -1,336 +1,428 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-	ActivatedRoute,
-	NavigationStart,
-	Router,
-} from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import * as ace from 'ace-builds';
-import { Subscription } from 'rxjs';
+import { last, Subscription } from 'rxjs';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import {
-	CompetitionInfo,
-	QuestionInfo,
-	resCode,
-	resultFull,
-	templates,
-	UserInfo,
+    CompetitionInfo,
+    QuestionProgress,
+    domainName,
+    ExecutionInfo,
+    HunterLanguage,
+    protocol,
+    QuestionInfo,
+    resCode,
+    result,
+    resultFull,
+    templates,
+    UserInfo,
+    environment,
 } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
+import {
+    faAddressCard,
+    faChevronUp,
+    faFileCode,
+    faHourglassHalf,
+    faSpinner,
+    faTableColumns,
+} from '@fortawesome/free-solid-svg-icons';
+import { prettyDuration } from 'src/app/utils/utils';
+import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
-	selector: 'competition',
-	templateUrl: './competition.component.html',
-	styleUrls: ['./competition.component.scss'],
+    selector: 'competition',
+    templateUrl: './competition.component.html',
+    styleUrls: ['./competition.component.scss'],
 })
 export class CompetitionComponent implements OnInit, OnDestroy {
-	loading = false;
-	fetchSubmissionMsg = '';
+    layoutIcon = faTableColumns;
+    judgeLoadingIcon = faSpinner;
+    loginIcon = faAddressCard;
+    timerIcon = faHourglassHalf;
+    upIcon = faChevronUp;
 
-	c_id: string = '';
-	editor!: ace.Ace.Editor;
+    showInstructionP = false;
 
-	isAuthenticated: boolean = false;
-	user = {} as UserInfo;
-	competition = {} as CompetitionInfo;
-	evaluation: Array<resultFull> = [];
-	competitionQuestions = [] as Array<QuestionInfo>;
-	questionSelected = -1;
-	questionSelectedInfo = {} as QuestionInfo;
-	solutionOutput = '';
-	languageSelected = 'cpp';
+    loading = false;
+    fetchSubmissionMsg = '';
 
-	timeRemaining = {
-		min: '∞',
-		sec: '∞',
-	};
-	hasEnded = false;
+    c_id: number = 0;
 
-	routerSubsc: Subscription | null = null;
-	subscriptions: Subscription[] = [];
-	timeInterval;
+    hrlayout: boolean = true;
+    bottomSection = false;
 
-	constructor(
-		private route: ActivatedRoute,
-		private authService: AuthService,
-		private router: Router,
-		private competitionsService: CompetitionsDataService,
-		private scoresDataService: ScoresDataService
-	) {
-		const idParam = this.route.snapshot.paramMap.get('competition_id');
-		if (idParam) {
-			this.c_id = idParam;
-		}
+    viewSubmissionResult: result | undefined;
+    questionsProgress: Array<QuestionProgress> = [];
 
-		this.subscriptions.push(
-			this.authService.isAuthenticated.subscribe((isAuth:boolean) => {
-				this.user = this.authService.user;
-				this.isAuthenticated = isAuth;
-				this.fetchData();
-			})
-		);
+    isAuthenticated: boolean = false;
+    user = {} as UserInfo;
+    competition = {} as CompetitionInfo;
 
-		this.timeInterval = setInterval(() => {
-			let seconds =
-				(Date.parse(this.competition.start_schedule) +
-					this.competition.duration * 60 * 1000 -
-					Date.now()) /
-				1000;
-			seconds = Math.floor(seconds);
-			if (seconds < 0) {
-				this.timeRemaining = { min: '0', sec: '0' };
-				clearInterval(this.timeInterval);
-				return;
-			}
-			this.timeRemaining.min = Math.floor(seconds / 60) + '';
-			this.timeRemaining.sec = (seconds % 60) + '';
-		}, 1000);
-	}
+    evaluation: Array<result> = [];
 
-	ngOnInit(): void {
-		this.subscriptions.push(
-			this.authService.authenticate_credentials().subscribe({
-				next: (res) => {
-					if (res.status == 202) {
-						const body = res.body as UserInfo;
-						this.user = body;
-						this.authService.user = this.user;
-						this.authService.isAuthenticated.next(true);
-						this.fetchData();
-						if (
-							/iPhone|iPad|iPod|Android|Opera Mini|IEMobile|BlackBerry|WPDesktop/i.test(
-								navigator.userAgent
-							)
-						) {
-							alert(
-								'Participating in competitions is not recommended on mobile phones. Hunter is designed to be best viewed on desktops'
-							);
-						}
-					}
-				}
-			})
-		);
+    questionSelected = -1;
+    questionSelectedInfo = {} as QuestionInfo;
+    judgeInProgress = false;
+    solutionOutput: ExecutionInfo = {
+        expected: '',
+        output: '',
+        success: false,
+        meta: '',
+    };
+    languageSelected: HunterLanguage = 'cpp';
+    codeWritten: string = '';
 
-		this.unsubscribeAll();
-	}
+    timeRemaining = '(-_-)';
+    hasEnded = false;
 
-	ngOnDestroy() {
-		this.unsubscribeAll();
-		this.routerSubsc?.unsubscribe();
-	}
+    routerSubsc: Subscription | null = null;
+    subscriptions: Subscription[] = [];
+    timeInterval: any = null;
 
-	unsubscribeAll() {
-		this.routerSubsc?.unsubscribe();
-		this.routerSubsc = this.router.events.subscribe((event) => {
-			if (event instanceof NavigationStart) {
-				let sub = this.subscriptions.pop();
-				while (sub) {
-					sub.unsubscribe();
-					sub = this.subscriptions.pop();
-				}
-			}
-		});
-	}
+    constructor(
+        private route: ActivatedRoute,
+        private authService: AuthService,
+        private router: Router,
+        private competitionsService: CompetitionsDataService,
+        private scoresDataService: ScoresDataService
+    ) {
+        const idParam = parseInt(
+            this.route.snapshot.paramMap.get('competition_id') || ''
+        );
+        if (idParam) {
+            this.c_id = idParam;
+        }
 
-	postSolution(samples = false) {
-		if (this.questionSelected == -1) {
-			this.solutionOutput = 'No question selected';
-			return;
-		}
-		if (!this.editor.getValue()) {
-			this.solutionOutput = 'Empty solution';
-			return;
-		}
+        this.user = this.authService.user;
+        this.isAuthenticated = this.authService.isAuthenticated.value;
+    }
 
-		this.solutionOutput = 'Judging.... (This might take few seconds)';
+    ngOnInit(): void {
+        document
+            .getElementsByTagName('bottom-app-bar')[0]
+            .classList.add('hidden');
 
-		this.loading = true;
-		this.enableSubmitControls(false);
-		this.subscriptions.push(
-			this.competitionsService
-				.judgeSolution(
-					{
-						for: {
-							competition_id: this.c_id,
-							question_id:
-								this.competitionQuestions[this.questionSelected]
-									.id,
-						},
-						solution: {
-							lang: this.languageSelected,
-							code: this.editor.getValue(),
-						},
-					},
-					samples
-				)
-				.subscribe({
-					next: (res) => {
-						this.loading = false;
-						this.enableSubmitControls(true);
-						if (res.status == resCode.success) {
-							this.solutionOutput = (
-								res.body as { output: string }
-							).output;
-							let outputBox =
-								document.getElementById('solution_output');
-							if (outputBox) {
-								if (this.solutionOutput[0] == '1') {
-									outputBox.style.backgroundColor =
-										'#A3EBB133';
-									outputBox.style.borderColor = 'darkgreen';
-								} else {
-									outputBox.style.backgroundColor = '#fff0f0';
-									outputBox.style.borderColor = 'darkred';
-								}
-							}
+        document.addEventListener('click', (event) => {
+            const inBottomSection = (event.target as HTMLElement).closest(
+                '.bottom-section'
+            );
+            const inSubmitControls = (event.target as HTMLElement).closest(
+                '#submit_controls'
+            );
 
-							this.fetchEvaluation();
-						} else this.solutionOutput = res.statusText;
-					},
+            if (!inBottomSection && !inSubmitControls) {
+                this.bottomSection = false;
+            }
+        });
 
-					error: (err) => {
-						this.loading = false;
-						this.enableSubmitControls(true);
-						this.solutionOutput = err.statusText;
-					},
-				})
-		);
-	}
+        document.addEventListener('keydown', (event) => {
+            if (event.shiftKey && event.altKey && event.key == 'J') {
+                this.postSolution(true);
+            }
 
-	fetchLastSubmission() {
-		this.fetchSubmissionMsg = '';
-		this.loading = true;
-		this.subscriptions.push(
-			this.competitionsService
-				.getLastSubmission({
-					competition_id: this.competition.id,
-					question_id: this.questionSelectedInfo.id,
-					lang: this.languageSelected,
-				})
-				.subscribe({
-					next: (res) => {
-						this.editor.setValue(res.body?.data ?? '');
-						this.loading = false;
-					},
-					error: (err) => {
-						console.log(err);
-						this.loading = false;
-						this.fetchSubmissionMsg =
-							'* Not found any .' +
-							this.languageSelected +
-							' submission';
-					},
-				})
-		);
-	}
+            if (event.key.startsWith('Esc')) {
+                this.bottomSection = false;
+            }
 
-	fetchEvaluation() {
-		this.subscriptions.push(
-			this.scoresDataService
-				.getScoresAll({
-					user_id: this.user.id,
-					competition_id: this.c_id,
-				})
-				.subscribe((res) => {
-					if (res.status == resCode.success) {
-						this.evaluation = res.body
-							? (res.body as Array<resultFull>)
-							: [];
-					}
-				})
-		);
-	}
+            this.lastEditorContent(true);
+        });
 
-	fetchData() {
-		this.fetchEvaluation();
+        if (this.isAuthenticated) {
+            this.fetchData();
+            return;
+        }
 
-		this.subscriptions.push(
-			this.competitionsService.getCompetitionInfo(this.c_id).subscribe({
-				next: (res) => {
-					this.competition = res.body as CompetitionInfo;
+        this.subscriptions.push(
+            this.authService.authenticate_credentials().subscribe({
+                next: (res) => {
+                    if (res.status == 202) {
+                        const body = res.body as UserInfo;
+                        this.user = body;
+                        this.isAuthenticated = true;
+                        this.authService.user = this.user;
+                        this.authService.isAuthenticated.next(true);
+                        this.fetchData();
+                        if (
+                            /iPhone|iPad|iPod|Android|Opera Mini|IEMobile|BlackBerry|WPDesktop/i.test(
+                                navigator.userAgent
+                            )
+                        ) {
+                            alert(
+                                'Participating in competitions is not recommended on your device. Hunter is designed to be best viewed on desktops'
+                            );
+                        }
+                    }
+                },
+            })
+        );
+    }
 
-					if (this.competition.duration == 0) {
-						clearInterval(this.timeInterval);
-					}
+    ngOnDestroy() {
+        document
+            .getElementsByTagName('bottom-app-bar')[0]
+            .classList.remove('hidden');
 
-					if (
-						Date.parse(this.competition.start_schedule) > Date.now()
-					) {
-						alert('Competition has not started yet');
-						this.router.navigate(['/compete']);
-					} else this.initEditor();
+        this.unsubscribeAll();
+        this.routerSubsc?.unsubscribe();
+    }
 
-					if (
-						this.competition.duration != 0 &&
-						Date.now() >
-							Date.parse(this.competition.start_schedule) +
-								this.competition.duration * 60 * 1000
-					) {
-						this.hasEnded = true;
-					}
+    unsubscribeAll() {
+        this.routerSubsc?.unsubscribe();
+        this.routerSubsc = this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                let sub = this.subscriptions.pop();
+                while (sub) {
+                    sub.unsubscribe();
+                    sub = this.subscriptions.pop();
+                }
+            }
+        });
+    }
 
-					this.competitionsService
-						.getQuestions({ competition_id: this.c_id })
-						.subscribe((res) => {
-							this.competitionQuestions =
-								res.body as QuestionInfo[];
-						});
-				},
-				error: (err) => {
-					if (err.status == resCode.notFound) {
-						this.router.navigate(['/404']);
-					}
-				},
-			})
-		);
-	}
+    clearOutput() {
+        this.solutionOutput = {
+            expected: '',
+            meta: '',
+            output: '',
+            success: false,
+        };
+    }
 
-	selectQuestion(index: number) {
-		this.questionSelected = index;
-		this.questionSelectedInfo = this.competitionQuestions[index];
-	}
+    getAcceptedSubmissions() {
+        return this.evaluation.filter((ev) => ev.accepted).length;
+    }
 
-	loadTemplate() {
-		this.editor.setValue(
-			templates[this.languageSelected as 'cpp' | 'py' | 'c' | 'js']
-		);
-	}
+    getRejectedSubmissions() {
+        return this.evaluation.filter((ev) => !ev.accepted).length;
+    }
 
-	updateEditorMode() {
-		switch (this.languageSelected) {
-			case 'c':
-			case 'cpp':
-				this.editor.session.setMode('ace/mode/c_cpp');
-				break;
-			case 'py':
-				this.editor.session.setMode('ace/mode/python');
-				break;
-			case 'js':
-				this.editor.session.setMode('ace/mode/javascript');
-		}
-	}
+    getAcceptedSolutions() {
+        return this.questionsProgress.filter((qp) => qp.accepted).length;
+    }
 
-	enableSubmitControls(enable: boolean) {
-		let elem = document.getElementById('submit_controls') as HTMLDivElement;
+    getTotalScore(question_id?: number) {
+        var total = 0;
 
-		if (enable) {
-			elem.style.pointerEvents = 'initial';
-			elem.style.opacity = '1';
-		} else {
-			elem.style.pointerEvents = 'none';
-			elem.style.opacity = '0.5';
-		}
-	}
+        this.questionsProgress.forEach((qp) => {
+            if (question_id && qp.question_id !== question_id) {
+                return;
+            }
 
-	initEditor() {
-		this.editor = ace.edit('editor');
-		ace.config.set('basePath', 'assets/');
-		/**
-		 * twilight
-		 * monokai
-		 * terminal
-		 */
-		this.editor.setTheme('ace/theme/twilight');
-		this.editor.session.setMode('ace/mode/c_cpp');
-	}
+            total += qp.total;
+        });
+        return total;
+    }
+
+    redirectToGitHubOAuth() {
+        window.open(`${environment.apiUrl}/oauth/github`);
+    }
+
+    postSolution(samples = false) {
+        this.clearOutput();
+        this.bottomSection = true;
+
+        if (this.questionSelected == -1) {
+            this.solutionOutput.output = 'No question selected';
+            return;
+        }
+        if (!this.codeWritten) {
+            this.solutionOutput.output = 'Empty solution';
+            return;
+        }
+
+        this.solutionOutput.output = '';
+        this.judgeInProgress = true;
+
+        this.loading = true;
+        this.enableSubmitControls(false);
+        this.subscriptions.push(
+            this.competitionsService
+                .judgeSolution(
+                    {
+                        for: {
+                            competition_id: this.c_id,
+                            question_id:
+                                this.competition.questions![
+                                    this.questionSelected
+                                ].id,
+                        },
+                        solution: {
+                            lang: this.languageSelected,
+                            code: this.codeWritten,
+                        },
+                    },
+                    samples
+                )
+                .subscribe({
+                    next: (res) => {
+                        this.loading = false;
+                        this.judgeInProgress = false;
+                        this.enableSubmitControls(true);
+
+                        if (res.status == resCode.success) {
+                            this.solutionOutput = res.body as ExecutionInfo;
+                        } else {
+                            this.solutionOutput.output = res.statusText;
+                        }
+                    },
+
+                    error: (err) => {
+                        this.loading = false;
+                        this.judgeInProgress = false;
+
+                        this.enableSubmitControls(true);
+                        this.solutionOutput = err.statusText;
+                    },
+                })
+        );
+    }
+
+    fetchLastSubmission() {
+        this.fetchSubmissionMsg = '';
+        this.loading = true;
+        this.subscriptions.push(
+            this.competitionsService
+                .getLastSubmission({
+                    competition_id: this.competition.id,
+                    question_id: this.questionSelectedInfo.id,
+                    lang: this.languageSelected,
+                })
+                .subscribe({
+                    next: (res) => {
+                        this.codeWritten = res.body?.data ?? '';
+                        this.loading = false;
+                    },
+                    error: (err) => {
+                        console.log(err);
+                        this.loading = false;
+                        this.fetchSubmissionMsg =
+                            '* Not found any .' +
+                            this.languageSelected +
+                            ' submission';
+                    },
+                })
+        );
+    }
+
+    fetchData() {
+        this.subscriptions.push(
+            this.competitionsService
+                .getQuestions({ competition_id: this.c_id })
+                .subscribe({
+                    next: (res) => {
+                        this.competition = res.body as CompetitionInfo;
+                        this.competitionsService.parseCompetitionTypes(
+                            this.competition
+                        );
+
+                        if (!this.competition.scheduled_end_at) {
+                            clearInterval(this.timeInterval);
+                        }
+
+                        if (
+                            this.competition.scheduled_at &&
+                            this.competition.scheduled_at.getTime() > Date.now()
+                        ) {
+                            alert('Competition has not started yet');
+                            this.router.navigate(['/compete']);
+                        }
+
+                        if (
+                            this.competition.scheduled_end_at &&
+                            new Date() > this.competition.scheduled_end_at
+                        ) {
+                            this.hasEnded = true;
+                        }
+
+                        if (this.competition.scheduled_end_at !== null) {
+                            this.timeInterval = setInterval(() => {
+                                let seconds =
+                                    (this.competition.scheduled_end_at!.getTime() -
+                                        Date.now()) /
+                                    1000;
+                                if (seconds < 0) {
+                                    this.timeRemaining = 'Closed';
+                                    clearInterval(this.timeInterval);
+                                    return;
+                                }
+                                this.timeRemaining = prettyDuration(seconds);
+                            }, 1000);
+                        } else {
+                            this.timeRemaining = 'Unlimited';
+                        }
+
+                        if (this.competition.questions) {
+                            this.selectQuestion(0);
+                        }
+                    },
+                    error: (err) => {
+                        if (err.status == resCode.notFound) {
+                            this.router.navigate(['/404']);
+                        }
+                    },
+                }),
+            this.scoresDataService
+                .getProgress({ comp_id: this.c_id })
+                .subscribe({
+                    next: (res) => {
+                        this.questionsProgress = res.body || [];
+                    },
+                })
+        );
+    }
+
+    selectQuestion(index: number) {
+        this.questionSelected = index;
+        this.questionSelectedInfo = this.competition.questions![index];
+
+        this.lastEditorContent();
+    }
+
+    lastEditorContent(save?: boolean) {
+        const storageKey = `code-c${this.questionSelectedInfo.competition_id}-q${this.questionSelectedInfo.id}`;
+
+        if (save) {
+            localStorage.setItem(storageKey, this.codeWritten);
+        } else {
+            const lastContent = localStorage.getItem(storageKey);
+
+            if (lastContent) {
+                this.codeWritten = lastContent;
+            }
+        }
+    }
+
+    toggleLayout() {
+        this.hrlayout = !this.hrlayout;
+    }
+
+    getQuestionStatement(questionInfo: QuestionInfo) {
+        var final = `$\\textbf{Statement}$\n\n` + questionInfo.statement || '';
+
+        if (questionInfo.sample_cases) {
+            final +=
+                `\n\n$\\textbf{Sample Cases}$\n\n` + questionInfo.sample_cases;
+        }
+
+        if (questionInfo.sample_sols) {
+            final +=
+                `\n\n$\\textbf{Sample Output}$\n\n` + questionInfo.sample_sols;
+        }
+
+        return final;
+    }
+
+    enableSubmitControls(enable: boolean) {
+        let elem = document.getElementById('submit_controls') as HTMLDivElement;
+
+        if (enable) {
+            elem.style.pointerEvents = 'initial';
+            elem.style.opacity = '1';
+        } else {
+            elem.style.pointerEvents = 'none';
+            elem.style.opacity = '0.5';
+        }
+    }
 }

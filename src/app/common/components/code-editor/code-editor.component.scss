@@ -1,0 +1,39 @@
+@use "../../../../assets/colors";
+@use "../../../../assets/fonts";
+@use "../../../../assets/mixins" as *;
+
+:host {
+    .hunter-conf {
+        width: calc(100% - 42px);
+        background-color: colors.$text_black;
+        border-radius: 24px 24px 0 0;
+        overflow: hidden;
+        height: 42px;
+        padding-left: 42px;
+
+        #load_template_btn {
+            height: 1.8rem;
+            padding-inline: 8px;
+            color: white;
+            background-color: colors.$text_black;
+            cursor: pointer;
+        }
+
+        #load_template_btn:hover {
+            background-color: #494949;
+        }
+
+        #load_template_btn,
+        drop-down-list {
+            border-radius: 6px;
+            overflow: hidden;
+        }
+    }
+
+    .editor-instance {
+        height: 752px;
+        font-size: 1rem;
+        border-radius: 0 0 24px 24px;
+        margin-bottom: 24px;
+    }
+}

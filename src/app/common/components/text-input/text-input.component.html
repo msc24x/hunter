@@ -1,4 +1,3 @@
-<div id="text_input_body">
-    {{title}} <input [id]="title" type="text" (keyup)="emitChange()">
-    <!--div id="trunc_title_btn" (click)="truncateInput()">&#10006;</div-->
-  </div>
+<div>{{ title }}</div>
+<input [id]="title" type="text" (keyup)="emitChange()" />
+<!--div id="trunc_title_btn" (click)="truncateInput()">&#10006;</div-->

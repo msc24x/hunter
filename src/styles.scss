@@ -1,85 +1,163 @@
 @use "./assets/colors";
 @use "./assets/fonts";
+@use "./assets/mixins" as *;
 
 /*160deg*/
 
-html{
-  scroll-behavior: smooth;
-
+html {
+    overflow-y: scroll;
 }
 
+.hidden {
+    display: none;
+}
 
-body{
-  background-color: colors.$text_white;
-  // background: linear-gradient(165deg, colors.$text_white,colors.$purple_high);
-  // background-repeat: no-repeat;
-  // background-attachment: fixed;
-  margin : 0px;
-  max-width: 1440px;
-  padding-inline: 2%;
-  margin-inline: auto;
+.no-click {
+    &:active {
+        pointer-events: none;
+    }
+}
+
+.disabled {
+    cursor: not-allowed !important;
+    opacity: 0.7;
+}
+
+html {
+    font-weight: 200;
+}
+
+a {
+    text-decoration: none;
+}
+
+.table_heading {
+    // pointer-events: none;
+}
+
+.hsection {
+    background-color: whitesmoke;
+    border-radius: 24px;
+    padding: 10px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+body {
+    background-color: colors.$text_white;
+    // background: linear-gradient(165deg, colors.$text_white,colors.$purple_high);
+    // background-repeat: no-repeat;
+    // background-attachment: fixed;
+    margin: 0px;
+    max-width: 1720px;
+    padding-inline: 2%;
+    margin-inline: auto;
+    font-family: appFont;
+    // background: linear-gradient(45deg, rgb(214, 214, 214), rgb(224, 224, 224));
+    // background-attachment: fixed;
 }
 
 .largeButton {
-  font-family: appFont;
-  padding: 0.8rem;
-  padding-inline: 1.6rem;
-  color: colors.$text_black;
-  font-size: 1rem;
-  background-color: white;
-  border-radius: 1rem;
-  cursor: pointer;
-  
-  &:not(:hover){
-    transition: 300ms;
-  }
+    padding: 0.8rem;
+    padding-inline: 1.6rem;
+    color: colors.$text_black;
+    font-size: 1rem;
+    background-color: white;
+    border-radius: 1rem;
+    cursor: pointer;
 
-  &:hover{
-    transform: scale(1.07);
-    background-color: colors.$text_black;
-    font-weight: bold;
-    color: white;
-    transition: 300ms;
-  }
+    &:not(:hover) {
+        transition: 300ms;
+    }
+
+    &:hover {
+        transform: scale(1.07);
+        background-color: colors.$text_black;
+        font-weight: bold;
+        color: white;
+        transition: 300ms;
+    }
 }
 
 .flex {
-  display: flex;
+    display: flex;
 
-  &-row{
-    @extend .flex;
-    flex-direction: row;
-  }
+    &-row {
+        @extend .flex;
+        flex-direction: row;
+    }
 
-  &-col{
-    @extend .flex;
-    flex-direction: column;
-  }
+    &-col {
+        @extend .flex;
+        flex-direction: column;
+    }
 }
 
-.justify{
-  &-center{
-    justify-content: center;
-  }
-  &-sb{
-    justify-content: space-between;
-  }
-}
-
-.align{
-  &-center{
+.row {
+    display: flex;
     align-items: center;
-  }
-  &-stretch{
-    align-items: stretch;
-  }
+    flex-wrap: wrap;
 }
 
-.wrap{
-  flex-wrap: wrap;
-
-  &-rev{
-    flex-wrap: wrap-reverse;
-  }
+.justify {
+    &-center {
+        justify-content: center;
+    }
+    &-sb {
+        justify-content: space-between;
+    }
 }
 
+.align {
+    &-center {
+        align-items: center;
+    }
+    &-stretch {
+        align-items: stretch;
+    }
+}
+
+.wrap {
+    flex-wrap: wrap;
+
+    &-rev {
+        flex-wrap: wrap-reverse;
+    }
+}
+
+.btable {
+    overflow: scroll;
+    max-height: 512px;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.1rem;
+    background-color: whitesmoke;
+    padding: 16px;
+    border-radius: 1rem;
+    margin: 4px;
+
+    @include sweetBorder();
+
+    .table_heading {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    div {
+        display: flex;
+        justify-content: start;
+
+        div {
+            text-align: center;
+            flex-basis: 33%;
+            padding: 0.3rem;
+        }
+    }
+
+    & > div:not(.table_heading):hover {
+        border-radius: 0.3rem;
+        background-color: colors.$text_white;
+    }
+}

@@ -1,4 +1,16 @@
-<div id="card" [ngClass]="{ 'default-type' : type == 'default', 'red-type' : type == 'red' }"> 
-	<i> <ng-content></ng-content> </i> 
-	<b id="close_tip_btn" *ngIf="!persist" (click)="hideSelf($event); $event.stopPropagation()">&#10006;</b>
+<div
+    id="card"
+    [ngClass]="{
+        'default-type': type == 'default',
+        'red-type': type == 'red',
+        'persist': persist
+    }"
+>
+    <i> <ng-content></ng-content> </i>
+    <b
+        id="close_tip_btn"
+        *ngIf="!persist"
+        (click)="hideSelf($event); $event.stopPropagation()"
+        >&#10006;</b
+    >
 </div>

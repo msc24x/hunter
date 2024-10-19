@@ -1,51 +1,70 @@
 <app-loading *ngIf="loading"></app-loading>
-<app-info-card (click)="href('https://github.com/msc24x/hunter/issues/4')" type="red" [persist]="true">Notice: We are under maintenance mode, since execution services are down and need a complete revamp! Stay tuned, and we will be back even stronger. Click here to follow on GitHub issues 🛠️</app-info-card>
+<!-- <app-info-card
+    (click)="href('https://github.com/msc24x/hunter/issues/4')"
+    type="red"
+    [persist]="true"
+    >Notice: We are under maintenance mode, since execution services are down
+    and need a complete revamp! Stay tuned, and we will be back even stronger.
+    Click here to follow on GitHub issues 🛠️</app-info-card
+> -->
 
 <div class="appBar">
-  <div id="app_title">
-    <span id = "app_title_full" routerLink="/home">{{app_title}}</span>
-    <div *ngIf="!isAuthenticated && showRegisterBtn" id = "register_btn" (click)="redirectToGitHubOAuth()">Sign In</div>
-    <div *ngIf="isAuthenticated" id= "user_name" routerLink="/editor/workbench" >{{user.name || user.email}}</div>
-  </div>
-  <a id="navBarBtn" (click)="toggleNavBar()">Menu
-    <div id="navBarCompact">
-      <ul>
-        <li routerLink="/home">
-          HOME
-        </li>
-        <li routerLink="/compete">
-          COMPETITIONS
-        </li>
-        <li *ngIf="isAuthenticated" routerLink="/editor/workbench">
-          EDITOR
-        </li>
-        <li routerLink="/about">
-          ABOUT
-        </li>
-        <li >
-          <a *ngIf="isAuthenticated" id = "logout_btn" (click)="sendLogoutRequest()">Sign Out</a>
-        </li>
-      </ul>
+    <div id="app_title">
+        <span id="app_title_full" routerLink="/home">{{ app_title }}</span>
+        <div
+            *ngIf="!isAuthenticated && showRegisterBtn"
+            id="register_btn"
+            (click)="redirectToGitHubOAuth()"
+        >
+            Sign In
+        </div>
+        <a
+            *ngIf="isAuthenticated"
+            id="user_name"
+            routerLink="/editor/workbench"
+            matTooltip="Configure your account"
+        >
+            <fa-icon [icon]="userIcon"></fa-icon>
+            &nbsp;
+            {{ user.name || user.email }}
+        </a>
     </div>
-  </a>
+    <a id="navBarBtn" (click)="toggleNavBar()">
+        <!-- <fa-icon [icon]="exploreIcon" size="2xl"></fa-icon> -->
+        Explore
+        <div id="navBarCompact">
+            <ul>
+                <a routerLink="/home">HOME</a>
+                <a routerLink="/compete">COMPETITIONS</a>
+                <a *ngIf="isAuthenticated" routerLink="/editor/workbench">
+                    EDITOR
+                </a>
+                <a routerLink="/about">ABOUT</a>
+                <a
+                    *ngIf="isAuthenticated"
+                    id="logout_btn"
+                    (click)="sendLogoutRequest()"
+                    >Sign Out</a
+                >
+            </ul>
+        </div>
+    </a>
 
-  <div id = "navBar">
-    <ul>
-      <li routerLink="/home">
-        HOME
-      </li>
-      <li routerLink="/compete">
-        COMPETITIONS
-      </li>
-      <li *ngIf="isAuthenticated" routerLink="/editor/workbench">
-        EDITOR
-      </li>
-      <li routerLink="/about">
-        ABOUT
-      </li>
-      <li *ngIf="isAuthenticated">
-        <a id = "logout_btn" (click)="sendLogoutRequest()">Sign Out</a>
-      </li>
-    </ul>
-  </div>
+    <div id="navBar">
+        <ul>
+            <a routerLink="/home">HOME</a>
+            <a routerLink="/compete">COMPETITIONS</a>
+            <a *ngIf="isAuthenticated" routerLink="/editor/workbench">
+                EDITOR
+            </a>
+            <a routerLink="/about">ABOUT</a>
+            <a
+                *ngIf="isAuthenticated"
+                id="logout_btn"
+                (click)="sendLogoutRequest()"
+            >
+                Sign Out
+            </a>
+        </ul>
+    </div>
 </div>

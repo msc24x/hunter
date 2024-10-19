@@ -1,72 +1,108 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {
+    faCheckDouble,
+    faCircleCheck,
+    faLock,
+} from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
+import { isLive, prettyDuration } from 'src/app/utils/utils';
 import { CompetitionInfo } from 'src/environments/environment';
 
 @Component({
-	selector: 'competitions-list',
-	templateUrl: './competitions-list.component.html',
-	styleUrls: ['./competitions-list.component.scss'],
+    selector: 'competitions-list',
+    templateUrl: './competitions-list.component.html',
+    styleUrls: ['./competitions-list.component.scss'],
 })
 export class CompetitionsListComponent implements OnInit {
-	loading = false;
+    loading = false;
+    officialIcon = faCircleCheck;
+    privateIcon = faLock;
 
-	@Input()
-	competitionsList: Array<CompetitionInfo> | null = null;
+    @Input()
+    competitionsList: Array<CompetitionInfo> | null = null;
 
-	@Input()
-	host_user_id = '';
+    @Input()
+    host_user_id = '';
 
-	@Input()
-	heading: string = 'Competitions';
+    @Input()
+    heading: string = 'Competitions';
 
-	@Input()
-	public: boolean = true;
+    @Input()
+    includeSelf: boolean = false;
 
-	@Input()
-	route: string = 'editor';
+    @Input()
+    route: string = 'editor';
 
-	title = '';
-	liveStatus = 'all';
-	orderBy: 'any' | 'latest' | 'oldest' = 'latest';
+    query = '';
+    liveStatus = 'all';
+    orderBy: '' | 'asc' | 'desc' = 'desc';
+    debounceTimeout?: NodeJS.Timeout;
+    timeLeftFlag = false;
 
-	orderByCode = { any: 0, latest: -1, oldest: 1 };
+    constructor(private competitionsDataService: CompetitionsDataService) {
+        setInterval(() => {
+            this.timeLeftFlag = !this.timeLeftFlag;
+        }, 30 * 1000);
+    }
 
-	constructor(private competitionsDataService: CompetitionsDataService) {}
+    isAfterNow(date: Date | null) {
+        if (date === null) {
+            return true;
+        }
+        return date.getTime() < Date.now();
+    }
 
-	isAfterNow(date: string) {
-		return Date.parse(date) < Date.now();
-	}
+    isClosedNow(com: CompetitionInfo) {
+        if (com.scheduled_end_at === null) {
+            return false;
+        }
+        return this.isAfterNow(com.scheduled_end_at);
+    }
 
-	
+    timeLeft(targetTime: Date, f: boolean) {
+        if (targetTime === null) {
+            return 'unlimited';
+        }
 
-	ngOnInit(): void {}
+        const seconds = Math.ceil((targetTime.getTime() - Date.now()) / 1000);
 
-	updateLiveStatus(event: Event) {
-		let select = event.target as HTMLSelectElement;
-		this.liveStatus = select.value;
-		this.updateList();
-	}
+        return prettyDuration(seconds, false);
+    }
 
-	updateOrderBy(event: Event) {
-		let select = event.target as HTMLSelectElement;
-		this.orderBy = select.value as 'any' | 'latest' | 'oldest';
-		this.updateList();
-	}
+    ngOnInit(): void {}
 
-	updateList() {
-		this.loading = true;
+    updateLiveStatus(event: Event) {
+        let select = event.target as HTMLSelectElement;
+        this.liveStatus = select.value;
+        this.updateList();
+    }
 
-		this.competitionsDataService
-			.getPublicCompetitions({
-				title: this.title,
-				public: this.public,
-				dateOrder: this.orderByCode[this.orderBy],
-				liveStatus: this.liveStatus,
-				host_user_id: this.host_user_id + '',
-			})
-			.subscribe((res) => {
-				this.competitionsList = res.body;
-				this.loading = false;
-			});
-	}
+    updateOrderBy(event: Event) {
+        let select = event.target as HTMLSelectElement;
+        this.orderBy = select.value as '' | 'asc' | 'desc';
+        this.updateList();
+    }
+
+    _updateList() {
+        this.competitionsDataService
+            .getCompetitions({
+                query: this.query,
+                includeSelf: this.includeSelf,
+                orderBy: this.orderBy,
+                liveStatus: this.liveStatus,
+            })
+            .then((res) => {
+                this.competitionsList = res;
+                this.loading = false;
+            });
+    }
+
+    updateList() {
+        this.loading = true;
+
+        clearTimeout(this.debounceTimeout);
+        this.debounceTimeout = setTimeout(() => {
+            this._updateList();
+        }, 300);
+    }
 }

@@ -1,0 +1,10 @@
+<div
+    class="green-part"
+    [style]="{ 'flex-basis': green_ratio + '%' }"
+    [matTooltip]="green_number + ' ' + green_label"
+></div>
+<div
+    class="red-part"
+    [style]="{ 'flex-basis': 100 - green_ratio + '%' }"
+    [matTooltip]="red_number + ' ' + red_label"
+></div>

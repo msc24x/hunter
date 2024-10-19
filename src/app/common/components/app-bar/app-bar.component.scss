@@ -2,205 +2,204 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-div.appBar{
-  padding-block: 24px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  justify-items: center;
-  align-items: center;
-  margin-bottom: 7rem;
-
-  #logout_btn{
-    background-color: rgb(255, 244, 244);
-    color: darkred;
-    border-radius: 12px;
-    padding-block: 4px;
-    padding-inline: 16px;
-    text-align: end;
-    cursor: pointer;
-  }
-
-  #app_title{
-    color: colors.$text_black;
-    font-family: appFont;
-    font-weight: bold;
-    font-size: 3em;
-    margin-left: 2%;
+div.appBar {
+    padding-block: 24px;
+    width: 100%;
     display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-items: center;
     align-items: center;
+    margin-bottom: 2rem;
 
-    #app_title_full{
-      cursor: pointer;
-      font-size: 2.5rem;
-      &:hover{
-        transform: translateX(-4px) rotateZ(-2deg);
-        transition: 400ms;
-      }
-      &:not(:hover){
-        transition: 400ms;
-      }
-    }
-
-    @media only screen and (max-width : 686px) and (min-width : 420px) {
-      #app_title_full{
-        display: initial;
-        font-size: 1.5rem;
-      }
-      #user_name{
-        display: none;
-      }
-    }
-  
-    #user_email, #user_name, #register_btn{
-      font-size: 0.8rem;
-      background-color: colors.$text_black;
-      color: colors.$text_white;
-      border-radius: 12px;
-      padding-block: 4px;
-      padding-inline: 16px;
-      margin-left: 12px;
-      cursor: pointer;
-    }
-
-  }
-  @media only screen and (max-width : 1400px) {
-    #navBar{
-      display: none;
-    }
-  }
-  @media only screen and (min-width : 1400px) {
-    #navBarBtn{
-      visibility: hidden;
-    }
-  }
-
-  @media only screen and (max-width : 430px){
-    #app_title_full{
-      display: initial;
-      font-size: 1.7rem;
-    }
-    #user_name, #user_email{
-      display: none;
-    }
-
-    #logout_btn{
-      font-size: 0.7rem !important;
-    }
-  }
-
-  #navBarBtn{
-    display: flex;
-    flex-direction: column;
-    justify-content: right;
-    align-items: flex-end;
-    font-family: appFont;
-    font-size: 0.8rem;
-    font-weight: bolder;
-    background-color: white;
-    padding : 6px;
-    padding-inline: 12px;
-    border-radius: 8px;
-    margin-right: 12px;
-    cursor: pointer;
-
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Standard */
-  }
-  #navBarBtn:hover{
-    background-color: white;
-  }
-
-  #navBarCompact{
-    font-family: appFont;
-    font-weight: bold;
-    margin-top: 14px;
-    position: absolute;
-    display: none;
-    font-size: 0.9rem;
-
-    ul{
-      padding : 5px;
-      list-style: none;
-      backdrop-filter: blur(16px);
-      border-radius: 16px;
-      background-color: rgba(255, 255, 255, 0.411);
-      box-shadow: 0 0 100px 0px rgba(0, 0, 0, 0.247);
-
-      li{
-        text-align: left;
-        padding : 8px;
-        padding-top: 10px;
-        border-radius: 24px;
-        margin: 5px;
-        min-width: 120px;
-        border : solid transparent;
-        border-width: 1px;
-        //box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.219);
+    #logout_btn {
+        background-color: rgb(255, 244, 244);
+        color: darkred;
+        border-radius: 12px;
+        padding-block: 4px;
+        padding-inline: 16px;
+        min-width: 4rem !important;
         cursor: pointer;
-        //backdrop-filter: blur(5px);
-      }
-      li:hover{
-        transform: translateX(5px);
-        transition: 400ms;
-      }
-      li:not(:hover){
-        transition: 400ms;
-      }
-      @keyframes rightSlide {
-        100%{
-          transform: translateX(3px);
-        }
-      }
-    }
-  }
 
-  #navBar{
-    ul{
-      color: colors.$text_black;
-      font-family: appFont;
-      font-weight: normal;
-      display: flex;
-      flex-wrap: wrap;
-      list-style-type: none;
-      li{
-        min-width : 140px;
-        text-align: center;
+        @include sweetBorder();
+    }
+
+    #app_title {
+        color: colors.$text_black;
+        font-weight: bold;
+        font-size: 3em;
+        display: flex;
+        align-items: center;
+
+        #app_title_full {
+            cursor: pointer;
+            font-size: 2.5rem;
+            &:hover {
+                transform: translateX(-4px) rotateZ(-2deg);
+                transition: 400ms;
+            }
+            &:not(:hover) {
+                transition: 400ms;
+            }
+        }
+
+        @media only screen and (max-width: 686px) and (min-width: 420px) {
+            #app_title_full {
+                display: initial;
+                font-size: 1.5rem;
+            }
+            #user_name {
+                display: none;
+            }
+        }
+
+        #user_email,
+        #user_name,
+        #register_btn {
+            font-size: 0.8rem;
+            background-color: colors.$text_black;
+            color: colors.$text_white;
+            border-radius: 12px;
+            padding-block: 6px;
+            padding-inline: 16px;
+            margin-left: 12px;
+            cursor: pointer;
+        }
+    }
+    @media only screen and (max-width: 1400px) {
+        #navBar {
+            display: none;
+        }
+    }
+    @media only screen and (min-width: 1400px) {
+        #navBarBtn {
+            visibility: hidden;
+        }
+    }
+
+    @media only screen and (max-width: 430px) {
+        #app_title_full {
+            display: initial;
+            font-size: 1.7rem;
+        }
+        #user_name,
+        #user_email {
+            display: none;
+        }
+
+        #logout_btn {
+            font-size: 0.7rem !important;
+        }
+    }
+
+    #navBarBtn {
+        display: flex;
+        flex-direction: column;
+        justify-content: right;
+        align-items: flex-end;
+
+        font-size: 0.8rem;
         font-weight: bolder;
-        color : rgb(71, 71, 71);
-        cursor :  pointer;
-        padding-top: 4px;
-        padding-bottom: 4px;
-      }
-      li:hover{
-        animation: forwards;
-        animation-name: burn;
-        animation-duration: 0.25s;
-        animation-iteration-count: 1;
-      }
+        background-color: white;
+        padding: 6px;
+        padding-inline: 12px;
+        border-radius: 8px;
+        margin-right: 12px;
+        cursor: pointer;
 
-
-      @keyframes unburn {
-        0%{
-          color: black;
-        }
-        100%{
-          color: rgb(71, 71, 71);
-          transform: translateY(-1px);
-        }
-      }
-
-      @keyframes burn {
-        100%{
-          color: black;
-          //transform: translateY(4px);
-        }
-      }
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
+    }
+    #navBarBtn:hover {
+        background-color: white;
     }
 
-  }
-}
+    #navBarCompact {
+        font-weight: bold;
+        margin-top: 14px;
+        position: absolute;
+        display: none;
+        font-size: 0.9rem;
 
+        ul {
+            padding: 5px;
+            list-style: none;
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            background-color: rgba(255, 255, 255, 0.411);
+            box-shadow: 0 0 100px 0px rgba(0, 0, 0, 0.247);
+
+            a {
+                display: block;
+                color: colors.$text_black;
+                text-align: left;
+                padding: 8px;
+                padding-top: 10px;
+                border-radius: 24px;
+                margin: 5px;
+                min-width: 120px;
+                border: solid transparent;
+                border-width: 1px;
+                //box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.219);
+                cursor: pointer;
+                //backdrop-filter: blur(5px);
+            }
+            a:hover {
+                transform: translateX(5px);
+                transition: 400ms;
+            }
+            a:not(:hover) {
+                transition: 400ms;
+            }
+            @keyframes rightSlide {
+                100% {
+                    transform: translateX(3px);
+                }
+            }
+        }
+    }
+
+    #navBar {
+        ul {
+            color: colors.$text_black;
+
+            font-weight: normal;
+            display: flex;
+            flex-wrap: wrap;
+            list-style-type: none;
+            a {
+                min-width: 140px;
+                text-align: center;
+                font-weight: bolder;
+                color: rgb(71, 71, 71);
+                cursor: pointer;
+                padding-block: 6px;
+            }
+            a:hover {
+                animation: forwards;
+                animation-name: burn;
+                animation-duration: 0.25s;
+                animation-iteration-count: 1;
+            }
+
+            @keyframes unburn {
+                0% {
+                    color: black;
+                }
+                100% {
+                    color: rgb(71, 71, 71);
+                    transform: translateY(-1px);
+                }
+            }
+
+            @keyframes burn {
+                100% {
+                    color: black;
+                    //transform: translateY(4px);
+                }
+            }
+        }
+    }
+}

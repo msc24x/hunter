@@ -2,54 +2,172 @@ import express from 'express';
 import { resCode } from '../../config/settings';
 import models from '../../database/containers/models';
 import { Util } from '../../util/util';
-import { authenticate } from '../auth';
+import { authenticate, loginRequired } from '../auth';
+import { UserInfo } from '../../config/types';
+import Container from 'typedi';
+import { DatabaseProvider } from '../../services/databaseProvider';
 
-var router = express.Router();
+const router = express.Router();
 
-router.get('/result/c/:id', (req, res) => {
-	if (req.params.id == null) {
-		Util.sendResponse(res, resCode.badRequest, 'id not specified');
-		return;
-	}
+const client = Container.get(DatabaseProvider).client();
 
-	models.results.getCompetitionScores(req.params.id, (rows, err) => {
-		if (err) {
-			console.log(err);
-			Util.sendResponse(res, resCode.serverError);
-			return;
-		}
+router.get('/competitions/:id/results', authenticate, (req, res) => {
+    if (req.params.id == null) {
+        Util.sendResponse(res, resCode.badRequest, 'id not specified');
+        return;
+    }
 
-		Util.sendResponseJson(res, resCode.success, rows);
-	});
+    models.results.getCompetitionScores(
+        (rows, err) => {
+            if (err) {
+                Util.sendResponse(res, resCode.serverError, err.message);
+                return;
+            }
+
+            Util.sendResponseJson(res, resCode.success, rows);
+        },
+        req.params.id,
+        res.locals.user,
+        parseInt(req.query.after?.toString() || '0'),
+        parseInt(req.query.question?.toString() || 'null')
+    );
 });
 
-router.get('/result', (req, res) => {
-	let user_id = req.query.user_id;
-	let competition_id = req.query.competition_id;
-	let question_id = req.query.question_id;
+router.get(
+    '/competitions/:id/progress',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const user: UserInfo = res.locals.user;
+        const competition_id = req.params.id;
 
-	if (!user_id && !competition_id && !question_id) {
-		Util.sendResponse(res, resCode.badRequest);
-		return;
-	}
+        client.results
+            .groupBy({
+                by: ['question_id'],
+                _sum: {
+                    result: true,
+                },
+                _max: {
+                    accepted: true,
+                },
+                where: {
+                    question: {
+                        competition_id: parseInt(competition_id),
+                        competitions: {
+                            deleted_at: null,
+                        },
+                        deleted_at: null,
+                    },
+                    user_id: user.id,
+                },
+            })
+            .then((results) => {
+                const new_res = results.map((result) => {
+                    return {
+                        question_id: result.question_id,
+                        total: result._sum.result,
+                        accepted: result._max.accepted,
+                    };
+                });
+                Util.sendResponseJson(res, resCode.success, new_res);
+            })
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
+    }
+);
 
-	authenticate(req, res, (req, res, user) => {
-		models.results.findAll(
-			{
-				user_id: user_id,
-				competition_id: competition_id,
-				question_id: question_id,
-			},
-			(rows, err) => {
-				if (err) {
-					console.log(err);
-					Util.sendResponse(res, resCode.serverError);
-					return;
-				}
-				Util.sendResponseJson(res, resCode.success, rows);
-			}
-		);
-	});
-});
+async function fetchUserSubmissions(
+    user: UserInfo,
+    competition_id: string,
+    question_id: string,
+    after_id?: string
+) {
+    const question_filters = {
+        deleted_at: null,
+        competitions: {
+            deleted_at: null,
+            id: parseInt(competition_id),
+        },
+        id: parseInt(question_id),
+    };
+
+    var cursor_params;
+
+    if (after_id) {
+        cursor_params = {
+            skip: 1,
+            cursor: {
+                id: parseInt(after_id.toString()),
+            },
+        };
+    }
+
+    const results = await client.results.findMany({
+        where: {
+            user_id: user.id,
+            question: question_filters,
+        },
+        orderBy: {
+            created_at: 'desc',
+        },
+        take: 10,
+        ...(after_id && cursor_params),
+    });
+
+    const accepted_count = await client.results.count({
+        where: {
+            user_id: user.id,
+            question: question_filters,
+            accepted: true,
+        },
+    });
+
+    const rejected_count = await client.results.count({
+        where: {
+            user_id: user.id,
+            question: question_filters,
+            accepted: false,
+        },
+    });
+
+    const final_res = {
+        results: results,
+        accepted_count: accepted_count,
+        rejected_count: rejected_count,
+    };
+
+    return final_res;
+}
+
+router.get(
+    '/competitions/:id/results/:ques_id',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const user: UserInfo = res.locals.user;
+        const competition_id = req.params.id;
+        const question_id = req.params.ques_id;
+        const after_id = req.query.after;
+
+        if (!competition_id && !question_id) {
+            Util.sendResponse(res, resCode.badRequest);
+            return;
+        }
+
+        fetchUserSubmissions(
+            user,
+            competition_id,
+            question_id,
+            after_id?.toString()
+        )
+            .then((result) => {
+                Util.sendResponseJson(res, resCode.success, result);
+            })
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
+    }
+);
 
 module.exports = router;

@@ -2,376 +2,520 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-popup{
-  display: none;
+popup {
+    display: none;
 }
 
-.red{
-  color: darkred;
+.red {
+    color: darkred;
 }
 
-.appTextInput{
-  @include appTextArea;
+.appTextInput {
+    @include appTextArea;
 }
 
-#input_competition_code{
-  border-width: 0px;
-  font-family: appFont;
-  width: 84px;
-  font-size: 1.1rem;
-  border-radius: 24px;
-  padding : 8px;
-  margin: 8px;
-  background-color: whitesmoke;
-}
+.c-insights {
+    max-width: 280px;
 
-#delete_competition_btn_popup{
-  font-family: appFont;
-  font-size: 1.2rem;
-  padding : 8px;
-  padding-inline: 16px;
-  border-radius: 24px;
-  width: fit-content;
-  margin : 8px;
-  color: white;
-  background-color: darkred;
-}
+    .participant-link {
+        font-family: monospace;
+        background-color: papayawhip;
+        display: flex;
+        border-radius: 16px;
+        width: calc(100% - 32px);
+        justify-content: space-between;
+        @include sweetBorder();
 
-#created_on{
-  background-color: whitesmoke;
-  font-family: appFont;
-  font-size: 0.8rem;
-  width: fit-content;
-  padding : 10px;
-  margin-inline: auto;
-  border-radius: 0px 0px 24px 24px ;
-}
+        .link-text {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding-right: 6px;
+        }
 
-#visbility_controller{
-  display: flex;
-  margin-top: 16px;
-  font-family: appFont;
-  cursor: default;
-  border-radius: 24px;
-
-  #id{
-    background-color: white;
-    border-radius: 24px 0px 0px 24px;
-    font-family: appFont;
-    width: fit-content;
-    padding : 10px;
-  }
-
-  #rating{
-    background-color: whitesmoke;
-    font-family: appFont;
-    width: fit-content;
-    padding : 10px;
-  }
-
-  #visibility{
-    background-color: rgb(20, 220, 120);
-    color : rgb(0, 0, 0);
-    border-radius: 0px 24px 24px 0px;
-    font-family: appFont;
-    font-weight: bold;
-    width: 64px;
-    padding : 10px;
-    cursor: pointer;
-    text-align: center;
-    
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Standard */
-  }
-
-
-}
-
-.vertical_flex{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  width: fit-content;
-
-  a{
-    background-color: transparent;
-    color : colors.$text_black;
-    width: fit-content;
-  }
-}
-
-
-.flex{
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.row_flex{
-  font-family: appFont;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-
-#title_label, #desc_label, #duration_label, #schedule_label{
-  font-family: appFont;
-  font-size: 1.2rem;
-  text-align: left;
-  width: 100%;
-  margin-left: 16px;
-  margin-top: 8px;
-  color: colors.$text_black;
-}
-
-#competition_duration, #competition_schedule{
-  @include appTextArea;
-  font-size: 1rem;
-}
-
-
-#text_title{
-  @include appTextArea();
-  width: 246px;
-  margin-top: 4px;
-}
-
-#text_description{
-  @include appTextArea();
-  min-width: 0px;
-  width: 512px;
-  margin-top: 4px;
-}
-
-#sample_test_cases{
-  font-family: appFont;
-  margin-top: 24px;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: space-between;
-
-  .vertical_flex{
-    width: 50%;
-    justify-content: center;
-    align-items: center;
-
-    #sample_cases_label, #sample_sols_label{
-      font-size: 1rem;
+        fa-icon {
+            color: rgb(30, 30, 30);
+        }
     }
 
-    textarea{
-      @include appTextArea;
-      margin:  8px;
-      width: 80%;
+    .insight-details {
+        border-radius: 16px;
+        cursor: pointer;
+        background-color: papayawhip;
+        margin-top: 1rem;
     }
-  }
 }
 
-
-@media only screen and (max-width : 1180px) {
-  #text_description{
-    width: 860px;
-    height: 120px;
-  }
-
-  #text_title{
-    width: 550px;
-    height: 120px;
-  }
-
-}
-
-@media only screen and (max-width : 990px) {
-  #text_description{
-    width: 660px;
-    height: 120px;
-  }
-
-  #text_title{
-    width: 660px;
-    height: 100px;
-  }
-
-}
-
-@media only screen and (max-width : 720px) {
-  #text_description{
-    width: 490px;
-    height: 120px;
-  }
-
-  #text_title{
-    width: 256px;
-    height: 180px;
-  }
-
-}
-
-
-@media only screen and (max-width : 580px) {
-  #text_description{
-    width: 320px;
-    height: 180px;
-  }
-
-  #text_title{
-    width: 320px;
-    height: 120px;
-  }
-
-}
-
-#controls{
-  position: fixed;
-  bottom: 0px;
-  left: 0px;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-  background-color: rgba(245, 245, 245, 0.514);
-  backdrop-filter: blur(8px);
-  padding-block: 8px;
-  z-index: 5;
-
-  button{
-    font-family: appFont;
-    font-weight: bold;
-    color: colors.$text_black;
-    font-size: 1rem;
-    background-color: transparent;
+#input_competition_code {
     border-width: 0px;
-    padding-inline: 16px;
-    min-width: 250px;
+
+    width: 84px;
+    font-size: 1.1rem;
+    border-radius: 24px;
+    padding: 8px;
     margin: 8px;
+    background-color: whitesmoke;
+}
+
+#delete_competition_btn_popup {
+    font-size: 1.2rem;
+    padding: 8px;
+    padding-inline: 16px;
+    border-radius: 24px;
+    width: fit-content;
+    margin: 8px;
+    color: white;
+    background-color: darkred;
+}
+
+#created_at {
+    background-color: whitesmoke;
+
+    font-size: 0.8rem;
+    width: fit-content;
+    padding: 10px;
+    margin-inline: auto;
+    border-radius: 0px 0px 1rem 1rem;
+}
+
+#visbility_controller {
+    display: flex;
+    margin-top: 16px;
+
+    cursor: default;
+    border-radius: 1rem;
+    @include sweetBorder();
+
+    #id {
+        background-color: white;
+        border-radius: 1rem 0px 0px 1rem;
+
+        width: fit-content;
+        padding: 10px;
+    }
+
+    #rating {
+        background-color: whitesmoke;
+
+        width: fit-content;
+        padding: 10px;
+    }
+
+    #visibility {
+        background-color: rgb(20, 220, 120);
+        color: rgb(0, 0, 0);
+        border-radius: 0px 1rem 1rem 0px;
+
+        font-weight: bold;
+        width: 64px;
+        padding: 10px;
+        cursor: pointer;
+        text-align: center;
+
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
+    }
+}
+
+.vertical_flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: fit-content;
+
+    a {
+        background-color: transparent;
+        color: colors.$text_black;
+        width: fit-content;
+    }
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.row_flex {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.label {
+    font-size: 1.1rem;
+    text-align: left;
+    width: 100%;
+    margin-inline: 16px;
+    margin-block: 8px;
+    color: colors.$text_black;
+}
+
+.text-area {
+    @include appTextArea;
+    font-size: 1rem;
+}
+
+#text_title {
+    @include appTextArea();
+    // width: 246px;
+    margin-top: 4px;
+}
+
+#text_description {
+    @include appTextArea();
+    @include hideSrollbar();
+    // width: 512px;
+    width: 100%;
+    margin-top: 4px;
+}
+
+#evaluation-section {
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    flex-basis: 100%;
+
+    .sample-cases-container {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+
+        #sample_cases_label,
+        #sample_sols_label {
+            font-size: 1rem;
+            font-weight: normal;
+        }
+
+        textarea {
+            @include appTextArea;
+            margin: 8px;
+            width: 80%;
+            font-family: monospace;
+            font-size: large;
+            // background-color: white;
+        }
+    }
+
+    .points-container {
+        padding: 1rem;
+    }
+
+    .eval-panel {
+        align-items: stretch;
+
+        .sample-cases-container {
+            width: 100%;
+            display: flex;
+            justify-content: stretch;
+
+            div {
+                flex-grow: 1;
+
+                textarea {
+                    width: calc(100% - 3rem);
+                }
+            }
+        }
+    }
+}
+
+// @media only screen and (max-width: 1180px) {
+//     #text_description {
+//         width: 860px;
+//         height: 120px;
+//     }
+
+//     #text_title {
+//         width: 550px;
+//         height: 120px;
+//     }
+// }
+
+@media only screen and (max-width: 990px) {
+    .title-eval-container {
+        flex-wrap: wrap !important;
+    }
+}
+
+// @media only screen and (max-width: 720px) {
+//     #text_description {
+//         width: 490px;
+//         height: 120px;
+//     }
+
+//     #text_title {
+//         width: 256px;
+//         height: 180px;
+//     }
+// }
+
+// @media only screen and (max-width: 580px) {
+//     #text_description {
+//         width: 320px;
+//         height: 180px;
+//     }
+
+//     #text_title {
+//         width: 320px;
+//         height: 120px;
+//     }
+// }
+
+#controls {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0.3rem;
+    width: calc(100% - 0.6rem);
+    background-color: rgba(193, 193, 193, 0.501);
+    backdrop-filter: blur(0.5rem);
+    padding-block: 8px;
+    z-index: 50;
+    border-radius: 1rem;
+    @include sweetBorder;
+
+    button {
+        color: colors.$text_black;
+        font-size: 1rem;
+        background-color: transparent;
+        border-width: 0px;
+        padding-inline: 16px;
+        min-width: 250px;
+        margin: 8px;
+        cursor: pointer;
+    }
+
+    div {
+        color: gray;
+        min-width: 250px;
+        text-align: center;
+    }
+}
+
+.full-stretch {
+    align-items: stretch;
+    width: 100%;
+    margin-bottom: 56px;
+}
+
+.clabel {
+    margin-top: 16px;
+    font-size: 1.2rem;
+    padding: 4px;
+    width: 100%;
+}
+
+#text_qtitle,
+#text_statement {
+    @include appTextArea;
+    font-size: large;
+    font-weight: normal;
+}
+
+#text_statement,
+#text_statement_preview {
+    width: 100%;
+    width: auto;
+    height: 360px;
+    overflow-y: scroll;
+    font-family: monospace;
+}
+
+#text_statement_preview {
+    @include appTextArea;
+    font-size: 1.05rem !important;
+}
+
+label.file_input {
+    color: colors.$text_black;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem;
     cursor: pointer;
-    //border: solid colors.$text_white;
-    //border-width: 1px;//0px 1px 0px 1px;
-  }
-  button:hover{
-    color: black;
-    font-weight: 550;
-  }
-
-  div{
-    color: gray;
-    min-width: 250px;
+    display: block;
+    margin-block: 1rem;
     text-align: center;
-  }
 
+    @include sweetBorder();
+}
+#toggle_preview_btn:hover {
+    background-color: whitesmoke;
 }
 
-#question_editor{
-  align-items: stretch;
-  width: 100%;
-  margin-bottom: 256px;
+#toggle_preview_btn {
+    @include basicBack;
+    cursor: pointer;
+    margin-block: 1rem;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    gap: 1rem;
+
+    fa-icon {
+        width: 1rem;
+    }
 }
 
-#qtitle_label, #qstatement_label{
-  font-family: appFont;
-  font-weight: normal;
-  margin-top: 16px;
-  font-size: 1.2rem;
-  padding : 4px;
+input.file_input {
+    display: none;
 }
 
-#text_qtitle, #text_statement{
-  @include appTextArea;
+a {
+    border-radius: 24px;
+
+    padding: 8px;
+    padding-inline: 16px;
+    cursor: pointer;
 }
 
-#text_statement_preview{
-  @include appTextArea;
-  height: 344px;
-  font-size: 1.05rem !important;
-  overflow-y: scroll;
+a:hover,
+#toggle_preview_btn:hover {
+    background-color: white;
 }
 
-label.file_input, #toggle_preview_btn{
-  font-family: appFont;
-  font-weight: bold;
-  color: colors.$text_black;
-  background-color: colors.$dim_white;
-  border-radius: 24px;
-  width: fit-content;
-  padding : 12px;
-  margin : 4px;
-  cursor: default;
-}
-label.file_input:hover, #toggle_preview_btn:hover{
-  background-color: colors.$sweet_white;
-}
+#question_points,
+#question_neg_points {
+    border-radius: 1rem;
+    padding: 8px;
+    padding-inline: 16px;
+    border-width: 0px;
+    margin-inline: 0.3rem;
+    font-size: 1.2rem;
+    width: 2.2rem;
+    color: colors.$text_black;
 
-input.file_input{
-  display: none;
+    @include sweetBorder();
 }
 
-a{
-  border-radius: 24px;
-  font-family: appFont;
-  padding : 8px;
-  padding-inline: 16px;
-  cursor: pointer;
+#question_points_lbl,
+#question_id {
+    font-size: 1.2rem;
+    margin: 1rem;
 }
 
-a:hover, #toggle_preview_btn:hover{
-  background-color: white;
+.info_text {
+    text-align: center;
+
+    color: white;
+    font-style: italic;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-#question_points{
-  background-color: whitesmoke;
-  border-radius: 24px;
-  font-family: appFont;
-  padding : 8px;
-  padding-inline: 16px;
-  border-width: 0px;
-  font-size: 1rem;
-  width: 50px;
-  font-family: appFont;
+#log {
+    font-style: italic;
+    color: black;
 }
 
-#question_points_lbl, #question_id{
-  font-family: appFont;
-  font-size: 1.2rem;
+#delete_competition_btn {
+    font-size: 1rem;
+    background-color: #fff0f0;
+    color: darkred;
+    width: fit-content;
+    border: 1px solid darkred;
+    border-radius: 24px;
+    padding: 8px;
+    padding-inline: 16px;
+    margin: 4px;
 }
 
-.info_text{
-  text-align : center;
-  font-family: appFont;
-  color : white;
-  font-style: italic;
-  text-decoration: underline;
-  cursor: pointer;
+#delete_competition_btn:hover {
+    cursor: pointer;
 }
 
-#log{
-  font-family: appFont;
-  font-style: italic;
-  color:black;
+.questions-list {
+    @include blackBack;
+    margin-top: 2rem;
 }
 
-#delete_competition_btn{
-  font-family: appFont;
-  font-size: 1rem;
-  background-color: #fff0f0;
-  color : darkred;
-  width: fit-content;
-  border : 1px solid darkred;
-  border-radius: 24px;
-  padding : 8px;
-  padding-inline: 16px;
-  margin : 4px;
+.editor-first-panel {
+    @include blackBack;
+    gap: 2rem;
+
+    .desc-panel {
+        flex-grow: 1;
+        margin-inline: 16px;
+    }
+
+    .title-panel {
+        flex-grow: 0.5;
+        margin-inline: 16px;
+        .label,
+        .vertical_flex,
+        textarea {
+            width: 100%;
+        }
+    }
 }
 
-#delete_competition_btn:hover{
-  cursor: pointer;
+.editor-second-panel {
+    .title-eval-container {
+        @include blackBack;
+        padding-inline: 2rem;
+        margin-top: 1rem;
+        align-items: stretch;
+        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 5rem;
 
+        .title-container {
+            justify-content: space-between;
+            // max-width: 40%;
+
+            #text_qtitle {
+                width: calc(100% - 2rem);
+            }
+        }
+
+        #evaluation-section {
+            // max-width: 50%;
+        }
+    }
 }
 
-body{
-  margin: 0px;
+.file-uploaders {
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+    gap: 2rem;
+    width: 100%;
+
+    label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    a {
+        padding: 0;
+        margin-inline: 0.3rem;
+    }
+
+    .solution-code-file {
+        #code_file_label {
+            height: 5.5rem;
+            font-size: larger;
+        }
+
+        fa-icon {
+            margin-left: 0.3rem;
+        }
+    }
+
+    .io-files,
+    .solution-code-file {
+        flex-grow: 0.5;
+    }
+}
+
+.marks-section {
 }

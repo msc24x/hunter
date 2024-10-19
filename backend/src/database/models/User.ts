@@ -1,4 +1,4 @@
-import mysql, { MysqlError } from 'mysql';
+import mysql, { QueryError } from 'mysql2';
 import { UserInfo } from '../../config/types';
 import Container, { Inject, Service } from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
@@ -12,7 +12,7 @@ export class User {
 		this.dbConnection = this.dbService.getInstance();
 	}
 
-	add(params: any, callback: (err: MysqlError | null) => void) {
+	add(params: any, callback: (err: QueryError | null) => void) {
 		let query =
 			'insert into users(email, name, password_hash, salt) values (?, ?, ?, ?);';
 		let args = [params.email, '', '', ''];
@@ -34,7 +34,7 @@ export class User {
 		});
 	}
 
-	delete(params: any, callback: (err: MysqlError | null) => void) {
+	delete(params: any, callback: (err: QueryError | null) => void) {
 		let args = [];
 		let query = 'delete from users where ';
 
@@ -56,7 +56,7 @@ export class User {
 
 	update(
 		newUserInfo: UserInfo,
-		callback: (err: mysql.MysqlError | null) => void
+		callback: (err: mysql.QueryError | null) => void
 	) {
 		this.dbConnection.query(
 			` update users set name = ? where id = ? ; `,
@@ -69,9 +69,9 @@ export class User {
 
 	findAll(
 		params: any,
-		callback: (err: MysqlError | null, rows: any) => void
+		callback: (err: QueryError | null, rows: any) => void
 	) {
-		let query = 'select * from users where true';
+		let query = 'select id, email, name from users where true';
 		let args = [];
 
 		if (params.id) {
@@ -93,7 +93,7 @@ export class User {
 		});
 	}
 
-	count(callback: (err: MysqlError | null, rows: any) => void) {
+	count(callback: (err: QueryError | null, rows: any) => void) {
 		this.dbConnection.query(
 			' select count(*) as count from users;',
 			(err, rows) => {

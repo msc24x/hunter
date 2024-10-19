@@ -2,11 +2,7 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-popup{
-  display: none;
-}
-
-#bottom_app_bar{
+#bottom_app_bar {
     background-color: whitesmoke;
     position: absolute;
     left: 0px;
@@ -14,66 +10,66 @@ popup{
     height: fit-content;
     padding-block: 64px;
     width: 100%;
-    display: flex; 
+    display: flex;
     justify-content: space-evenly;
     align-items: center;
     flex-wrap: wrap-reverse;
     gap: 2rem;
-    font-family: appFont;
 
-     #site_logo{
+    #site_logo {
         font-weight: bold;
         font-size: 2rem;
-        #site_info{
-          font-size: 1rem;
-          font-family: appFont;
-          font-weight: 100;
-          color : gray;
-          margin-right : 64px;
-          margin-bottom: 24px;
+        margin-bottom: 4rem;
+
+        #site_info {
+            font-size: 1rem;
+            font-weight: 100;
+            color: gray;
         }
-      }
-    
 
-    .row{
-      
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1024px;
-      padding-inline: 10%;
-
-
-     
-
-      div{
-        cursor: default;
-      }
-      
-      .button{
-        opacity: 0.8;
-        margin-inline: 12px;
-        cursor: pointer;
-      }
-
-      .button:hover{
-        text-decoration: underline;
-      }
-
+        .site-version {
+            font-size: 1.2rem;
+            font-weight: 100;
+            color: gray;
+        }
     }
 
-  }
-  @media only screen and (max-width : 1024px) {
-    #site_logo{
-      font-size: 1.2rem !important;
-      #site_info{
-        font-size: 0.6rem !important;
-      }
-      
+    a {
+        color: colors.$text_black;
     }
-    .button{
-      font-size: 0.7rem !important;   
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1024px;
+        padding-inline: 10%;
+        gap: 1.5rem;
+
+        div {
+            cursor: default;
+        }
+
+        a {
+            opacity: 0.8;
+            margin-inline: 12px;
+            cursor: pointer;
+        }
+
+        a:hover {
+            opacity: 1;
+        }
     }
-  }
-  
+}
+@media only screen and (max-width: 1024px) {
+    #site_logo {
+        font-size: 1.2rem !important;
+        #site_info {
+            font-size: 1rem !important;
+        }
+    }
+    .button {
+        font-size: 0.7rem !important;
+    }
+}

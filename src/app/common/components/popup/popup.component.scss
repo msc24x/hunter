@@ -2,58 +2,58 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-#bg{
+.bg {
     @include popup;
-    font-family: appFont;
-    padding-top: 64px;
+    z-index: 100;
 }
 
+// .dialog::-webkit-scrollbar {
+//     display: none;
+// }
 
-#dialog::-webkit-scrollbar{
-    display: none
-}
-
-#dialog{
+.dialog {
     background-color: colors.$text_white;
-    width: fit-content;
-    height: fit-content;
-    border-radius: 10px;
+    min-width: 33%;
+    max-width: 60%;
+    max-height: 60%;
+    border-radius: 2rem;
     box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
     max-height: 820px;
-    overflow-y: scroll;
-    padding: 24px;
+    overflow-y: auto;
+    padding: 2rem;
     font-size: 1.2rem;
     margin-inline: 2%;
     margin-block: auto;
 
-    #title{
+    .title {
         font-size: 2rem;
         font-weight: bold;
         margin-bottom: 24px;
     }
 
-    .row{
+    .row {
         margin-top: 24px;
         display: flex;
         justify-content: space-around;
 
-        div{
-            padding : 8px;
+        div {
+            padding: 8px;
             padding-inline: 16px;
-            background-color: colors.$text_white;
+            background-color: whitesmoke;
             cursor: pointer;
             border-radius: 12px;
+
+            @include sweetBorder();
         }
 
-        div:hover{
-            background-color: whitesmoke;
-
+        div:hover {
+            background-color: white;
         }
     }
 }
 
-@media only screen and (max-width : 456px) {
-    #dialog{
+@media only screen and (max-width: 456px) {
+    .dialog {
         font-size: 1.05rem !important;
-    }    
+    }
 }

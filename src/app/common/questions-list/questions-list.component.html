@@ -1,0 +1,60 @@
+<app-loading *ngIf="loading"></app-loading>
+
+<popup
+    title="Destructive Action"
+    id="delete_confirm"
+    (closeEvent)="handleDeleteConfirmation($event)"
+>
+    You are about to delete the question. This is an irreversible action.
+</popup>
+
+<ol class="questions_list">
+    <div class="list-heading">{{ questionsList.length }} Questions</div>
+    <li
+        *ngFor="let question of this.questionsList; index as i"
+        [ngClass]="{ 'selected-question': questionSelected == i }"
+        (click)="selectQuestion($event)"
+        matTooltip="Click to unselect"
+        [matTooltipDisabled]="questionSelected !== i || !clearable"
+    >
+        Q
+        <fa-icon
+            *ngIf="getQuestionProgress(question.id) as quesProgress"
+            [icon]="quesProgress.accepted ? checkIcon : crossIcon"
+            [style]="
+                quesProgress.accepted ? 'color: darkgreen' : 'color: darkred'
+            "
+            class="question-progress"
+            [matTooltip]="quesProgress.total + ' points'"
+            matTooltipPosition="above"
+        ></fa-icon>
+
+        <span>
+            {{ this.questionsList.indexOf(question) + 1 }}
+        </span>
+    </li>
+    <div
+        matTooltip="Insert one new question"
+        *ngIf="editable"
+        id="create_question_btn"
+        (click)="addQuestion()"
+    >
+        Add
+    </div>
+    <div
+        matTooltip="Save changes for the selected question"
+        *ngIf="editable && questionSelected !== -1"
+        id="save_question_btn"
+        (click)="saveClicked.emit()"
+    >
+        Save
+    </div>
+    <div
+        matTooltip="Delete the selected question"
+        *ngIf="editable && questionSelected !== -1"
+        id="delete_question_btn"
+        (click)="showDeleteConfirmation(true)"
+    >
+        DELETE
+    </div>
+</ol>

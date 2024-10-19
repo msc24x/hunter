@@ -1,38 +1,66 @@
 <app-bar></app-bar>
 <app-loading *ngIf="loading !== 0"></app-loading>
 
-<popup id="edit_profile_popup" [showControls]="false" title="Manage Account" (closeEvent)="showEditProfileForm(false)">
-  <div id="profile_editor">
-    <div id="label">Update public user name</div>
-    <div class="row">
-      <input id = "user_name_input" type="text" maxlength="50">
-      <div id = "save_btn" (click)="updateUserInfo()">Update</div>
+<popup
+    id="edit_profile_popup"
+    [showControls]="false"
+    title="Manage Account"
+    (closeEvent)="showEditProfileForm(false)"
+>
+    <div class="account-field">
+        <div class="field-row">
+            <div id="label">Display Name</div>
+            <div class="row">
+                <input
+                    id="user_name_input"
+                    type="text"
+                    maxlength="50"
+                    [value]="user.name"
+                    placeholder="Example: Tyler Durden"
+                />
+            </div>
+        </div>
+        <p class="field-note">
+            Your name is currently displayed as
+            <span
+                class="name-preview"
+                matTooltip="Hunter users' name will have a suffix, which will be their user id"
+            >
+                {{ user.name || "Anonymous" }}#{{ user.id }}
+            </span>
+        </p>
     </div>
-  </div>
+    <div id="profile_save_btn" (click)="updateUserInfo()">Update</div>
 </popup>
 
 <div id="settings_label" class="flex-row justify-sb wrap">
-  Workbench for {{user.name || user.email}}
-  <div class="largeButton" (click)="showEditProfileForm(true)">Edit Profile</div>
-
+    Workbench for {{ user.name || user.email }}
+    <div class="largeButton" (click)="showEditProfileForm(true)">
+        Edit Profile
+    </div>
 </div>
 
 <div class="row">
-
-  <div class="flex-row align-stretch wrap justify-center">
-    <dashboard-card title="{{competitionsMetaData.total}}" message="Total Competitions Built"></dashboard-card>
-    <dashboard-card title="{{competitionsMetaData.live}}" message="Competitions Live Right Now"></dashboard-card>
-    <dashboard-card title="{{competitionsMetaData.public}}" message="Number of Public Competitions"></dashboard-card>
-  </div>
-  <create-dialog></create-dialog>
+    <div class="flex-row align-stretch wrap justify-center">
+        <dashboard-card
+            title="{{ competitionsMetaData.total }}"
+            message="Total Competitions Built"
+        ></dashboard-card>
+        <dashboard-card
+            title="{{ competitionsMetaData.live }}"
+            message="Competitions Live Right Now"
+        ></dashboard-card>
+        <dashboard-card
+            title="{{ competitionsMetaData.public }}"
+            message="Number of Public Competitions"
+        ></dashboard-card>
+    </div>
+    <create-dialog></create-dialog>
 </div>
 
-
-
 <competitions-list
-  heading="Your Competitions"
-  route="editor"
-  [public]="false"
-  [host_user_id]="user.id"
-  [competitionsList]="this.userCompetitions"
+    heading="Your Competitions"
+    route="editor"
+    [includeSelf]="true"
+    [competitionsList]="this.userCompetitions"
 ></competitions-list>

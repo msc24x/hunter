@@ -1,46 +1,85 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { apiEndpoints } from 'src/environments/environment';
+import { format } from 'src/app/utils/utils';
+import {
+    apiEndpoints,
+    QuestionProgress,
+    result,
+} from 'src/environments/environment';
 
 @Injectable({
-  providedIn: "root"
+    providedIn: 'root',
 })
 export class ScoresDataService {
+    constructor(private http: HttpClient) {}
 
-  constructor(private http : HttpClient) { }
+    getQuestionScores(params: {
+        comp_id: number;
+        ques_id: number;
+        after?: number;
+    }) {
+        var endpoint = format(
+            apiEndpoints.results,
+            params.comp_id.toString(),
+            params.ques_id.toString()
+        );
 
-  getScoreboard(competition_id :string){
-    return this.http.get(apiEndpoints.results + competition_id,
-      {
-        observe : "response",
-        responseType : 'json',
-        withCredentials : true
-      }
-    )
-  }
+        if (params.after) {
+            endpoint += '?after=' + params.after;
+        }
 
-
-  getScoresAll(params : any){
-    let httpParams = new HttpParams()
-    
-    if(params.user_id){
-      httpParams = httpParams.set("user_id", params.user_id)
+        return this.http.get<{
+            results: Array<result>;
+            accepted_count: number;
+            rejected_count: number;
+        }>(endpoint, {
+            observe: 'response',
+            responseType: 'json',
+            withCredentials: true,
+        });
     }
-    if(params.question_id){
-      httpParams = httpParams.set("question_id", params.question_id)
-    }
-    if(params.competition_id){
-      httpParams = httpParams.set("competition_id", params.competition_id)
+
+    getScoresAll(params: {
+        comp_id: number;
+        ques_id?: number;
+        after?: number;
+    }) {
+        var endpoint = format(
+            apiEndpoints.resultsAll,
+            params.comp_id.toString()
+        );
+
+        var queryParams: string[] = [];
+
+        if (params.after) {
+            queryParams.push(`after=${params.after}`);
+        }
+
+        if (params.ques_id) {
+            queryParams.push(`question=${params.ques_id}`);
+        }
+
+        if (queryParams) {
+            endpoint += '?' + queryParams.join('&');
+        }
+
+        return this.http.get<{
+            meta: { user_details: result; total: number };
+            rows: result[];
+        }>(endpoint, {
+            observe: 'response',
+            responseType: 'json',
+            withCredentials: true,
+        });
     }
 
-    return this.http.get(apiEndpoints.resultsAll, 
-      {
-        observe : "response",
-        responseType : 'json',
-        withCredentials : true,
-        params : httpParams
-      }
-    )
-  }
+    getProgress(params: { comp_id: number }) {
+        var endpoint = format(apiEndpoints.progress, params.comp_id.toString());
 
+        return this.http.get<Array<QuestionProgress>>(endpoint, {
+            observe: 'response',
+            responseType: 'json',
+            withCredentials: true,
+        });
+    }
 }

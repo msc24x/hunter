@@ -1,0 +1,107 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+#view-submissions-list-popup {
+    width: 34rem;
+}
+
+#score_board {
+    margin-top: 64px;
+
+    width: inherit;
+
+    .next-prev-options {
+        @include nextPrevControls;
+    }
+
+    #sc_title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        padding: 8px;
+    }
+
+    #scores_table {
+        font-size: 1.1rem;
+
+        &.question-scoreboard {
+            & > div:not(.table_heading) {
+                cursor: pointer;
+            }
+        }
+
+        .table_heading {
+            font-weight: bold;
+            margin-bottom: 8px;
+            background-color: whitesmoke;
+        }
+
+        .user-rank-row {
+            background-color: rgb(220, 231, 245);
+            border-radius: 0.3rem;
+            @include sweetBorder();
+        }
+
+        background-color: whitesmoke;
+        padding: 16px;
+        border-radius: 1rem;
+        @include sweetBorder();
+
+        display: flex;
+        flex-direction: column;
+
+        div {
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.3rem;
+
+            div {
+                width: 200px;
+                word-break: break-all;
+            }
+
+            .rank-col {
+                flex-basis: 5%;
+                text-align: center;
+            }
+
+            .name-col {
+                flex-basis: 45%;
+                justify-content: start;
+
+                .ahead-statement {
+                    font-size: 0.8rem;
+                    font-weight: bold;
+                }
+            }
+
+            .time-col {
+                flex-basis: 30%;
+            }
+
+            .score-p {
+                color: darkcyan;
+                flex-basis: 10%;
+                overflow: visible;
+            }
+
+            .score {
+                color: green;
+                flex-basis: 10%;
+                text-wrap: nowrap;
+            }
+
+            .penalities {
+                color: darkred;
+                flex-basis: 5%;
+            }
+        }
+
+        & > div:not(.table_heading):hover {
+            background-color: colors.$text_white;
+            border-radius: 0.3rem;
+        }
+    }
+}

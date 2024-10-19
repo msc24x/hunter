@@ -1,0 +1,26 @@
+@use "../../../../assets/colors";
+@use "../../../../assets/fonts";
+@use "../../../../assets/mixins" as *;
+
+:host {
+    .last-verification-res {
+        @include basicBack;
+        margin-bottom: 3rem;
+        margin-inline: auto;
+
+        .failure-reason {
+            pre {
+                width: 100%;
+                overflow: scroll;
+                font-weight: 100;
+            }
+        }
+    }
+    .test-solution-btn {
+        @include basicBack;
+        background-color: whitesmoke;
+        width: fit-content;
+        cursor: pointer;
+        margin-block: 1rem;
+    }
+}

@@ -1,17 +1,17 @@
-#about{
-    font-family: appFont;
+#about {
     font-size: 1.2rem;
 }
 
-a{
-    &:link, &:visited{
+a {
+    &:link,
+    &:visited {
         color: rgb(91, 91, 238);
         text-decoration: none;
     }
 }
 
-@media only screen and (max-width : 456px) {
-    #about{
+@media only screen and (max-width: 456px) {
+    #about {
         font-size: 1.05rem !important;
-    }    
+    }
 }

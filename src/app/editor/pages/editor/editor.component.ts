@@ -1,461 +1,462 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import {
+    faCircleCheck,
+    faCircleXmark,
+    faDownload,
+    faEye,
+    faEyeSlash,
+    faPenToSquare,
+    faShare,
+    faSquareShareNodes,
+    faUpload,
+} from '@fortawesome/free-solid-svg-icons';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
-	CompetitionInfo,
-	QuestionInfo,
-	resCode,
-	UserInfo,
+    CompetitionInfo,
+    domainName,
+    environment,
+    protocol,
+    QuestionInfo,
+    QuestionVerification,
+    resCode,
+    UserInfo,
 } from 'src/environments/environment';
 
 @Component({
-	selector: 'editor',
-	templateUrl: './editor.component.html',
-	styleUrls: ['./editor.component.scss'],
+    selector: 'editor',
+    templateUrl: './editor.component.html',
+    styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements OnInit {
-	loading = false;
-	preview_mode = false;
-	log = new Array<string>();
-	deleteCompMessage = '';
+export class EditorComponent implements OnInit, OnDestroy {
+    shareIcon = faSquareShareNodes;
+    viewIcon = faEye;
+    writeIcon = faEyeSlash;
+    checkIcon = faCircleCheck;
+    crossIcon = faCircleXmark;
 
-	competition_id: string;
-	competitionInfo: CompetitionInfo = {} as CompetitionInfo;
-	competitionQuestions: Array<QuestionInfo> = [];
-	questionSelected = -1;
-	questionSelectedInfo = {} as QuestionInfo;
-	testExists = false;
-	solsExists = false;
-	elem: HTMLElement | null = null;
+    uploadIcon = faUpload;
+    downloadIcon = faDownload;
 
-	isAuthenticated: boolean = false;
-	user = {} as UserInfo;
-	eventPopup = new BehaviorSubject<string>('');
+    loading = false;
+    preview_mode = false;
+    log = new Array<string>();
+    deleteCompMessage = '';
 
-	constructor(
-		private router: Router,
-		private activatedRoute: ActivatedRoute,
-		private authService: AuthService,
-		private competitionsData: CompetitionsDataService,
-		private datePipe: DatePipe
-	) {
-		this.competition_id = this.activatedRoute.snapshot.paramMap.get(
-			'competition_id'
-		) as string;
+    competition_id: number;
+    competitionInfo: CompetitionInfo = {} as CompetitionInfo;
+    questionSelected = -1;
+    questionSelectedInfo = {} as QuestionInfo;
+    testExists = false;
+    solsExists = false;
+    verificationResult: QuestionVerification | null = null;
+    elem: HTMLElement | null = null;
 
-		this.authService.isAuthenticated.subscribe((isAuth) => {
-			this.user = this.authService.user;
-			this.isAuthenticated = isAuth;
-		});
-	}
+    isAuthenticated: boolean = false;
+    user = {} as UserInfo;
+    eventPopup = new BehaviorSubject<string>('');
 
-	ngOnInit(): void {
-		window.scroll(0, 0);
+    constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private authService: AuthService,
+        private competitionsData: CompetitionsDataService,
+        private datePipe: DatePipe
+    ) {
+        this.competition_id = parseInt(
+            this.activatedRoute.snapshot.paramMap.get('competition_id') || ''
+        );
 
-		this.elem = document.getElementById('log');
+        this.authService.isAuthenticated.subscribe((isAuth) => {
+            this.user = this.authService.user;
+            this.isAuthenticated = isAuth;
+        });
+    }
 
-		this.loading = true;
-		this.authService.authenticate_credentials().subscribe(
-			(res) => {
-				if (res.status == 202) {
-					const body = res.body as UserInfo;
-					this.user = body;
-					this.authService.user = this.user;
-					this.authService.isAuthenticated.next(true);
-					this.loading = false;
-					this.fetchCompetitionInfo();
-				}
-			},
-			(err) => {
-				this.loading = false;
-				this.router.navigate(['/home']);
-			}
-		);
+    ngOnDestroy(): void {
+        document
+            .getElementsByTagName('bottom-app-bar')[0]
+            .classList.remove('hidden');
+    }
 
-		document.onkeydown = (event) => {
-			if (
-				event.shiftKey &&
-				event.key == 'S' &&
-				!['INPUT', 'TEXTAREA'].includes(
-					(event.target as HTMLElement).tagName
-				)
-			) {
-				this.saveQuestion();
-				this.saveChanges();
-			}
-		};
-	}
+    ngOnInit(): void {
+        document
+            .getElementsByTagName('bottom-app-bar')[0]
+            .classList.add('hidden');
+        window.scroll(0, 0);
 
-	getFileStatus(fileType: string) {
-		let exists = new BehaviorSubject(false);
-		this.competitionsData
-			.getFileStatus(this.questionSelectedInfo.id, fileType)
-			.subscribe((res) => {
-				if (res.status == resCode.success) {
-					exists.next((res.body as any).exists);
-				}
-			});
+        this.elem = document.getElementById('log');
 
-		return exists.asObservable();
-	}
+        if (!this.isAuthenticated) {
+            this.loading = true;
+            this.authService.authenticate_credentials().subscribe(
+                (res) => {
+                    if (res.status == 202) {
+                        const body = res.body as UserInfo;
+                        this.user = body;
+                        this.authService.user = this.user;
+                        this.authService.isAuthenticated.next(true);
+                        this.loading = false;
+                        this.fetchQuestions();
+                    }
+                },
+                (err) => {
+                    this.loading = false;
+                    this.router.navigate(['/home']);
+                }
+            );
+        } else {
+            this.fetchQuestions();
+        }
 
-	downloadFile(fileType: string) {
-		window.open(
-			`/api/question/${this.questionSelectedInfo.id}/${fileType}/download`
-		);
-	}
+        document.onkeydown = (event) => {
+            if (
+                event.shiftKey &&
+                event.key == 'S' &&
+                !['INPUT', 'TEXTAREA'].includes(
+                    (event.target as HTMLElement).tagName
+                )
+            ) {
+                this.saveQuestion();
+                this.saveChanges();
+            }
+        };
+    }
 
-	saveQuestion() {
-		if (this.questionSelected == -1) {
-			this.displayLog('No question selected');
-			return;
-		}
+    shareAction() {
+        navigator.share({
+            title: `Invitation to ${this.competitionInfo.title}`,
+            url: this.getParticipationLink(),
+            text: `You are invited to participate in the competition created by ${
+                this.user.name || 'a user'
+            } on https://hunter.cambo.in`,
+        });
+    }
 
-		this.loading = true;
-		this.competitionsData
-			.putQuestion({
-				id: this.competitionQuestions[this.questionSelected].id,
-				title: (
-					document.getElementById(
-						'text_qtitle'
-					) as HTMLTextAreaElement
-				).value,
-				statement: (
-					document.getElementById(
-						'text_statement'
-					) as HTMLTextAreaElement
-				).value,
-				points: (
-					document.getElementById(
-						'question_points'
-					) as HTMLInputElement
-				).valueAsNumber,
-				sample_cases: (
-					document.getElementById(
-						'question_sample_cases'
-					) as HTMLInputElement
-				).value,
-				sample_sols: (
-					document.getElementById(
-						'question_sample_sols'
-					) as HTMLInputElement
-				).value,
-			})
-			.subscribe((res) => {
-				this.displayLog('Question Updated');
-				this.loading = false;
-				this.fetchQuestions();
-			});
-	}
+    getParticipationLink() {
+        return `${protocol}://${domainName}/compete/p/${this.competition_id}`;
+    }
 
-	selectedQuestionElement(): HTMLLIElement | null {
-		let prevTarget = document
-			.getElementById('questions_list')
-			?.getElementsByTagName('li')[this.questionSelected];
-		if (prevTarget) {
-			return prevTarget;
-		} else return null;
-	}
+    getFileStatus(fileType: string) {
+        let exists = new BehaviorSubject(false);
+        this.competitionsData
+            .getFileStatus({
+                competition_id: this.questionSelectedInfo.competition_id,
+                question_id: this.questionSelectedInfo.id,
+                file_type: fileType,
+            })
+            .subscribe((res) => {
+                if (res.status == resCode.success) {
+                    exists.next((res.body as any).exists);
+                }
+            });
 
-	selectQuestion(index: number) {
-		this.loading = true;
+        return exists.asObservable();
+    }
 
-		this.questionSelected = index;
-		this.questionSelectedInfo =
-			index == -1
-				? ({} as QuestionInfo)
-				: this.competitionQuestions[index];
+    downloadFileUrl(fileType: string) {
+        return `${environment.apiUrl}/competitions/${this.questionSelectedInfo.competition_id}/questions/${this.questionSelectedInfo.id}/${fileType}/download`;
+    }
 
-		this.competitionsData
-			.getFileStatus(this.questionSelectedInfo.id, 'solutions')
-			.subscribe((res) => {
-				if (res.status == resCode.success) {
-					this.solsExists = (res.body as any).exists;
-				}
-			});
-		this.competitionsData
-			.getFileStatus(this.questionSelectedInfo.id, 'testcases')
-			.subscribe((res) => {
-				if (res.status == resCode.success) {
-					this.testExists = (res.body as any).exists;
-				}
-			});
-		this.loading = false;
-	}
+    downloadFile(fileType: string) {
+        window.open(this.downloadFileUrl(fileType));
+    }
 
-	updateFile(event: any, filen: string) {
-		const file = (event.target as HTMLInputElement).files;
+    saveQuestion() {
+        if (this.questionSelected == -1) {
+            this.displayLog('No question selected');
+            return;
+        }
 
-		if (!file || file.length == 0) {
-			this.displayLog('Error while uploading');
-			return;
-		}
+        this.loading = true;
+        this.competitionsData
+            .putQuestion({
+                id: this.competitionInfo.questions![this.questionSelected].id,
+                competition_id: this.competitionInfo.id,
+                title: (
+                    document.getElementById(
+                        'text_qtitle'
+                    ) as HTMLTextAreaElement
+                ).value,
+                statement: (
+                    document.getElementById(
+                        'text_statement'
+                    ) as HTMLTextAreaElement
+                ).value,
+                points: (
+                    document.getElementById(
+                        'question_points'
+                    ) as HTMLInputElement
+                ).valueAsNumber,
+                neg_points: (
+                    document.getElementById(
+                        'question_neg_points'
+                    ) as HTMLInputElement
+                ).valueAsNumber,
+                sample_cases: (
+                    document.getElementById(
+                        'question_sample_cases'
+                    ) as HTMLInputElement
+                ).value,
+                sample_sols: (
+                    document.getElementById(
+                        'question_sample_sols'
+                    ) as HTMLInputElement
+                ).value,
+                created_at: this.competitionInfo.created_at,
+                updated_at: new Date(),
+            } as QuestionInfo)
+            .subscribe((res) => {
+                this.displayLog('Question Updated');
+                this.loading = false;
+                this.fetchQuestions();
+            });
+    }
 
-		if (this.questionSelected == -1) {
-			this.displayLog('Error : No question selected');
-			return;
-		}
+    selectedQuestionElement(): HTMLLIElement | null {
+        let prevTarget = document
+            .getElementById('questions_list')
+            ?.getElementsByTagName('li')[this.questionSelected];
+        if (prevTarget) {
+            return prevTarget;
+        } else return null;
+    }
 
-		if (file[0].size > 1572864 || file[0].type != 'text/plain') {
-			this.displayLog('File should be .txt < 1.5 Mb');
-			return;
-		}
+    selectQuestion(index: number, force: boolean = false) {
+        this.loading = true;
 
-		this.loading = true;
+        this.questionSelected = index;
+        this.questionSelectedInfo =
+            index == -1
+                ? ({} as QuestionInfo)
+                : this.competitionInfo.questions![index];
 
-		const label = document.getElementById(
-			filen.toLowerCase() + '_file_label'
-		) as HTMLLabelElement;
-		label.innerText = 'Uploading.. ' + filen + ' ' + file[0].name;
+        this.getFileStatus('solutions').subscribe((res) => {
+            this.solsExists = res;
+        });
+        this.getFileStatus('testcases').subscribe((res) => {
+            this.testExists = res;
+        });
+        this.loading = false;
+    }
 
-		const contents = file[0].text();
+    updateFile(event: any, filen: string) {
+        const file = (event.target as HTMLInputElement).files;
 
-		contents.then((result) => {
-			this.competitionsData
-				.postFile({
-					id: this.questionSelectedInfo.id,
-					fileType: filen.toLowerCase(),
-					file: result,
-				})
-				.subscribe((res) => {
-					this.displayLog('File for ' + filen + ' Uploaded');
-					label.innerText = filen + ' Uploaded';
+        if (!file || file.length == 0) {
+            this.displayLog('Error while uploading');
+            return;
+        }
 
-					this.competitionsData
-						.getFileStatus(
-							this.questionSelectedInfo.id,
-							'solutions'
-						)
-						.subscribe((res) => {
-							if (res.status == resCode.success) {
-								this.solsExists = (res.body as any).exists;
-							}
-						});
-					this.competitionsData
-						.getFileStatus(
-							this.questionSelectedInfo.id,
-							'testcases'
-						)
-						.subscribe((res) => {
-							if (res.status == resCode.success) {
-								this.testExists = (res.body as any).exists;
-							}
-						});
-					this.loading = false;
-				});
-		});
-	}
+        if (this.questionSelected == -1) {
+            this.displayLog('Error : No question selected');
+            return;
+        }
 
-	fetchQuestions() {
-		this.loading = true;
-		this.competitionsData
-			.getQuestions({ competition_id: this.competitionInfo.id as string })
-			.subscribe((res) => {
-				if (res.status == resCode.success) {
-					if (res.body) {
-						this.competitionQuestions = res.body;
-						this.questionSelected = -1;
-						this.questionSelectedInfo = {} as QuestionInfo;
-						this.loading = false;
-					}
-				}
-			});
-	}
+        if (file[0].size > 1572864 || file[0].type != 'text/plain') {
+            this.displayLog('File should be .txt < 1.5 Mb');
+            return;
+        }
 
-	fetchCompetitionInfo() {
-		this.loading = true;
-		this.competitionsData
-			.getCompetitionInfo(this.competition_id as string)
-			.subscribe(
-				(res) => {
-					if (res.status == resCode.success) {
-						this.competitionInfo = res.body as CompetitionInfo;
-						this.toggleVisibility();
-						this.toggleVisibility();
+        this.loading = true;
+        this.displayLog('Uploading.. ' + filen + ' ' + file[0].name);
 
-						if (this.competitionInfo.host_user_id != this.user.id) {
-							this.router.navigate(['/home']);
-						}
+        this.competitionsData
+            .postFile({
+                id: this.questionSelectedInfo.id,
+                fileType: filen.toLowerCase(),
+                file: file[0],
+                competition_id: this.competitionInfo.id,
+            })
+            .subscribe((res) => {
+                if (res.status !== 200) {
+                    this.displayLog('Upload failed');
+                    return;
+                }
 
-						this.fetchQuestions();
-						this.loading = false;
-					}
-				},
-				(err) => {
-					if (err.status == resCode.success) {
-						this.competitionInfo = err.error as CompetitionInfo;
-						this.toggleVisibility();
-						this.toggleVisibility();
+                this.displayLog('File for ' + filen + ' Uploaded');
 
-						if (this.competitionInfo.host_user_id != this.user.id) {
-							this.router.navigate(['/home']);
-						}
+                if (filen === 'testcases') {
+                    this.testExists = true;
+                } else if (filen === 'solutions') {
+                    this.solsExists = true;
+                }
 
-						this.fetchQuestions();
-					} else {
-						this.router.navigate(['/home']);
-					}
-					this.loading = false;
-				}
-			);
-	}
+                this.loading = false;
+            });
+    }
 
-	refreshCompetitionInfo() {
-		this.fetchCompetitionInfo();
-		this.loading = true;
-		const title = document.getElementById(
-			'text_title'
-		) as HTMLTextAreaElement;
-		const description = document.getElementById(
-			'text_description'
-		) as HTMLTextAreaElement;
-		const duration = document.getElementById(
-			'competition_duration'
-		) as HTMLInputElement;
-		const schedule = document.getElementById(
-			'competition_schedule'
-		) as HTMLInputElement;
-		duration.value = this.competitionInfo.duration as unknown as string;
-		schedule.value = this.datePipe.transform(
-			this.competitionInfo.start_schedule,
-			'yyyy-MM-ddThh:mm'
-		)!;
-		title.value = this.competitionInfo.title as string;
-		description.value = this.competitionInfo.description as string;
+    fetchQuestions() {
+        this.loading = true;
+        this.competitionsData
+            .getQuestions({ competition_id: this.competition_id })
+            .subscribe((res) => {
+                if (res.status == resCode.success) {
+                    if (res.body) {
+                        this.competitionInfo = res.body as CompetitionInfo;
+                        this.toggleVisibility();
+                        this.toggleVisibility();
+                        this.loading = false;
+                    }
+                }
+            });
+    }
 
-		this.displayLog('Data refreshed');
-		this.loading = false;
-	}
+    refreshCompetitionInfo() {
+        this.fetchQuestions();
+        this.loading = true;
+        const title = document.getElementById(
+            'text_title'
+        ) as HTMLTextAreaElement;
+        const description = document.getElementById(
+            'text_description'
+        ) as HTMLTextAreaElement;
+        const duration = document.getElementById(
+            'competition_duration'
+        ) as HTMLInputElement;
+        const schedule = document.getElementById(
+            'competition_schedule'
+        ) as HTMLInputElement;
+        schedule.value = this.datePipe.transform(
+            this.competitionInfo.scheduled_at,
+            'yyyy-MM-ddThh:mm'
+        )!;
+        title.value = this.competitionInfo.title as string;
+        description.value = this.competitionInfo.description as string;
 
-	toggleVisibility() {
-		this.loading = true;
-		const visBtn = document.getElementById('visibility') as HTMLDivElement;
+        this.displayLog('Data refreshed');
+        this.loading = false;
+    }
 
-		if (this.competitionInfo?.public) {
-			this.competitionInfo.public = false;
-			visBtn.innerHTML = 'PRIVATE';
-			visBtn.style.color = 'black';
-			visBtn.style.backgroundColor = 'rgb(20, 220, 120)';
-		} else if (this.competitionInfo) {
-			this.competitionInfo.public = true;
-			visBtn.innerHTML = 'PUBLIC';
-			visBtn.style.color = 'white';
-			visBtn.style.backgroundColor = 'crimson';
-		}
-		this.loading = false;
-	}
+    toggleVisibility() {
+        this.loading = true;
+        const visBtn = document.getElementById('visibility') as HTMLDivElement;
 
-	saveChanges() {
-		this.saveQuestion();
-		this.loading = true;
-		const title = document.getElementById(
-			'text_title'
-		) as HTMLTextAreaElement;
-		const description = document.getElementById(
-			'text_description'
-		) as HTMLTextAreaElement;
-		const duration = document.getElementById(
-			'competition_duration'
-		) as HTMLInputElement;
-		const schedule = document.getElementById(
-			'competition_schedule'
-		) as HTMLInputElement;
-		this.competitionInfo.title = title.value;
-		this.competitionInfo.description = description.value;
-		this.competitionInfo.duration = duration.value as unknown as number;
-		this.competitionInfo.start_schedule = new Date(
-			schedule.value
-		).toISOString();
-		this.competitionsData
-			.putCompetitionInfo(this.competitionInfo)
-			.subscribe((res) => {
-				this.displayLog('Competition changes saved');
-				this.loading = false;
-			});
-	}
+        if (this.competitionInfo?.public) {
+            this.competitionInfo.public = false;
+            visBtn.innerHTML = 'PRIVATE';
+            visBtn.style.color = 'black';
+            visBtn.style.backgroundColor = 'rgb(20, 220, 120)';
+        } else if (this.competitionInfo) {
+            this.competitionInfo.public = true;
+            visBtn.innerHTML = 'PUBLIC';
+            visBtn.style.color = 'white';
+            visBtn.style.backgroundColor = 'crimson';
+        }
+        this.loading = false;
+    }
 
-	displayLog(msg: string) {
-		this.log.push(msg);
-		if (this.elem) this.elem.innerHTML = '&#x1F6C8; ' + msg;
-	}
+    saveChanges() {
+        this.saveQuestion();
+        this.loading = true;
+        const title = document.getElementById(
+            'text_title'
+        ) as HTMLTextAreaElement;
+        const description = document.getElementById(
+            'text_description'
+        ) as HTMLTextAreaElement;
+        const duration = document.getElementById(
+            'competition_duration'
+        ) as HTMLInputElement;
+        const schedule = document.getElementById(
+            'competition_schedule'
+        ) as HTMLInputElement;
+        const schedule_end = document.getElementById(
+            'competition_schedule_end'
+        ) as HTMLInputElement;
+        this.competitionInfo.title = title.value;
+        this.competitionInfo.description = description.value;
+        this.competitionInfo.scheduled_end_at = new Date(schedule_end.value);
+        this.competitionInfo.scheduled_at = new Date(schedule.value);
+        this.competitionsData
+            .putCompetitionInfo(this.competitionInfo)
+            .subscribe((res) => {
+                this.displayLog('Competition changes saved');
+                this.loading = false;
+            });
+    }
 
-	handleDeleteCompPopupEvent(event: string) {
-		this.showPopup(false, 'delete_comp_popup');
-	}
+    displayLog(msg: string) {
+        this.log.push(msg);
+        if (this.elem) this.elem.innerHTML = '&#x1F6C8; ' + msg;
+    }
 
-	handleGuidePopupEvent(event: string) {
-		this.eventPopup.next(event);
-		this.showPopup(false, 'guide');
-	}
+    handleDeleteCompPopupEvent(event: string) {
+        this.showPopup(false, 'delete_comp_popup');
+    }
 
-	handlePrivacyConfirmPopupEvent(event: string) {
-		if (event == 'continue') {
-			this.toggleVisibility();
-		}
-		this.showPopup(false, 'public_status_confirm');
-	}
+    handleGuidePopupEvent(event: string) {
+        this.eventPopup.next(event);
+        this.showPopup(false, 'guide');
+    }
 
-	showLog() {
-		console.log(this.log);
-	}
+    handlePrivacyConfirmPopupEvent(event: string) {
+        if (event == 'continue') {
+            this.toggleVisibility();
+        }
+        this.showPopup(false, 'public_status_confirm');
+    }
 
-	showPopup(f: boolean, id: string) {
-		let guide = document.getElementById(id) as HTMLElement;
-		if (f) {
-			guide.style.display = 'block';
-			window.scroll(0, 0);
-		} else guide.style.display = 'none';
-	}
+    showLog() {
+        console.log(this.log);
+    }
 
-	onClickVisibility() {
-		if (this.competitionInfo.public == false) {
-			this.showPopup(true, 'public_status_confirm');
-		} else {
-			this.toggleVisibility();
-		}
-	}
+    showPopup(f: boolean, id: string) {
+        let guide = document.getElementById(id) as HTMLElement;
+        if (f) {
+            guide.style.display = 'block';
+            window.scroll(0, 0);
+        } else guide.style.display = 'none';
+    }
 
-	togglePreview() {
-		
-		// Saving the text area content into questions statement
-		// so that the user do not loose the written content 
-		let text_statement = document.getElementById(
-			'text_statement'
-		) as HTMLTextAreaElement;
-		
-		if (text_statement)
-			this.questionSelectedInfo.statement = text_statement.value;
-			
-		this.preview_mode = !this.preview_mode
-	}
+    onClickVisibility() {
+        if (this.competitionInfo.public == false) {
+            this.showPopup(true, 'public_status_confirm');
+        } else {
+            this.toggleVisibility();
+        }
+    }
 
-	deleteCompetition() {
-		let input = document.getElementById(
-			'input_competition_code'
-		) as HTMLInputElement;
-		if (input.value != this.competitionInfo.id) {
-			this.deleteCompMessage = '*Code does not match';
-		} else {
-			this.deleteCompMessage = '';
-			this.loading = true;
-			this.competitionsData
-				.deleteCompetition(this.competitionInfo.id)
-				.subscribe({
-					next: (res) => {
-						this.deleteCompMessage = 'Deleted';
-						this.showPopup(false, 'delete_comp_popup');
-						this.router.navigate(['/editor']);
-					},
-					error: (err) => {
-						this.deleteCompMessage = err.status;
-					},
-					complete: () => {
-						this.loading = false;
-					},
-				});
-		}
-	}
+    togglePreview() {
+        // Saving the text area content into questions statement
+        // so that the user do not loose the written content
+        let text_statement = document.getElementById(
+            'text_statement'
+        ) as HTMLTextAreaElement;
+
+        if (text_statement)
+            this.questionSelectedInfo.statement = text_statement.value;
+
+        this.preview_mode = !this.preview_mode;
+    }
+
+    deleteCompetition() {
+        let input = document.getElementById(
+            'input_competition_code'
+        ) as HTMLInputElement;
+        if (parseInt(input.value) != this.competitionInfo.id) {
+            this.deleteCompMessage = '*Code does not match';
+        } else {
+            this.deleteCompMessage = '';
+            this.loading = true;
+            this.competitionsData
+                .deleteCompetition(this.competitionInfo.id)
+                .subscribe({
+                    next: (res) => {
+                        this.deleteCompMessage = 'Deleted';
+                        this.showPopup(false, 'delete_comp_popup');
+                        this.router.navigate(['/editor']);
+                    },
+                    error: (err) => {
+                        this.deleteCompMessage = err.status;
+                    },
+                    complete: () => {
+                        this.loading = false;
+                    },
+                });
+        }
+    }
 }

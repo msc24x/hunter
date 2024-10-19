@@ -1,28 +1,26 @@
-version: '1.0.0'
+version: "1.0.0"
 
-services:  
-  hunter-database:
-    container_name: hunter-database
-    image: mysql
-    profiles:
-      - services
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    ports:
-      - "${DB_PORT}:${DB_PORT}"
-  hunter-backend:
-    image: hunter-backend
-    container_name: hunter-backend
-    profiles:
-      - services
-    build:
-      context: backend
-      dockerfile: Dockerfile
-    depends_on:
-      - hunter-database
-    environment:
-      - ENV=${ENV}
-    ports:
-      - "8080:8080"
-  
-    
+services:
+    hunter-database:
+        container_name: hunter-database
+        image: mysql
+        profiles:
+            - services
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        ports:
+            - "${DB_PORT}:${DB_PORT}"
+    hunter-backend:
+        image: hunter-backend
+        container_name: hunter-backend
+        profiles:
+            - services
+        build:
+            context: backend
+            dockerfile: Dockerfile
+        depends_on:
+            - hunter-database
+        environment:
+            - ENV=${ENV}
+        ports:
+            - "8080:8080"

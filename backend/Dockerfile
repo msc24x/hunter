@@ -1,11 +1,10 @@
-FROM node:18
+FROM node:20.18.0
 
 WORKDIR /home/app
 
-COPY package.json .
-RUN npm install
-
 COPY . .
+
+RUN npm install
 
 ARG ENV
 

@@ -1,0 +1,6 @@
+<div class="drop-down-list" (click)="this.expandList()">
+  <a class="row">Current  {{listType}} : {{itemSelected}}</a>
+  <div class="drop-down-list-expansion" *ngIf="hover">
+    <li *ngFor="let item of this.items" (click)="selectItem($event)">{{item}}</li>
+  </div>
+</div>
