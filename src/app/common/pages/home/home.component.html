@@ -10,32 +10,70 @@
 
 </app-info-card> -->
 
-<div id="tagline" class="app-line">Your Place To Host Programming Competitions.</div>
-<div id="tagline_small" class="app-line inview_slide">Host your own designed coding questions with the convenience of a click.
-  Build, Maintain & Participate in them under one roof. </div>
+<div id="tagline" class="app-line">
+    Your <span class="hibold">Home</span> for <br />
+    Hosting <span class="hibold">Programming Contests</span>.
+</div>
+<div id="tagline_small" class="app-line inview_slide">
+    <span class="hibold">Open source</span> platform for you to host your own
+    customized coding competitions.
+    <span class="hibold">Build, Judge or Participate</span>, all under one roof.
+</div>
 
-<div id="getstarted" [ngClass]="{'app-line' : true, 'vanish': isAuthenticated}" (click)="getStarted()">
-  <img *ngIf="prod" src="../../../../assets/gh_logo.png" height="28px" width="28px" alt="github_logo"
-  >Sign In to start using Hunter 
+<div
+    id="getstarted"
+    [ngClass]="{ 'app-line': true, 'vanish': isAuthenticated }"
+    (click)="getStarted()"
+>
+    <img
+        src="../../../../assets/gh_logo.png"
+        height="28px"
+        width="28px"
+        alt="github_logo"
+    />Sign In to start using Hunter
 </div>
 
 <div class="row inview_slide">
-  <img id="ss1" class="app-img-r" src="../../../assets/ss1.webp" width="640px" height="640px" alt="How hunter allows you to build coding competitions with so much ease">
-  <div id="ss1_tag" class="app-line">Build Your Own Competitions With A Click.</div>
+    <img
+        id="ss1"
+        class="app-img-r"
+        src="../../../assets/ss1.webp"
+        width="640px"
+        height="640px"
+        alt="How hunter allows you to build coding competitions with so much ease"
+    />
+    <div id="ss1_tag" class="app-line">
+        Build Your Own Competitions With A Click.
+    </div>
 </div>
 
 <div class="row inview_slide" id="ss2_row">
-  <div id="ss2_tag" class="app-line">Let The World Participate In Your Challenge</div>
-  <img id="ss2" class="app-img-b" src="../../../assets/ss4.webp" alt="Shows how hunter enables users to host their challanges across the world">
+    <div id="ss2_tag" class="app-line">
+        Let The World Participate In Your Challenge
+    </div>
+    <img
+        id="ss2"
+        class="app-img-b"
+        src="../../../assets/ss4.webp"
+        alt="Shows how hunter enables users to host their challanges across the world"
+    />
 </div>
 
 <div class="row inview_slide">
-  <img id="ss3" class="app-img-r" width="640px" height="640px" src="../../../assets/ss3.webp" alt="Hunter comes with their home grown code compiling and execution services at their backend">
-  <div id="ss3_tag" class="app-line">Compile & Execute On Hunter's Servers.</div>
+    <img
+        id="ss3"
+        class="app-img-r"
+        width="640px"
+        height="640px"
+        src="../../../assets/ss3.webp"
+        alt="Hunter comes with their home grown code compiling and execution services at their backend"
+    />
+    <div id="ss3_tag" class="app-line">
+        Compile & Execute On Hunter's Servers.
+    </div>
 </div>
 
 <div *ngIf="!isAuthenticated && !prod" class="row">
-  <div id="login_tag" class="app-line">Login Into Your Account</div>
-  <login-dialog></login-dialog>
+    <div id="login_tag" class="app-line">Login Into Your Account</div>
+    <login-dialog></login-dialog>
 </div>
-
