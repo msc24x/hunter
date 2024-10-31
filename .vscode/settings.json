@@ -14,4 +14,6 @@
 	"[dotenv]": {
 		"editor.defaultFormatter": "foxundermoon.shell-format"
 	},
+	"editor.formatOnPaste": false,
+	"eslint.format.enable": true,
 }

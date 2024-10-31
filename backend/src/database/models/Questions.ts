@@ -9,7 +9,7 @@ export class Questions {
     dbService: DatabaseProvider = Container.get(DatabaseProvider);
 
     constructor() {
-        this.dbConnection = this.dbService.getInstance();
+        this.dbConnection = () => this.dbService.getInstance();
     }
 
     delete(params: any, callback: (err: QueryError | null) => void) {
@@ -27,7 +27,7 @@ export class Questions {
             return;
         }
 
-        this.dbConnection.query(query, args, (err) => {
+        this.dbConnection().query(query, args, (err) => {
             callback(err);
         });
     }
@@ -45,7 +45,7 @@ export class Questions {
         }
         query += ';';
 
-        this.dbConnection.query(query, args, (err, rows) => {
+        this.dbConnection().query(query, args, (err, rows) => {
             if (err) {
                 console.log(err);
                 return;
@@ -62,7 +62,7 @@ export class Questions {
         callback: (question_id: number) => void,
         errCallback: (err: QueryError | null) => void
     ) {
-        this.dbConnection.query(
+        this.dbConnection().query(
             ` insert into questions (competition_id, date_created) values(?, NOW()) ; `,
             [competition_id],
             (err) => {
@@ -70,7 +70,7 @@ export class Questions {
                     errCallback(err);
                     return;
                 }
-                this.dbConnection.query(
+                this.dbConnection().query(
                     ` select * from questions where competition_id = ? order by date_created ;`,
                     [competition_id],
                     (err, rows) => {
@@ -106,7 +106,7 @@ export class Questions {
         query += ` where id = ? ; `;
         args.push(newQuestion.id);
 
-        this.dbConnection.query(query, args, (err) => {
+        this.dbConnection().query(query, args, (err) => {
             callback(err);
         });
     }

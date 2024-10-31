@@ -37,6 +37,45 @@ export class DatabaseProvider {
                 throw err;
             }
             console.log(`Raw connection to database: Initialized`);
+
+            const retryCallback = (retryCount = 1) => {
+                const retryAfter = retryCount * 1000;
+                console.log('Raw connection to database: Failed');
+                console.log(`Retrying in ${retryAfter} ms`);
+
+                setTimeout(() => {
+                    console.log('Raw connection to database: Reconnecting');
+
+                    try {
+                        this._dbConnection.end((err) => {
+                            if (err) {
+                                console.error(
+                                    'Unable to end existing raw connection, ignoring for now.'
+                                );
+                            }
+
+                            this._dbConnection = mysql.createConnection(
+                                this._connectionConfig.db_url!
+                            );
+
+                            this._dbConnection.connect((err) => {
+                                if (err) {
+                                    retryCallback(retryCount + 1);
+                                    return;
+                                }
+                                console.log(
+                                    `Raw connection to database: Initialized`
+                                );
+                            });
+                        });
+                    } catch (error) {
+                        retryCallback(retryCount + 1);
+                        return;
+                    }
+                }, retryAfter);
+            };
+
+            this._dbConnection.on('end', retryCallback);
         });
     }
 

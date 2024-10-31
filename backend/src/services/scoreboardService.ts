@@ -1,6 +1,4 @@
 import Container, { Service } from 'typedi';
-import models from '../database/containers/models';
-import { User } from '../database/models/User';
 import {
     ExeInfo,
     HunterExecutable,
