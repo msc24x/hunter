@@ -25,6 +25,7 @@ import {
     faChevronUp,
     faFileCode,
     faHourglassHalf,
+    faMeteor,
     faSpinner,
     faTableColumns,
 } from '@fortawesome/free-solid-svg-icons';
@@ -42,10 +43,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     loginIcon = faAddressCard;
     timerIcon = faHourglassHalf;
     upIcon = faChevronUp;
+    submitIcon = faMeteor;
 
     showInstructionP = false;
 
-    loading = false;
+    loading = 0;
     fetchSubmissionMsg = '';
 
     c_id: number = 0;
@@ -122,6 +124,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 this.postSolution(true);
             }
 
+            if (event.ctrlKey && event.key == '`') {
+                this.bottomSection = !this.bottomSection;
+            }
+
             if (event.key.startsWith('Esc')) {
                 this.bottomSection = false;
             }
@@ -134,9 +140,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             return;
         }
 
+        this.loading++;
         this.subscriptions.push(
             this.authService.authenticate_credentials().subscribe({
                 next: (res) => {
+                    this.loading--;
+
                     if (res.status == 202) {
                         const body = res.body as UserInfo;
                         this.user = body;
@@ -235,7 +244,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.solutionOutput.output = '';
         this.judgeInProgress = true;
 
-        this.loading = true;
+        this.loading++;
         this.enableSubmitControls(false);
         this.subscriptions.push(
             this.competitionsService
@@ -257,7 +266,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 )
                 .subscribe({
                     next: (res) => {
-                        this.loading = false;
+                        this.loading--;
                         this.judgeInProgress = false;
                         this.enableSubmitControls(true);
 
@@ -269,7 +278,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                     },
 
                     error: (err) => {
-                        this.loading = false;
+                        this.loading--;
                         this.judgeInProgress = false;
 
                         this.enableSubmitControls(true);
@@ -281,7 +290,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     fetchLastSubmission() {
         this.fetchSubmissionMsg = '';
-        this.loading = true;
+        this.loading++;
         this.subscriptions.push(
             this.competitionsService
                 .getLastSubmission({
@@ -292,11 +301,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 .subscribe({
                     next: (res) => {
                         this.codeWritten = res.body?.data ?? '';
-                        this.loading = false;
+                        this.loading--;
                     },
                     error: (err) => {
                         console.log(err);
-                        this.loading = false;
+                        this.loading--;
                         this.fetchSubmissionMsg =
                             '* Not found any .' +
                             this.languageSelected +
@@ -307,11 +316,13 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     fetchData() {
-        this.subscriptions.push(
+        const dataSubscriptions = [
             this.competitionsService
                 .getQuestions({ competition_id: this.c_id })
                 .subscribe({
                     next: (res) => {
+                        this.loading--;
+
                         this.competition = res.body as CompetitionInfo;
                         this.competitionsService.parseCompetitionTypes(
                             this.competition
@@ -358,6 +369,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         }
                     },
                     error: (err) => {
+                        this.loading--;
+
                         if (err.status == resCode.notFound) {
                             this.router.navigate(['/404']);
                         }
@@ -367,10 +380,14 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 .getProgress({ comp_id: this.c_id })
                 .subscribe({
                     next: (res) => {
+                        this.loading--;
                         this.questionsProgress = res.body || [];
                     },
-                })
-        );
+                }),
+        ];
+
+        this.loading += dataSubscriptions.length;
+        this.subscriptions.push(...dataSubscriptions);
     }
 
     selectQuestion(index: number) {

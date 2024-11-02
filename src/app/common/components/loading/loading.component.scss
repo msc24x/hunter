@@ -8,10 +8,10 @@ div {
     opacity: 0.6;
     background-color: rgb(146, 173, 21);
     animation-name: loading;
-    animation-duration: 3s;
+    animation-duration: 1.5s;
     animation-fill-mode: forwards;
     animation-iteration-count: infinite;
-    box-shadow: 0 20px 90px 9px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 20px 90px 9px rgba(255, 147, 147, 0.307);
 }
 
 @keyframes loading {

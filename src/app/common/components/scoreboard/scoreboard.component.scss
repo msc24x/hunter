@@ -3,7 +3,7 @@
 @use "../../../../assets/mixins" as *;
 
 #view-submissions-list-popup {
-    width: 34rem;
+    width: 30%;
 }
 
 #score_board {
@@ -65,6 +65,7 @@
             .rank-col {
                 flex-basis: 5%;
                 text-align: center;
+                text-wrap: nowrap;
             }
 
             .name-col {

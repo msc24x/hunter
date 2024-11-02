@@ -3,11 +3,22 @@
         *ngIf="editable"
         matTooltip="Load the boilerplate template for the selected language"
         matTooltipPosition="above"
-        class="row"
+        class="row editor-button"
         id="load_template_btn"
         (click)="loadTemplate()"
     >
         Load Template
+    </div>
+
+    <div
+        *ngIf="false"
+        matTooltip="Paste your last submitted code for this question into the editor"
+        matTooltipPosition="above"
+        class="row editor-button"
+        id="last_submission_button"
+        (click)="fetchLastSubmission.emit()"
+    >
+        Fetch Last Submission
     </div>
 
     <drop-down-list

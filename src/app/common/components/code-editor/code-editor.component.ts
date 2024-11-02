@@ -24,6 +24,8 @@ export class CodeEditorComponent implements OnInit, OnChanges {
 
     editorInitialized = new BehaviorSubject<boolean>(false);
 
+    @Output() fetchLastSubmission = new EventEmitter<void>();
+
     @Input() editable: boolean = true;
     @Input() languageSelected: HunterLanguage = 'cpp';
     @Output() languageSelectedChange = new EventEmitter<HunterLanguage>();

@@ -9,8 +9,8 @@
     border-radius: 1.5rem;
     position: fixed;
     top: 97%;
-    left: 10%;
-    right: 10%;
+    left: 7%;
+    right: 7%;
     bottom: -2rem;
     opacity: 0.5;
     transition: opacity 100ms, top 200ms;
@@ -99,6 +99,12 @@
 
 #submit_controls {
     justify-content: end !important;
+    margin-bottom: 1rem;
+
+    #submit_code_btn {
+        background-color: #f7f0ff;
+        border-color: #a081d2;
+    }
 
     .button {
         margin-top: 0.5rem;
@@ -132,11 +138,12 @@
 }
 
 #competition_info {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     font-size: 1.3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background-color: colors.$text_white;
+    padding-block: 1rem !important;
+    @include basicBack;
+    @include sweetBorder;
 
     infotip {
         margin-left: 0.4rem;
@@ -146,17 +153,57 @@
         }
     }
 
+    .title-duration-container {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+
+        > b {
+            width: 100%;
+            flex-basis: 70%;
+            font-size: 1.1rem;
+        }
+    }
+
+    .description-toggle-content {
+        margin: 6px;
+        margin-bottom: 0;
+        width: 100%;
+        cursor: pointer;
+    }
+    .description-toggle-content-a:hover {
+        text-decoration: underline;
+    }
+
+    #description-toggle:checked + p {
+        .description-toggle-content-a {
+            display: none;
+        }
+        .description-toggle-content-b {
+            display: block;
+        }
+    }
+
+    #description-toggle:not(:checked) + p {
+        .description-toggle-content-a {
+            display: block;
+        }
+        .description-toggle-content-b {
+            display: none;
+        }
+    }
+
     #duration_info {
-        background-color: whitesmoke;
-        border-radius: 24px;
+        // background-color: whitesmoke;
+        border-radius: 0.6rem;
         padding: 10px;
-        margin: 24px;
-        margin-right: 0;
         padding-inline: 24px;
         text-align: start;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        @include sweetBorder;
 
         .label {
             font-size: 1rem;
@@ -207,7 +254,7 @@
     display: flex;
     justify-content: stretch;
     align-items: start;
-    gap: 3rem;
+    gap: 0.6rem;
 
     question-evaluation {
         width: 50%;
@@ -220,7 +267,7 @@
         max-height: 512px;
         padding: 18px;
         font-size: 1rem;
-        border-radius: 24px;
+        border-radius: 1rem;
         border: 1px solid whitesmoke;
         margin: 4px;
         transition: height 200ms;

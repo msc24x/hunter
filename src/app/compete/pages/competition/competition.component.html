@@ -74,30 +74,40 @@
         </popup>
 
         <div *ngIf="isAuthenticated" id="competition_info">
-            <div>
-                <b>{{ this.competition.title }}</b>
-                <infotip
-                    message="Click to read instructions"
-                    (click)="showInstructionP = true"
-                    [svgSize]="'sm'"
-                ></infotip>
+            <div class="title-duration-container">
+                <b>
+                    {{ this.competition.title }}
+                    <infotip
+                        message="Click to read instructions"
+                        (click)="showInstructionP = true"
+                        [svgSize]="'sm'"
+                    ></infotip>
+                </b>
+                <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">
+                    <fa-icon [icon]="timerIcon"></fa-icon>
+                    <span style="width: max-content">
+                        &nbsp; &nbsp;
+                        {{ timeRemaining }}
+                    </span>
+                </div>
+            </div>
 
-                <p>
+            <input type="checkbox" id="description-toggle" hidden />
+            <p class="description-toggle-content">
+                <label
+                    class="description-toggle-content-a"
+                    for="description-toggle"
+                >
+                    Read description
+                </label>
+                <label
+                    class="description-toggle-content-b"
+                    for="description-toggle"
+                    matTooltip="Click to collapse"
+                >
                     {{ this.competition.description }}
-                </p>
-            </div>
-
-            <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">
-                <!-- <span class="label">Time left</span> -->
-                <!-- <br /> -->
-                <fa-icon [icon]="timerIcon"></fa-icon>
-                <span style="width: max-content">
-                    &nbsp; &nbsp;
-                    {{ timeRemaining }}
-                </span>
-                <!-- <b>{{ timeRemaining.min || "&infin;" }}</b> mins
-                <b>{{ timeRemaining.sec || "&infin;" }}</b> s -->
-            </div>
+                </label>
+            </p>
         </div>
 
         <div
@@ -158,7 +168,12 @@
             </div>
 
             <!-- Code editor -->
-            <code-editor class="ace-editor" [(code)]="codeWritten">
+            <code-editor
+                class="ace-editor"
+                [(code)]="codeWritten"
+                [(languageSelected)]="languageSelected"
+                (fetchLastSubmission)="fetchLastSubmission()"
+            >
             </code-editor>
         </div>
 
@@ -169,29 +184,24 @@
             class="row"
         >
             <div
-                matTooltip="Only submit when you're ready, to avoid negative marking"
-                class="button"
-                id="submit_code_btn"
-                (click)="postSolution()"
-            >
-                Submit
-            </div>
-            <div
                 class="button"
                 id="submit_code_samples_btn"
                 (click)="postSolution(true)"
+                [matTooltipPosition]="'above'"
                 [matTooltip]="'Test samples (Shift + Alt + J)'"
             >
                 Test Sample Cases
             </div>
             <div
+                matTooltip="Only submit when you're ready, to avoid negative marking"
                 class="button"
-                id="fetch_last_submit"
-                (click)="fetchLastSubmission()"
+                id="submit_code_btn"
+                [matTooltipPosition]="'above'"
+                (click)="postSolution()"
             >
-                Fetch Last Submission
+                <fa-icon [icon]="submitIcon"></fa-icon>
+                &nbsp; Submit & Evaluate
             </div>
-            <div>{{ fetchSubmissionMsg }}</div>
         </div>
     </div>
 
@@ -201,14 +211,10 @@
         <div
             class="section-toggle"
             (click)="bottomSection = !bottomSection"
-            matTooltip="Toggle the judge panel"
+            matTooltip="Toggle (Ctrl + `)"
         >
             <fa-icon [icon]="upIcon"></fa-icon>
         </div>
-        <!-- <div *ngIf="isAuthenticated && !hasEnded" class="row sa">
-            <div id="pts_desc_label">Evaluation</div>
-            <div id="output_label">Submission Output</div>
-        </div> -->
 
         <h2>Question Evaluation</h2>
 

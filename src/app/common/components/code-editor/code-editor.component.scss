@@ -8,10 +8,11 @@
         background-color: colors.$text_black;
         border-radius: 24px 24px 0 0;
         overflow: hidden;
-        height: 42px;
+        height: auto;
+        padding-block: 8px;
         padding-left: 42px;
 
-        #load_template_btn {
+        .editor-button {
             height: 1.8rem;
             padding-inline: 8px;
             color: white;
@@ -19,11 +20,11 @@
             cursor: pointer;
         }
 
-        #load_template_btn:hover {
+        .editor-button:hover {
             background-color: #494949;
         }
 
-        #load_template_btn,
+        .editor-button,
         drop-down-list {
             border-radius: 6px;
             overflow: hidden;
