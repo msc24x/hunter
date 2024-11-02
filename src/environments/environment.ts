@@ -115,9 +115,9 @@ export const templates = {
     cpp: '#include <iostream>\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n\t//write code\n\treturn 0;\n}',
     c: '#include"stdio.h"\n#include"string.h"\n#include"math.h"\n#include"stdlib.h"\n#include"ctype.h"\n#include"limits.h"\n#include"time.h"\n#include"stdbool.h"\n\nint main(){\n\t//write code\n\treturn 0;\n}',
     py: '# write code',
-    js: '/*write code*/',
-    ts: '/*write code*/',
-    go: 'package main\nimport "fmt"\nfunc main() {\n  fmt.Println("Hello, World!")\n}',
+    js: "const readline = require('readline');\n\nconst stdio = readline.createInterface({\n    input: process.stdin,\n    output: process.stdout\n});\n\nfunction main() {\n    //write your code here\n}\nmain();",
+    ts: "import * as readline from 'readline';\r\n\r\nconst stdio = readline.createInterface({\r\n    input: process.stdin,\r\n    output: process.stdout\r\n});\r\n\r\nfunction main(): void {\r\n    //write your code here\r\n}\r\n\r\nmain();\r\n",
+    go: 'package main\n\nimport "fmt"\n\nfunc main() {\n  fmt.Println("Hello, World!")\n}',
 };
 
 export const resCode = {

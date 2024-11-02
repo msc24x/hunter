@@ -13,11 +13,11 @@
 
     & > div {
         border-radius: 0.6rem;
-        max-width: 10rem;
-        flex-basis: 20%;
+        max-width: 7rem;
         justify-content: center !important;
-        @include sweetBorder;
         cursor: pointer;
+        text-wrap: nowrap;
+        @include sweetBorder;
 
         &:hover {
             background-color: white;
