@@ -1,19 +1,15 @@
-version: '1.0.0'
+version: "1.0.0"
 
-services:  
-  hunter-backend:
-    image: msc24x/hunter-backend:${ENV}
-    container_name: hunter-backend
-    ports:
-      - 8080:8080
-    restart: always
-    
-    build:
-      context: backend
-      args:
-        ENV: ${ENV}
-      dockerfile: Dockerfile
-      
+services:
+    hunter-backend:
+        image: msc24x/hunter-backend:latest
+        container_name: hunter-backend
+        ports:
+            - 8080:8080
+        restart: always
 
-  
-    
+        build:
+            context: backend
+            args:
+                ENV: prod
+            dockerfile: Dockerfile
