@@ -68,6 +68,7 @@ export class ScoreboardComponent implements OnInit, OnChanges {
     }
 
     fetchScores(question_id?: number) {
+        this.loading = true;
         this.scoresDataService
             .getScoresAll({
                 comp_id: this.competition_id,
@@ -75,6 +76,7 @@ export class ScoreboardComponent implements OnInit, OnChanges {
                 after: this.pages[this.pages.length - 1],
             })
             .subscribe((res) => {
+                this.loading = false;
                 this.scores = res.body!.rows as Array<result>;
                 this.meta = res.body!.meta;
             });

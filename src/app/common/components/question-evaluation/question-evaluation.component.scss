@@ -50,3 +50,13 @@ pretty-meta {
         }
     }
 }
+
+@media only screen and (max-width: 512px) {
+    .points-time-col {
+        display: none !important;
+    }
+
+    .btable div div {
+        flex-basis: initial;
+    }
+}

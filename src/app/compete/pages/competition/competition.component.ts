@@ -135,6 +135,17 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.lastEditorContent(true);
         });
 
+        if (
+            /iPhone|iPad|iPod|Android|Opera Mini|IEMobile|BlackBerry|WPDesktop/i.test(
+                navigator.userAgent
+            )
+        ) {
+            alert(
+                'Participating in competitions is not recommended on your device. Hunter is designed to be best viewed on desktops.'
+            );
+            this.hrlayout = false;
+        }
+
         if (this.isAuthenticated) {
             this.fetchData();
             return;
@@ -153,15 +164,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.authService.user = this.user;
                         this.authService.isAuthenticated.next(true);
                         this.fetchData();
-                        if (
-                            /iPhone|iPad|iPod|Android|Opera Mini|IEMobile|BlackBerry|WPDesktop/i.test(
-                                navigator.userAgent
-                            )
-                        ) {
-                            alert(
-                                'Participating in competitions is not recommended on your device. Hunter is designed to be best viewed on desktops'
-                            );
-                        }
                     }
                 },
             })

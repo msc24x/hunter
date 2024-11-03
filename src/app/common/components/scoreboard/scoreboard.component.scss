@@ -106,3 +106,15 @@
         }
     }
 }
+
+@media only screen and (max-width: 512px) {
+    .score,
+    .score-p,
+    .time-col {
+        display: none !important;
+    }
+
+    .name-col {
+        flex-basis: initial !important;
+    }
+}

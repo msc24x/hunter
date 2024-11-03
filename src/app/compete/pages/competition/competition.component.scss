@@ -44,6 +44,8 @@
     .progress-container {
         display: flex;
         align-items: stretch;
+        flex-wrap: wrap;
+        gap: 0.3rem;
 
         .progress-box {
             font-size: 1.3rem;
@@ -54,6 +56,7 @@
             display: inline-block;
             margin-right: 1rem;
             border-radius: 1rem;
+            flex-grow: 1;
             @include sweetBorder;
 
             .progress-num {
@@ -69,6 +72,7 @@
             &.score-box {
                 display: flex;
                 align-items: center;
+                gap: 0.3rem;
             }
         }
     }
@@ -140,8 +144,8 @@
 #competition_info {
     margin-bottom: 1rem;
     font-size: 1.3rem;
-    background-color: colors.$text_white;
     padding-block: 1rem !important;
+    background-color: colors.$text_white;
     @include basicBack;
     @include sweetBorder;
 
@@ -155,8 +159,9 @@
 
     .title-duration-container {
         display: flex;
-        flex-wrap: nowrap;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
         justify-content: space-between;
 
         > b {
@@ -168,6 +173,7 @@
 
     .description-toggle-content {
         margin: 6px;
+        margin-top: 9px;
         margin-bottom: 0;
         width: 100%;
         cursor: pointer;
@@ -196,6 +202,7 @@
 
     #duration_info {
         // background-color: whitesmoke;
+        // margin-top: 1rem;
         border-radius: 0.6rem;
         padding: 10px;
         padding-inline: 24px;
@@ -259,12 +266,16 @@
     question-evaluation {
         width: 50%;
     }
+    @media only screen and (max-width: 512px) {
+        question-evaluation {
+            width: 100%;
+        }
+    }
 
     #solution_output {
         background-color: whitesmoke;
         width: 50%;
         overflow: scroll;
-        max-height: 512px;
         padding: 18px;
         font-size: 1rem;
         border-radius: 1rem;
@@ -317,5 +328,13 @@
         #solution_output {
             width: 91% !important;
         }
+    }
+
+    .title-duration-container > b {
+        flex-basis: 100% !important;
+    }
+
+    .description-toggle-content-a {
+        text-decoration: underline;
     }
 }
