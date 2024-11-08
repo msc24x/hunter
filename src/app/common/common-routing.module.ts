@@ -5,28 +5,36 @@ import { CompeteComponent } from './pages/compete/compete.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 
-const routes: Routes = [{
-  "path" : "",
-  "component": HomeComponent,
-  "pathMatch" : "full",
-},{
-  "path" : "home",
-  "component" : HomeComponent
-},{
-  "path" : "register",
-  "component" : RegisterComponent
-},{
-  "path" : "compete",
-  "component" : CompeteComponent
-},
-{
-  "path" : "about",
-  "component" : AboutComponent
-}
+const routes: Routes = [
+    {
+        'path': '',
+        'title': 'Home | Hunter',
+        'component': HomeComponent,
+        'pathMatch': 'full',
+    },
+    {
+        'path': 'home',
+        'title': 'Home | Hunter',
+        'component': HomeComponent,
+    },
+    {
+        'path': 'register',
+        'component': RegisterComponent,
+    },
+    {
+        'path': 'compete',
+        'title': 'Public Competitions | Hunter',
+        'component': CompeteComponent,
+    },
+    {
+        'path': 'about',
+        'title': 'About | Hunter',
+        'component': AboutComponent,
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
 })
-export class CommonRoutingModule { }
+export class CommonRoutingModule {}

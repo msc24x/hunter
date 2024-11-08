@@ -31,6 +31,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'competition',
@@ -53,7 +54,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     c_id: number = 0;
 
     hrlayout: boolean = true;
-    bottomSection = false;
+    bottomSection = true;
 
     viewSubmissionResult: result | undefined;
     questionsProgress: Array<QuestionProgress> = [];
@@ -88,14 +89,18 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private router: Router,
         private competitionsService: CompetitionsDataService,
-        private scoresDataService: ScoresDataService
+        private scoresDataService: ScoresDataService,
+        private titleService: Title
     ) {
         const idParam = parseInt(
             this.route.snapshot.paramMap.get('competition_id') || ''
         );
+
         if (idParam) {
             this.c_id = idParam;
         }
+
+        titleService.setTitle('Participate | Hunter');
 
         this.user = this.authService.user;
         this.isAuthenticated = this.authService.isAuthenticated.value;
@@ -165,6 +170,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.authService.isAuthenticated.next(true);
                         this.fetchData();
                     }
+                },
+                error: (err) => {
+                    this.loading--;
                 },
             })
         );
@@ -330,6 +338,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             this.competition
                         );
 
+                        this.titleService.setTitle(
+                            `${this.competition.title || 'Competition'}`
+                        );
+
                         if (!this.competition.scheduled_end_at) {
                             clearInterval(this.timeInterval);
                         }
@@ -397,6 +409,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.questionSelectedInfo = this.competition.questions![index];
 
         this.lastEditorContent();
+
+        this.titleService.setTitle(
+            `Q${this.questionSelected + 1} | ${
+                this.competition.title || 'Competition'
+            }`
+        );
     }
 
     lastEditorContent(save?: boolean) {

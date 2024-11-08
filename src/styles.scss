@@ -6,6 +6,7 @@
 
 html {
     overflow-y: scroll;
+    font-weight: 200;
 }
 
 .hidden {
@@ -21,10 +22,6 @@ html {
 .disabled {
     cursor: not-allowed !important;
     opacity: 0.7;
-}
-
-html {
-    font-weight: 200;
 }
 
 a {

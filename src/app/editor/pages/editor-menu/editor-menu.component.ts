@@ -5,6 +5,7 @@ import { CompetitionInfo, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'editor-menu',
@@ -32,11 +33,22 @@ export class EditorMenuComponent implements OnInit {
         private authService: AuthService,
         private competitionsDataService: CompetitionsDataService,
         private userDataService: UserDataService,
-        private router: Router
+        private router: Router,
+        private titleService: Title
     ) {
+        this.titleService.setTitle('Workbench | Hunter');
+
         this.authService.isAuthenticated.subscribe((isAuth) => {
             this.user = this.authService.user;
             this.isAuthenticated = isAuth;
+
+            if (this.user) {
+                this.titleService.setTitle(
+                    `${
+                        this.user?.name ? this.user.name + ' | ' : ''
+                    }Workbench | Hunter`
+                );
+            }
         });
     }
     showEditProfileForm(f: boolean) {

@@ -5,7 +5,7 @@
     <div class="main">
         <app-info-card
             [persist]="true"
-            *ngIf="!isAuthenticated"
+            *ngIf="!isAuthenticated && !loading"
             (click)="redirectToGitHubOAuth()"
         >
             <br />
@@ -73,7 +73,10 @@
             </ul>
         </popup>
 
-        <div *ngIf="isAuthenticated" id="competition_info">
+        <div
+            *ngIf="isAuthenticated && this.competition.title"
+            id="competition_info"
+        >
             <div class="title-duration-container">
                 <b>
                     {{ this.competition.title }}
@@ -215,84 +218,92 @@
         >
             <fa-icon [icon]="upIcon"></fa-icon>
         </div>
+        <ng-template #questionEvaluation>
+            <h2>Question Evaluation</h2>
 
-        <h2>Question Evaluation</h2>
+            <div id="output_points">
+                <question-evaluation
+                    [questionSelectedInfo]="questionSelectedInfo"
+                >
+                </question-evaluation>
 
-        <div id="output_points">
-            <question-evaluation [questionSelectedInfo]="questionSelectedInfo">
-            </question-evaluation>
+                <div id="solution_output">
+                    <div class="loading" *ngIf="judgeInProgress">
+                        <fa-icon
+                            [icon]="judgeLoadingIcon"
+                            [spin]="true"
+                            [pulse]="true"
+                        ></fa-icon>
+                        &nbsp;&nbsp; Judging... this may take a few seconds
+                    </div>
+                    <div *ngIf="solutionOutput.output">
+                        <h3>Output<br /></h3>
+                        <pre [innerText]="solutionOutput.output"></pre>
+                    </div>
 
-            <div id="solution_output">
-                <div class="loading" *ngIf="judgeInProgress">
-                    <fa-icon
-                        [icon]="judgeLoadingIcon"
-                        [spin]="true"
-                        [pulse]="true"
-                    ></fa-icon>
-                    &nbsp;&nbsp; Judging... this may take a few seconds
+                    <div *ngIf="solutionOutput.expected">
+                        <h3>Expected<br /></h3>
+                        <pre [innerText]="solutionOutput.expected"></pre>
+                    </div>
+
+                    <pretty-meta
+                        [meta]="solutionOutput.meta"
+                        [success]="solutionOutput.success"
+                    ></pretty-meta>
                 </div>
-                <div *ngIf="solutionOutput.output">
-                    <h3>Output<br /></h3>
-                    <pre [innerText]="solutionOutput.output"></pre>
+            </div>
+
+            <br />
+            <h2 *ngIf="competition.questions">Your Overall Progress</h2>
+
+            <div *ngIf="competition.questions" class="progress-container">
+                <div class="progress-box">
+                    <span class="progress-num">
+                        {{ questionsProgress.length }} of
+                        {{ competition.questions.length }}
+                    </span>
+                    Questions Attempted
+                    <greenred
+                        [green_number]="questionsProgress.length"
+                        [red_number]="
+                            (competition.questions.length || 1) -
+                            questionsProgress.length
+                        "
+                        green_label="Attempted"
+                        red_label="Unattempted"
+                    ></greenred>
                 </div>
 
-                <div *ngIf="solutionOutput.expected">
-                    <h3>Expected<br /></h3>
-                    <pre [innerText]="solutionOutput.expected"></pre>
+                <div class="progress-box">
+                    <span class="progress-num">
+                        {{ getAcceptedSolutions() }} of
+                        {{ questionsProgress.length }}
+                    </span>
+                    Questions Accepted
+                    <greenred
+                        [green_number]="getAcceptedSolutions()"
+                        [red_number]="
+                            questionsProgress.length - getAcceptedSolutions()
+                        "
+                        green_label="Accepted"
+                        red_label="Not Accepted"
+                    ></greenred>
                 </div>
 
-                <pretty-meta
-                    [meta]="solutionOutput.meta"
-                    [success]="solutionOutput.success"
-                ></pretty-meta>
+                <div class="progress-box score-box">
+                    You aggregated a total of &nbsp;
+                    <span class="progress-num">
+                        {{ getTotalScore() }}
+                    </span>
+                    points
+                </div>
             </div>
-        </div>
+        </ng-template>
 
-        <br />
-        <h2 *ngIf="competition.questions">Your Overall Progress</h2>
-
-        <div *ngIf="competition.questions" class="progress-container">
-            <div class="progress-box">
-                <span class="progress-num">
-                    {{ questionsProgress.length }} of
-                    {{ competition.questions.length }}
-                </span>
-                Questions Attempted
-                <greenred
-                    [green_number]="questionsProgress.length"
-                    [red_number]="
-                        (competition.questions.length || 1) -
-                        questionsProgress.length
-                    "
-                    green_label="Attempted"
-                    red_label="Unattempted"
-                ></greenred>
-            </div>
-
-            <div class="progress-box">
-                <span class="progress-num">
-                    {{ getAcceptedSolutions() }} of
-                    {{ questionsProgress.length }}
-                </span>
-                Questions Accepted
-                <greenred
-                    [green_number]="getAcceptedSolutions()"
-                    [red_number]="
-                        questionsProgress.length - getAcceptedSolutions()
-                    "
-                    green_label="Accepted"
-                    red_label="Not Accepted"
-                ></greenred>
-            </div>
-
-            <div class="progress-box score-box">
-                You aggregated a total of &nbsp;
-                <span class="progress-num">
-                    {{ getTotalScore() }}
-                </span>
-                points
-            </div>
-        </div>
+        <ng-container
+            *ngIf="isAuthenticated"
+            [ngTemplateOutlet]="questionEvaluation"
+        ></ng-container>
 
         <scoreboard [competition_id]="c_id"></scoreboard>
     </div>

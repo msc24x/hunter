@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     faCircleCheck,
@@ -64,8 +65,11 @@ export class EditorComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private competitionsData: CompetitionsDataService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private titleService: Title
     ) {
+        titleService.setTitle('Build | Hunter');
+
         this.competition_id = parseInt(
             this.activatedRoute.snapshot.paramMap.get('competition_id') || ''
         );
@@ -241,6 +245,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             this.testExists = res;
         });
         this.loading = false;
+
+        this.titleService.setTitle(
+            `Q${index + 1} | ${this.competitionInfo.title || 'Competition'}`
+        );
     }
 
     updateFile(event: any, filen: string) {
@@ -300,6 +308,12 @@ export class EditorComponent implements OnInit, OnDestroy {
                         this.toggleVisibility();
                         this.toggleVisibility();
                         this.loading = false;
+
+                        this.titleService.setTitle(
+                            `Build | ${
+                                this.competitionInfo.title || 'Competition'
+                            }`
+                        );
                     }
                 }
             });
