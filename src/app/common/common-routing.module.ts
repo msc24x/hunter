@@ -8,13 +8,13 @@ import { RegisterComponent } from './pages/register/register.component';
 const routes: Routes = [
     {
         'path': '',
-        'title': 'Home | Hunter',
+        'title': 'Home • Hunter',
         'component': HomeComponent,
         'pathMatch': 'full',
     },
     {
         'path': 'home',
-        'title': 'Home | Hunter',
+        'title': 'Home • Hunter',
         'component': HomeComponent,
     },
     {
@@ -23,12 +23,12 @@ const routes: Routes = [
     },
     {
         'path': 'compete',
-        'title': 'Public Competitions | Hunter',
+        'title': 'Public Competitions • Hunter',
         'component': CompeteComponent,
     },
     {
         'path': 'about',
-        'title': 'About | Hunter',
+        'title': 'About • Hunter',
         'component': AboutComponent,
     },
 ];
