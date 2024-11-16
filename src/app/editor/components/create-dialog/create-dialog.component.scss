@@ -49,7 +49,7 @@
     cursor: pointer;
 
     #plus_btn {
-        background-color: whitesmoke;
+        background-color: colors.$ls;
         transition: 300ms;
         font-size: 24px;
         padding: 1rem;
@@ -58,8 +58,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
         @include sweetBorder;
+        border-color: crimson;
     }
 }
 #create_btn:active {

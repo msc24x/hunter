@@ -12,7 +12,7 @@ div {
     animation-duration: 1.5s;
     animation-fill-mode: forwards;
     animation-iteration-count: infinite;
-    box-shadow: 0 20px 90px 9px rgba(255, 147, 147, 0.307);
+    box-shadow: 0 20px 90px 9px rgb(210, 174, 181);
 }
 
 @keyframes loading {
@@ -24,7 +24,7 @@ div {
         height: 3px;
     }
     40% {
-        background-color: #ffc549;
+        background-color: rgba(216, 39, 75, 0.596);
         height: 12px;
     }
     60% {

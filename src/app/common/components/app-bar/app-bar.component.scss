@@ -14,7 +14,7 @@ div.appBar {
 
     #logout_btn {
         background-color: rgb(255, 244, 244);
-        color: darkred;
+        color: crimson;
         border-radius: 12px;
         padding-block: 4px;
         padding-inline: 16px;
@@ -34,6 +34,9 @@ div.appBar {
         #app_title_full {
             cursor: pointer;
             font-size: 2.5rem;
+            color: crimson;
+            font-style: italic;
+
             &:hover {
                 transform: translateX(-4px) rotateZ(-2deg);
                 transition: 400ms;

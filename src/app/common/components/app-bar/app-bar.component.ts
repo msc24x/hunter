@@ -10,6 +10,7 @@ import {
     faBars,
     faCircleUser,
     faCompass,
+    faSlash,
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -20,6 +21,7 @@ import {
 export class AppBarComponent implements OnInit {
     userIcon = faCircleUser;
     exploreIcon = faBars;
+    slashIcon = faSlash;
     loading = false;
 
     @Input()

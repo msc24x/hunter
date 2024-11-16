@@ -54,7 +54,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     c_id: number = 0;
 
     hrlayout: boolean = true;
-    bottomSection = true;
+    bottomSection = false;
 
     viewSubmissionResult: result | undefined;
     questionsProgress: Array<QuestionProgress> = [];
