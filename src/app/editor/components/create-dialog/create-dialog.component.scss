@@ -58,6 +58,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        @include sweetBorder;
     }
 }
 #create_btn:active {

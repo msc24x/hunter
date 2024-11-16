@@ -12,6 +12,7 @@
 
 .view-submission {
     cursor: pointer;
+    white-space: nowrap;
 
     fa-icon {
         color: colors.$text_black;

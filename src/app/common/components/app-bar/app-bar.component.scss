@@ -26,7 +26,7 @@ div.appBar {
 
     #app_title {
         color: colors.$text_black;
-        font-weight: bold;
+        font-weight: 800;
         font-size: 3em;
         display: flex;
         align-items: center;
@@ -97,7 +97,6 @@ div.appBar {
         flex-direction: column;
         justify-content: right;
         align-items: flex-end;
-
         font-size: 0.8rem;
         font-weight: bolder;
         background-color: white;
@@ -107,17 +106,24 @@ div.appBar {
         margin-right: 12px;
         cursor: pointer;
 
+        @include sweetBorder;
+
         -webkit-user-select: none; /* Safari */
         -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* IE10+/Edge */
         user-select: none; /* Standard */
+
+        fa-icon,
+        fa-icon * {
+            pointer-events: none;
+        }
     }
     #navBarBtn:hover {
         background-color: white;
     }
 
     #navBarCompact {
-        font-weight: bold;
+        // font-weight: bold;
         margin-top: 14px;
         position: absolute;
         display: none;
@@ -164,15 +170,14 @@ div.appBar {
     #navBar {
         ul {
             color: colors.$text_black;
-
             font-weight: normal;
             display: flex;
             flex-wrap: wrap;
             list-style-type: none;
+
             a {
                 min-width: 140px;
                 text-align: center;
-                font-weight: bolder;
                 color: rgb(71, 71, 71);
                 cursor: pointer;
                 padding-block: 6px;

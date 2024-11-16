@@ -176,24 +176,27 @@
     }
 
     .detail-tag {
-        background-color: colors.$text_white;
-        border-radius: 1rem;
+        background-color: rgba(128, 128, 128, 0.1);
+        border-radius: 0.6rem;
         margin-block: 0.3rem;
         padding: 4px;
         padding-inline: 12px;
         margin-right: 4px;
         width: fit-content;
         display: inline-flex;
+
+        @include sweetBorder;
     }
 }
 
 #c_title {
-    font-weight: normal;
+    font-weight: 400;
     word-break: break-word;
     font-size: 1.2rem;
 }
 #c_host_user {
     margin-left: 4px;
+    margin-top: 6px;
     font-weight: lighter;
     padding: 4px;
 }

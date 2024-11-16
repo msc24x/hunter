@@ -10,7 +10,9 @@
 
 <div class="appBar">
     <div id="app_title">
-        <span id="app_title_full" routerLink="/home">{{ app_title }}</span>
+        <span id="app_title_full" routerLink="/home">
+            {{ app_title }}
+        </span>
         <div
             *ngIf="!isAuthenticated && showRegisterBtn"
             id="register_btn"
@@ -29,9 +31,9 @@
             {{ user.name || user.email }}
         </a>
     </div>
-    <a id="navBarBtn" (click)="toggleNavBar()">
-        <!-- <fa-icon [icon]="exploreIcon" size="2xl"></fa-icon> -->
-        Explore
+    <div id="navBarBtn" (click)="toggleNavBar()">
+        <fa-icon [icon]="exploreIcon" size="2xl"></fa-icon>
+        <!-- Explore -->
         <div id="navBarCompact">
             <ul>
                 <a routerLink="/home">HOME</a>
@@ -48,7 +50,7 @@
                 >
             </ul>
         </div>
-    </a>
+    </div>
 
     <div id="navBar">
         <ul>

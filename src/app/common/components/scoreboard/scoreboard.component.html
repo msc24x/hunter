@@ -14,7 +14,13 @@
 </popup>
 
 <div id="score_board">
-    <h2 *ngIf="question_list">Select Question</h2>
+    <h2 *ngIf="question_list">
+        {{
+            questionSelected === -1
+                ? "Select Question"
+                : "Q" + (questionSelected + 1) + " selected"
+        }}
+    </h2>
     <questions-list
         *ngIf="question_list"
         [competitionInfo]="competitionInfo"
@@ -24,9 +30,9 @@
         [editable]="false"
         [clearable]="true"
     ></questions-list>
-    <h2>
+    <!-- <h2>
         {{ questionSelected === -1 ? "Competition" : "Question" }} Scoreboard
-    </h2>
+    </h2> -->
     <p>
         Scoreboard displays the aggregate scores of all participants for this
         contest{{ questionSelected !== -1 ? "'s selected question" : "" }}.

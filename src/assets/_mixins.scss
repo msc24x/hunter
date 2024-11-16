@@ -79,6 +79,8 @@
     font-size: 16px;
     text-align: left;
     padding-left: 12px;
+    font-weight: 300;
+
     @include sweetBorder();
 }
 
@@ -87,6 +89,7 @@
     background-color: rgb(250, 250, 250);
     border-radius: 1rem;
     font-family: appFont;
+    font-weight: 300;
     font-size: 1.2rem;
     padding: 16px;
     border-width: 0px;

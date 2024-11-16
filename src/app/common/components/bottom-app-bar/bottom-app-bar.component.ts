@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { showPopup } from 'src/app/utils/utils';
 import { environment } from 'src/environments/environment';
 
@@ -9,6 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class BottomAppBarComponent implements OnInit {
     version: string = environment.version;
+    heartIcon = faHeart;
 
     constructor() {}
 

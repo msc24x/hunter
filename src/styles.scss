@@ -65,6 +65,8 @@ body {
     border-radius: 1rem;
     cursor: pointer;
 
+    @include sweetBorder;
+
     &:not(:hover) {
         transition: 300ms;
     }

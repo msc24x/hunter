@@ -11,15 +11,23 @@
     padding-block: 64px;
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-    flex-wrap: wrap-reverse;
+    flex-wrap: wrap;
     gap: 2rem;
+
+    .para {
+        color: gray;
+        max-width: 512px;
+    }
+
+    > div {
+        margin: 3rem;
+    }
 
     #site_logo {
         font-weight: bold;
         font-size: 2rem;
-        margin-bottom: 4rem;
 
         #site_info {
             font-size: 1rem;
@@ -38,21 +46,19 @@
         color: colors.$text_black;
     }
 
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
+    .links {
         max-width: 1024px;
         padding-inline: 10%;
         gap: 1.5rem;
+        grid-column: 2;
+        display: grid;
+        justify-items: end;
 
         div {
             cursor: default;
         }
 
         a {
-            opacity: 0.8;
             margin-inline: 12px;
             cursor: pointer;
         }
@@ -64,12 +70,11 @@
 }
 @media only screen and (max-width: 1024px) {
     #site_logo {
-        font-size: 1.2rem !important;
         #site_info {
             font-size: 1rem !important;
         }
     }
     .button {
-        font-size: 0.7rem !important;
+        font-size: 0.9rem !important;
     }
 }
