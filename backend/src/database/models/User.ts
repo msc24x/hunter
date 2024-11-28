@@ -1,15 +1,17 @@
-import mysql, { QueryError } from 'mysql2';
+import mysql, { PoolConnection, QueryError } from 'mysql2';
 import { UserInfo } from '../../config/types';
 import Container, { Inject, Service } from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 
 export class User {
-    dbConnection;
+    dbConnection!: PoolConnection;
 
     dbService: DatabaseProvider = Container.get(DatabaseProvider);
 
     constructor() {
-        this.dbConnection = () => this.dbService.getInstance();
+        this.dbService.getInstance().then((conn) => {
+            this.dbConnection = conn;
+        });
     }
 
     add(params: any, callback: (err: QueryError | null) => void) {
@@ -29,7 +31,7 @@ export class User {
             args[3] = params.salt;
         }
 
-        this.dbConnection().query(query, args, (err) => {
+        this.dbConnection.query(query, args, (err) => {
             callback(err);
         });
     }
@@ -49,7 +51,7 @@ export class User {
             return;
         }
 
-        this.dbConnection().query(query, args, (err) => {
+        this.dbConnection.query(query, args, (err) => {
             callback(err);
         });
     }
@@ -58,7 +60,7 @@ export class User {
         newUserInfo: UserInfo,
         callback: (err: mysql.QueryError | null) => void
     ) {
-        this.dbConnection().query(
+        this.dbConnection.query(
             ` update users set name = ? where id = ? ; `,
             [newUserInfo.name, newUserInfo.id],
             (err) => {
@@ -88,13 +90,13 @@ export class User {
         }
         query += ';';
 
-        this.dbConnection().query(query, args, (err, rows) => {
+        this.dbConnection.query(query, args, (err, rows) => {
             callback(err, rows);
         });
     }
 
     count(callback: (err: QueryError | null, rows: any) => void) {
-        this.dbConnection().query(
+        this.dbConnection.query(
             ' select count(*) as count from users;',
             (err, rows) => {
                 if (err) {

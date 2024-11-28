@@ -3,13 +3,17 @@
 <popup
     title="Destructive Action"
     id="delete_confirm"
+    [hidden]="!showQuestionDeleteP"
     (closeEvent)="handleDeleteConfirmation($event)"
 >
     You are about to delete the question. This is an irreversible action.
 </popup>
 
 <ol class="questions_list">
-    <div class="list-heading">{{ questionsList.length }} Questions</div>
+    <div class="list-heading">
+        {{ questionsList.length }}
+        {{ questionsList.length === 1 ? "Question" : "Questions" }}
+    </div>
     <li
         *ngFor="let question of this.questionsList; index as i"
         [ngClass]="{ 'selected-question': questionSelected == i }"
@@ -53,7 +57,7 @@
         matTooltip="Delete the selected question"
         *ngIf="editable && questionSelected !== -1"
         id="delete_question_btn"
-        (click)="showDeleteConfirmation(true)"
+        (click)="showQuestionDeleteP = true"
     >
         DELETE
     </div>

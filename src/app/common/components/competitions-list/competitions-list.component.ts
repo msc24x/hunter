@@ -31,6 +31,9 @@ export class CompetitionsListComponent implements OnInit {
     includeSelf: boolean = false;
 
     @Input()
+    showAuthor: boolean = true;
+
+    @Input()
     route: string = 'editor';
 
     query = '';

@@ -1,5 +1,5 @@
 import Container, { Service } from 'typedi';
-import mysql, { Connection } from 'mysql2';
+import mysql, { Connection, Pool, PoolConnection } from 'mysql2';
 import { Questions } from '../database/models/Questions';
 import config from '../config/config';
 import { Competitions } from '../database/models/Competitions';
@@ -10,7 +10,8 @@ import { PrismaClient } from '@prisma/client';
 
 @Service({ global: true })
 export class DatabaseProvider {
-    private _dbConnection: Connection;
+    // private _dbConnection: Connection;
+    private _dbPool: Pool;
     private _connectionConfig = config.dbConnectionConfig;
     private prismaClient: PrismaClient;
 
@@ -18,9 +19,16 @@ export class DatabaseProvider {
     public loaded = false;
 
     constructor() {
-        this._dbConnection = mysql.createConnection(
-            this._connectionConfig.db_url!
-        );
+        // this._dbConnection = mysql.createConnection(
+        //     this._connectionConfig.db_url!
+        // );
+
+        this._dbPool = mysql.createPool({
+            uri: this._connectionConfig.db_url,
+            keepAliveInitialDelay: 10000, // 0 by default.
+            enableKeepAlive: true, // false by default.
+        });
+
         this.prismaClient = new PrismaClient();
 
         this.prismaClient.$connect().then(
@@ -32,51 +40,18 @@ export class DatabaseProvider {
             }
         );
 
-        this._dbConnection.connect((err) => {
-            if (err) {
-                throw err;
-            }
-            console.log(`Raw connection to database: Initialized`);
+        // this._dbConnection.connect((err) => {
+        //     if (err) {
+        //         throw err;
+        //     }
+        //     console.log(`Raw connection to database: Initialized`);
 
-            const retryCallback = (retryCount = 1) => {
-                const retryAfter = retryCount * 1000;
-                console.log('Raw connection to database: Failed');
-                console.log(`Retrying in ${retryAfter} ms`);
-
-                setTimeout(() => {
-                    console.log('Raw connection to database: Reconnecting');
-
-                    try {
-                        this._dbConnection.end((err) => {
-                            if (err) {
-                                console.error(
-                                    'Unable to end existing raw connection, ignoring for now.'
-                                );
-                            }
-
-                            this._dbConnection = mysql.createConnection(
-                                this._connectionConfig.db_url!
-                            );
-
-                            this._dbConnection.connect((err) => {
-                                if (err) {
-                                    retryCallback(retryCount + 1);
-                                    return;
-                                }
-                                console.log(
-                                    `Raw connection to database: Initialized`
-                                );
-                            });
-                        });
-                    } catch (error) {
-                        retryCallback(retryCount + 1);
-                        return;
-                    }
-                }, retryAfter);
-            };
-
-            this._dbConnection.on('end', retryCallback);
-        });
+        //     // this._dbConnection.on('error', () => {
+        //     //     this._dbConnection.destroy();
+        //     //     console.log('Errored connection destroyed');
+        //     //     this._dbConnection.connect()
+        //     // });
+        // });
     }
 
     loadModels() {
@@ -89,7 +64,20 @@ export class DatabaseProvider {
     }
 
     public getInstance() {
-        return this._dbConnection;
+        const conn = new Promise<PoolConnection>((resolve, reject) => {
+            this._dbPool.getConnection((err, poolConn) => {
+                if (err) {
+                    console.log('destroying errored connection');
+                    poolConn.destroy();
+                    reject('err');
+                    return;
+                }
+
+                resolve(poolConn);
+            });
+        });
+
+        return conn;
     }
 
     public client() {

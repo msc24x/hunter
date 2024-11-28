@@ -102,17 +102,31 @@
 }
 
 #submit_controls {
-    justify-content: end !important;
+    justify-content: space-between !important;
     margin-bottom: 1rem;
 
     #submit_code_btn {
         background-color: colors.$ls;
-        border-color: crimson;
+        border-color: #8a656c;
     }
 
     .button {
         margin-top: 0.5rem;
         margin-bottom: 1.5rem;
+    }
+
+    #report-btn {
+        cursor: pointer;
+        color: colors.$text_black;
+        margin: 1rem;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    & > div {
+        justify-content: end;
     }
 }
 
@@ -266,13 +280,9 @@
     question-evaluation {
         width: 50%;
     }
-    @media only screen and (max-width: 512px) {
-        question-evaluation {
-            width: 100%;
-        }
-    }
 
     #solution_output {
+        scroll-margin: 24px;
         background-color: whitesmoke;
         width: 50%;
         overflow: scroll;
@@ -324,9 +334,13 @@
     }
 
     #output_points {
-        flex-direction: column;
+        flex-direction: column-reverse;
+
         #solution_output {
-            width: 91% !important;
+            width: auto !important;
+        }
+        question-evaluation {
+            width: 100%;
         }
     }
 

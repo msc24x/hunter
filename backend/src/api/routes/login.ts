@@ -8,7 +8,6 @@ import { DatabaseProvider } from '../../services/databaseProvider';
 import { resCode } from '../../config/settings';
 
 var router = express.Router();
-const database = Container.get(DatabaseProvider).getInstance();
 const client = Container.get(DatabaseProvider).client();
 
 router.use(bodyParser.json());

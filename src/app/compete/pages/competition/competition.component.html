@@ -186,24 +186,35 @@
             *ngIf="!hasEnded && questionSelected != -1 && isAuthenticated"
             class="row"
         >
-            <div
-                class="button"
-                id="submit_code_samples_btn"
-                (click)="postSolution(true)"
-                [matTooltipPosition]="'above'"
-                [matTooltip]="'Test samples (Shift + Alt + J)'"
+            <a
+                id="report-btn"
+                matTooltip="Email us for any kind of concern"
+                [href]="reportCompetitionLink()"
             >
-                Test Sample Cases
-            </div>
-            <div
-                matTooltip="Only submit when you're ready, to avoid negative marking"
-                class="button"
-                id="submit_code_btn"
-                [matTooltipPosition]="'above'"
-                (click)="postSolution()"
-            >
-                <fa-icon [icon]="submitIcon"></fa-icon>
-                &nbsp; Submit & Evaluate
+                <fa-icon [icon]="reportIcon" size="sm"></fa-icon>
+                Report
+            </a>
+            <div class="row">
+                <div
+                    class="button"
+                    id="submit_code_samples_btn"
+                    (click)="postSolution(true)"
+                    [matTooltipPosition]="'above'"
+                    [matTooltip]="'Test samples (Shift + Alt + J)'"
+                >
+                    <fa-icon [icon]="playIcon"></fa-icon>
+                    &nbsp; Run Tests
+                </div>
+                <div
+                    matTooltip="Only submit when you're ready, to avoid negative marking"
+                    class="button"
+                    id="submit_code_btn"
+                    [matTooltipPosition]="'above'"
+                    (click)="postSolution()"
+                >
+                    <fa-icon [icon]="submitIcon"></fa-icon>
+                    &nbsp; Submit & Evaluate
+                </div>
             </div>
         </div>
     </div>

@@ -193,6 +193,10 @@
     font-weight: 400;
     word-break: break-word;
     font-size: 1.2rem;
+
+    &.untitled {
+        opacity: 0.3;
+    }
 }
 #c_host_user {
     margin-left: 4px;

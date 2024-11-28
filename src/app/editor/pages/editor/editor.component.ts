@@ -84,6 +84,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         document
             .getElementsByTagName('bottom-app-bar')[0]
             .classList.remove('hidden');
+
+        window.onbeforeunload = null;
     }
 
     ngOnInit(): void {
@@ -91,6 +93,11 @@ export class EditorComponent implements OnInit, OnDestroy {
             .getElementsByTagName('bottom-app-bar')[0]
             .classList.add('hidden');
         window.scroll(0, 0);
+
+        window.onbeforeunload = (event) => {
+            event.preventDefault();
+            return;
+        };
 
         this.elem = document.getElementById('log');
 

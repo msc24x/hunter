@@ -1,10 +1,10 @@
-import { QueryError } from 'mysql2';
+import { PoolConnection, QueryError } from 'mysql2';
 import Container, { Inject, Service } from 'typedi';
 import { Result, UserInfo } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
 
 export class Results {
-    dbConnection;
+    dbConnection!: PoolConnection;
 
     dbService: DatabaseProvider = Container.get(DatabaseProvider);
 
@@ -52,7 +52,9 @@ export class Results {
     }
 
     constructor() {
-        this.dbConnection = () => this.dbService.getInstance();
+        this.dbService.getInstance().then((conn) => {
+            this.dbConnection = conn;
+        });
     }
 
     post(params: any, callback: (err: QueryError | null) => void) {
@@ -60,7 +62,7 @@ export class Results {
 
         if (params.result == 0) p = 1;
 
-        this.dbConnection().query(
+        this.dbConnection.query(
             `insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, ?);`,
             [
                 params.user_id,
@@ -84,7 +86,7 @@ export class Results {
 
         if (result == '0') p = 1;
 
-        this.dbConnection().query(
+        this.dbConnection.query(
             `update results set result = ?, penalities = penalities + ? where id = ? ;`,
             [result, p, id],
             (err) => {
@@ -104,7 +106,7 @@ export class Results {
             params.push(question_id.toString());
         }
 
-        this.dbConnection().query(
+        this.dbConnection.query(
             `
             SELECT
                 COUNT(DISTINCT r.user_id) as total_count
@@ -153,7 +155,7 @@ export class Results {
             queryParams = [id, question_id, after];
         }
 
-        this.dbConnection().query(
+        this.dbConnection.query(
             `${this.getScoresQuery(Boolean(question_id))};`,
             queryParams,
             (err, rows) => {
@@ -179,7 +181,7 @@ export class Results {
                             return;
                         }
 
-                        this.dbConnection().query(
+                        this.dbConnection.query(
                             `
                         SELECT
                             ranked_users.*
@@ -247,7 +249,7 @@ export class Results {
 
         query += ';';
 
-        this.dbConnection().query(query, args, (err, rows) => {
+        this.dbConnection.query(query, args, (err, rows) => {
             callback(rows, err);
         });
     }

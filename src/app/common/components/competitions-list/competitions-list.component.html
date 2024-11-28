@@ -45,22 +45,31 @@
                     class="competition_card"
                     routerLink="/{{ this.route }}/{{ com.id }}"
                 >
-                    <div id="c_title">{{ com.title }}</div>
+                    <div id="c_title" [ngClass]="{ 'untitled': !com.title }">
+                        {{ com.title || "untitled" }}
+                    </div>
                     <div id="c_host_user">
-                        By
-                        {{ com.host_user?.name || "Anonymous" }}
-                        <span *ngIf="com.host_user_id != 1">
-                            #{{ com.host_user_id }}
-                        </span>
-                        &nbsp;
-                        <span
-                            *ngIf="com.host_user_id == 1"
-                            matTooltip="Official by Hunter"
-                        >
-                            <fa-icon [icon]="officialIcon"></fa-icon>
-                        </span>
+                        <ng-template #authorElem>
+                            By
+                            {{ com.host_user?.name || "Anonymous" }}
+                            <span *ngIf="com.host_user_id != 1">
+                                #{{ com.host_user_id }}
+                            </span>
+                            &nbsp;
+                            <span
+                                *ngIf="com.host_user_id == 1"
+                                matTooltip="Official by Hunter"
+                            >
+                                <fa-icon [icon]="officialIcon"></fa-icon>
+                            </span>
 
-                        &nbsp;
+                            &nbsp;
+                        </ng-template>
+
+                        <ng-container
+                            [ngTemplateOutlet]="authorElem"
+                            *ngIf="showAuthor"
+                        ></ng-container>
                         <span
                             *ngIf="!com.public"
                             matTooltip="Private, only visible to you"
@@ -121,7 +130,9 @@
                         {{ timeLeft(com.scheduled_end_at, timeLeftFlag) }} left
                     </div>
                     <br />
-                    <p id="c_about">{{ com.description }}</p>
+                    <p id="c_about" *ngIf="com.description">
+                        {{ com.description }}
+                    </p>
                 </div>
             </li>
 

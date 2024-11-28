@@ -21,6 +21,8 @@ export class QuestionsListComponent implements OnInit {
     checkIcon = faCircleCheck;
     crossIcon = faCircleXmark;
 
+    showQuestionDeleteP = false;
+
     constructor(private competitionsData: CompetitionsDataService) {}
 
     @Input()
@@ -132,16 +134,11 @@ export class QuestionsListComponent implements OnInit {
     }
 
     handleDeleteConfirmation(event: string) {
-        this.showDeleteConfirmation(false);
+        this.showQuestionDeleteP = false;
+
         if (event == 'continue') {
             this.delQuestion();
         }
-    }
-
-    showDeleteConfirmation(f: boolean) {
-        const e = document.getElementById('delete_confirm') as HTMLElement;
-        if (f) e.style.display = 'block';
-        else e.style.display = 'none';
     }
 
     displayLog(msg: string) {

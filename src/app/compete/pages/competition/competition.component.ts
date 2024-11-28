@@ -22,10 +22,14 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     faAddressCard,
+    faBug,
     faChevronUp,
+    faEnvelopeOpenText,
     faFileCode,
+    faFlag,
     faHourglassHalf,
     faMeteor,
+    faPlay,
     faSpinner,
     faTableColumns,
 } from '@fortawesome/free-solid-svg-icons';
@@ -44,7 +48,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     loginIcon = faAddressCard;
     timerIcon = faHourglassHalf;
     upIcon = faChevronUp;
-    submitIcon = faMeteor;
+    submitIcon = faEnvelopeOpenText;
+    playIcon = faPlay;
+    reportIcon = faBug;
 
     showInstructionP = false;
 
@@ -131,9 +137,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
             if (event.ctrlKey && event.key == '`') {
                 this.bottomSection = !this.bottomSection;
-            }
-
-            if (event.key.startsWith('Esc')) {
+            } else if (event.key.startsWith('Esc')) {
                 this.bottomSection = false;
             }
 
@@ -238,9 +242,20 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         window.open(`${environment.apiUrl}/oauth/github`);
     }
 
+    scrollToTop() {
+        setTimeout(() => {
+            document.querySelector('.bottom-section')?.scrollTo({
+                behavior: 'smooth',
+                top: 0,
+            });
+        });
+    }
+
     postSolution(samples = false) {
         this.clearOutput();
         this.bottomSection = true;
+
+        this.scrollToTop();
 
         if (this.questionSelected == -1) {
             this.solutionOutput.output = 'No question selected';
@@ -279,6 +294,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.loading--;
                         this.judgeInProgress = false;
                         this.enableSubmitControls(true);
+                        this.scrollToTop();
 
                         if (res.status == resCode.success) {
                             this.solutionOutput = res.body as ExecutionInfo;
@@ -292,6 +308,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.judgeInProgress = false;
 
                         this.enableSubmitControls(true);
+                        this.scrollToTop();
                         this.solutionOutput = err.statusText;
                     },
                 })
@@ -461,5 +478,17 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             elem.style.pointerEvents = 'none';
             elem.style.opacity = '0.5';
         }
+    }
+
+    getParticipationLink() {
+        return `${protocol}://${domainName}/compete/p/${this.competition.id}`;
+    }
+
+    reportCompetitionLink() {
+        var mailtoString = `mailto:msc24x+hunter_reports@gmail.com?subject=%5BReport%5D%20${
+            this.competition.title || '<Untitled competition>'
+        }&body=I%20would%20like%20to%20report%20the%20following%20competition.%0A%0ALink%3A%20${this.getParticipationLink()}%0A%0AREASON%3A%0A%3CPlease%20specify%20your%20reason%20here%3E%0A%0AACTION%20REQUEST%3A%0A%3CPlease%20specify%20what%20action%20do%20you%20wish%20the%20Hunter%20to%20take%3E`;
+
+        return mailtoString;
     }
 }
