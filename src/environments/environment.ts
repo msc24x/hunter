@@ -15,6 +15,10 @@ export interface UserInfo {
     id: number;
     email: string;
     name: string;
+    avatar_url?: string;
+    blog_url?: string;
+    github_url?: string;
+    linkedin_url?: string;
 }
 
 export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go';

@@ -12,6 +12,7 @@ import {
     faCompass,
     faSlash,
 } from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
     selector: 'app-bar',
@@ -19,7 +20,7 @@ import {
     styleUrls: ['./app-bar.component.scss'],
 })
 export class AppBarComponent implements OnInit {
-    userIcon = faCircleUser;
+    userIcon = faGithub;
     exploreIcon = faBars;
     slashIcon = faSlash;
     loading = false;

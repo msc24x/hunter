@@ -23,6 +23,8 @@ router.put('/user', authenticate, loginRequired, (req, res) => {
             where: { id: res.locals.user.id },
             data: {
                 name: updateUser.name,
+                linkedin_url: updateUser.linkedin_url,
+                blog_url: updateUser.blog_url,
             },
         })
         .then(() => Util.sendResponse(res, resCode.success))

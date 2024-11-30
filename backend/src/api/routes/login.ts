@@ -52,7 +52,10 @@ function getOrCreateSession(user: UserInfo): Promise<SessionInfo> {
     return promise;
 }
 
-function getOrCreateUser(email: string): Promise<UserInfo | null> {
+function getOrCreateUser(
+    email: string,
+    data: UserInfo
+): Promise<UserInfo | null> {
     const promise = new Promise<UserInfo | null>((resolve, reject) => {
         client.users
             .findFirst({
@@ -66,6 +69,11 @@ function getOrCreateUser(email: string): Promise<UserInfo | null> {
                         .create({
                             data: {
                                 email: email,
+                                name: data.name,
+                                blog_url: data.blog_url,
+                                linkedin_url: data.linkedin_url,
+                                avatar_url: data.avatar_url,
+                                github_url: data.github_url,
                             },
                         })
                         .then((user) =>
@@ -77,11 +85,34 @@ function getOrCreateUser(email: string): Promise<UserInfo | null> {
                         )
                         .catch(() => resolve(null));
                 } else {
-                    resolve({
-                        id: user.id,
-                        email: user.email!,
-                        name: user.name || '',
-                    });
+                    if (!user.github_fetched_at) {
+                        client.users
+                            .update({
+                                where: {
+                                    id: user.id,
+                                },
+                                data: {
+                                    name: data.name,
+                                    blog_url: data.blog_url,
+                                    avatar_url: data.avatar_url,
+                                    github_url: data.github_url,
+                                    github_fetched_at: new Date(),
+                                },
+                            })
+                            .then(() => {
+                                resolve({
+                                    id: user.id,
+                                    email: user.email!,
+                                    name: user.name || '',
+                                });
+                            });
+                    } else {
+                        resolve({
+                            id: user.id,
+                            email: user.email!,
+                            name: user.name || '',
+                        });
+                    }
                 }
             })
             .catch(() => resolve(null));
@@ -124,27 +155,51 @@ router.get('/oauth/github', (req, res) => {
 
                         const email = emails.find((val) => val.primary)?.email;
 
-                        getOrCreateUser(email!).then((user) => {
-                            if (!user) {
-                                res.sendStatus(400);
-                                return;
-                            }
+                        fetch(`https://api.github.com/user`, {
+                            headers: {
+                                Accept: 'application/json',
+                                Authorization: `token ${body.access_token}`,
+                            },
+                        })
+                            .then((githubUserData) => githubUserData.json())
+                            .then((githubUserData) => {
+                                const usefulData = {
+                                    id: -1,
+                                    email: email,
+                                    name: githubUserData?.name || '',
+                                    avatar_url:
+                                        githubUserData?.avatar_url || '',
+                                    github_url: githubUserData?.html_url || '',
+                                    blog_url: githubUserData?.blog || '',
+                                } as UserInfo;
 
-                            getOrCreateSession(user)
-                                .then((session) => {
-                                    res.cookie('session', session.id);
-                                    res.redirect(
-                                        `${process.env.PROTOCOL}://${process.env.DOMAIN}`
-                                    );
-                                })
-                                .catch((err) =>
-                                    Util.sendResponse(
-                                        res,
-                                        resCode.badRequest,
-                                        err
-                                    )
+                                getOrCreateUser(email!, usefulData).then(
+                                    (user) => {
+                                        if (!user) {
+                                            res.sendStatus(400);
+                                            return;
+                                        }
+
+                                        getOrCreateSession(user)
+                                            .then((session) => {
+                                                res.cookie(
+                                                    'session',
+                                                    session.id
+                                                );
+                                                res.redirect(
+                                                    `${process.env.PROTOCOL}://${process.env.DOMAIN}`
+                                                );
+                                            })
+                                            .catch((err) =>
+                                                Util.sendResponse(
+                                                    res,
+                                                    resCode.badRequest,
+                                                    err
+                                                )
+                                            );
+                                    }
                                 );
-                        });
+                            });
                     })
                     .catch((err) =>
                         Util.sendResponse(res, resCode.serverError, err)

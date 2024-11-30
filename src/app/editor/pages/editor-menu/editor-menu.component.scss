@@ -1,9 +1,11 @@
 @use "../../../../assets/mixins" as *;
+@use "../../../../assets/colors";
 
 #settings_label {
     font-size: 2.2rem;
     margin: 16px;
     gap: 2rem;
+    align-items: center;
 }
 
 .row {
@@ -11,6 +13,64 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+}
+
+.user-profile {
+    @include basicBack;
+    align-items: stretch;
+    border-radius: 2rem;
+    display: flex;
+    padding: 1rem;
+    gap: 0.5rem;
+
+    .edit-button {
+        cursor: pointer;
+        color: gray;
+        padding: 0.3rem;
+        border-radius: 0.3rem 1rem 1rem 0.3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: colors.$ls;
+
+        &:hover {
+            color: colors.$text_black;
+        }
+    }
+
+    .user-profile-details {
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        a {
+            color: colors.$text_black;
+        }
+
+        .profile-name {
+            font-size: 1.2rem;
+        }
+
+        .blog-icon {
+            color: colors.$text_black;
+            margin: 0.3rem;
+            opacity: 0.8;
+        }
+
+        .profile-icons {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            gap: 0.3rem;
+            margin: 0.3rem;
+        }
+    }
+
+    img {
+        border-radius: 1rem;
+        @include sweetBorder;
+    }
 }
 
 #user_info {
@@ -49,11 +109,14 @@
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
+        margin-block: 0.3rem;
+        font-size: 1rem;
 
-        #user_name_input {
+        input {
             background-color: whitesmoke;
             border-radius: 1rem;
-            padding: 16px;
+            padding: 8px;
+            padding-inline: 12px;
             border-width: 0px;
             font-size: 1rem;
 
@@ -61,12 +124,13 @@
         }
     }
     .field-note {
-        font-size: 0.8rem;
+        font-size: 0.6rem;
+        margin-bottom: 1rem;
     }
 
     .name-preview {
         border-radius: 0.5rem;
-        font-size: 0.9rem;
+        font-size: 0.6rem;
         padding: 0.2rem;
         padding-inline: 0.4rem;
         margin-left: 0.3rem;

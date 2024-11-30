@@ -9,6 +9,18 @@
 >
     <div class="account-field">
         <div class="field-row">
+            <div id="label">Email Address</div>
+            <div class="row">
+                <input
+                    type="text"
+                    maxlength="100"
+                    [value]="user.email"
+                    disabled
+                    class="disabled"
+                />
+            </div>
+        </div>
+        <div class="field-row">
             <div id="label">Display Name</div>
             <div class="row">
                 <input
@@ -16,7 +28,7 @@
                     type="text"
                     maxlength="50"
                     [value]="user.name"
-                    placeholder="Example: Tyler Durden"
+                    placeholder="Tyler Durden"
                 />
             </div>
         </div>
@@ -29,15 +41,94 @@
                 {{ user.name || "Anonymous" }}#{{ user.id }}
             </span>
         </p>
+
+        <div class="field-row">
+            <div id="label">Your Blog</div>
+            <div class="row">
+                <input
+                    id="user_blog_input"
+                    type="text"
+                    maxlength="100"
+                    [value]="user.blog_url"
+                />
+            </div>
+        </div>
+        <div class="field-row">
+            <div id="label">Github Account</div>
+            <div class="row">
+                <input
+                    type="text"
+                    maxlength="100"
+                    [value]="user.github_url"
+                    disabled
+                    placeholder="Should be fetched from Github"
+                    matTooltip="Should be fetched from Github"
+                    matTooltipPosition="left"
+                    class="disabled"
+                />
+            </div>
+        </div>
+        <div class="field-row">
+            <div id="label">LinkedIn Account</div>
+            <div class="row">
+                <input
+                    id="user_linkedin_input"
+                    type="text"
+                    maxlength="100"
+                    [value]="user.linkedin_url"
+                />
+            </div>
+        </div>
     </div>
     <div id="profile_save_btn" (click)="updateUserInfo()">Update</div>
 </popup>
 
 <div id="settings_label" class="flex-row justify-sb wrap">
     Workbench for {{ user.name || user.email }}
-    <div class="largeButton" (click)="showEditProfileForm(true)">
-        Edit Profile
+    <div class="user-profile">
+        <img
+            src="{{ user.avatar_url || '/assets/empty-profile.png' }}"
+            alt="User Github Avatar"
+            [height]="84"
+        />
+
+        <div class="user-profile-details">
+            <div>
+                <div class="profile-name">{{ user.name || user.email }}</div>
+                <div class="profile-icons">
+                    <a [href]="user.github_url" matTooltip="Github Account">
+                        <fa-icon
+                            *ngIf="user.github_url"
+                            [icon]="githubIcon"
+                        ></fa-icon>
+                    </a>
+                    <a [href]="user.linkedin_url" matTooltip="LinkedIn Account">
+                        <fa-icon
+                            *ngIf="user.linkedin_url"
+                            [icon]="linkedinIcon"
+                        ></fa-icon>
+                    </a>
+                </div>
+            </div>
+            <a
+                class="blog-icon"
+                [href]="user.blog_url"
+                target="_blank"
+                matTooltip="Blog site"
+            >
+                <fa-icon *ngIf="user.blog_url" [icon]="webIcon"></fa-icon>
+                &nbsp;
+                <span>{{ user.blog_url }}</span>
+            </a>
+        </div>
+
+        <div class="edit-button" (click)="showEditProfileForm(true)">
+            <fa-icon [icon]="penIcon"></fa-icon>
+        </div>
     </div>
+    <!-- <div class="largeButton" (click)="showEditProfileForm(true)">
+        Edit Profile
+    </div> -->
 </div>
 
 <div class="row">

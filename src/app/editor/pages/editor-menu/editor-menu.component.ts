@@ -6,6 +6,13 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { Title } from '@angular/platform-browser';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import {
+    faGear,
+    faGlobe,
+    faLink,
+    faPen,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'editor-menu',
@@ -15,12 +22,17 @@ import { Title } from '@angular/platform-browser';
 export class EditorMenuComponent implements OnInit {
     loading = 0;
 
+    githubIcon = faGithub;
+    linkedinIcon = faLinkedin;
+    webIcon = faLink;
+    penIcon = faGear;
+
     isAuthenticated: boolean = false;
     user = {
         id: 0,
         email: '',
         name: '',
-    };
+    } as UserInfo;
 
     userCompetitions: Array<CompetitionInfo> | null = null;
     competitionsMetaData = {
@@ -85,17 +97,24 @@ export class EditorMenuComponent implements OnInit {
     }
 
     updateUserInfo() {
-        let userInput = document.getElementById(
-            'user_name_input'
-        ) as HTMLInputElement;
-        this.user.name = userInput.value;
+        const getElemVal = (key: string) => {
+            const elem = document.getElementById(key) as HTMLInputElement;
+
+            return elem.value;
+        };
+
+        this.user.name = getElemVal('user_name_input');
+        this.user.blog_url = getElemVal('user_blog_input');
+        this.user.linkedin_url = getElemVal('user_linkedin_input');
 
         this.loading += 1;
 
         this.userDataService
             .updateUserInfo({
                 id: this.user.id,
-                name: userInput.value,
+                name: this.user.name,
+                blog_url: this.user.blog_url,
+                linkedin_url: this.user.linkedin_url,
                 email: this.user.email,
             })
             .subscribe((res) => {

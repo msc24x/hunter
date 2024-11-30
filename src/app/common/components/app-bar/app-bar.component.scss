@@ -3,7 +3,7 @@
 @use "../../../../assets/mixins" as *;
 
 div.appBar {
-    padding-block: 24px;
+    padding-block: 0.5rem;
     width: 100%;
     display: flex;
     justify-content: space-between;

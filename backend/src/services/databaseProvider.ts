@@ -25,8 +25,8 @@ export class DatabaseProvider {
 
         this._dbPool = mysql.createPool({
             uri: this._connectionConfig.db_url,
-            keepAliveInitialDelay: 10000, // 0 by default.
-            enableKeepAlive: true, // false by default.
+            keepAliveInitialDelay: 0,
+            enableKeepAlive: true,
         });
 
         this.prismaClient = new PrismaClient();
@@ -39,19 +39,6 @@ export class DatabaseProvider {
                 console.error(err);
             }
         );
-
-        // this._dbConnection.connect((err) => {
-        //     if (err) {
-        //         throw err;
-        //     }
-        //     console.log(`Raw connection to database: Initialized`);
-
-        //     // this._dbConnection.on('error', () => {
-        //     //     this._dbConnection.destroy();
-        //     //     console.log('Errored connection destroyed');
-        //     //     this._dbConnection.connect()
-        //     // });
-        // });
     }
 
     loadModels() {
@@ -67,11 +54,18 @@ export class DatabaseProvider {
         const conn = new Promise<PoolConnection>((resolve, reject) => {
             this._dbPool.getConnection((err, poolConn) => {
                 if (err) {
-                    console.log('destroying errored connection');
+                    console.log(
+                        'destroying errored connection while providing'
+                    );
                     poolConn.destroy();
                     reject('err');
                     return;
                 }
+
+                poolConn.on('error', (error) => {
+                    console.log('destroying an errored connection');
+                    poolConn.destroy();
+                });
 
                 resolve(poolConn);
             });

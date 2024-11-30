@@ -82,6 +82,11 @@ model users {
   id            Int     @id @default(autoincrement())
   email         String? @db.VarChar(330)
   name          String? @db.VarChar(50)
+  avatar_url    String? @db.VarChar(100)
+  github_url    String? @db.VarChar(100)
+  blog_url      String? @db.VarChar(100)
+  linkedin_url  String? @db.VarChar(100)
+  github_fetched_at  DateTime?    @db.DateTime(0)
   competitions  competitions[]
   results       results[]
   session       session?

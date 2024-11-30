@@ -35,10 +35,24 @@ export type Result = {
     user_rank: number;
 };
 
+export type UserSocials = {
+    avatar_url?: string;
+    blog_url?: string;
+    github_url?: string;
+    linkedin_url?: string;
+};
+
 export type UserInfo = {
     id: number;
     email: string;
     name: string;
+
+    avatar_url?: string;
+    blog_url?: string;
+    github_url?: string;
+    linkedin_url?: string;
+
+    github_fetched_at?: Date;
 };
 
 export type CompetitionInfo = {
