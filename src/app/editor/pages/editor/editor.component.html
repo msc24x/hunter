@@ -49,80 +49,73 @@
 
 <popup title="Guide" id="guide" (closeEvent)="handleGuidePopupEvent($event)">
     <b>Saving</b> <br /><br />
-    Always remember to save your changes by clicking the button SAVE CHANGES in
-    the bottom bar. You can also trigger this functionality by keyboard shortcut
-    Shift + S
+    Ensure you save your changes by clicking the "SAVE CHANGES" button in the
+    bottom bar. You can also use the keyboard shortcut Shift + S.
     <br /><br /><br />
 
     <b>Duration</b> <br /><br />
-    If you wish to set your competition live forever, set the duration to 0.
-    This practically gives unlimited time to participants.
+    To set your competition live indefinitely, set the duration to 0. This
+    provides participants with unlimited time.
     <br /><br /><br />
 
-    <b>Visibility controller</b> <br /><br />
-    The button next to Rating bounces between two values, PUBLIC and PRIVATE.
-    This is essential for the visibility of your competition. Even if the
-    competition has been set to live due to the Schedule, a PRIVATE competition
-    would still not be accessible to the users. <br />
-    Moreover, a public competition would appear on the Compete page of the
-    website, which further will only show questions if and only if it is live.
+    <b>Visibility Controller</b> <br /><br />
+    The button next to "Rating" toggles between PUBLIC and PRIVATE. This
+    controls the visibility of your competition. Even if the competition is live
+    according to the schedule, a PRIVATE competition will not be accessible to
+    users. A public competition will appear on the Compete page of the website
+    and will only show questions if it is live.
     <br /><br /><br />
 
     <b>Questions List</b> <br /><br />
-    To see or edit questions' related data, a question must be selected from the
-    list. All operations such as Add, Save & Delete would unselect the question
-    to avoid confusion.<br />
-    Note that the Save button in the list only saves the changes made to the
-    question. Though the Save Changes in bottom bar saves all changes.<br />
-    It is a must to acknowledge that the questions added would not have any
-    specific order. The index numbers in list is only for frontend purposes.
-    Only question IDs distinguish between them.
+    To view or edit question-related data, select a question from the list. All
+    operations such as Add, Save, and Delete will unselect the question to avoid
+    confusion. Note that the Save button in the list only saves changes made to
+    the question, while the "SAVE CHANGES" button in the bottom bar saves all
+    changes. Questions are not added in any specific order; the index numbers in
+    the list are for frontend purposes only. Questions are distinguished by
+    their IDs.
     <br /><br /><br />
 
-    <b>Latex in Question Statement</b> <br /><br />
-    You can write Latex expressions in Question Statement wrapped with dollar
-    signs ($)<br />
-    For example,<br />
-    write $\sqrt{{ "{" }}p+q{{ "}" }}$<br /><br />
-    It would be rendered as <br />
-    <ng-katex data="$\sqrt{p+q}$"></ng-katex> <br />
-    To learn more about the syntax, refer
+    <b>LaTeX in Question Statement</b> <br /><br />
+    You can write LaTeX expressions in the Question Statement wrapped with
+    dollar signs ($). For example, write $\sqrt{{ "{" }}p+q{{ "}" }}$. It will
+    be rendered as <ng-katex data="$\sqrt{p+q}$"></ng-katex>. To learn more
+    about the syntax, refer to
     <a href="https://katex.org/docs/support_table.html" target="_blank"
-        ><ng-katex data="$\KaTeX$"></ng-katex
-    ></a>
-    <br /><br /><br />
+        ><ng-katex data="$\KaTeX$"></ng-katex></a
+    >. <br /><br /><br />
 
-    <b>Guidelines for setting questions</b><br /><br />
-    The online judge for Hunter accepts the user's code as a black box. Test
-    cases file is given as an input and the output is compared with your
-    solutions file.<br />
-    The questions that would require the participants to complete a part of the
-    code is currently not supported. Hence, it is advised to keep your
-    questions' format as simple input-output style.<br /><br />
-    e.g. test cases file<br />
-    2<br />
-    1 2 3<br />
-    4 5 6<br />
-    solutions file<br />
-    6<br />
-    15<br />
-    <br /><br /><br />
+    <b>Guidelines for Setting Questions</b><br /><br />
+    The online judge for Hunter accepts the user's code as a black box. A test
+    cases file is given as input, and the output is compared with your solutions
+    file. Questions requiring participants to complete a part of the code are
+    currently not supported. It is advised to keep your questions in a simple
+    input-output format. For example, test cases file: <br />
+    <pre>
+2
+1 2 3
+4 5 6
+    </pre>
+    Solutions file:
+    <pre>
+6
+15
+    </pre>
 
-    <b>Uploading files</b><br /><br />
-    Only text files with less than 1.5Mb size are acceptable<br />
-    It is encouraged as it necessary to format your test cases and solutions
-    file correctly. Always check those files against your correct code.<br />
-    It is the question setter's responsibility to verify the legitimacy of the
-    test cases and reliability of the solutions.
+    <b>Uploading Files</b><br /><br />
+    Only text files smaller than 1.5MB are acceptable. It is necessary to format
+    your test cases and solutions file correctly. Always verify these files
+    against your correct code. It is the question setter's responsibility to
+    ensure the legitimacy of the test cases and the reliability of the
+    solutions.
     <br /><br /><br />
 
     <b>Points</b><br /><br />
-    This is the question points that would be accumulated in the total score of
-    the participants. The score is given if and only if they pass all the test
-    cases.
+    The points for each question will be accumulated in the total score of the
+    participants. The score is awarded only if all test cases are passed.
     <br /><br /><br />
 
-    <b>Deleting the competition</b><br /><br />
+    <b>Deleting the Competition</b><br /><br />
     <div
         id="delete_competition_btn"
         (click)="

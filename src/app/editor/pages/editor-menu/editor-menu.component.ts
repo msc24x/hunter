@@ -24,7 +24,7 @@ export class EditorMenuComponent implements OnInit {
 
     githubIcon = faGithub;
     linkedinIcon = faLinkedin;
-    webIcon = faLink;
+    webIcon = faGlobe;
     penIcon = faGear;
 
     isAuthenticated: boolean = false;

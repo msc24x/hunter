@@ -11,7 +11,12 @@ export class AboutComponent implements OnInit {
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
 
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService) {
+        authService.isAuthenticated.subscribe((val) => {
+            this.user = this.authService.user;
+            this.isAuthenticated = val;
+        });
+    }
 
     ngOnInit(): void {
         window.scroll(0, 0);

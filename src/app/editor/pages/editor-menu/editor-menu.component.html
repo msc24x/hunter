@@ -9,7 +9,7 @@
 >
     <div class="account-field">
         <div class="field-row">
-            <div id="label">Email Address</div>
+            <div class="label">Email Address</div>
             <div class="row">
                 <input
                     type="text"
@@ -21,14 +21,13 @@
             </div>
         </div>
         <div class="field-row">
-            <div id="label">Display Name</div>
+            <div class="label">Display Name</div>
             <div class="row">
                 <input
                     id="user_name_input"
                     type="text"
                     maxlength="50"
                     [value]="user.name"
-                    placeholder="Tyler Durden"
                 />
             </div>
         </div>
@@ -43,7 +42,7 @@
         </p>
 
         <div class="field-row">
-            <div id="label">Your Blog</div>
+            <div class="label">Your Blog/Website</div>
             <div class="row">
                 <input
                     id="user_blog_input"
@@ -54,7 +53,7 @@
             </div>
         </div>
         <div class="field-row">
-            <div id="label">Github Account</div>
+            <div class="label">Github Account</div>
             <div class="row">
                 <input
                     type="text"
@@ -69,7 +68,7 @@
             </div>
         </div>
         <div class="field-row">
-            <div id="label">LinkedIn Account</div>
+            <div class="label">LinkedIn Account</div>
             <div class="row">
                 <input
                     id="user_linkedin_input"
@@ -84,7 +83,7 @@
 </popup>
 
 <div id="settings_label" class="flex-row justify-sb wrap">
-    Workbench for {{ user.name || user.email }}
+    Your Workbench
     <div class="user-profile">
         <img
             src="{{ user.avatar_url || '/assets/empty-profile.png' }}"
@@ -94,7 +93,9 @@
 
         <div class="user-profile-details">
             <div>
-                <div class="profile-name">{{ user.name || user.email }}</div>
+                <div class="profile-name">
+                    {{ user.name || user.email }}
+                </div>
                 <div class="profile-icons">
                     <a [href]="user.github_url" matTooltip="Github Account">
                         <fa-icon
@@ -108,27 +109,19 @@
                             [icon]="linkedinIcon"
                         ></fa-icon>
                     </a>
+                    <a [href]="user.blog_url" matTooltip="Website">
+                        <fa-icon
+                            *ngIf="user.blog_url"
+                            [icon]="webIcon"
+                        ></fa-icon>
+                    </a>
                 </div>
             </div>
-            <a
-                class="blog-icon"
-                [href]="user.blog_url"
-                target="_blank"
-                matTooltip="Blog site"
-            >
-                <fa-icon *ngIf="user.blog_url" [icon]="webIcon"></fa-icon>
-                &nbsp;
-                <span>{{ user.blog_url }}</span>
-            </a>
-        </div>
-
-        <div class="edit-button" (click)="showEditProfileForm(true)">
-            <fa-icon [icon]="penIcon"></fa-icon>
+            <div class="manage-button" (click)="showEditProfileForm(true)">
+                Manage Profile
+            </div>
         </div>
     </div>
-    <!-- <div class="largeButton" (click)="showEditProfileForm(true)">
-        Edit Profile
-    </div> -->
 </div>
 
 <div class="row">

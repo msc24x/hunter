@@ -23,18 +23,13 @@
     padding: 1rem;
     gap: 0.5rem;
 
-    .edit-button {
+    .manage-button {
+        font-size: 0.8rem;
+        opacity: 0.8;
         cursor: pointer;
-        color: gray;
-        padding: 0.3rem;
-        border-radius: 0.3rem 1rem 1rem 0.3rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: colors.$ls;
 
         &:hover {
-            color: colors.$text_black;
+            text-decoration: underline;
         }
     }
 
@@ -52,18 +47,14 @@
             font-size: 1.2rem;
         }
 
-        .blog-icon {
-            color: colors.$text_black;
-            margin: 0.3rem;
-            opacity: 0.8;
-        }
-
         .profile-icons {
             display: flex;
             flex-wrap: wrap;
             width: 100%;
-            gap: 0.3rem;
-            margin: 0.3rem;
+            gap: 0.5rem;
+            font-size: 1rem;
+            margin: 0.5rem;
+            opacity: 0.8;
         }
     }
 
@@ -108,9 +99,13 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
         margin-block: 0.3rem;
         font-size: 1rem;
+
+        .label {
+            margin-top: 0.5rem;
+            margin-right: 1rem;
+        }
 
         input {
             background-color: whitesmoke;
