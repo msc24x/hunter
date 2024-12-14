@@ -69,12 +69,7 @@ export class HomeComponent implements OnInit {
 
         this.authService.authenticate_credentials().subscribe((res) => {
             if (res.status == 202) {
-                const body = res.body as UserInfo;
-                this.user = {
-                    id: body.id,
-                    email: body.email,
-                    name: body.name,
-                };
+                this.user = res.body as UserInfo;
                 this.authService.user = this.user;
                 this.isAuthenticated = true;
                 this.authService.isAuthenticated.next(true);

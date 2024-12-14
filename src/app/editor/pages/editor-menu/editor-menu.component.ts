@@ -12,6 +12,7 @@ import {
     faGlobe,
     faLink,
     faPen,
+    faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -26,6 +27,7 @@ export class EditorMenuComponent implements OnInit {
     linkedinIcon = faLinkedin;
     webIcon = faGlobe;
     penIcon = faGear;
+    linkIcon = faUpRightFromSquare;
 
     isAuthenticated: boolean = false;
     user = {
@@ -49,6 +51,8 @@ export class EditorMenuComponent implements OnInit {
         private titleService: Title
     ) {
         this.titleService.setTitle('Workbench • Hunter');
+        console.log(this.authService.user);
+        this.user = this.authService.user;
 
         this.authService.isAuthenticated.subscribe((isAuth) => {
             this.user = this.authService.user;
@@ -63,8 +67,21 @@ export class EditorMenuComponent implements OnInit {
             }
         });
     }
+
     showEditProfileForm(f: boolean) {
         showPopup(f, 'edit_profile_popup');
+    }
+
+    getUrl(url?: string) {
+        if (!url?.startsWith('http')) {
+            url = 'https://' + url;
+        }
+
+        return url;
+    }
+
+    openUrl(url?: string) {
+        window.open(this.getUrl(url), '_blank');
     }
 
     calculateCompetitionsMetaData() {

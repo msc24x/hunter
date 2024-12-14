@@ -17,10 +17,10 @@ export class AuthService {
         id: 0,
         email: '',
         name: '',
-        avatar_url: 'string',
-        blog_url: 'string',
-        github_url: 'string',
-        linkedin_url: 'string',
+        avatar_url: '',
+        blog_url: '',
+        github_url: '',
+        linkedin_url: '',
     };
 
     apiUrl = environment.apiUrl;

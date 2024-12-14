@@ -2,14 +2,25 @@ import { PoolConnection, QueryError } from 'mysql2';
 import Container, { Inject, Service } from 'typedi';
 import { Result, UserInfo } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
+import { Prisma } from '@prisma/client';
 
 export class Results {
     dbConnection!: PoolConnection;
+    client = Container.get(DatabaseProvider).client();
 
     dbService: DatabaseProvider = Container.get(DatabaseProvider);
 
-    getScoresQuery(filterQuestion = false) {
-        const scoresQuery = `
+    getScoresQuery(
+        filterQuestion: boolean,
+        queryParams: {
+            id: string;
+            after: number;
+            question_id?: number;
+        }
+    ) {
+        const questionQuery = Prisma.sql`AND q.id = ${queryParams.question_id}`;
+
+        const scoresQuery = Prisma.sql`
             SELECT
                 s.*,
                 @curRank := @curRank + 1 AS user_rank
@@ -33,8 +44,8 @@ export class Results {
                     WHERE
                         q.deleted_at IS NULL 
                         AND c.deleted_at IS NULL 
-                        AND q.competition_id = ?
-                        ${filterQuestion ? 'AND q.id = ?' : ''}
+                        AND q.competition_id = ${queryParams.id}
+                        ${filterQuestion ? questionQuery : Prisma.empty}
                     GROUP BY 
                         r.user_id
                     ORDER BY
@@ -45,7 +56,7 @@ export class Results {
             ORDER BY
                 user_rank ASC
             LIMIT
-                ?, 10
+                ${queryParams.after}, 10
         `;
 
         return scoresQuery;
@@ -101,13 +112,15 @@ export class Results {
         question_id?: number
     ) {
         var params = [id];
+        var question_where;
 
         if (question_id) {
+            question_where = Prisma.sql`AND q.id = ${question_id}`;
+
             params.push(question_id.toString());
         }
 
-        this.dbConnection.query(
-            `
+        this.client.$queryRaw`
             SELECT
                 COUNT(DISTINCT r.user_id) as total_count
             FROM
@@ -121,20 +134,19 @@ export class Results {
             WHERE
                 q.deleted_at IS NULL 
                 AND c.deleted_at IS NULL 
-                AND q.competition_id = ?
-                ${question_id ? 'AND q.id = ?' : ''}
+                AND q.competition_id = ${id}
+                ${question_id ? question_where : Prisma.empty}
                 ;
-            `,
-            params,
-            (err, rows) => {
+            `
+            .then((rows) => {
+                callback(parseInt((rows as Array<any>)[0].total_count), null);
+            })
+            .catch((err) => {
                 if (err) {
                     callback(null, err);
                     return;
                 }
-
-                callback((rows as Array<any>)[0].total_count, null);
-            }
-        );
+            });
     }
 
     getCompetitionScores(
@@ -149,21 +161,23 @@ export class Results {
     ) {
         after = after || 0;
 
-        var queryParams = [id, after];
+        var params: {
+            id: string;
+            after: number;
+            question_id?: number;
+        } = {
+            id: id,
+            after: after,
+        };
 
         if (question_id) {
-            queryParams = [id, question_id, after];
+            params.question_id = question_id;
         }
 
-        this.dbConnection.query(
-            `${this.getScoresQuery(Boolean(question_id))};`,
-            queryParams,
-            (err, rows) => {
-                if (err) {
-                    callback(null, err);
-                    return;
-                }
-
+        this.client.$queryRaw`
+            ${this.getScoresQuery(Boolean(question_id), params)}
+        `
+            .then((rows) => {
                 this.getCompetitionScoresCount(
                     (total_count, err) => {
                         if (err) {
@@ -181,26 +195,20 @@ export class Results {
                             return;
                         }
 
-                        this.dbConnection.query(
-                            `
-                        SELECT
-                            ranked_users.*
-                        FROM (
-                            ${this.getScoresQuery(Boolean(question_id))}
-                        ) ranked_users
-                        WHERE
-                            user_id = ?;`,
-                            [
-                                ...queryParams.slice(0, queryParams.length - 1),
-                                0,
-                                user?.id,
-                            ],
-                            (err, rank_rows) => {
-                                if (err) {
-                                    callback(null, err);
-                                    return;
-                                }
-
+                        this.client.$queryRaw`
+                            SELECT
+                                ranked_users.*
+                            FROM (
+                                ${this.getScoresQuery(Boolean(question_id), {
+                                    id: id,
+                                    after: 0,
+                                    question_id: question_id,
+                                })}
+                            ) ranked_users
+                            WHERE
+                                user_id = ${user.id};
+                        `
+                            .then((rank_rows) => {
                                 meta.user_details = (
                                     rank_rows as Array<Result>
                                 )[0];
@@ -212,14 +220,24 @@ export class Results {
                                     },
                                     err
                                 );
-                            }
-                        );
+                            })
+                            .catch((err) => {
+                                if (err) {
+                                    callback(null, err);
+                                    return;
+                                }
+                            });
                     },
                     id,
                     question_id
                 );
-            }
-        );
+            })
+            .catch((err) => {
+                if (err) {
+                    callback(null, err);
+                    return;
+                }
+            });
     }
 
     findAll(

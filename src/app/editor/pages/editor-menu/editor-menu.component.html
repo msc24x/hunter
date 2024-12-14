@@ -53,15 +53,22 @@
             </div>
         </div>
         <div class="field-row">
-            <div class="label">Github Account</div>
+            <div class="label link-like" (click)="openUrl(user.github_url!)">
+                Github Account
+                <fa-icon
+                    [icon]="linkIcon"
+                    [style]="{ color: 'gray' }"
+                    size="2xs"
+                ></fa-icon>
+            </div>
             <div class="row">
                 <input
                     type="text"
                     maxlength="100"
                     [value]="user.github_url"
                     disabled
-                    placeholder="Should be fetched from Github"
-                    matTooltip="Should be fetched from Github"
+                    placeholder="Associated with Sign up"
+                    matTooltip="Associated with Sign up"
                     matTooltipPosition="left"
                     class="disabled"
                 />
@@ -97,19 +104,31 @@
                     {{ user.name || user.email }}
                 </div>
                 <div class="profile-icons">
-                    <a [href]="user.github_url" matTooltip="Github Account">
+                    <a
+                        [href]="getUrl(user.github_url)"
+                        target="_blank"
+                        matTooltip="Github Account"
+                    >
                         <fa-icon
                             *ngIf="user.github_url"
                             [icon]="githubIcon"
                         ></fa-icon>
                     </a>
-                    <a [href]="user.linkedin_url" matTooltip="LinkedIn Account">
+                    <a
+                        [href]="getUrl(user.linkedin_url)"
+                        target="_blank"
+                        matTooltip="LinkedIn Account"
+                    >
                         <fa-icon
                             *ngIf="user.linkedin_url"
                             [icon]="linkedinIcon"
                         ></fa-icon>
                     </a>
-                    <a [href]="user.blog_url" matTooltip="Website">
+                    <a
+                        [href]="getUrl(user.blog_url)"
+                        target="_blank"
+                        matTooltip="Website"
+                    >
                         <fa-icon
                             *ngIf="user.blog_url"
                             [icon]="webIcon"

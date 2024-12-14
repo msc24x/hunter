@@ -24,6 +24,13 @@ html {
     opacity: 0.7;
 }
 
+.link-like {
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 a {
     text-decoration: none;
 }
