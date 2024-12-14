@@ -6,6 +6,7 @@ import {
     OnInit,
     Output,
 } from '@angular/core';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'popup',
@@ -13,6 +14,8 @@ import {
     styleUrls: ['./popup.component.scss'],
 })
 export class PopupComponent implements OnInit {
+    closeIcon = faClose;
+
     @Output()
     closeEvent = new EventEmitter<string>();
 
@@ -31,7 +34,10 @@ export class PopupComponent implements OnInit {
     constructor(private el: ElementRef) {}
 
     bgClicked(event: any) {
-        if (event.target.classList.contains('bg')) {
+        if (
+            event.target.classList.contains('bg') ||
+            event.target.closest('.close-icon')
+        ) {
             event.stopPropagation();
             this.closeEvent.emit('cancel');
         }

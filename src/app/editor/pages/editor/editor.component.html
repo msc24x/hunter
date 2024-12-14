@@ -286,7 +286,7 @@
 
     <div class="vertical_flex full-stretch" *ngIf="questionSelected !== -1">
         <div class="flex title-eval-container">
-            <div class="vertical_flex title-container">
+            <div class="vertical_flex title-container" style="width: 100%">
                 <div class="clabel">Title</div>
 
                 <textarea
@@ -297,108 +297,50 @@
                     placeholder="Example: Write a program to flip the string."
                 ></textarea>
 
-                <div class="file-uploaders">
-                    <div class="io-files">
-                        <label
-                            id="testcases_file_label"
-                            class="file_input"
-                            for="testcases_file"
-                            matTooltipPosition="left"
-                            matTooltip="Upload a text file to define evaluation test cases for this question. These test cases will not be shown to the participants. Hunter will use this to test participants' code"
-                        >
-                            Test Cases
+                <div class="clabel">Settings</div>
 
-                            <a
-                                [href]="downloadFileUrl('testcases')"
-                                [download]="
-                                    questionSelectedInfo.id + '_testcases.txt'
-                                "
-                            >
-                                <fa-icon
-                                    *ngIf="testExists"
-                                    matTooltip="Download existing test cases file"
-                                    [icon]="downloadIcon"
-                                ></fa-icon>
-                            </a>
-                        </label>
-                        <input
-                            class="file_input"
-                            (change)="updateFile($event, 'testcases')"
-                            id="testcases_file"
-                            type="file"
-                        />
+                <div style="width: 100%">
+                    <div class="flex">
+                        <div class="points-container">
+                            <p>
+                                Reward
+                                <input
+                                    id="question_points"
+                                    type="number"
+                                    min="0"
+                                    [max]="9"
+                                    [value]="questionSelectedInfo.points"
+                                />
+                                points for first correct submission
+                                <infotip
+                                    message="This is the weighage the question holds. Participants will be awarded this many points to their first correct submission. A maximum of 9 points can be set for one question"
+                                ></infotip>
+                            </p>
 
-                        <label
-                            id="solutions_file_label"
-                            class="file_input"
-                            for="solutions_file"
-                            matTooltipPosition="left"
-                            matTooltip="Upload a text file to define the expected output from participants code when test cases are supplied to them"
-                        >
-                            Solution to tests
-                            <a
-                                [href]="downloadFileUrl('solutions')"
-                                [download]="
-                                    questionSelectedInfo.id + '_solutions.txt'
-                                "
-                            >
-                                <fa-icon
-                                    *ngIf="solsExists"
-                                    [icon]="downloadIcon"
-                                    matTooltip="Download existing solution to test cases file"
-                                ></fa-icon>
-                            </a>
-                        </label>
-                        <input
-                            class="file_input"
-                            id="solutions_file"
-                            type="file"
-                            (change)="updateFile($event, 'solutions')"
-                        />
-                    </div>
-                    <div class="solution-code-file">
-                        <label
-                            id="code_file_label"
-                            class="file_input"
-                            (click)="showPopup(true, 'code-tester')"
-                            [matTooltip]="
-                                !testExists || !solsExists
-                                    ? 'You must upload both test cases files to test your competition'
-                                    : ''
-                            "
-                            [ngClass]="{
-                                'no-click disabled': !testExists || !solsExists
-                            }"
-                        >
-                            *Verify Participation
-                            <fa-icon
-                                *ngIf="verificationResult?.success === true"
-                                [icon]="checkIcon"
-                                style="color: green"
-                                [matTooltip]="
-                                    'Verification was successful at ' +
-                                    verificationResult?.created_at?.toLocaleString()
-                                "
-                            ></fa-icon>
-
-                            <fa-icon
-                                *ngIf="verificationResult?.success === false"
-                                [icon]="crossIcon"
-                                style="color: red"
-                                [matTooltip]="
-                                    'Verification failed at ' +
-                                    verificationResult?.created_at?.toLocaleString()
-                                "
-                            ></fa-icon>
-                        </label>
+                            <p>
+                                Cut
+                                <input
+                                    id="question_neg_points"
+                                    type="number"
+                                    min="0"
+                                    [max]="4"
+                                    [value]="questionSelectedInfo.neg_points"
+                                />
+                                points for each wrong submission
+                                <infotip
+                                    message="Set this to any non-zero value (1-4) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
+                                ></infotip>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <p>
+
+                <!-- <p>
                     * You must upload the both test cases and solution to your
                     test cases files, to test the correctness of your
                     competition and ensure it is solvable. If you don't do this,
                     participants will see that your competition is unverified.
-                </p>
+                </p> -->
             </div>
             <div id="evaluation-section">
                 <div class="flex eval-panel">
@@ -434,41 +376,105 @@
                             ></textarea>
                         </div>
                     </div>
-                    <div style="width: 100%">
-                        <div class="flex">
-                            <div class="points-container">
-                                <p>
-                                    Reward
-                                    <input
-                                        id="question_points"
-                                        type="number"
-                                        min="0"
-                                        [max]="9"
-                                        [value]="questionSelectedInfo.points"
-                                    />
-                                    points for first correct submission
-                                    <infotip
-                                        message="This is the weighage the question holds. Participants will be awarded this many points to their first correct submission. A maximum of 9 points can be set for one question"
-                                    ></infotip>
-                                </p>
+                    <div class="file-uploaders">
+                        <div class="io-files">
+                            <label
+                                id="testcases_file_label"
+                                class="file_input"
+                                for="testcases_file"
+                                matTooltipPosition="left"
+                                matTooltip="Upload a text file to define evaluation test cases for this question. These test cases will not be shown to the participants. Hunter will use this to test participants' code"
+                            >
+                                Test Cases
 
-                                <p>
-                                    Cut
-                                    <input
-                                        id="question_neg_points"
-                                        type="number"
-                                        min="0"
-                                        [max]="4"
-                                        [value]="
-                                            questionSelectedInfo.neg_points
-                                        "
-                                    />
-                                    points for each wrong submission
-                                    <infotip
-                                        message="Set this to any non-zero value (1-4) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
-                                    ></infotip>
-                                </p>
-                            </div>
+                                <a
+                                    [href]="downloadFileUrl('testcases')"
+                                    [download]="
+                                        questionSelectedInfo.id +
+                                        '_testcases.txt'
+                                    "
+                                >
+                                    <fa-icon
+                                        *ngIf="testExists"
+                                        matTooltip="Download existing test cases file"
+                                        [icon]="downloadIcon"
+                                    ></fa-icon>
+                                </a>
+                            </label>
+                            <input
+                                class="file_input"
+                                (change)="updateFile($event, 'testcases')"
+                                id="testcases_file"
+                                type="file"
+                            />
+
+                            <label
+                                id="solutions_file_label"
+                                class="file_input"
+                                for="solutions_file"
+                                matTooltipPosition="left"
+                                matTooltip="Upload a text file to define the expected output from participants code when test cases are supplied to them"
+                            >
+                                Solution to tests
+                                <a
+                                    [href]="downloadFileUrl('solutions')"
+                                    [download]="
+                                        questionSelectedInfo.id +
+                                        '_solutions.txt'
+                                    "
+                                >
+                                    <fa-icon
+                                        *ngIf="solsExists"
+                                        [icon]="downloadIcon"
+                                        matTooltip="Download existing solution to test cases file"
+                                    ></fa-icon>
+                                </a>
+                            </label>
+                            <input
+                                class="file_input"
+                                id="solutions_file"
+                                type="file"
+                                (change)="updateFile($event, 'solutions')"
+                            />
+                        </div>
+                        <div class="solution-code-file">
+                            <label
+                                id="code_file_label"
+                                class="file_input"
+                                (click)="showPopup(true, 'code-tester')"
+                                [matTooltip]="
+                                    !testExists || !solsExists
+                                        ? 'You must upload both test cases files to test your competition'
+                                        : ''
+                                "
+                                [ngClass]="{
+                                    'no-click disabled':
+                                        !testExists || !solsExists
+                                }"
+                            >
+                                *Verify Participation
+                                <fa-icon
+                                    *ngIf="verificationResult?.success === true"
+                                    [icon]="checkIcon"
+                                    style="color: green"
+                                    [matTooltip]="
+                                        'Verification was successful at ' +
+                                        verificationResult?.created_at?.toLocaleString()
+                                    "
+                                ></fa-icon>
+
+                                <fa-icon
+                                    *ngIf="
+                                        verificationResult?.success === false
+                                    "
+                                    [icon]="crossIcon"
+                                    style="color: red"
+                                    [matTooltip]="
+                                        'Verification failed at ' +
+                                        verificationResult?.created_at?.toLocaleString()
+                                    "
+                                ></fa-icon>
+                            </label>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,9 @@
-<popup id="privacy_policy" title="" (closeEvent)="showPrivacyPolicy(false)">
+<popup
+    id="privacy_policy"
+    title=""
+    (closeEvent)="showPrivacyPolicy(false)"
+    [showControls]="false"
+>
     <h1>Privacy Policy of Hunter</h1>
 
     <p>
@@ -136,18 +141,9 @@
         programming contests. It also uses a custom built execution engine
         Showdown for its execution and judge services.
     </div> -->
-    <div class="links">
-        <a href="mailto:msc24x@gmail.com">Email</a>
-        <a href="https://cambo.in">Portfolio</a>
-        <a href="https://github.com/msc24x/hunter"> Github </a>
-        <a id="privacy_policy" (click)="showPrivacyPolicy(true)">
-            Privacy Policy
-        </a>
-        <a href="https://donate.cambo.in">Donate</a>
-        <!--div class="button"  id="terms" (click)="showPopup(true, 'terms')">Terms & Conditions</div-->
-    </div>
+
     <div id="site_logo">
-        <img src="favicon.png" alt="logo" height="24px" />
+        <!-- <img src="favicon.png" alt="logo" height="24px" /> -->
         Hunter
         <!-- <span class="site-version">
             {{ version }}
@@ -159,5 +155,16 @@
             <br /><br />
             &copy; Cambo {{ getYear() }}
         </div>
+    </div>
+
+    <div class="links">
+        <a href="mailto:msc24x@gmail.com">Email</a>
+        <a href="https://cambo.in">Portfolio</a>
+        <a href="https://github.com/msc24x/hunter"> Github </a>
+        <a id="privacy_policy" (click)="showPrivacyPolicy(true)">
+            Privacy Policy
+        </a>
+        <a href="https://donate.cambo.in">Donate</a>
+        <!--div class="button"  id="terms" (click)="showPopup(true, 'terms')">Terms & Conditions</div-->
     </div>
 </div>

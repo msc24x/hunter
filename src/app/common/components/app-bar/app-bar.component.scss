@@ -33,7 +33,7 @@ div.appBar {
 
         #app_title_full {
             cursor: pointer;
-            font-size: 2.5rem;
+            font-size: 2.4rem;
             color: crimson;
             font-style: italic;
 
@@ -49,7 +49,7 @@ div.appBar {
         @media only screen and (max-width: 686px) and (min-width: 420px) {
             #app_title_full {
                 display: initial;
-                font-size: 1.5rem;
+                font-size: 1rem !important;
             }
             #user_name {
                 display: none;
@@ -83,15 +83,11 @@ div.appBar {
     @media only screen and (max-width: 430px) {
         #app_title_full {
             display: initial;
-            font-size: 1.7rem;
+            font-size: 1.8rem !important;
         }
         #user_name,
         #user_email {
             display: none;
-        }
-
-        #logout_btn {
-            font-size: 0.7rem !important;
         }
     }
 
@@ -102,14 +98,12 @@ div.appBar {
         align-items: flex-end;
         font-size: 0.8rem;
         font-weight: bolder;
-        background-color: white;
+        // background-color: white;
         padding: 6px;
         padding-inline: 12px;
         border-radius: 8px;
         margin-right: 12px;
         cursor: pointer;
-
-        @include sweetBorder;
 
         -webkit-user-select: none; /* Safari */
         -moz-user-select: none; /* Firefox */
@@ -131,6 +125,7 @@ div.appBar {
         position: absolute;
         display: none;
         font-size: 0.9rem;
+        z-index: 90;
 
         ul {
             padding: 5px;
@@ -139,21 +134,25 @@ div.appBar {
             border-radius: 16px;
             background-color: rgba(255, 255, 255, 0.411);
             box-shadow: 0 0 100px 0px rgba(0, 0, 0, 0.247);
+            @include sweetBorder;
 
             a {
                 display: block;
                 color: colors.$text_black;
                 text-align: left;
-                padding: 8px;
+                padding: 12px;
                 padding-top: 10px;
                 border-radius: 24px;
                 margin: 5px;
                 min-width: 120px;
                 border: solid transparent;
                 border-width: 1px;
-                //box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.219);
                 cursor: pointer;
-                //backdrop-filter: blur(5px);
+
+                &#logout_btn {
+                    background-color: initial;
+                    color: rgb(188, 0, 0);
+                }
             }
             a:hover {
                 transform: translateX(5px);

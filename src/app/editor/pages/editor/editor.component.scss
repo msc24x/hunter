@@ -461,7 +461,7 @@ a:hover,
         @include blackBack;
         padding-inline: 2rem;
         margin-top: 1rem;
-        align-items: stretch;
+        align-items: start;
         justify-content: center;
         flex-wrap: nowrap;
         gap: 5rem;
@@ -485,7 +485,7 @@ a:hover,
     display: flex;
     justify-content: stretch;
     align-items: stretch;
-    gap: 2rem;
+    gap: 1rem;
     width: 100%;
 
     label {
@@ -512,7 +512,7 @@ a:hover,
 
     .io-files,
     .solution-code-file {
-        flex-grow: 0.5;
+        flex-grow: 1;
     }
 }
 

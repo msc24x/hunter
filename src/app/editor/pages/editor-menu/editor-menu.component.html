@@ -90,7 +90,7 @@
 </popup>
 
 <div id="settings_label" class="flex-row justify-sb wrap">
-    Your Workbench
+    <span>Your Workbench</span>
     <div class="user-profile">
         <img
             src="{{ user.avatar_url || '/assets/empty-profile.png' }}"
@@ -143,8 +143,8 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="flex-row align-stretch wrap justify-center">
+<div class="row cards-row">
+    <div class="flex-row align-stretch wrap justify-center dashboard-cards">
         <dashboard-card
             title="{{ competitionsMetaData.total }}"
             message="Total Competitions Built"
