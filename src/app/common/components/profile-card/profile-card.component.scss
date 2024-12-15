@@ -1,16 +1,18 @@
 @use "../../../../assets/mixins" as *;
 @use "../../../../assets/colors";
 
-.user-profile {
+:host {
     @include basicBack;
     align-items: stretch;
     border-radius: 2rem;
     display: flex;
     padding: 1rem;
     gap: 0.5rem;
+    width: 24rem;
+    height: fit-content;
 
-    @media screen and (max-width: 600px) {
-        width: 100%;
+    @media screen and (max-width: 640px) {
+        width: 100% !important;
     }
 
     .manage-button {

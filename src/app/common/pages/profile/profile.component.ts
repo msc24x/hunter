@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { UserInfo } from 'src/environments/environment';
@@ -10,9 +11,12 @@ import { UserInfo } from 'src/environments/environment';
     styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
+    linkIcon = faArrowUpRightFromSquare;
+
     user: UserInfo = {} as UserInfo;
     loading: number = 0;
     editable = false;
+    isAuthenticated = false;
     user_profile: UserInfo = {} as UserInfo;
     user_profile_id: number;
 
@@ -25,7 +29,9 @@ export class ProfileComponent implements OnInit {
         this.user_profile_id = parseInt(
             this.activatedRoute.snapshot.paramMap.get('user_id') || ''
         );
+    }
 
+    ngOnInit(): void {
         this.loading++;
         this.userService.getUser(this.user_profile_id).subscribe({
             next: (data) => {
@@ -39,7 +45,7 @@ export class ProfileComponent implements OnInit {
             },
         });
 
-        if (!authService.isAuthenticated) {
+        if (!this.isAuthenticated) {
             this.loading++;
             this.authService.authenticate_credentials().subscribe(
                 (res) => {
@@ -59,8 +65,43 @@ export class ProfileComponent implements OnInit {
                     this.loading--;
                 }
             );
+        } else {
+            this.user = this.authService.user;
         }
+
+        this.authService.isAuthenticated.subscribe((isAuth) => {
+            this.user = this.authService.user;
+            this.isAuthenticated = isAuth;
+        });
     }
 
-    ngOnInit(): void {}
+    openUrl(url: string) {
+        window.open(url, '_blank');
+    }
+
+    updateUserInfo() {
+        const getElemVal = (key: string) => {
+            const elem = document.getElementById(key) as HTMLInputElement;
+
+            return elem.value;
+        };
+
+        this.user.name = getElemVal('user_name_input');
+        this.user.blog_url = getElemVal('user_blog_input');
+        this.user.linkedin_url = getElemVal('user_linkedin_input');
+
+        this.loading++;
+
+        this.userService
+            .updateUserInfo({
+                id: this.user.id,
+                name: this.user.name,
+                blog_url: this.user.blog_url,
+                linkedin_url: this.user.linkedin_url,
+                email: this.user.email,
+            })
+            .subscribe((res) => {
+                this.loading--;
+            });
+    }
 }

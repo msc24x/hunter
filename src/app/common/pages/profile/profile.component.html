@@ -1,3 +1,98 @@
 <app-bar></app-bar>
+<app-loading *ngIf="loading"></app-loading>
 
-<profile-card [user]="user_profile"></profile-card>
+<div class="profile-section">
+    <profile-card [user]="user_profile"></profile-card>
+    <div class="side-section">
+        <div class="user-analytics">
+            <h2>Stats</h2>
+        </div>
+        <div class="profile-settings">
+            <h2>Profile</h2>
+
+            <div class="account-field">
+                <div class="field-row">
+                    <div class="label">Email Address</div>
+                    <div class="row">
+                        <input
+                            type="text"
+                            maxlength="100"
+                            [value]="user.email"
+                            disabled
+                            class="disabled"
+                        />
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="label">Display Name</div>
+                    <div class="row">
+                        <input
+                            id="user_name_input"
+                            type="text"
+                            maxlength="50"
+                            [value]="user.name"
+                        />
+                    </div>
+                </div>
+                <p class="field-note">
+                    Your name is currently displayed as
+                    <span
+                        class="name-preview"
+                        matTooltip="Hunter users' name will have a suffix, which will be their user id"
+                    >
+                        {{ user.name || "Anonymous" }}#{{ user.id }}
+                    </span>
+                </p>
+
+                <div class="field-row">
+                    <div class="label">Your Blog/Website</div>
+                    <div class="row">
+                        <input
+                            id="user_blog_input"
+                            type="text"
+                            maxlength="100"
+                            [value]="user.blog_url"
+                        />
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div
+                        class="label link-like"
+                        (click)="openUrl(user.github_url!)"
+                    >
+                        Github Account
+                        <fa-icon
+                            [icon]="linkIcon"
+                            [style]="{ color: 'gray' }"
+                            size="2xs"
+                        ></fa-icon>
+                    </div>
+                    <div class="row">
+                        <input
+                            type="text"
+                            maxlength="100"
+                            [value]="user.github_url"
+                            disabled
+                            placeholder="Associated with Sign up"
+                            matTooltip="Associated with Sign up"
+                            matTooltipPosition="left"
+                            class="disabled"
+                        />
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="label">LinkedIn Account</div>
+                    <div class="row">
+                        <input
+                            id="user_linkedin_input"
+                            type="text"
+                            maxlength="100"
+                            [value]="user.linkedin_url"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div id="profile_save_btn" (click)="updateUserInfo()">Update</div>
+        </div>
+    </div>
+</div>

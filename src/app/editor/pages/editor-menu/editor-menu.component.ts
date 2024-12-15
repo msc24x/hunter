@@ -110,32 +110,6 @@ export class EditorMenuComponent implements OnInit {
         return;
     }
 
-    updateUserInfo() {
-        const getElemVal = (key: string) => {
-            const elem = document.getElementById(key) as HTMLInputElement;
-
-            return elem.value;
-        };
-
-        this.user.name = getElemVal('user_name_input');
-        this.user.blog_url = getElemVal('user_blog_input');
-        this.user.linkedin_url = getElemVal('user_linkedin_input');
-
-        this.loading += 1;
-
-        this.userDataService
-            .updateUserInfo({
-                id: this.user.id,
-                name: this.user.name,
-                blog_url: this.user.blog_url,
-                linkedin_url: this.user.linkedin_url,
-                email: this.user.email,
-            })
-            .subscribe((res) => {
-                this.loading -= 1;
-            });
-    }
-
     ngOnInit(): void {
         const fetchData = () => {
             this.loading += 1;

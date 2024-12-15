@@ -1,51 +1,42 @@
-<div class="user-profile">
-    <img
-        src="{{ user.avatar_url || '/assets/empty-profile.png' }}"
-        alt="User Github Avatar"
-        [height]="84"
-    />
+<img
+    src="{{ user.avatar_url || '/assets/empty-profile.png' }}"
+    alt="User Github Avatar"
+    [height]="84"
+/>
 
-    <div class="user-profile-details">
-        <div>
-            <div class="profile-name">
-                {{ user.name || user.email }}
-            </div>
-            <div class="profile-icons">
-                <a
-                    [href]="getUrl(user.github_url)"
-                    target="_blank"
-                    matTooltip="Github Account"
-                >
-                    <fa-icon
-                        *ngIf="user.github_url"
-                        [icon]="githubIcon"
-                    ></fa-icon>
-                </a>
-                <a
-                    [href]="getUrl(user.linkedin_url)"
-                    target="_blank"
-                    matTooltip="LinkedIn Account"
-                >
-                    <fa-icon
-                        *ngIf="user.linkedin_url"
-                        [icon]="linkedinIcon"
-                    ></fa-icon>
-                </a>
-                <a
-                    [href]="getUrl(user.blog_url)"
-                    target="_blank"
-                    matTooltip="Website"
-                >
-                    <fa-icon *ngIf="user.blog_url" [icon]="webIcon"></fa-icon>
-                </a>
-            </div>
+<div class="user-profile-details">
+    <div>
+        <div class="profile-name">
+            {{ user.name || user.email }}
         </div>
-        <div
-            *ngIf="controls"
-            class="manage-button"
-            [routerLink]="'/u/' + user.id"
-        >
-            Manage Profile
+        <div class="profile-icons">
+            <a
+                [href]="getUrl(user.github_url)"
+                target="_blank"
+                matTooltip="Github Account"
+            >
+                <fa-icon *ngIf="user.github_url" [icon]="githubIcon"></fa-icon>
+            </a>
+            <a
+                [href]="getUrl(user.linkedin_url)"
+                target="_blank"
+                matTooltip="LinkedIn Account"
+            >
+                <fa-icon
+                    *ngIf="user.linkedin_url"
+                    [icon]="linkedinIcon"
+                ></fa-icon>
+            </a>
+            <a
+                [href]="getUrl(user.blog_url)"
+                target="_blank"
+                matTooltip="Website"
+            >
+                <fa-icon *ngIf="user.blog_url" [icon]="webIcon"></fa-icon>
+            </a>
         </div>
+    </div>
+    <div *ngIf="controls" class="manage-button" [routerLink]="'/u/' + user.id">
+        Manage Profile
     </div>
 </div>
