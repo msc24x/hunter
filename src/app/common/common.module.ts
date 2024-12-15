@@ -28,6 +28,8 @@ import { ScoreboardComponent } from './components/scoreboard/scoreboard.componen
 import { EditorModule } from '../editor/editor.module';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionEvaluationComponent } from './components/question-evaluation/question-evaluation.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 
 @NgModule({
     declarations: [
@@ -54,6 +56,8 @@ import { QuestionEvaluationComponent } from './components/question-evaluation/qu
         ScoreboardComponent,
         QuestionsListComponent,
         QuestionEvaluationComponent,
+        ProfileComponent,
+        ProfileCardComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -86,6 +90,7 @@ import { QuestionEvaluationComponent } from './components/question-evaluation/qu
         ScoreboardComponent,
         QuestionsListComponent,
         QuestionEvaluationComponent,
+        ProfileCardComponent,
     ],
     providers: [DatePipe],
 })

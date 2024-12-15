@@ -23,9 +23,6 @@ import {
 export class EditorMenuComponent implements OnInit {
     loading = 0;
 
-    githubIcon = faGithub;
-    linkedinIcon = faLinkedin;
-    webIcon = faGlobe;
     penIcon = faGear;
     linkIcon = faUpRightFromSquare;
 

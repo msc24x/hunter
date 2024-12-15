@@ -10,7 +10,42 @@ import { DatabaseProvider } from '../../services/databaseProvider';
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
 
-router.put('/user', authenticate, loginRequired, (req, res) => {
+router.get('/users/:id', authenticate, loginRequired, (req, res) => {
+    const user_id = parseInt(req.params.id);
+
+    client.users
+        .findUniqueOrThrow({
+            where: {
+                id: user_id,
+            },
+            select: {
+                id: true,
+                name: true,
+                avatar_url: true,
+                blog_url: true,
+                github_url: true,
+                linkedin_url: true,
+                competitions: {
+                    where: {
+                        public: true,
+                        deleted_at: null,
+                    },
+                    select: {
+                        id: true,
+                        title: true,
+                    },
+                },
+            },
+        })
+        .then((rows) => {
+            Util.sendResponseJson(res, resCode.success, rows);
+        })
+        .catch((err) => {
+            Util.sendResponse(res, resCode.notFound);
+        });
+});
+
+router.put('/users', authenticate, loginRequired, (req, res) => {
     const updateUser = req.body as UserInfo;
 
     if (updateUser.name.length > 50) {
