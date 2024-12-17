@@ -15,6 +15,21 @@
         width: 100% !important;
     }
 
+    .points {
+        background-color: bisque;
+        font-size: 1rem;
+        color: chocolate;
+        width: fit-content;
+        border-radius: 0.5rem;
+        padding: 0.2rem;
+        padding-inline: 0.4rem;
+        cursor: default;
+        margin-left: 0.3rem;
+        font-weight: 400;
+        @include sweetBorder;
+        border-color: rgba(210, 105, 30, 0.5);
+    }
+
     .manage-button {
         font-size: 0.8rem;
         opacity: 0.8;

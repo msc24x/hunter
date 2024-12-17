@@ -26,6 +26,8 @@ html {
 
 .link-like {
     cursor: pointer;
+    color: colors.$text_black;
+
     &:hover {
         text-decoration: underline;
     }

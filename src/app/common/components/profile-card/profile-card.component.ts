@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
-import { UserInfo } from 'backend/src/config/types';
+import { faGlobe, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { UserInfo } from 'src/environments/environment';
 
 @Component({
     selector: 'profile-card',
@@ -12,6 +12,7 @@ export class ProfileCardComponent {
     githubIcon = faGithub;
     linkedinIcon = faLinkedin;
     webIcon = faGlobe;
+    pointsIcon = faTrophy;
 
     @Input()
     user!: UserInfo;

@@ -122,7 +122,13 @@
                 ></fa-icon>
             </div>
             <div class="name-col">
-                {{ score.user_name || "Anonymous" }}#{{ score.user_id }}
+                <a
+                    class="link-like"
+                    href="/u/{{ score.user_id }}"
+                    target="_blank"
+                >
+                    {{ score.user_name || "Anonymous" }}#{{ score.user_id }}
+                </a>
                 &nbsp;
                 <i
                     class="ahead-statement"

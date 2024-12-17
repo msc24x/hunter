@@ -20,6 +20,9 @@ export interface UserInfo {
     github_url?: string;
     linkedin_url?: string;
 
+    hunt_points?: number;
+    participated?: Array<CompetitionInfo>;
+
     competitions?: Array<CompetitionInfo>;
 }
 

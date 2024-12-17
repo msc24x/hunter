@@ -22,6 +22,25 @@
         }
     }
 
+    .user-analytics {
+        max-height: 42rem;
+        overflow-y: auto;
+
+        .hosted-comp {
+            padding: 0.5rem;
+            padding-inline: 0.7rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: whitesmoke;
+
+            .comp-created-at {
+                font-size: 0.7rem;
+                opacity: 0.7;
+                padding-top: 0.3rem;
+            }
+        }
+    }
+
     .profile-settings {
         .account-field {
             .field-row {
@@ -50,13 +69,14 @@
                 }
             }
             .field-note {
-                font-size: 0.6rem;
+                font-size: 0.8rem;
                 margin-bottom: 1rem;
             }
 
             .name-preview {
                 border-radius: 0.5rem;
-                font-size: 0.6rem;
+                font-size: 0.7rem;
+                white-space: nowrap;
                 padding: 0.2rem;
                 padding-inline: 0.4rem;
                 margin-left: 0.3rem;

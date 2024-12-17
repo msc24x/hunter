@@ -5,14 +5,76 @@
     <profile-card [user]="user_profile"></profile-card>
     <div class="side-section">
         <div class="user-analytics">
-            <h2>Stats</h2>
+            <h3>Participated Competitions</h3>
+            <div
+                class="hosted-comp"
+                *ngFor="let comp of user_profile.participated"
+            >
+                <div class="link-like" routerLink="/compete/p/{{ comp.id }}">
+                    {{ comp.title || "Untitled" }}
+                </div>
+
+                <div class="comp-created-at">
+                    Hosted by
+                    <span
+                        class="link-like"
+                        routerLink="/u/{{ comp.host_user?.id }}"
+                    >
+                        {{ comp.host_user?.name || "Anonymous" }}#{{
+                            comp.host_user?.id
+                        }}
+                    </span>
+                </div>
+            </div>
+            <div
+                *ngIf="!user_profile.participated?.length"
+                [ngStyle]="{ opacity: 0.7 }"
+            >
+                Did not take part in any competition so far! <br />
+                <br />
+            </div>
         </div>
-        <div class="profile-settings">
-            <h2>Profile</h2>
+
+        <div class="user-analytics">
+            <h3>
+                Hosted Competitions
+                <infotip
+                    message="Public competitions hosted by the user"
+                ></infotip>
+            </h3>
+            <div
+                class="hosted-comp"
+                *ngFor="let comp of user_profile.competitions"
+                routerLink="/compete/p/{{ comp.id }}"
+            >
+                <div class="link-like">
+                    {{ comp.title || "Untitled" }}
+                </div>
+
+                <div class="comp-created-at">
+                    Created
+                    {{ comp.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
+                </div>
+            </div>
+            <div
+                *ngIf="!user_profile.competitions?.length"
+                [ngStyle]="{ opacity: 0.7 }"
+            >
+                No competitions hosted by user yet! <br />
+                <br />
+            </div>
+        </div>
+        <div class="profile-settings" *ngIf="editable">
+            <h3>Profile</h3>
 
             <div class="account-field">
                 <div class="field-row">
-                    <div class="label">Email Address</div>
+                    <div class="label">
+                        Email Address
+                        <infotip
+                            message="Connected with your GitHub account"
+                        ></infotip>
+                    </div>
                     <div class="row">
                         <input
                             type="text"

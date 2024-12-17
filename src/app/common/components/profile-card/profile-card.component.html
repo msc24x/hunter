@@ -7,7 +7,7 @@
 <div class="user-profile-details">
     <div>
         <div class="profile-name">
-            {{ user.name || user.email }}
+            {{ user.name || user.email || "Anonymous#" + user.id }}
         </div>
         <div class="profile-icons">
             <a
@@ -36,7 +36,21 @@
             </a>
         </div>
     </div>
-    <div *ngIf="controls" class="manage-button" [routerLink]="'/u/' + user.id">
-        Manage Profile
+    <div>
+        <div
+            class="points"
+            *ngIf="user.hunt_points !== undefined"
+            matTooltip="Hunt points earned"
+        >
+            {{ user.hunt_points || "0" }}
+            <fa-icon size="sm" [icon]="pointsIcon"></fa-icon>
+        </div>
+        <div
+            *ngIf="controls"
+            class="manage-button"
+            [routerLink]="'/u/' + user.id"
+        >
+            Manage Profile
+        </div>
     </div>
 </div>

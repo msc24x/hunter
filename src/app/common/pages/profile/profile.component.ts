@@ -18,21 +18,20 @@ export class ProfileComponent implements OnInit {
     editable = false;
     isAuthenticated = false;
     user_profile: UserInfo = {} as UserInfo;
-    user_profile_id: number;
+    user_profile_id: number = -1;
 
     constructor(
         private routeService: Router,
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private userService: UserDataService
-    ) {
+    ) {}
+
+    fetchUserDetails() {
+        this.loading++;
         this.user_profile_id = parseInt(
             this.activatedRoute.snapshot.paramMap.get('user_id') || ''
         );
-    }
-
-    ngOnInit(): void {
-        this.loading++;
         this.userService.getUser(this.user_profile_id).subscribe({
             next: (data) => {
                 this.user_profile = data.body!;
@@ -43,6 +42,12 @@ export class ProfileComponent implements OnInit {
 
                 this.routeService.navigate(['/compete']);
             },
+        });
+    }
+
+    ngOnInit(): void {
+        this.activatedRoute.paramMap.subscribe(() => {
+            this.fetchUserDetails();
         });
 
         if (!this.isAuthenticated) {
