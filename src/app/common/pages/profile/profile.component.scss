@@ -12,13 +12,20 @@
         flex-wrap: wrap;
     }
 
+    profile-card {
+        width: 24rem;
+    }
+
     .side-section {
-        flex-basis: 0.8;
         width: 100%;
 
         & > div {
             @include basicBack;
             margin-bottom: 1rem;
+
+            & > h3 {
+                font-weight: 600;
+            }
         }
     }
 
@@ -27,16 +34,34 @@
         overflow-y: auto;
 
         .hosted-comp {
-            padding: 0.5rem;
-            padding-inline: 0.7rem;
+            padding: 0.7rem;
+            padding-inline: 0.8rem;
             margin-bottom: 0.5rem;
-            border-radius: 0.5rem;
+            border-radius: 0.8rem;
             background-color: whitesmoke;
+            @include sweetBorder;
+            border-color: gainsboro;
 
             .comp-created-at {
                 font-size: 0.7rem;
                 opacity: 0.7;
                 padding-top: 0.3rem;
+            }
+
+            .comp-stats {
+                display: flex;
+                gap: 1rem;
+                margin-top: 0.5rem;
+
+                & > div {
+                    font-size: 0.8rem;
+                    background-color: antiquewhite;
+                    color: rgb(146, 61, 0);
+                    border-radius: 0.5rem;
+                    padding: 0.3rem;
+                    @include sweetBorder;
+                    border-color: wheat;
+                }
             }
         }
     }

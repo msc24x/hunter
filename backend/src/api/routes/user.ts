@@ -31,6 +31,15 @@ function getPublicUserDetails(user_id: number) {
                     id: true,
                     title: true,
                     created_at: true,
+                    questions: {
+                        select: {
+                            _count: {
+                                select: {
+                                    results: true,
+                                },
+                            },
+                        },
+                    },
                 },
                 orderBy: {
                     id: 'desc',
@@ -76,6 +85,21 @@ async function getUserStats(user_id: number) {
                 select: {
                     id: true,
                     name: true,
+                },
+            },
+            questions: {
+                select: {
+                    results: {
+                        select: {
+                            accepted: true,
+                            created_at: true,
+                            language: true,
+                            result: true,
+                        },
+                        orderBy: {
+                            id: 'desc',
+                        },
+                    },
                 },
             },
         },

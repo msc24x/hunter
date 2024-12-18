@@ -45,6 +45,16 @@ export class ProfileComponent implements OnInit {
         });
     }
 
+    getTotalSubmissions(questions: any) {
+        let totalSub = 0;
+
+        questions?.forEach((ques: any) => {
+            totalSub = totalSub + ques._count.results;
+        });
+
+        return totalSub;
+    }
+
     ngOnInit(): void {
         this.activatedRoute.paramMap.subscribe(() => {
             this.fetchUserDetails();

@@ -33,6 +33,7 @@ export type Result = {
     result: number;
     final_result: number;
     user_rank: number;
+    questions_attempted?: number;
 };
 
 export type UserSocials = {
