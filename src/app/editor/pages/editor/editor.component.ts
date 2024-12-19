@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -66,7 +67,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private competitionsData: CompetitionsDataService,
         private datePipe: DatePipe,
-        private titleService: Title
+        private titleService: Title,
+        private snackBar: MatSnackBar
     ) {
         titleService.setTitle('Build • Hunter');
 
@@ -397,6 +399,7 @@ export class EditorComponent implements OnInit, OnDestroy {
             .subscribe((res) => {
                 this.displayLog('Competition changes saved');
                 this.loading = false;
+                this.snackBar.open('Saved successfully');
             });
     }
 

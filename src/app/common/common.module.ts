@@ -18,6 +18,7 @@ import { RouterModule } from '@angular/router';
 import { CommonRoutingModule } from './common-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { InfotipComponent } from './components/infotip/infotip.component';
 import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
 import { CodeEditorComponent } from './components/code-editor/code-editor.component';
@@ -30,6 +31,7 @@ import { QuestionsListComponent } from './questions-list/questions-list.componen
 import { QuestionEvaluationComponent } from './components/question-evaluation/question-evaluation.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [
@@ -65,6 +67,8 @@ import { ProfileCardComponent } from './components/profile-card/profile-card.com
         CommonRoutingModule,
         FontAwesomeModule,
         MatTooltipModule,
+        MatSnackBarModule,
+        MatSlideToggleModule,
     ],
     exports: [
         AppBarComponent,

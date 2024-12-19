@@ -4,6 +4,15 @@
 
 /*160deg*/
 
+.mdc-switch {
+    --mdc-switch-track-height: 24px !important;
+    --mdc-switch-track-shape: 24px !important;
+}
+.mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color: #361717 !important;
+    --mdc-snackbar-container-shape: 12px !important;
+}
+
 html {
     overflow-y: scroll;
     font-weight: 200;

@@ -82,7 +82,9 @@ export type result = {
     accepted: boolean;
     created_at?: string;
     language?: HunterLanguage;
+    neg_result?: number;
     final_result?: number;
+    questions_attempted?: number;
     submission?: string;
     meta?: string;
 };

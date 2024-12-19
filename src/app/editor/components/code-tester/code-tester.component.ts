@@ -8,6 +8,7 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     HunterLanguage,
@@ -31,7 +32,10 @@ export class CodeTesterComponent implements OnInit, OnChanges {
     lastVerification: QuestionVerification | null = null;
     verificationInProgress = false;
 
-    constructor(private competitionsService: CompetitionsDataService) {}
+    constructor(
+        private competitionsService: CompetitionsDataService,
+        private snackBar: MatSnackBar
+    ) {}
 
     ngOnInit(): void {
         this.fetchLastVerification();
@@ -70,6 +74,7 @@ export class CodeTesterComponent implements OnInit, OnChanges {
                 (res) => {
                     this.parseVerificationBody(res);
                     this.verificationInProgress = false;
+                    this.snackBar.open('Verification result received');
                 },
                 (err) => {
                     this.lastVerificationChange.emit(null);

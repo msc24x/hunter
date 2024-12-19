@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -24,7 +25,8 @@ export class ProfileComponent implements OnInit {
         private routeService: Router,
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
-        private userService: UserDataService
+        private userService: UserDataService,
+        private snackBar: MatSnackBar
     ) {}
 
     fetchUserDetails() {
@@ -117,6 +119,7 @@ export class ProfileComponent implements OnInit {
             })
             .subscribe((res) => {
                 this.loading--;
+                this.snackBar.open('Profile updated');
             });
     }
 }

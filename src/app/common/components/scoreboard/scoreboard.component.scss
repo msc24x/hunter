@@ -82,21 +82,26 @@
                 flex-basis: 30%;
             }
 
+            .score,
+            .score-p,
+            .score-n,
+            .ques-col {
+                flex-basis: 10%;
+                justify-content: center;
+            }
+
             .score-p {
                 color: darkcyan;
-                flex-basis: 10%;
                 overflow: visible;
             }
 
             .score {
                 color: green;
-                flex-basis: 10%;
                 text-wrap: nowrap;
             }
 
-            .penalities {
+            .score-n {
                 color: darkred;
-                flex-basis: 5%;
             }
         }
 

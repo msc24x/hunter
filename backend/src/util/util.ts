@@ -26,7 +26,11 @@ export class Util {
             | Array<CompetitionInfo>
             | any
     ) {
-        res.status(code).send(body);
+        res.status(code).send(
+            JSON.stringify(body, (key, value) =>
+                typeof value === 'bigint' ? value.toString() : value
+            )
+        );
     }
 
     static getValidLangs(): string[] {
