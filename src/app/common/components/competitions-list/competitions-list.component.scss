@@ -143,7 +143,6 @@
     list-style-type: none;
     padding: 0px;
     margin: 0;
-    overflow: hidden;
     scroll-behavior: smooth;
     flex-basis: 80%;
     width: 100%;
@@ -155,9 +154,7 @@
 }
 
 .competition_card {
-    margin-left: 8px;
-    margin-right: 8px;
-    margin: 8px;
+    margin-bottom: 0.5rem;
     padding: 16px;
     border-radius: 1rem;
     border-color: black;

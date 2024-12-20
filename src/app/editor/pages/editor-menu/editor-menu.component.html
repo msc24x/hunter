@@ -4,7 +4,7 @@
 <popup
     id="edit_profile_popup"
     [showControls]="false"
-    title="Manage Profile"
+    heading="Manage Profile"
     (closeEvent)="showEditProfileForm(false)"
 >
 </popup>
@@ -29,7 +29,6 @@
             message="Number of Public Competitions"
         ></dashboard-card>
     </div>
-    <create-dialog></create-dialog>
 </div>
 
 <competitions-list
@@ -38,4 +37,5 @@
     [includeSelf]="true"
     [showAuthor]="false"
     [competitionsList]="this.userCompetitions"
+    [showBuildButton]="true"
 ></competitions-list>

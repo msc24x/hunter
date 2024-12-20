@@ -32,6 +32,7 @@ import { QuestionEvaluationComponent } from './components/question-evaluation/qu
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
 
 @NgModule({
     declarations: [
@@ -60,6 +61,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         QuestionEvaluationComponent,
         ProfileComponent,
         ProfileCardComponent,
+        CreateDialogComponent,
     ],
     imports: [
         AngularCommonModule,

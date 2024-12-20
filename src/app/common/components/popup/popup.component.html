@@ -1,11 +1,8 @@
 <div class="bg" (click)="bgClicked($event)">
     <div class="dialog">
-        <div
-            class="title"
-            [ngStyle]="{ 'color': destructive ? 'darkred' : 'initial' }"
-        >
-            {{ title }}
-        </div>
+        <h2 [ngStyle]="{ 'color': destructive ? 'darkred' : 'initial' }">
+            {{ heading }}
+        </h2>
         <ng-content></ng-content>
         <div *ngIf="showControls" class="row">
             <div class="continue_btn" (click)="closeEvent.emit('continue')">

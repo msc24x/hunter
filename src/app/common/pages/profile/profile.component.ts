@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import {
+    faArrowUpRightFromSquare,
+    faDatabase,
+    faTrophy,
+    faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { UserInfo } from 'src/environments/environment';
@@ -13,6 +18,9 @@ import { UserInfo } from 'src/environments/environment';
 })
 export class ProfileComponent implements OnInit {
     linkIcon = faArrowUpRightFromSquare;
+    pointsIcon = faTrophy;
+    contestsIcon = faDatabase;
+    participatedIcon = faUser;
 
     user: UserInfo = {} as UserInfo;
     loading: number = 0;
@@ -38,6 +46,8 @@ export class ProfileComponent implements OnInit {
             next: (data) => {
                 this.user_profile = data.body!;
                 this.loading--;
+
+                this.editable = this.user.id === this.user_profile_id;
             },
             error: (err) => {
                 this.loading--;
@@ -72,10 +82,7 @@ export class ProfileComponent implements OnInit {
                         this.authService.user = this.user;
                         this.authService.isAuthenticated.next(true);
                         this.loading--;
-
-                        if (this.user.id === this.user_profile_id) {
-                            this.editable = true;
-                        }
+                        this.editable = this.user.id === this.user_profile_id;
                     }
                 },
                 (err) => {

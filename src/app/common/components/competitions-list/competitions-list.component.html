@@ -40,6 +40,8 @@
             </div>
         </div>
         <ul id="competitions_ol">
+            <create-dialog *ngIf="showBuildButton"></create-dialog>
+
             <li *ngFor="let com of this.competitionsList">
                 <div
                     class="competition_card"
@@ -100,13 +102,12 @@
                                 !isClosedNow(com)
                             "
                         >
-                            Live
                             {{
                                 !isAfterNow(com.scheduled_at)
-                                    ? "at"
+                                    ? "Opens at"
                                     : com.scheduled_at
-                                    ? "since"
-                                    : "until"
+                                    ? "Live since"
+                                    : "Open until"
                             }}
                             {{
                                 com.scheduled_at || com.scheduled_end_at

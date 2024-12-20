@@ -11,7 +11,7 @@
     width: 19rem;
     height: fit-content;
 
-    @media screen and (max-width: 640px) {
+    @media only screen and (max-width: 640px) {
         width: 100% !important;
     }
 

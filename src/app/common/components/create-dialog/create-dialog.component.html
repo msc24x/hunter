@@ -2,14 +2,13 @@
 
 <popup
     id="create_dialog_popup"
-    title="Create new"
+    heading="New Contest"
     [showControls]="false"
     (closeEvent)="showCreateDialog(false)"
 >
     <p>
-        <br />
-        *Set a descriptive title to let us initiate the Editor for your
-        competition. (You can always change it later)
+        Initialize with a title (max 120 characters)
+        <infotip message="You can change it later"></infotip>
     </p>
     <textarea
         id="competition_title"
@@ -30,6 +29,6 @@
     <div class="error">{{ responseMessage }}</div>
 </popup>
 
-<div id="create_btn" (click)="showCreateDialog(true)">
-    <div id="plus_btn">+ Create New</div>
+<div id="create_btn" class="create_btn" (click)="showCreateDialog(true)">
+    Build a new competition
 </div>

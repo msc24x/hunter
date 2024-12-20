@@ -5,7 +5,7 @@
     [hidden]="!showSubmissionsListP"
     (closeEvent)="showSubmissionsListP = false"
     [showControls]="false"
-    title="User Submissions"
+    heading="User Submissions"
 >
     <question-evaluation
         *ngIf="competitionInfo.questions?.[questionSelected]"

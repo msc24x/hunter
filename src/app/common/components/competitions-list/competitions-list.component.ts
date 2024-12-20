@@ -34,6 +34,9 @@ export class CompetitionsListComponent implements OnInit {
     showAuthor: boolean = true;
 
     @Input()
+    showBuildButton: boolean = false;
+
+    @Input()
     route: string = 'editor';
 
     query = '';

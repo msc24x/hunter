@@ -5,10 +5,10 @@
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    max-width: 1280px;
+    max-width: 1080px;
     margin-inline: auto;
 
-    @media screen and (max-width: 640px) {
+    @media only screen and (max-width: 640px) {
         flex-wrap: wrap;
     }
 
@@ -20,12 +20,65 @@
         width: 100%;
 
         & > div {
-            @include basicBack;
+            &:not(.clean-panel) {
+                @include basicBack;
+            }
+
             margin-bottom: 1rem;
 
             & > h3 {
                 font-weight: 600;
             }
+        }
+    }
+
+    .user-badges {
+        display: flex;
+        gap: 2rem;
+        overflow-x: auto;
+
+        .badge {
+            border-radius: 2rem;
+            font-size: 4rem;
+            padding: 1.7rem;
+            font-weight: 600;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.3rem;
+            flex-grow: 1;
+
+            & > div {
+                white-space: nowrap;
+            }
+
+            .title {
+                font-size: 0.8rem;
+                font-weight: 400;
+            }
+        }
+
+        @media only screen and (max-width: 720px) {
+            .badge {
+                font-size: 2.5rem;
+            }
+        }
+
+        .points {
+            background-color: #fff1e7;
+            color: brown;
+        }
+
+        .competitions {
+            background-color: #fffeed;
+            color: #ff6464;
+        }
+
+        .participated {
+            background-color: aliceblue;
+            color: chocolate;
         }
     }
 
