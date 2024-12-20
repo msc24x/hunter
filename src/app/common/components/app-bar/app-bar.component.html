@@ -23,7 +23,7 @@
         <a
             *ngIf="isAuthenticated"
             id="user_name"
-            routerLink="/editor/workbench"
+            routerLink="/u/{{ user.id }}"
             matTooltip="Configure your account"
         >
             <fa-icon [icon]="userIcon"></fa-icon>
@@ -37,6 +37,9 @@
         <div id="navBarCompact">
             <ul>
                 <a routerLink="/home">HOME</a>
+                <a *ngIf="isAuthenticated" routerLink="/u/{{ user.id }}"
+                    >PROFILE</a
+                >
                 <a routerLink="/compete">COMPETITIONS</a>
                 <a *ngIf="isAuthenticated" routerLink="/editor/workbench">
                     EDITOR

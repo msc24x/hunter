@@ -18,7 +18,6 @@ const routes: Routes = [
         'loadChildren': () =>
             import('./compete/compete.module').then((m) => m.CompeteModule),
     },
-
     {
         'path': '404',
         'component': NotFoundComponent,

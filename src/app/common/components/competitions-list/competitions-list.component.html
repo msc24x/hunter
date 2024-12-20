@@ -40,6 +40,8 @@
             </div>
         </div>
         <ul id="competitions_ol">
+            <create-dialog *ngIf="showBuildButton"></create-dialog>
+
             <li *ngFor="let com of this.competitionsList">
                 <div
                     class="competition_card"
@@ -48,12 +50,17 @@
                     <div id="c_title" [ngClass]="{ 'untitled': !com.title }">
                         {{ com.title || "untitled" }}
                     </div>
-                    <div id="c_host_user">
+                    <div
+                        id="c_host_user"
+                        routerLink="/u/{{ com.host_user_id }}"
+                    >
                         <ng-template #authorElem>
                             By
-                            {{ com.host_user?.name || "Anonymous" }}
-                            <span *ngIf="com.host_user_id != 1">
-                                #{{ com.host_user_id }}
+                            <span class="link-like">
+                                {{ com.host_user?.name || "Anonymous" }}
+                                <span *ngIf="com.host_user_id != 1">
+                                    #{{ com.host_user_id }}
+                                </span>
                             </span>
                             &nbsp;
                             <span
@@ -62,7 +69,6 @@
                             >
                                 <fa-icon [icon]="officialIcon"></fa-icon>
                             </span>
-
                             &nbsp;
                         </ng-template>
 
@@ -96,13 +102,12 @@
                                 !isClosedNow(com)
                             "
                         >
-                            Live
                             {{
                                 !isAfterNow(com.scheduled_at)
-                                    ? "at"
+                                    ? "Opens at"
                                     : com.scheduled_at
-                                    ? "since"
-                                    : "until"
+                                    ? "Live since"
+                                    : "Open until"
                             }}
                             {{
                                 com.scheduled_at || com.scheduled_end_at

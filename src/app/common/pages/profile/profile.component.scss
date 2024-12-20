@@ -1,0 +1,182 @@
+@use "../../../../assets/mixins" as *;
+@use "../../../../assets/colors";
+
+.profile-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 1080px;
+    margin-inline: auto;
+
+    @media only screen and (max-width: 640px) {
+        flex-wrap: wrap;
+    }
+
+    profile-card {
+        width: 24rem;
+    }
+
+    .side-section {
+        width: 100%;
+
+        & > div {
+            &:not(.clean-panel) {
+                @include basicBack;
+            }
+
+            margin-bottom: 1rem;
+
+            & > h3 {
+                font-weight: 600;
+            }
+        }
+    }
+
+    .user-badges {
+        display: flex;
+        gap: 2rem;
+        overflow-x: auto;
+
+        .badge {
+            border-radius: 2rem;
+            font-size: 4rem;
+            padding: 1.7rem;
+            font-weight: 600;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.3rem;
+            flex-grow: 1;
+
+            & > div {
+                white-space: nowrap;
+            }
+
+            .title {
+                font-size: 0.8rem;
+                font-weight: 400;
+            }
+        }
+
+        @media only screen and (max-width: 720px) {
+            .badge {
+                font-size: 2.5rem;
+            }
+        }
+
+        .points {
+            background-color: #fff1e7;
+            color: brown;
+        }
+
+        .competitions {
+            background-color: #fffeed;
+            color: #ff6464;
+        }
+
+        .participated {
+            background-color: aliceblue;
+            color: chocolate;
+        }
+    }
+
+    .user-analytics {
+        max-height: 42rem;
+        overflow-y: auto;
+
+        .hosted-comp {
+            padding: 0.7rem;
+            padding-inline: 0.8rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.8rem;
+            background-color: whitesmoke;
+            @include sweetBorder;
+            border-color: gainsboro;
+
+            .comp-created-at {
+                font-size: 0.7rem;
+                opacity: 0.7;
+                padding-top: 0.3rem;
+            }
+
+            .comp-stats {
+                display: flex;
+                gap: 1rem;
+                margin-top: 0.5rem;
+
+                & > div {
+                    font-size: 0.8rem;
+                    background-color: antiquewhite;
+                    color: rgb(146, 61, 0);
+                    border-radius: 0.5rem;
+                    padding: 0.3rem;
+                    @include sweetBorder;
+                    border-color: wheat;
+                }
+            }
+        }
+    }
+
+    .profile-settings {
+        .account-field {
+            .field-row {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                margin-block: 0.3rem;
+                font-size: 1rem;
+                min-height: 3rem;
+
+                .label {
+                    margin-top: 0.5rem;
+                    margin-right: 1rem;
+                }
+
+                input {
+                    background-color: whitesmoke;
+                    border-radius: 1rem;
+                    padding: 8px;
+                    padding-inline: 12px;
+                    border-width: 0px;
+                    font-size: 1rem;
+                    width: 16rem;
+
+                    @include sweetBorder;
+                }
+            }
+            .field-note {
+                font-size: 0.8rem;
+                margin-bottom: 1rem;
+            }
+
+            .name-preview {
+                border-radius: 0.5rem;
+                font-size: 0.7rem;
+                white-space: nowrap;
+                padding: 0.2rem;
+                padding-inline: 0.4rem;
+                margin-left: 0.3rem;
+                @include sweetBorder;
+            }
+        }
+        #profile_save_btn {
+            background-color: whitesmoke;
+            border-radius: 1rem;
+            cursor: pointer;
+            padding: 10px;
+            padding-inline: 12px;
+            margin-left: auto;
+            margin-top: 2rem;
+            width: 7rem;
+            text-align: center;
+            @include sweetBorder;
+        }
+
+        #profile_save_btn:hover {
+            background-color: white;
+        }
+    }
+}

@@ -10,7 +10,125 @@ import { DatabaseProvider } from '../../services/databaseProvider';
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
 
-router.put('/user', authenticate, loginRequired, (req, res) => {
+function getPublicUserDetails(user_id: number) {
+    return client.users.findUniqueOrThrow({
+        where: {
+            id: user_id,
+        },
+        select: {
+            id: true,
+            name: true,
+            avatar_url: true,
+            blog_url: true,
+            github_url: true,
+            linkedin_url: true,
+            competitions: {
+                where: {
+                    public: true,
+                    deleted_at: null,
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    created_at: true,
+                    questions: {
+                        select: {
+                            _count: {
+                                select: {
+                                    results: true,
+                                },
+                            },
+                        },
+                    },
+                },
+                orderBy: {
+                    id: 'desc',
+                },
+            },
+        },
+    });
+}
+
+async function getUserStats(user_id: number) {
+    const totalPoints = await client.results.aggregate({
+        _sum: {
+            result: true,
+        },
+        where: {
+            question: {
+                deleted_at: null,
+                competitions: {
+                    deleted_at: null,
+                },
+            },
+            user_id: user_id,
+        },
+    });
+
+    const participated = await client.competitions.findMany({
+        where: {
+            questions: {
+                some: {
+                    results: {
+                        some: {
+                            user_id: user_id,
+                        },
+                    },
+                    deleted_at: null,
+                },
+            },
+            deleted_at: null,
+            public: true,
+        },
+        include: {
+            host_user: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+            questions: {
+                select: {
+                    results: {
+                        select: {
+                            accepted: true,
+                            created_at: true,
+                            language: true,
+                            result: true,
+                        },
+                        orderBy: {
+                            id: 'desc',
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    return {
+        hunt_points: totalPoints._sum.result,
+        participated: participated,
+    };
+}
+
+router.get('/users/:id', authenticate, loginRequired, (req, res) => {
+    const user_id = parseInt(req.params.id);
+
+    getPublicUserDetails(user_id)
+        .then((rows) => {
+            getUserStats(user_id).then((stats) => {
+                Util.sendResponseJson(res, resCode.success, {
+                    ...rows,
+                    ...stats,
+                });
+            });
+        })
+        .catch((err) => {
+            Util.sendResponse(res, resCode.notFound);
+        });
+});
+
+router.put('/users', authenticate, loginRequired, (req, res) => {
     const updateUser = req.body as UserInfo;
 
     if (updateUser.name.length > 50) {

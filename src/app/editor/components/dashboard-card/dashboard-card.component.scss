@@ -3,9 +3,9 @@
 :host {
     @include basicBack;
     width: 186px;
-    // opacity: 0.9;
     border-radius: 2rem;
     margin: 0.2rem;
+    padding: 1.2rem;
 
     div {
         height: 100%;
@@ -19,7 +19,7 @@
         .message {
             font-size: 1.4rem;
 
-            @media screen and (max-width: 900px) {
+            @media only screen and (max-width: 900px) {
                 font-size: 1rem;
             }
         }

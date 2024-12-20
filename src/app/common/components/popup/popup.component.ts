@@ -20,7 +20,7 @@ export class PopupComponent implements OnInit {
     closeEvent = new EventEmitter<string>();
 
     @Input()
-    title = 'Message';
+    heading = 'Message';
 
     @Input()
     destructive = false;

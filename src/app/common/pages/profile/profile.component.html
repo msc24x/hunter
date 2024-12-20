@@ -1,0 +1,216 @@
+<app-bar></app-bar>
+<app-loading *ngIf="loading"></app-loading>
+
+<div class="profile-section">
+    <profile-card *ngIf="user_profile" [user]="user_profile"></profile-card>
+    <div class="side-section">
+        <div class="user-badges clean-panel">
+            <div
+                class="points badge"
+                *ngIf="user_profile.hunt_points !== undefined"
+            >
+                <div>
+                    {{ user_profile.hunt_points || "0" }}
+                    <fa-icon size="xs" [icon]="pointsIcon"></fa-icon>
+                </div>
+                <div class="title">Points Earned</div>
+            </div>
+            <div
+                class="competitions badge"
+                *ngIf="user_profile.competitions?.length !== undefined"
+            >
+                <div>
+                    {{ user_profile.competitions?.length || "0" }}
+                    <fa-icon size="xs" [icon]="contestsIcon"></fa-icon>
+                </div>
+                <div class="title">Contests Created</div>
+            </div>
+            <div
+                class="participated badge"
+                *ngIf="user_profile.participated?.length !== undefined"
+            >
+                <div>
+                    {{ user_profile.participated?.length || "0" }}
+                    <fa-icon size="xs" [icon]="participatedIcon"></fa-icon>
+                </div>
+                <div class="title">Participated Contests</div>
+            </div>
+        </div>
+        <div class="user-analytics">
+            <h3>Participated Competitions</h3>
+            <div
+                class="hosted-comp"
+                *ngFor="let comp of user_profile.participated"
+            >
+                <div class="link-like" routerLink="/compete/p/{{ comp.id }}">
+                    {{ comp.title || "Untitled" }}
+                </div>
+
+                <div class="comp-created-at">
+                    Hosted by
+                    <span
+                        class="link-like"
+                        routerLink="/u/{{ comp.host_user?.id }}"
+                    >
+                        {{ comp.host_user?.name || "Anonymous" }}#{{
+                            comp.host_user?.id
+                        }}
+                    </span>
+                </div>
+
+                <div></div>
+            </div>
+            <div
+                *ngIf="!user_profile.participated?.length"
+                [ngStyle]="{ opacity: 0.7 }"
+            >
+                Did not take part in any competition so far! <br />
+                <br />
+            </div>
+        </div>
+
+        <div class="user-analytics">
+            <h3>
+                Hosted Competitions
+                <infotip
+                    message="Public competitions hosted by the user"
+                ></infotip>
+            </h3>
+            <div
+                class="hosted-comp"
+                *ngFor="let comp of user_profile.competitions"
+                routerLink="/compete/p/{{ comp.id }}"
+            >
+                <div class="link-like">
+                    {{ comp.title || "Untitled" }}
+                </div>
+
+                <div class="comp-created-at">
+                    Created
+                    {{ comp.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
+                </div>
+
+                <div class="comp-stats">
+                    <div>{{ comp.questions?.length || "0" }} Ques</div>
+                    <div>
+                        Total Submissions:
+                        {{ getTotalSubmissions(comp.questions) || "0" }}
+                    </div>
+                </div>
+            </div>
+            <div
+                *ngIf="!user_profile.competitions?.length"
+                [ngStyle]="{ opacity: 0.7 }"
+            >
+                No competitions hosted by user yet! <br />
+                <br />
+            </div>
+        </div>
+        <div class="profile-settings" *ngIf="editable">
+            <h3>Profile</h3>
+
+            <div class="account-field">
+                <div class="field-row">
+                    <div class="label">
+                        Email Address
+                        <infotip
+                            message="Connected with your GitHub account"
+                        ></infotip>
+                    </div>
+                    <div class="row">
+                        <input
+                            type="text"
+                            maxlength="100"
+                            [value]="user.email"
+                            disabled
+                            class="disabled"
+                        />
+                    </div>
+                </div>
+                <!-- <div class="field-row">
+                    <div class="label">
+                        Display your Email to contest hosts?
+                        <infotip
+                            message="When you participate in a contest"
+                        ></infotip>
+                    </div>
+                    <div class="row">
+                        <mat-slide-toggle
+                            disabled
+                            matTooltip="Feature preview"
+                        ></mat-slide-toggle>
+                    </div>
+                </div> -->
+                <div class="field-row">
+                    <div class="label">Display Name</div>
+                    <div class="row">
+                        <input
+                            id="user_name_input"
+                            type="text"
+                            maxlength="50"
+                            [value]="user.name"
+                        />
+                    </div>
+                </div>
+                <p class="field-note">
+                    Your name is currently displayed as
+                    <span
+                        class="name-preview"
+                        matTooltip="Hunter users' name will have a suffix, which will be their user id"
+                    >
+                        {{ user.name || "Anonymous" }}#{{ user.id }}
+                    </span>
+                </p>
+
+                <div class="field-row">
+                    <div class="label">Your Blog/Website</div>
+                    <div class="row">
+                        <input
+                            id="user_blog_input"
+                            type="text"
+                            maxlength="100"
+                            [value]="user.blog_url"
+                        />
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div
+                        class="label link-like"
+                        (click)="openUrl(user.github_url!)"
+                    >
+                        Github Account
+                        <fa-icon
+                            [icon]="linkIcon"
+                            [style]="{ color: 'gray' }"
+                            size="2xs"
+                        ></fa-icon>
+                    </div>
+                    <div class="row">
+                        <input
+                            type="text"
+                            maxlength="100"
+                            [value]="user.github_url"
+                            disabled
+                            placeholder="Associated with Sign up"
+                            matTooltip="Associated with Sign up"
+                            matTooltipPosition="left"
+                            class="disabled"
+                        />
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="label">LinkedIn Account</div>
+                    <div class="row">
+                        <input
+                            id="user_linkedin_input"
+                            type="text"
+                            maxlength="100"
+                            [value]="user.linkedin_url"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div id="profile_save_btn" (click)="updateUserInfo()">Update</div>
+        </div>
+    </div>
+</div>

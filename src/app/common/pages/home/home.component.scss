@@ -50,7 +50,7 @@
 .app-line {
     font-weight: 100;
     color: colors.$text_black;
-    text-shadow: 0 0px 100px rgba(82, 177, 255, 0.4);
+    // text-shadow: 0 0px 100px rgba(82, 177, 255, 0.4);
 
     .hibold {
         font-weight: 600;
@@ -65,6 +65,11 @@
     flex-wrap: nowrap;
 }
 
+img {
+    @include sweetBorder;
+    border-radius: 5rem;
+}
+
 .app-img-r {
     border-radius: 64px;
     box-shadow: 56px 0 700px 100px rgba(255, 82, 82, 0.2);
@@ -72,7 +77,7 @@
 
 .app-img-b {
     border-radius: 64px;
-    box-shadow: 56px 0 700px 100px rgba(82, 177, 255, 0.2);
+    // box-shadow: 56px 0 700px 100px rgba(82, 177, 255, 0.2);
 }
 
 #tagline {
@@ -268,7 +273,7 @@
         margin-top: 90px;
         padding-left: 12px;
         font-size: 2.2rem;
-        text-shadow: 0 56px 100px rgba(82, 177, 255, 0.795);
+        // text-shadow: 0 56px 100px rgba(82, 177, 255, 0.795);
     }
 
     #ss1,

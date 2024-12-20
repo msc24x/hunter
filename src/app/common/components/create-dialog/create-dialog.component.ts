@@ -1,5 +1,6 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -18,7 +19,8 @@ export class CreateDialogComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private router: Router,
-        private competitionsData: CompetitionsDataService
+        private competitionsData: CompetitionsDataService,
+        private snackBar: MatSnackBar
     ) {}
 
     ngOnInit(): void {
@@ -36,40 +38,28 @@ export class CreateDialogComponent implements OnInit {
         ).value;
         this.competitionsData.postCompetition(title)?.subscribe(
             (res) => {
-                this.handleResponse(res as HttpResponse<Object>);
+                this.router.navigate([
+                    `/editor/${(res.body as unknown as { id: number }).id}`,
+                ]);
             },
             (err) => {
-                this.handleResponse(err as HttpResponse<Object>);
+                this.handleResponse(err as HttpErrorResponse);
             }
         );
     }
 
-    private handleResponse(res: HttpResponse<Object>) {
+    private handleResponse(res: HttpErrorResponse) {
         this.toggleSubmitButton(true);
         this.loading = false;
 
         switch (res.status) {
-            case resCode.serverError:
-                this.responseMessage =
-                    '*Server side exception, please try again later';
-                break;
-            case resCode.forbidden:
-                this.responseMessage =
-                    '*' + (res as unknown as HttpErrorResponse).error;
-                break;
             case resCode.badRequest:
-                this.responseMessage = '*Title not valid';
-                break;
-            case resCode.success:
-                this.responseMessage = '*created successfully';
-                this.router.navigate([
-                    `/editor/${(res.body as unknown as { id: number }).id}`,
-                ]);
-                break;
-            case resCode.accepted:
+                this.snackBar.open(res.error);
                 break;
             default:
-                this.responseMessage = '*Unknown error occurred';
+                this.snackBar.open(
+                    'Unknown error occurred, please try again later'
+                );
                 break;
         }
     }

@@ -19,6 +19,11 @@ export interface UserInfo {
     blog_url?: string;
     github_url?: string;
     linkedin_url?: string;
+
+    hunt_points?: number;
+    participated?: Array<CompetitionInfo>;
+
+    competitions?: Array<CompetitionInfo>;
 }
 
 export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go';
@@ -77,7 +82,9 @@ export type result = {
     accepted: boolean;
     created_at?: string;
     language?: HunterLanguage;
+    neg_result?: number;
     final_result?: number;
+    questions_attempted?: number;
     submission?: string;
     meta?: string;
 };
@@ -108,7 +115,7 @@ export const apiEndpoints = {
     deleteQuestion: environment.apiUrl + '/question/delete',
     postFile: environment.apiUrl + '/question/upload',
     execute: environment.apiUrl + '/execute',
-    user: environment.apiUrl + '/user',
+    user: environment.apiUrl + '/users',
     results: environment.apiUrl + '/competitions/{0}/results/{1}',
     resultsAll: environment.apiUrl + '/competitions/{0}/results',
     progress: environment.apiUrl + '/competitions/{0}/progress',

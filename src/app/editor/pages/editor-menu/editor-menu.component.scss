@@ -16,59 +16,6 @@
     flex-wrap: wrap;
 }
 
-.user-profile {
-    @include basicBack;
-    align-items: stretch;
-    border-radius: 2rem;
-    display: flex;
-    padding: 1rem;
-    gap: 0.5rem;
-
-    @media screen and (max-width: 600px) {
-        width: 100%;
-    }
-
-    .manage-button {
-        font-size: 0.8rem;
-        opacity: 0.8;
-        cursor: pointer;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-
-    .user-profile-details {
-        font-size: 0.9rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        a {
-            color: colors.$text_black;
-        }
-
-        .profile-name {
-            font-size: 1.2rem;
-        }
-
-        .profile-icons {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-            gap: 0.5rem;
-            font-size: 1rem;
-            margin: 0.5rem;
-            opacity: 0.8;
-        }
-    }
-
-    img {
-        border-radius: 1rem;
-        @include sweetBorder;
-    }
-}
-
 #user_info {
     #user_info_h {
         font-size: 1.25rem;
@@ -96,62 +43,6 @@
     background-color: antiquewhite;
     border: 1px solid rgb(179, 112, 26);
     border-radius: 24px;
-}
-
-.account-field {
-    .field-row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        margin-block: 0.3rem;
-        font-size: 1rem;
-
-        .label {
-            margin-top: 0.5rem;
-            margin-right: 1rem;
-        }
-
-        input {
-            background-color: whitesmoke;
-            border-radius: 1rem;
-            padding: 8px;
-            padding-inline: 12px;
-            border-width: 0px;
-            font-size: 1rem;
-
-            @include sweetBorder;
-        }
-    }
-    .field-note {
-        font-size: 0.6rem;
-        margin-bottom: 1rem;
-    }
-
-    .name-preview {
-        border-radius: 0.5rem;
-        font-size: 0.6rem;
-        padding: 0.2rem;
-        padding-inline: 0.4rem;
-        margin-left: 0.3rem;
-        @include sweetBorder;
-    }
-}
-#profile_save_btn {
-    background-color: whitesmoke;
-    border-radius: 1rem;
-    cursor: pointer;
-    padding: 10px;
-    padding-inline: 12px;
-    margin-left: auto;
-    margin-top: 2rem;
-    width: 7rem;
-    text-align: center;
-    @include sweetBorder;
-}
-
-#profile_save_btn:hover {
-    background-color: white;
 }
 
 @media only screen and (max-width: 900px) {

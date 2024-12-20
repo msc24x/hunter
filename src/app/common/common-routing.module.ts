@@ -4,6 +4,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { CompeteComponent } from './pages/compete/compete.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 const routes: Routes = [
     {
@@ -25,6 +26,10 @@ const routes: Routes = [
         'path': 'compete',
         'title': 'Public Competitions • Hunter',
         'component': CompeteComponent,
+    },
+    {
+        'path': 'u/:user_id',
+        'component': ProfileComponent,
     },
     {
         'path': 'about',

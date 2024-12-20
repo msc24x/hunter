@@ -32,7 +32,9 @@ export class Results {
                         u.name AS user_name,
                         MAX(r.created_at) AS created_at,
                         SUM(case when r.result > 0 then r.result else 0 end) AS result,
-                        SUM(r.result) AS final_result
+                        SUM(case when r.result < 0 then r.result else 0 end) AS neg_result,
+                        SUM(r.result) AS final_result,
+                        COUNT(DISTINCT r.question_id) AS questions_attempted
                     FROM
                         results r
                     JOIN 
@@ -122,7 +124,8 @@ export class Results {
 
         this.client.$queryRaw`
             SELECT
-                COUNT(DISTINCT r.user_id) as total_count
+                COUNT(DISTINCT r.user_id) as total_count,
+                COUNT(DISTINCT r.question_id) as questions_attempted
             FROM
                 results r
             JOIN 
@@ -139,7 +142,7 @@ export class Results {
                 ;
             `
             .then((rows) => {
-                callback(parseInt((rows as Array<any>)[0].total_count), null);
+                callback((rows as Array<any>)[0], null);
             })
             .catch((err) => {
                 if (err) {
@@ -179,14 +182,17 @@ export class Results {
         `
             .then((rows) => {
                 this.getCompetitionScoresCount(
-                    (total_count, err) => {
+                    (total_counts, err) => {
                         if (err) {
                             callback(null, err);
                             return;
                         }
 
                         var meta: any = {
-                            total: total_count,
+                            total: parseInt(total_counts.total_count),
+                            questions_attempted: parseInt(
+                                total_counts.questions_attempted
+                            ),
                             user_details: null,
                         };
 

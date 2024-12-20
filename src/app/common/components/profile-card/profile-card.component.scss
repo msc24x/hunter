@@ -1,0 +1,73 @@
+@use "../../../../assets/mixins" as *;
+@use "../../../../assets/colors";
+
+:host {
+    @include basicBack;
+    align-items: stretch;
+    border-radius: 2rem;
+    display: flex;
+    padding: 1rem;
+    gap: 0.5rem;
+    width: 19rem;
+    height: fit-content;
+
+    @media only screen and (max-width: 640px) {
+        width: 100% !important;
+    }
+
+    .points {
+        background-color: bisque;
+        font-size: 1rem;
+        color: chocolate;
+        width: fit-content;
+        border-radius: 0.5rem;
+        padding: 0.2rem;
+        padding-top: 0.3rem;
+        padding-inline: 0.4rem;
+        cursor: default;
+        margin-left: 0.3rem;
+        font-weight: 400;
+        @include sweetBorder;
+        border-color: rgba(210, 105, 30, 0.5);
+    }
+
+    .manage-button {
+        font-size: 0.8rem;
+        opacity: 0.8;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .user-profile-details {
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        a {
+            color: colors.$text_black;
+        }
+
+        .profile-name {
+            font-size: 1.2rem;
+        }
+
+        .profile-icons {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            gap: 0.5rem;
+            font-size: 1rem;
+            margin: 0.5rem;
+            opacity: 0.8;
+        }
+    }
+
+    img {
+        border-radius: 1rem;
+        @include sweetBorder;
+    }
+}

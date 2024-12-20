@@ -4,7 +4,7 @@
 
 <popup
     id="competition-insights"
-    title="Insights"
+    heading="Insights"
     [showControls]="false"
     [destructive]="false"
     (closeEvent)="showPopup(false, 'competition-insights')"
@@ -15,7 +15,7 @@
 <popup
     id="code-tester"
     (closeEvent)="showPopup(false, 'code-tester')"
-    title="Verify Participation"
+    heading="Verify Participation"
     [showControls]="false"
     [destructive]="false"
 >
@@ -28,7 +28,7 @@
 </popup>
 
 <popup
-    title="Destructive Action"
+    heading="Destructive Action"
     id="delete_comp_popup"
     (closeEvent)="handleDeleteCompPopupEvent($event)"
     [showControls]="false"
@@ -47,7 +47,7 @@
     </div>
 </popup>
 
-<popup title="Guide" id="guide" (closeEvent)="handleGuidePopupEvent($event)">
+<popup heading="Guide" id="guide" (closeEvent)="handleGuidePopupEvent($event)">
     <b>Saving</b> <br /><br />
     Ensure you save your changes by clicking the "SAVE CHANGES" button in the
     bottom bar. You can also use the keyboard shortcut Shift + S.
@@ -128,7 +128,7 @@
 </popup>
 
 <popup
-    title="Confirmation"
+    heading="Confirmation"
     id="public_status_confirm"
     (closeEvent)="handlePrivacyConfirmPopupEvent($event)"
 >

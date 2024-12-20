@@ -4,143 +4,14 @@
 <popup
     id="edit_profile_popup"
     [showControls]="false"
-    title="Manage Profile"
+    heading="Manage Profile"
     (closeEvent)="showEditProfileForm(false)"
 >
-    <div class="account-field">
-        <div class="field-row">
-            <div class="label">Email Address</div>
-            <div class="row">
-                <input
-                    type="text"
-                    maxlength="100"
-                    [value]="user.email"
-                    disabled
-                    class="disabled"
-                />
-            </div>
-        </div>
-        <div class="field-row">
-            <div class="label">Display Name</div>
-            <div class="row">
-                <input
-                    id="user_name_input"
-                    type="text"
-                    maxlength="50"
-                    [value]="user.name"
-                />
-            </div>
-        </div>
-        <p class="field-note">
-            Your name is currently displayed as
-            <span
-                class="name-preview"
-                matTooltip="Hunter users' name will have a suffix, which will be their user id"
-            >
-                {{ user.name || "Anonymous" }}#{{ user.id }}
-            </span>
-        </p>
-
-        <div class="field-row">
-            <div class="label">Your Blog/Website</div>
-            <div class="row">
-                <input
-                    id="user_blog_input"
-                    type="text"
-                    maxlength="100"
-                    [value]="user.blog_url"
-                />
-            </div>
-        </div>
-        <div class="field-row">
-            <div class="label link-like" (click)="openUrl(user.github_url!)">
-                Github Account
-                <fa-icon
-                    [icon]="linkIcon"
-                    [style]="{ color: 'gray' }"
-                    size="2xs"
-                ></fa-icon>
-            </div>
-            <div class="row">
-                <input
-                    type="text"
-                    maxlength="100"
-                    [value]="user.github_url"
-                    disabled
-                    placeholder="Associated with Sign up"
-                    matTooltip="Associated with Sign up"
-                    matTooltipPosition="left"
-                    class="disabled"
-                />
-            </div>
-        </div>
-        <div class="field-row">
-            <div class="label">LinkedIn Account</div>
-            <div class="row">
-                <input
-                    id="user_linkedin_input"
-                    type="text"
-                    maxlength="100"
-                    [value]="user.linkedin_url"
-                />
-            </div>
-        </div>
-    </div>
-    <div id="profile_save_btn" (click)="updateUserInfo()">Update</div>
 </popup>
 
 <div id="settings_label" class="flex-row justify-sb wrap">
     <span>Your Workbench</span>
-    <div class="user-profile">
-        <img
-            src="{{ user.avatar_url || '/assets/empty-profile.png' }}"
-            alt="User Github Avatar"
-            [height]="84"
-        />
-
-        <div class="user-profile-details">
-            <div>
-                <div class="profile-name">
-                    {{ user.name || user.email }}
-                </div>
-                <div class="profile-icons">
-                    <a
-                        [href]="getUrl(user.github_url)"
-                        target="_blank"
-                        matTooltip="Github Account"
-                    >
-                        <fa-icon
-                            *ngIf="user.github_url"
-                            [icon]="githubIcon"
-                        ></fa-icon>
-                    </a>
-                    <a
-                        [href]="getUrl(user.linkedin_url)"
-                        target="_blank"
-                        matTooltip="LinkedIn Account"
-                    >
-                        <fa-icon
-                            *ngIf="user.linkedin_url"
-                            [icon]="linkedinIcon"
-                        ></fa-icon>
-                    </a>
-                    <a
-                        [href]="getUrl(user.blog_url)"
-                        target="_blank"
-                        matTooltip="Website"
-                    >
-                        <fa-icon
-                            *ngIf="user.blog_url"
-                            [icon]="webIcon"
-                        ></fa-icon>
-                    </a>
-                </div>
-            </div>
-            <div class="manage-button" (click)="showEditProfileForm(true)">
-                Manage Profile
-            </div>
-        </div>
-    </div>
+    <profile-card [controls]="true" [user]="user"></profile-card>
 </div>
 
 <div class="row cards-row">
@@ -158,7 +29,6 @@
             message="Number of Public Competitions"
         ></dashboard-card>
     </div>
-    <create-dialog></create-dialog>
 </div>
 
 <competitions-list
@@ -167,4 +37,5 @@
     [includeSelf]="true"
     [showAuthor]="false"
     [competitionsList]="this.userCompetitions"
+    [showBuildButton]="true"
 ></competitions-list>

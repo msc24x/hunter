@@ -5,7 +5,7 @@
     [hidden]="!showSubmissionP"
     (closeEvent)="showSubmissionP = false; viewSubmissionResult = undefined"
     [showControls]="false"
-    title="Your Submission"
+    heading="Your Submission"
 >
     <div class="view-submission-container" *ngIf="viewSubmissionResult">
         <pretty-meta [meta]="viewSubmissionResult.meta!"></pretty-meta>

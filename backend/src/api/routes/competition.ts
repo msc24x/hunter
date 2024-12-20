@@ -37,8 +37,12 @@ router.delete('/competition/:id', authenticate, loginRequired, (req, res) => {
 router.post('/competition', authenticate, loginRequired, (req, res) => {
     const title = req.body.title;
 
-    if (title == null || (title as string).length > 120) {
-        Util.sendResponse(res, resCode.badRequest);
+    if (title == null || (title as string).length > 20) {
+        Util.sendResponse(
+            res,
+            resCode.badRequest,
+            'No more than 120 characters are allowed'
+        );
         return;
     }
 

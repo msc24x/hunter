@@ -9,7 +9,7 @@
         "start-prod": "ENV=prod ts-node src/app.ts",
         "start": "nodemon -L src/app.ts",
         "win-start-prod": "set ENV=prod&& ts-node src/app.ts",
-        "shell": "ts-node shell.ts",
+        "shell": "ts-node src/scripts/shell.ts",
         "lint": "eslint src/**/*.{ts,tsx}",
         "check-types": "tsc --noemit",
         "eslint": "eslint"
