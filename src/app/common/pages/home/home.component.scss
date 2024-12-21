@@ -48,12 +48,18 @@
 }
 
 .app-line {
-    font-weight: 100;
-    color: colors.$text_black;
-    // text-shadow: 0 0px 100px rgba(82, 177, 255, 0.4);
+    font-weight: 800;
+    color: rgb(111, 10, 10);
+    text-align: center;
 
     .hibold {
         font-weight: 600;
+    }
+
+    .helperline {
+        font-size: 2rem;
+        opacity: 0.8;
+        text-shadow: -2px 10px 100px rgb(225 0 0);
     }
 }
 
@@ -81,38 +87,16 @@ img {
 }
 
 #tagline {
-    margin-top: 256px;
+    margin-top: 10rem;
     font-size: 5rem;
 }
 
 #tagline_small {
     color: rgb(88, 88, 88);
-    margin: 16px;
+    margin-top: 16px;
     margin-bottom: 120px;
-}
-
-#getstarted {
-    @include basicBack;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    animation-name: attention;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 2;
-    animation-duration: 0.5s;
-    width: fit-content;
-    border-radius: 2rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    padding-inline: 1rem;
-}
-
-@keyframes attention {
-    50% {
-        transform: scale(1.1);
-    }
+    font-size: 1rem;
+    font-weight: 100;
 }
 
 #ss1_tag,
@@ -181,8 +165,8 @@ img {
 
 @media only screen and (max-width: 770px) {
     #tagline {
-        margin-top: 156px;
-        font-size: 4rem;
+        margin-top: 10rem;
+        font-size: 3rem;
     }
 
     #ss1,
@@ -217,10 +201,8 @@ img {
     }
 
     #tagline {
-        margin-top: 120px;
+        margin-top: 10rem;
         padding-left: 24px;
-        font-size: 3rem;
-        // text-shadow: 0 84px 700px rgba(82, 177, 255, 0.795);
     }
 
     #ss1,
@@ -267,8 +249,6 @@ img {
     #tagline {
         margin-top: 90px;
         padding-left: 12px;
-        font-size: 2.2rem;
-        // text-shadow: 0 56px 100px rgba(82, 177, 255, 0.795);
     }
 
     #ss1,

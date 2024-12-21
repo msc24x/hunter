@@ -187,7 +187,8 @@ router.get('/oauth/github', (req, res) => {
                                                     session.id
                                                 );
                                                 res.redirect(
-                                                    `${process.env.PROTOCOL}://${process.env.DOMAIN}`
+                                                    req.query.redirect_uri?.toString() ||
+                                                        `${process.env.PROTOCOL}://${process.env.FRONTEND_DOMAIN}`
                                                 );
                                             })
                                             .catch((err) =>
@@ -214,8 +215,13 @@ router.get('/oauth/github', (req, res) => {
                 );
             });
     } else {
+        const redirect_uri = `${process.env.PROTOCOL}://${
+            process.env.FRONTEND_DOMAIN || process.env.DOMAIN
+        }/api/oauth/github?redirect_uri=${encodeURIComponent(
+            req.headers.referer || ''
+        )}`;
         res.redirect(
-            `https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.CID}`
+            `https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.CID}&redirect_uri=${redirect_uri}`
         );
     }
 });

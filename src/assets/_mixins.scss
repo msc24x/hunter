@@ -25,6 +25,17 @@
     }
 }
 
+@mixin yellowBg {
+    border-radius: 1rem;
+    border-width: 2px;
+    @include sweetBorder;
+    background: antiquewhite;
+    border-style: dashed;
+    border-color: goldenrod;
+    color: darkgoldenrod;
+    font-size: 1.2rem;
+}
+
 @mixin hideSrollbar {
     /* Hide scrollbar for Chrome, Safari, and Opera */
     &::-webkit-scrollbar {

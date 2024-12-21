@@ -6,6 +6,7 @@ import {
     protocol,
 } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
+import { faRankingStar } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-home',
@@ -13,6 +14,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+    homeIcon = faRankingStar;
     isAuthenticated: boolean = false;
     prod: boolean = environment.production;
     user = {
@@ -28,21 +30,9 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    getStarted() {
-        if (this.prod) {
-            this.redirectToGitHubOAuth();
-        } else {
-            this.scrollToBottom();
-        }
-    }
-
     scrollToBottom() {
         let elem = document.getElementById('login_tag');
         elem?.scrollIntoView();
-    }
-
-    redirectToGitHubOAuth() {
-        window.open(`${environment.apiUrl}/oauth/github`);
     }
 
     animateInView() {

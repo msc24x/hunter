@@ -135,19 +135,9 @@
     </p>
 </popup>
 
-<div id="bottom_app_bar">
-    <!-- <div class="para">
-        Hunter is a free to use open source designed to let users host
-        programming contests. It also uses a custom built execution engine
-        Showdown for its execution and judge services.
-    </div> -->
-
+<div id="bottom_app_bar" [ngClass]="{ isAuthenticated: 'no-auth' }">
     <div id="site_logo">
-        <!-- <img src="favicon.png" alt="logo" height="24px" /> -->
         Hunter
-        <!-- <span class="site-version">
-            {{ version }}
-        </span> -->
         <br />
         <div id="site_info">
             With <fa-icon [icon]="heartIcon"></fa-icon> by
@@ -166,6 +156,5 @@
             Privacy Policy
         </a>
         <a href="https://donate.cambo.in">Donate</a>
-        <!--div class="button"  id="terms" (click)="showPopup(true, 'terms')">Terms & Conditions</div-->
     </div>
 </div>

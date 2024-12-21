@@ -11,8 +11,11 @@
 </app-info-card> -->
 
 <div id="tagline" class="app-line">
-    Your <span class="">Home</span> for <br />
-    Hosting <span class="">Programming Contests</span>.
+    Home to Programming Contests <br />
+    <span class="helperline">
+        <fa-icon [icon]="homeIcon"></fa-icon>
+        with Ease & Freedom!
+    </span>
 </div>
 <div id="tagline_small" class="app-line inview_slide">
     <span class="">Open source</span> platform for you to host your own
@@ -20,20 +23,14 @@
     <span class="">Build, Judge or Participate</span>, all under one roof.
 </div>
 
-<div
-    id="getstarted"
-    [ngClass]="{ 'app-line': true, 'vanish': isAuthenticated }"
-    (click)="getStarted()"
->
-    <img
-        src="../../../../assets/gh_logo.png"
-        height="36"
-        width="36"
-        alt="github_logo"
-    />
-    <span>Sign In to start using Hunter</span>
+<div *ngIf="!isAuthenticated" [ngClass]="{ 'vanish': isAuthenticated }">
+    <br />
+
+    <sign-in-prompt></sign-in-prompt>
 </div>
 
+<br />
+<br />
 <div class="row inview_slide">
     <img
         id="ss1"
@@ -56,7 +53,7 @@
         id="ss2"
         class="app-img-b"
         src="../../../assets/ss4.webp"
-        alt="Shows how hunter enables users to host their challanges across the world"
+        alt="Shows how hunter enables users to host their challenges across the world"
     />
 </div>
 

@@ -51,8 +51,6 @@ export class ProfileComponent implements OnInit {
             },
             error: (err) => {
                 this.loading--;
-
-                this.routeService.navigate(['/home']);
             },
         });
     }

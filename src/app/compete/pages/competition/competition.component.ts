@@ -177,6 +177,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 },
                 error: (err) => {
                     this.loading--;
+                    this.bottomSection = true;
                 },
             })
         );

@@ -33,6 +33,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
+import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-prompt.component';
 
 @NgModule({
     declarations: [
@@ -62,6 +63,7 @@ import { CreateDialogComponent } from './components/create-dialog/create-dialog.
         ProfileComponent,
         ProfileCardComponent,
         CreateDialogComponent,
+        SignInPromptComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -97,6 +99,7 @@ import { CreateDialogComponent } from './components/create-dialog/create-dialog.
         QuestionsListComponent,
         QuestionEvaluationComponent,
         ProfileCardComponent,
+        SignInPromptComponent,
     ],
     providers: [DatePipe],
 })

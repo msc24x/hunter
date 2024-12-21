@@ -42,19 +42,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: antiquewhite;
-    border-radius: 1rem;
     margin: 2rem;
-    @include sweetBorder;
-    border-style: dashed;
-    border-width: 2px;
-    border-color: goldenrod;
-    color: darkgoldenrod;
     font-weight: 600;
     transition: 300ms;
-    font-size: 1.2rem;
     margin-inline: auto;
     max-width: 60rem;
+
+    @include yellowBg;
 
     &:hover {
         cursor: pointer;

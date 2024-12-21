@@ -1,0 +1,65 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+.sign-in-section {
+    display: flex;
+    justify-content: center;
+    max-width: 42rem;
+    margin-inline: auto;
+    align-items: end;
+    padding: 2rem;
+    border-width: 1px;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    overflow: hidden;
+    border-radius: 2rem;
+    margin-bottom: 8rem;
+    background: linear-gradient(
+        120deg,
+        rgba(0, 0, 0, 0.8) 10%,
+        rgba(252, 69, 69, 0.5) 150%
+    );
+    @include sweetBorder;
+
+    .text {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: white;
+        text-align: center;
+    }
+
+    @media screen and (max-width: 720px) {
+        font-size: 1.8rem;
+        padding-block: 3rem;
+
+        .text {
+            font-size: 1.2rem;
+        }
+    }
+}
+
+#getstarted {
+    @include basicBack;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    animation-name: attention;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 2;
+    animation-duration: 0.5s;
+    width: fit-content;
+    border-radius: 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-inline: 1rem;
+}
+
+@keyframes attention {
+    50% {
+        transform: scale(1.1);
+    }
+}
