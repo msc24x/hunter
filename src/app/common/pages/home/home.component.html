@@ -1,15 +1,5 @@
 <app-bar></app-bar>
 
-<!--div id="logo" class="app-line">Hunter <span>I</span></div-->
-<!-- <app-info-card [persist]="true">
-  <b>UPDATE&nbsp;:&nbsp;</b> I regret to inform you that I will be discontinuing this hobby project of 
-  mine in upcoming days due to some technical reasons. Hunter was a fun and challenging project that I 
-  enjoyed working on, but unfortunately I can no longer maintain it. I hope to resume it someday, but 
-  on a different domain. You will be notified on my Linkedin profile if and when that happens. Thank you 
-  for your support and interest in Hunter.
-
-</app-info-card> -->
-
 <div id="tagline" class="app-line">
     Home to Programming Contests <br />
     <span class="helperline">
@@ -31,47 +21,65 @@
 
 <br />
 <br />
-<div class="row inview_slide">
-    <img
-        id="ss1"
-        class="app-img-r"
-        src="../../../assets/ss1.webp"
-        width="640px"
-        height="640px"
-        alt="How hunter allows you to build coding competitions with so much ease"
-    />
-    <div id="ss1_tag" class="app-line">
-        Build Your Own Competitions With A Click.
+<section class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <h3>80+</h3>
+            <p>Active Users</p>
+        </div>
+        <div class="stat-item">
+            <h3>70+</h3>
+            <p>Contests Hosted</p>
+        </div>
+        <div class="stat-item">
+            <h3>Open Source</h3>
+            <p>Project Status</p>
+        </div>
+        <div class="stat-item">
+            <h3>6+</h3>
+            <p>Prominent Languages Supported</p>
+        </div>
     </div>
-</div>
+</section>
 
-<div class="row inview_slide" id="ss2_row">
-    <div id="ss2_tag" class="app-line">
-        Let The World Participate In Your Challenge
+<section class="feature-section">
+    <div class="feature-content">
+        <h2>Build Your Own Competitions With A Click</h2>
+        <p>
+            Create custom programming contests effortlessly. Set up problems,
+            test cases, and scoring systems with our intuitive interface.
+        </p>
     </div>
-    <img
-        id="ss2"
-        class="app-img-b"
-        src="../../../assets/ss4.webp"
-        alt="Shows how hunter enables users to host their challenges across the world"
-    />
-</div>
-
-<div class="row inview_slide">
-    <img
-        id="ss3"
-        class="app-img-r"
-        width="640px"
-        height="640px"
-        src="../../../assets/ss3.webp"
-        alt="Hunter comes with their home grown code compiling and execution services at their backend"
-    />
-    <div id="ss3_tag" class="app-line">
-        Compile & Execute On Hunter's Servers.
+    <div class="feature-image">
+        <img
+            src="../../../assets/editor.webp"
+            alt="Contest Creation Interface"
+        />
     </div>
-</div>
+</section>
 
-<div *ngIf="!isAuthenticated && !prod" class="row">
-    <div id="login_tag" class="app-line">Login Into Your Account</div>
-    <login-dialog></login-dialog>
-</div>
+<section class="feature-section">
+    <div class="feature-content">
+        <h2>Let The World Participate In Your Challenge</h2>
+        <p>
+            Share your contests globally. Engage with participants worldwide and
+            foster a community of programmers.
+        </p>
+    </div>
+    <div class="feature-image">
+        <img src="../../../assets/workbench.webp" alt="Global Participation" />
+    </div>
+</section>
+
+<section class="feature-section">
+    <div class="feature-content">
+        <h2>Compile & Execute On Our Secure Servers</h2>
+        <p>
+            Powerful backend infrastructure handles code compilation and
+            execution. Multiple language support with secure sandboxing.
+        </p>
+    </div>
+    <div class="feature-image">
+        <img src="../../../assets/evaluation.webp" alt="Code Execution" />
+    </div>
+</section>
