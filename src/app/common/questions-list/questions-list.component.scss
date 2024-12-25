@@ -36,13 +36,21 @@
         @include sweetBorder;
     }
 
-    div#create_question_btn {
+    #create_question_btn {
         padding-top: 0px;
         padding-bottom: 0px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-left: 12px;
+        width: 3rem;
+
+        &:hover {
+            background-color: whitesmoke !important;
+        }
+
+        mat-select {
+            font-weight: bold;
+        }
     }
 
     div#delete_question_btn {

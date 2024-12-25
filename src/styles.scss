@@ -13,6 +13,20 @@
     --mdc-snackbar-container-shape: 12px !important;
 }
 
+.mat-mdc-select-panel {
+    border-radius: 1rem !important;
+    @include sweetBorder;
+
+    .mat-mdc-option {
+        margin-inline: 0.5rem;
+        border-radius: 0.7rem;
+
+        &:hover {
+            background-color: antiquewhite;
+        }
+    }
+}
+
 html {
     overflow-y: scroll;
     font-weight: 200;

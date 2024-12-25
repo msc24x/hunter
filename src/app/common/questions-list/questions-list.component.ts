@@ -1,8 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
+    Component,
+    EventEmitter,
+    Input,
+    OnInit,
+    Output,
+    ViewChild,
+} from '@angular/core';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
+import {
+    faAlignLeft,
     faCheckCircle,
+    faCheckDouble,
     faCircleCheck,
+    faCircleHalfStroke,
     faCircleXmark,
+    faCode,
+    faParagraph,
 } from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
@@ -22,6 +35,8 @@ export class QuestionsListComponent implements OnInit {
     crossIcon = faCircleXmark;
 
     showQuestionDeleteP = false;
+
+    questionTypeBuffer: number = -1;
 
     constructor(private competitionsData: CompetitionsDataService) {}
 
@@ -56,6 +71,16 @@ export class QuestionsListComponent implements OnInit {
     questionSelected: number = -1;
     @Output()
     questionSelectedChange = new EventEmitter<number>();
+
+    @ViewChild('add_question_select') addQuestionSelect!: MatSelect;
+
+    questionTypes = [
+        ['Coding Test', 0],
+        ['Multiple Choice', 1],
+        ['Fill In Blanks', 2],
+        ['Long Answer', 3],
+        ['Short Answer', 4],
+    ];
 
     ngOnInit(): void {}
 
@@ -121,10 +146,39 @@ export class QuestionsListComponent implements OnInit {
         } else this.displayLog('No Question selected');
     }
 
-    addQuestion() {
+    openCreateQues() {
+        this.addQuestionSelect.open();
+    }
+
+    getQuesIcon(type: any) {
+        switch (type) {
+            case 0:
+                return faCode;
+            case 1:
+                return faCheckDouble;
+            case 2:
+                return faCircleHalfStroke;
+            case 3:
+                return faParagraph;
+            case 4:
+                return faAlignLeft;
+            default:
+                return faCode;
+        }
+    }
+
+    addQuestion(question_type: MatSelectChange) {
         this.loading = true;
+
+        setTimeout(() => {
+            this.questionTypeBuffer = -1;
+        });
+
         this.competitionsData
-            .postQuestion({ competition_id: this.competitionInfo.id })
+            .postQuestion({
+                competition_id: this.competitionInfo.id,
+                type: question_type.value,
+            })
             .subscribe(() => {
                 this.resetQuestionSelected();
                 this.fetchRequired.emit();

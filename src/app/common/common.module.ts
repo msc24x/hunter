@@ -34,6 +34,7 @@ import { ProfileCardComponent } from './components/profile-card/profile-card.com
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
 import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-prompt.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [
@@ -73,6 +74,7 @@ import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-promp
         MatTooltipModule,
         MatSnackBarModule,
         MatSlideToggleModule,
+        MatSelectModule,
     ],
     exports: [
         AppBarComponent,

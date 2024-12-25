@@ -61,6 +61,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     user = {} as UserInfo;
     eventPopup = new BehaviorSubject<string>('');
 
+    choiceTypes = {
+        selectable: 0,
+        hidden: 1,
+    };
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -96,10 +101,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             .classList.add('hidden');
         window.scroll(0, 0);
 
-        window.onbeforeunload = (event) => {
-            event.preventDefault();
-            return;
-        };
+        // window.onbeforeunload = (event) => {
+        //     event.preventDefault();
+        //     return;
+        // };
 
         this.elem = document.getElementById('log');
 

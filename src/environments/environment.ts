@@ -145,6 +145,9 @@ export interface QuestionInfo {
     id: number;
     competition_id: number;
     title: string;
+    type: number;
+    choice_type: number;
+    position: number;
     statement: string;
     created_at: Date;
     updated_at: Date;
@@ -156,6 +159,17 @@ export interface QuestionInfo {
     test_cases_file?: boolean;
     sol_cases_file?: boolean;
     sol_code_file?: boolean;
+
+    question_choices?: QuestionChoice[];
+}
+
+export interface QuestionChoice {
+    id: number;
+    text: string;
+    question_id: number;
+    position: number;
+    group_number: number;
+    is_correct: boolean;
 }
 /*
  * For easier debugging in development mode, you can import the following file

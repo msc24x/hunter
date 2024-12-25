@@ -10,6 +10,7 @@ import { DatabaseProvider } from '../../services/databaseProvider';
 import path from 'path';
 import fileUpload from 'express-fileupload';
 import { JudgeService } from '../../services/judgeService';
+import config from '../../config/config';
 
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -334,6 +335,17 @@ router.post(
         const comp_id = parseInt(req.params.comp_id);
         const user: UserInfo = res.locals.user;
 
+        const quest_type = parseInt(req.body.type);
+
+        if (!Object.values(config.questionTypes).includes(quest_type)) {
+            Util.sendResponse(
+                res,
+                resCode.badRequest,
+                'Question type not supported'
+            );
+            return;
+        }
+
         client.competitions
             .findUnique({
                 where: { id: comp_id },
@@ -349,6 +361,7 @@ router.post(
                         data: {
                             competition_id: competition.id,
                             created_at: new Date(),
+                            type: quest_type,
                         },
                     })
                     .then((question) =>
