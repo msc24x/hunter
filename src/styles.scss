@@ -62,16 +62,11 @@ a {
 
 body {
     background-color: colors.$text_white;
-    // background: linear-gradient(165deg, colors.$text_white,colors.$purple_high);
-    // background-repeat: no-repeat;
-    // background-attachment: fixed;
     margin: 0px;
     max-width: 1720px;
     padding-inline: 2%;
     margin-inline: auto;
     font-family: appFont;
-    // background: linear-gradient(45deg, rgb(214, 214, 214), rgb(224, 224, 224));
-    // background-attachment: fixed;
 }
 
 .largeButton {
