@@ -22,6 +22,7 @@ import {
     domainName,
     environment,
     protocol,
+    QuestionChoice,
     QuestionInfo,
     QuestionVerification,
     resCode,
@@ -65,6 +66,33 @@ export class EditorComponent implements OnInit, OnDestroy {
         selectable: 0,
         hidden: 1,
     };
+
+    choicesDemo: QuestionChoice[] = [
+        {
+            id: -1,
+            group_number: 0,
+            is_correct: false,
+            position: 0,
+            question_id: 0,
+            text: 'The bird was completely wrong',
+        },
+        {
+            id: -1,
+            group_number: 0,
+            is_correct: true,
+            position: 0,
+            question_id: 0,
+            text: 'The bird was wrong, but not technically.',
+        },
+        {
+            id: -1,
+            group_number: 0,
+            is_correct: true,
+            position: 0,
+            question_id: 0,
+            text: 'The bird was right technically',
+        },
+    ];
 
     constructor(
         private router: Router,

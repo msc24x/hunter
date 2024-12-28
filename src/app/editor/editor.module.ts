@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CodeTesterComponent } from './components/code-tester/code-tester.component';
 import { InsightsComponent } from './components/insights/insights.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { InsightsComponent } from './components/insights/insights.component';
         MatTooltipModule,
         FontAwesomeModule,
         MatSelectModule,
+        MatSlideToggleModule,
     ],
     exports: [NgKatexComponent],
 })

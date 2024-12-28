@@ -14,6 +14,33 @@ popup {
     @include appTextArea;
 }
 
+.page-section {
+    width: 100%;
+    display: flex;
+    max-width: 1450px;
+    gap: 2rem;
+    margin-inline: auto;
+
+    .section-side {
+        flex-basis: 20%;
+        @include basicBack;
+        background-color: whitesmoke;
+        border-radius: 2rem;
+        height: fit-content;
+        // position: sticky;
+        // top: 2rem;
+    }
+
+    .section-content {
+        flex-basis: 80%;
+        flex-shrink: 1;
+    }
+}
+
+.full-input {
+    width: calc(100% - 32px);
+}
+
 .c-insights {
     max-width: 280px;
     border-style: dashed !important;
@@ -79,13 +106,36 @@ popup {
     border-radius: 0px 0px 1rem 1rem;
 }
 
+.question-data {
+    @include basicBack;
+    background-color: whitesmoke;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 3rem;
+    margin-bottom: 8rem;
+
+    .question-type {
+        @include blackBack;
+        width: fit-content;
+        margin-inline: auto;
+        margin-top: -2.5rem;
+    }
+}
+
 #visbility_controller {
     display: flex;
     margin-top: 16px;
+    justify-content: stretch;
 
     cursor: default;
     border-radius: 1rem;
     @include sweetBorder();
+
+    & > div {
+        flex-grow: 1;
+    }
 
     #id {
         background-color: white;
@@ -151,9 +201,9 @@ popup {
 .label {
     font-size: 1.1rem;
     text-align: left;
-    width: 100%;
-    margin-inline: 16px;
+    margin-inline: 6px;
     margin-block: 8px;
+    margin-top: 16px;
     color: colors.$text_black;
 }
 
@@ -164,29 +214,31 @@ popup {
 
 #text_title {
     @include appTextArea();
-    // width: 246px;
+    resize: vertical;
     margin-top: 4px;
 }
 
 #text_description {
     @include appTextArea();
     @include hideSrollbar();
-    // width: 512px;
-    width: 100%;
     margin-top: 4px;
+    resize: vertical;
 }
 
-#evaluation-section {
-    flex-wrap: wrap;
-    flex-direction: column;
+.eval-panel {
     align-items: stretch;
-    justify-content: space-between;
-    flex-basis: 100%;
 
     .sample-cases-container {
+        width: 100%;
+        display: flex;
+        justify-content: stretch;
         justify-content: center;
         align-items: center;
         display: flex;
+
+        & > div {
+            flex-grow: 1;
+        }
 
         #sample_cases_label,
         #sample_sols_label {
@@ -197,77 +249,12 @@ popup {
         textarea {
             @include appTextArea;
             margin: 8px;
-            width: 80%;
             font-family: monospace;
             font-size: large;
-            // background-color: white;
-        }
-    }
-
-    .points-container {
-        padding: 1rem;
-    }
-
-    .eval-panel {
-        align-items: stretch;
-
-        .sample-cases-container {
-            width: 100%;
-            display: flex;
-            justify-content: stretch;
-
-            div {
-                flex-grow: 1;
-
-                textarea {
-                    width: calc(100% - 3rem);
-                }
-            }
+            width: calc(100% - 4rem);
         }
     }
 }
-
-// @media only screen and (max-width: 1180px) {
-//     #text_description {
-//         width: 860px;
-//         height: 120px;
-//     }
-
-//     #text_title {
-//         width: 550px;
-//         height: 120px;
-//     }
-// }
-
-@media only screen and (max-width: 990px) {
-    .title-eval-container {
-        flex-wrap: wrap !important;
-    }
-}
-
-// @media only screen and (max-width: 720px) {
-//     #text_description {
-//         width: 490px;
-//         height: 120px;
-//     }
-
-//     #text_title {
-//         width: 256px;
-//         height: 180px;
-//     }
-// }
-
-// @media only screen and (max-width: 580px) {
-//     #text_description {
-//         width: 320px;
-//         height: 180px;
-//     }
-
-//     #text_title {
-//         width: 320px;
-//         height: 120px;
-//     }
-// }
 
 #controls {
     position: fixed;
@@ -325,7 +312,8 @@ popup {
 #text_statement_preview {
     width: 100%;
     width: auto;
-    height: 360px;
+    max-height: 42rem;
+    resize: vertical;
     overflow-y: scroll;
     font-family: monospace;
 }
@@ -347,22 +335,23 @@ label.file_input {
 
     @include sweetBorder();
 }
-#toggle_preview_btn:hover {
-    background-color: whitesmoke;
+
+.statement-label-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 #toggle_preview_btn {
-    @include basicBack;
     cursor: pointer;
-    margin-block: 1rem;
     display: flex;
     justify-content: space-between;
     text-align: center;
+    align-items: center;
     gap: 1rem;
-
-    fa-icon {
-        width: 1rem;
-    }
+    padding: 0.5rem;
+    padding-inline-start: 1rem;
+    margin-block: 0.5rem;
 }
 
 input.file_input {
@@ -377,9 +366,25 @@ a {
     cursor: pointer;
 }
 
-a:hover,
-#toggle_preview_btn:hover {
+a:hover {
     background-color: white;
+}
+
+.multiple-choices-panel {
+    width: 100%;
+
+    .choice {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        // @include blackBack;
+        margin-bottom: 0.5rem;
+
+        input.app-text-area {
+            @include appTextArea;
+            flex-grow: 1;
+        }
+    }
 }
 
 #question_points,
@@ -439,47 +444,9 @@ a:hover,
 
 .editor-first-panel {
     @include blackBack;
-    gap: 2rem;
-
-    .desc-panel {
-        flex-grow: 1;
-        margin-inline: 16px;
-    }
-
-    .title-panel {
-        flex-grow: 0.5;
-        margin-inline: 16px;
-        .label,
-        .vertical_flex,
-        textarea {
-            width: 100%;
-        }
-    }
-}
-
-.editor-second-panel {
-    .title-eval-container {
-        @include blackBack;
-        padding-inline: 2rem;
-        margin-top: 1rem;
-        align-items: start;
-        justify-content: center;
-        flex-wrap: nowrap;
-        gap: 5rem;
-
-        .title-container {
-            justify-content: space-between;
-            // max-width: 40%;
-
-            #text_qtitle {
-                width: calc(100% - 2rem);
-            }
-        }
-
-        #evaluation-section {
-            // max-width: 50%;
-        }
-    }
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
 }
 
 .file-uploaders {

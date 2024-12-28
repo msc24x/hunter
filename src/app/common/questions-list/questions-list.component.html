@@ -37,12 +37,11 @@
         </span>
     </li>
 
-    <li id="create_question_btn" (click)="openCreateQues()">
+    <li *ngIf="editable" id="create_question_btn" (click)="openCreateQues()">
         <mat-select
             #add_question_select
             panelWidth="14rem"
             matTooltip="Insert one new question"
-            *ngIf="editable"
             [(value)]="questionTypeBuffer"
             (selectionChange)="addQuestion($event)"
             placeholder="Add"
@@ -51,9 +50,9 @@
                 *ngFor="let qOption of questionTypes"
                 [value]="qOption[1]"
             >
-                <fa-icon [icon]="getQuesIcon(qOption[1])" size="sm"></fa-icon>
-                &nbsp;
-                {{ qOption[0] }}
+                <ques-type-label
+                    [ques_type]="parseInt(qOption[1])"
+                ></ques-type-label>
             </mat-option>
         </mat-select>
     </li>

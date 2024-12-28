@@ -84,6 +84,10 @@ export class QuestionsListComponent implements OnInit {
 
     ngOnInit(): void {}
 
+    parseInt(f: any) {
+        return parseInt(f);
+    }
+
     getQuestionProgress(ques_id: number) {
         return this.questionsProgress.find((qp) => qp.question_id === ques_id);
     }
@@ -148,23 +152,6 @@ export class QuestionsListComponent implements OnInit {
 
     openCreateQues() {
         this.addQuestionSelect.open();
-    }
-
-    getQuesIcon(type: any) {
-        switch (type) {
-            case 0:
-                return faCode;
-            case 1:
-                return faCheckDouble;
-            case 2:
-                return faCircleHalfStroke;
-            case 3:
-                return faParagraph;
-            case 4:
-                return faAlignLeft;
-            default:
-                return faCode;
-        }
     }
 
     addQuestion(question_type: MatSelectChange) {

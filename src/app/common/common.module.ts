@@ -35,6 +35,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
 import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-prompt.component';
 import { MatSelectModule } from '@angular/material/select';
+import { QuesTypeLabelComponent } from './components/ques-type-label/ques-type-label.component';
 
 @NgModule({
     declarations: [
@@ -65,6 +66,7 @@ import { MatSelectModule } from '@angular/material/select';
         ProfileCardComponent,
         CreateDialogComponent,
         SignInPromptComponent,
+        QuesTypeLabelComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -102,6 +104,7 @@ import { MatSelectModule } from '@angular/material/select';
         QuestionEvaluationComponent,
         ProfileCardComponent,
         SignInPromptComponent,
+        QuesTypeLabelComponent,
     ],
     providers: [DatePipe],
 })

@@ -478,6 +478,9 @@ router.get(
                             deleted_at: null,
                             ...(ques_id !== '' && { id: ques_id }),
                         },
+                        include: {
+                            question_choices: true,
+                        },
                     },
                 },
             })

@@ -41,7 +41,7 @@
     transform: translateY(0);
     transition: transform 0.3s ease;
     @include sweetBorder;
-    border-color: rgb(112, 112, 112);
+    // border-color: rgb(112, 112, 112);
 }
 
 .feature-image:hover {
