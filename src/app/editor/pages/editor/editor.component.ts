@@ -12,6 +12,7 @@ import {
     faPenToSquare,
     faShare,
     faSquareShareNodes,
+    faTrashCan,
     faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { BehaviorSubject } from 'rxjs';
@@ -40,6 +41,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     writeIcon = faEyeSlash;
     checkIcon = faCircleCheck;
     crossIcon = faCircleXmark;
+    trashIcon = faTrashCan;
 
     uploadIcon = faUpload;
     downloadIcon = faDownload;
@@ -211,47 +213,29 @@ export class EditorComponent implements OnInit, OnDestroy {
         window.open(this.downloadFileUrl(fileType));
     }
 
+    addNewChoiceInQuestion() {
+        this.questionSelectedInfo.question_choices?.push({
+            id: -1,
+            group_number: 0,
+            is_correct: false,
+            position: this.questionSelectedInfo.question_choices.length,
+            question_id: this.questionSelectedInfo.id,
+            text: '',
+        });
+    }
+
     saveQuestion() {
         if (this.questionSelected == -1) {
             this.displayLog('No question selected');
             return;
         }
 
+        console.log(this.competitionInfo);
+
         this.loading = true;
         this.competitionsData
             .putQuestion({
-                id: this.competitionInfo.questions![this.questionSelected].id,
-                competition_id: this.competitionInfo.id,
-                title: (
-                    document.getElementById(
-                        'text_qtitle'
-                    ) as HTMLTextAreaElement
-                ).value,
-                statement: (
-                    document.getElementById(
-                        'text_statement'
-                    ) as HTMLTextAreaElement
-                ).value,
-                points: (
-                    document.getElementById(
-                        'question_points'
-                    ) as HTMLInputElement
-                ).valueAsNumber,
-                neg_points: (
-                    document.getElementById(
-                        'question_neg_points'
-                    ) as HTMLInputElement
-                ).valueAsNumber,
-                sample_cases: (
-                    document.getElementById(
-                        'question_sample_cases'
-                    ) as HTMLInputElement
-                ).value,
-                sample_sols: (
-                    document.getElementById(
-                        'question_sample_sols'
-                    ) as HTMLInputElement
-                ).value,
+                ...this.questionSelectedInfo,
                 created_at: this.competitionInfo.created_at,
                 updated_at: new Date(),
             } as QuestionInfo)
@@ -408,23 +392,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     saveChanges() {
         this.saveQuestion();
         this.loading = true;
-        const title = document.getElementById(
-            'text_title'
-        ) as HTMLTextAreaElement;
-        const description = document.getElementById(
-            'text_description'
-        ) as HTMLTextAreaElement;
-        const duration = document.getElementById(
-            'competition_duration'
-        ) as HTMLInputElement;
+
         const schedule = document.getElementById(
             'competition_schedule'
         ) as HTMLInputElement;
         const schedule_end = document.getElementById(
             'competition_schedule_end'
         ) as HTMLInputElement;
-        this.competitionInfo.title = title.value;
-        this.competitionInfo.description = description.value;
+
         this.competitionInfo.scheduled_end_at = new Date(schedule_end.value);
         this.competitionInfo.scheduled_at = new Date(schedule.value);
         this.competitionsData

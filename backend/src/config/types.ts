@@ -12,6 +12,8 @@ export type QuestionInfo = {
     id: number;
     competition_id: number;
     title: string | null;
+    type: number;
+    choice_type: number;
     statement: string;
     created_at: Date;
     deleted_at: Date | null;
@@ -22,6 +24,16 @@ export type QuestionInfo = {
     test_cases_file?: boolean;
     sol_cases_file?: boolean;
     sol_code_file?: boolean;
+    question_choices?: QuestionChoice[];
+};
+
+export type QuestionChoice = {
+    id: number;
+    text: string;
+    question_id: number;
+    position: number;
+    group_number: number;
+    is_correct: boolean;
 };
 
 export type Result = {

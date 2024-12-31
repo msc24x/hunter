@@ -227,16 +227,16 @@
                 id="text_title"
                 rows="1"
                 placeholder="Example: University Club Tie-breaker Challenge"
-                >{{ this.competitionInfo.title }}</textarea
-            >
+                [(ngModel)]="competitionInfo.title"
+            ></textarea>
             <div id="desc_label" class="label">Description</div>
             <textarea
                 maxlength="456"
                 rows="5"
                 id="text_description"
                 placeholder="Example: This challenge consists of ...."
-                >{{ this.competitionInfo.description }}</textarea
-            >
+                [(ngModel)]="competitionInfo.description"
+            ></textarea>
         </div>
 
         <br />
@@ -276,7 +276,7 @@
                 id="text_qtitle"
                 maxlength="150"
                 rows="3"
-                [value]="questionSelectedInfo.title"
+                [(ngModel)]="questionSelectedInfo.title"
                 placeholder="Example: Write a program to flip the string."
             ></textarea>
 
@@ -304,7 +304,7 @@
                 id="text_statement"
                 maxlength="2046"
                 rows="6"
-                [value]="questionSelectedInfo.statement"
+                [(ngModel)]="questionSelectedInfo.statement"
                 placeholder="Example: You are given a list of strings separated by a space..."
             ></textarea>
             <ng-katex
@@ -324,7 +324,7 @@
                     type="number"
                     min="0"
                     [max]="9"
-                    [value]="questionSelectedInfo.points"
+                    [(ngModel)]="questionSelectedInfo.points"
                 />
                 points for first correct submission
                 <infotip
@@ -339,7 +339,7 @@
                     type="number"
                     min="0"
                     [max]="4"
-                    [value]="questionSelectedInfo.neg_points"
+                    [(ngModel)]="questionSelectedInfo.neg_points"
                 />
                 points for each wrong submission
                 <infotip
@@ -353,21 +353,37 @@
             >
                 <h3>Choices</h3>
 
-                <div class="choice" *ngFor="let choice of choicesDemo">
-                    <b>1.</b>
-                    <input
+                <div
+                    class="choice"
+                    *ngFor="
+                        let choice of questionSelectedInfo.question_choices;
+                        let i = index
+                    "
+                >
+                    <div class="delete-choice" matTooltip="Delete the choice">
+                        <fa-icon [icon]="trashIcon"></fa-icon>
+                    </div>
+                    <textarea
                         type="text"
                         name="choice-text"
                         class="app-text-area"
-                        [value]="choice.text"
-                    />
+                        rows="1"
+                        [(ngModel)]="choice.text"
+                    ></textarea>
 
-                    <div>
-                        Is this a correct choice? &nbsp; &nbsp;
+                    <div style="font-size: smaller">
+                        Is this a correct choice? &nbsp; &nbsp; <br />
                         <mat-slide-toggle
-                            [checked]="choice.is_correct"
+                            [(ngModel)]="choice.is_correct"
                         ></mat-slide-toggle>
                     </div>
+                </div>
+                <p *ngIf="questionSelectedInfo.question_choices?.length === 0">
+                    No choices added so far. Quickly add one using the button
+                    below.
+                </p>
+                <div class="add-choice" (click)="addNewChoiceInQuestion()">
+                    + Add new choice
                 </div>
             </div>
 
@@ -384,7 +400,7 @@
                             id="question_sample_cases"
                             maxlength="250"
                             rows="6"
-                            [value]="questionSelectedInfo.sample_cases"
+                            [(ngModel)]="questionSelectedInfo.sample_cases"
                             placeholder="Example: dice car club winter"
                         ></textarea>
                     </div>
@@ -399,7 +415,7 @@
                             id="question_sample_sols"
                             maxlength="250"
                             rows="6"
-                            [value]="questionSelectedInfo.sample_sols"
+                            [(ngModel)]="questionSelectedInfo.sample_sols"
                             placeholder="Example: ecid rac bulc retniw"
                         ></textarea>
                     </div>

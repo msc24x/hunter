@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [AppComponent, NotFoundComponent],
@@ -19,6 +20,7 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
         FontAwesomeModule,
         BrowserModule,
         BrowserAnimationsModule,
+        FormsModule,
     ],
     bootstrap: [AppComponent],
     providers: [
