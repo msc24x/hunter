@@ -243,12 +243,14 @@ export class EditorComponent implements OnInit, OnDestroy {
                 ? ({} as QuestionInfo)
                 : this.competitionInfo.questions![index];
 
-        this.getFileStatus('solutions').subscribe((res) => {
-            this.solsExists = res;
-        });
-        this.getFileStatus('testcases').subscribe((res) => {
-            this.testExists = res;
-        });
+        if (this.questionSelectedInfo?.type === 0) {
+            this.getFileStatus('solutions').subscribe((res) => {
+                this.solsExists = res;
+            });
+            this.getFileStatus('testcases').subscribe((res) => {
+                this.testExists = res;
+            });
+        }
         this.loading = false;
 
         this.titleService.setTitle(

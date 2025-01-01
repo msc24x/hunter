@@ -18,6 +18,7 @@
     heading="Verify Participation"
     [showControls]="false"
     [destructive]="false"
+    *ngIf="questionSelectedInfo?.type === 0"
 >
     <code-tester
         *ngIf="questionSelectedInfo.competition_id && questionSelectedInfo.id"
@@ -142,78 +143,80 @@
 
 <div class="page-section">
     <div class="section-side">
-        <h3>Configure</h3>
+        <h2>Meta</h2>
 
-        <div id="schedule_label" class="label">
-            Set Live on schedule
-            <infotip
-                message="When should the competition be visible to read and start accept submissions"
-            />
-        </div>
-        <input
-            type="datetime-local"
-            id="competition_schedule"
-            class="text-area full-input"
-            [value]="competitionInfo.scheduled_at | date : 'yyyy-MM-ddTHH:mm'"
-        />
-        <div id="schedule_end_label" class="label">
-            Schedule the closure
-            <infotip
-                message="When should the competition stop submissions and participation"
-            />
-        </div>
-        <input
-            type="datetime-local"
-            id="competition_schedule_end"
-            class="text-area full-input"
-            [value]="
-                competitionInfo.scheduled_end_at | date : 'yyyy-MM-ddTHH:mm'
-            "
-        />
+        <div class="meta-section">
+            <h3>Schedule</h3>
 
-        <div id="visbility_controller">
-            <div id="id">
-                Code : <b>{{ competition_id }}</b>
+            <div id="schedule_label" class="label">
+                Submissions open at
+                <infotip
+                    message="When should the competition be visible to read and start accept submissions"
+                />
             </div>
-            <div id="rating">
-                Rating : <b>{{ this.competitionInfo.rating }}</b>
-            </div>
-            <div
-                [matTooltip]="
-                    competitionInfo.public
-                        ? 'Currently anybody can see or participate in the competition'
-                        : 'Currently no one can see or participate in the competition'
+            <input
+                type="datetime-local"
+                id="competition_schedule"
+                class="text-area full-input"
+                [value]="
+                    competitionInfo.scheduled_at | date : 'yyyy-MM-ddTHH:mm'
                 "
-                id="visibility"
-                (click)="onClickVisibility()"
-            >
-                PUBLIC
+            />
+            <div id="schedule_end_label" class="label">
+                Close submissions at
+                <infotip
+                    message="When should the competition stop submissions and participation"
+                />
+            </div>
+            <input
+                type="datetime-local"
+                id="competition_schedule_end"
+                class="text-area full-input"
+                [value]="
+                    competitionInfo.scheduled_end_at | date : 'yyyy-MM-ddTHH:mm'
+                "
+            />
+
+            <div id="visbility_controller">
+                <div id="id">
+                    Code : <b>{{ competition_id }}</b>
+                </div>
+                <div id="rating">
+                    Rating : <b>{{ this.competitionInfo.rating }}</b>
+                </div>
+                <div
+                    [matTooltip]="
+                        competitionInfo.public
+                            ? 'Currently anybody can see or participate in the competition'
+                            : 'Currently no one can see or participate in the competition'
+                    "
+                    id="visibility"
+                    (click)="onClickVisibility()"
+                >
+                    PUBLIC
+                </div>
             </div>
 
-            <!-- <div id="created_at">
-        {{ this.competitionInfo.created_at | date : "medium" }}
-    </div> -->
-        </div>
-
-        <h3>Insights</h3>
-        <div class="text-area c-insights">
-            <div class="label">Share link to participants</div>
-            <a
-                class="participant-link"
-                (click)="shareAction()"
-                matTooltip="Click to share the participation link"
-            >
-                <span class="link-text">{{ getParticipationLink() }}</span>
-                <span>
-                    <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
-                </span>
-            </a>
-            <div
-                class="text-area insight-details"
-                (click)="showPopup(true, 'competition-insights')"
-            >
-                Click here to see the participation insights for this
-                competition
+            <h3>Insights</h3>
+            <div class="text-area c-insights">
+                <div class="label">Share link to participants</div>
+                <a
+                    class="participant-link"
+                    (click)="shareAction()"
+                    matTooltip="Click to share the participation link"
+                >
+                    <span class="link-text">{{ getParticipationLink() }}</span>
+                    <span>
+                        <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
+                    </span>
+                </a>
+                <div
+                    class="text-area insight-details"
+                    (click)="showPopup(true, 'competition-insights')"
+                >
+                    Click here to see the participation insights for this
+                    competition
+                </div>
             </div>
         </div>
     </div>

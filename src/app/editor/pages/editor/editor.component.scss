@@ -23,12 +23,15 @@ popup {
 
     .section-side {
         flex-basis: 20%;
-        @include basicBack;
-        background-color: whitesmoke;
-        border-radius: 2rem;
-        height: fit-content;
         // position: sticky;
         // top: 2rem;
+
+        .meta-section {
+            @include basicBack;
+            background-color: whitesmoke;
+            border-radius: 2rem;
+            height: fit-content;
+        }
     }
 
     .section-content {
