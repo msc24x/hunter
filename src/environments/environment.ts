@@ -146,7 +146,6 @@ export interface QuestionInfo {
     competition_id: number;
     title: string;
     type: number;
-    choice_type: number;
     position: number;
     statement: string;
     created_at: Date;
@@ -156,6 +155,8 @@ export interface QuestionInfo {
     sample_sols: string;
     points: number;
     neg_points: number;
+    char_limit?: number | null;
+    case_sensitive?: boolean;
     test_cases_file?: boolean;
     sol_cases_file?: boolean;
     sol_code_file?: boolean;
@@ -168,8 +169,8 @@ export interface QuestionChoice {
     text: string;
     question_id: number;
     position: number;
-    group_number: number;
     is_correct: boolean;
+    delete?: boolean;
 }
 /*
  * For easier debugging in development mode, you can import the following file

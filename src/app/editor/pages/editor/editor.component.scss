@@ -370,7 +370,8 @@ a:hover {
     background-color: white;
 }
 
-.multiple-choices-panel {
+.multiple-choices-panel,
+.fill-in-blanks {
     width: 100%;
 
     .choice {
@@ -380,7 +381,7 @@ a:hover {
         // @include blackBack;
         margin-bottom: 0.5rem;
 
-        textarea.app-text-area {
+        .app-text-area {
             @include appTextArea;
             flex-grow: 1;
             resize: vertical;
@@ -407,15 +408,13 @@ a:hover {
     }
 }
 
-#question_points,
-#question_neg_points {
+input {
     border-radius: 1rem;
     padding: 8px;
     padding-inline: 16px;
     border-width: 0px;
     margin-inline: 0.3rem;
     font-size: 1.2rem;
-    width: 2.2rem;
     color: colors.$text_black;
 
     @include sweetBorder();

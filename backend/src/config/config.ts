@@ -17,7 +17,6 @@ export default {
         mcq: 1,
         fill: 2,
         long: 3,
-        short: 4,
     },
     choiceTypes: {
         selectable: 0,

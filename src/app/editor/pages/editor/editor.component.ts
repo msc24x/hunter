@@ -12,6 +12,7 @@ import {
     faPenToSquare,
     faShare,
     faSquareShareNodes,
+    faTrashArrowUp,
     faTrashCan,
     faUpload,
 } from '@fortawesome/free-solid-svg-icons';
@@ -42,6 +43,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     checkIcon = faCircleCheck;
     crossIcon = faCircleXmark;
     trashIcon = faTrashCan;
+    trashUpIcon = faTrashArrowUp;
 
     uploadIcon = faUpload;
     downloadIcon = faDownload;
@@ -68,33 +70,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         selectable: 0,
         hidden: 1,
     };
-
-    choicesDemo: QuestionChoice[] = [
-        {
-            id: -1,
-            group_number: 0,
-            is_correct: false,
-            position: 0,
-            question_id: 0,
-            text: 'The bird was completely wrong',
-        },
-        {
-            id: -1,
-            group_number: 0,
-            is_correct: true,
-            position: 0,
-            question_id: 0,
-            text: 'The bird was wrong, but not technically.',
-        },
-        {
-            id: -1,
-            group_number: 0,
-            is_correct: true,
-            position: 0,
-            question_id: 0,
-            text: 'The bird was right technically',
-        },
-    ];
 
     constructor(
         private router: Router,
@@ -168,7 +143,6 @@ export class EditorComponent implements OnInit, OnDestroy {
                     (event.target as HTMLElement).tagName
                 )
             ) {
-                this.saveQuestion();
                 this.saveChanges();
             }
         };
@@ -216,12 +190,15 @@ export class EditorComponent implements OnInit, OnDestroy {
     addNewChoiceInQuestion() {
         this.questionSelectedInfo.question_choices?.push({
             id: -1,
-            group_number: 0,
             is_correct: false,
             position: this.questionSelectedInfo.question_choices.length,
             question_id: this.questionSelectedInfo.id,
             text: '',
         });
+    }
+
+    markChoiceAsDeletedToggle(choice: QuestionChoice) {
+        choice.delete = !choice.delete;
     }
 
     saveQuestion() {
@@ -242,6 +219,8 @@ export class EditorComponent implements OnInit, OnDestroy {
             .subscribe((res) => {
                 this.displayLog('Question Updated');
                 this.loading = false;
+                this.snackBar.open('Selected question data saved successfully');
+
                 this.fetchQuestions();
             });
     }
@@ -328,21 +307,29 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.competitionsData
             .getQuestions({ competition_id: this.competition_id })
             .subscribe((res) => {
-                if (res.status == resCode.success) {
-                    if (res.body) {
-                        this.competitionInfo = res.body as CompetitionInfo;
-                        this.toggleVisibility();
-                        this.toggleVisibility();
-                        this.loading = false;
+                if (res.body) {
+                    this.competitionInfo = res.body as CompetitionInfo;
+                    this.toggleVisibility();
+                    this.toggleVisibility();
+                    this.loading = false;
 
-                        this.titleService.setTitle(
-                            `Build • ${
-                                this.competitionInfo.title || 'Competition'
-                            }`
-                        );
+                    this.titleService.setTitle(
+                        `Build • ${this.competitionInfo.title || 'Competition'}`
+                    );
+
+                    if (this.questionSelected) {
+                        this.selectQuestion(this.questionSelected);
                     }
                 }
             });
+    }
+
+    toggleCharLimit(enabled: boolean) {
+        if (enabled) {
+            this.questionSelectedInfo.char_limit = 24;
+        } else {
+            this.questionSelectedInfo.char_limit = null;
+        }
     }
 
     refreshCompetitionInfo() {
@@ -407,7 +394,7 @@ export class EditorComponent implements OnInit, OnDestroy {
             .subscribe((res) => {
                 this.displayLog('Competition changes saved');
                 this.loading = false;
-                this.snackBar.open('Saved successfully');
+                this.snackBar.open('Competition data saved successfully');
             });
     }
 

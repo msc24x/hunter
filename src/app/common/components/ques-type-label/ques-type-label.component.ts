@@ -19,9 +19,8 @@ export class QuesTypeLabelComponent {
     questionTypes = [
         'Coding Test',
         'Multiple Choice',
-        'Fill In Blanks',
+        'Fill In Blank',
         'Long Answer',
-        'Short Answer',
     ];
     getQuesIcon(type: any) {
         switch (type) {
@@ -32,8 +31,6 @@ export class QuesTypeLabelComponent {
             case 2:
                 return faCircleHalfStroke;
             case 3:
-                return faParagraph;
-            case 4:
                 return faAlignLeft;
             default:
                 return faCode;

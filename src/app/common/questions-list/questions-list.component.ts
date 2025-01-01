@@ -77,9 +77,8 @@ export class QuestionsListComponent implements OnInit {
     questionTypes = [
         ['Coding Test', 0],
         ['Multiple Choice', 1],
-        ['Fill In Blanks', 2],
+        ['Fill In Blank', 2],
         ['Long Answer', 3],
-        ['Short Answer', 4],
     ];
 
     ngOnInit(): void {}

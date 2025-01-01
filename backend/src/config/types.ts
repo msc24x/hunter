@@ -13,7 +13,6 @@ export type QuestionInfo = {
     competition_id: number;
     title: string | null;
     type: number;
-    choice_type: number;
     statement: string;
     created_at: Date;
     deleted_at: Date | null;
@@ -21,6 +20,8 @@ export type QuestionInfo = {
     sample_sols: string;
     points: number;
     neg_points: number;
+    case_sensitive?: boolean;
+    char_limit?: number;
     test_cases_file?: boolean;
     sol_cases_file?: boolean;
     sol_code_file?: boolean;
@@ -28,12 +29,12 @@ export type QuestionInfo = {
 };
 
 export type QuestionChoice = {
-    id: number;
+    id?: number;
     text: string;
     question_id: number;
     position: number;
-    group_number: number;
     is_correct: boolean;
+    delete?: boolean;
 };
 
 export type Result = {

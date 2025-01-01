@@ -40,11 +40,23 @@ html {
     &:active {
         pointer-events: none;
     }
+
+    * {
+        pointer-events: none;
+        &:active {
+            pointer-events: none;
+        }
+    }
 }
 
 .disabled {
     cursor: not-allowed !important;
     opacity: 0.7;
+
+    * {
+        cursor: not-allowed !important;
+        opacity: 0.7;
+    }
 }
 
 .link-like {
@@ -53,6 +65,15 @@ html {
 
     &:hover {
         text-decoration: underline;
+    }
+}
+
+.info-like {
+    color: gray;
+
+    b {
+        font-weight: 500;
+        color: rgb(95, 95, 95);
     }
 }
 

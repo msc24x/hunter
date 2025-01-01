@@ -26,13 +26,12 @@
         "express": "^4.19.2",
         "mysql": "^2.18.1",
         "nodemon": "^2.0.15",
-        "prisma": "^5.18.0",
+        "prisma": "^6.1.0",
         "ts-node": "^10.9.1"
     },
     "dependencies": {
-        "@prisma/client": "^5.18.0",
+        "@prisma/client": "^6.1.0",
         "@types/express-fileupload": "^1.5.1",
-        "prisma": "^5.18.0",
         "argon2": "^0.30.3",
         "body-parser": "^1.19.1",
         "cookie-parser": "^1.4.6",

@@ -299,6 +299,17 @@
                 </div>
             </div>
 
+            <p class="info-like" *ngIf="questionSelectedInfo.type == 2">
+                In your statement, you may <b>include one blank space</b> in any
+                format, making it visible to the participant. The participant
+                will then be prompted to type their answer in the blank space.
+                Unlike Multiple Choice Questions (MCQs),
+                <b
+                    >Fill in the Blank questions do not provide the participant
+                    with a selection of choices to choose from.</b
+                >
+            </p>
+
             <textarea
                 [hidden]="preview_mode"
                 id="text_statement"
@@ -314,9 +325,19 @@
             ></ng-katex>
 
             <br />
-            <br />
 
             <h3>Evaluation</h3>
+            <p class="info-like" *ngIf="questionSelectedInfo.type === 3">
+                Your question type is &nbsp;
+                <ques-type-label
+                    [ques_type]="questionSelectedInfo.type"
+                ></ques-type-label
+                >. &nbsp; Automatic evaluation is not feasible for this type of
+                question. Therefore, participants' responses will not be
+                automatically evaluated, and they will not receive points or
+                penalties. You will be provided with the responses and can
+                evaluate them yourself based on the range you provide below.
+            </p>
             <p>
                 Reward
                 <input
@@ -347,21 +368,124 @@
                 ></infotip>
             </p>
 
+            <p *ngIf="questionSelectedInfo.type === 2">
+                Do you want to enable case sensitivity
+                <infotip
+                    message="If disabled, responses such as 'apple', 'Apple', 'APPle' or 'APPLE' are treated as equal. (Recommended to keep it disabled, as it improves false penalities against minor mistakes)"
+                ></infotip>
+                for the responses? &nbsp;
+
+                <mat-slide-toggle></mat-slide-toggle>
+            </p>
+
+            <p *ngIf="questionSelectedInfo.type === 3">
+                <mat-slide-toggle
+                    [checked]="questionSelectedInfo.char_limit !== null"
+                    (change)="toggleCharLimit($event.checked)"
+                ></mat-slide-toggle>
+                &nbsp; Accept minimum
+                <input
+                    type="number"
+                    [min]="1"
+                    [max]="1000"
+                    [(ngModel)]="questionSelectedInfo.char_limit"
+                />
+                number of words in a response
+                <infotip
+                    message="If disabled, participants can submit any number of words"
+                ></infotip>
+            </p>
+
+            <div class="fill-in-blanks" *ngIf="questionSelectedInfo.type == 2">
+                <h3>Possible Answers for your blank space</h3>
+                <p class="info-like">
+                    The Hunter backend will evaluate participants' input against
+                    an exact match of your provided possible answers. Please
+                    ensure that you do not include more than one or two words.
+                    <b
+                        >If you believe there are multiple answers with
+                        different spellings or synonyms, feel free to add as
+                        many possible answers as you would like.</b
+                    >
+                </p>
+
+                <div
+                    class="choice"
+                    *ngFor="let choice of questionSelectedInfo.question_choices"
+                    [hidden]="choice.delete"
+                >
+                    <div
+                        class="delete-choice"
+                        (click)="markChoiceAsDeletedToggle(choice)"
+                    >
+                        <fa-icon
+                            *ngIf="!choice.delete"
+                            [icon]="trashIcon"
+                            matTooltip="Delete the possible answer"
+                        ></fa-icon>
+                        <fa-icon
+                            [icon]="trashUpIcon"
+                            *ngIf="choice.delete"
+                            matTooltip="Restore the choice"
+                        ></fa-icon>
+                    </div>
+                    <input
+                        type="text"
+                        name="choice-text"
+                        class="app-text-area"
+                        rows="1"
+                        [(ngModel)]="choice.text"
+                        [disabled]="choice.delete === true"
+                        [ngClass]="{ 'disabled no-click': choice.delete }"
+                    />
+                </div>
+                <p
+                    *ngIf="questionSelectedInfo.question_choices?.length === 0"
+                    class="info-like"
+                >
+                    No possible answers added so far. Quickly add one using the
+                    button below. Otherwise your question will remain
+                    unanswerable.
+                </p>
+                <div class="add-choice" (click)="addNewChoiceInQuestion()">
+                    + Add new possible answer
+                </div>
+            </div>
+
             <div
                 class="multiple-choices-panel"
                 *ngIf="questionSelectedInfo.type == 1"
             >
                 <h3>Choices</h3>
+                <p class="info-like">
+                    The choices you add will be shown to the participants. You
+                    can input the text for each choice as desired. You can set
+                    any number of choices to be correct.
+                    <b
+                        >A participant's response will be positively marked only
+                        if they select all the correct choices.</b
+                    >
+                </p>
 
                 <div
                     class="choice"
-                    *ngFor="
-                        let choice of questionSelectedInfo.question_choices;
-                        let i = index
-                    "
+                    *ngFor="let choice of questionSelectedInfo.question_choices"
+                    [hidden]="choice.delete"
                 >
-                    <div class="delete-choice" matTooltip="Delete the choice">
-                        <fa-icon [icon]="trashIcon"></fa-icon>
+                    <div
+                        class="delete-choice"
+                        (click)="markChoiceAsDeletedToggle(choice)"
+                    >
+                        <fa-icon
+                            *ngIf="!choice.delete"
+                            [icon]="trashIcon"
+                            matTooltip="Delete the choice"
+                        ></fa-icon>
+                        <fa-icon
+                            [icon]="trashUpIcon"
+                            *ngIf="choice.delete"
+                            matTooltip="Restore the choice"
+                        ></fa-icon>
                     </div>
                     <textarea
                         type="text"
@@ -369,18 +493,26 @@
                         class="app-text-area"
                         rows="1"
                         [(ngModel)]="choice.text"
+                        [disabled]="choice.delete === true"
+                        [ngClass]="{ 'disabled no-click': choice.delete }"
                     ></textarea>
 
-                    <div style="font-size: smaller">
+                    <div
+                        style="font-size: smaller"
+                        [ngClass]="{ 'disabled no-click': choice.delete }"
+                    >
                         Is this a correct choice? &nbsp; &nbsp; <br />
                         <mat-slide-toggle
                             [(ngModel)]="choice.is_correct"
                         ></mat-slide-toggle>
                     </div>
                 </div>
-                <p *ngIf="questionSelectedInfo.question_choices?.length === 0">
+                <p
+                    *ngIf="questionSelectedInfo.question_choices?.length === 0"
+                    class="info-like"
+                >
                     No choices added so far. Quickly add one using the button
-                    below.
+                    below. Otherwise, your question will have no correct answer.
                 </p>
                 <div class="add-choice" (click)="addNewChoiceInQuestion()">
                     + Add new choice

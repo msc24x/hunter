@@ -405,25 +405,112 @@ router.put(
             );
         }
 
-        client.questions
-            .update({
-                where: {
-                    id: id,
-                    competition_id: comp_id,
-                    competitions: { host_user_id: user.id },
-                    deleted_at: null,
-                },
-                data: {
-                    title: params.title,
-                    statement: params.statement,
-                    points: params.points,
-                    neg_points: params.neg_points,
-                },
-            })
-            .then((question) =>
-                Util.sendResponseJson(res, resCode.success, question)
+        var promises: Promise<any>[] = [];
+
+        var resolvePromisesAndSendRes = function () {
+            Promise.all(promises)
+                .then(() => {
+                    Util.sendResponse(res, resCode.success);
+                })
+                .catch((err) => {
+                    Util.sendResponse(res, resCode.serverError, err);
+                });
+        };
+
+        const saveQuestionDataPr = client.questions.update({
+            where: {
+                id: id,
+                competition_id: comp_id,
+                competitions: { host_user_id: user.id },
+                deleted_at: null,
+            },
+            data: {
+                title: params.title,
+                statement: params.statement,
+                points: params.points,
+                neg_points: params.neg_points,
+                case_sensitive: params.case_sensitive,
+                char_limit: params.char_limit,
+            },
+        });
+
+        promises.push(saveQuestionDataPr);
+
+        if (
+            ![config.questionTypes.mcq, config.questionTypes.fill].includes(
+                params.type
             )
-            .catch((err) => Util.sendResponse(res, resCode.serverError, err));
+        ) {
+            resolvePromisesAndSendRes();
+            return;
+        }
+
+        var choicesToCreate = params.question_choices?.filter(
+            (val) => (!val.id || val.id < 0) && !val.delete
+        );
+
+        var choicesToUpdate = params.question_choices?.filter(
+            (val) => val.id && val.id > 0 && !val.delete
+        );
+        var choicesToDelete = params.question_choices?.filter(
+            (val) => val.id && val.id > 0 && val.delete
+        );
+
+        if (choicesToCreate) {
+            choicesToCreate.map((val) => {
+                delete val.delete;
+                delete val.id;
+                val.question_id = params.id;
+            });
+            promises.push(
+                client.question_choice.createMany({
+                    data: choicesToCreate,
+                })
+            );
+        }
+
+        if (choicesToUpdate) {
+            choicesToUpdate.map((val) => {
+                delete val.delete;
+            });
+
+            choicesToUpdate.forEach((choiceToUpdate) => {
+                promises.push(
+                    client.question_choice.update({
+                        data: choiceToUpdate,
+                        where: {
+                            question: {
+                                competitions: {
+                                    host_user_id: user.id,
+                                },
+                            },
+                            id: choiceToUpdate.id,
+                        },
+                    })
+                );
+            });
+        }
+
+        if (choicesToDelete) {
+            promises.push(
+                client.question_choice.deleteMany({
+                    where: {
+                        id: {
+                            in: choicesToDelete.map((val) => val.id!),
+                        },
+                        question: {
+                            competitions: {
+                                host_user_id: user.id,
+                            },
+                            id: params.id,
+                        },
+                    },
+                })
+            );
+        }
+
+        resolvePromisesAndSendRes();
+        return;
     }
 );
 /**
