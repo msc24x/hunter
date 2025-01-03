@@ -17,12 +17,14 @@ import {
     templates,
     UserInfo,
     environment,
+    QuestionChoice,
 } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     faAddressCard,
     faBug,
+    faCheckCircle,
     faChevronUp,
     faEnvelopeOpenText,
     faFileCode,
@@ -36,6 +38,9 @@ import {
 import { prettyDuration } from 'src/app/utils/utils';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { Title } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import { LocationStrategy } from '@angular/common';
 
 @Component({
     selector: 'competition',
@@ -51,6 +56,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     submitIcon = faEnvelopeOpenText;
     playIcon = faPlay;
     reportIcon = faBug;
+    tickIcon = faCheckCircle;
+    circleIcon = faCircle;
 
     showInstructionP = false;
 
@@ -58,6 +65,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     fetchSubmissionMsg = '';
 
     c_id: number = 0;
+    q_idx: number = 0;
 
     hrlayout: boolean = true;
     bottomSection = false;
@@ -96,14 +104,24 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         private router: Router,
         private competitionsService: CompetitionsDataService,
         private scoresDataService: ScoresDataService,
-        private titleService: Title
+        private titleService: Title,
+        private snackBar: MatSnackBar,
+        private location: LocationStrategy
     ) {
         const idParam = parseInt(
             this.route.snapshot.paramMap.get('competition_id') || ''
         );
 
+        const idQues = parseInt(
+            this.route.snapshot.paramMap.get('ques_id') || ''
+        );
+
         if (idParam) {
             this.c_id = idParam;
+        }
+
+        if (idQues) {
+            this.q_idx = idQues;
         }
 
         titleService.setTitle('Participate • Hunter');
@@ -397,7 +415,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         }
 
                         if (this.competition.questions) {
-                            this.selectQuestion(0);
+                            this.selectQuestion(this.q_idx);
                         }
                     },
                     error: (err) => {
@@ -425,6 +443,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     selectQuestion(index: number) {
         this.questionSelected = index;
         this.questionSelectedInfo = this.competition.questions![index];
+
+        if (!this.questionSelectedInfo) {
+            this.selectQuestion(0);
+            return;
+        }
 
         this.lastEditorContent();
 
@@ -491,5 +514,36 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         }&body=I%20would%20like%20to%20report%20the%20following%20competition.%0A%0ALink%3A%20${this.getParticipationLink()}%0A%0AREASON%3A%0A%3CPlease%20specify%20your%20reason%20here%3E%0A%0AACTION%20REQUEST%3A%0A%3CPlease%20specify%20what%20action%20do%20you%20wish%20the%20Hunter%20to%20take%3E`;
 
         return mailtoString;
+    }
+
+    alreadySelectedOptions() {
+        let alreadySelected = 0;
+
+        this.questionSelectedInfo.question_choices?.forEach((ch) => {
+            if (ch.is_correct) {
+                alreadySelected++;
+            }
+        });
+
+        return alreadySelected;
+    }
+
+    handleChoiceSelection(choice: QuestionChoice) {
+        let alreadySelected = this.alreadySelectedOptions();
+
+        if (!choice.is_correct) {
+            alreadySelected++;
+        }
+
+        if (alreadySelected > (this.questionSelectedInfo.correct_count || 0)) {
+            this.snackBar.open(
+                `Cannot select more than ${
+                    alreadySelected - 1
+                }, Please un-select some option to choose a new one`
+            );
+            return;
+        }
+
+        choice.is_correct = !choice.is_correct;
     }
 }

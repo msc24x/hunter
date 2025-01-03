@@ -156,6 +156,7 @@ export interface QuestionInfo {
     points: number;
     neg_points: number;
     char_limit?: number | null;
+    correct_count?: number;
     case_sensitive?: boolean;
     test_cases_file?: boolean;
     sol_cases_file?: boolean;

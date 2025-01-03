@@ -151,19 +151,30 @@
                 </div>
 
                 <div id="question_title">
-                    Correct Submission:
-                    <b>{{ questionSelectedInfo.points }} </b> points
+                    {{ questionSelectedInfo.title }}
+                    <br /><br />
+
+                    <span class="info-like"
+                        >Correct Submission:
+                        <b>{{ questionSelectedInfo.points }} </b> points
+                    </span>
                     <br />
-                    <span *ngIf="!questionSelectedInfo.neg_points">
+                    <span
+                        class="info-like"
+                        *ngIf="!questionSelectedInfo.neg_points"
+                    >
                         No negative marking
                     </span>
-                    <span *ngIf="questionSelectedInfo.neg_points">
-                        Each incorrect submission:
+                    <span
+                        class="info-like"
+                        *ngIf="questionSelectedInfo.neg_points"
+                    >
+                        Incorrect submission:
                         <b>-{{ questionSelectedInfo.neg_points }} </b> points
                     </span>
-
-                    <br /><br />
-                    {{ questionSelectedInfo.title }}
+                    <ques-type-label
+                        [ques_type]="questionSelectedInfo.type"
+                    ></ques-type-label>
                 </div>
 
                 <div id="question_statement">
@@ -175,12 +186,56 @@
 
             <!-- Code editor -->
             <code-editor
-                class="ace-editor"
+                *ngIf="questionSelectedInfo.type === 0"
+                class="ace-editor question-side-section"
                 [(code)]="codeWritten"
                 [(languageSelected)]="languageSelected"
                 (fetchLastSubmission)="fetchLastSubmission()"
             >
             </code-editor>
+
+            <div
+                *ngIf="questionSelectedInfo.type === 1"
+                class="mcq-section question-side-section"
+            >
+                <h3>Options</h3>
+                <p class="info-like">
+                    Please read the statement of the question carefully and
+                    <b
+                        >choose any
+                        {{ questionSelectedInfo.correct_count }} from the
+                        following
+                        {{ questionSelectedInfo.question_choices?.length }}
+                        choices.</b
+                    >
+                </p>
+                <br />
+
+                <b>
+                    You have selected {{ alreadySelectedOptions() }}/{{
+                        questionSelectedInfo.correct_count
+                    }}
+                </b>
+
+                <div class="choices">
+                    <div
+                        class="choice"
+                        *ngFor="
+                            let choice of questionSelectedInfo.question_choices
+                        "
+                        (click)="handleChoiceSelection(choice)"
+                    >
+                        <fa-icon
+                            size="lg"
+                            [icon]="choice.is_correct ? tickIcon : circleIcon"
+                            [ngClass]="{ 'selected': choice.is_correct }"
+                        ></fa-icon>
+                        <div>
+                            {{ choice.text }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
@@ -204,6 +259,7 @@
                     (click)="postSolution(true)"
                     [matTooltipPosition]="'above'"
                     [matTooltip]="'Test samples (Shift + Alt + J)'"
+                    *ngIf="questionSelectedInfo.type === 0"
                 >
                     <fa-icon [icon]="playIcon"></fa-icon>
                     &nbsp; Run Tests

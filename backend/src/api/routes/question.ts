@@ -547,6 +547,7 @@ router.get(
         const competition_id: number = parseInt(req.params.comp_id);
         const ques_id: number | '' = req.params.id && parseInt(req.params.id);
         const user: UserInfo = res.locals.user;
+        const is_editor = req.headers.referer?.includes('/editor/');
 
         if (isNaN(competition_id)) {
             Util.sendResponse(res, resCode.badRequest);
@@ -572,12 +573,14 @@ router.get(
                 },
             })
             .then((competition) => {
+                // If not found, then not found
                 if (!competition) {
                     Util.sendResponse(res, resCode.notFound);
                     return;
                 }
 
-                if (competition.host_user_id === user.id) {
+                // If its the host, send everything
+                if (competition.host_user_id === user.id && is_editor) {
                     Util.sendResponseJson(res, resCode.success, competition);
                     return;
                 }
@@ -585,6 +588,7 @@ router.get(
                 const now = new Date();
                 const endDate = competition.scheduled_end_at;
 
+                // If its not live yet, remove questions info
                 if (
                     !competition.public ||
                     (competition.scheduled_at &&
@@ -597,10 +601,28 @@ router.get(
                             ques.title = '';
                             ques.sample_cases = '';
                             ques.sample_sols = '';
+                            ques.case_sensitive = false;
+                            ques.char_limit = null;
+                            ques.question_choices = [];
+
                             return ques;
                         }
                     );
                 }
+
+                // Remove just sensitive info
+                competition.questions.map((ques: QuestionInfo) => {
+                    var correctCount = 0;
+
+                    ques?.question_choices?.map((choice) => {
+                        if (choice.is_correct) {
+                            correctCount++;
+                        }
+                        choice.is_correct = false;
+                    });
+
+                    ques.correct_count = correctCount;
+                });
 
                 Util.sendResponseJson(res, resCode.success, competition);
             })

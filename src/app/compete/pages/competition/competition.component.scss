@@ -132,13 +132,18 @@
 
 .compete-hr-layout {
     flex-wrap: nowrap !important;
-    align-items: end !important;
+    align-items: stretch !important;
     gap: 1rem;
 
-    .ace-editor,
-    .editor-instance {
+    .question-side-section {
         width: 100%;
-        flex-basis: 65%;
+        flex-basis: 60%;
+        flex-grow: 1;
+        margin-bottom: 1rem;
+
+        &:not(.ace-editor) {
+            @include basicBack;
+        }
     }
 
     #question_statement {
@@ -152,6 +157,50 @@
         flex-direction: column;
         justify-content: stretch;
         flex-basis: 45%;
+    }
+}
+
+.question-side-section {
+    &:not(.ace-editor) {
+        @include basicBack;
+    }
+}
+
+.mcq-section {
+    .choices {
+        .choice {
+            @include blackBack;
+            font-size: 1.1rem;
+            display: flex;
+            gap: 2rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            align-items: center;
+            transition: transform 300ms;
+
+            fa-icon {
+                opacity: 0.7;
+
+                &.selected {
+                    color: green;
+                    opacity: 1;
+                }
+            }
+
+            &:hover {
+                fa-icon {
+                    opacity: 0.8;
+                }
+
+                transform: scale(1.008);
+            }
+
+            &:active {
+                transform: scale(1);
+            }
+        }
     }
 }
 
@@ -219,7 +268,7 @@
         // margin-top: 1rem;
         border-radius: 0.6rem;
         padding: 10px;
-        padding-inline: 24px;
+        padding-inline: 1rem;
         text-align: start;
         display: flex;
         align-items: center;
@@ -236,12 +285,16 @@
 #question_statement {
     background-color: white;
     padding: 16px;
-    border-radius: 24px;
-
-    font-size: 1.2rem;
-    margin-bottom: 24px;
+    border-radius: 1rem;
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
 
     @include sweetBorder();
+
+    ques-type-label {
+        float: right;
+        margin-top: 0.5rem;
+    }
 }
 
 #question_statement {

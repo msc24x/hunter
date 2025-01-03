@@ -374,11 +374,13 @@
             <p *ngIf="questionSelectedInfo.type === 2">
                 Do you want to enable case sensitivity
                 <infotip
-                    message="If disabled, responses such as 'apple', 'Apple', 'APPle' or 'APPLE' are treated as equal. (Recommended to keep it disabled, as it improves false penalities against minor mistakes)"
+                    message="If disabled, responses such as 'apple', 'Apple', 'APPle' or 'APPLE' are treated as equal. (Recommended to keep it disabled, as it prevents false penalities against minor mistakes)"
                 ></infotip>
                 for the responses? &nbsp;
 
-                <mat-slide-toggle></mat-slide-toggle>
+                <mat-slide-toggle
+                    [(ngModel)]="questionSelectedInfo.case_sensitive"
+                ></mat-slide-toggle>
             </p>
 
             <p *ngIf="questionSelectedInfo.type === 3">
@@ -402,14 +404,18 @@
             <div class="fill-in-blanks" *ngIf="questionSelectedInfo.type == 2">
                 <h3>Possible Answers for your blank space</h3>
                 <p class="info-like">
-                    The Hunter backend will evaluate participants' input against
-                    an exact match of your provided possible answers. Please
-                    ensure that you do not include more than one or two words.
+                    We will evaluate participants' input against an exact match
+                    of your provided possible answers. Please ensure that you do
+                    not include more than one or two words.
                     <b
                         >If you believe there are multiple answers with
                         different spellings or synonyms, feel free to add as
                         many possible answers as you would like.</b
                     >
+                </p>
+
+                <p class="info-like">
+                    <b>These will be stay hidden from the participants</b>
                 </p>
 
                 <div
