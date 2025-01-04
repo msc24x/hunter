@@ -114,7 +114,7 @@ export const apiEndpoints = {
     question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',
     postFile: environment.apiUrl + '/question/upload',
-    execute: environment.apiUrl + '/execute',
+    execute: environment.apiUrl + '/submit',
     user: environment.apiUrl + '/users',
     results: environment.apiUrl + '/competitions/{0}/results/{1}',
     resultsAll: environment.apiUrl + '/competitions/{0}/results',

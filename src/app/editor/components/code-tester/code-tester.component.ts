@@ -64,6 +64,7 @@ export class CodeTesterComponent implements OnInit, OnChanges {
                 for: {
                     competition_id: this.competition_id,
                     question_id: this.question_id,
+                    type: 0,
                 },
                 solution: {
                     code: this.code,

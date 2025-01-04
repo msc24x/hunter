@@ -113,6 +113,13 @@ async function fetchUserSubmissions(
         },
         take: 10,
         ...(after_id && cursor_params),
+        include: {
+            question_choices: {
+                select: {
+                    id: true,
+                },
+            },
+        },
     });
 
     const accepted_count = await client.results.count({

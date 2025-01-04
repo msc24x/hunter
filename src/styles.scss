@@ -9,8 +9,16 @@
     --mdc-switch-track-shape: 24px !important;
 }
 .mat-mdc-snack-bar-container {
-    --mdc-snackbar-container-color: #361717 !important;
-    --mdc-snackbar-container-shape: 12px !important;
+    --mdc-snackbar-container-color: blanchedalmond !important;
+    --mdc-snackbar-supporting-text-color: rgb(91, 54, 0) !important;
+    --mdc-snackbar-container-shape: 0.5rem !important;
+    --mdc-snackbar-supporting-text-font: appFont !important;
+    --mdc-snackbar-supporting-text-size: 16px !important;
+    --mdc-snackbar-supporting-text-weight: 200 !important;
+    --mdc-snackbar-supporting-text-line-height: 1.5rem !important;
+    @include sweetBorder;
+    border-color: rgb(255, 208, 150);
+    border-radius: 0.5rem !important;
 }
 
 .mat-mdc-select-panel {
@@ -50,12 +58,22 @@ html {
 }
 
 .disabled {
-    cursor: not-allowed !important;
     opacity: 0.7;
+    cursor: not-allowed !important;
 
     * {
         cursor: not-allowed !important;
         opacity: 0.7;
+    }
+}
+
+.disabled_bright {
+    opacity: 0.85;
+    cursor: not-allowed !important;
+
+    * {
+        cursor: not-allowed !important;
+        opacity: 0.85;
     }
 }
 

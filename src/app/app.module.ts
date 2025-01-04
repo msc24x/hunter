@@ -26,7 +26,7 @@ import { FormsModule } from '@angular/forms';
     providers: [
         {
             provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-            useValue: { duration: 2500, horizontalPosition: 'right' },
+            useValue: { duration: 4000, horizontalPosition: 'right' },
         },
     ],
 })

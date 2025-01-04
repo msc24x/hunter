@@ -26,7 +26,7 @@
 
         <div class="points-time-col">Time</div>
     </div>
-    <div *ngFor="let row of evaluation">
+    <div *ngFor="let row of questionSelectedInfo.results">
         <div>
             <a class="view-submission" (click)="viewSubmission(row)">
                 <fa-icon [icon]="codeIcon" [size]="'sm'"></fa-icon>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div *ngIf="evaluation.length === 0">
+    <div *ngIf="this.questionSelectedInfo.results?.length === 0">
         <div>-</div>
         <div>-</div>
         <div class="points-time-col">-</div>
@@ -55,7 +55,7 @@
             <b>{{ getTotalScore(questionSelectedInfo.id) }}</b> points. -->
     </p>
     <greenred
-        *ngIf="evaluation.length !== 0"
+        *ngIf="questionSelectedInfo.results?.length !== 0"
         [green_number]="acceptedEvaluation"
         [red_number]="rejectedEvaluation"
         green_label="Submissions Accepted"
@@ -75,7 +75,9 @@
         </div>
         <div
             [ngClass]="{
-                'no-click disabled': loading || evaluation.length < 10,
+                'no-click disabled':
+                    loading ||
+                    (this.questionSelectedInfo.results?.length || 0) < 10,
                 'option-next': true
             }"
             (click)="nextEvaluations()"

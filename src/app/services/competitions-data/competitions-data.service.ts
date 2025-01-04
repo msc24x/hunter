@@ -103,7 +103,7 @@ export class CompetitionsDataService {
 
     judgeSolution(exe: HunterExecutable, samples = false) {
         return this.http.post(
-            apiEndpoints.execute,
+            apiEndpoints.submit,
             { exec: exe, samples: samples },
             {
                 responseType: 'json',

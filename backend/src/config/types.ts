@@ -26,6 +26,7 @@ export type QuestionInfo = {
     test_cases_file?: boolean;
     sol_cases_file?: boolean;
     sol_code_file?: boolean;
+    user_answer?: string;
     question_choices?: QuestionChoice[];
 };
 
@@ -85,16 +86,19 @@ export type CompetitionInfo = {
     public: boolean;
 };
 
+export type CodeSolution = {
+    lang: 'py' | 'c' | 'cpp' | 'js' | 'ts' | 'go';
+    code: string;
+};
+
 export type HunterExecutable = {
     for: {
         competition_id: number;
         question_id: number;
+        type: number;
     };
 
-    solution: {
-        lang: 'py' | 'c' | 'cpp' | 'js' | 'ts' | 'go';
-        code: string;
-    };
+    solution: CodeSolution | QuestionInfo;
 };
 
 export type ExeInfo = {

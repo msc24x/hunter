@@ -270,16 +270,46 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         });
     }
 
-    postSolution(samples = false) {
-        this.clearOutput();
-        this.bottomSection = true;
+    submitAnswerBasedQues() {
+        this.judgeInProgress = true;
 
-        this.scrollToTop();
+        this.loading++;
+        this.enableSubmitControls(false);
 
-        if (this.questionSelected == -1) {
-            this.solutionOutput.output = 'No question selected';
-            return;
-        }
+        this.subscriptions.push(
+            this.competitionsService
+                .judgeSolution({
+                    for: {
+                        competition_id: this.c_id,
+                        question_id: this.questionSelectedInfo.id,
+                        type: this.questionSelectedInfo.type,
+                    },
+                    solution: this.questionSelectedInfo,
+                })
+                .subscribe({
+                    next: (res) => {
+                        this.loading--;
+                        this.judgeInProgress = false;
+                        this.enableSubmitControls(true);
+                        this.scrollToTop();
+
+                        this.solutionOutput = res.body as ExecutionInfo;
+                    },
+
+                    error: (err) => {
+                        this.loading--;
+                        this.judgeInProgress = false;
+                        this.snackBar.open(err.error);
+
+                        this.enableSubmitControls(true);
+                        this.scrollToTop();
+                        this.solutionOutput = err.statusText;
+                    },
+                })
+        );
+    }
+
+    executeCode(samples = false) {
         if (!this.codeWritten) {
             this.solutionOutput.output = 'Empty solution';
             return;
@@ -300,6 +330,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                                 this.competition.questions![
                                     this.questionSelected
                                 ].id,
+                            type: 0,
                         },
                         solution: {
                             lang: this.languageSelected,
@@ -332,6 +363,24 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                     },
                 })
         );
+    }
+
+    postSolution(samples = false) {
+        this.clearOutput();
+        this.bottomSection = true;
+
+        this.scrollToTop();
+
+        if (this.questionSelected == -1) {
+            this.solutionOutput.output = 'No question selected';
+            return;
+        }
+
+        if (this.questionSelectedInfo.type === 0) {
+            this.executeCode(samples);
+        } else {
+            this.submitAnswerBasedQues();
+        }
     }
 
     fetchLastSubmission() {
@@ -458,6 +507,31 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         );
     }
 
+    getLastSubmission() {
+        return this.questionSelectedInfo.results?.[0];
+    }
+
+    showChoiceAsSelected(choice: QuestionChoice) {
+        if (choice.is_correct) {
+            return true;
+        }
+        const lastSub = this.getLastSubmission();
+
+        if (!lastSub) {
+            return false;
+        }
+
+        let wasIt = false;
+
+        lastSub.question_choices?.forEach((qChoice) => {
+            if (qChoice?.id === choice.id) {
+                wasIt = true;
+            }
+        });
+
+        return wasIt;
+    }
+
     lastEditorContent(save?: boolean) {
         const storageKey = `code-c${this.questionSelectedInfo.competition_id}-q${this.questionSelectedInfo.id}`;
 
@@ -520,7 +594,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         let alreadySelected = 0;
 
         this.questionSelectedInfo.question_choices?.forEach((ch) => {
-            if (ch.is_correct) {
+            if (this.showChoiceAsSelected(ch)) {
                 alreadySelected++;
             }
         });
@@ -539,11 +613,25 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.snackBar.open(
                 `Cannot select more than ${
                     alreadySelected - 1
-                }, Please un-select some option to choose a new one`
+                } choice(s), please un-select some option to choose a new one.`
             );
             return;
         }
 
         choice.is_correct = !choice.is_correct;
+    }
+
+    numOfWordsWritten(content: string) {
+        if (!content?.trim()) {
+            return 0;
+        }
+        return content?.trim().split(' ').length;
+    }
+
+    isLongAnswerAcceptable(content: string) {
+        return (
+            this.numOfWordsWritten(content) >=
+            (this.questionSelectedInfo?.char_limit || 0)
+        );
     }
 }

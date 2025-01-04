@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import { readFile, readFileSync, writeFile } from 'fs';
 import { Service } from 'typedi';
 import {
+    CodeSolution,
     ExeInfo,
     HunterExecutable,
     QuestionInfo,
@@ -98,8 +99,8 @@ export class JudgeService {
                     ],
                 },
                 exe: {
-                    language: hunterExecutable.solution.lang,
-                    code: hunterExecutable.solution.code,
+                    language: (hunterExecutable.solution as CodeSolution).lang,
+                    code: (hunterExecutable.solution as CodeSolution).code,
                     input: programInput,
                     output: programOutput,
                 },

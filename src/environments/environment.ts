@@ -58,12 +58,15 @@ export type HunterExecutable = {
     for: {
         competition_id: number;
         question_id: number;
+        type: number;
     };
 
-    solution: {
-        lang: 'py' | 'c' | 'cpp' | 'js' | string;
-        code: string;
-    };
+    solution:
+        | {
+              lang: 'py' | 'c' | 'cpp' | 'js' | string;
+              code: string;
+          }
+        | QuestionInfo;
 };
 
 export type ExecutionInfo = {
@@ -87,6 +90,7 @@ export type result = {
     questions_attempted?: number;
     submission?: string;
     meta?: string;
+    question_choices?: QuestionChoice[];
 };
 
 export type resultFull = {
@@ -114,7 +118,7 @@ export const apiEndpoints = {
     question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',
     postFile: environment.apiUrl + '/question/upload',
-    execute: environment.apiUrl + '/execute',
+    submit: environment.apiUrl + '/submit',
     user: environment.apiUrl + '/users',
     results: environment.apiUrl + '/competitions/{0}/results/{1}',
     resultsAll: environment.apiUrl + '/competitions/{0}/results',
@@ -161,8 +165,10 @@ export interface QuestionInfo {
     test_cases_file?: boolean;
     sol_cases_file?: boolean;
     sol_code_file?: boolean;
+    user_answer?: string;
 
     question_choices?: QuestionChoice[];
+    results?: result[];
 }
 
 export interface QuestionChoice {

@@ -1,7 +1,12 @@
 import express, { Request, Response } from 'express';
 import { existsSync, readFile, writeFile } from 'fs';
 import models from '../../database/containers/models';
-import { HunterExecutable, QuestionInfo, UserInfo } from '../../config/types';
+import {
+    CodeSolution,
+    HunterExecutable,
+    QuestionInfo,
+    UserInfo,
+} from '../../config/types';
 import { Util } from '../../util/util';
 import { authenticate, loginRequired } from '../auth';
 import { resCode } from '../../config/settings';
@@ -70,6 +75,7 @@ router.post(
             for: {
                 competition_id: comp_id,
                 question_id: ques_id,
+                type: config.questionTypes.code,
             },
             solution: {
                 code: code,
@@ -124,7 +130,8 @@ router.post(
                                     success: exeRes.success,
                                     question_id: ques_id,
                                     reason: exeRes.meta,
-                                    language: execReq.solution.lang,
+                                    language: (execReq.solution as CodeSolution)
+                                        .lang,
                                 },
                                 update: {
                                     created_at: new Date(),
@@ -132,7 +139,8 @@ router.post(
                                     success: exeRes.success,
                                     question_id: ques_id,
                                     reason: exeRes.meta,
-                                    language: execReq.solution.lang,
+                                    language: (execReq.solution as CodeSolution)
+                                        .lang,
                                 },
                             })
                             .then((verification) => {
@@ -614,14 +622,18 @@ router.get(
                 competition.questions.map((ques: QuestionInfo) => {
                     var correctCount = 0;
 
-                    ques?.question_choices?.map((choice) => {
-                        if (choice.is_correct) {
-                            correctCount++;
-                        }
-                        choice.is_correct = false;
-                    });
+                    if (ques.type === config.questionTypes.mcq) {
+                        ques?.question_choices?.map((choice) => {
+                            if (choice.is_correct) {
+                                correctCount++;
+                            }
+                            choice.is_correct = false;
+                        });
 
-                    ques.correct_count = correctCount;
+                        ques.correct_count = correctCount;
+                    } else if (ques.type === config.questionTypes.fill) {
+                        ques.question_choices = [];
+                    }
                 });
 
                 Util.sendResponseJson(res, resCode.success, competition);

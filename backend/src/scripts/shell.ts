@@ -3,6 +3,12 @@ import { DatabaseProvider } from '../services/databaseProvider';
 
 var client = new DatabaseProvider().client();
 
-async function main() {}
+async function main() {
+    await client.results.delete({
+        where: {
+            id: 52,
+        },
+    });
+}
 
 client.$connect().then(() => main());

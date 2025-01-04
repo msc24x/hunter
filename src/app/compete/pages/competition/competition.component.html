@@ -194,11 +194,27 @@
             >
             </code-editor>
 
+            <ng-template #alreadySubmittedInfo>
+                <p class="" *ngIf="questionSelectedInfo.results?.length != 0">
+                    <b>
+                        You have already submitted your response on
+                        {{
+                            questionSelectedInfo.results?.[0]?.created_at
+                                | date : "yyyy MMM dd 'at' hh:mm aa"
+                        }}
+                    </b>
+                </p>
+            </ng-template>
+
             <div
                 *ngIf="questionSelectedInfo.type === 1"
                 class="mcq-section question-side-section"
+                [ngClass]="{
+                    'disabled_bright no-click':
+                        questionSelectedInfo.results?.length
+                }"
             >
-                <h3>Options</h3>
+                <h3>Select option(s)</h3>
                 <p class="info-like">
                     Please read the statement of the question carefully and
                     <b
@@ -215,6 +231,15 @@
                     You have selected {{ alreadySelectedOptions() }}/{{
                         questionSelectedInfo.correct_count
                     }}
+
+                    <infotip
+                        [message]="
+                            alreadySelectedOptions() ===
+                            questionSelectedInfo.correct_count
+                                ? 'You have selected the required number of options, and are ready to submit.'
+                                : 'You have not selected the required number of options'
+                        "
+                    ></infotip>
                 </b>
 
                 <div class="choices">
@@ -227,14 +252,122 @@
                     >
                         <fa-icon
                             size="lg"
-                            [icon]="choice.is_correct ? tickIcon : circleIcon"
-                            [ngClass]="{ 'selected': choice.is_correct }"
+                            [icon]="
+                                showChoiceAsSelected(choice)
+                                    ? tickIcon
+                                    : circleIcon
+                            "
+                            [ngClass]="{
+                                'selected': showChoiceAsSelected(choice)
+                            }"
                         ></fa-icon>
                         <div>
                             {{ choice.text }}
                         </div>
                     </div>
                 </div>
+                <ng-outlet
+                    [ngTemplateOutlet]="alreadySubmittedInfo"
+                ></ng-outlet>
+            </div>
+
+            <div
+                *ngIf="questionSelectedInfo.type === 2"
+                class="blank-section question-side-section"
+                [ngClass]="{
+                    'disabled_bright no-click':
+                        questionSelectedInfo.results?.length
+                }"
+            >
+                <h3>Fill in the value</h3>
+                <p class="info-like">
+                    Please read the statement of the question carefully and
+                    answer the value for the blank
+                </p>
+
+                <br />
+
+                <p class="info-like">Input your answer below *</p>
+                <input
+                    type="text"
+                    [(ngModel)]="questionSelectedInfo.user_answer"
+                    [value]="getLastSubmission()?.submission"
+                    placeholder="Type..."
+                />
+                <ng-outlet
+                    [ngTemplateOutlet]="alreadySubmittedInfo"
+                ></ng-outlet>
+            </div>
+
+            <div
+                *ngIf="questionSelectedInfo.type === 3"
+                class="long-answer-section question-side-section"
+                [ngClass]="{
+                    'disabled_bright no-click':
+                        questionSelectedInfo.results?.length
+                }"
+            >
+                <h3>Write your answer</h3>
+                <p class="info-like">
+                    Please read the statement of the question carefully and
+                    start writing your answer.
+                </p>
+
+                <p class="info-like" *ngIf="questionSelectedInfo.char_limit">
+                    <b
+                        >Minimum number of words acceptable are
+                        {{ questionSelectedInfo.char_limit }}</b
+                    >
+                </p>
+
+                <br />
+
+                <p
+                    class="info-like"
+                    *ngIf="questionSelectedInfo.char_limit"
+                    [ngClass]="{
+                        'acceptable': isLongAnswerAcceptable(
+                            this.questionSelectedInfo.user_answer ||
+                                getLastSubmission()?.submission ||
+                                ''
+                        )
+                    }"
+                    class="words-written"
+                >
+                    Number of words you've written
+                    <span>
+                        {{
+                            numOfWordsWritten(
+                                this.questionSelectedInfo.user_answer ||
+                                    getLastSubmission()?.submission ||
+                                    ""
+                            ) || 0
+                        }}/{{ questionSelectedInfo.char_limit }}
+                    </span>
+
+                    <infotip
+                        [message]="
+                            isLongAnswerAcceptable(
+                                this.questionSelectedInfo.user_answer ||
+                                    getLastSubmission()?.submission ||
+                                    ''
+                            )
+                                ? 'You have written enough words, and are ready to submit.'
+                                : 'Minimum words are not written, please write more.'
+                        "
+                    ></infotip>
+                </p>
+
+                <textarea
+                    type="text"
+                    [(ngModel)]="questionSelectedInfo.user_answer"
+                    placeholder="Start typing your answer..."
+                    [value]="getLastSubmission()?.submission"
+                    rows="15"
+                ></textarea>
+                <ng-outlet
+                    [ngTemplateOutlet]="alreadySubmittedInfo"
+                ></ng-outlet>
             </div>
         </div>
 
@@ -265,11 +398,21 @@
                     &nbsp; Run Tests
                 </div>
                 <div
-                    matTooltip="Only submit when you're ready, to avoid negative marking"
+                    [matTooltip]="
+                        questionSelectedInfo.type !== 0 &&
+                        questionSelectedInfo.results?.length
+                            ? 'You have already submitted your response'
+                            : 'Only submit when you\'re ready, to avoid negative marking'
+                    "
                     class="button"
                     id="submit_code_btn"
                     [matTooltipPosition]="'above'"
                     (click)="postSolution()"
+                    [ngClass]="{
+                        'disabled no-click':
+                            questionSelectedInfo.type !== 0 &&
+                            questionSelectedInfo.results?.length
+                    }"
                 >
                     <fa-icon [icon]="submitIcon"></fa-icon>
                     &nbsp; Submit & Evaluate

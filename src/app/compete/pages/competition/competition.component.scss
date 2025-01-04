@@ -107,7 +107,8 @@
 
     #submit_code_btn {
         background-color: colors.$ls;
-        border-color: #8a656c;
+        border-color: #dcadb6;
+        color: saddlebrown;
     }
 
     .button {
@@ -143,6 +144,7 @@
 
         &:not(.ace-editor) {
             @include basicBack;
+            flex-basis: calc(60% - 3.3rem);
         }
     }
 
@@ -152,7 +154,7 @@
     }
 
     .question-section {
-        height: 818px;
+        height: 70svh;
         display: flex;
         flex-direction: column;
         justify-content: stretch;
@@ -163,6 +165,22 @@
 .question-side-section {
     &:not(.ace-editor) {
         @include basicBack;
+    }
+}
+
+input,
+textarea {
+    @include appTextArea;
+    width: calc(100% - 2rem);
+}
+
+.long-answer-section {
+    .words-written {
+        color: darkred;
+
+        &.acceptable {
+            color: darkgreen;
+        }
     }
 }
 

@@ -1,8 +1,10 @@
 import {
     Component,
+    EventEmitter,
     Input,
     OnChanges,
     OnInit,
+    Output,
     SimpleChanges,
 } from '@angular/core';
 import { faFileCode } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +29,6 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     viewSubmissionResult: result | undefined;
 
     evaluationAfterPages: number[] = [];
-    evaluation: Array<result> = [];
     acceptedEvaluation: number = 0;
     rejectedEvaluation: number = 0;
 
@@ -42,7 +43,7 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.viewSubmissionResult = undefined;
         this.evaluationAfterPages = [];
-        this.evaluation = [];
+        this.questionSelectedInfo.results = [];
 
         this.fetchEvaluation();
     }
@@ -54,7 +55,9 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
 
     nextEvaluations() {
         this.evaluationAfterPages.push(
-            this.evaluation[this.evaluation.length - 1].id
+            this.questionSelectedInfo.results?.[
+                this.questionSelectedInfo.results?.length - 1
+            ]?.id!
         );
         this.fetchEvaluation();
     }
@@ -64,7 +67,7 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
             return;
         }
 
-        console.log(this.questionSelectedInfo);
+        const qId = this.questionSelectedInfo.id;
 
         this.loading = true;
         this.subscriptions.push(
@@ -80,7 +83,7 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
                     this.loading = false;
 
                     if (res.status == resCode.success) {
-                        this.evaluation = res.body?.results
+                        this.questionSelectedInfo.results = res.body?.results
                             ? (res.body.results as Array<result>)
                             : [];
                         this.acceptedEvaluation = res.body!.accepted_count;
