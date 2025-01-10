@@ -4,9 +4,9 @@ import { DatabaseProvider } from '../services/databaseProvider';
 var client = new DatabaseProvider().client();
 
 async function main() {
-    await client.results.delete({
+    await client.results.deleteMany({
         where: {
-            id: 52,
+            question_id: 107,
         },
     });
 }

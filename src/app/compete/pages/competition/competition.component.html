@@ -431,16 +431,69 @@
         >
             <fa-icon [icon]="upIcon"></fa-icon>
         </div>
+        <ng-template #overallProgress>
+            <div>
+                <div *ngIf="competition.questions" class="progress-container">
+                    <div class="progress-box">
+                        <span class="progress-num">
+                            {{ questionsProgress.length }} of
+                            {{ competition.questions.length }}
+                        </span>
+                        Questions Attempted
+                        <greenred
+                            [green_number]="questionsProgress.length"
+                            [red_number]="
+                                (competition.questions.length || 1) -
+                                questionsProgress.length
+                            "
+                            green_label="Attempted"
+                            red_label="Unattempted"
+                        ></greenred>
+                    </div>
+
+                    <div class="progress-box">
+                        <span class="progress-num">
+                            {{ getAcceptedSolutions() }} of
+                            {{ questionsProgress.length }}
+                        </span>
+                        Questions Accepted
+                        <greenred
+                            [green_number]="getAcceptedSolutions()"
+                            [red_number]="
+                                questionsProgress.length -
+                                getAcceptedSolutions()
+                            "
+                            green_label="Accepted"
+                            red_label="Not Accepted"
+                        ></greenred>
+                    </div>
+
+                    <div class="progress-box score-box">
+                        Received a total of
+                        <span class="progress-num">
+                            {{ getTotalScore() }}
+                        </span>
+                        points
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
         <ng-template #questionEvaluation>
             <h2>Question Evaluation</h2>
-
             <div id="output_points">
                 <question-evaluation
                     [questionSelectedInfo]="questionSelectedInfo"
+                    [flipper]="evaluationChangeOccurred"
                 >
                 </question-evaluation>
 
                 <div id="solution_output">
+                    <ng-outlet
+                        [ngTemplateOutlet]="overallProgress"
+                        [ngTemplateOutletContext]="{ hideTitle: true }"
+                        *ngIf="questionSelectedInfo.type !== 0"
+                    ></ng-outlet>
                     <div class="loading" *ngIf="judgeInProgress">
                         <fa-icon
                             [icon]="judgeLoadingIcon"
@@ -467,50 +520,15 @@
             </div>
 
             <br />
-            <h2 *ngIf="competition.questions">Your Overall Progress</h2>
-
-            <div *ngIf="competition.questions" class="progress-container">
-                <div class="progress-box">
-                    <span class="progress-num">
-                        {{ questionsProgress.length }} of
-                        {{ competition.questions.length }}
-                    </span>
-                    Questions Attempted
-                    <greenred
-                        [green_number]="questionsProgress.length"
-                        [red_number]="
-                            (competition.questions.length || 1) -
-                            questionsProgress.length
-                        "
-                        green_label="Attempted"
-                        red_label="Unattempted"
-                    ></greenred>
-                </div>
-
-                <div class="progress-box">
-                    <span class="progress-num">
-                        {{ getAcceptedSolutions() }} of
-                        {{ questionsProgress.length }}
-                    </span>
-                    Questions Accepted
-                    <greenred
-                        [green_number]="getAcceptedSolutions()"
-                        [red_number]="
-                            questionsProgress.length - getAcceptedSolutions()
-                        "
-                        green_label="Accepted"
-                        red_label="Not Accepted"
-                    ></greenred>
-                </div>
-
-                <div class="progress-box score-box">
-                    You aggregated a total of &nbsp;
-                    <span class="progress-num">
-                        {{ getTotalScore() }}
-                    </span>
-                    points
-                </div>
-            </div>
+            <h2
+                *ngIf="competition.questions && questionSelectedInfo.type === 0"
+            >
+                Your Overall Progress
+            </h2>
+            <ng-outlet
+                [ngTemplateOutlet]="overallProgress"
+                *ngIf="questionSelectedInfo.type === 0"
+            ></ng-outlet>
         </ng-template>
 
         <ng-container

@@ -5,17 +5,38 @@
     [hidden]="!showSubmissionP"
     (closeEvent)="showSubmissionP = false; viewSubmissionResult = undefined"
     [showControls]="false"
-    heading="Your Submission"
+    [heading]="viewSubmissionResult?.accepted ? 'Accepted' : 'Not Accepted'"
 >
     <div class="view-submission-container" *ngIf="viewSubmissionResult">
-        <pretty-meta [meta]="viewSubmissionResult.meta!"></pretty-meta>
+        <div *ngIf="questionSelectedInfo.type === 0">
+            <pretty-meta [meta]="viewSubmissionResult.meta!"></pretty-meta>
 
-        <code-editor
-            [editable]="false"
-            [code]="viewSubmissionResult.submission!"
-            [languageSelected]="viewSubmissionResult.language!"
-        ></code-editor>
-        <!-- <pre [innerText]="viewSubmissionResult.submission"></pre> -->
+            <code-editor
+                [editable]="false"
+                [code]="viewSubmissionResult.submission!"
+                [languageSelected]="viewSubmissionResult.language!"
+            ></code-editor>
+        </div>
+
+        <div *ngIf="questionSelectedInfo.type === 1" class="user-submission">
+            <p>Following choice(s) were chosen</p>
+
+            <pre
+                *ngFor="let ch of viewSubmissionResult.question_choices"
+                [textContent]="getChoiceText(ch.id)"
+            ></pre>
+        </div>
+
+        <div
+            *ngIf="[2, 3].includes(questionSelectedInfo.type)"
+            class="user-submission"
+        >
+            <h5>
+                Answer Status:
+                {{ viewSubmissionResult.accepted ? "Accepted" : "Wrong" }}
+            </h5>
+            <pre [innerText]="viewSubmissionResult.submission"></pre>
+        </div>
     </div>
 </popup>
 
@@ -26,11 +47,14 @@
 
         <div class="points-time-col">Time</div>
     </div>
-    <div *ngFor="let row of questionSelectedInfo.results">
+    <div
+        *ngFor="let row of questionSelectedInfo.results"
+        (click)="viewSubmission(row)"
+    >
         <div>
             <a class="view-submission" (click)="viewSubmission(row)">
                 <fa-icon [icon]="codeIcon" [size]="'sm'"></fa-icon>
-                &nbsp; <span>View Code</span></a
+                &nbsp; <span>View</span></a
             >
         </div>
         <div>{{ row.result }}</div>

@@ -26,6 +26,9 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     @Input()
     questionSelectedInfo = {} as QuestionInfo;
 
+    @Input()
+    flipper = false;
+
     viewSubmissionResult: result | undefined;
 
     evaluationAfterPages: number[] = [];
@@ -62,12 +65,16 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
         this.fetchEvaluation();
     }
 
+    getChoiceText(choice_id: number) {
+        return this.questionSelectedInfo.question_choices?.find(
+            (ch) => ch.id === choice_id
+        )?.text;
+    }
+
     fetchEvaluation() {
         if (!Object.keys(this.questionSelectedInfo).length) {
             return;
         }
-
-        const qId = this.questionSelectedInfo.id;
 
         this.loading = true;
         this.subscriptions.push(

@@ -61,6 +61,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     showInstructionP = false;
 
+    evaluationChangeOccurred = false;
+
     loading = 0;
     fetchSubmissionMsg = '';
 
@@ -293,7 +295,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.enableSubmitControls(true);
                         this.scrollToTop();
 
-                        this.solutionOutput = res.body as ExecutionInfo;
+                        this.evaluationChangeOccurred =
+                            !this.evaluationChangeOccurred;
+
+                        this.loading++;
+                        this.subscriptions.push(this.fetchProgress());
                     },
 
                     error: (err) => {
@@ -475,18 +481,22 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         }
                     },
                 }),
-            this.scoresDataService
-                .getProgress({ comp_id: this.c_id })
-                .subscribe({
-                    next: (res) => {
-                        this.loading--;
-                        this.questionsProgress = res.body || [];
-                    },
-                }),
+            this.fetchProgress(),
         ];
 
         this.loading += dataSubscriptions.length;
         this.subscriptions.push(...dataSubscriptions);
+    }
+
+    fetchProgress() {
+        return this.scoresDataService
+            .getProgress({ comp_id: this.c_id })
+            .subscribe({
+                next: (res) => {
+                    this.loading--;
+                    this.questionsProgress = res.body || [];
+                },
+            });
     }
 
     selectQuestion(index: number) {
