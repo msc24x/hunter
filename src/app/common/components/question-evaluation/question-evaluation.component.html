@@ -8,6 +8,21 @@
     [heading]="viewSubmissionResult?.accepted ? 'Accepted' : 'Not Accepted'"
 >
     <div class="view-submission-container" *ngIf="viewSubmissionResult">
+        <h6 class="grading-status cute-panel">
+            <fa-icon [icon]="judgeIcon"></fa-icon> &nbsp; Grading status ~
+            {{
+                viewSubmissionResult.evaluated_at
+                    ? "Evaluated on " +
+                      (viewSubmissionResult.evaluated_at
+                          | date : "yyyy MMM dd 'at' hh:mm aa") +
+                      (!viewSubmissionResult.evaluated_by
+                          ? " by Hunter"
+                          : (viewSubmissionResult.evaluated_by.name ||
+                                "Anonymous") +
+                            viewSubmissionResult.evaluated_by_id)
+                    : "Yet to be evaluated"
+            }}
+        </h6>
         <div *ngIf="questionSelectedInfo.type === 0">
             <pretty-meta [meta]="viewSubmissionResult.meta!"></pretty-meta>
 
@@ -35,6 +50,15 @@
                 Answer Status:
                 {{ viewSubmissionResult.accepted ? "Accepted" : "Wrong" }}
             </h5>
+
+            <p>
+                Following
+                {{
+                    viewSubmissionResult.submission?.trim()?.split(" ")?.length
+                }}
+                words was submitted
+            </p>
+
             <pre [innerText]="viewSubmissionResult.submission"></pre>
         </div>
     </div>

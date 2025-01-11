@@ -422,6 +422,8 @@
                 ></infotip>
             </p>
 
+            <manual-error [message]="errors.char_limit"></manual-error>
+
             <div class="fill-in-blanks" *ngIf="questionSelectedInfo.type == 2">
                 <h3>Possible Answers for your blank space</h3>
                 <p class="info-like">
@@ -477,6 +479,10 @@
                     button below. Otherwise your question will remain
                     unanswerable.
                 </p>
+                <manual-error
+                    [message]="errors.question_choices"
+                ></manual-error>
+
                 <div class="add-choice" (click)="addNewChoiceInQuestion()">
                     + Add new possible answer
                 </div>
@@ -544,6 +550,10 @@
                     No choices added so far. Quickly add one using the button
                     below. Otherwise, your question will have no correct answer.
                 </p>
+                <manual-error
+                    [message]="errors.question_choices"
+                ></manual-error>
+
                 <div class="add-choice" (click)="addNewChoiceInQuestion()">
                     + Add new choice
                 </div>

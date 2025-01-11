@@ -8,19 +8,19 @@ datasource db {
 }
 
 model competitions {
-  id             Int         @id @default(autoincrement())
-  host_user_id   Int
-  host_user      users       @relation(fields: [host_user_id], references: [id], onDelete: NoAction)
-  title          String?     @db.VarChar(120)
-  description    String?     @db.VarChar(456)
-  created_at     DateTime    @db.DateTime(0)
-  deleted_at     DateTime?    @db.DateTime(0)
-  updated_at     DateTime    @db.DateTime(0)
-  rating         Int         @default(0)
-  public         Boolean?
-  scheduled_at   DateTime?    @db.DateTime(0)
-  scheduled_end_at   DateTime?    @db.DateTime(0)
-  questions      questions[]
+  id               Int         @id @default(autoincrement())
+  host_user_id     Int
+  host_user        users       @relation(fields: [host_user_id], references: [id], onDelete: NoAction)
+  title            String?     @db.VarChar(120)
+  description      String?     @db.VarChar(456)
+  created_at       DateTime    @db.DateTime(0)
+  deleted_at       DateTime?   @db.DateTime(0)
+  updated_at       DateTime    @db.DateTime(0)
+  rating           Int         @default(0)
+  public           Boolean?
+  scheduled_at     DateTime?   @db.DateTime(0)
+  scheduled_end_at DateTime?   @db.DateTime(0)
+  questions        questions[]
 }
 
 model files {
@@ -29,85 +29,89 @@ model files {
 }
 
 model questions {
-  id             Int          @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   competition_id Int
-  title          String?      @db.VarChar(400)
-  statement      String?      @db.VarChar(4000)
-  type            Int         @db.UnsignedTinyInt()	 	@default(0)
-  points         Int          @default(0)
-  neg_points     Int          @default(0)
-  position       Int         @default(0)
-  created_at     DateTime     @db.DateTime(0)
-  deleted_at     DateTime?    @db.DateTime(0)
+  title          String?   @db.VarChar(400)
+  statement      String?   @db.VarChar(4000)
+  type           Int       @default(0) @db.UnsignedTinyInt()
+  points         Int       @default(0)
+  neg_points     Int       @default(0)
+  position       Int       @default(0)
+  created_at     DateTime  @db.DateTime(0)
+  deleted_at     DateTime? @db.DateTime(0)
 
-  sample_cases   String?      @db.VarChar(1000)
-  sample_sols    String?      @db.VarChar(1000)
-  competitions   competitions @relation(fields: [competition_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_cid")
-  
-  question_verifications       question_verification[]
+  sample_cases String?      @db.VarChar(1000)
+  sample_sols  String?      @db.VarChar(1000)
+  competitions competitions @relation(fields: [competition_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_cid")
 
-  case_sensitive  Boolean @default(false)
-  char_limit Int?
-  question_choices       question_choice[]
-  results       results[]
+  question_verifications question_verification[]
+
+  case_sensitive   Boolean           @default(false)
+  char_limit       Int?
+  question_choices question_choice[]
+  results          results[]
 
   @@index([competition_id], map: "fk_cid")
 }
 
 model question_choice {
-  id             Int          @id @default(autoincrement())
-  text          String?      @db.VarChar(150)
-  position       Int         @default(0)
-  question_id    Int
-  question       questions     @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  is_correct       Boolean
+  id          Int       @id @default(autoincrement())
+  text        String?   @db.VarChar(150)
+  position    Int       @default(0)
+  question_id Int
+  question    questions @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  is_correct  Boolean
 
   results results[] @relation("question_choice")
 }
 
 model question_verification {
-  id             Int          @id @default(autoincrement())
-  question_id    Int          @unique
-  question       questions     @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  submission    String        @db.Text
-  language      String        @db.VarChar(20) @default("")
-  success       Boolean
-  reason        String?       @db.Text
-  created_at     DateTime    @db.DateTime(0)
+  id          Int       @id @default(autoincrement())
+  question_id Int       @unique
+  question    questions @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  submission  String    @db.Text
+  language    String    @default("") @db.VarChar(20)
+  success     Boolean
+  reason      String?   @db.Text
+  created_at  DateTime  @db.DateTime(0)
 }
 
 model results {
-  id             Int           @id @default(autoincrement())
-  user_id        Int
-  user           users         @relation(fields: [user_id], references: [id])
-  question_id    Int
-  question       questions     @relation(fields: [question_id], references: [id])
-  question_choices       question_choice[]     @relation("question_choice")
-  result         Int
-  accepted      Boolean       @default(false)
-  submission     String?       @db.Text
-  language      String        @db.VarChar(20) @default("")
-  meta           String?       @db.VarChar(200)
-  created_at     DateTime    @db.DateTime(0) @default(now())
+  id               Int               @id @default(autoincrement())
+  user_id          Int
+  user             users             @relation(fields: [user_id], references: [id])
+  question_id      Int
+  question         questions         @relation(fields: [question_id], references: [id])
+  question_choices question_choice[] @relation("question_choice")
+  result           Int
+  accepted         Boolean           @default(false)
+  submission       String?           @db.Text
+  language         String            @default("") @db.VarChar(20)
+  meta             String?           @db.VarChar(200)
+  created_at       DateTime          @default(now()) @db.DateTime(0)
+  evaluated_at     DateTime?         @db.DateTime(0)
+  evaluated_by_id  Int?
+  evaluated_by     users?             @relation("evaluator", fields: [evaluated_by_id], references: [id])
 }
 
 model session {
-  id      String   @id @default(uuid())
-  user_id Int   @unique
-  created_at     DateTime    @db.DateTime(0) @default(now())
-  user    users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id         String   @id @default(uuid())
+  user_id    Int      @unique
+  created_at DateTime @default(now()) @db.DateTime(0)
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model users {
-  id            Int     @id @default(autoincrement())
-  email         String? @db.VarChar(330)
-  name          String? @db.VarChar(50)
-  avatar_url    String? @db.VarChar(100)
-  github_url    String? @db.VarChar(100)
-  blog_url      String? @db.VarChar(100)
-  linkedin_url  String? @db.VarChar(100)
-  github_fetched_at  DateTime?    @db.DateTime(0)
-  competitions  competitions[]
-  results       results[]
-  session       session?
+  id                Int            @id @default(autoincrement())
+  email             String?        @db.VarChar(330)
+  name              String?        @db.VarChar(50)
+  avatar_url        String?        @db.VarChar(100)
+  github_url        String?        @db.VarChar(100)
+  blog_url          String?        @db.VarChar(100)
+  linkedin_url      String?        @db.VarChar(100)
+  github_fetched_at DateTime?      @db.DateTime(0)
+  competitions      competitions[]
+  results           results[]
+  evaluations       results[]      @relation("evaluator")
+  session           session?
 }

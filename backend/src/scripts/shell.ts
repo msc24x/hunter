@@ -6,7 +6,7 @@ var client = new DatabaseProvider().client();
 async function main() {
     await client.results.deleteMany({
         where: {
-            question_id: 107,
+            question_id: 108,
         },
     });
 }

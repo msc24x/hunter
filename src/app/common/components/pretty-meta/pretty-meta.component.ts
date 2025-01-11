@@ -35,10 +35,10 @@ export class PrettyMetaComponent {
                     ]);
                     break;
                 case 'time':
-                    prettyArr.push(['CPU time', itemVal + ' sec']);
+                    prettyArr.push(['CPU', itemVal + ' sec']);
                     break;
                 case 'time-wall':
-                    prettyArr.push(['Total time', itemVal + ' sec']);
+                    prettyArr.push(['Total', itemVal + ' sec']);
             }
         });
 

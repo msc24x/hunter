@@ -438,6 +438,12 @@ function validateQuestionInfo(data: QuestionInfo) {
         });
     }
 
+    if (config.questionTypes.long === data.type) {
+        if ((data.char_limit || 0) < 0) {
+            errors.char_limit = 'Word limit cannot be in negative';
+        }
+    }
+
     return errors;
 }
 

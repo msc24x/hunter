@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `results` ADD COLUMN `evaluated_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0);

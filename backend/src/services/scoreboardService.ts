@@ -82,11 +82,19 @@ export class ScoreboardService {
                 };
                 break;
             case config.questionTypes.fill:
+                result_data = {
+                    ...result_data,
+                    submission: (hunterExecutable.solution as QuestionInfo)
+                        .user_answer,
+                };
+                break;
             case config.questionTypes.long:
                 result_data = {
                     ...result_data,
                     submission: (hunterExecutable.solution as QuestionInfo)
                         .user_answer,
+                    evaluated_at: null,
+                    result: 0,
                 };
                 break;
             default:

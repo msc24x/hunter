@@ -35,7 +35,14 @@
             white-space: -o-pre-wrap;
             word-wrap: break-word;
             max-width: 38rem;
+            max-height: 24rem;
+            overflow: auto;
         }
+    }
+
+    .grading-status {
+        @include basicBack;
+        font-weight: 500;
     }
 }
 
@@ -48,11 +55,9 @@
 }
 
 code-editor {
-    // @include basicBack;
     display: block;
-    width: 860px;
+    max-width: 720px;
     margin-block: 1rem;
-    // overflow: scroll;
 }
 
 pretty-meta {

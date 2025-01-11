@@ -393,6 +393,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     saveChanges() {
         this.loading = true;
+        this.errors = {};
 
         const schedule = document.getElementById(
             'competition_schedule'

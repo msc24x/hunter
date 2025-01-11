@@ -7,7 +7,7 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
-import { faFileCode } from '@fortawesome/free-solid-svg-icons';
+import { faFileCode, faStarOfLife } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import { QuestionInfo, resCode, result } from 'src/environments/environment';
@@ -20,6 +20,7 @@ import { QuestionInfo, resCode, result } from 'src/environments/environment';
 export class QuestionEvaluationComponent implements OnInit, OnChanges {
     loading = false;
     codeIcon = faFileCode;
+    judgeIcon = faStarOfLife;
 
     showSubmissionP = false;
 

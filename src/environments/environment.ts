@@ -79,11 +79,14 @@ export type ExecutionInfo = {
 export type result = {
     id: number;
     user_id: number;
+    evaluated_by_id?: number;
+    evaluated_by?: UserInfo;
     user_name: string;
     user_rank: number;
     result: number;
     accepted: boolean;
     created_at?: string;
+    evaluated_at?: string;
     language?: HunterLanguage;
     neg_result?: number;
     final_result?: number;

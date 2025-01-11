@@ -119,6 +119,12 @@ async function fetchUserSubmissions(
                     id: true,
                 },
             },
+            evaluated_by: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
         },
     });
 
