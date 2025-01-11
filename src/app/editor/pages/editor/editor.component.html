@@ -9,7 +9,13 @@
     [destructive]="false"
     (closeEvent)="showPopup(false, 'competition-insights')"
 >
-    <insights [competitionInfo]="competitionInfo"></insights>
+    <scoreboard
+        *ngIf="competitionInfo.id"
+        [competition_id]="competitionInfo.id"
+        [competitionInfo]="competitionInfo"
+        [question_list]="true"
+        (metaChange)="scoreMeta = $event"
+    ></scoreboard>
 </popup>
 
 <popup
@@ -198,25 +204,33 @@
             </div>
 
             <h3>Insights</h3>
-            <div class="text-area c-insights">
-                <div class="label">Share link to participants</div>
-                <a
-                    class="participant-link"
-                    (click)="shareAction()"
-                    matTooltip="Click to share the participation link"
+            <div
+                class="participant-link"
+                (click)="shareAction()"
+                matTooltip="Click to share the participation link"
+            >
+                <span class="link-text"
+                    >Share link to the participants, and let the contest
+                    begin!</span
                 >
-                    <span class="link-text">{{ getParticipationLink() }}</span>
-                    <span>
-                        <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
-                    </span>
-                </a>
-                <div
-                    class="text-area insight-details"
-                    (click)="showPopup(true, 'competition-insights')"
-                >
-                    Click here to see the participation insights for this
-                    competition
-                </div>
+                <span>
+                    <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
+                </span>
+            </div>
+            <div
+                class="text-area insight-details cute-panel"
+                (click)="showPopup(true, 'competition-insights')"
+                *ngIf="scoreMeta"
+            >
+                <fa-icon
+                    [icon]="magicIcon"
+                    size="lg"
+                    [animation]="'fade'"
+                ></fa-icon>
+                <span>
+                    Insights of <b>{{ scoreMeta.total }}</b> users, who took
+                    part in your contest!
+                </span>
             </div>
         </div>
     </div>
@@ -277,11 +291,13 @@
 
             <textarea
                 id="text_qtitle"
-                maxlength="150"
+                maxlength="400"
                 rows="3"
                 [(ngModel)]="questionSelectedInfo.title"
                 placeholder="Example: Write a program to flip the string."
             ></textarea>
+
+            <manual-error [message]="errors.title"></manual-error>
 
             <div class="statement-label-container">
                 <div class="clabel">
@@ -316,7 +332,7 @@
             <textarea
                 [hidden]="preview_mode"
                 id="text_statement"
-                maxlength="2046"
+                maxlength="4000"
                 rows="6"
                 [(ngModel)]="questionSelectedInfo.statement"
                 placeholder="Example: You are given a list of strings separated by a space..."
@@ -326,6 +342,8 @@
                 id="text_statement_preview"
                 [data]="questionSelectedInfo.statement"
             ></ng-katex>
+
+            <manual-error [message]="errors.statement"></manual-error>
 
             <br />
 
@@ -347,7 +365,7 @@
                     id="question_points"
                     type="number"
                     min="0"
-                    [max]="9"
+                    [max]="40"
                     [(ngModel)]="questionSelectedInfo.points"
                 />
                 points for first correct submission
@@ -356,20 +374,23 @@
                 ></infotip>
             </p>
 
+            <manual-error [message]="errors.points"></manual-error>
+
             <p>
                 Cut
                 <input
                     id="question_neg_points"
                     type="number"
                     min="0"
-                    [max]="4"
+                    [max]="40"
                     [(ngModel)]="questionSelectedInfo.neg_points"
                 />
                 points for each wrong submission
                 <infotip
-                    message="Set this to any non-zero value (1-4) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
+                    message="Set this to any non-zero value (1-40) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
                 ></infotip>
             </p>
+            <manual-error [message]="errors.neg_points"></manual-error>
 
             <p *ngIf="questionSelectedInfo.type === 2">
                 Do you want to enable case sensitivity
@@ -539,11 +560,14 @@
                         </div>
                         <textarea
                             id="question_sample_cases"
-                            maxlength="250"
+                            maxlength="1000"
                             rows="6"
                             [(ngModel)]="questionSelectedInfo.sample_cases"
                             placeholder="Example: dice car club winter"
                         ></textarea>
+                        <manual-error
+                            [message]="errors.sample_cases"
+                        ></manual-error>
                     </div>
 
                     <div>
@@ -554,11 +578,14 @@
                         </div>
                         <textarea
                             id="question_sample_sols"
-                            maxlength="250"
+                            maxlength="1000"
                             rows="6"
                             [(ngModel)]="questionSelectedInfo.sample_sols"
                             placeholder="Example: ecid rac bulc retniw"
                         ></textarea>
+                        <manual-error
+                            [message]="errors.sample_sols"
+                        ></manual-error>
                     </div>
                 </div>
                 <div class="file-uploaders">

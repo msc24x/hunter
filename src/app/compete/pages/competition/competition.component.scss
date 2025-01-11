@@ -9,13 +9,18 @@
     border-radius: 1.5rem;
     position: fixed;
     top: 97%;
-    left: 7%;
-    right: 7%;
+    left: 12%;
+    right: 12%;
     bottom: -2rem;
     opacity: 0.5;
     transition: opacity 100ms, top 200ms;
     box-shadow: -1px 0px 6px 0px rgba(128, 128, 128, 0.5);
     padding-top: 0;
+
+    @media screen and (max-width: 512px) {
+        left: 0;
+        right: 0;
+    }
 
     &:hover {
         opacity: 0.7;
@@ -72,9 +77,6 @@
                 display: flex;
                 align-items: center;
                 gap: 0.3rem;
-                background: #fff1ff;
-                border-color: #c19bc1;
-                color: purple;
                 justify-content: center;
             }
         }

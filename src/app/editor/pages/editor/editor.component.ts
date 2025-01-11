@@ -11,11 +11,14 @@ import {
     faEyeSlash,
     faPenToSquare,
     faShare,
+    faShareNodes,
     faSquareShareNodes,
     faTrashArrowUp,
     faTrashCan,
     faUpload,
+    faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
+import { error } from 'console';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -28,6 +31,7 @@ import {
     QuestionInfo,
     QuestionVerification,
     resCode,
+    ScoresMeta,
     UserInfo,
 } from 'src/environments/environment';
 
@@ -37,13 +41,14 @@ import {
     styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit, OnDestroy {
-    shareIcon = faSquareShareNodes;
+    shareIcon = faShareNodes;
     viewIcon = faEye;
     writeIcon = faEyeSlash;
     checkIcon = faCircleCheck;
     crossIcon = faCircleXmark;
     trashIcon = faTrashCan;
     trashUpIcon = faTrashArrowUp;
+    magicIcon = faWandMagicSparkles;
 
     uploadIcon = faUpload;
     downloadIcon = faDownload;
@@ -62,9 +67,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     verificationResult: QuestionVerification | null = null;
     elem: HTMLElement | null = null;
 
+    scoreMeta: ScoresMeta = null;
+
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
     eventPopup = new BehaviorSubject<string>('');
+
+    errors: any = {};
 
     choiceTypes = {
         selectable: 0,
@@ -207,8 +216,6 @@ export class EditorComponent implements OnInit, OnDestroy {
             return;
         }
 
-        console.log(this.competitionInfo);
-
         this.loading = true;
         this.competitionsData
             .putQuestion({
@@ -216,13 +223,19 @@ export class EditorComponent implements OnInit, OnDestroy {
                 created_at: this.competitionInfo.created_at,
                 updated_at: new Date(),
             } as QuestionInfo)
-            .subscribe((res) => {
-                this.displayLog('Question Updated');
-                this.loading = false;
-                this.snackBar.open('Selected question data saved successfully');
+            .subscribe(
+                (res) => {
+                    this.displayLog('Question Updated');
+                    this.loading = false;
+                    this.snackBar.open('Data saved successfully');
 
-                this.fetchQuestions();
-            });
+                    this.fetchQuestions();
+                },
+                (error) => {
+                    this.loading = false;
+                    this.errors = error.error;
+                }
+            );
     }
 
     selectedQuestionElement(): HTMLLIElement | null {
@@ -379,7 +392,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     saveChanges() {
-        this.saveQuestion();
         this.loading = true;
 
         const schedule = document.getElementById(
@@ -393,11 +405,18 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.competitionInfo.scheduled_at = new Date(schedule.value);
         this.competitionsData
             .putCompetitionInfo(this.competitionInfo)
-            .subscribe((res) => {
-                this.displayLog('Competition changes saved');
-                this.loading = false;
-                this.snackBar.open('Competition data saved successfully');
-            });
+            .subscribe(
+                (res) => {
+                    this.displayLog('Competition changes saved');
+                    this.loading = false;
+
+                    this.saveQuestion();
+                },
+                (error) => {
+                    this.loading = false;
+                    this.errors = error.error;
+                }
+            );
     }
 
     displayLog(msg: string) {

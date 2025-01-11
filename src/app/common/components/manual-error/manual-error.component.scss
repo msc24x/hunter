@@ -1,0 +1,29 @@
+p {
+    font-size: 1.1rem;
+    width: fit-content;
+
+    animation-name: bounce;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes bounce {
+    0% {
+        scale: 1;
+    }
+
+    25% {
+        scale: 1.01;
+    }
+    50% {
+        scale: 1;
+    }
+
+    75% {
+        scale: 1.01;
+    }
+    100% {
+        scale: 1;
+    }
+}

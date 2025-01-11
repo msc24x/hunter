@@ -1,13 +1,23 @@
 import {
     Component,
+    EventEmitter,
     Input,
     OnChanges,
     OnInit,
+    Output,
     SimpleChanges,
 } from '@angular/core';
-import { faMedal } from '@fortawesome/free-solid-svg-icons';
+import {
+    faArrowPointer,
+    faICursor,
+    faMedal,
+} from '@fortawesome/free-solid-svg-icons';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
-import { CompetitionInfo, result } from 'src/environments/environment';
+import {
+    CompetitionInfo,
+    result,
+    ScoresMeta,
+} from 'src/environments/environment';
 
 @Component({
     selector: 'scoreboard',
@@ -16,16 +26,17 @@ import { CompetitionInfo, result } from 'src/environments/environment';
 })
 export class ScoreboardComponent implements OnInit, OnChanges {
     faMedal = faMedal;
+
     scores: Array<result> = [];
-    meta: {
-        total: number;
-        user_details: result | undefined;
-    } | null = null;
+    meta: ScoresMeta = null;
 
     pages: Array<number> = [];
     loading = false;
 
     showSubmissionsListP = false;
+
+    @Output()
+    metaChange = new EventEmitter<ScoresMeta>();
 
     @Input()
     competitionInfo = {} as CompetitionInfo;
@@ -79,6 +90,7 @@ export class ScoreboardComponent implements OnInit, OnChanges {
                 this.loading = false;
                 this.scores = res.body!.rows as Array<result>;
                 this.meta = res.body!.meta;
+                this.metaChange.emit(this.meta);
             });
     }
 

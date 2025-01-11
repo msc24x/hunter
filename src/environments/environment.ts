@@ -93,6 +93,11 @@ export type result = {
     question_choices?: QuestionChoice[];
 };
 
+export type ScoresMeta = {
+    total: number;
+    user_details: result | undefined;
+} | null;
+
 export type resultFull = {
     id: number;
     user: UserInfo;

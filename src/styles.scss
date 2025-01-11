@@ -2,12 +2,35 @@
 @use "./assets/fonts";
 @use "./assets/mixins" as *;
 
-/*160deg*/
+// =============================
+// Base Styles
+// =============================
+html {
+    overflow-y: scroll;
+    font-weight: 200;
+}
 
+body {
+    background-color: colors.$text_white;
+    margin: 0;
+    max-width: 1720px;
+    padding-inline: 2%;
+    margin-inline: auto;
+    font-family: appFont;
+}
+
+a {
+    text-decoration: none;
+}
+
+// =============================
+// Material Design Components
+// =============================
 .mdc-switch {
     --mdc-switch-track-height: 24px !important;
     --mdc-switch-track-shape: 24px !important;
 }
+
 .mat-mdc-snack-bar-container {
     --mdc-snackbar-container-color: blanchedalmond !important;
     --mdc-snackbar-supporting-text-color: rgb(91, 54, 0) !important;
@@ -35,117 +58,9 @@
     }
 }
 
-html {
-    overflow-y: scroll;
-    font-weight: 200;
-}
-
-.hidden {
-    display: none;
-}
-
-.no-click {
-    &:active {
-        pointer-events: none;
-    }
-
-    * {
-        pointer-events: none;
-        &:active {
-            pointer-events: none;
-        }
-    }
-}
-
-.disabled {
-    opacity: 0.7;
-    cursor: not-allowed !important;
-
-    * {
-        cursor: not-allowed !important;
-        opacity: 0.7;
-    }
-}
-
-.disabled_bright {
-    opacity: 0.85;
-    cursor: not-allowed !important;
-
-    * {
-        cursor: not-allowed !important;
-        opacity: 0.85;
-    }
-}
-
-.link-like {
-    cursor: pointer;
-    color: colors.$text_black;
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.info-like {
-    color: gray;
-
-    b {
-        font-weight: 500;
-        color: rgb(95, 95, 95);
-    }
-}
-
-a {
-    text-decoration: none;
-}
-
-.table_heading {
-    // pointer-events: none;
-}
-
-.hsection {
-    background-color: whitesmoke;
-    border-radius: 24px;
-    padding: 10px;
-}
-
-.pointer {
-    cursor: pointer;
-}
-
-body {
-    background-color: colors.$text_white;
-    margin: 0px;
-    max-width: 1720px;
-    padding-inline: 2%;
-    margin-inline: auto;
-    font-family: appFont;
-}
-
-.largeButton {
-    padding: 0.8rem;
-    padding-inline: 1.6rem;
-    color: colors.$text_black;
-    font-size: 1rem;
-    background-color: white;
-    border-radius: 1rem;
-    cursor: pointer;
-
-    @include sweetBorder;
-
-    &:not(:hover) {
-        transition: 300ms;
-    }
-
-    &:hover {
-        transform: scale(1.07);
-        background-color: colors.$text_black;
-        font-weight: bold;
-        color: white;
-        transition: 300ms;
-    }
-}
-
+// =============================
+// Layout Utilities
+// =============================
 .flex {
     display: flex;
 
@@ -158,12 +73,6 @@ body {
         @extend .flex;
         flex-direction: column;
     }
-}
-
-.row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
 }
 
 .justify {
@@ -184,11 +93,81 @@ body {
     }
 }
 
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .wrap {
     flex-wrap: wrap;
 
     &-rev {
         flex-wrap: wrap-reverse;
+    }
+}
+
+// =============================
+// State Classes
+// =============================
+.hidden {
+    display: none;
+}
+
+.no-click {
+    &,
+    * {
+        &:active {
+            pointer-events: none;
+        }
+    }
+    * {
+        pointer-events: none;
+    }
+}
+
+.disabled {
+    &,
+    * {
+        opacity: 0.7;
+        cursor: not-allowed !important;
+    }
+}
+
+.disabled_bright {
+    &,
+    * {
+        opacity: 0.85;
+        cursor: not-allowed !important;
+    }
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+// =============================
+// Components
+// =============================
+.largeButton {
+    padding: 0.8rem 1.6rem;
+    color: colors.$text_black;
+    font-size: 1rem;
+    background-color: white;
+    border-radius: 1rem;
+    cursor: pointer;
+    @include sweetBorder;
+
+    &:not(:hover) {
+        transition: 300ms;
+    }
+
+    &:hover {
+        transform: scale(1.07);
+        background-color: colors.$text_black;
+        font-weight: bold;
+        color: white;
+        transition: 300ms;
     }
 }
 
@@ -202,7 +181,6 @@ body {
     padding: 16px;
     border-radius: 1rem;
     margin: 4px;
-
     @include sweetBorder();
 
     .table_heading {
@@ -225,4 +203,41 @@ body {
         border-radius: 0.3rem;
         background-color: colors.$text_white;
     }
+}
+
+// =============================
+// Utility Classes
+// =============================
+.link-like {
+    cursor: pointer;
+    color: colors.$text_black;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.info-like {
+    color: gray;
+
+    b {
+        font-weight: 500;
+        color: rgb(95, 95, 95);
+    }
+}
+
+.error-like {
+    color: darkred;
+}
+
+.hsection {
+    background-color: whitesmoke;
+    border-radius: 24px;
+    padding: 10px;
+}
+
+.cute-panel {
+    background: #fff1ff !important;
+    border-color: #c19bc1 !important;
+    color: purple !important;
 }

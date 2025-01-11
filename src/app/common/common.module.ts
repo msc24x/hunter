@@ -36,6 +36,7 @@ import { CreateDialogComponent } from './components/create-dialog/create-dialog.
 import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-prompt.component';
 import { MatSelectModule } from '@angular/material/select';
 import { QuesTypeLabelComponent } from './components/ques-type-label/ques-type-label.component';
+import { ManualErrorComponent } from './components/manual-error/manual-error.component';
 
 @NgModule({
     declarations: [
@@ -67,6 +68,7 @@ import { QuesTypeLabelComponent } from './components/ques-type-label/ques-type-l
         CreateDialogComponent,
         SignInPromptComponent,
         QuesTypeLabelComponent,
+        ManualErrorComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -105,6 +107,7 @@ import { QuesTypeLabelComponent } from './components/ques-type-label/ques-type-l
         ProfileCardComponent,
         SignInPromptComponent,
         QuesTypeLabelComponent,
+        ManualErrorComponent,
     ],
     providers: [DatePipe],
 })

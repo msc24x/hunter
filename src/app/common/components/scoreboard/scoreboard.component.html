@@ -14,13 +14,13 @@
 </popup>
 
 <div id="score_board">
-    <h2 *ngIf="question_list">
+    <h4 *ngIf="question_list">
         {{
             questionSelected === -1
                 ? "Filter By Question"
                 : "Q" + (questionSelected + 1) + " selected"
         }}
-    </h2>
+    </h4>
     <questions-list
         *ngIf="question_list"
         [competitionInfo]="competitionInfo"
@@ -33,17 +33,17 @@
     <!-- <h2>
         {{ questionSelected === -1 ? "Competition" : "Question" }} Scoreboard
     </h2> -->
-    <p>
+    <p class="info-like">
         Scoreboard displays the aggregate scores of all participants for this
         contest{{ questionSelected !== -1 ? "'s selected question" : "" }}.
         <br />So far, <b>{{ meta?.total }} participants</b> have submitted their
         code for this contest.
     </p>
 
-    <app-info-card *ngIf="questionSelected !== -1" [persist]="true">
-        You can click any participant from below table, to view their
-        submissions for selected question.
-    </app-info-card>
+    <p *ngIf="questionSelected !== -1">
+        Click any participant from below table, to view their submissions for
+        selected question.
+    </p>
 
     <div
         id="scores_table"

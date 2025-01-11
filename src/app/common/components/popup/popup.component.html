@@ -14,7 +14,11 @@
         </div>
     </div>
 
-    <div class="close-icon" (click)="bgClicked($event)">
-        <fa-icon [icon]="closeIcon" size="2xl"></fa-icon>
+    <div
+        class="close-icon"
+        (click)="bgClicked($event)"
+        matTooltip="Close modal"
+    >
+        <fa-icon [icon]="closeIcon"></fa-icon>
     </div>
 </div>

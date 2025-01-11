@@ -34,8 +34,13 @@
             white-space: -pre-wrap;
             white-space: -o-pre-wrap;
             word-wrap: break-word;
+            max-width: 38rem;
         }
     }
+}
+
+.submission-row {
+    cursor: pointer;
 }
 
 #pts_desc::-webkit-scrollbar {

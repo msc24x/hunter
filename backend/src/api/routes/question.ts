@@ -383,6 +383,64 @@ router.post(
     }
 );
 
+function validateQuestionInfo(data: QuestionInfo) {
+    var errors: any = {};
+
+    if (data.points < 0) {
+        errors.points = 'Points cannot be negative for correct submissions';
+    }
+
+    if (data.points > 40) {
+        errors.points = 'Points more than 40 are not allowed to be set';
+    }
+
+    if (data.neg_points < 0) {
+        errors.neg_points =
+            'Please refrain from entering negative numbers manually. Write positive integers, as they are automatically considered negative';
+    }
+
+    if (data.neg_points > 40) {
+        errors.neg_points =
+            'Negative points are not allowed to be more than 40';
+    }
+
+    if ((data.title || '').length > 400) {
+        errors.title = 'Characters more than 400 are not allowed in title';
+    }
+
+    if ((data.statement || '').length > 4000) {
+        errors.statement =
+            'Characters more than 4000 are not allowed in statement';
+    }
+
+    if (data.type === config.questionTypes.code) {
+        if ((data.sample_cases || '').length > 1000) {
+            errors.sample_cases =
+                'Characters more than 1000 are not allowed in sample cases';
+        }
+
+        if ((data.sample_sols || '').length > 1000) {
+            errors.sample_sols =
+                'Characters more than 1000 are not allowed in sample cases';
+        }
+    }
+
+    if (
+        [config.questionTypes.fill, config.questionTypes.mcq].includes(
+            data.type
+        )
+    ) {
+        data.question_choices?.forEach((ch) => {
+            if (!ch.delete && (ch.text || '').length > 150) {
+                errors.question_choices =
+                    'Characters in input cannot be more than 150';
+            }
+        });
+    }
+
+    return errors;
+}
+
 router.put(
     '/competitions/:comp_id/questions/:id',
     authenticate,
@@ -393,24 +451,11 @@ router.put(
         var params = req.body as QuestionInfo;
         const user: UserInfo = res.locals.user;
 
-        const validate = (): boolean => {
-            if (params.points < 0 || params.points > 9) {
-                return false;
-            }
+        var errors = validateQuestionInfo(params);
 
-            if (params.neg_points < 0 || params.neg_points > 4) {
-                return false;
-            }
-
-            return true;
-        };
-
-        if (!validate()) {
-            Util.sendResponse(
-                res,
-                resCode.badRequest,
-                'Values are not correct'
-            );
+        if (Object.keys(errors).length) {
+            Util.sendResponseJson(res, resCode.badRequest, errors);
+            return;
         }
 
         var promises: Promise<any>[] = [];
