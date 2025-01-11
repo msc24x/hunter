@@ -67,7 +67,13 @@
 <div id="pts_desc" class="btable">
     <div class="table_heading">
         <div>Submission</div>
-        <div>Points (+/-)</div>
+        <div>Pts</div>
+        <div>
+            Evaluation
+            <infotip
+                message="Whether the submission evaluation has been completed by the Hunter or the Host"
+            ></infotip>
+        </div>
 
         <div class="points-time-col">Time</div>
     </div>
@@ -83,6 +89,7 @@
             >
         </div>
         <div>{{ row.result }}</div>
+        <div>{{ row.evaluated_at ? "Completed" : "Pending" }}</div>
         <div class="points-time-col">
             {{ row.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
         </div>
@@ -103,8 +110,8 @@
         <!-- for a total of
             <b>{{ getTotalScore(questionSelectedInfo.id) }}</b> points. -->
     </p>
+    <!-- *ngIf="questionSelectedInfo.results?.length !== 0" -->
     <greenred
-        *ngIf="questionSelectedInfo.results?.length !== 0"
         [green_number]="acceptedEvaluation"
         [red_number]="rejectedEvaluation"
         green_label="Submissions Accepted"

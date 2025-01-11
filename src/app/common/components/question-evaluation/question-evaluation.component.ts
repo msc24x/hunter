@@ -28,6 +28,9 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     questionSelectedInfo = {} as QuestionInfo;
 
     @Input()
+    user_id: number | null | undefined = null;
+
+    @Input()
     flipper = false;
 
     viewSubmissionResult: result | undefined;
@@ -86,6 +89,7 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
                     after: this.evaluationAfterPages[
                         this.evaluationAfterPages.length - 1
                     ],
+                    user_id: this.user_id,
                 })
                 .subscribe((res) => {
                     this.loading = false;

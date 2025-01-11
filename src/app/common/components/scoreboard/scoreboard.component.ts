@@ -17,6 +17,7 @@ import {
     CompetitionInfo,
     result,
     ScoresMeta,
+    UserInfo,
 } from 'src/environments/environment';
 
 @Component({
@@ -29,6 +30,8 @@ export class ScoreboardComponent implements OnInit, OnChanges {
 
     scores: Array<result> = [];
     meta: ScoresMeta = null;
+
+    user: UserInfo | null = null;
 
     pages: Array<number> = [];
     loading = false;
@@ -124,10 +127,16 @@ export class ScoreboardComponent implements OnInit, OnChanges {
         return rankColors[rank - 1];
     }
 
-    showSubmissionList() {
+    showSubmissionList(user: UserInfo | null) {
         if (this.questionSelected === -1) {
             return;
         }
+
+        this.user = user;
         this.showSubmissionsListP = true;
+
+        setTimeout(() => {
+            document.querySelector('.submissions-list')?.scrollIntoView();
+        });
     }
 }

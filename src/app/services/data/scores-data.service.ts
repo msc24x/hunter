@@ -16,6 +16,7 @@ export class ScoresDataService {
     getQuestionScores(params: {
         comp_id: number;
         ques_id: number;
+        user_id?: number | null;
         after?: number;
     }) {
         var endpoint = format(
@@ -24,9 +25,17 @@ export class ScoresDataService {
             params.ques_id.toString()
         );
 
+        var queryParams = [];
+
         if (params.after) {
-            endpoint += '?after=' + params.after;
+            queryParams.push(`after=${params.after}`);
         }
+
+        if (params.user_id) {
+            queryParams.push(`user_id=${params.user_id}`);
+        }
+
+        endpoint += '?' + queryParams.join('&');
 
         return this.http.get<{
             results: Array<result>;

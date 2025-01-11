@@ -15,6 +15,15 @@
         @include nextPrevControls;
     }
 
+    questions-list {
+        @include blackBack;
+        display: block;
+        position: sticky;
+        top: -1rem;
+        backdrop-filter: blur(8px);
+        background-color: #a2a2a229;
+    }
+
     #sc_title {
         font-size: 1.4rem;
         font-weight: bold;

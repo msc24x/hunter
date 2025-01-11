@@ -1,6 +1,6 @@
 <app-loading *ngIf="loading"></app-loading>
 
-<popup
+<!-- <popup
     id="view-submissions-list-popup"
     [hidden]="!showSubmissionsListP"
     (closeEvent)="showSubmissionsListP = false"
@@ -10,14 +10,15 @@
     <question-evaluation
         *ngIf="competitionInfo.questions?.[questionSelected]"
         [questionSelectedInfo]="competitionInfo.questions![questionSelected]"
+        [user_id]="user.id"
     ></question-evaluation>
-</popup>
+</popup> -->
 
 <div id="score_board">
     <h4 *ngIf="question_list">
         {{
             questionSelected === -1
-                ? "Filter By Question"
+                ? "Select a question to filter"
                 : "Q" + (questionSelected + 1) + " selected"
         }}
     </h4>
@@ -79,7 +80,13 @@
             matTooltip="Click to view submissions"
             matTooltipPosition="before"
             [matTooltipDisabled]="questionSelected === -1"
-            (click)="showSubmissionList()"
+            (click)="
+                showSubmissionList({
+                    id: meta?.user_details?.user_id!,
+                    name: meta?.user_details?.user_name!,
+                    email: ''
+                })
+            "
         >
             <div class="rank-col">
                 <b>{{ meta!.user_details!.user_rank }}</b>
@@ -119,7 +126,13 @@
             matTooltip="Click to view submissions"
             matTooltipPosition="before"
             [matTooltipDisabled]="questionSelected === -1"
-            (click)="showSubmissionList()"
+            (click)="
+                showSubmissionList({
+                    name: score.user_name,
+                    id: score.user_id,
+                    email: ''
+                })
+            "
             [ngClass]="{
                 'user-rank-row':
                     meta?.user_details &&
@@ -196,5 +209,18 @@
                 View Next
             </div>
         </div>
+    </div>
+    <div *ngIf="user?.id && questionSelected >= 0" class="submissions-list">
+        <h3>
+            Submissions by {{ user?.name || "Anonymous" }}#{{ user?.id }} for
+            Q{{ questionSelected + 1 }}
+        </h3>
+        <question-evaluation
+            *ngIf="competitionInfo.questions?.[questionSelected]"
+            [questionSelectedInfo]="
+                competitionInfo.questions![questionSelected]
+            "
+            [user_id]="user?.id"
+        ></question-evaluation>
     </div>
 </div>

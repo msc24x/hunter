@@ -78,7 +78,7 @@ router.get(
 );
 
 async function fetchUserSubmissions(
-    user: UserInfo,
+    user_id: number,
     competition_id: string,
     question_id: string,
     after_id?: string
@@ -105,7 +105,7 @@ async function fetchUserSubmissions(
 
     const results = await client.results.findMany({
         where: {
-            user_id: user.id,
+            user_id: user_id,
             question: question_filters,
         },
         orderBy: {
@@ -130,7 +130,7 @@ async function fetchUserSubmissions(
 
     const accepted_count = await client.results.count({
         where: {
-            user_id: user.id,
+            user_id: user_id,
             question: question_filters,
             accepted: true,
         },
@@ -138,7 +138,7 @@ async function fetchUserSubmissions(
 
     const rejected_count = await client.results.count({
         where: {
-            user_id: user.id,
+            user_id: user_id,
             question: question_filters,
             accepted: false,
         },
@@ -162,20 +162,41 @@ router.get(
         const competition_id = req.params.id;
         const question_id = req.params.ques_id;
         const after_id = req.query.after;
+        const user_id = req.query.user_id;
 
         if (!competition_id && !question_id) {
             Util.sendResponse(res, resCode.badRequest);
             return;
         }
 
-        fetchUserSubmissions(
-            user,
-            competition_id,
-            question_id,
-            after_id?.toString()
-        )
-            .then((result) => {
-                Util.sendResponseJson(res, resCode.success, result);
+        client.competitions
+            .findUniqueOrThrow({
+                where: {
+                    id: parseInt(competition_id),
+                },
+                include: {
+                    host_user: true,
+                },
+            })
+            .then((comp) => {
+                var filterUser = user.id;
+
+                if (comp.host_user_id === user.id && user_id) {
+                    filterUser = parseInt(user_id.toString());
+                }
+
+                fetchUserSubmissions(
+                    filterUser,
+                    competition_id,
+                    question_id,
+                    after_id?.toString()
+                )
+                    .then((result) => {
+                        Util.sendResponseJson(res, resCode.success, result);
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
             })
             .catch((err) => {
                 Util.sendResponse(res, resCode.serverError, err);
