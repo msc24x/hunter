@@ -75,20 +75,20 @@
                 </li>
             </ul>
         </popup>
+        <h3>
+            {{ this.competition.title }}
+            <infotip
+                message="Click to read instructions"
+                (click)="showInstructionP = true"
+                [svgSize]="'sm'"
+            ></infotip>
+        </h3>
 
         <div
             *ngIf="isAuthenticated && this.competition.title"
             id="competition_info"
         >
             <div class="title-duration-container">
-                <b>
-                    {{ this.competition.title }}
-                    <infotip
-                        message="Click to read instructions"
-                        (click)="showInstructionP = true"
-                        [svgSize]="'sm'"
-                    ></infotip>
-                </b>
                 <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">
                     <fa-icon [icon]="timerIcon"></fa-icon>
                     <span style="width: max-content">

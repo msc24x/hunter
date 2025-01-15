@@ -24,7 +24,6 @@ import { DropDownListComponent } from './components/drop-down-list/drop-down-lis
 import { CodeEditorComponent } from './components/code-editor/code-editor.component';
 import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.component';
 import { GreenredComponent } from './greenred/greenred.component';
-import { InsightsComponent } from '../editor/components/insights/insights.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { EditorModule } from '../editor/editor.module';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
@@ -37,6 +36,7 @@ import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-promp
 import { MatSelectModule } from '@angular/material/select';
 import { QuesTypeLabelComponent } from './components/ques-type-label/ques-type-label.component';
 import { ManualErrorComponent } from './components/manual-error/manual-error.component';
+import { SubmissionViewComponent } from './components/submission-view/submission-view.component';
 
 @NgModule({
     declarations: [
@@ -69,6 +69,7 @@ import { ManualErrorComponent } from './components/manual-error/manual-error.com
         SignInPromptComponent,
         QuesTypeLabelComponent,
         ManualErrorComponent,
+        SubmissionViewComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -108,6 +109,7 @@ import { ManualErrorComponent } from './components/manual-error/manual-error.com
         SignInPromptComponent,
         QuesTypeLabelComponent,
         ManualErrorComponent,
+        SubmissionViewComponent,
     ],
     providers: [DatePipe],
 })

@@ -74,25 +74,19 @@ popup {
 }
 
 #input_competition_code {
-    border-width: 0px;
-
-    width: 84px;
-    font-size: 1.1rem;
-    border-radius: 24px;
-    padding: 8px;
-    margin: 8px;
-    background-color: whitesmoke;
+    @include appTextArea;
 }
 
 #delete_competition_btn_popup {
     font-size: 1.2rem;
     padding: 8px;
     padding-inline: 16px;
-    border-radius: 24px;
+    border-radius: 1rem;
     width: fit-content;
     margin: 8px;
     color: white;
     background-color: darkred;
+    cursor: pointer;
 }
 
 #created_at {
@@ -280,6 +274,11 @@ popup {
         min-width: 250px;
         margin: 8px;
         cursor: pointer;
+        opacity: 0.8;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 
     div {
@@ -358,15 +357,10 @@ input.file_input {
     display: none;
 }
 
-a {
-    border-radius: 1rem;
-    padding: 8px;
-    padding-inline: 16px;
-    cursor: pointer;
-}
-
-a:hover {
-    background-color: white;
+#guide {
+    pre {
+        @include basicBack;
+    }
 }
 
 .multiple-choices-panel,
@@ -379,6 +373,7 @@ a:hover {
         gap: 1rem;
         // @include blackBack;
         margin-bottom: 0.5rem;
+        height: auto;
 
         .app-text-area {
             @include appTextArea;

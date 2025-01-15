@@ -4,6 +4,12 @@
 
 .points-time-col {
     flex-basis: 60%;
+
+    &:not(.header) {
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+    }
 }
 
 .next-prev-options {
@@ -25,24 +31,21 @@
     }
 }
 
-.view-submission-container {
-    .user-submission {
-        pre {
-            @include basicBack;
-            white-space: pre-wrap;
-            white-space: -moz-pre-wrap;
-            white-space: -pre-wrap;
-            white-space: -o-pre-wrap;
-            word-wrap: break-word;
-            max-width: 38rem;
-            max-height: 24rem;
-            overflow: auto;
-        }
+.eval-table-view-container {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+
+    .evaluation-table {
+        flex-basis: 40%;
+        height: fit-content;
     }
 
-    .grading-status {
-        @include basicBack;
-        font-weight: 500;
+    .view-submission-container {
+        @include blackBack;
+        flex-grow: 1;
+        border-radius: 1rem;
+        max-width: 50%;
     }
 }
 

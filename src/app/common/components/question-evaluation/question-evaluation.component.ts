@@ -7,7 +7,11 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
-import { faFileCode, faStarOfLife } from '@fortawesome/free-solid-svg-icons';
+import {
+    faClock,
+    faFileCode,
+    faStarOfLife,
+} from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import { QuestionInfo, resCode, result } from 'src/environments/environment';
@@ -21,6 +25,7 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     loading = false;
     codeIcon = faFileCode;
     judgeIcon = faStarOfLife;
+    clockIcon = faClock;
 
     showSubmissionP = false;
 
@@ -32,6 +37,9 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
 
     @Input()
     flipper = false;
+
+    @Input()
+    inlineView = false;
 
     viewSubmissionResult: result | undefined;
 
@@ -69,12 +77,6 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
         this.fetchEvaluation();
     }
 
-    getChoiceText(choice_id: number) {
-        return this.questionSelectedInfo.question_choices?.find(
-            (ch) => ch.id === choice_id
-        )?.text;
-    }
-
     fetchEvaluation() {
         if (!Object.keys(this.questionSelectedInfo).length) {
             return;
@@ -106,7 +108,10 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     }
 
     viewSubmission(result: result) {
-        this.showSubmissionP = true;
+        if (!this.inlineView) {
+            this.showSubmissionP = true;
+        }
+
         this.viewSubmissionResult = result;
     }
 }

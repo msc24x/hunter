@@ -1,0 +1,17 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+.page {
+    max-width: 1280px;
+    margin-inline: auto;
+}
+
+.insights-title {
+    text-align: center;
+}
+.insights-header {
+    @include blackBack;
+    padding-inline: 2rem !important;
+    cursor: pointer;
+}

@@ -1,5 +1,15 @@
 <app-loading *ngIf="loading"></app-loading>
 
+<ng-template #submissionView>
+    <div class="view-submission-container" *ngIf="viewSubmissionResult">
+        <h3 *ngIf="inlineView">Submission Details</h3>
+        <submission-view
+            [viewSubmissionResult]="viewSubmissionResult"
+            [questionSelectedInfo]="questionSelectedInfo"
+        ></submission-view>
+    </div>
+</ng-template>
+
 <popup
     id="view-submission-popup"
     [hidden]="!showSubmissionP"
@@ -7,138 +17,100 @@
     [showControls]="false"
     [heading]="viewSubmissionResult?.accepted ? 'Accepted' : 'Not Accepted'"
 >
-    <div class="view-submission-container" *ngIf="viewSubmissionResult">
-        <h6 class="grading-status cute-panel">
-            <fa-icon [icon]="judgeIcon"></fa-icon> &nbsp; Grading status ~
-            {{
-                viewSubmissionResult.evaluated_at
-                    ? "Evaluated on " +
-                      (viewSubmissionResult.evaluated_at
-                          | date : "yyyy MMM dd 'at' hh:mm aa") +
-                      (!viewSubmissionResult.evaluated_by
-                          ? " by Hunter"
-                          : (viewSubmissionResult.evaluated_by.name ||
-                                "Anonymous") +
-                            viewSubmissionResult.evaluated_by_id)
-                    : "Yet to be evaluated"
-            }}
-        </h6>
-        <div *ngIf="questionSelectedInfo.type === 0">
-            <pretty-meta [meta]="viewSubmissionResult.meta!"></pretty-meta>
-
-            <code-editor
-                [editable]="false"
-                [code]="viewSubmissionResult.submission!"
-                [languageSelected]="viewSubmissionResult.language!"
-            ></code-editor>
-        </div>
-
-        <div *ngIf="questionSelectedInfo.type === 1" class="user-submission">
-            <p>Following choice(s) were chosen</p>
-
-            <pre
-                *ngFor="let ch of viewSubmissionResult.question_choices"
-                [textContent]="getChoiceText(ch.id)"
-            ></pre>
-        </div>
-
-        <div
-            *ngIf="[2, 3].includes(questionSelectedInfo.type)"
-            class="user-submission"
-        >
-            <h5>
-                Answer Status:
-                {{ viewSubmissionResult.accepted ? "Accepted" : "Wrong" }}
-            </h5>
-
-            <p>
-                Following
-                {{
-                    viewSubmissionResult.submission?.trim()?.split(" ")?.length
-                }}
-                words was submitted
-            </p>
-
-            <pre [innerText]="viewSubmissionResult.submission"></pre>
-        </div>
-    </div>
+    <ng-outlet [ngTemplateOutlet]="submissionView"></ng-outlet>
 </popup>
 
-<div id="pts_desc" class="btable">
-    <div class="table_heading">
-        <div>Submission</div>
-        <div>Pts</div>
-        <div>
-            Evaluation
-            <infotip
-                message="Whether the submission evaluation has been completed by the Hunter or the Host"
-            ></infotip>
+<ng-template #evaluationTable>
+    <div id="pts_desc" class="btable evaluation-table">
+        <div class="table_heading">
+            <div>Submission</div>
+            <div>Pts</div>
+            <div>
+                Evaluation
+                <infotip
+                    message="Whether the submission evaluation has been completed by the Hunter or the Host"
+                ></infotip>
+            </div>
+
+            <div class="points-time-col header">Time</div>
+        </div>
+        <div
+            *ngFor="let row of questionSelectedInfo.results"
+            class="submission-row"
+            (click)="viewSubmission(row)"
+        >
+            <div>
+                <a class="view-submission" (click)="viewSubmission(row)">
+                    <fa-icon [icon]="codeIcon" [size]="'sm'"></fa-icon>
+                    &nbsp; <span>View</span></a
+                >
+            </div>
+            <div>{{ row.result }}</div>
+            <div>
+                <span *ngIf="row.evaluated_at">Completed</span>
+
+                <span *ngIf="!row.evaluated_at">
+                    Pending &nbsp;
+                    <fa-icon [icon]="clockIcon" size="sm"></fa-icon>
+                </span>
+            </div>
+            <div class="points-time-col">
+                {{ row.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
+            </div>
         </div>
 
-        <div class="points-time-col">Time</div>
-    </div>
-    <div
-        *ngFor="let row of questionSelectedInfo.results"
-        class="submission-row"
-        (click)="viewSubmission(row)"
-    >
-        <div>
-            <a class="view-submission" (click)="viewSubmission(row)">
-                <fa-icon [icon]="codeIcon" [size]="'sm'"></fa-icon>
-                &nbsp; <span>View</span></a
+        <div *ngIf="this.questionSelectedInfo.results?.length === 0">
+            <div>-</div>
+            <div>-</div>
+            <div class="points-time-col">-</div>
+        </div>
+
+        <br />
+
+        <p>
+            Submitted
+            <b>{{ acceptedEvaluation + rejectedEvaluation }}</b>
+            solutions for this question,
+            <!-- for a total of
+                <b>{{ getTotalScore(questionSelectedInfo.id) }}</b> points. -->
+        </p>
+        <!-- *ngIf="questionSelectedInfo.results?.length !== 0" -->
+        <greenred
+            [green_number]="acceptedEvaluation"
+            [red_number]="rejectedEvaluation"
+            green_label="Submissions Accepted"
+            red_label="Submissions Not Accepted"
+        ></greenred>
+
+        <div class="next-prev-options">
+            <div
+                [ngClass]="{
+                    'no-click disabled':
+                        loading || evaluationAfterPages.length === 0,
+                    'option-prev': true
+                }"
+                (click)="prevEvaluations()"
             >
-        </div>
-        <div>{{ row.result }}</div>
-        <div>{{ row.evaluated_at ? "Completed" : "Pending" }}</div>
-        <div class="points-time-col">
-            {{ row.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
-        </div>
-    </div>
-
-    <div *ngIf="this.questionSelectedInfo.results?.length === 0">
-        <div>-</div>
-        <div>-</div>
-        <div class="points-time-col">-</div>
-    </div>
-
-    <br />
-
-    <p>
-        Submitted
-        <b>{{ acceptedEvaluation + rejectedEvaluation }}</b>
-        solutions for this question,
-        <!-- for a total of
-            <b>{{ getTotalScore(questionSelectedInfo.id) }}</b> points. -->
-    </p>
-    <!-- *ngIf="questionSelectedInfo.results?.length !== 0" -->
-    <greenred
-        [green_number]="acceptedEvaluation"
-        [red_number]="rejectedEvaluation"
-        green_label="Submissions Accepted"
-        red_label="Submissions Not Accepted"
-    ></greenred>
-
-    <div class="next-prev-options">
-        <div
-            [ngClass]="{
-                'no-click disabled':
-                    loading || evaluationAfterPages.length === 0,
-                'option-prev': true
-            }"
-            (click)="prevEvaluations()"
-        >
-            View Newer
-        </div>
-        <div
-            [ngClass]="{
-                'no-click disabled':
-                    loading ||
-                    (this.questionSelectedInfo.results?.length || 0) < 10,
-                'option-next': true
-            }"
-            (click)="nextEvaluations()"
-        >
-            View Older
+                View Newer
+            </div>
+            <div
+                [ngClass]="{
+                    'no-click disabled':
+                        loading ||
+                        (this.questionSelectedInfo.results?.length || 0) < 10,
+                    'option-next': true
+                }"
+                (click)="nextEvaluations()"
+            >
+                View Older
+            </div>
         </div>
     </div>
+</ng-template>
+
+<ng-outlet *ngIf="!inlineView" [ngTemplateOutlet]="evaluationTable"></ng-outlet>
+
+<div class="eval-table-view-container" *ngIf="inlineView">
+    <ng-outlet [ngTemplateOutlet]="evaluationTable"></ng-outlet>
+    <ng-outlet [ngTemplateOutlet]="submissionView"></ng-outlet>
 </div>

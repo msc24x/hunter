@@ -15,13 +15,13 @@
 </popup> -->
 
 <div id="score_board">
-    <h4 *ngIf="question_list">
+    <h3 *ngIf="question_list">
         {{
             questionSelected === -1
                 ? "Select a question to filter"
                 : "Q" + (questionSelected + 1) + " selected"
         }}
-    </h4>
+    </h3>
     <questions-list
         *ngIf="question_list"
         [competitionInfo]="competitionInfo"
@@ -78,7 +78,7 @@
             *ngIf="meta?.user_details && uiShowUserRow()"
             class="user-rank-row"
             matTooltip="Click to view submissions"
-            matTooltipPosition="before"
+            matTooltipPosition="above"
             [matTooltipDisabled]="questionSelected === -1"
             (click)="
                 showSubmissionList({
@@ -124,7 +124,7 @@
         <div
             *ngFor="let score of scores; let i = index"
             matTooltip="Click to view submissions"
-            matTooltipPosition="before"
+            matTooltipPosition="above"
             [matTooltipDisabled]="questionSelected === -1"
             (click)="
                 showSubmissionList({
@@ -211,16 +211,18 @@
         </div>
     </div>
     <div *ngIf="user?.id && questionSelected >= 0" class="submissions-list">
-        <h3>
+        <br />
+        <h2>
             Submissions by {{ user?.name || "Anonymous" }}#{{ user?.id }} for
             Q{{ questionSelected + 1 }}
-        </h3>
+        </h2>
         <question-evaluation
             *ngIf="competitionInfo.questions?.[questionSelected]"
             [questionSelectedInfo]="
                 competitionInfo.questions![questionSelected]
             "
             [user_id]="user?.id"
+            [inlineView]="question_list"
         ></question-evaluation>
     </div>
 </div>

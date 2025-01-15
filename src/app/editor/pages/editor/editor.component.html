@@ -44,94 +44,115 @@
     Deleting the competition is an irreversible operation. All the data
     associated with it will be immediately lost forever and users will no longer
     be able to see or participate in it.<br />
-    Remember : If you do not want others to see this competition, you can always
-    make it private instead of deleting.<br /><br />
-    <b>Enter the current competition code</b>
-    <input type="text" id="input_competition_code" placeholder="342" />
-    <div class="red">{{ deleteCompMessage }}</div>
+
+    <p class="error-like">
+        <b>
+            Remember : If you do not want others to see this competition, you
+            can always make it private instead of deleting.
+        </b>
+    </p>
+    <b>Enter the current competition code ({{ competitionInfo.id }})</b>
+    <input type="text" id="input_competition_code" placeholder="Enter code" />
+    <manual-error [message]="errors.delete_code"></manual-error>
     <div id="delete_competition_btn_popup" (click)="deleteCompetition()">
         Delete
     </div>
 </popup>
 
-<popup heading="Guide" id="guide" (closeEvent)="handleGuidePopupEvent($event)">
-    <b>Saving</b> <br /><br />
-    Ensure you save your changes by clicking the "SAVE CHANGES" button in the
-    bottom bar. You can also use the keyboard shortcut Shift + S.
-    <br /><br /><br />
+<popup
+    heading="Guide"
+    id="guide"
+    (closeEvent)="handleGuidePopupEvent($event)"
+    [showControls]="false"
+>
+    <h3>Meta section</h3>
+    <hr />
+    <h5>Submissions open at</h5>
+    <p>
+        Set this as date time at which you would wish your contest to be public,
+        with all questions available to see and participate into.
+    </p>
+    <h5>Submissions close at</h5>
+    <p>
+        Set this as date time at which you would wish your contest to be closed,
+        with all questions hidden. Only scoreboard will be visible to the
+        participants; no more submissions will be recorded or evaluated.
+    </p>
+    <h5>PUBLIC/PRIVATE</h5>
+    <p>
+        If set to Public, your contest will be shown in the main public
+        competitions list. If Private, it won't be visible to anyone, as if it
+        does not exists.
+    </p>
 
-    <b>Duration</b> <br /><br />
-    To set your competition live indefinitely, set the duration to 0. This
-    provides participants with unlimited time.
-    <br /><br /><br />
+    <h3>Competition Data</h3>
+    <hr />
+    <p>
+        You can write competition title and description. These will remain
+        public even if submissions are not open or have been closed.
+    </p>
 
-    <b>Visibility Controller</b> <br /><br />
-    The button next to "Rating" toggles between PUBLIC and PRIVATE. This
-    controls the visibility of your competition. Even if the competition is live
-    according to the schedule, a PRIVATE competition will not be accessible to
-    users. A public competition will appear on the Compete page of the website
-    and will only show questions if it is live.
-    <br /><br /><br />
+    <h3>Questions Data</h3>
+    <hr />
+    <h5>Adding a new question</h5>
+    <p>
+        Use the "Add" button to create a new question. You can created 4 types
+        of questions:
+    </p>
+    <ol>
+        <li>Coding test</li>
+        <li>MCQ (Multiple choice question)</li>
+        <li>Fill in blank (or Short answer)</li>
+        <li>Long answer</li>
+    </ol>
 
-    <b>Questions List</b> <br /><br />
-    To view or edit question-related data, select a question from the list. All
-    operations such as Add, Save, and Delete will unselect the question to avoid
-    confusion. Note that the Save button in the list only saves changes made to
-    the question, while the "SAVE CHANGES" button in the bottom bar saves all
-    changes. Questions are not added in any specific order; the index numbers in
-    the list are for frontend purposes only. Questions are distinguished by
-    their IDs.
-    <br /><br /><br />
+    <h5>Editing a question</h5>
+    <p>
+        Select any question from the question list bar. A new panel will open.
+        You can edit all the details of your question there.
+    </p>
 
-    <b>LaTeX in Question Statement</b> <br /><br />
-    You can write LaTeX expressions in the Question Statement wrapped with
-    dollar signs ($). For example, write $\sqrt{{ "{" }}p+q{{ "}" }}$. It will
-    be rendered as <ng-katex data="$\sqrt{p+q}$"></ng-katex>. To learn more
-    about the syntax, refer to
-    <a href="https://katex.org/docs/support_table.html" target="_blank"
-        ><ng-katex data="$\KaTeX$"></ng-katex></a
-    >. <br /><br /><br />
+    <h5>Question statement</h5>
+    <p>
+        You can not only write plain text into it, but for mathematics questions
+        or symbols you can use the LaTeX to write complex symbols. You can click
+        Preview to view how your statement will be rendered to the participants.
+    </p>
+    <p>
+        Our LaTeX parser is powered by
+        <a href="https://katex.org/docs/support_table.html" target="_blank"
+            >Katex (click here to see the guide)</a
+        >
+    </p>
 
-    <b>Guidelines for Setting Questions</b><br /><br />
-    The online judge for Hunter accepts the user's code as a black box. A test
-    cases file is given as input, and the output is compared with your solutions
-    file. Questions requiring participants to complete a part of the code are
-    currently not supported. It is advised to keep your questions in a simple
-    input-output format. For example, test cases file: <br />
+    <h5>Guidelines for Setting Coding test samples</h5>
+    <p>
+        The online judge for Hunter accepts the user's code as a black box. A
+        test cases file is given as input, and the output is compared with your
+        solutions file. Questions requiring participants to complete a part of
+        the code are currently not supported. It is advised to keep your
+        questions in a simple input-output format.
+    </p>
+    <p>For example, test cases file:</p>
     <pre>
 2
 1 2 3
 4 5 6
-    </pre>
+</pre
+    >
     Solutions file:
     <pre>
 6
 15
-    </pre>
-
-    <b>Uploading Files</b><br /><br />
-    Only text files smaller than 1.5MB are acceptable. It is necessary to format
-    your test cases and solutions file correctly. Always verify these files
-    against your correct code. It is the question setter's responsibility to
-    ensure the legitimacy of the test cases and the reliability of the
-    solutions.
-    <br /><br /><br />
-
-    <b>Points</b><br /><br />
-    The points for each question will be accumulated in the total score of the
-    participants. The score is awarded only if all test cases are passed.
-    <br /><br /><br />
-
-    <b>Deleting the Competition</b><br /><br />
-    <div
-        id="delete_competition_btn"
-        (click)="
-            showPopup(true, 'delete_comp_popup'); showPopup(false, 'guide')
-        "
+</pre
     >
-        Delete Competition
-    </div>
-    <br /><br /><br />
+
+    <h3>Saving</h3>
+    <hr />
+    <p>
+        Ensure you save your changes by clicking the "SAVE CHANGES" button in
+        the bottom bar. You can also use the keyboard shortcut Shift + S.
+    </p>
 </popup>
 
 <popup
@@ -219,6 +240,7 @@
             </div>
             <div
                 class="text-area insight-details cute-panel"
+                routerLink="/editor/{{ competitionInfo.id }}/insights"
                 (click)="showPopup(true, 'competition-insights')"
                 *ngIf="scoreMeta"
             >
@@ -305,6 +327,13 @@
                     <infotip
                         message="The statement body supports Latex by default, learn more about the typesetting at katex.org"
                     ></infotip>
+                    <span class="info-like" style="font-size: 0.8rem">
+                        <a
+                            href="https://katex.org/docs/support_table.html"
+                            target="_blank"
+                            >(Click here KaTeX guide to write LaTeX)</a
+                        >
+                    </span>
                 </div>
                 <div
                     id="toggle_preview_btn"
@@ -465,7 +494,6 @@
                         type="text"
                         name="choice-text"
                         class="app-text-area"
-                        rows="1"
                         [(ngModel)]="choice.text"
                         [disabled]="choice.delete === true"
                         [ngClass]="{ 'disabled no-click': choice.delete }"
@@ -527,7 +555,6 @@
                         type="text"
                         name="choice-text"
                         class="app-text-area"
-                        rows="1"
                         [(ngModel)]="choice.text"
                         [disabled]="choice.delete === true"
                         [ngClass]="{ 'disabled no-click': choice.delete }"
@@ -698,17 +725,26 @@
         </div>
 
         <div class="row_flex" id="controls">
-            <!--button (click)="refreshCompetitionInfo()">RESET UNSAVED CHANGES</button -->
             <button
-                matTooltip="Save the competition and its questions all details (Shift + S)"
+                (click)="
+                    showPopup(true, 'delete_comp_popup');
+                    showPopup(false, 'guide')
+                "
+            >
+                <fa-icon [icon]="trashIcon"></fa-icon> &nbsp; DELETE CONTEST
+            </button>
+            <div matTooltip="Logs for fun" id="log" (click)="showLog()">
+                Welcome!
+            </div>
+            <button (click)="showPopup(true, 'guide')">
+                <fa-icon [icon]="guideIcon"></fa-icon> &nbsp; GUIDE
+            </button>
+            <button
+                matTooltip="Save the competition and selected question (Shift + S)"
                 (click)="this.saveChanges()"
             >
                 SAVE CHANGES
             </button>
-            <button (click)="showPopup(true, 'guide')">GUIDE</button>
-            <div matTooltip="Logs for fun" id="log" (click)="showLog()">
-                Welcome!
-            </div>
         </div>
     </div>
 </div>

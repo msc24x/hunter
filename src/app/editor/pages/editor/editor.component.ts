@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+    faBook,
     faCircleCheck,
     faCircleXmark,
     faDownload,
@@ -49,6 +50,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     trashIcon = faTrashCan;
     trashUpIcon = faTrashArrowUp;
     magicIcon = faWandMagicSparkles;
+    guideIcon = faBook;
 
     uploadIcon = faUpload;
     downloadIcon = faDownload;
@@ -475,11 +477,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     deleteCompetition() {
+        this.errors.delete_code = '';
+
         let input = document.getElementById(
             'input_competition_code'
         ) as HTMLInputElement;
         if (parseInt(input.value) != this.competitionInfo.id) {
-            this.deleteCompMessage = '*Code does not match';
+            this.errors.delete_code = 'Code does not match';
         } else {
             this.deleteCompMessage = '';
             this.loading = true;

@@ -136,7 +136,10 @@ export class ScoreboardComponent implements OnInit, OnChanges {
         this.showSubmissionsListP = true;
 
         setTimeout(() => {
-            document.querySelector('.submissions-list')?.scrollIntoView();
+            document.querySelector('.submissions-list')?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            });
         });
     }
 }

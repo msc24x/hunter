@@ -1,0 +1,22 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+.user-submission {
+    pre {
+        @include basicBack;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        max-height: 24rem;
+        overflow: auto;
+    }
+}
+
+.grading-status {
+    @include basicBack;
+    font-weight: 500;
+    padding: 1.2rem;
+}

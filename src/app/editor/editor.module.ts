@@ -11,9 +11,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CodeTesterComponent } from './components/code-tester/code-tester.component';
-import { InsightsComponent } from './components/insights/insights.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
+import { InsightsComponent } from './pages/insights/insights.component';
 
 @NgModule({
     declarations: [

@@ -1,0 +1,62 @@
+<h6 class="grading-status cute-panel">
+    <fa-icon
+        [icon]="viewSubmissionResult.evaluated_at ? judgeIcon : clockIcon"
+    ></fa-icon>
+    &nbsp; Grading status ~
+    <span *ngIf="viewSubmissionResult.evaluated_at">
+        Marked with <b>{{ viewSubmissionResult.result }} pts</b> ~
+    </span>
+    {{
+        viewSubmissionResult.evaluated_at
+            ? "Evaluated on " +
+              (viewSubmissionResult.evaluated_at
+                  | date : "yyyy MMM dd 'at' hh:mm aa") +
+              (!viewSubmissionResult.evaluated_by
+                  ? " by Hunter"
+                  : (viewSubmissionResult.evaluated_by.name || "Anonymous") +
+                    viewSubmissionResult.evaluated_by_id)
+            : "Yet to be evaluated"
+    }}
+    <br />
+    <br />
+    <div style="text-align: end">
+        Submission received at
+        {{
+            viewSubmissionResult.created_at | date : "yyyy MMM dd 'at' hh:mm aa"
+        }}
+    </div>
+</h6>
+<div *ngIf="questionSelectedInfo.type === 0">
+    <pretty-meta [meta]="viewSubmissionResult.meta!"></pretty-meta>
+
+    <br />
+    <code-editor
+        [editable]="false"
+        [code]="viewSubmissionResult.submission!"
+        [languageSelected]="viewSubmissionResult.language!"
+    ></code-editor>
+</div>
+
+<div *ngIf="questionSelectedInfo.type === 1" class="user-submission">
+    <p>Following choice(s) were chosen</p>
+
+    <pre
+        *ngFor="let ch of viewSubmissionResult.question_choices"
+        [textContent]="getChoiceText(ch.id)"
+    ></pre>
+</div>
+
+<div *ngIf="[2, 3].includes(questionSelectedInfo.type)" class="user-submission">
+    <h5>
+        Answer Status:
+        {{ viewSubmissionResult.accepted ? "Accepted" : "Wrong" }}
+    </h5>
+
+    <p>
+        Following
+        {{ viewSubmissionResult.submission?.trim()?.split(" ")?.length }}
+        word(s) were submitted
+    </p>
+
+    <pre [innerText]="viewSubmissionResult.submission"></pre>
+</div>
