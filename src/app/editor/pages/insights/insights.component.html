@@ -1,24 +1,51 @@
 <app-bar></app-bar>
 
 <div class="page">
-    <h2 class="insights-title">
-        <fa-icon [icon]="rankIcon"></fa-icon>
-        Insights and Evaluations
-    </h2>
-    <div
-        class="insights-header"
-        routerLink="/editor/{{ competition_id }}"
-        matTooltip="Got to editor"
-    >
-        <h3>{{ competitionInfo.title || "Untitled" }}</h3>
-        <p class="info-like">{{ competitionInfo.description }}</p>
+    <div class="page-bar">
+        <div class="options">
+            <div
+                class="option"
+                routerLink="/editor/{{ competitionInfo.id }}"
+                matTooltip="Open Editor page"
+            >
+                <fa-icon [icon]="editorIcon"></fa-icon> Editor
+            </div>
+            <div
+                *ngFor="let option of panels; let i = index"
+                class="option"
+                [ngClass]="i === currentPanel ? 'selected' : ''"
+                (click)="currentPanel = i"
+            >
+                <fa-icon [icon]="option.icon"></fa-icon> {{ option.title }}
+            </div>
+        </div>
     </div>
 
-    <scoreboard
-        *ngIf="competitionInfo.id"
-        [competition_id]="competitionInfo.id"
-        [competitionInfo]="competitionInfo"
-        [question_list]="true"
-        (metaChange)="scoreMeta = $event"
-    ></scoreboard>
+    <div class="page-content" [hidden]="currentPanel !== 0">
+        <h2 class="insights-title">
+            {{ panels[currentPanel].title }}
+        </h2>
+        <!-- <div
+            class="insights-header"
+            routerLink="/editor/{{ competition_id }}"
+            matTooltip="Got to editor"
+        >
+            <h3>{{ competitionInfo.title || "Untitled" }}</h3>
+            <p class="info-like">{{ competitionInfo.description }}</p>
+        </div> -->
+
+        <scoreboard
+            *ngIf="competitionInfo.id"
+            [competition_id]="competitionInfo.id"
+            [competitionInfo]="competitionInfo"
+            [question_list]="true"
+            (metaChange)="scoreMeta = $event"
+        ></scoreboard>
+    </div>
+
+    <div class="page-content" [hidden]="currentPanel !== 1">
+        <h2 class="insights-title">
+            {{ panels[currentPanel].title }}
+        </h2>
+    </div>
 </div>

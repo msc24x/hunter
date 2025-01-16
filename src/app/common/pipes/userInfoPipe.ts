@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { resCode, UserInfo } from 'src/environments/environment';
 import { isLive } from '../../utils/utils';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
+import { DatePipe } from '@angular/common';
 
 @Pipe({
     name: 'userInfoPipe',
@@ -37,5 +38,31 @@ export class UserInfoPipe implements PipeTransform {
 export class IsLiveStatusPipe implements PipeTransform {
     transform(value: Date | null, ...args: any[]) {
         return isLive(value, args[0]);
+    }
+}
+
+@Pipe({
+    name: 'prettyDate',
+})
+export class PrettyDate implements PipeTransform {
+    transform(
+        value: Date | string | undefined | null,
+        format?: string
+    ): string {
+        if (!value) {
+            return '';
+        }
+
+        format = format || "yyyy MMM dd 'at' hh:mm aa";
+        let date = new Date(value);
+        let dateNow = new Date();
+        let dateString = new DatePipe('en-US').transform(date, format) || '';
+        console.log(dateString, dateNow.getFullYear().toString());
+
+        dateString = dateString
+            .replace(dateNow.getFullYear().toString(), '')
+            .trim();
+
+        return dateString;
     }
 }

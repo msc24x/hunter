@@ -87,6 +87,9 @@
                     email: ''
                 })
             "
+            [ngClass]="{
+                'selected': user?.id === meta?.user_details?.user_id
+            }"
         >
             <div class="rank-col">
                 <b>{{ meta!.user_details!.user_rank }}</b>
@@ -107,10 +110,7 @@
                 <i class="ahead-statement"> Ahead of {{ calcAheadOf() }}% </i>
             </div>
             <div class="time-col">
-                {{
-                    meta?.user_details?.created_at
-                        | date : "yyyy MMM dd 'at' hh:mm aa"
-                }}
+                {{ meta?.user_details?.created_at | prettyDate }}
             </div>
             <div class="ques-col">
                 {{ meta?.user_details?.questions_attempted }}
@@ -136,7 +136,8 @@
             [ngClass]="{
                 'user-rank-row':
                     meta?.user_details &&
-                    meta?.user_details?.user_id === score.user_id
+                    meta?.user_details?.user_id === score.user_id,
+                'selected': user?.id === score.user_id
             }"
         >
             <div class="rank-col">
@@ -169,7 +170,7 @@
                 </i>
             </div>
             <div class="time-col">
-                {{ score.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
+                {{ score.created_at | prettyDate }}
             </div>
 
             <div class="ques-col">
@@ -209,20 +210,26 @@
                 View Next
             </div>
         </div>
-    </div>
-    <div *ngIf="user?.id && questionSelected >= 0" class="submissions-list">
-        <br />
-        <h2>
-            Submissions by {{ user?.name || "Anonymous" }}#{{ user?.id }} for
-            Q{{ questionSelected + 1 }}
-        </h2>
-        <question-evaluation
-            *ngIf="competitionInfo.questions?.[questionSelected]"
-            [questionSelectedInfo]="
-                competitionInfo.questions![questionSelected]
-            "
-            [user_id]="user?.id"
-            [inlineView]="question_list"
-        ></question-evaluation>
+        <div class="unusual" *ngIf="user?.id && questionSelected >= 0">
+            <h2>
+                Submissions by {{ user?.name || "Anonymous" }}#{{
+                    user?.id
+                }}
+                for Q{{ questionSelected + 1 }}
+            </h2>
+        </div>
+        <div
+            *ngIf="user?.id && questionSelected >= 0"
+            class="submissions-list unusual"
+        >
+            <question-evaluation
+                *ngIf="competitionInfo.questions?.[questionSelected]"
+                [questionSelectedInfo]="
+                    competitionInfo.questions![questionSelected]
+                "
+                [user_id]="user?.id"
+                [inlineView]="question_list"
+            ></question-evaluation>
+        </div>
     </div>
 </div>

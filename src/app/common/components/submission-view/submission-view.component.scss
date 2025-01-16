@@ -17,6 +17,21 @@
 
 .grading-status {
     @include basicBack;
-    font-weight: 500;
     padding: 1.2rem;
+    font-weight: 500;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 10rem;
+    z-index: 50;
+
+    .evaluation-details {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .submission-user-details {
+        font-size: 1rem;
+        text-align: end;
+        font-weight: 400;
+    }
 }

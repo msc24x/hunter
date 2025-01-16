@@ -3,7 +3,12 @@ import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faRankingStar } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCube,
+    faRankingStar,
+    faUserPen,
+    faWandMagicSparkles,
+} from '@fortawesome/free-solid-svg-icons';
 import { CompetitionInfo } from 'backend/src/config/types';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -16,6 +21,9 @@ import { ScoresMeta, UserInfo } from 'src/environments/environment';
 })
 export class InsightsComponent {
     rankIcon = faRankingStar;
+    editorIcon = faCube;
+    InsightsIcon = faWandMagicSparkles;
+    evalIcon = faUserPen;
     competition_id: number = -1;
     scoreMeta: ScoresMeta = null;
 
@@ -23,6 +31,13 @@ export class InsightsComponent {
 
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
+
+    panels = [
+        { title: 'Insights', icon: this.InsightsIcon },
+        { title: 'Evaluations', icon: this.evalIcon },
+    ];
+
+    currentPanel = 0;
 
     @Input({ required: true })
     competitionInfo!: CompetitionInfo;
@@ -98,5 +113,9 @@ export class InsightsComponent {
                     );
                 }
             });
+    }
+
+    selectPanel(index: number) {
+        this.currentPanel = index;
     }
 }

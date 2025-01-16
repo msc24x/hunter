@@ -94,6 +94,8 @@ export type result = {
     submission?: string;
     meta?: string;
     question_choices?: QuestionChoice[];
+    question?: QuestionInfo;
+    user?: UserInfo;
 };
 
 export type ScoresMeta = {

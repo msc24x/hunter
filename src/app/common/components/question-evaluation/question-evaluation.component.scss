@@ -39,6 +39,8 @@
     .evaluation-table {
         flex-basis: 40%;
         height: fit-content;
+        position: sticky;
+        top: 10rem;
     }
 
     .view-submission-container {

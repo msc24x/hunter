@@ -75,26 +75,29 @@
                 </li>
             </ul>
         </popup>
-        <h3>
-            {{ this.competition.title }}
-            <infotip
-                message="Click to read instructions"
-                (click)="showInstructionP = true"
-                [svgSize]="'sm'"
-            ></infotip>
-        </h3>
 
         <div
             *ngIf="isAuthenticated && this.competition.title"
             id="competition_info"
         >
             <div class="title-duration-container">
-                <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">
-                    <fa-icon [icon]="timerIcon"></fa-icon>
-                    <span style="width: max-content">
-                        &nbsp; &nbsp;
-                        {{ timeRemaining }}
-                    </span>
+                <div class="title">
+                    {{ this.competition.title }}
+                    <infotip
+                        message="Click to read instructions"
+                        (click)="showInstructionP = true"
+                        [svgSize]="'sm'"
+                    ></infotip>
+                    <div
+                        *ngIf="!hasEnded && isAuthenticated"
+                        id="duration_info"
+                    >
+                        <fa-icon [icon]="clockIcon"></fa-icon>
+                        <span style="width: max-content">
+                            &nbsp; &nbsp;
+                            {{ timeRemaining }}
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -200,7 +203,7 @@
                         You have already submitted your response on
                         {{
                             questionSelectedInfo.results?.[0]?.created_at
-                                | date : "yyyy MMM dd 'at' hh:mm aa"
+                                | prettyDate
                         }}
                     </b>
                 </p>

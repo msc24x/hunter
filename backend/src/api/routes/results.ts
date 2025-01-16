@@ -125,6 +125,13 @@ async function fetchUserSubmissions(
                     name: true,
                 },
             },
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+            question: true,
         },
     });
 

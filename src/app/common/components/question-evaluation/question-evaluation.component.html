@@ -49,13 +49,13 @@
             <div>
                 <span *ngIf="row.evaluated_at">Completed</span>
 
-                <span *ngIf="!row.evaluated_at">
-                    Pending &nbsp;
+                <span *ngIf="!row.evaluated_at" style="color: darkred">
                     <fa-icon [icon]="clockIcon" size="sm"></fa-icon>
+                    &nbsp;Pending
                 </span>
             </div>
             <div class="points-time-col">
-                {{ row.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
+                {{ row.created_at | prettyDate }}
             </div>
         </div>
 

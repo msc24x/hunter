@@ -39,7 +39,7 @@ import { prettyDuration } from 'src/app/utils/utils';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import { faCircle, faClock } from '@fortawesome/free-regular-svg-icons';
 import { LocationStrategy } from '@angular/common';
 
 @Component({
@@ -58,6 +58,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     reportIcon = faBug;
     tickIcon = faCheckCircle;
     circleIcon = faCircle;
+    clockIcon = faClock;
 
     showInstructionP = false;
 

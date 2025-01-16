@@ -229,11 +229,12 @@ textarea {
 
 #competition_info {
     margin-bottom: 1rem;
-    font-size: 1.3rem;
-    padding-block: 1rem !important;
+    padding: 1.3rem;
     // background-color: colors.$dim_white;
-    @include basicBack;
+    @include blackBack;
     @include sweetBorder;
+    border-radius: 1.5rem;
+    font-size: 1.1rem;
 
     infotip {
         margin-left: 0.4rem;
@@ -244,11 +245,11 @@ textarea {
     }
 
     .title-duration-container {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
         gap: 1rem;
-        justify-content: space-between;
+
+        .title {
+            font-weight: 500;
+        }
 
         > b {
             width: 100%;
@@ -287,8 +288,6 @@ textarea {
     }
 
     #duration_info {
-        // background-color: whitesmoke;
-        // margin-top: 1rem;
         border-radius: 0.6rem;
         padding: 10px;
         padding-inline: 1rem;
@@ -296,7 +295,9 @@ textarea {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        @include sweetBorder;
+        float: right;
+        margin: 0.2rem;
+        // @include sweetBorder;
 
         .label {
             font-size: 1rem;

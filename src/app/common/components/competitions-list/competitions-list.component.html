@@ -67,7 +67,10 @@
                                 *ngIf="com.host_user_id == 1"
                                 matTooltip="Official by Hunter"
                             >
-                                <fa-icon [icon]="officialIcon"></fa-icon>
+                                <fa-icon
+                                    [icon]="officialIcon"
+                                    style="color: purple"
+                                ></fa-icon>
                             </span>
                             &nbsp;
                         </ng-template>
@@ -111,7 +114,7 @@
                             }}
                             {{
                                 com.scheduled_at || com.scheduled_end_at
-                                    | date : "MMM d, h:mm a" : "IST"
+                                    | prettyDate
                             }}
                         </span>
                         <span

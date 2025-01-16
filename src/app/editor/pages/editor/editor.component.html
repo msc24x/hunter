@@ -185,9 +185,7 @@
                 type="datetime-local"
                 id="competition_schedule"
                 class="text-area full-input"
-                [value]="
-                    competitionInfo.scheduled_at | date : 'yyyy-MM-ddTHH:mm'
-                "
+                [value]="competitionInfo.scheduled_at | prettyDate"
             />
             <div id="schedule_end_label" class="label">
                 Close submissions at
@@ -199,23 +197,24 @@
                 type="datetime-local"
                 id="competition_schedule_end"
                 class="text-area full-input"
-                [value]="
-                    competitionInfo.scheduled_end_at | date : 'yyyy-MM-ddTHH:mm'
-                "
+                [value]="competitionInfo.scheduled_end_at | prettyDate"
             />
 
             <div id="visbility_controller">
                 <div id="id">
-                    Code : <b>{{ competition_id }}</b>
+                    Visibility
+                    <infotip
+                        message="Set your contest visibility (Public/Private)"
+                    ></infotip>
                 </div>
-                <div id="rating">
+                <!-- <div id="rating">
                     Rating : <b>{{ this.competitionInfo.rating }}</b>
-                </div>
+                </div> -->
                 <div
                     [matTooltip]="
                         competitionInfo.public
-                            ? 'Currently anybody can see or participate in the competition'
-                            : 'Currently no one can see or participate in the competition'
+                            ? 'Click to toggle, currently anybody can see or participate in the competition'
+                            : 'Click to toggle, currently no one can see or participate in the competition'
                     "
                     id="visibility"
                     (click)="onClickVisibility()"

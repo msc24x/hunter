@@ -3,8 +3,53 @@
 @use "../../../../assets/mixins" as *;
 
 .page {
-    max-width: 1280px;
-    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+    .page-bar {
+        width: 18%;
+    }
+
+    .page-content {
+        width: 80%;
+    }
+}
+
+.options {
+    // @include blackBack;
+    border-radius: 1rem;
+    position: sticky;
+    top: 1rem;
+    margin-top: 4rem;
+
+    .option {
+        font-size: 1.2rem;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin: 0.5rem;
+        opacity: 0.8;
+        cursor: pointer;
+        background-color: whitesmoke;
+        @include sweetBorder;
+        transition: transform 200ms;
+
+        fa-icon {
+            margin-right: 0.3rem;
+            opacity: 0.8;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &.selected {
+            opacity: 1;
+            font-weight: 500;
+            background-color: white;
+            transform: translateX(0.2rem);
+        }
+    }
 }
 
 .insights-title {

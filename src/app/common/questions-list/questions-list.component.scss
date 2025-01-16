@@ -2,6 +2,10 @@
 @use "../../../assets/colors";
 @use "../../../assets/mixins" as *;
 
+:host {
+    z-index: 50;
+}
+
 .questions_list::-webkit-scrollbar {
     display: none;
 }

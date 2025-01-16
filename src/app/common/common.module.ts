@@ -13,7 +13,11 @@ import { AboutComponent } from './pages/about/about.component';
 import { CompeteComponent } from './pages/compete/compete.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { IsLiveStatusPipe, UserInfoPipe } from './pipes/userInfoPipe';
+import {
+    IsLiveStatusPipe,
+    PrettyDate,
+    UserInfoPipe,
+} from './pipes/userInfoPipe';
 import { RouterModule } from '@angular/router';
 import { CommonRoutingModule } from './common-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -55,6 +59,7 @@ import { SubmissionViewComponent } from './components/submission-view/submission
         RegisterComponent,
         UserInfoPipe,
         IsLiveStatusPipe,
+        PrettyDate,
         InfotipComponent,
         DropDownListComponent,
         CodeEditorComponent,
@@ -96,6 +101,7 @@ import { SubmissionViewComponent } from './components/submission-view/submission
         HomeComponent,
         RegisterComponent,
         UserInfoPipe,
+        PrettyDate,
         IsLiveStatusPipe,
         InfotipComponent,
         DropDownListComponent,

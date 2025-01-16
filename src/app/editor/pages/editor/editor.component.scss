@@ -129,13 +129,14 @@ popup {
     & > div {
         flex-grow: 1;
         white-space: nowrap;
+        width: 50%;
     }
 
     #id {
         background-color: white;
         border-radius: 1rem 0px 0px 1rem;
-
-        width: fit-content;
+        font-weight: 500;
+        text-align: center;
         padding: 10px;
     }
 
@@ -152,7 +153,6 @@ popup {
         border-radius: 0px 1rem 1rem 0px;
 
         font-weight: bold;
-        width: 64px;
         padding: 10px;
         cursor: pointer;
         text-align: center;
