@@ -7,6 +7,7 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import {
     faClock,
     faFileCode,
@@ -26,6 +27,7 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     codeIcon = faFileCode;
     judgeIcon = faStarOfLife;
     clockIcon = faClock;
+    checkIcon = faCheckCircle;
 
     showSubmissionP = false;
 

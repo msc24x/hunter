@@ -41,6 +41,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { QuesTypeLabelComponent } from './components/ques-type-label/ques-type-label.component';
 import { ManualErrorComponent } from './components/manual-error/manual-error.component';
 import { SubmissionViewComponent } from './components/submission-view/submission-view.component';
+import { UserDisplayComponent } from './components/user-display/user-display.component';
 
 @NgModule({
     declarations: [
@@ -75,6 +76,7 @@ import { SubmissionViewComponent } from './components/submission-view/submission
         QuesTypeLabelComponent,
         ManualErrorComponent,
         SubmissionViewComponent,
+        UserDisplayComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -116,6 +118,7 @@ import { SubmissionViewComponent } from './components/submission-view/submission
         QuesTypeLabelComponent,
         ManualErrorComponent,
         SubmissionViewComponent,
+        UserDisplayComponent,
     ],
     providers: [DatePipe],
 })

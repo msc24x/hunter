@@ -91,4 +91,28 @@ export class ScoresDataService {
             withCredentials: true,
         });
     }
+
+    getEvaluations(params: { comp_id: number; ques_id?: number | null }) {
+        var endpoint;
+
+        if (params.ques_id) {
+            console.log(params);
+            endpoint = format(
+                apiEndpoints.evaluations,
+                params.comp_id.toString(),
+                params.ques_id.toString()
+            );
+        } else {
+            endpoint = format(
+                apiEndpoints.evaluationsAll,
+                params.comp_id.toString()
+            );
+        }
+
+        return this.http.get<Array<result>>(endpoint, {
+            observe: 'response',
+            responseType: 'json',
+            withCredentials: true,
+        });
+    }
 }

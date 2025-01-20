@@ -82,6 +82,7 @@ export type result = {
     evaluated_by_id?: number;
     evaluated_by?: UserInfo;
     user_name: string;
+    user_avatar_url: string;
     user_rank: number;
     result: number;
     accepted: boolean;
@@ -131,6 +132,8 @@ export const apiEndpoints = {
     submit: environment.apiUrl + '/submit',
     user: environment.apiUrl + '/users',
     results: environment.apiUrl + '/competitions/{0}/results/{1}',
+    evaluationsAll: environment.apiUrl + '/competitions/{0}/evaluations',
+    evaluations: environment.apiUrl + '/competitions/{0}/evaluations/{1}',
     resultsAll: environment.apiUrl + '/competitions/{0}/results',
     progress: environment.apiUrl + '/competitions/{0}/progress',
     submission: environment.apiUrl + '/submission/',

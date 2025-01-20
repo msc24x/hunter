@@ -123,12 +123,14 @@ async function fetchUserSubmissions(
                 select: {
                     id: true,
                     name: true,
+                    avatar_url: true,
                 },
             },
             user: {
                 select: {
                     id: true,
                     name: true,
+                    avatar_url: true,
                 },
             },
             question: true,
@@ -200,6 +202,91 @@ router.get(
                 )
                     .then((result) => {
                         Util.sendResponseJson(res, resCode.success, result);
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
+            })
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
+    }
+);
+
+router.get(
+    '/competitions/:id/evaluations/:ques_id?',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const user: UserInfo = res.locals.user;
+        const competition_id = req.params.id;
+        const question_id = req.params.ques_id;
+        const after_id = req.query.after;
+
+        if (!competition_id && !question_id) {
+            Util.sendResponse(res, resCode.badRequest);
+            return;
+        }
+
+        client.competitions
+            .findUniqueOrThrow({
+                where: {
+                    id: parseInt(competition_id),
+                    host_user: {
+                        id: user.id,
+                    },
+                },
+                include: {
+                    host_user: true,
+                },
+            })
+            .then((comp) => {
+                var questionFilter: any = {
+                    competition_id: parseInt(competition_id),
+                    deleted_at: null,
+                };
+
+                if (question_id) {
+                    questionFilter.id = question_id;
+                }
+
+                client.results
+                    .findMany({
+                        where: {
+                            OR: [
+                                {
+                                    evaluated_at: null,
+                                },
+                                { evaluated_by_id: user.id },
+                            ],
+                            question: questionFilter,
+                        },
+                        include: {
+                            evaluated_by: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    avatar_url: true,
+                                },
+                            },
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    avatar_url: true,
+                                },
+                            },
+                            question: {
+                                select: {
+                                    title: true,
+                                    points: true,
+                                    neg_points: true,
+                                },
+                            },
+                        },
+                    })
+                    .then((results) => {
+                        Util.sendResponseJson(res, resCode.success, results);
                     })
                     .catch((err) => {
                         Util.sendResponse(res, resCode.serverError, err);

@@ -29,9 +29,7 @@
         {{ viewSubmissionResult.created_at | prettyDate }}
         <br />
         Submitted by
-        {{ viewSubmissionResult.user?.name || "Anonymous" }}#{{
-            viewSubmissionResult.user?.id
-        }}
+        <user-display [userInfo]="viewSubmissionResult.user"></user-display>
     </div>
 </div>
 <br />

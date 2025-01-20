@@ -4,15 +4,22 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+    faArrowUpRightFromSquare,
     faCube,
     faRankingStar,
     faUserPen,
     faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
-import { CompetitionInfo } from 'backend/src/config/types';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
-import { ScoresMeta, UserInfo } from 'src/environments/environment';
+import { ScoresDataService } from 'src/app/services/data/scores-data.service';
+import {
+    CompetitionInfo,
+    QuestionInfo,
+    result,
+    ScoresMeta,
+    UserInfo,
+} from 'src/environments/environment';
 
 @Component({
     selector: 'app-insights',
@@ -23,6 +30,7 @@ export class InsightsComponent {
     rankIcon = faRankingStar;
     editorIcon = faCube;
     InsightsIcon = faWandMagicSparkles;
+    linkIcon = faArrowUpRightFromSquare;
     evalIcon = faUserPen;
     competition_id: number = -1;
     scoreMeta: ScoresMeta = null;
@@ -39,14 +47,19 @@ export class InsightsComponent {
 
     currentPanel = 0;
 
+    questionSelected = -1;
+
     @Input({ required: true })
     competitionInfo!: CompetitionInfo;
+
+    evaluations: result[] = [];
 
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private competitionsData: CompetitionsDataService,
+        private scoresData: ScoresDataService,
         private datePipe: DatePipe,
         private titleService: Title,
         private snackBar: MatSnackBar
@@ -115,7 +128,25 @@ export class InsightsComponent {
             });
     }
 
+    getSelectedQues(): QuestionInfo | null {
+        if (this.questionSelected === -1) {
+            return null;
+        }
+
+        return this.competitionInfo.questions?.[this.questionSelected] || null;
+    }
+
     selectPanel(index: number) {
         this.currentPanel = index;
+    }
+
+    fetchEvaluations() {
+        this.scoresData
+            .getEvaluations({
+                comp_id: this.competitionInfo.id,
+            })
+            .subscribe((response) => {
+                this.evaluations = response.body as result[];
+            });
     }
 }

@@ -150,13 +150,14 @@
                 ></fa-icon>
             </div>
             <div class="name-col">
-                <a
-                    class="link-like"
-                    href="/u/{{ score.user_id }}"
-                    target="_blank"
-                >
-                    {{ score.user_name || "Anonymous" }}#{{ score.user_id }}
-                </a>
+                <user-display
+                    [userInfo]="{
+                        id: score.user_id,
+                        name: score.user_name,
+                        avatar_url: score.user_avatar_url,
+                        email: ''
+                    }"
+                ></user-display>
                 &nbsp;
                 <i
                     class="ahead-statement"
@@ -211,7 +212,7 @@
             </div>
         </div>
         <div class="unusual" *ngIf="user?.id && questionSelected >= 0">
-            <h2>
+            <h2 style="text-align: center">
                 Submissions by {{ user?.name || "Anonymous" }}#{{
                     user?.id
                 }}

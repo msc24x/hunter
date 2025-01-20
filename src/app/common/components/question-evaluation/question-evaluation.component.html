@@ -46,8 +46,10 @@
                 >
             </div>
             <div>{{ row.result }}</div>
-            <div>
-                <span *ngIf="row.evaluated_at">Completed</span>
+            <div style="font-size: 0.9rem">
+                <span *ngIf="row.evaluated_at">
+                    <fa-icon [icon]="checkIcon" size="sm"></fa-icon>
+                </span>
 
                 <span *ngIf="!row.evaluated_at" style="color: darkred">
                     <fa-icon [icon]="clockIcon" size="sm"></fa-icon>

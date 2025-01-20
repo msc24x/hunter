@@ -9,12 +9,15 @@
                 matTooltip="Open Editor page"
             >
                 <fa-icon [icon]="editorIcon"></fa-icon> Editor
+                <fa-icon [icon]="linkIcon" size="2xs"></fa-icon>
             </div>
             <div
                 *ngFor="let option of panels; let i = index"
                 class="option"
                 [ngClass]="i === currentPanel ? 'selected' : ''"
-                (click)="currentPanel = i"
+                (click)="
+                    currentPanel = i; currentPanel === 1 && fetchEvaluations()
+                "
             >
                 <fa-icon [icon]="option.icon"></fa-icon> {{ option.title }}
             </div>
@@ -23,16 +26,9 @@
 
     <div class="page-content" [hidden]="currentPanel !== 0">
         <h2 class="insights-title">
+            <fa-icon [icon]="panels[currentPanel].icon"></fa-icon>
             {{ panels[currentPanel].title }}
         </h2>
-        <!-- <div
-            class="insights-header"
-            routerLink="/editor/{{ competition_id }}"
-            matTooltip="Got to editor"
-        >
-            <h3>{{ competitionInfo.title || "Untitled" }}</h3>
-            <p class="info-like">{{ competitionInfo.description }}</p>
-        </div> -->
 
         <scoreboard
             *ngIf="competitionInfo.id"
@@ -40,12 +36,48 @@
             [competitionInfo]="competitionInfo"
             [question_list]="true"
             (metaChange)="scoreMeta = $event"
+            [(questionSelected)]="questionSelected"
         ></scoreboard>
     </div>
 
-    <div class="page-content" [hidden]="currentPanel !== 1">
+    <div class="page-content evaluations-panel" [hidden]="currentPanel !== 1">
         <h2 class="insights-title">
+            <fa-icon [icon]="panels[currentPanel].icon"></fa-icon>
             {{ panels[currentPanel].title }}
         </h2>
+
+        <!-- <h3>
+            {{
+                questionSelected === -1
+                    ? "Select a question to filter"
+                    : "Q" + (questionSelected + 1) + " selected"
+            }}
+        </h3>
+
+        <questions-list
+            [clearable]="true"
+            [editable]="false"
+            [competitionInfo]="competitionInfo"
+            [questionsList]="competitionInfo.questions || []"
+            [questionSelected]="questionSelected"
+            (questionSelectedChange)="
+                questionSelected = $event; fetchEvaluations()
+            "
+        ></questions-list> -->
+
+        <div class="evaluations">
+            <div class="evaluation" *ngFor="let eval of evaluations">
+                <div class="for">
+                    {{ eval.question?.title || "Untitled question" }}
+                </div>
+                <div class="by">
+                    Submission By
+                    <user-display [userInfo]="eval.user"></user-display>
+                </div>
+                <div class="at">
+                    Submitted at {{ eval.created_at | prettyDate }}
+                </div>
+            </div>
+        </div>
     </div>
 </div>

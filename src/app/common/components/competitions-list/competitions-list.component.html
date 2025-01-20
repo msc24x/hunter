@@ -55,13 +55,11 @@
                         routerLink="/u/{{ com.host_user_id }}"
                     >
                         <ng-template #authorElem>
-                            By
-                            <span class="link-like">
-                                {{ com.host_user?.name || "Anonymous" }}
-                                <span *ngIf="com.host_user_id != 1">
-                                    #{{ com.host_user_id }}
-                                </span>
-                            </span>
+                            By &nbsp;
+
+                            <user-display
+                                [userInfo]="com.host_user"
+                            ></user-display>
                             &nbsp;
                             <span
                                 *ngIf="com.host_user_id == 1"
@@ -69,10 +67,9 @@
                             >
                                 <fa-icon
                                     [icon]="officialIcon"
-                                    style="color: purple"
+                                    style="color: chocolate"
                                 ></fa-icon>
                             </span>
-                            &nbsp;
                         </ng-template>
 
                         <ng-container

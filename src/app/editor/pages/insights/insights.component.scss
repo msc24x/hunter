@@ -2,26 +2,11 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-.page {
+.options {
+    border-radius: 1rem;
+    display: flex;
     display: flex;
     justify-content: center;
-    gap: 1rem;
-
-    .page-bar {
-        width: 18%;
-    }
-
-    .page-content {
-        width: 80%;
-    }
-}
-
-.options {
-    // @include blackBack;
-    border-radius: 1rem;
-    position: sticky;
-    top: 1rem;
-    margin-top: 4rem;
 
     .option {
         font-size: 1.2rem;
@@ -31,8 +16,9 @@
         opacity: 0.8;
         cursor: pointer;
         background-color: whitesmoke;
-        @include sweetBorder;
         transition: transform 200ms;
+
+        @include sweetBorder;
 
         fa-icon {
             margin-right: 0.3rem;
@@ -47,16 +33,41 @@
             opacity: 1;
             font-weight: 500;
             background-color: white;
-            transform: translateX(0.2rem);
+            transform: translateY(0.2rem);
         }
     }
 }
 
-.insights-title {
-    text-align: center;
-}
 .insights-header {
     @include blackBack;
     padding-inline: 2rem !important;
     cursor: pointer;
+}
+
+.evaluations-panel {
+    questions-list {
+        @include blackBack;
+        display: block;
+        position: sticky;
+        top: 0rem;
+        backdrop-filter: blur(16px);
+        background-color: #a2a2a229;
+    }
+
+    .evaluations {
+        width: 28rem;
+
+        .evaluation {
+            @include basicBack;
+
+            .for {
+                font-size: 1.2rem;
+                font-weight: 400;
+            }
+
+            .by {
+                font-weight: 500;
+            }
+        }
+    }
 }

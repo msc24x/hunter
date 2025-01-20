@@ -33,7 +33,6 @@
 
 .eval-table-view-container {
     display: flex;
-    gap: 1rem;
     width: 100%;
 
     .evaluation-table {
@@ -41,13 +40,14 @@
         height: fit-content;
         position: sticky;
         top: 10rem;
+        margin-right: 1rem;
     }
 
     .view-submission-container {
         @include blackBack;
         flex-grow: 1;
         border-radius: 1rem;
-        max-width: 50%;
+        max-width: 55%;
     }
 }
 

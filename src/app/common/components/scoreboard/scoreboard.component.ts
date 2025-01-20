@@ -47,7 +47,11 @@ export class ScoreboardComponent implements OnInit, OnChanges {
     @Input()
     question_list = false;
 
+    @Input()
     questionSelected: number = -1;
+
+    @Output()
+    questionSelectedChange = new EventEmitter<number>();
 
     @Input()
     competition_id: number = 0;
@@ -63,7 +67,7 @@ export class ScoreboardComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.fetchScores();
+        this.handleQuestionChange(this.questionSelected);
     }
 
     ngOnDestroy(): void {
@@ -100,6 +104,7 @@ export class ScoreboardComponent implements OnInit, OnChanges {
     handleQuestionChange(newQuestionIndex: number) {
         const ques_id = this.competitionInfo.questions?.[newQuestionIndex]?.id;
         this.questionSelected = newQuestionIndex;
+        this.questionSelectedChange.emit(this.questionSelected);
 
         this.fetchScores(ques_id);
     }

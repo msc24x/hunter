@@ -1,0 +1,9 @@
+&nbsp;<img
+    *ngIf="userInfo"
+    src="{{ userInfo?.avatar_url || '/assets/empty-profile.webp' }}"
+    alt="user-avatar"
+    class="avatar"
+/>
+<span class="user-name" routerLink="/u/{{ userInfo?.id }}">
+    {{ userInfo?.name || "Anonymous" }}#{{ userInfo?.id }}
+</span>

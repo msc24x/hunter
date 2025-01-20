@@ -178,14 +178,12 @@ hr {
 
 .btable {
     overflow: scroll;
-    max-height: 512px;
     display: flex;
     flex-direction: column;
     font-size: 1.1rem;
     background-color: whitesmoke;
     padding: 16px;
     border-radius: 1rem;
-    margin: 4px;
     @include sweetBorder();
 
     .table_heading {
@@ -196,6 +194,7 @@ hr {
     div {
         display: flex;
         justify-content: start;
+        align-items: center;
 
         div {
             text-align: center;

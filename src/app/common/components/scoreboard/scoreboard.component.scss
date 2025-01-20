@@ -69,6 +69,8 @@
                 top: 6rem;
                 z-index: 50;
                 @include basicBack;
+                border-radius: 0.5rem;
+                background-color: whitesmoke;
             }
 
             div {
