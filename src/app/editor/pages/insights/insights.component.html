@@ -65,18 +65,53 @@
             "
         ></questions-list> -->
 
-        <div class="evaluations">
-            <div class="evaluation" *ngFor="let eval of evaluations">
-                <div class="for">
-                    {{ eval.question?.title || "Untitled question" }}
+        <div class="eval-section">
+            <div class="evaluations">
+                <div
+                    class="evaluation"
+                    *ngFor="let eval of evaluations"
+                    (click)="selectedEvaluation = eval"
+                    [ngClass]="{
+                        'selected': eval.id === selectedEvaluation?.id
+                    }"
+                >
+                    <div class="for">
+                        {{ eval.question?.title || "Untitled question" }}
+                    </div>
+                    <div
+                        class="status"
+                        [ngClass]="{
+                            'pending': !eval.evaluated_at,
+                        }"
+                    >
+                        <span *ngIf="eval.evaluated_at">
+                            <fa-icon [icon]="checkedIcon"></fa-icon> &nbsp;
+                            Evaluated with {{ eval.result || "0" }} pts</span
+                        >
+                        <span *ngIf="!eval.evaluated_at">
+                            <fa-icon [icon]="clockIcon"></fa-icon> &nbsp; Yet to
+                            be evaluated</span
+                        >
+                    </div>
+                    <div class="by">
+                        Submission By
+                        <user-display [userInfo]="eval.user"></user-display>
+                    </div>
+                    <div class="at">
+                        Submitted at {{ eval.created_at | prettyDate }}
+                    </div>
                 </div>
-                <div class="by">
-                    Submission By
-                    <user-display [userInfo]="eval.user"></user-display>
+            </div>
+
+            <div class="selected-eval">
+                <div *ngIf="!selectedEvaluation" class="empty">
+                    <fa-icon [icon]="bulbIcon" size="6x"></fa-icon>
+                    <br />
+                    <br />
+                    <div>Select an evaluation to view</div>
                 </div>
-                <div class="at">
-                    Submitted at {{ eval.created_at | prettyDate }}
-                </div>
+
+                <pre [textContent]="selectedEvaluation?.submission"></pre>
             </div>
         </div>
     </div>

@@ -3,8 +3,10 @@ import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faClock, faLightbulb } from '@fortawesome/free-regular-svg-icons';
 import {
     faArrowUpRightFromSquare,
+    faCheckDouble,
     faCube,
     faRankingStar,
     faUserPen,
@@ -32,6 +34,9 @@ export class InsightsComponent {
     InsightsIcon = faWandMagicSparkles;
     linkIcon = faArrowUpRightFromSquare;
     evalIcon = faUserPen;
+    clockIcon = faClock;
+    checkedIcon = faCheckDouble;
+    bulbIcon = faLightbulb;
     competition_id: number = -1;
     scoreMeta: ScoresMeta = null;
 
@@ -53,6 +58,8 @@ export class InsightsComponent {
     competitionInfo!: CompetitionInfo;
 
     evaluations: result[] = [];
+
+    selectedEvaluation: result | null = null;
 
     constructor(
         private router: Router,

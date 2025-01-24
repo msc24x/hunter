@@ -32,7 +32,7 @@
         font-size: 1.1rem;
 
         &.question-scoreboard {
-            & > div:not(.table_heading) {
+            & > div:not(.table_heading):not(.unusual) {
                 cursor: pointer;
             }
         }
