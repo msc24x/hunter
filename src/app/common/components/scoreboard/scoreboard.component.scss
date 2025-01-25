@@ -7,12 +7,19 @@
 }
 
 #score_board {
-    margin-top: 64px;
-
     width: inherit;
 
     .next-prev-options {
         @include nextPrevControls;
+    }
+
+    questions-list {
+        @include blackBack;
+        display: block;
+        position: sticky;
+        top: 0rem;
+        backdrop-filter: blur(16px);
+        background-color: #a2a2a229;
     }
 
     #sc_title {
@@ -25,7 +32,7 @@
         font-size: 1.1rem;
 
         &.question-scoreboard {
-            & > div:not(.table_heading) {
+            & > div:not(.table_heading):not(.unusual) {
                 cursor: pointer;
             }
         }
@@ -50,12 +57,21 @@
         display: flex;
         flex-direction: column;
 
-        div {
+        div:not(.unusual) {
             text-align: center;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0.3rem;
+
+            &.selected {
+                position: sticky;
+                top: 6rem;
+                z-index: 50;
+                @include basicBack;
+                border-radius: 0.5rem;
+                background-color: whitesmoke;
+            }
 
             div {
                 width: 200px;
@@ -105,7 +121,7 @@
             }
         }
 
-        & > div:not(.table_heading):hover {
+        & > div:not(.table_heading):not(.unusual):hover {
             background-color: colors.$text_white;
             border-radius: 0.3rem;
         }

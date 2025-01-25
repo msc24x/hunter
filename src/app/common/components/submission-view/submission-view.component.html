@@ -1,0 +1,66 @@
+<div class="grading-status cute-panel">
+    <fa-icon
+        [icon]="viewSubmissionResult.evaluated_at ? judgeIcon : clockIcon"
+    ></fa-icon>
+    &nbsp;
+    <span *ngIf="viewSubmissionResult.evaluated_at">
+        Marked with <b>{{ viewSubmissionResult.result }} pts</b>
+    </span>
+    <span *ngIf="!viewSubmissionResult.evaluated_at">
+        Yet to be evaluated
+    </span>
+    <br />
+
+    <span class="evaluation-details" *ngIf="viewSubmissionResult.evaluated_at">
+        {{
+            "Evaluated on " +
+                (viewSubmissionResult.evaluated_at | prettyDate) +
+                (!viewSubmissionResult.evaluated_by
+                    ? " by Hunter"
+                    : (viewSubmissionResult.evaluated_by.name || "Anonymous") +
+                      viewSubmissionResult.evaluated_by_id)
+        }}
+    </span>
+
+    <br />
+    <br />
+    <div class="submission-user-details">
+        Submission received at
+        {{ viewSubmissionResult.created_at | prettyDate }}
+        <br />
+        Submitted by
+        <user-display [userInfo]="viewSubmissionResult.user"></user-display>
+    </div>
+</div>
+<br />
+<div *ngIf="questionSelectedInfo.type === 0">
+    <code-editor
+        [editable]="false"
+        [code]="viewSubmissionResult.submission || ''"
+        [languageSelected]="viewSubmissionResult.language!"
+    ></code-editor>
+</div>
+
+<div *ngIf="questionSelectedInfo.type === 1" class="user-submission">
+    <p>Following choice(s) were chosen</p>
+
+    <pre
+        *ngFor="let ch of viewSubmissionResult.question_choices"
+        [textContent]="getChoiceText(ch.id)"
+    ></pre>
+</div>
+
+<div *ngIf="[2, 3].includes(questionSelectedInfo.type)" class="user-submission">
+    <h5>
+        Answer Status:
+        {{ viewSubmissionResult.accepted ? "Accepted" : "Wrong" }}
+    </h5>
+
+    <p>
+        Following
+        {{ viewSubmissionResult.submission?.trim()?.split(" ")?.length }}
+        word(s) were submitted
+    </p>
+
+    <pre [innerText]="viewSubmissionResult.submission"></pre>
+</div>

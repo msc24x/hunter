@@ -58,12 +58,15 @@ export type HunterExecutable = {
     for: {
         competition_id: number;
         question_id: number;
+        type: number;
     };
 
-    solution: {
-        lang: 'py' | 'c' | 'cpp' | 'js' | string;
-        code: string;
-    };
+    solution:
+        | {
+              lang: 'py' | 'c' | 'cpp' | 'js' | string;
+              code: string;
+          }
+        | QuestionInfo;
 };
 
 export type ExecutionInfo = {
@@ -76,18 +79,30 @@ export type ExecutionInfo = {
 export type result = {
     id: number;
     user_id: number;
+    evaluated_by_id?: number;
+    evaluated_by?: UserInfo;
     user_name: string;
+    user_avatar_url: string;
     user_rank: number;
     result: number;
     accepted: boolean;
     created_at?: string;
+    evaluated_at?: string;
     language?: HunterLanguage;
     neg_result?: number;
     final_result?: number;
     questions_attempted?: number;
     submission?: string;
     meta?: string;
+    question_choices?: QuestionChoice[];
+    question?: QuestionInfo;
+    user?: UserInfo;
 };
+
+export type ScoresMeta = {
+    total: number;
+    user_details: result | undefined;
+} | null;
 
 export type resultFull = {
     id: number;
@@ -114,9 +129,11 @@ export const apiEndpoints = {
     question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',
     postFile: environment.apiUrl + '/question/upload',
-    execute: environment.apiUrl + '/execute',
+    submit: environment.apiUrl + '/submit',
     user: environment.apiUrl + '/users',
     results: environment.apiUrl + '/competitions/{0}/results/{1}',
+    evaluationsAll: environment.apiUrl + '/competitions/{0}/evaluations',
+    evaluations: environment.apiUrl + '/competitions/{0}/evaluations/{1}',
     resultsAll: environment.apiUrl + '/competitions/{0}/results',
     progress: environment.apiUrl + '/competitions/{0}/progress',
     submission: environment.apiUrl + '/submission/',
@@ -145,6 +162,8 @@ export interface QuestionInfo {
     id: number;
     competition_id: number;
     title: string;
+    type: number;
+    position: number;
     statement: string;
     created_at: Date;
     updated_at: Date;
@@ -153,9 +172,25 @@ export interface QuestionInfo {
     sample_sols: string;
     points: number;
     neg_points: number;
+    char_limit?: number | null;
+    correct_count?: number;
+    case_sensitive?: boolean;
     test_cases_file?: boolean;
     sol_cases_file?: boolean;
     sol_code_file?: boolean;
+    user_answer?: string;
+
+    question_choices?: QuestionChoice[];
+    results?: result[];
+}
+
+export interface QuestionChoice {
+    id: number;
+    text: string;
+    question_id: number;
+    position: number;
+    is_correct: boolean;
+    delete?: boolean;
 }
 /*
  * For easier debugging in development mode, you can import the following file

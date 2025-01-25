@@ -13,7 +13,11 @@ import { AboutComponent } from './pages/about/about.component';
 import { CompeteComponent } from './pages/compete/compete.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { IsLiveStatusPipe, UserInfoPipe } from './pipes/userInfoPipe';
+import {
+    IsLiveStatusPipe,
+    PrettyDate,
+    UserInfoPipe,
+} from './pipes/userInfoPipe';
 import { RouterModule } from '@angular/router';
 import { CommonRoutingModule } from './common-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -24,7 +28,6 @@ import { DropDownListComponent } from './components/drop-down-list/drop-down-lis
 import { CodeEditorComponent } from './components/code-editor/code-editor.component';
 import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.component';
 import { GreenredComponent } from './greenred/greenred.component';
-import { InsightsComponent } from '../editor/components/insights/insights.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { EditorModule } from '../editor/editor.module';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
@@ -34,6 +37,13 @@ import { ProfileCardComponent } from './components/profile-card/profile-card.com
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
 import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-prompt.component';
+import { MatSelectModule } from '@angular/material/select';
+import { QuesTypeLabelComponent } from './components/ques-type-label/ques-type-label.component';
+import { ManualErrorComponent } from './components/manual-error/manual-error.component';
+import { SubmissionViewComponent } from './components/submission-view/submission-view.component';
+import { UserDisplayComponent } from './components/user-display/user-display.component';
+import { QuestionDisplayComponent } from './components/question-display/question-display.component';
+import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
 
 @NgModule({
     declarations: [
@@ -52,6 +62,7 @@ import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-promp
         RegisterComponent,
         UserInfoPipe,
         IsLiveStatusPipe,
+        PrettyDate,
         InfotipComponent,
         DropDownListComponent,
         CodeEditorComponent,
@@ -64,6 +75,12 @@ import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-promp
         ProfileCardComponent,
         CreateDialogComponent,
         SignInPromptComponent,
+        QuesTypeLabelComponent,
+        ManualErrorComponent,
+        SubmissionViewComponent,
+        UserDisplayComponent,
+        QuestionDisplayComponent,
+        NgKatexComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -73,6 +90,7 @@ import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-promp
         MatTooltipModule,
         MatSnackBarModule,
         MatSlideToggleModule,
+        MatSelectModule,
     ],
     exports: [
         AppBarComponent,
@@ -89,6 +107,7 @@ import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-promp
         HomeComponent,
         RegisterComponent,
         UserInfoPipe,
+        PrettyDate,
         IsLiveStatusPipe,
         InfotipComponent,
         DropDownListComponent,
@@ -100,6 +119,12 @@ import { SignInPromptComponent } from './components/sign-in-prompt/sign-in-promp
         QuestionEvaluationComponent,
         ProfileCardComponent,
         SignInPromptComponent,
+        QuesTypeLabelComponent,
+        ManualErrorComponent,
+        SubmissionViewComponent,
+        UserDisplayComponent,
+        QuestionDisplayComponent,
+        NgKatexComponent,
     ],
     providers: [DatePipe],
 })

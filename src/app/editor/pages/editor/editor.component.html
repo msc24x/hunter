@@ -9,7 +9,13 @@
     [destructive]="false"
     (closeEvent)="showPopup(false, 'competition-insights')"
 >
-    <insights [competitionInfo]="competitionInfo"></insights>
+    <scoreboard
+        *ngIf="competitionInfo.id"
+        [competition_id]="competitionInfo.id"
+        [competitionInfo]="competitionInfo"
+        [question_list]="true"
+        (metaChange)="scoreMeta = $event"
+    ></scoreboard>
 </popup>
 
 <popup
@@ -18,6 +24,7 @@
     heading="Verify Participation"
     [showControls]="false"
     [destructive]="false"
+    *ngIf="questionSelectedInfo?.type === 0"
 >
     <code-tester
         *ngIf="questionSelectedInfo.competition_id && questionSelectedInfo.id"
@@ -37,94 +44,115 @@
     Deleting the competition is an irreversible operation. All the data
     associated with it will be immediately lost forever and users will no longer
     be able to see or participate in it.<br />
-    Remember : If you do not want others to see this competition, you can always
-    make it private instead of deleting.<br /><br />
-    <b>Enter the current competition code</b>
-    <input type="text" id="input_competition_code" placeholder="342" />
-    <div class="red">{{ deleteCompMessage }}</div>
+
+    <p class="error-like">
+        <b>
+            Remember : If you do not want others to see this competition, you
+            can always make it private instead of deleting.
+        </b>
+    </p>
+    <b>Enter the current competition code ({{ competitionInfo.id }})</b>
+    <input type="text" id="input_competition_code" placeholder="Enter code" />
+    <manual-error [message]="errors.delete_code"></manual-error>
     <div id="delete_competition_btn_popup" (click)="deleteCompetition()">
         Delete
     </div>
 </popup>
 
-<popup heading="Guide" id="guide" (closeEvent)="handleGuidePopupEvent($event)">
-    <b>Saving</b> <br /><br />
-    Ensure you save your changes by clicking the "SAVE CHANGES" button in the
-    bottom bar. You can also use the keyboard shortcut Shift + S.
-    <br /><br /><br />
+<popup
+    heading="Guide"
+    id="guide"
+    (closeEvent)="handleGuidePopupEvent($event)"
+    [showControls]="false"
+>
+    <h3>Meta section</h3>
+    <hr />
+    <h5>Submissions open at</h5>
+    <p>
+        Set this as date time at which you would wish your contest to be public,
+        with all questions available to see and participate into.
+    </p>
+    <h5>Submissions close at</h5>
+    <p>
+        Set this as date time at which you would wish your contest to be closed,
+        with all questions hidden. Only scoreboard will be visible to the
+        participants; no more submissions will be recorded or evaluated.
+    </p>
+    <h5>PUBLIC/PRIVATE</h5>
+    <p>
+        If set to Public, your contest will be shown in the main public
+        competitions list. If Private, it won't be visible to anyone, as if it
+        does not exists.
+    </p>
 
-    <b>Duration</b> <br /><br />
-    To set your competition live indefinitely, set the duration to 0. This
-    provides participants with unlimited time.
-    <br /><br /><br />
+    <h3>Competition Data</h3>
+    <hr />
+    <p>
+        You can write competition title and description. These will remain
+        public even if submissions are not open or have been closed.
+    </p>
 
-    <b>Visibility Controller</b> <br /><br />
-    The button next to "Rating" toggles between PUBLIC and PRIVATE. This
-    controls the visibility of your competition. Even if the competition is live
-    according to the schedule, a PRIVATE competition will not be accessible to
-    users. A public competition will appear on the Compete page of the website
-    and will only show questions if it is live.
-    <br /><br /><br />
+    <h3>Questions Data</h3>
+    <hr />
+    <h5>Adding a new question</h5>
+    <p>
+        Use the "Add" button to create a new question. You can created 4 types
+        of questions:
+    </p>
+    <ol>
+        <li>Coding test</li>
+        <li>MCQ (Multiple choice question)</li>
+        <li>Fill in blank (or Short answer)</li>
+        <li>Long answer</li>
+    </ol>
 
-    <b>Questions List</b> <br /><br />
-    To view or edit question-related data, select a question from the list. All
-    operations such as Add, Save, and Delete will unselect the question to avoid
-    confusion. Note that the Save button in the list only saves changes made to
-    the question, while the "SAVE CHANGES" button in the bottom bar saves all
-    changes. Questions are not added in any specific order; the index numbers in
-    the list are for frontend purposes only. Questions are distinguished by
-    their IDs.
-    <br /><br /><br />
+    <h5>Editing a question</h5>
+    <p>
+        Select any question from the question list bar. A new panel will open.
+        You can edit all the details of your question there.
+    </p>
 
-    <b>LaTeX in Question Statement</b> <br /><br />
-    You can write LaTeX expressions in the Question Statement wrapped with
-    dollar signs ($). For example, write $\sqrt{{ "{" }}p+q{{ "}" }}$. It will
-    be rendered as <ng-katex data="$\sqrt{p+q}$"></ng-katex>. To learn more
-    about the syntax, refer to
-    <a href="https://katex.org/docs/support_table.html" target="_blank"
-        ><ng-katex data="$\KaTeX$"></ng-katex></a
-    >. <br /><br /><br />
+    <h5>Question statement</h5>
+    <p>
+        You can not only write plain text into it, but for mathematics questions
+        or symbols you can use the LaTeX to write complex symbols. You can click
+        Preview to view how your statement will be rendered to the participants.
+    </p>
+    <p>
+        Our LaTeX parser is powered by
+        <a href="https://katex.org/docs/support_table.html" target="_blank"
+            >Katex (click here to see the guide)</a
+        >
+    </p>
 
-    <b>Guidelines for Setting Questions</b><br /><br />
-    The online judge for Hunter accepts the user's code as a black box. A test
-    cases file is given as input, and the output is compared with your solutions
-    file. Questions requiring participants to complete a part of the code are
-    currently not supported. It is advised to keep your questions in a simple
-    input-output format. For example, test cases file: <br />
+    <h5>Guidelines for Setting Coding test samples</h5>
+    <p>
+        The online judge for Hunter accepts the user's code as a black box. A
+        test cases file is given as input, and the output is compared with your
+        solutions file. Questions requiring participants to complete a part of
+        the code are currently not supported. It is advised to keep your
+        questions in a simple input-output format.
+    </p>
+    <p>For example, test cases file:</p>
     <pre>
 2
 1 2 3
 4 5 6
-    </pre>
+</pre
+    >
     Solutions file:
     <pre>
 6
 15
-    </pre>
-
-    <b>Uploading Files</b><br /><br />
-    Only text files smaller than 1.5MB are acceptable. It is necessary to format
-    your test cases and solutions file correctly. Always verify these files
-    against your correct code. It is the question setter's responsibility to
-    ensure the legitimacy of the test cases and the reliability of the
-    solutions.
-    <br /><br /><br />
-
-    <b>Points</b><br /><br />
-    The points for each question will be accumulated in the total score of the
-    participants. The score is awarded only if all test cases are passed.
-    <br /><br /><br />
-
-    <b>Deleting the Competition</b><br /><br />
-    <div
-        id="delete_competition_btn"
-        (click)="
-            showPopup(true, 'delete_comp_popup'); showPopup(false, 'guide')
-        "
+</pre
     >
-        Delete Competition
-    </div>
-    <br /><br /><br />
+
+    <h3>Saving</h3>
+    <hr />
+    <p>
+        Ensure you save your changes by clicking the "SAVE CHANGES" button in
+        the bottom bar. You can also use the keyboard shortcut Shift + S.
+    </p>
 </popup>
 
 <popup
@@ -140,388 +168,582 @@
     recommended to take a look at the guide.</app-info-card
 > -->
 
-<h2>Competition Data</h2>
+<div class="page-section">
+    <div class="section-side">
+        <h2>Meta</h2>
 
-<div class="row_flex editor-first-panel" style="margin-top: 16px">
-    <div class="vertical_flex desc-panel">
-        <div id="desc_label" class="label">Description</div>
-        <textarea
-            maxlength="456"
-            rows="7"
-            id="text_description"
-            placeholder="Example: This challenge consists of ...."
-            >{{ this.competitionInfo.description }}</textarea
-        >
-    </div>
+        <div class="meta-section">
+            <h3>Schedule</h3>
 
-    <div class="vertical_flex title-panel">
-        <div class="vertical_flex">
-            <div id="title_label" class="label">Title</div>
-            <textarea
-                maxlength="120"
-                rows="7"
-                id="text_title"
-                placeholder="Example: University Club Tie-breaker Challenge"
-                >{{ this.competitionInfo.title }}</textarea
-            >
-        </div>
-    </div>
+            <div id="schedule_label" class="label">
+                Submissions open at
+                <infotip
+                    message="When should the competition be visible to read and start accept submissions"
+                />
+            </div>
+            <input
+                type="datetime-local"
+                id="competition_schedule"
+                class="text-area full-input"
+                [value]="competitionInfo.scheduled_at | prettyDate"
+            />
+            <div id="schedule_end_label" class="label">
+                Close submissions at
+                <infotip
+                    message="When should the competition stop submissions and participation"
+                />
+            </div>
+            <input
+                type="datetime-local"
+                id="competition_schedule_end"
+                class="text-area full-input"
+                [value]="competitionInfo.scheduled_end_at | prettyDate"
+            />
 
-    <div class="vertical_flex">
-        <div class="label">Insights</div>
-        <div class="text-area c-insights">
-            <div class="label">Share link to participants</div>
-            <a
+            <div id="visbility_controller">
+                <div id="id">
+                    Visibility
+                    <infotip
+                        message="Set your contest visibility (Public/Private)"
+                    ></infotip>
+                </div>
+                <!-- <div id="rating">
+                    Rating : <b>{{ this.competitionInfo.rating }}</b>
+                </div> -->
+                <div
+                    [matTooltip]="
+                        competitionInfo.public
+                            ? 'Click to toggle, currently anybody can see or participate in the competition'
+                            : 'Click to toggle, currently no one can see or participate in the competition'
+                    "
+                    id="visibility"
+                    (click)="onClickVisibility()"
+                >
+                    PUBLIC
+                </div>
+            </div>
+
+            <h3>Insights</h3>
+            <div
                 class="participant-link"
                 (click)="shareAction()"
                 matTooltip="Click to share the participation link"
             >
-                <span class="link-text">{{ getParticipationLink() }}</span>
+                <span class="link-text"
+                    >Share link to the participants, and let the contest
+                    begin!</span
+                >
                 <span>
                     <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
                 </span>
-            </a>
+            </div>
             <div
-                class="text-area insight-details"
+                class="text-area insight-details cute-panel"
+                routerLink="/editor/{{ competitionInfo.id }}/data/insights"
                 (click)="showPopup(true, 'competition-insights')"
+                *ngIf="scoreMeta"
             >
-                Click here to see the participation insights for this
-                competition
+                <fa-icon
+                    [icon]="magicIcon"
+                    size="lg"
+                    [animation]="'fade'"
+                ></fa-icon>
+                <span>
+                    Insights of <b>{{ scoreMeta.total }}</b> users, who took
+                    part in your contest!
+                </span>
             </div>
         </div>
     </div>
+    <div class="section-content">
+        <h2>Competition Data</h2>
 
-    <div class="vertical_flex" style="align-items: stretch">
-        <!-- <div id="duration_label">
-            Duration (minutes)
-            <infotip
-                message="For how long the competition should accept submissions after being live"
-            />
+        <div class="row_flex editor-first-panel" style="margin-top: 16px">
+            <div id="title_label" class="label">Title</div>
+            <textarea
+                maxlength="120"
+                id="text_title"
+                rows="1"
+                placeholder="Example: University Club Tie-breaker Challenge"
+                [(ngModel)]="competitionInfo.title"
+            ></textarea>
+            <div id="desc_label" class="label">Description</div>
+            <textarea
+                maxlength="456"
+                rows="5"
+                id="text_description"
+                placeholder="Example: This challenge consists of ...."
+                [(ngModel)]="competitionInfo.description"
+            ></textarea>
         </div>
-        <input
-            type="number"
-            min="0"
-            id="competition_duration"
-            [value]="competitionInfo.duration"
-        /> -->
 
-        <div id="schedule_label" class="label">
-            Set Live on schedule
-            <infotip
-                message="When should the competition be visible to read and start accept submissions"
-            />
-        </div>
-        <input
-            type="datetime-local"
-            id="competition_schedule"
-            class="text-area"
-            [value]="competitionInfo.scheduled_at | date : 'yyyy-MM-ddTHH:mm'"
-        />
-        <div id="schedule_end_label" class="label">
-            Schedule the closure
-            <infotip
-                message="When should the competition stop submissions and participation"
-            />
-        </div>
-        <input
-            type="datetime-local"
-            id="competition_schedule_end"
-            class="text-area"
-            [value]="
-                competitionInfo.scheduled_end_at | date : 'yyyy-MM-ddTHH:mm'
-            "
-        />
+        <br />
+        <br />
+        <h2>Questions Data</h2>
 
-        <div id="visbility_controller">
-            <div id="id">
-                Code : <b>{{ competition_id }}</b>
-            </div>
-            <div id="rating">
-                Rating : <b>{{ this.competitionInfo.rating }}</b>
-            </div>
-            <div
-                [matTooltip]="
-                    competitionInfo.public
-                        ? 'Currently anybody can see or participate in the competition'
-                        : 'Currently no one can see or participate in the competition'
-                "
-                id="visibility"
-                (click)="onClickVisibility()"
+        <div class="questions-list">
+            <questions-list
+                [competitionInfo]="competitionInfo"
+                [questionsList]="this.competitionInfo.questions || []"
+                (messageEmitter)="displayLog($event)"
+                (questionSelectEmitter)="selectQuestion($event)"
+                (saveClicked)="saveQuestion()"
+                (fetchRequired)="fetchQuestions()"
+                [(questionSelected)]="questionSelected"
             >
-                PUBLIC
-            </div>
+            </questions-list>
         </div>
 
-        <!-- <div id="created_at">
-            {{ this.competitionInfo.created_at | date : "medium" }}
-        </div> -->
-    </div>
-</div>
+        <div *ngIf="!this.questionSelectedInfo.id" id="question_id">
+            (No Question Selected)
+            <infotip
+                *ngIf="!questionSelectedInfo.id"
+                message="Please select a question from above to see details"
+            />
+        </div>
+        <div class="question-data" *ngIf="questionSelected !== -1">
+            <div class="question-type">
+                <ques-type-label
+                    [ques_type]="questionSelectedInfo.type"
+                ></ques-type-label>
+            </div>
 
-<br />
-<br />
-<h2>Questions Data</h2>
+            <div class="clabel">Title</div>
 
-<div class="questions-list">
-    <questions-list
-        [competitionInfo]="competitionInfo"
-        [questionsList]="this.competitionInfo.questions || []"
-        (messageEmitter)="displayLog($event)"
-        (questionSelectEmitter)="selectQuestion($event)"
-        (saveClicked)="saveQuestion()"
-        (fetchRequired)="fetchQuestions()"
-        [(questionSelected)]="questionSelected"
-    >
-    </questions-list>
-</div>
+            <textarea
+                id="text_qtitle"
+                maxlength="400"
+                rows="3"
+                [(ngModel)]="questionSelectedInfo.title"
+                placeholder="Example: Write a program to flip the string."
+            ></textarea>
 
-<div class="vertical_flex full-stretch editor-second-panel">
-    <div *ngIf="!this.questionSelectedInfo.id" id="question_id">
-        (No Question Selected)
-        <infotip
-            *ngIf="!questionSelectedInfo.id"
-            message="Please select a question from above to see details"
-        />
-    </div>
+            <manual-error [message]="errors.title"></manual-error>
 
-    <div class="vertical_flex full-stretch" *ngIf="questionSelected !== -1">
-        <div class="flex title-eval-container">
-            <div class="vertical_flex title-container" style="width: 100%">
-                <div class="clabel">Title</div>
-
-                <textarea
-                    id="text_qtitle"
-                    maxlength="150"
-                    rows="3"
-                    [value]="questionSelectedInfo.title"
-                    placeholder="Example: Write a program to flip the string."
-                ></textarea>
-
-                <div class="clabel">Settings</div>
-
-                <div style="width: 100%">
-                    <div class="flex">
-                        <div class="points-container">
-                            <p>
-                                Reward
-                                <input
-                                    id="question_points"
-                                    type="number"
-                                    min="0"
-                                    [max]="9"
-                                    [value]="questionSelectedInfo.points"
-                                />
-                                points for first correct submission
-                                <infotip
-                                    message="This is the weighage the question holds. Participants will be awarded this many points to their first correct submission. A maximum of 9 points can be set for one question"
-                                ></infotip>
-                            </p>
-
-                            <p>
-                                Cut
-                                <input
-                                    id="question_neg_points"
-                                    type="number"
-                                    min="0"
-                                    [max]="4"
-                                    [value]="questionSelectedInfo.neg_points"
-                                />
-                                points for each wrong submission
-                                <infotip
-                                    message="Set this to any non-zero value (1-4) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
-                                ></infotip>
-                            </p>
-                        </div>
-                    </div>
+            <div class="statement-label-container">
+                <div class="clabel">
+                    Statement
+                    <infotip
+                        message="The statement body supports Latex by default, learn more about the typesetting at katex.org"
+                    ></infotip>
+                    <span class="info-like" style="font-size: 0.8rem">
+                        <a
+                            href="https://katex.org/docs/support_table.html"
+                            target="_blank"
+                            >(Click here KaTeX guide to write LaTeX)</a
+                        >
+                    </span>
                 </div>
-
-                <!-- <p>
-                    * You must upload the both test cases and solution to your
-                    test cases files, to test the correctness of your
-                    competition and ensure it is solvable. If you don't do this,
-                    participants will see that your competition is unverified.
-                </p> -->
-            </div>
-            <div id="evaluation-section">
-                <div class="flex eval-panel">
-                    <div class="sample-cases-container">
-                        <div>
-                            <div id="sample_cases_label" class="clabel">
-                                Sample Tests Cases
-                                <infotip
-                                    message="Small test cases for participants to test their code against without actually submitting for evaluation. These will be visible to the participants"
-                                ></infotip>
-                            </div>
-                            <textarea
-                                id="question_sample_cases"
-                                maxlength="250"
-                                rows="6"
-                                [value]="questionSelectedInfo.sample_cases"
-                                placeholder="Example: dice car club winter"
-                            ></textarea>
-                        </div>
-
-                        <div>
-                            <div id="sample_sols_label" class="clabel">
-                                Solution to the samples<infotip
-                                    message="Solution to the test cases provided above. These will be visible to the participants"
-                                ></infotip>
-                            </div>
-                            <textarea
-                                id="question_sample_sols"
-                                maxlength="250"
-                                rows="6"
-                                [value]="questionSelectedInfo.sample_sols"
-                                placeholder="Example: ecid rac bulc retniw"
-                            ></textarea>
-                        </div>
-                    </div>
-                    <div class="file-uploaders">
-                        <div class="io-files">
-                            <label
-                                id="testcases_file_label"
-                                class="file_input"
-                                for="testcases_file"
-                                matTooltipPosition="left"
-                                matTooltip="Upload a text file to define evaluation test cases for this question. These test cases will not be shown to the participants. Hunter will use this to test participants' code"
-                            >
-                                Test Cases
-
-                                <a
-                                    [href]="downloadFileUrl('testcases')"
-                                    [download]="
-                                        questionSelectedInfo.id +
-                                        '_testcases.txt'
-                                    "
-                                >
-                                    <fa-icon
-                                        *ngIf="testExists"
-                                        matTooltip="Download existing test cases file"
-                                        [icon]="downloadIcon"
-                                    ></fa-icon>
-                                </a>
-                            </label>
-                            <input
-                                class="file_input"
-                                (change)="updateFile($event, 'testcases')"
-                                id="testcases_file"
-                                type="file"
-                            />
-
-                            <label
-                                id="solutions_file_label"
-                                class="file_input"
-                                for="solutions_file"
-                                matTooltipPosition="left"
-                                matTooltip="Upload a text file to define the expected output from participants code when test cases are supplied to them"
-                            >
-                                Solution to tests
-                                <a
-                                    [href]="downloadFileUrl('solutions')"
-                                    [download]="
-                                        questionSelectedInfo.id +
-                                        '_solutions.txt'
-                                    "
-                                >
-                                    <fa-icon
-                                        *ngIf="solsExists"
-                                        [icon]="downloadIcon"
-                                        matTooltip="Download existing solution to test cases file"
-                                    ></fa-icon>
-                                </a>
-                            </label>
-                            <input
-                                class="file_input"
-                                id="solutions_file"
-                                type="file"
-                                (change)="updateFile($event, 'solutions')"
-                            />
-                        </div>
-                        <div class="solution-code-file">
-                            <label
-                                id="code_file_label"
-                                class="file_input"
-                                (click)="showPopup(true, 'code-tester')"
-                                [matTooltip]="
-                                    !testExists || !solsExists
-                                        ? 'You must upload both test cases files to test your competition'
-                                        : ''
-                                "
-                                [ngClass]="{
-                                    'no-click disabled':
-                                        !testExists || !solsExists
-                                }"
-                            >
-                                *Verify Participation
-                                <fa-icon
-                                    *ngIf="verificationResult?.success === true"
-                                    [icon]="checkIcon"
-                                    style="color: green"
-                                    [matTooltip]="
-                                        'Verification was successful at ' +
-                                        verificationResult?.created_at?.toLocaleString()
-                                    "
-                                ></fa-icon>
-
-                                <fa-icon
-                                    *ngIf="
-                                        verificationResult?.success === false
-                                    "
-                                    [icon]="crossIcon"
-                                    style="color: red"
-                                    [matTooltip]="
-                                        'Verification failed at ' +
-                                        verificationResult?.created_at?.toLocaleString()
-                                    "
-                                ></fa-icon>
-                            </label>
-                        </div>
-                    </div>
+                <div
+                    id="toggle_preview_btn"
+                    matTooltip="Click to toggle LaTeX preview"
+                    (click)="preview_mode = !preview_mode"
+                >
+                    Preview
+                    <mat-slide-toggle
+                        [checked]="preview_mode"
+                    ></mat-slide-toggle>
                 </div>
             </div>
-        </div>
 
-        <div class="flex">
-            <div class="clabel">
-                Statement
+            <p class="info-like" *ngIf="questionSelectedInfo.type == 2">
+                In your statement, you may <b>include one blank space</b> in any
+                format, making it visible to the participant. The participant
+                will then be prompted to type their answer in the blank space.
+                Unlike Multiple Choice Questions (MCQs),
+                <b
+                    >Fill in the Blank questions do not provide the participant
+                    with a selection of choices to choose from.</b
+                >
+            </p>
+
+            <textarea
+                [hidden]="preview_mode"
+                id="text_statement"
+                maxlength="4000"
+                rows="6"
+                [(ngModel)]="questionSelectedInfo.statement"
+                placeholder="Example: You are given a list of strings separated by a space..."
+            ></textarea>
+            <ng-katex
+                *ngIf="preview_mode"
+                id="text_statement_preview"
+                [data]="questionSelectedInfo.statement"
+            ></ng-katex>
+
+            <manual-error [message]="errors.statement"></manual-error>
+
+            <br />
+
+            <h3>Evaluation</h3>
+            <p class="info-like" *ngIf="questionSelectedInfo.type === 3">
+                Your question type is &nbsp;
+                <ques-type-label
+                    [ques_type]="questionSelectedInfo.type"
+                ></ques-type-label
+                >. &nbsp; Automatic evaluation is not feasible for this type of
+                question. Therefore, participants' responses will not be
+                automatically evaluated, and they will not receive points or
+                penalties. You will be provided with the responses and can
+                evaluate them yourself based on the range you provide below.
+            </p>
+            <p>
+                Reward
+                <input
+                    id="question_points"
+                    type="number"
+                    min="0"
+                    [max]="40"
+                    [(ngModel)]="questionSelectedInfo.points"
+                />
+                points for first correct submission
                 <infotip
-                    message="The statement body supports Latex by default, learn more about the typesetting at katex.org"
+                    message="This is the weighage the question holds. Participants will be awarded this many points to their first correct submission. A maximum of 9 points can be set for one question"
                 ></infotip>
+            </p>
+
+            <manual-error [message]="errors.points"></manual-error>
+
+            <p>
+                Cut
+                <input
+                    id="question_neg_points"
+                    type="number"
+                    min="0"
+                    [max]="40"
+                    [(ngModel)]="questionSelectedInfo.neg_points"
+                />
+                points for each wrong submission
+                <infotip
+                    message="Set this to any non-zero value (1-40) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
+                ></infotip>
+            </p>
+            <manual-error [message]="errors.neg_points"></manual-error>
+
+            <p *ngIf="questionSelectedInfo.type === 2">
+                Do you want to enable case sensitivity
+                <infotip
+                    message="If disabled, responses such as 'apple', 'Apple', 'APPle' or 'APPLE' are treated as equal. (Recommended to keep it disabled, as it prevents false penalities against minor mistakes)"
+                ></infotip>
+                for the responses? &nbsp;
+
+                <mat-slide-toggle
+                    [(ngModel)]="questionSelectedInfo.case_sensitive"
+                ></mat-slide-toggle>
+            </p>
+
+            <p *ngIf="questionSelectedInfo.type === 3">
+                <mat-slide-toggle
+                    [checked]="questionSelectedInfo.char_limit !== null"
+                    (change)="toggleCharLimit($event.checked)"
+                ></mat-slide-toggle>
+                &nbsp; Accept minimum
+                <input
+                    type="number"
+                    [min]="1"
+                    [max]="1000"
+                    [(ngModel)]="questionSelectedInfo.char_limit"
+                />
+                number of words in a response
+                <infotip
+                    message="If disabled, participants can submit any number of words"
+                ></infotip>
+            </p>
+
+            <manual-error [message]="errors.char_limit"></manual-error>
+
+            <div class="fill-in-blanks" *ngIf="questionSelectedInfo.type == 2">
+                <h3>Possible Answers for your blank space</h3>
+                <p class="info-like">
+                    We will evaluate participants' input against an exact match
+                    of your provided possible answers. Please ensure that you do
+                    not include more than one or two words.
+                    <b
+                        >If you believe there are multiple answers with
+                        different spellings or synonyms, feel free to add as
+                        many possible answers as you would like.</b
+                    >
+                </p>
+
+                <p class="info-like">
+                    <b>These will be stay hidden from the participants</b>
+                </p>
+
+                <div
+                    class="choice"
+                    *ngFor="let choice of questionSelectedInfo.question_choices"
+                    [hidden]="choice.delete"
+                >
+                    <div
+                        class="delete-choice"
+                        (click)="markChoiceAsDeletedToggle(choice)"
+                    >
+                        <fa-icon
+                            *ngIf="!choice.delete"
+                            [icon]="trashIcon"
+                            matTooltip="Delete the possible answer"
+                        ></fa-icon>
+                        <fa-icon
+                            [icon]="trashUpIcon"
+                            *ngIf="choice.delete"
+                            matTooltip="Restore the choice"
+                        ></fa-icon>
+                    </div>
+                    <input
+                        type="text"
+                        name="choice-text"
+                        class="app-text-area"
+                        [(ngModel)]="choice.text"
+                        [disabled]="choice.delete === true"
+                        [ngClass]="{ 'disabled no-click': choice.delete }"
+                    />
+                </div>
+                <p
+                    *ngIf="questionSelectedInfo.question_choices?.length === 0"
+                    class="info-like"
+                >
+                    No possible answers added so far. Quickly add one using the
+                    button below. Otherwise your question will remain
+                    unanswerable.
+                </p>
+                <manual-error
+                    [message]="errors.question_choices"
+                ></manual-error>
+
+                <div class="add-choice" (click)="addNewChoiceInQuestion()">
+                    + Add new possible answer
+                </div>
             </div>
+
             <div
-                id="toggle_preview_btn"
-                matTooltip="Click to toggle LaTeX preview"
-                (click)="togglePreview()"
+                class="multiple-choices-panel"
+                *ngIf="questionSelectedInfo.type == 1"
             >
-                Toggle Preview
-                <fa-icon *ngIf="preview_mode" [icon]="viewIcon"></fa-icon>
-                <fa-icon *ngIf="!preview_mode" [icon]="writeIcon"></fa-icon>
+                <h3>Choices</h3>
+                <p class="info-like">
+                    The choices you add will be shown to the participants. You
+                    can input the text for each choice as desired. You can set
+                    any number of choices to be correct.
+                    <b
+                        >A participant's response will be positively marked only
+                        if they select all the correct choices.</b
+                    >
+                </p>
+
+                <div
+                    class="choice"
+                    *ngFor="let choice of questionSelectedInfo.question_choices"
+                    [hidden]="choice.delete"
+                >
+                    <div
+                        class="delete-choice"
+                        (click)="markChoiceAsDeletedToggle(choice)"
+                    >
+                        <fa-icon
+                            *ngIf="!choice.delete"
+                            [icon]="trashIcon"
+                            matTooltip="Delete the choice"
+                        ></fa-icon>
+                        <fa-icon
+                            [icon]="trashUpIcon"
+                            *ngIf="choice.delete"
+                            matTooltip="Restore the choice"
+                        ></fa-icon>
+                    </div>
+                    <textarea
+                        type="text"
+                        name="choice-text"
+                        class="app-text-area"
+                        [(ngModel)]="choice.text"
+                        [disabled]="choice.delete === true"
+                        [ngClass]="{ 'disabled no-click': choice.delete }"
+                    ></textarea>
+
+                    <div
+                        style="font-size: smaller"
+                        [ngClass]="{ 'disabled no-click': choice.delete }"
+                    >
+                        Is this a correct choice? &nbsp; &nbsp; <br />
+                        <mat-slide-toggle
+                            [(ngModel)]="choice.is_correct"
+                        ></mat-slide-toggle>
+                    </div>
+                </div>
+                <p
+                    *ngIf="questionSelectedInfo.question_choices?.length === 0"
+                    class="info-like"
+                >
+                    No choices added so far. Quickly add one using the button
+                    below. Otherwise, your question will have no correct answer.
+                </p>
+                <manual-error
+                    [message]="errors.question_choices"
+                ></manual-error>
+
+                <div class="add-choice" (click)="addNewChoiceInQuestion()">
+                    + Add new choice
+                </div>
+            </div>
+
+            <div class="flex eval-panel" *ngIf="questionSelectedInfo.type == 0">
+                <div class="sample-cases-container">
+                    <div>
+                        <div id="sample_cases_label" class="clabel">
+                            Sample Tests Cases
+                            <infotip
+                                message="Small test cases for participants to test their code against without actually submitting for evaluation. These will be visible to the participants"
+                            ></infotip>
+                        </div>
+                        <textarea
+                            id="question_sample_cases"
+                            maxlength="1000"
+                            rows="6"
+                            [(ngModel)]="questionSelectedInfo.sample_cases"
+                            placeholder="Example: dice car club winter"
+                        ></textarea>
+                        <manual-error
+                            [message]="errors.sample_cases"
+                        ></manual-error>
+                    </div>
+
+                    <div>
+                        <div id="sample_sols_label" class="clabel">
+                            Solution to the samples<infotip
+                                message="Solution to the test cases provided above. These will be visible to the participants"
+                            ></infotip>
+                        </div>
+                        <textarea
+                            id="question_sample_sols"
+                            maxlength="1000"
+                            rows="6"
+                            [(ngModel)]="questionSelectedInfo.sample_sols"
+                            placeholder="Example: ecid rac bulc retniw"
+                        ></textarea>
+                        <manual-error
+                            [message]="errors.sample_sols"
+                        ></manual-error>
+                    </div>
+                </div>
+                <div class="file-uploaders">
+                    <div class="io-files">
+                        <label
+                            id="testcases_file_label"
+                            class="file_input"
+                            for="testcases_file"
+                            matTooltipPosition="left"
+                            matTooltip="Upload a text file to define evaluation test cases for this question. These test cases will not be shown to the participants. Hunter will use this to test participants' code"
+                        >
+                            Test Cases
+
+                            <a
+                                [href]="downloadFileUrl('testcases')"
+                                [download]="
+                                    questionSelectedInfo.id + '_testcases.txt'
+                                "
+                            >
+                                <fa-icon
+                                    *ngIf="testExists"
+                                    matTooltip="Download existing test cases file"
+                                    [icon]="downloadIcon"
+                                ></fa-icon>
+                            </a>
+                        </label>
+                        <input
+                            class="file_input"
+                            (change)="updateFile($event, 'testcases')"
+                            id="testcases_file"
+                            type="file"
+                        />
+
+                        <label
+                            id="solutions_file_label"
+                            class="file_input"
+                            for="solutions_file"
+                            matTooltipPosition="left"
+                            matTooltip="Upload a text file to define the expected output from participants code when test cases are supplied to them"
+                        >
+                            Solution to tests
+                            <a
+                                [href]="downloadFileUrl('solutions')"
+                                [download]="
+                                    questionSelectedInfo.id + '_solutions.txt'
+                                "
+                            >
+                                <fa-icon
+                                    *ngIf="solsExists"
+                                    [icon]="downloadIcon"
+                                    matTooltip="Download existing solution to test cases file"
+                                ></fa-icon>
+                            </a>
+                        </label>
+                        <input
+                            class="file_input"
+                            id="solutions_file"
+                            type="file"
+                            (change)="updateFile($event, 'solutions')"
+                        />
+                    </div>
+                    <div class="solution-code-file">
+                        <label
+                            id="code_file_label"
+                            class="file_input"
+                            (click)="showPopup(true, 'code-tester')"
+                            [matTooltip]="
+                                !testExists || !solsExists
+                                    ? 'You must upload both test cases files to test your competition'
+                                    : ''
+                            "
+                            [ngClass]="{
+                                'no-click disabled': !testExists || !solsExists
+                            }"
+                        >
+                            *Verify Participation
+                            <fa-icon
+                                *ngIf="verificationResult?.success === true"
+                                [icon]="checkIcon"
+                                style="color: green"
+                                [matTooltip]="
+                                    'Verification was successful at ' +
+                                    verificationResult?.created_at?.toLocaleString()
+                                "
+                            ></fa-icon>
+
+                            <fa-icon
+                                *ngIf="verificationResult?.success === false"
+                                [icon]="crossIcon"
+                                style="color: red"
+                                [matTooltip]="
+                                    'Verification failed at ' +
+                                    verificationResult?.created_at?.toLocaleString()
+                                "
+                            ></fa-icon>
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <textarea
-            [hidden]="preview_mode"
-            id="text_statement"
-            maxlength="2046"
-            [value]="questionSelectedInfo.statement"
-            placeholder="Example: You are given a list of strings separated by a space..."
-        ></textarea>
-        <ng-katex
-            *ngIf="preview_mode"
-            id="text_statement_preview"
-            [data]="questionSelectedInfo.statement"
-        ></ng-katex>
+        <div class="row_flex" id="controls">
+            <button
+                (click)="
+                    showPopup(true, 'delete_comp_popup');
+                    showPopup(false, 'guide')
+                "
+            >
+                <fa-icon [icon]="trashIcon"></fa-icon> &nbsp; DELETE CONTEST
+            </button>
+            <div matTooltip="Logs for fun" id="log" (click)="showLog()">
+                Welcome!
+            </div>
+            <button (click)="showPopup(true, 'guide')">
+                <fa-icon [icon]="guideIcon"></fa-icon> &nbsp; GUIDE
+            </button>
+            <button
+                matTooltip="Save the competition and selected question (Shift + S)"
+                (click)="this.saveChanges()"
+            >
+                SAVE CHANGES
+            </button>
+        </div>
     </div>
-</div>
-
-<div class="row_flex" id="controls">
-    <!--button (click)="refreshCompetitionInfo()">RESET UNSAVED CHANGES</button -->
-    <button
-        matTooltip="Save the competition and its questions all details (Shift + S)"
-        (click)="this.saveChanges()"
-    >
-        SAVE CHANGES
-    </button>
-    <button (click)="showPopup(true, 'guide')">GUIDE</button>
-    <div matTooltip="Logs for fun" id="log" (click)="showLog()">Welcome!</div>
 </div>

@@ -17,12 +17,14 @@ import {
     templates,
     UserInfo,
     environment,
+    QuestionChoice,
 } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     faAddressCard,
     faBug,
+    faCheckCircle,
     faChevronUp,
     faEnvelopeOpenText,
     faFileCode,
@@ -36,6 +38,9 @@ import {
 import { prettyDuration } from 'src/app/utils/utils';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { Title } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { faCircle, faClock } from '@fortawesome/free-regular-svg-icons';
+import { LocationStrategy } from '@angular/common';
 
 @Component({
     selector: 'competition',
@@ -51,13 +56,19 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     submitIcon = faEnvelopeOpenText;
     playIcon = faPlay;
     reportIcon = faBug;
+    tickIcon = faCheckCircle;
+    circleIcon = faCircle;
+    clockIcon = faClock;
 
     showInstructionP = false;
+
+    evaluationChangeOccurred = false;
 
     loading = 0;
     fetchSubmissionMsg = '';
 
     c_id: number = 0;
+    q_idx: number = 0;
 
     hrlayout: boolean = true;
     bottomSection = false;
@@ -96,14 +107,24 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         private router: Router,
         private competitionsService: CompetitionsDataService,
         private scoresDataService: ScoresDataService,
-        private titleService: Title
+        private titleService: Title,
+        private snackBar: MatSnackBar,
+        private location: LocationStrategy
     ) {
         const idParam = parseInt(
             this.route.snapshot.paramMap.get('competition_id') || ''
         );
 
+        const idQues = parseInt(
+            this.route.snapshot.paramMap.get('ques_id') || ''
+        );
+
         if (idParam) {
             this.c_id = idParam;
+        }
+
+        if (idQues) {
+            this.q_idx = idQues;
         }
 
         titleService.setTitle('Participate • Hunter');
@@ -252,16 +273,50 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         });
     }
 
-    postSolution(samples = false) {
-        this.clearOutput();
-        this.bottomSection = true;
+    submitAnswerBasedQues() {
+        this.judgeInProgress = true;
 
-        this.scrollToTop();
+        this.loading++;
+        this.enableSubmitControls(false);
 
-        if (this.questionSelected == -1) {
-            this.solutionOutput.output = 'No question selected';
-            return;
-        }
+        this.subscriptions.push(
+            this.competitionsService
+                .judgeSolution({
+                    for: {
+                        competition_id: this.c_id,
+                        question_id: this.questionSelectedInfo.id,
+                        type: this.questionSelectedInfo.type,
+                    },
+                    solution: this.questionSelectedInfo,
+                })
+                .subscribe({
+                    next: (res) => {
+                        this.loading--;
+                        this.judgeInProgress = false;
+                        this.enableSubmitControls(true);
+                        this.scrollToTop();
+
+                        this.evaluationChangeOccurred =
+                            !this.evaluationChangeOccurred;
+
+                        this.loading++;
+                        this.subscriptions.push(this.fetchProgress());
+                    },
+
+                    error: (err) => {
+                        this.loading--;
+                        this.judgeInProgress = false;
+                        this.snackBar.open(err.error);
+
+                        this.enableSubmitControls(true);
+                        this.scrollToTop();
+                        this.solutionOutput = err.statusText;
+                    },
+                })
+        );
+    }
+
+    executeCode(samples = false) {
         if (!this.codeWritten) {
             this.solutionOutput.output = 'Empty solution';
             return;
@@ -282,6 +337,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                                 this.competition.questions![
                                     this.questionSelected
                                 ].id,
+                            type: 0,
                         },
                         solution: {
                             lang: this.languageSelected,
@@ -314,6 +370,24 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                     },
                 })
         );
+    }
+
+    postSolution(samples = false) {
+        this.clearOutput();
+        this.bottomSection = true;
+
+        this.scrollToTop();
+
+        if (this.questionSelected == -1) {
+            this.solutionOutput.output = 'No question selected';
+            return;
+        }
+
+        if (this.questionSelectedInfo.type === 0) {
+            this.executeCode(samples);
+        } else {
+            this.submitAnswerBasedQues();
+        }
     }
 
     fetchLastSubmission() {
@@ -397,7 +471,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         }
 
                         if (this.competition.questions) {
-                            this.selectQuestion(0);
+                            this.selectQuestion(this.q_idx);
                         }
                     },
                     error: (err) => {
@@ -408,23 +482,32 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         }
                     },
                 }),
-            this.scoresDataService
-                .getProgress({ comp_id: this.c_id })
-                .subscribe({
-                    next: (res) => {
-                        this.loading--;
-                        this.questionsProgress = res.body || [];
-                    },
-                }),
+            this.fetchProgress(),
         ];
 
         this.loading += dataSubscriptions.length;
         this.subscriptions.push(...dataSubscriptions);
     }
 
+    fetchProgress() {
+        return this.scoresDataService
+            .getProgress({ comp_id: this.c_id })
+            .subscribe({
+                next: (res) => {
+                    this.loading--;
+                    this.questionsProgress = res.body || [];
+                },
+            });
+    }
+
     selectQuestion(index: number) {
         this.questionSelected = index;
         this.questionSelectedInfo = this.competition.questions![index];
+
+        if (!this.questionSelectedInfo) {
+            this.selectQuestion(0);
+            return;
+        }
 
         this.lastEditorContent();
 
@@ -433,6 +516,31 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 this.competition.title || 'Competition'
             }`
         );
+    }
+
+    getLastSubmission() {
+        return this.questionSelectedInfo.results?.[0];
+    }
+
+    showChoiceAsSelected(choice: QuestionChoice) {
+        if (choice.is_correct) {
+            return true;
+        }
+        const lastSub = this.getLastSubmission();
+
+        if (!lastSub) {
+            return false;
+        }
+
+        let wasIt = false;
+
+        lastSub.question_choices?.forEach((qChoice) => {
+            if (qChoice?.id === choice.id) {
+                wasIt = true;
+            }
+        });
+
+        return wasIt;
     }
 
     lastEditorContent(save?: boolean) {
@@ -451,22 +559,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     toggleLayout() {
         this.hrlayout = !this.hrlayout;
-    }
-
-    getQuestionStatement(questionInfo: QuestionInfo) {
-        var final = `$\\textbf{Statement}$\n\n` + questionInfo.statement || '';
-
-        if (questionInfo.sample_cases) {
-            final +=
-                `\n\n$\\textbf{Sample Cases}$\n\n` + questionInfo.sample_cases;
-        }
-
-        if (questionInfo.sample_sols) {
-            final +=
-                `\n\n$\\textbf{Sample Output}$\n\n` + questionInfo.sample_sols;
-        }
-
-        return final;
     }
 
     enableSubmitControls(enable: boolean) {
@@ -491,5 +583,50 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         }&body=I%20would%20like%20to%20report%20the%20following%20competition.%0A%0ALink%3A%20${this.getParticipationLink()}%0A%0AREASON%3A%0A%3CPlease%20specify%20your%20reason%20here%3E%0A%0AACTION%20REQUEST%3A%0A%3CPlease%20specify%20what%20action%20do%20you%20wish%20the%20Hunter%20to%20take%3E`;
 
         return mailtoString;
+    }
+
+    alreadySelectedOptions() {
+        let alreadySelected = 0;
+
+        this.questionSelectedInfo.question_choices?.forEach((ch) => {
+            if (this.showChoiceAsSelected(ch)) {
+                alreadySelected++;
+            }
+        });
+
+        return alreadySelected;
+    }
+
+    handleChoiceSelection(choice: QuestionChoice) {
+        let alreadySelected = this.alreadySelectedOptions();
+
+        if (!choice.is_correct) {
+            alreadySelected++;
+        }
+
+        if (alreadySelected > (this.questionSelectedInfo.correct_count || 0)) {
+            this.snackBar.open(
+                `Cannot select more than ${
+                    alreadySelected - 1
+                } choice(s), please un-select some option to choose a new one.`
+            );
+            return;
+        }
+
+        choice.is_correct = !choice.is_correct;
+    }
+
+    numOfWordsWritten(content: string) {
+        if (!content?.trim()) {
+            return 0;
+        }
+        return content?.trim().split(' ').length;
+    }
+
+    isLongAnswerAcceptable(content: string) {
+        return (
+            this.numOfWordsWritten(content) >=
+            (this.questionSelectedInfo?.char_limit || 0)
+        );
     }
 }

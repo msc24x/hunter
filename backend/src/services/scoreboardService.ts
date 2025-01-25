@@ -1,11 +1,13 @@
 import Container, { Service } from 'typedi';
 import {
+    CodeSolution,
     ExeInfo,
     HunterExecutable,
     QuestionInfo,
     UserInfo,
 } from '../config/types';
 import { DatabaseProvider } from './databaseProvider';
+import config from '../config/config';
 
 const client = Container.get(DatabaseProvider).client();
 
@@ -43,16 +45,67 @@ export class ScoreboardService {
             points = 0;
         }
 
+        var result_data: any = {
+            result: points,
+            created_at: new Date(),
+            user_id: user.id,
+            meta: exeInfo.meta,
+            question_id: hunterExecutable.for.question_id,
+            accepted: exeInfo.success,
+        };
+
+        switch (hunterExecutable.for.type) {
+            case config.questionTypes.code:
+                result_data = {
+                    ...result_data,
+                    language: (hunterExecutable.solution as CodeSolution).lang,
+                    submission: (hunterExecutable.solution as CodeSolution)
+                        .code,
+                };
+                break;
+
+            case config.questionTypes.mcq:
+                result_data = {
+                    ...result_data,
+                    question_choices: {
+                        connect: (
+                            hunterExecutable.solution as QuestionInfo
+                        ).question_choices
+                            ?.filter((qChoice) => qChoice.is_correct)
+                            .map((qChoice) => {
+                                const newChoice = {
+                                    id: qChoice.id,
+                                };
+                                return newChoice;
+                            }),
+                    },
+                };
+                break;
+            case config.questionTypes.fill:
+                result_data = {
+                    ...result_data,
+                    submission: (hunterExecutable.solution as QuestionInfo)
+                        .user_answer,
+                };
+                break;
+            case config.questionTypes.long:
+                result_data = {
+                    ...result_data,
+                    submission: (hunterExecutable.solution as QuestionInfo)
+                        .user_answer,
+                    evaluated_at: null,
+                    result: 0,
+                };
+                break;
+            default:
+                throw 'Question type not supported';
+                break;
+        }
+
         client.results
             .create({
                 data: {
-                    result: points,
-                    created_at: new Date(),
-                    language: hunterExecutable.solution.lang,
-                    meta: exeInfo.meta,
-                    question_id: hunterExecutable.for.question_id,
-                    user_id: user.id,
-                    submission: hunterExecutable.solution.code,
+                    ...result_data,
                 },
             })
             .catch((err) => {

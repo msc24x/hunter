@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EditorMenuComponent } from './pages/editor-menu/editor-menu.component';
 import { EditorComponent } from './pages/editor/editor.component';
+import { InsightsComponent } from './pages/insights/insights.component';
+import { ScoreboardComponent } from '../common/components/scoreboard/scoreboard.component';
 
 const routes: Routes = [
     {
@@ -11,6 +13,10 @@ const routes: Routes = [
     {
         'path': ':competition_id',
         'component': EditorComponent,
+    },
+    {
+        'path': ':competition_id/data/:tab',
+        'component': InsightsComponent,
     },
 ];
 

@@ -1,0 +1,189 @@
+<app-bar></app-bar>
+
+<popup
+    heading="Question Details"
+    [showControls]="false"
+    [hidden]="!popups.question"
+    (closeEvent)="popups.question = false"
+>
+    <question-display
+        *ngIf="selectedEvaluation?.question"
+        [questionInfo]="selectedEvaluation?.question!"
+    ></question-display>
+</popup>
+
+<div class="page">
+    <div class="page-bar">
+        <div class="options">
+            <div
+                class="option"
+                routerLink="/editor/{{ competitionInfo.id }}"
+                matTooltip="Open Editor page"
+            >
+                <fa-icon [icon]="editorIcon"></fa-icon> Editor
+                <fa-icon [icon]="linkIcon" size="2xs"></fa-icon>
+            </div>
+            <div
+                *ngFor="let option of panels; let i = index"
+                class="option"
+                [ngClass]="i === currentPanel ? 'selected' : ''"
+                (click)="selectPanel(i)"
+            >
+                <fa-icon [icon]="option.icon"></fa-icon> {{ option.title }}
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content" [hidden]="currentPanel !== 0">
+        <h2 class="insights-title">
+            <fa-icon [icon]="panels[currentPanel].icon"></fa-icon>
+            {{ panels[currentPanel].title }}
+        </h2>
+
+        <scoreboard
+            *ngIf="competitionInfo.id"
+            [competition_id]="competitionInfo.id"
+            [competitionInfo]="competitionInfo"
+            [question_list]="true"
+            (metaChange)="scoreMeta = $event"
+            [(questionSelected)]="questionSelected"
+        ></scoreboard>
+    </div>
+
+    <div class="page-content evaluations-panel" [hidden]="currentPanel !== 1">
+        <h2 class="insights-title">
+            <fa-icon [icon]="panels[currentPanel].icon"></fa-icon>
+            {{ panels[currentPanel].title }}
+        </h2>
+
+        <!-- <h3>
+            {{
+                questionSelected === -1
+                    ? "Select a question to filter"
+                    : "Q" + (questionSelected + 1) + " selected"
+            }}
+        </h3>
+
+        <questions-list
+            [clearable]="true"
+            [editable]="false"
+            [competitionInfo]="competitionInfo"
+            [questionsList]="competitionInfo.questions || []"
+            [questionSelected]="questionSelected"
+            (questionSelectedChange)="
+                questionSelected = $event; fetchEvaluations()
+            "
+        ></questions-list> -->
+
+        <div class="eval-section">
+            <div class="evaluations">
+                <div
+                    class="evaluation"
+                    *ngFor="let eval of evaluations"
+                    (click)="selectedEvaluation = eval"
+                    [ngClass]="{
+                        'selected': eval.id === selectedEvaluation?.id
+                    }"
+                >
+                    <div class="for">
+                        {{ eval.question?.title || "Untitled question" }}
+                    </div>
+                    <div
+                        class="status"
+                        [ngClass]="{
+                            'pending': !eval.evaluated_at,
+                        }"
+                    >
+                        <span *ngIf="eval.evaluated_at">
+                            <fa-icon [icon]="checkedIcon"></fa-icon> &nbsp;
+                            Evaluated with {{ eval.result || "0" }} pts</span
+                        >
+                        <span *ngIf="!eval.evaluated_at">
+                            <fa-icon [icon]="clockIcon"></fa-icon> &nbsp; Yet to
+                            be evaluated</span
+                        >
+                    </div>
+                    <div class="by">
+                        Submission By
+                        <user-display
+                            [noClick]="true"
+                            [userInfo]="eval.user"
+                        ></user-display>
+                    </div>
+                    <div class="at">
+                        Submitted at {{ eval.created_at | prettyDate }}
+                    </div>
+                </div>
+
+                <p class="info-like" [hidden]="evaluations.length > 0">
+                    No evaluations so far.
+                </p>
+            </div>
+
+            <div class="selected-eval">
+                <div *ngIf="!selectedEvaluation" class="empty">
+                    <fa-icon [icon]="bulbIcon" size="6x"></fa-icon>
+                    <br />
+                    <br />
+                    <div>Select an evaluation to view</div>
+                </div>
+
+                <div *ngIf="selectedEvaluation">
+                    <p class="points">
+                        <fa-icon [icon]="boltIcon"></fa-icon>
+
+                        Points granted to the participant &nbsp;
+                        <input
+                            type="number"
+                            [(ngModel)]="selectedEvaluation.result"
+                        />&nbsp;&nbsp;
+                        <button class="main" (click)="updateEvaluation()">
+                            Submit
+                        </button>
+                    </p>
+
+                    <manual-error [message]="errors.result"></manual-error>
+
+                    <p class="info-like" style="text-align: right">
+                        Last updated:
+                        {{
+                            selectedEvaluation.evaluated_at
+                                ? (selectedEvaluation.evaluated_at | prettyDate)
+                                : "never"
+                        }}
+                    </p>
+
+                    <question-display
+                        (click)="popups.question = true"
+                        *ngIf="selectedEvaluation?.question"
+                        [questionInfo]="selectedEvaluation?.question!"
+                        [titleOnly]="true"
+                    ></question-display>
+
+                    <h4 class="by">
+                        Following is submitted by
+                        <user-display
+                            [userInfo]="selectedEvaluation.user"
+                        ></user-display>
+                    </h4>
+
+                    <p class="info-like cute" style="text-align: right">
+                        <fa-icon [icon]="bulbIcon"></fa-icon>
+
+                        Number of words:
+                        {{
+                            selectedEvaluation.submission?.trim()?.split(" ")
+                                ?.length
+                        }}
+                        ({{ timeToRead() }}
+                        minutes to read)
+                    </p>
+
+                    <pre
+                        [textContent]="selectedEvaluation.submission || ''"
+                    ></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

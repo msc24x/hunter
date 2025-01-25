@@ -12,4 +12,14 @@ export default {
     dbConnectionConfig: {
         db_url: process.env.DB_URL,
     },
+    questionTypes: {
+        code: 0,
+        mcq: 1,
+        fill: 2,
+        long: 3,
+    },
+    choiceTypes: {
+        selectable: 0,
+        hidden: 1,
+    },
 };

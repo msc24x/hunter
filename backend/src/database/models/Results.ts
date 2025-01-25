@@ -30,6 +30,7 @@ export class Results {
                     SELECT
                         r.user_id, 
                         u.name AS user_name,
+                        u.avatar_url AS user_avatar_url,
                         MAX(r.created_at) AS created_at,
                         SUM(case when r.result > 0 then r.result else 0 end) AS result,
                         SUM(case when r.result < 0 then r.result else 0 end) AS neg_result,

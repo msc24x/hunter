@@ -3,6 +3,12 @@ import { DatabaseProvider } from '../services/databaseProvider';
 
 var client = new DatabaseProvider().client();
 
-async function main() {}
+async function main() {
+    await client.results.deleteMany({
+        where: {
+            question_id: 108,
+        },
+    });
+}
 
 client.$connect().then(() => main());

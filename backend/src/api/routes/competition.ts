@@ -223,6 +223,8 @@ router.get('/competitions', authenticate, (req, res) => {
             include: {
                 host_user: {
                     select: {
+                        id: true,
+                        avatar_url: true,
                         name: true,
                     },
                 },

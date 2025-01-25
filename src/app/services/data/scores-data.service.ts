@@ -16,6 +16,7 @@ export class ScoresDataService {
     getQuestionScores(params: {
         comp_id: number;
         ques_id: number;
+        user_id?: number | null;
         after?: number;
     }) {
         var endpoint = format(
@@ -24,9 +25,17 @@ export class ScoresDataService {
             params.ques_id.toString()
         );
 
+        var queryParams = [];
+
         if (params.after) {
-            endpoint += '?after=' + params.after;
+            queryParams.push(`after=${params.after}`);
         }
+
+        if (params.user_id) {
+            queryParams.push(`user_id=${params.user_id}`);
+        }
+
+        endpoint += '?' + queryParams.join('&');
 
         return this.http.get<{
             results: Array<result>;
@@ -81,5 +90,46 @@ export class ScoresDataService {
             responseType: 'json',
             withCredentials: true,
         });
+    }
+
+    getEvaluations(params: { comp_id: number; ques_id?: number | null }) {
+        var endpoint;
+
+        if (params.ques_id) {
+            endpoint = format(
+                apiEndpoints.evaluations,
+                params.comp_id.toString(),
+                params.ques_id.toString()
+            );
+        } else {
+            endpoint = format(
+                apiEndpoints.evaluationsAll,
+                params.comp_id.toString()
+            );
+        }
+
+        return this.http.get<Array<result>>(endpoint, {
+            observe: 'response',
+            responseType: 'json',
+            withCredentials: true,
+        });
+    }
+
+    updateEvaluation(params: { comp_id: number; id: number; points: number }) {
+        var endpoint = format(
+            apiEndpoints.evaluations,
+            params.comp_id.toString(),
+            params.id.toString()
+        );
+
+        return this.http.put(
+            endpoint,
+            { result: params.points },
+            {
+                observe: 'response',
+                responseType: 'json',
+                withCredentials: true,
+            }
+        );
     }
 }

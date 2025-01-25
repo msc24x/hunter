@@ -1,0 +1,38 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+.user-submission {
+    pre {
+        @include basicBack;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        overflow: auto;
+        max-height: 24rem;
+        background-color: blanchedalmond;
+    }
+}
+
+.grading-status {
+    @include basicBack;
+    padding: 1.2rem;
+    font-weight: 500;
+    font-size: 1.2rem;
+    // position: sticky;
+    // top: 10rem;
+    // z-index: 50;
+
+    .evaluation-details {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .submission-user-details {
+        font-size: 1rem;
+        text-align: end;
+        font-weight: 400;
+    }
+}

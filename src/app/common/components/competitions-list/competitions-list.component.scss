@@ -161,6 +161,8 @@
     border-width: 110px;
     height: fit-content;
     background-color: colors.$dim_white;
+    margin-inline: auto;
+    max-width: 62rem;
 
     @include sweetBorder();
 

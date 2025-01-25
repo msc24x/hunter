@@ -2,6 +2,10 @@
 @use "../../../assets/colors";
 @use "../../../assets/mixins" as *;
 
+:host {
+    z-index: 50;
+}
+
 .questions_list::-webkit-scrollbar {
     display: none;
 }
@@ -36,13 +40,21 @@
         @include sweetBorder;
     }
 
-    div#create_question_btn {
+    #create_question_btn {
         padding-top: 0px;
         padding-bottom: 0px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-left: 12px;
+        width: 3rem;
+
+        &:hover {
+            background-color: whitesmoke !important;
+        }
+
+        mat-select {
+            font-weight: bold;
+        }
     }
 
     div#delete_question_btn {
@@ -71,6 +83,7 @@
         position: relative;
         text-wrap: nowrap;
         @include sweetBorder;
+        min-width: 1rem;
 
         &.selected-question {
             background-color: colors.$text_black;

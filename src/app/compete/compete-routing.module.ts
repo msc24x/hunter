@@ -7,6 +7,10 @@ const routes: Routes = [
         'path': 'p/:competition_id',
         'component': CompetitionComponent,
     },
+    {
+        'path': 'p/:competition_id/:ques_id',
+        'component': CompetitionComponent,
+    },
 ];
 
 @NgModule({

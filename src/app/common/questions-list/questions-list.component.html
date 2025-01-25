@@ -21,7 +21,6 @@
         matTooltip="Click to unselect"
         [matTooltipDisabled]="questionSelected !== i || !clearable"
     >
-        Q
         <fa-icon
             *ngIf="getQuestionProgress(question.id) as quesProgress"
             [icon]="quesProgress.accepted ? checkIcon : crossIcon"
@@ -37,22 +36,34 @@
             {{ this.questionsList.indexOf(question) + 1 }}
         </span>
     </li>
-    <div
-        matTooltip="Insert one new question"
-        *ngIf="editable"
-        id="create_question_btn"
-        (click)="addQuestion()"
-    >
-        Add
-    </div>
-    <div
+
+    <li *ngIf="editable" id="create_question_btn" (click)="openCreateQues()">
+        <mat-select
+            #add_question_select
+            panelWidth="14rem"
+            matTooltip="Insert one new question"
+            [(value)]="questionTypeBuffer"
+            (selectionChange)="addQuestion($event)"
+            placeholder="Add"
+        >
+            <mat-option
+                *ngFor="let qOption of questionTypes"
+                [value]="qOption[1]"
+            >
+                <ques-type-label
+                    [ques_type]="parseInt(qOption[1])"
+                ></ques-type-label>
+            </mat-option>
+        </mat-select>
+    </li>
+    <!-- <div
         matTooltip="Save changes for the selected question"
         *ngIf="editable && questionSelected !== -1"
         id="save_question_btn"
         (click)="saveClicked.emit()"
     >
         Save
-    </div>
+    </div> -->
     <div
         matTooltip="Delete the selected question"
         *ngIf="editable && questionSelected !== -1"

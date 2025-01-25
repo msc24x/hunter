@@ -81,20 +81,23 @@
             id="competition_info"
         >
             <div class="title-duration-container">
-                <b>
+                <div class="title">
                     {{ this.competition.title }}
                     <infotip
                         message="Click to read instructions"
                         (click)="showInstructionP = true"
                         [svgSize]="'sm'"
                     ></infotip>
-                </b>
-                <div *ngIf="!hasEnded && isAuthenticated" id="duration_info">
-                    <fa-icon [icon]="timerIcon"></fa-icon>
-                    <span style="width: max-content">
-                        &nbsp; &nbsp;
-                        {{ timeRemaining }}
-                    </span>
+                    <div
+                        *ngIf="!hasEnded && isAuthenticated"
+                        id="duration_info"
+                    >
+                        <fa-icon [icon]="clockIcon"></fa-icon>
+                        <span style="width: max-content">
+                            &nbsp; &nbsp;
+                            {{ timeRemaining }}
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -150,37 +153,196 @@
                     />
                 </div>
 
-                <div id="question_title">
-                    Correct Submission:
-                    <b>{{ questionSelectedInfo.points }} </b> points
-                    <br />
-                    <span *ngIf="!questionSelectedInfo.neg_points">
-                        No negative marking
-                    </span>
-                    <span *ngIf="questionSelectedInfo.neg_points">
-                        Each incorrect submission:
-                        <b>-{{ questionSelectedInfo.neg_points }} </b> points
-                    </span>
-
-                    <br /><br />
-                    {{ questionSelectedInfo.title }}
-                </div>
-
-                <div id="question_statement">
-                    <ng-katex
-                        [data]="getQuestionStatement(questionSelectedInfo)"
-                    ></ng-katex>
-                </div>
+                <question-display
+                    [questionInfo]="questionSelectedInfo"
+                ></question-display>
             </div>
 
             <!-- Code editor -->
             <code-editor
-                class="ace-editor"
+                *ngIf="questionSelectedInfo.type === 0"
+                class="ace-editor question-side-section"
                 [(code)]="codeWritten"
                 [(languageSelected)]="languageSelected"
                 (fetchLastSubmission)="fetchLastSubmission()"
             >
             </code-editor>
+
+            <ng-template #alreadySubmittedInfo>
+                <p class="" *ngIf="questionSelectedInfo.results?.length != 0">
+                    <b>
+                        You have already submitted your response on
+                        {{
+                            questionSelectedInfo.results?.[0]?.created_at
+                                | prettyDate
+                        }}
+                    </b>
+                </p>
+            </ng-template>
+
+            <div
+                *ngIf="questionSelectedInfo.type === 1"
+                class="mcq-section question-side-section"
+                [ngClass]="{
+                    'disabled_bright no-click':
+                        questionSelectedInfo.results?.length
+                }"
+            >
+                <h3>Select option(s)</h3>
+                <p class="info-like">
+                    Please read the statement of the question carefully and
+                    <b
+                        >choose any
+                        {{ questionSelectedInfo.correct_count }} from the
+                        following
+                        {{ questionSelectedInfo.question_choices?.length }}
+                        choices.</b
+                    >
+                </p>
+                <br />
+
+                <b>
+                    You have selected {{ alreadySelectedOptions() }}/{{
+                        questionSelectedInfo.correct_count
+                    }}
+
+                    <infotip
+                        [message]="
+                            alreadySelectedOptions() ===
+                            questionSelectedInfo.correct_count
+                                ? 'You have selected the required number of options, and are ready to submit.'
+                                : 'You have not selected the required number of options'
+                        "
+                    ></infotip>
+                </b>
+
+                <div class="choices">
+                    <div
+                        class="choice"
+                        *ngFor="
+                            let choice of questionSelectedInfo.question_choices
+                        "
+                        (click)="handleChoiceSelection(choice)"
+                    >
+                        <fa-icon
+                            size="lg"
+                            [icon]="
+                                showChoiceAsSelected(choice)
+                                    ? tickIcon
+                                    : circleIcon
+                            "
+                            [ngClass]="{
+                                'selected': showChoiceAsSelected(choice)
+                            }"
+                        ></fa-icon>
+                        <div>
+                            {{ choice.text }}
+                        </div>
+                    </div>
+                </div>
+                <ng-outlet
+                    [ngTemplateOutlet]="alreadySubmittedInfo"
+                ></ng-outlet>
+            </div>
+
+            <div
+                *ngIf="questionSelectedInfo.type === 2"
+                class="blank-section question-side-section"
+                [ngClass]="{
+                    'disabled_bright no-click':
+                        questionSelectedInfo.results?.length
+                }"
+            >
+                <h3>Fill in the value</h3>
+                <p class="info-like">
+                    Please read the statement of the question carefully and
+                    answer the value for the blank
+                </p>
+
+                <br />
+
+                <p class="info-like">Input your answer below *</p>
+                <input
+                    type="text"
+                    [(ngModel)]="questionSelectedInfo.user_answer"
+                    [value]="getLastSubmission()?.submission"
+                    placeholder="Type..."
+                />
+                <ng-outlet
+                    [ngTemplateOutlet]="alreadySubmittedInfo"
+                ></ng-outlet>
+            </div>
+
+            <div
+                *ngIf="questionSelectedInfo.type === 3"
+                class="long-answer-section question-side-section"
+                [ngClass]="{
+                    'disabled_bright no-click':
+                        questionSelectedInfo.results?.length
+                }"
+            >
+                <h3>Write your answer</h3>
+                <p class="info-like">
+                    Please read the statement of the question carefully and
+                    start writing your answer.
+                </p>
+
+                <p class="info-like" *ngIf="questionSelectedInfo.char_limit">
+                    <b
+                        >Minimum number of words acceptable are
+                        {{ questionSelectedInfo.char_limit }}</b
+                    >
+                </p>
+
+                <br />
+
+                <p
+                    class="info-like"
+                    *ngIf="questionSelectedInfo.char_limit"
+                    [ngClass]="{
+                        'acceptable': isLongAnswerAcceptable(
+                            this.questionSelectedInfo.user_answer ||
+                                getLastSubmission()?.submission ||
+                                ''
+                        )
+                    }"
+                    class="words-written"
+                >
+                    Number of words you've written
+                    <span>
+                        {{
+                            numOfWordsWritten(
+                                this.questionSelectedInfo.user_answer ||
+                                    getLastSubmission()?.submission ||
+                                    ""
+                            ) || 0
+                        }}/{{ questionSelectedInfo.char_limit }}
+                    </span>
+
+                    <infotip
+                        [message]="
+                            isLongAnswerAcceptable(
+                                this.questionSelectedInfo.user_answer ||
+                                    getLastSubmission()?.submission ||
+                                    ''
+                            )
+                                ? 'You have written enough words, and are ready to submit.'
+                                : 'Minimum words are not written, please write more.'
+                        "
+                    ></infotip>
+                </p>
+
+                <textarea
+                    type="text"
+                    [(ngModel)]="questionSelectedInfo.user_answer"
+                    placeholder="Start typing your answer..."
+                    [value]="getLastSubmission()?.submission"
+                    rows="15"
+                ></textarea>
+                <ng-outlet
+                    [ngTemplateOutlet]="alreadySubmittedInfo"
+                ></ng-outlet>
+            </div>
         </div>
 
         <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
@@ -204,16 +366,27 @@
                     (click)="postSolution(true)"
                     [matTooltipPosition]="'above'"
                     [matTooltip]="'Test samples (Shift + Alt + J)'"
+                    *ngIf="questionSelectedInfo.type === 0"
                 >
                     <fa-icon [icon]="playIcon"></fa-icon>
                     &nbsp; Run Tests
                 </div>
                 <div
-                    matTooltip="Only submit when you're ready, to avoid negative marking"
+                    [matTooltip]="
+                        questionSelectedInfo.type !== 0 &&
+                        questionSelectedInfo.results?.length
+                            ? 'You have already submitted your response'
+                            : 'Only submit when you\'re ready, to avoid negative marking'
+                    "
                     class="button"
                     id="submit_code_btn"
                     [matTooltipPosition]="'above'"
                     (click)="postSolution()"
+                    [ngClass]="{
+                        'disabled no-click':
+                            questionSelectedInfo.type !== 0 &&
+                            questionSelectedInfo.results?.length
+                    }"
                 >
                     <fa-icon [icon]="submitIcon"></fa-icon>
                     &nbsp; Submit & Evaluate
@@ -232,16 +405,69 @@
         >
             <fa-icon [icon]="upIcon"></fa-icon>
         </div>
+        <ng-template #overallProgress>
+            <div>
+                <div *ngIf="competition.questions" class="progress-container">
+                    <div class="progress-box">
+                        <span class="progress-num">
+                            {{ questionsProgress.length }} of
+                            {{ competition.questions.length }}
+                        </span>
+                        Questions Attempted
+                        <greenred
+                            [green_number]="questionsProgress.length"
+                            [red_number]="
+                                (competition.questions.length || 1) -
+                                questionsProgress.length
+                            "
+                            green_label="Attempted"
+                            red_label="Unattempted"
+                        ></greenred>
+                    </div>
+
+                    <div class="progress-box">
+                        <span class="progress-num">
+                            {{ getAcceptedSolutions() }} of
+                            {{ questionsProgress.length }}
+                        </span>
+                        Questions Accepted
+                        <greenred
+                            [green_number]="getAcceptedSolutions()"
+                            [red_number]="
+                                questionsProgress.length -
+                                getAcceptedSolutions()
+                            "
+                            green_label="Accepted"
+                            red_label="Not Accepted"
+                        ></greenred>
+                    </div>
+
+                    <div class="progress-box score-box cute-panel">
+                        Received a total of
+                        <span class="progress-num">
+                            {{ getTotalScore() }}
+                        </span>
+                        points
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
         <ng-template #questionEvaluation>
             <h2>Question Evaluation</h2>
-
             <div id="output_points">
                 <question-evaluation
                     [questionSelectedInfo]="questionSelectedInfo"
+                    [flipper]="evaluationChangeOccurred"
                 >
                 </question-evaluation>
 
                 <div id="solution_output">
+                    <ng-outlet
+                        [ngTemplateOutlet]="overallProgress"
+                        [ngTemplateOutletContext]="{ hideTitle: true }"
+                        *ngIf="questionSelectedInfo.type !== 0"
+                    ></ng-outlet>
                     <div class="loading" *ngIf="judgeInProgress">
                         <fa-icon
                             [icon]="judgeLoadingIcon"
@@ -268,50 +494,15 @@
             </div>
 
             <br />
-            <h2 *ngIf="competition.questions">Your Overall Progress</h2>
-
-            <div *ngIf="competition.questions" class="progress-container">
-                <div class="progress-box">
-                    <span class="progress-num">
-                        {{ questionsProgress.length }} of
-                        {{ competition.questions.length }}
-                    </span>
-                    Questions Attempted
-                    <greenred
-                        [green_number]="questionsProgress.length"
-                        [red_number]="
-                            (competition.questions.length || 1) -
-                            questionsProgress.length
-                        "
-                        green_label="Attempted"
-                        red_label="Unattempted"
-                    ></greenred>
-                </div>
-
-                <div class="progress-box">
-                    <span class="progress-num">
-                        {{ getAcceptedSolutions() }} of
-                        {{ questionsProgress.length }}
-                    </span>
-                    Questions Accepted
-                    <greenred
-                        [green_number]="getAcceptedSolutions()"
-                        [red_number]="
-                            questionsProgress.length - getAcceptedSolutions()
-                        "
-                        green_label="Accepted"
-                        red_label="Not Accepted"
-                    ></greenred>
-                </div>
-
-                <div class="progress-box score-box">
-                    You aggregated a total of &nbsp;
-                    <span class="progress-num">
-                        {{ getTotalScore() }}
-                    </span>
-                    points
-                </div>
-            </div>
+            <h2
+                *ngIf="competition.questions && questionSelectedInfo.type === 0"
+            >
+                Your Overall Progress
+            </h2>
+            <ng-outlet
+                [ngTemplateOutlet]="overallProgress"
+                *ngIf="questionSelectedInfo.type === 0"
+            ></ng-outlet>
         </ng-template>
 
         <ng-container

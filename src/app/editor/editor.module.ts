@@ -6,18 +6,20 @@ import { EditorMenuComponent } from './pages/editor-menu/editor-menu.component';
 import { DashboardCardComponent } from './components/dashboard-card/dashboard-card.component';
 import { RouterModule } from '@angular/router';
 import { EditorRoutingModule } from './editor-routing.module';
-import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
+import { NgKatexComponent } from '../common/components/ng-katex/ng-katex.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CodeTesterComponent } from './components/code-tester/code-tester.component';
-import { InsightsComponent } from './components/insights/insights.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
+import { InsightsComponent } from './pages/insights/insights.component';
 
 @NgModule({
     declarations: [
         EditorComponent,
         EditorMenuComponent,
         DashboardCardComponent,
-        NgKatexComponent,
         CodeTesterComponent,
         InsightsComponent,
     ],
@@ -28,6 +30,9 @@ import { InsightsComponent } from './components/insights/insights.component';
         EditorRoutingModule,
         MatTooltipModule,
         FontAwesomeModule,
+        MatSelectModule,
+        MatSlideToggleModule,
+        FormsModule,
     ],
     exports: [NgKatexComponent],
 })

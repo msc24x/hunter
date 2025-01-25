@@ -2,97 +2,96 @@
 @use "./assets/fonts";
 @use "./assets/mixins" as *;
 
-/*160deg*/
-
-.mdc-switch {
-    --mdc-switch-track-height: 24px !important;
-    --mdc-switch-track-shape: 24px !important;
-}
-.mat-mdc-snack-bar-container {
-    --mdc-snackbar-container-color: #361717 !important;
-    --mdc-snackbar-container-shape: 12px !important;
-}
-
+// =============================
+// Base Styles
+// =============================
 html {
     overflow-y: scroll;
     font-weight: 200;
 }
 
-.hidden {
-    display: none;
-}
-
-.no-click {
-    &:active {
-        pointer-events: none;
-    }
-}
-
-.disabled {
-    cursor: not-allowed !important;
-    opacity: 0.7;
-}
-
-.link-like {
-    cursor: pointer;
-    color: colors.$text_black;
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-a {
-    text-decoration: none;
-}
-
-.table_heading {
-    // pointer-events: none;
-}
-
-.hsection {
-    background-color: whitesmoke;
-    border-radius: 24px;
-    padding: 10px;
-}
-
-.pointer {
-    cursor: pointer;
-}
-
 body {
     background-color: colors.$text_white;
-    margin: 0px;
+    margin: 0;
     max-width: 1720px;
     padding-inline: 2%;
     margin-inline: auto;
     font-family: appFont;
 }
 
-.largeButton {
-    padding: 0.8rem;
-    padding-inline: 1.6rem;
-    color: colors.$text_black;
+a {
+    text-decoration: none;
+}
+
+hr {
+    border-color: #ffffff;
+    border-bottom: transparent;
+}
+
+input[type="number"],
+input[type="text"] {
+    @include appTextArea;
+}
+
+button.main {
+    @include blackBack;
     font-size: 1rem;
-    background-color: white;
+    color: colors.$cute_blue;
+    border-color: colors.$cute_blue;
+    background-color: #e1e5ff;
+    min-width: 6rem;
     border-radius: 1rem;
     cursor: pointer;
-
-    @include sweetBorder;
-
-    &:not(:hover) {
-        transition: 300ms;
-    }
+    transition: 100ms;
 
     &:hover {
-        transform: scale(1.07);
-        background-color: colors.$text_black;
-        font-weight: bold;
-        color: white;
-        transition: 300ms;
+        background-color: #f1f3ff;
+    }
+
+    &:active {
+        scale: 0.99;
+        background-color: #d6dcff;
     }
 }
 
+// =============================
+// Material Design Components
+// =============================
+.mdc-switch {
+    --mdc-switch-track-height: 24px !important;
+    --mdc-switch-track-shape: 24px !important;
+}
+
+.mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color: blanchedalmond !important;
+    --mdc-snackbar-supporting-text-color: rgb(91, 54, 0) !important;
+    --mdc-snackbar-container-shape: 0.5rem !important;
+    --mdc-snackbar-supporting-text-font: appFont !important;
+    --mdc-snackbar-supporting-text-size: 16px !important;
+    --mdc-snackbar-supporting-text-weight: 200 !important;
+    --mdc-snackbar-supporting-text-line-height: 1.5rem !important;
+    @include sweetBorder;
+    border-color: rgb(255, 208, 150);
+    border-radius: 0.5rem !important;
+}
+
+.mat-mdc-select-panel {
+    border-radius: 1rem !important;
+    @include sweetBorder;
+
+    .mat-mdc-option {
+        margin-inline: 0.5rem;
+        border-radius: 0.7rem;
+
+        &:hover {
+            background-color: antiquewhite;
+        }
+    }
+}
+
+// =============================
+// Layout Utilities
+// =============================
 .flex {
     display: flex;
 
@@ -105,12 +104,6 @@ body {
         @extend .flex;
         flex-direction: column;
     }
-}
-
-.row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
 }
 
 .justify {
@@ -131,6 +124,12 @@ body {
     }
 }
 
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .wrap {
     flex-wrap: wrap;
 
@@ -139,17 +138,78 @@ body {
     }
 }
 
+// =============================
+// State Classes
+// =============================
+.hidden {
+    display: none;
+}
+
+.no-click {
+    &,
+    * {
+        &:active {
+            pointer-events: none;
+        }
+    }
+    * {
+        pointer-events: none;
+    }
+}
+
+.disabled {
+    &,
+    * {
+        opacity: 0.7;
+        cursor: not-allowed !important;
+    }
+}
+
+.disabled_bright {
+    &,
+    * {
+        opacity: 0.85;
+        cursor: not-allowed !important;
+    }
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+// =============================
+// Components
+// =============================
+.largeButton {
+    padding: 0.8rem 1.6rem;
+    color: colors.$text_black;
+    font-size: 1rem;
+    background-color: white;
+    border-radius: 1rem;
+    cursor: pointer;
+    @include sweetBorder;
+
+    &:not(:hover) {
+        transition: 300ms;
+    }
+
+    &:hover {
+        transform: scale(1.07);
+        background-color: colors.$text_black;
+        font-weight: bold;
+        color: white;
+        transition: 300ms;
+    }
+}
+
 .btable {
     overflow: scroll;
-    max-height: 512px;
     display: flex;
     flex-direction: column;
     font-size: 1.1rem;
     background-color: whitesmoke;
     padding: 16px;
     border-radius: 1rem;
-    margin: 4px;
-
     @include sweetBorder();
 
     .table_heading {
@@ -160,6 +220,7 @@ body {
     div {
         display: flex;
         justify-content: start;
+        align-items: center;
 
         div {
             text-align: center;
@@ -172,4 +233,46 @@ body {
         border-radius: 0.3rem;
         background-color: colors.$text_white;
     }
+}
+
+// =============================
+// Utility Classes
+// =============================
+.link-like {
+    cursor: pointer;
+    color: colors.$text_black;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.info-like {
+    color: gray;
+
+    b {
+        font-weight: 500;
+        color: rgb(95, 95, 95);
+    }
+
+    &.cute {
+        color: colors.$cute_blue;
+        font-weight: 500;
+    }
+}
+
+.error-like {
+    color: darkred;
+}
+
+.hsection {
+    background-color: whitesmoke;
+    border-radius: 24px;
+    padding: 10px;
+}
+
+.cute-panel {
+    background: #fff1ff !important;
+    border-color: #c19bc1 !important;
+    color: purple !important;
 }

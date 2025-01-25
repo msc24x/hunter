@@ -103,7 +103,7 @@ export class CompetitionsDataService {
 
     judgeSolution(exe: HunterExecutable, samples = false) {
         return this.http.post(
-            apiEndpoints.execute,
+            apiEndpoints.submit,
             { exec: exe, samples: samples },
             {
                 responseType: 'json',
@@ -113,7 +113,7 @@ export class CompetitionsDataService {
         );
     }
 
-    postQuestion(params: { competition_id: number }) {
+    postQuestion(params: { competition_id: number; type: number }) {
         const endpoint = format(
             apiEndpoints.question,
             params.competition_id.toString()!,
@@ -121,7 +121,7 @@ export class CompetitionsDataService {
         );
         return this.http.post(
             endpoint,
-            { competition_id: params.competition_id },
+            { competition_id: params.competition_id, type: params.type },
             {
                 withCredentials: true,
                 observe: 'response',

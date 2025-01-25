@@ -78,7 +78,7 @@ router.get(
 );
 
 async function fetchUserSubmissions(
-    user: UserInfo,
+    user_id: number,
     competition_id: string,
     question_id: string,
     after_id?: string
@@ -105,7 +105,7 @@ async function fetchUserSubmissions(
 
     const results = await client.results.findMany({
         where: {
-            user_id: user.id,
+            user_id: user_id,
             question: question_filters,
         },
         orderBy: {
@@ -113,11 +113,33 @@ async function fetchUserSubmissions(
         },
         take: 10,
         ...(after_id && cursor_params),
+        include: {
+            question_choices: {
+                select: {
+                    id: true,
+                },
+            },
+            evaluated_by: {
+                select: {
+                    id: true,
+                    name: true,
+                    avatar_url: true,
+                },
+            },
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    avatar_url: true,
+                },
+            },
+            question: true,
+        },
     });
 
     const accepted_count = await client.results.count({
         where: {
-            user_id: user.id,
+            user_id: user_id,
             question: question_filters,
             accepted: true,
         },
@@ -125,7 +147,7 @@ async function fetchUserSubmissions(
 
     const rejected_count = await client.results.count({
         where: {
-            user_id: user.id,
+            user_id: user_id,
             question: question_filters,
             accepted: false,
         },
@@ -149,20 +171,208 @@ router.get(
         const competition_id = req.params.id;
         const question_id = req.params.ques_id;
         const after_id = req.query.after;
+        const user_id = req.query.user_id;
 
         if (!competition_id && !question_id) {
             Util.sendResponse(res, resCode.badRequest);
             return;
         }
 
-        fetchUserSubmissions(
-            user,
-            competition_id,
-            question_id,
-            after_id?.toString()
-        )
+        client.competitions
+            .findUniqueOrThrow({
+                where: {
+                    id: parseInt(competition_id),
+                },
+                include: {
+                    host_user: true,
+                },
+            })
+            .then((comp) => {
+                var filterUser = user.id;
+
+                if (comp.host_user_id === user.id && user_id) {
+                    filterUser = parseInt(user_id.toString());
+                }
+
+                fetchUserSubmissions(
+                    filterUser,
+                    competition_id,
+                    question_id,
+                    after_id?.toString()
+                )
+                    .then((result) => {
+                        Util.sendResponseJson(res, resCode.success, result);
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
+            })
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
+    }
+);
+
+router.get(
+    '/competitions/:id/evaluations/:ques_id?',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const user: UserInfo = res.locals.user;
+        const competition_id = req.params.id;
+        const question_id = req.params.ques_id;
+        const after_id = req.query.after;
+
+        if (!competition_id && !question_id) {
+            Util.sendResponse(res, resCode.badRequest);
+            return;
+        }
+
+        client.competitions
+            .findUniqueOrThrow({
+                where: {
+                    id: parseInt(competition_id),
+                    host_user: {
+                        id: user.id,
+                    },
+                },
+                include: {
+                    host_user: true,
+                },
+            })
+            .then((comp) => {
+                var questionFilter: any = {
+                    competition_id: parseInt(competition_id),
+                    deleted_at: null,
+                };
+
+                if (question_id) {
+                    questionFilter.id = question_id;
+                }
+
+                client.results
+                    .findMany({
+                        where: {
+                            OR: [
+                                {
+                                    evaluated_at: null,
+                                },
+                                { evaluated_by_id: user.id },
+                            ],
+                            question: questionFilter,
+                        },
+                        include: {
+                            evaluated_by: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    avatar_url: true,
+                                },
+                            },
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    avatar_url: true,
+                                },
+                            },
+                            question: {
+                                select: {
+                                    id: true,
+                                    title: true,
+                                    points: true,
+                                    neg_points: true,
+                                    type: true,
+                                },
+                            },
+                        },
+                    })
+                    .then((results) => {
+                        Util.sendResponseJson(res, resCode.success, results);
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
+            })
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
+    }
+);
+
+router.put(
+    '/competitions/:id/evaluations/:eval_id',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const user: UserInfo = res.locals.user;
+        const competition_id = parseInt(req.params.id);
+        const eval_id = parseInt(req.params.eval_id);
+
+        if (!competition_id || !eval_id) {
+            Util.sendResponse(res, resCode.badRequest);
+            return;
+        }
+
+        client.results
+            .findUnique({
+                where: {
+                    id: eval_id,
+                    question: {
+                        competitions: {
+                            id: competition_id,
+                            host_user_id: user.id,
+                        },
+                    },
+                },
+                include: {
+                    question: true,
+                },
+            })
             .then((result) => {
-                Util.sendResponseJson(res, resCode.success, result);
+                if (!result) {
+                    Util.sendResponse(res, resCode.notFound);
+                    return;
+                }
+
+                const points = parseInt(req.body?.result);
+
+                if (isNaN(points)) {
+                    Util.sendResponseJson(res, resCode.badRequest, {
+                        result: 'Invalid number of points, please input a valid number.',
+                    });
+                    return;
+                }
+
+                if (
+                    points < (result.question.neg_points * -1 || 0) ||
+                    points > (result.question.points || 0)
+                ) {
+                    Util.sendResponseJson(res, resCode.badRequest, {
+                        result: `Points only between ${
+                            result.question.neg_points * -1
+                        } and ${
+                            result.question.points
+                        } can be granted for this question.`,
+                    });
+                    return;
+                }
+
+                client.results
+                    .update({
+                        where: { id: result.id },
+                        data: {
+                            evaluated_at: new Date(),
+                            evaluated_by_id: user.id,
+                            result: points,
+                        },
+                    })
+                    .then(() => {
+                        Util.sendResponse(res, resCode.success);
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
             })
             .catch((err) => {
                 Util.sendResponse(res, resCode.serverError, err);

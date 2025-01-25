@@ -7,6 +7,7 @@ import { EditorModule } from '../editor/editor.module';
 import { CompeteRoutingModule } from './compete-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [CompetitionComponent],
@@ -18,6 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         RouterModule,
         FontAwesomeModule,
         MatTooltipModule,
+        FormsModule,
     ],
     providers: [DatePipe],
 })

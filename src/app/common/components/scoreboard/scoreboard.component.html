@@ -1,6 +1,6 @@
 <app-loading *ngIf="loading"></app-loading>
 
-<popup
+<!-- <popup
     id="view-submissions-list-popup"
     [hidden]="!showSubmissionsListP"
     (closeEvent)="showSubmissionsListP = false"
@@ -10,17 +10,18 @@
     <question-evaluation
         *ngIf="competitionInfo.questions?.[questionSelected]"
         [questionSelectedInfo]="competitionInfo.questions![questionSelected]"
+        [user_id]="user.id"
     ></question-evaluation>
-</popup>
+</popup> -->
 
 <div id="score_board">
-    <h2 *ngIf="question_list">
+    <h3 *ngIf="question_list">
         {{
             questionSelected === -1
-                ? "Filter By Question"
+                ? "Select a question to filter"
                 : "Q" + (questionSelected + 1) + " selected"
         }}
-    </h2>
+    </h3>
     <questions-list
         *ngIf="question_list"
         [competitionInfo]="competitionInfo"
@@ -33,17 +34,17 @@
     <!-- <h2>
         {{ questionSelected === -1 ? "Competition" : "Question" }} Scoreboard
     </h2> -->
-    <p>
+    <p class="info-like">
         Scoreboard displays the aggregate scores of all participants for this
         contest{{ questionSelected !== -1 ? "'s selected question" : "" }}.
         <br />So far, <b>{{ meta?.total }} participants</b> have submitted their
         code for this contest.
     </p>
 
-    <app-info-card *ngIf="questionSelected !== -1" [persist]="true">
-        You can click any participant from below table, to view their
-        submissions for selected question.
-    </app-info-card>
+    <p *ngIf="questionSelected !== -1">
+        Click any participant from below table, to view their submissions for
+        selected question.
+    </p>
 
     <div
         id="scores_table"
@@ -77,9 +78,18 @@
             *ngIf="meta?.user_details && uiShowUserRow()"
             class="user-rank-row"
             matTooltip="Click to view submissions"
-            matTooltipPosition="before"
+            matTooltipPosition="above"
             [matTooltipDisabled]="questionSelected === -1"
-            (click)="showSubmissionList()"
+            (click)="
+                showSubmissionList({
+                    id: meta?.user_details?.user_id!,
+                    name: meta?.user_details?.user_name!,
+                    email: ''
+                })
+            "
+            [ngClass]="{
+                'selected': user?.id === meta?.user_details?.user_id
+            }"
         >
             <div class="rank-col">
                 <b>{{ meta!.user_details!.user_rank }}</b>
@@ -100,10 +110,7 @@
                 <i class="ahead-statement"> Ahead of {{ calcAheadOf() }}% </i>
             </div>
             <div class="time-col">
-                {{
-                    meta?.user_details?.created_at
-                        | date : "yyyy MMM dd 'at' hh:mm aa"
-                }}
+                {{ meta?.user_details?.created_at | prettyDate }}
             </div>
             <div class="ques-col">
                 {{ meta?.user_details?.questions_attempted }}
@@ -117,13 +124,20 @@
         <div
             *ngFor="let score of scores; let i = index"
             matTooltip="Click to view submissions"
-            matTooltipPosition="before"
+            matTooltipPosition="above"
             [matTooltipDisabled]="questionSelected === -1"
-            (click)="showSubmissionList()"
+            (click)="
+                showSubmissionList({
+                    name: score.user_name,
+                    id: score.user_id,
+                    email: ''
+                })
+            "
             [ngClass]="{
                 'user-rank-row':
                     meta?.user_details &&
-                    meta?.user_details?.user_id === score.user_id
+                    meta?.user_details?.user_id === score.user_id,
+                'selected': user?.id === score.user_id
             }"
         >
             <div class="rank-col">
@@ -136,13 +150,14 @@
                 ></fa-icon>
             </div>
             <div class="name-col">
-                <a
-                    class="link-like"
-                    href="/u/{{ score.user_id }}"
-                    target="_blank"
-                >
-                    {{ score.user_name || "Anonymous" }}#{{ score.user_id }}
-                </a>
+                <user-display
+                    [userInfo]="{
+                        id: score.user_id,
+                        name: score.user_name,
+                        avatar_url: score.user_avatar_url,
+                        email: ''
+                    }"
+                ></user-display>
                 &nbsp;
                 <i
                     class="ahead-statement"
@@ -156,7 +171,7 @@
                 </i>
             </div>
             <div class="time-col">
-                {{ score.created_at | date : "yyyy MMM dd 'at' hh:mm aa" }}
+                {{ score.created_at | prettyDate }}
             </div>
 
             <div class="ques-col">
@@ -195,6 +210,27 @@
             >
                 View Next
             </div>
+        </div>
+        <div class="unusual" *ngIf="user?.id && questionSelected >= 0">
+            <h2 style="text-align: center">
+                Submissions by {{ user?.name || "Anonymous" }}#{{
+                    user?.id
+                }}
+                for Q{{ questionSelected + 1 }}
+            </h2>
+        </div>
+        <div
+            *ngIf="user?.id && questionSelected >= 0"
+            class="submissions-list unusual"
+        >
+            <question-evaluation
+                *ngIf="competitionInfo.questions?.[questionSelected]"
+                [questionSelectedInfo]="
+                    competitionInfo.questions![questionSelected]
+                "
+                [user_id]="user?.id"
+                [inlineView]="question_list"
+            ></question-evaluation>
         </div>
     </div>
 </div>

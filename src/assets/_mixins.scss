@@ -96,7 +96,7 @@
 }
 
 @mixin appTextArea {
-    resize: none;
+    resize: vertical;
     background-color: rgb(250, 250, 250);
     border-radius: 1rem;
     font-family: appFont;

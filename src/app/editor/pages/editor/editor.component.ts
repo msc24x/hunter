@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+    faBook,
     faCircleCheck,
     faCircleXmark,
     faDownload,
@@ -11,9 +12,14 @@ import {
     faEyeSlash,
     faPenToSquare,
     faShare,
+    faShareNodes,
     faSquareShareNodes,
+    faTrashArrowUp,
+    faTrashCan,
     faUpload,
+    faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
+import { error } from 'console';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -22,9 +28,11 @@ import {
     domainName,
     environment,
     protocol,
+    QuestionChoice,
     QuestionInfo,
     QuestionVerification,
     resCode,
+    ScoresMeta,
     UserInfo,
 } from 'src/environments/environment';
 
@@ -34,11 +42,15 @@ import {
     styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit, OnDestroy {
-    shareIcon = faSquareShareNodes;
+    shareIcon = faShareNodes;
     viewIcon = faEye;
     writeIcon = faEyeSlash;
     checkIcon = faCircleCheck;
     crossIcon = faCircleXmark;
+    trashIcon = faTrashCan;
+    trashUpIcon = faTrashArrowUp;
+    magicIcon = faWandMagicSparkles;
+    guideIcon = faBook;
 
     uploadIcon = faUpload;
     downloadIcon = faDownload;
@@ -57,9 +69,18 @@ export class EditorComponent implements OnInit, OnDestroy {
     verificationResult: QuestionVerification | null = null;
     elem: HTMLElement | null = null;
 
+    scoreMeta: ScoresMeta = null;
+
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
     eventPopup = new BehaviorSubject<string>('');
+
+    errors: any = {};
+
+    choiceTypes = {
+        selectable: 0,
+        hidden: 1,
+    };
 
     constructor(
         private router: Router,
@@ -96,10 +117,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             .classList.add('hidden');
         window.scroll(0, 0);
 
-        window.onbeforeunload = (event) => {
-            event.preventDefault();
-            return;
-        };
+        // window.onbeforeunload = (event) => {
+        //     event.preventDefault();
+        //     return;
+        // };
 
         this.elem = document.getElementById('log');
 
@@ -133,7 +154,6 @@ export class EditorComponent implements OnInit, OnDestroy {
                     (event.target as HTMLElement).tagName
                 )
             ) {
-                this.saveQuestion();
                 this.saveChanges();
             }
         };
@@ -178,6 +198,20 @@ export class EditorComponent implements OnInit, OnDestroy {
         window.open(this.downloadFileUrl(fileType));
     }
 
+    addNewChoiceInQuestion() {
+        this.questionSelectedInfo.question_choices?.push({
+            id: -1,
+            is_correct: false,
+            position: this.questionSelectedInfo.question_choices.length,
+            question_id: this.questionSelectedInfo.id,
+            text: '',
+        });
+    }
+
+    markChoiceAsDeletedToggle(choice: QuestionChoice) {
+        choice.delete = !choice.delete;
+    }
+
     saveQuestion() {
         if (this.questionSelected == -1) {
             this.displayLog('No question selected');
@@ -187,46 +221,23 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.competitionsData
             .putQuestion({
-                id: this.competitionInfo.questions![this.questionSelected].id,
-                competition_id: this.competitionInfo.id,
-                title: (
-                    document.getElementById(
-                        'text_qtitle'
-                    ) as HTMLTextAreaElement
-                ).value,
-                statement: (
-                    document.getElementById(
-                        'text_statement'
-                    ) as HTMLTextAreaElement
-                ).value,
-                points: (
-                    document.getElementById(
-                        'question_points'
-                    ) as HTMLInputElement
-                ).valueAsNumber,
-                neg_points: (
-                    document.getElementById(
-                        'question_neg_points'
-                    ) as HTMLInputElement
-                ).valueAsNumber,
-                sample_cases: (
-                    document.getElementById(
-                        'question_sample_cases'
-                    ) as HTMLInputElement
-                ).value,
-                sample_sols: (
-                    document.getElementById(
-                        'question_sample_sols'
-                    ) as HTMLInputElement
-                ).value,
+                ...this.questionSelectedInfo,
                 created_at: this.competitionInfo.created_at,
                 updated_at: new Date(),
             } as QuestionInfo)
-            .subscribe((res) => {
-                this.displayLog('Question Updated');
-                this.loading = false;
-                this.fetchQuestions();
-            });
+            .subscribe(
+                (res) => {
+                    this.displayLog('Question Updated');
+                    this.loading = false;
+                    this.snackBar.open('Data saved successfully');
+
+                    this.fetchQuestions();
+                },
+                (error) => {
+                    this.loading = false;
+                    this.errors = error.error;
+                }
+            );
     }
 
     selectedQuestionElement(): HTMLLIElement | null {
@@ -247,12 +258,14 @@ export class EditorComponent implements OnInit, OnDestroy {
                 ? ({} as QuestionInfo)
                 : this.competitionInfo.questions![index];
 
-        this.getFileStatus('solutions').subscribe((res) => {
-            this.solsExists = res;
-        });
-        this.getFileStatus('testcases').subscribe((res) => {
-            this.testExists = res;
-        });
+        if (this.questionSelectedInfo?.type === 0) {
+            this.getFileStatus('solutions').subscribe((res) => {
+                this.solsExists = res;
+            });
+            this.getFileStatus('testcases').subscribe((res) => {
+                this.testExists = res;
+            });
+        }
         this.loading = false;
 
         this.titleService.setTitle(
@@ -311,21 +324,29 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.competitionsData
             .getQuestions({ competition_id: this.competition_id })
             .subscribe((res) => {
-                if (res.status == resCode.success) {
-                    if (res.body) {
-                        this.competitionInfo = res.body as CompetitionInfo;
-                        this.toggleVisibility();
-                        this.toggleVisibility();
-                        this.loading = false;
+                if (res.body) {
+                    this.competitionInfo = res.body as CompetitionInfo;
+                    this.toggleVisibility();
+                    this.toggleVisibility();
+                    this.loading = false;
 
-                        this.titleService.setTitle(
-                            `Build • ${
-                                this.competitionInfo.title || 'Competition'
-                            }`
-                        );
+                    this.titleService.setTitle(
+                        `Build • ${this.competitionInfo.title || 'Competition'}`
+                    );
+
+                    if (this.questionSelected) {
+                        this.selectQuestion(this.questionSelected);
                     }
                 }
             });
+    }
+
+    toggleCharLimit(enabled: boolean) {
+        if (enabled) {
+            this.questionSelectedInfo.char_limit = 24;
+        } else {
+            this.questionSelectedInfo.char_limit = null;
+        }
     }
 
     refreshCompetitionInfo() {
@@ -373,34 +394,32 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     saveChanges() {
-        this.saveQuestion();
         this.loading = true;
-        const title = document.getElementById(
-            'text_title'
-        ) as HTMLTextAreaElement;
-        const description = document.getElementById(
-            'text_description'
-        ) as HTMLTextAreaElement;
-        const duration = document.getElementById(
-            'competition_duration'
-        ) as HTMLInputElement;
+        this.errors = {};
+
         const schedule = document.getElementById(
             'competition_schedule'
         ) as HTMLInputElement;
         const schedule_end = document.getElementById(
             'competition_schedule_end'
         ) as HTMLInputElement;
-        this.competitionInfo.title = title.value;
-        this.competitionInfo.description = description.value;
+
         this.competitionInfo.scheduled_end_at = new Date(schedule_end.value);
         this.competitionInfo.scheduled_at = new Date(schedule.value);
         this.competitionsData
             .putCompetitionInfo(this.competitionInfo)
-            .subscribe((res) => {
-                this.displayLog('Competition changes saved');
-                this.loading = false;
-                this.snackBar.open('Saved successfully');
-            });
+            .subscribe(
+                (res) => {
+                    this.displayLog('Competition changes saved');
+                    this.loading = false;
+
+                    this.saveQuestion();
+                },
+                (error) => {
+                    this.loading = false;
+                    this.errors = error.error;
+                }
+            );
     }
 
     displayLog(msg: string) {
@@ -458,11 +477,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     deleteCompetition() {
+        this.errors.delete_code = '';
+
         let input = document.getElementById(
             'input_competition_code'
         ) as HTMLInputElement;
         if (parseInt(input.value) != this.competitionInfo.id) {
-            this.deleteCompMessage = '*Code does not match';
+            this.errors.delete_code = 'Code does not match';
         } else {
             this.deleteCompMessage = '';
             this.loading = true;

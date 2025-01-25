@@ -4,6 +4,12 @@
 
 .points-time-col {
     flex-basis: 60%;
+
+    &:not(.header) {
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+    }
 }
 
 .next-prev-options {
@@ -25,16 +31,38 @@
     }
 }
 
+.eval-table-view-container {
+    display: flex;
+    width: 100%;
+
+    .evaluation-table {
+        flex-basis: 40%;
+        height: fit-content;
+        position: sticky;
+        top: 10rem;
+        margin-right: 1rem;
+    }
+
+    .view-submission-container {
+        @include blackBack;
+        flex-grow: 1;
+        border-radius: 1rem;
+        max-width: 55%;
+    }
+}
+
+.submission-row {
+    cursor: pointer;
+}
+
 #pts_desc::-webkit-scrollbar {
     display: none;
 }
 
 code-editor {
-    // @include basicBack;
     display: block;
-    width: 860px;
+    max-width: 720px;
     margin-block: 1rem;
-    // overflow: scroll;
 }
 
 pretty-meta {
@@ -55,9 +83,5 @@ pretty-meta {
 @media only screen and (max-width: 512px) {
     .points-time-col {
         display: none !important;
-    }
-
-    .btable div div {
-        flex-basis: initial;
     }
 }

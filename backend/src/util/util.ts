@@ -1,5 +1,10 @@
 import path from 'path';
-import { CompetitionInfo, HunterExecutable, UserInfo } from '../config/types';
+import {
+    CodeSolution,
+    CompetitionInfo,
+    HunterExecutable,
+    UserInfo,
+} from '../config/types';
 import { existsSync } from 'fs';
 import config from '../config/config';
 
@@ -44,8 +49,8 @@ export class Util {
             if (
                 exec.for.competition_id &&
                 exec.for.question_id &&
-                exec.solution.code &&
-                langs.includes(exec.solution.lang)
+                (exec.solution as CodeSolution).code &&
+                langs.includes((exec.solution as CodeSolution).lang)
             )
                 return true;
         } catch (error) {

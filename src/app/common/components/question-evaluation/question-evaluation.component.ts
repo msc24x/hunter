@@ -1,11 +1,18 @@
 import {
     Component,
+    EventEmitter,
     Input,
     OnChanges,
     OnInit,
+    Output,
     SimpleChanges,
 } from '@angular/core';
-import { faFileCode } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import {
+    faClock,
+    faFileCode,
+    faStarOfLife,
+} from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import { QuestionInfo, resCode, result } from 'src/environments/environment';
@@ -18,16 +25,27 @@ import { QuestionInfo, resCode, result } from 'src/environments/environment';
 export class QuestionEvaluationComponent implements OnInit, OnChanges {
     loading = false;
     codeIcon = faFileCode;
+    judgeIcon = faStarOfLife;
+    clockIcon = faClock;
+    checkIcon = faCheckCircle;
 
     showSubmissionP = false;
 
     @Input()
     questionSelectedInfo = {} as QuestionInfo;
 
+    @Input()
+    user_id: number | null | undefined = null;
+
+    @Input()
+    flipper = false;
+
+    @Input()
+    inlineView = false;
+
     viewSubmissionResult: result | undefined;
 
     evaluationAfterPages: number[] = [];
-    evaluation: Array<result> = [];
     acceptedEvaluation: number = 0;
     rejectedEvaluation: number = 0;
 
@@ -42,7 +60,7 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.viewSubmissionResult = undefined;
         this.evaluationAfterPages = [];
-        this.evaluation = [];
+        this.questionSelectedInfo.results = [];
 
         this.fetchEvaluation();
     }
@@ -54,7 +72,9 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
 
     nextEvaluations() {
         this.evaluationAfterPages.push(
-            this.evaluation[this.evaluation.length - 1].id
+            this.questionSelectedInfo.results?.[
+                this.questionSelectedInfo.results?.length - 1
+            ]?.id!
         );
         this.fetchEvaluation();
     }
@@ -63,8 +83,6 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
         if (!Object.keys(this.questionSelectedInfo).length) {
             return;
         }
-
-        console.log(this.questionSelectedInfo);
 
         this.loading = true;
         this.subscriptions.push(
@@ -75,12 +93,13 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
                     after: this.evaluationAfterPages[
                         this.evaluationAfterPages.length - 1
                     ],
+                    user_id: this.user_id,
                 })
                 .subscribe((res) => {
                     this.loading = false;
 
                     if (res.status == resCode.success) {
-                        this.evaluation = res.body?.results
+                        this.questionSelectedInfo.results = res.body?.results
                             ? (res.body.results as Array<result>)
                             : [];
                         this.acceptedEvaluation = res.body!.accepted_count;
@@ -91,7 +110,10 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
     }
 
     viewSubmission(result: result) {
-        this.showSubmissionP = true;
+        if (!this.inlineView) {
+            this.showSubmissionP = true;
+        }
+
         this.viewSubmissionResult = result;
     }
 }
