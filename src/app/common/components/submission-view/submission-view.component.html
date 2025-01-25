@@ -12,14 +12,13 @@
     <br />
 
     <span class="evaluation-details" *ngIf="viewSubmissionResult.evaluated_at">
-        {{
-            "Evaluated on " +
-                (viewSubmissionResult.evaluated_at | prettyDate) +
-                (!viewSubmissionResult.evaluated_by
-                    ? " by Hunter"
-                    : (viewSubmissionResult.evaluated_by.name || "Anonymous") +
-                      viewSubmissionResult.evaluated_by_id)
-        }}
+        Evaluated on {{ viewSubmissionResult.evaluated_at | prettyDate }} by
+        <span *ngIf="!viewSubmissionResult.evaluated_by">Hunter</span>
+        <span *ngIf="viewSubmissionResult.evaluated_by"
+            ><user-display
+                [userInfo]="viewSubmissionResult.evaluated_by"
+            ></user-display>
+        </span>
     </span>
 
     <br />

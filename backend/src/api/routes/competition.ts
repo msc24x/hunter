@@ -72,10 +72,10 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
 router.put('/competition', authenticate, loginRequired, (req, res) => {
     const competitionBody = req.body;
     if (
-        !competitionBody.host_user_id ||
-        !competitionBody.id ||
-        competitionBody.title.length > 120 ||
-        competitionBody.description.length > 456
+        !competitionBody?.host_user_id ||
+        !competitionBody?.id ||
+        competitionBody?.title?.length > 120 ||
+        competitionBody?.description?.length > 456
     ) {
         Util.sendResponse(res, resCode.badRequest);
         return;
@@ -101,8 +101,8 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                         host_user_id: res.locals.user.id,
                     },
                     data: {
-                        description: competitionBody.description,
-                        title: competitionBody.title,
+                        description: competitionBody.description || '',
+                        title: competitionBody.title || '',
                         public: competitionBody.public,
                         scheduled_at: competitionBody.scheduled_at
                             ? new Date(competitionBody.scheduled_at)

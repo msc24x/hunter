@@ -52,6 +52,7 @@ export class ScoreboardService {
             meta: exeInfo.meta,
             question_id: hunterExecutable.for.question_id,
             accepted: exeInfo.success,
+            evaluated_at: new Date(),
         };
 
         switch (hunterExecutable.for.type) {
