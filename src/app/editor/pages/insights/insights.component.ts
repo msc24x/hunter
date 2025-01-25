@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faClock, faLightbulb } from '@fortawesome/free-regular-svg-icons';
 import {
     faArrowUpRightFromSquare,
+    faBolt,
     faCheckDouble,
     faCube,
     faRankingStar,
@@ -37,6 +38,7 @@ export class InsightsComponent {
     clockIcon = faClock;
     checkedIcon = faCheckDouble;
     bulbIcon = faLightbulb;
+    boltIcon = faBolt;
     competition_id: number = -1;
     scoreMeta: ScoresMeta = null;
 
@@ -61,6 +63,12 @@ export class InsightsComponent {
 
     selectedEvaluation: result | null = null;
 
+    errors: any = {};
+
+    popups = {
+        question: false,
+    };
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -69,7 +77,8 @@ export class InsightsComponent {
         private scoresData: ScoresDataService,
         private datePipe: DatePipe,
         private titleService: Title,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private location: Location
     ) {
         titleService.setTitle('Build • Hunter');
 
@@ -117,6 +126,8 @@ export class InsightsComponent {
         }
     }
 
+    fetchPageData() {}
+
     fetchQuestions() {
         this.loading = true;
         this.competitionsData
@@ -126,8 +137,17 @@ export class InsightsComponent {
                     this.competitionInfo = res.body as CompetitionInfo;
                     this.loading = false;
 
+                    const tab =
+                        this.activatedRoute.snapshot.paramMap.get('tab');
+
+                    if (tab === 'insights') {
+                        this.selectPanel(0);
+                    } else if (tab === 'evaluations') {
+                        this.selectPanel(1);
+                    }
+
                     this.titleService.setTitle(
-                        `Insights • ${
+                        `${tab?.toUpperCase()} • ${
                             this.competitionInfo.title || 'Competition'
                         }`
                     );
@@ -145,6 +165,20 @@ export class InsightsComponent {
 
     selectPanel(index: number) {
         this.currentPanel = index;
+
+        if (this.currentPanel === 1) {
+            this.fetchEvaluations();
+        }
+
+        if (this.currentPanel === 0) {
+            this.location.replaceState(
+                `/editor/${this.competitionInfo.id}/data/insights`
+            );
+        } else if (this.currentPanel === 1) {
+            this.location.replaceState(
+                `/editor/${this.competitionInfo.id}/data/evaluations`
+            );
+        }
     }
 
     fetchEvaluations() {
@@ -155,5 +189,35 @@ export class InsightsComponent {
             .subscribe((response) => {
                 this.evaluations = response.body as result[];
             });
+    }
+
+    timeToRead() {
+        return Math.round(
+            (this.selectedEvaluation?.submission?.trim()?.split(' ')?.length ||
+                0) / 200
+        );
+    }
+
+    updateEvaluation() {
+        delete this.errors.result;
+        this.loading = true;
+        this.scoresData
+            .updateEvaluation({
+                comp_id: this.competitionInfo.id,
+                id: this.selectedEvaluation?.id!,
+                points: this.selectedEvaluation?.result || 0,
+            })
+            .subscribe(
+                (response) => {
+                    this.snackBar.open(
+                        'Your evaluation has been submitted successfully'
+                    );
+                    this.loading = false;
+                },
+                (error) => {
+                    this.errors = error.error;
+                    this.loading = false;
+                }
+            );
     }
 }

@@ -42,6 +42,8 @@ import { QuesTypeLabelComponent } from './components/ques-type-label/ques-type-l
 import { ManualErrorComponent } from './components/manual-error/manual-error.component';
 import { SubmissionViewComponent } from './components/submission-view/submission-view.component';
 import { UserDisplayComponent } from './components/user-display/user-display.component';
+import { QuestionDisplayComponent } from './components/question-display/question-display.component';
+import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
 
 @NgModule({
     declarations: [
@@ -77,6 +79,8 @@ import { UserDisplayComponent } from './components/user-display/user-display.com
         ManualErrorComponent,
         SubmissionViewComponent,
         UserDisplayComponent,
+        QuestionDisplayComponent,
+        NgKatexComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -119,6 +123,8 @@ import { UserDisplayComponent } from './components/user-display/user-display.com
         ManualErrorComponent,
         SubmissionViewComponent,
         UserDisplayComponent,
+        QuestionDisplayComponent,
+        NgKatexComponent,
     ],
     providers: [DatePipe],
 })

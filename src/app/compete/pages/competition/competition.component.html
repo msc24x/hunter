@@ -153,38 +153,9 @@
                     />
                 </div>
 
-                <div id="question_title">
-                    {{ questionSelectedInfo.title }}
-                    <br /><br />
-
-                    <span class="info-like"
-                        >Correct Submission:
-                        <b>{{ questionSelectedInfo.points }} </b> points
-                    </span>
-                    <br />
-                    <span
-                        class="info-like"
-                        *ngIf="!questionSelectedInfo.neg_points"
-                    >
-                        No negative marking
-                    </span>
-                    <span
-                        class="info-like"
-                        *ngIf="questionSelectedInfo.neg_points"
-                    >
-                        Incorrect submission:
-                        <b>-{{ questionSelectedInfo.neg_points }} </b> points
-                    </span>
-                    <ques-type-label
-                        [ques_type]="questionSelectedInfo.type"
-                    ></ques-type-label>
-                </div>
-
-                <div id="question_statement">
-                    <ng-katex
-                        [data]="getQuestionStatement(questionSelectedInfo)"
-                    ></ng-katex>
-                </div>
+                <question-display
+                    [questionInfo]="questionSelectedInfo"
+                ></question-display>
             </div>
 
             <!-- Code editor -->

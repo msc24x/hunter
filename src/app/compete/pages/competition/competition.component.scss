@@ -153,11 +153,6 @@
         }
     }
 
-    #question_statement {
-        overflow-y: auto;
-        flex-grow: 1;
-    }
-
     .question-section {
         height: 70svh;
         display: flex;
@@ -303,26 +298,6 @@ textarea {
             font-size: 1rem;
         }
     }
-}
-
-#question_title,
-#question_statement {
-    background-color: white;
-    padding: 16px;
-    border-radius: 1rem;
-    font-size: 1.05rem;
-    margin-bottom: 1rem;
-
-    @include sweetBorder();
-
-    ques-type-label {
-        float: right;
-        margin-top: 0.5rem;
-    }
-}
-
-#question_statement {
-    font-size: 1.05rem !important;
 }
 
 .button {

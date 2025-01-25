@@ -1,5 +1,17 @@
 <app-bar></app-bar>
 
+<popup
+    heading="Question Details"
+    [showControls]="false"
+    [hidden]="!popups.question"
+    (closeEvent)="popups.question = false"
+>
+    <question-display
+        *ngIf="selectedEvaluation?.question"
+        [questionInfo]="selectedEvaluation?.question!"
+    ></question-display>
+</popup>
+
 <div class="page">
     <div class="page-bar">
         <div class="options">
@@ -15,9 +27,7 @@
                 *ngFor="let option of panels; let i = index"
                 class="option"
                 [ngClass]="i === currentPanel ? 'selected' : ''"
-                (click)="
-                    currentPanel = i; currentPanel === 1 && fetchEvaluations()
-                "
+                (click)="selectPanel(i)"
             >
                 <fa-icon [icon]="option.icon"></fa-icon> {{ option.title }}
             </div>
@@ -95,12 +105,19 @@
                     </div>
                     <div class="by">
                         Submission By
-                        <user-display [userInfo]="eval.user"></user-display>
+                        <user-display
+                            [noClick]="true"
+                            [userInfo]="eval.user"
+                        ></user-display>
                     </div>
                     <div class="at">
                         Submitted at {{ eval.created_at | prettyDate }}
                     </div>
                 </div>
+
+                <p class="info-like" [hidden]="evaluations.length > 0">
+                    No evaluations so far.
+                </p>
             </div>
 
             <div class="selected-eval">
@@ -111,7 +128,61 @@
                     <div>Select an evaluation to view</div>
                 </div>
 
-                <pre [textContent]="selectedEvaluation?.submission"></pre>
+                <div *ngIf="selectedEvaluation">
+                    <p class="points">
+                        <fa-icon [icon]="boltIcon"></fa-icon>
+
+                        Points granted to the participant &nbsp;
+                        <input
+                            type="number"
+                            [(ngModel)]="selectedEvaluation.result"
+                        />&nbsp;&nbsp;
+                        <button class="main" (click)="updateEvaluation()">
+                            Submit
+                        </button>
+                    </p>
+
+                    <manual-error [message]="errors.result"></manual-error>
+
+                    <p class="info-like" style="text-align: right">
+                        Last updated:
+                        {{
+                            selectedEvaluation.evaluated_at
+                                ? (selectedEvaluation.evaluated_at | prettyDate)
+                                : "never"
+                        }}
+                    </p>
+
+                    <question-display
+                        (click)="popups.question = true"
+                        *ngIf="selectedEvaluation?.question"
+                        [questionInfo]="selectedEvaluation?.question!"
+                        [titleOnly]="true"
+                    ></question-display>
+
+                    <h4 class="by">
+                        Following is submitted by
+                        <user-display
+                            [userInfo]="selectedEvaluation.user"
+                        ></user-display>
+                    </h4>
+
+                    <p class="info-like cute" style="text-align: right">
+                        <fa-icon [icon]="bulbIcon"></fa-icon>
+
+                        Number of words:
+                        {{
+                            selectedEvaluation.submission?.trim()?.split(" ")
+                                ?.length
+                        }}
+                        ({{ timeToRead() }}
+                        minutes to read)
+                    </p>
+
+                    <pre
+                        [textContent]="selectedEvaluation.submission || ''"
+                    ></pre>
+                </div>
             </div>
         </div>
     </div>

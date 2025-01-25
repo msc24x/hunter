@@ -33,7 +33,7 @@
             opacity: 1;
             font-weight: 500;
             background-color: white;
-            transform: translateY(0.2rem);
+            transform: translateY(-0.1rem);
         }
     }
 }
@@ -77,6 +77,7 @@
 
                 &.selected {
                     background-color: rgb(255, 251, 242);
+                    transform: translateX(0.25rem);
                 }
 
                 .for {
@@ -86,7 +87,6 @@
 
                 .by {
                     font-weight: 500;
-                    margin-top: 1rem;
                 }
 
                 .status {
@@ -98,7 +98,7 @@
                     @include sweetBorder;
                     border-color: darkgreen;
                     color: darkgreen;
-                    margin: 0.2rem;
+                    margin: 0.5rem;
 
                     &.pending {
                         border-color: darkred;
@@ -112,6 +112,37 @@
         .selected-eval {
             @include basicBack;
             width: calc(70% - 1rem);
+
+            pre {
+                @include basicBack;
+                white-space: pre-wrap;
+                white-space: -moz-pre-wrap;
+                white-space: -pre-wrap;
+                white-space: -o-pre-wrap;
+                word-wrap: break-word;
+                overflow: auto;
+                background-color: rgb(255, 243, 226);
+                height: 50svh;
+            }
+
+            question-display {
+                cursor: pointer;
+            }
+
+            .by {
+                font-size: 1.3rem;
+                font-weight: 500;
+            }
+
+            .points {
+                font-size: 1.4rem;
+                font-weight: 400;
+                color: colors.$cute_blue;
+
+                input {
+                    width: 3rem;
+                }
+            }
         }
 
         .empty {

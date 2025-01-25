@@ -9,4 +9,7 @@ import { UserInfo } from 'src/environments/environment';
 export class UserDisplayComponent {
     @Input()
     userInfo?: UserInfo;
+
+    @Input()
+    noClick = false;
 }

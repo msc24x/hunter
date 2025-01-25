@@ -278,15 +278,97 @@ router.get(
                             },
                             question: {
                                 select: {
+                                    id: true,
                                     title: true,
                                     points: true,
                                     neg_points: true,
+                                    type: true,
                                 },
                             },
                         },
                     })
                     .then((results) => {
                         Util.sendResponseJson(res, resCode.success, results);
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
+            })
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
+    }
+);
+
+router.put(
+    '/competitions/:id/evaluations/:eval_id',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const user: UserInfo = res.locals.user;
+        const competition_id = parseInt(req.params.id);
+        const eval_id = parseInt(req.params.eval_id);
+
+        if (!competition_id || !eval_id) {
+            Util.sendResponse(res, resCode.badRequest);
+            return;
+        }
+
+        client.results
+            .findUnique({
+                where: {
+                    id: eval_id,
+                    question: {
+                        competitions: {
+                            id: competition_id,
+                            host_user_id: user.id,
+                        },
+                    },
+                },
+                include: {
+                    question: true,
+                },
+            })
+            .then((result) => {
+                if (!result) {
+                    Util.sendResponse(res, resCode.notFound);
+                    return;
+                }
+
+                const points = parseInt(req.body?.result);
+
+                if (isNaN(points)) {
+                    Util.sendResponseJson(res, resCode.badRequest, {
+                        result: 'Invalid number of points, please input a valid number.',
+                    });
+                    return;
+                }
+
+                if (
+                    points < (result.question.neg_points * -1 || 0) ||
+                    points > (result.question.points || 0)
+                ) {
+                    Util.sendResponseJson(res, resCode.badRequest, {
+                        result: `Points only between ${
+                            result.question.neg_points * -1
+                        } and ${
+                            result.question.points
+                        } can be granted for this question.`,
+                    });
+                    return;
+                }
+
+                client.results
+                    .update({
+                        where: { id: result.id },
+                        data: {
+                            evaluated_at: new Date(),
+                            evaluated_by_id: user.id,
+                            result: points,
+                        },
+                    })
+                    .then(() => {
+                        Util.sendResponse(res, resCode.success);
                     })
                     .catch((err) => {
                         Util.sendResponse(res, resCode.serverError, err);

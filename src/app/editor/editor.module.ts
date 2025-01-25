@@ -6,7 +6,7 @@ import { EditorMenuComponent } from './pages/editor-menu/editor-menu.component';
 import { DashboardCardComponent } from './components/dashboard-card/dashboard-card.component';
 import { RouterModule } from '@angular/router';
 import { EditorRoutingModule } from './editor-routing.module';
-import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
+import { NgKatexComponent } from '../common/components/ng-katex/ng-katex.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -20,7 +20,6 @@ import { InsightsComponent } from './pages/insights/insights.component';
         EditorComponent,
         EditorMenuComponent,
         DashboardCardComponent,
-        NgKatexComponent,
         CodeTesterComponent,
         InsightsComponent,
     ],

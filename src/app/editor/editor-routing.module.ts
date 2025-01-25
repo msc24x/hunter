@@ -15,7 +15,7 @@ const routes: Routes = [
         'component': EditorComponent,
     },
     {
-        'path': ':competition_id/insights',
+        'path': ':competition_id/data/:tab',
         'component': InsightsComponent,
     },
 ];

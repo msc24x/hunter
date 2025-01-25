@@ -96,7 +96,6 @@ export class ScoresDataService {
         var endpoint;
 
         if (params.ques_id) {
-            console.log(params);
             endpoint = format(
                 apiEndpoints.evaluations,
                 params.comp_id.toString(),
@@ -114,5 +113,23 @@ export class ScoresDataService {
             responseType: 'json',
             withCredentials: true,
         });
+    }
+
+    updateEvaluation(params: { comp_id: number; id: number; points: number }) {
+        var endpoint = format(
+            apiEndpoints.evaluations,
+            params.comp_id.toString(),
+            params.id.toString()
+        );
+
+        return this.http.put(
+            endpoint,
+            { result: params.points },
+            {
+                observe: 'response',
+                responseType: 'json',
+                withCredentials: true,
+            }
+        );
     }
 }

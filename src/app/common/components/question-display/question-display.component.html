@@ -1,0 +1,21 @@
+<div id="question_title" [ngClass]="{ 'titleOnly': titleOnly }">
+    {{ questionInfo.title }}
+    <br /><br />
+
+    <span class="info-like"
+        >Correct Submission: <b>{{ questionInfo.points }} </b> points
+    </span>
+    <br />
+    <span class="info-like" *ngIf="!questionInfo.neg_points">
+        No negative marking
+    </span>
+    <span class="info-like" *ngIf="questionInfo.neg_points">
+        Incorrect submission:
+        <b>-{{ questionInfo.neg_points }} </b> points
+    </span>
+    <ques-type-label [ques_type]="questionInfo.type"></ques-type-label>
+</div>
+
+<div id="question_statement" *ngIf="!titleOnly">
+    <ng-katex [data]="getQuestionStatement(questionInfo)"></ng-katex>
+</div>

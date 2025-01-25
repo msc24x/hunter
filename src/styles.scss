@@ -28,6 +28,32 @@ hr {
     border-bottom: transparent;
 }
 
+input[type="number"],
+input[type="text"] {
+    @include appTextArea;
+}
+
+button.main {
+    @include blackBack;
+    font-size: 1rem;
+    color: colors.$cute_blue;
+    border-color: colors.$cute_blue;
+    background-color: #e1e5ff;
+    min-width: 6rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: 100ms;
+
+    &:hover {
+        background-color: #f1f3ff;
+    }
+
+    &:active {
+        scale: 0.99;
+        background-color: #d6dcff;
+    }
+}
+
 // =============================
 // Material Design Components
 // =============================
@@ -227,6 +253,11 @@ hr {
     b {
         font-weight: 500;
         color: rgb(95, 95, 95);
+    }
+
+    &.cute {
+        color: colors.$cute_blue;
+        font-weight: 500;
     }
 }
 

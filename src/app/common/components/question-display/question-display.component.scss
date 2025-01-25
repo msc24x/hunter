@@ -1,0 +1,35 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+:host {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+#question_title,
+#question_statement {
+    background-color: white;
+    padding: 16px;
+    border-radius: 1rem;
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+
+    @include sweetBorder();
+
+    ques-type-label {
+        float: right;
+        margin-top: 0.5rem;
+    }
+}
+
+#question_title.titleOnly {
+    background-color: ghostwhite;
+}
+
+#question_statement {
+    font-size: 1.05rem !important;
+    flex-grow: 1;
+}
