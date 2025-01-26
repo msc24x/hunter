@@ -119,7 +119,7 @@ export class CompetitionsDataService {
             params.competition_id.toString()!,
             ''
         );
-        return this.http.post(
+        return this.http.post<QuestionInfo>(
             endpoint,
             { competition_id: params.competition_id, type: params.type },
             {

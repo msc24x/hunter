@@ -16,6 +16,9 @@ export class QuesTypeLabelComponent {
     @Input({ required: true })
     ques_type!: number;
 
+    @Input()
+    no_label = false;
+
     questionTypes = [
         'Coding Test',
         'Multiple Choice',

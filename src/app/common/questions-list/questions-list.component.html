@@ -4,9 +4,14 @@
     heading="Destructive Action"
     id="delete_confirm"
     [hidden]="!showQuestionDeleteP"
+    [destructive]="true"
     (closeEvent)="handleDeleteConfirmation($event)"
+    continueMessage="Yes, delete the question"
 >
-    You are about to delete the question. This is an irreversible action.
+    <p>
+        You are about to delete the question. This is an irreversible action,
+        please confirm once.
+    </p>
 </popup>
 
 <ol class="questions_list">
@@ -33,6 +38,12 @@
         ></fa-icon>
 
         <span>
+            <ques-type-label
+                [ques_type]="question.type"
+                [no_label]="true"
+                style="opacity: 0.3; margin-left: -0.3rem"
+            ></ques-type-label
+            >&nbsp;
             {{ this.questionsList.indexOf(question) + 1 }}
         </span>
     </li>
@@ -64,12 +75,12 @@
     >
         Save
     </div> -->
-    <div
+    <button
         matTooltip="Delete the selected question"
         *ngIf="editable && questionSelected !== -1"
-        id="delete_question_btn"
+        class="main danger"
         (click)="showQuestionDeleteP = true"
     >
         DELETE
-    </div>
+    </button>
 </ol>

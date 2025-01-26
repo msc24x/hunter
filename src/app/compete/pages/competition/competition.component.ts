@@ -374,9 +374,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     postSolution(samples = false) {
         this.clearOutput();
-        this.bottomSection = true;
-
-        this.scrollToTop();
 
         if (this.questionSelected == -1) {
             this.solutionOutput.output = 'No question selected';
@@ -384,6 +381,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         }
 
         if (this.questionSelectedInfo.type === 0) {
+            this.bottomSection = true;
+            this.scrollToTop();
             this.executeCode(samples);
         } else {
             this.submitAnswerBasedQues();

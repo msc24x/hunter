@@ -47,9 +47,13 @@
         align-items: center;
         justify-content: center;
         width: 3rem;
+        background-color: rgb(255, 233, 255);
+        color: purple;
+        transition: 100ms;
+        border-color: rgb(155, 73, 155);
 
         &:hover {
-            background-color: whitesmoke !important;
+            background-color: rgb(255, 224, 255) !important;
         }
 
         mat-select {

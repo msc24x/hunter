@@ -33,7 +33,8 @@ input[type="text"] {
     @include appTextArea;
 }
 
-button.main {
+button.main,
+.button.main {
     @include blackBack;
     font-size: 1rem;
     color: colors.$cute_blue;
@@ -46,11 +47,25 @@ button.main {
 
     &:hover {
         background-color: #f1f3ff;
+
+        &.danger {
+            background-color: #fff7f7;
+        }
     }
 
     &:active {
         scale: 0.99;
         background-color: #d6dcff;
+
+        &.danger {
+            background-color: #ffe7e7;
+        }
+    }
+
+    &.danger {
+        background-color: #fff1f1;
+        color: darkred;
+        border-color: darkred;
     }
 }
 
@@ -64,11 +79,11 @@ button.main {
 
 .mat-mdc-snack-bar-container {
     --mdc-snackbar-container-color: blanchedalmond !important;
-    --mdc-snackbar-supporting-text-color: rgb(91, 54, 0) !important;
+    --mdc-snackbar-supporting-text-color: rgb(109, 65, 0) !important;
     --mdc-snackbar-container-shape: 0.5rem !important;
     --mdc-snackbar-supporting-text-font: appFont !important;
     --mdc-snackbar-supporting-text-size: 16px !important;
-    --mdc-snackbar-supporting-text-weight: 200 !important;
+    --mdc-snackbar-supporting-text-weight: 400 !important;
     --mdc-snackbar-supporting-text-line-height: 1.5rem !important;
     @include sweetBorder;
     border-color: rgb(255, 208, 150);
@@ -258,6 +273,11 @@ button.main {
     &.cute {
         color: colors.$cute_blue;
         font-weight: 500;
+    }
+
+    &.sticky {
+        margin-top: -0.7rem;
+        font-size: 0.8rem;
     }
 }
 

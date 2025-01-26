@@ -5,12 +5,16 @@
         </h2>
         <ng-content></ng-content>
         <div *ngIf="showControls" class="row">
-            <div class="continue_btn" (click)="closeEvent.emit('continue')">
-                Continue
-            </div>
-            <div class="cancel_btn" (click)="closeEvent.emit('cancel')">
+            <button
+                class="main"
+                [ngClass]="{ 'danger': destructive }"
+                (click)="closeEvent.emit('continue')"
+            >
+                {{ continueMessage }}
+            </button>
+            <button class="main" (click)="closeEvent.emit('cancel')">
                 Cancel
-            </div>
+            </button>
         </div>
     </div>
 

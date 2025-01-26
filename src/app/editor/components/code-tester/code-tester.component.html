@@ -9,7 +9,10 @@
         <br />Last verification attempted at
         {{ lastVerification.created_at.toLocaleString() }}</i
     >
-    <div
+    <br />
+    <br />
+    <button
+        class="main"
         [ngClass]="{
             'no-click disabled': verificationInProgress,
             'test-solution-btn': true
@@ -17,7 +20,7 @@
         (click)="verifySolution()"
     >
         Submit New Verification Request
-    </div>
+    </button>
 </div>
 
 <p>

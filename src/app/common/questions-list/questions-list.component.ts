@@ -143,8 +143,8 @@ export class QuestionsListComponent implements OnInit {
                         'Question ' + this.questionSelected + ' deleted'
                     );
                     this.resetQuestionSelected();
-                    this.fetchRequired.emit();
                     this.loading = false;
+                    this.fetchRequired.emit();
                 });
         } else this.displayLog('No Question selected');
     }
@@ -165,11 +165,15 @@ export class QuestionsListComponent implements OnInit {
                 competition_id: this.competitionInfo.id,
                 type: question_type.value,
             })
-            .subscribe(() => {
-                this.resetQuestionSelected();
+            .subscribe((response) => {
+                if (response.body) {
+                    this.questionsList.push(response.body as QuestionInfo);
+                    this.questionSelected = this.questionsList.length - 1;
+                    this.questionSelectEmitter.emit(this.questionSelected);
+                }
+                this.loading = false;
                 this.fetchRequired.emit();
                 this.displayLog('New question inserted and saved');
-                this.loading = false;
             });
     }
 

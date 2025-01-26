@@ -45,18 +45,19 @@
     associated with it will be immediately lost forever and users will no longer
     be able to see or participate in it.<br />
 
-    <p class="error-like">
-        <b>
-            Remember : If you do not want others to see this competition, you
-            can always make it private instead of deleting.
-        </b>
-    </p>
+    <manual-error
+        message="Remember! if you do not want others to see this competition, you can
+    always make it private instead of deleting."
+    ></manual-error>
     <b>Enter the current competition code ({{ competitionInfo.id }})</b>
     <input type="text" id="input_competition_code" placeholder="Enter code" />
     <manual-error [message]="errors.delete_code"></manual-error>
-    <div id="delete_competition_btn_popup" (click)="deleteCompetition()">
-        Delete
-    </div>
+
+    <br />
+    <br />
+    <button class="main danger" (click)="deleteCompetition()">
+        Submit, and delete the contest
+    </button>
 </popup>
 
 <popup
@@ -259,7 +260,7 @@
         <h2>Competition Data</h2>
 
         <div class="row_flex editor-first-panel" style="margin-top: 16px">
-            <div id="title_label" class="label">Title</div>
+            <div id="title_label" class="label">Competition Title</div>
             <textarea
                 maxlength="120"
                 id="text_title"
@@ -267,7 +268,7 @@
                 placeholder="Example: University Club Tie-breaker Challenge"
                 [(ngModel)]="competitionInfo.title"
             ></textarea>
-            <div id="desc_label" class="label">Description</div>
+            <div id="desc_label" class="label">Competition Description</div>
             <textarea
                 maxlength="456"
                 rows="5"
@@ -288,13 +289,17 @@
                 (messageEmitter)="displayLog($event)"
                 (questionSelectEmitter)="selectQuestion($event)"
                 (saveClicked)="saveQuestion()"
-                (fetchRequired)="fetchQuestions()"
+                (fetchRequired)="fetchQuestions(false)"
                 [(questionSelected)]="questionSelected"
             >
             </questions-list>
         </div>
 
-        <div *ngIf="!this.questionSelectedInfo.id" id="question_id">
+        <div
+            class="no-question-selected"
+            *ngIf="!this.questionSelectedInfo.id"
+            id="question_id"
+        >
             (No Question Selected)
             <infotip
                 *ngIf="!questionSelectedInfo.id"
@@ -308,7 +313,18 @@
                 ></ques-type-label>
             </div>
 
-            <div class="clabel">Title</div>
+            <div class="clabel">
+                <span *ngIf="questionSelectedInfo.type === 0"
+                    >Coding task title</span
+                >
+                <span *ngIf="questionSelectedInfo.type === 1"
+                    >Question title</span
+                >
+                <span *ngIf="questionSelectedInfo.type === 2"
+                    >Question title</span
+                >
+                <span *ngIf="questionSelectedInfo.type === 3">Task title</span>
+            </div>
 
             <textarea
                 id="text_qtitle"
@@ -322,7 +338,7 @@
 
             <div class="statement-label-container">
                 <div class="clabel">
-                    Statement
+                    Question statement
                     <infotip
                         message="The statement body supports Latex by default, learn more about the typesetting at katex.org"
                     ></infotip>
@@ -346,17 +362,6 @@
                 </div>
             </div>
 
-            <p class="info-like" *ngIf="questionSelectedInfo.type == 2">
-                In your statement, you may <b>include one blank space</b> in any
-                format, making it visible to the participant. The participant
-                will then be prompted to type their answer in the blank space.
-                Unlike Multiple Choice Questions (MCQs),
-                <b
-                    >Fill in the Blank questions do not provide the participant
-                    with a selection of choices to choose from.</b
-                >
-            </p>
-
             <textarea
                 [hidden]="preview_mode"
                 id="text_statement"
@@ -370,13 +375,24 @@
                 id="text_statement_preview"
                 [data]="questionSelectedInfo.statement"
             ></ng-katex>
+            <p class="info-like sticky" *ngIf="questionSelectedInfo.type == 2">
+                <br />
+                In your statement, you may <b>include one blank space</b> in any
+                format, making it visible to the participant. The participant
+                will then be prompted to type their answer in the blank space.
+                Unlike Multiple Choice Questions (MCQs),
+                <b
+                    >Fill in the Blank questions do not provide the participant
+                    with a selection of choices to choose from.</b
+                >
+            </p>
 
             <manual-error [message]="errors.statement"></manual-error>
 
             <br />
 
             <h3>Evaluation</h3>
-            <p class="info-like" *ngIf="questionSelectedInfo.type === 3">
+            <p class="info-like sticky" *ngIf="questionSelectedInfo.type === 3">
                 Your question type is &nbsp;
                 <ques-type-label
                     [ques_type]="questionSelectedInfo.type"
@@ -388,7 +404,8 @@
                 evaluate them yourself based on the range you provide below.
             </p>
             <p>
-                Reward
+                <fa-icon [icon]="correctIcon"></fa-icon> &nbsp; Positive marking
+                for this question
                 <input
                     id="question_points"
                     type="number"
@@ -396,16 +413,18 @@
                     [max]="40"
                     [(ngModel)]="questionSelectedInfo.points"
                 />
-                points for first correct submission
-                <infotip
-                    message="This is the weighage the question holds. Participants will be awarded this many points to their first correct submission. A maximum of 9 points can be set for one question"
-                ></infotip>
+            </p>
+            <p class="info-like sticky">
+                This is the weighage the question holds. Participants will be
+                awarded this many points to their first correct submission. A
+                maximum of 40 points can be set for one question
             </p>
 
             <manual-error [message]="errors.points"></manual-error>
 
             <p>
-                Cut
+                <fa-icon [icon]="minusIcon"></fa-icon> &nbsp; Negative marking
+                for each wrong submission
                 <input
                     id="question_neg_points"
                     type="number"
@@ -413,48 +432,58 @@
                     [max]="40"
                     [(ngModel)]="questionSelectedInfo.neg_points"
                 />
-                points for each wrong submission
-                <infotip
-                    message="Set this to any non-zero value (1-40) to apply negative marking for the participants. Every wrong submission prior a successful one will result into the reduction of their final scores."
-                ></infotip>
+            </p>
+            <p class="info-like sticky">
+                Set this to any non-zero value (1-40) to apply negative marking
+                for the participants. Every wrong submission prior a successful
+                one will result into the reduction of their final scores.
             </p>
             <manual-error [message]="errors.neg_points"></manual-error>
 
-            <p *ngIf="questionSelectedInfo.type === 2">
-                Do you want to enable case sensitivity
-                <infotip
-                    message="If disabled, responses such as 'apple', 'Apple', 'APPle' or 'APPLE' are treated as equal. (Recommended to keep it disabled, as it prevents false penalities against minor mistakes)"
-                ></infotip>
-                for the responses? &nbsp;
+            <div *ngIf="questionSelectedInfo.type === 2">
+                <p *ngIf="questionSelectedInfo.type === 2">
+                    Enable case sensitivity for responses &nbsp;
 
-                <mat-slide-toggle
-                    [(ngModel)]="questionSelectedInfo.case_sensitive"
-                ></mat-slide-toggle>
-            </p>
+                    <mat-slide-toggle
+                        [(ngModel)]="questionSelectedInfo.case_sensitive"
+                    ></mat-slide-toggle>
+                </p>
+                <p
+                    *ngIf="questionSelectedInfo.type === 2"
+                    class="info-like sticky"
+                >
+                    If enabled, responses such as 'apple', 'Apple', 'APPle' or
+                    'APPLE' are treated as different. (<b
+                        >Recommended to keep it disabled</b
+                    >, as it prevents false penalities against minor mistakes)
+                </p>
+            </div>
 
-            <p *ngIf="questionSelectedInfo.type === 3">
-                <mat-slide-toggle
-                    [checked]="questionSelectedInfo.char_limit !== null"
-                    (change)="toggleCharLimit($event.checked)"
-                ></mat-slide-toggle>
-                &nbsp; Accept minimum
-                <input
-                    type="number"
-                    [min]="1"
-                    [max]="1000"
-                    [(ngModel)]="questionSelectedInfo.char_limit"
-                />
-                number of words in a response
-                <infotip
-                    message="If disabled, participants can submit any number of words"
-                ></infotip>
-            </p>
+            <div *ngIf="questionSelectedInfo.type === 3">
+                <p>
+                    <mat-slide-toggle
+                        [checked]="questionSelectedInfo.char_limit !== null"
+                        (change)="toggleCharLimit($event.checked)"
+                    ></mat-slide-toggle>
+                    &nbsp; Minimum number of words acceptable in a response
+                    <input
+                        type="number"
+                        [min]="1"
+                        [max]="1000"
+                        [(ngModel)]="questionSelectedInfo.char_limit"
+                    />
+                </p>
+
+                <p class="info-like sticky">
+                    If disabled, participants can submit any number of words.
+                </p>
+            </div>
 
             <manual-error [message]="errors.char_limit"></manual-error>
 
             <div class="fill-in-blanks" *ngIf="questionSelectedInfo.type == 2">
                 <h3>Possible Answers for your blank space</h3>
-                <p class="info-like">
+                <p class="info-like sticky">
                     We will evaluate participants' input against an exact match
                     of your provided possible answers. Please ensure that you do
                     not include more than one or two words.
@@ -466,7 +495,7 @@
                 </p>
 
                 <p class="info-like">
-                    <b>These will be stay hidden from the participants</b>
+                    <b>These will stay hidden from the participants</b>
                 </p>
 
                 <div
@@ -486,7 +515,7 @@
                         <fa-icon
                             [icon]="trashUpIcon"
                             *ngIf="choice.delete"
-                            matTooltip="Restore the choice"
+                            matTooltip="Undo delete"
                         ></fa-icon>
                     </div>
                     <input
@@ -498,14 +527,13 @@
                         [ngClass]="{ 'disabled no-click': choice.delete }"
                     />
                 </div>
-                <p
+                <manual-error
                     *ngIf="questionSelectedInfo.question_choices?.length === 0"
-                    class="info-like"
-                >
-                    No possible answers added so far. Quickly add one using the
+                    message="No possible answers added so far. Quickly add one using the
                     button below. Otherwise your question will remain
-                    unanswerable.
-                </p>
+                    unanswerable."
+                >
+                </manual-error>
                 <manual-error
                     [message]="errors.question_choices"
                 ></manual-error>
@@ -547,7 +575,7 @@
                         <fa-icon
                             [icon]="trashUpIcon"
                             *ngIf="choice.delete"
-                            matTooltip="Restore the choice"
+                            matTooltip="Undo delete"
                         ></fa-icon>
                     </div>
                     <textarea
@@ -636,13 +664,14 @@
                             Test Cases
 
                             <a
+                                *ngIf="testExists"
                                 [href]="downloadFileUrl('testcases')"
                                 [download]="
                                     questionSelectedInfo.id + '_testcases.txt'
                                 "
                             >
+                                (Uploaded)
                                 <fa-icon
-                                    *ngIf="testExists"
                                     matTooltip="Download existing test cases file"
                                     [icon]="downloadIcon"
                                 ></fa-icon>
@@ -664,13 +693,14 @@
                         >
                             Solution to tests
                             <a
+                                *ngIf="solsExists"
                                 [href]="downloadFileUrl('solutions')"
                                 [download]="
                                     questionSelectedInfo.id + '_solutions.txt'
                                 "
                             >
+                                (Uploaded)
                                 <fa-icon
-                                    *ngIf="solsExists"
                                     [icon]="downloadIcon"
                                     matTooltip="Download existing solution to test cases file"
                                 ></fa-icon>
@@ -697,7 +727,7 @@
                                 'no-click disabled': !testExists || !solsExists
                             }"
                         >
-                            *Verify Participation
+                            Test your own solution
                             <fa-icon
                                 *ngIf="verificationResult?.success === true"
                                 [icon]="checkIcon"
@@ -732,9 +762,9 @@
             >
                 <fa-icon [icon]="trashIcon"></fa-icon> &nbsp; DELETE CONTEST
             </button>
-            <div matTooltip="Logs for fun" id="log" (click)="showLog()">
+            <!-- <div matTooltip="Logs for fun" id="log" (click)="showLog()">
                 Welcome!
-            </div>
+            </div> -->
             <button (click)="showPopup(true, 'guide')">
                 <fa-icon [icon]="guideIcon"></fa-icon> &nbsp; GUIDE
             </button>

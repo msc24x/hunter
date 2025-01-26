@@ -73,6 +73,10 @@ popup {
     gap: 0.4rem;
 }
 
+.no-question-selected {
+    margin-bottom: 12rem !important;
+}
+
 #input_competition_code {
     @include appTextArea;
 }

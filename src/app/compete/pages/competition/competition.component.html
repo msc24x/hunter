@@ -223,6 +223,11 @@
                             let choice of questionSelectedInfo.question_choices
                         "
                         (click)="handleChoiceSelection(choice)"
+                        [matTooltip]="
+                            showChoiceAsSelected(choice)
+                                ? 'Click to unselect'
+                                : ''
+                        "
                     >
                         <fa-icon
                             size="lg"
@@ -357,7 +362,7 @@
                 [href]="reportCompetitionLink()"
             >
                 <fa-icon [icon]="reportIcon" size="sm"></fa-icon>
-                Report
+                Report/Feedback
             </a>
             <div class="row">
                 <div

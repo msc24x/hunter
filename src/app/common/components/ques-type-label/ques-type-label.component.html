@@ -1,3 +1,5 @@
 <fa-icon [icon]="getQuesIcon(ques_type)" size="sm"></fa-icon>
-&nbsp;
-{{ questionTypes[ques_type] }}
+<span *ngIf="!no_label">
+    &nbsp;
+    {{ questionTypes[ques_type] }}
+</span>

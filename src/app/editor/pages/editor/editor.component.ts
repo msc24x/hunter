@@ -5,11 +5,13 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     faBook,
+    faCheckDouble,
     faCircleCheck,
     faCircleXmark,
     faDownload,
     faEye,
     faEyeSlash,
+    faMinusCircle,
     faPenToSquare,
     faShare,
     faShareNodes,
@@ -51,6 +53,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     trashUpIcon = faTrashArrowUp;
     magicIcon = faWandMagicSparkles;
     guideIcon = faBook;
+
+    correctIcon = faCheckDouble;
+    minusIcon = faMinusCircle;
 
     uploadIcon = faUpload;
     downloadIcon = faDownload;
@@ -117,10 +122,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             .classList.add('hidden');
         window.scroll(0, 0);
 
-        // window.onbeforeunload = (event) => {
-        //     event.preventDefault();
-        //     return;
-        // };
+        window.onbeforeunload = (event) => {
+            event.preventDefault();
+            return;
+        };
 
         this.elem = document.getElementById('log');
 
@@ -214,7 +219,6 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     saveQuestion() {
         if (this.questionSelected == -1) {
-            this.displayLog('No question selected');
             return;
         }
 
@@ -227,7 +231,6 @@ export class EditorComponent implements OnInit, OnDestroy {
             } as QuestionInfo)
             .subscribe(
                 (res) => {
-                    this.displayLog('Question Updated');
                     this.loading = false;
                     this.snackBar.open('Data saved successfully');
 
@@ -235,6 +238,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                 },
                 (error) => {
                     this.loading = false;
+                    this.snackBar.open('Some error occurred');
                     this.errors = error.error;
                 }
             );
@@ -319,15 +323,17 @@ export class EditorComponent implements OnInit, OnDestroy {
             });
     }
 
-    fetchQuestions() {
+    fetchQuestions(update_competition = true) {
         this.loading = true;
         this.competitionsData
             .getQuestions({ competition_id: this.competition_id })
             .subscribe((res) => {
                 if (res.body) {
-                    this.competitionInfo = res.body as CompetitionInfo;
-                    this.toggleVisibility();
-                    this.toggleVisibility();
+                    if (update_competition) {
+                        this.competitionInfo = res.body as CompetitionInfo;
+                        this.toggleVisibility();
+                        this.toggleVisibility();
+                    }
                     this.loading = false;
 
                     this.titleService.setTitle(
@@ -351,28 +357,6 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     refreshCompetitionInfo() {
         this.fetchQuestions();
-        this.loading = true;
-        const title = document.getElementById(
-            'text_title'
-        ) as HTMLTextAreaElement;
-        const description = document.getElementById(
-            'text_description'
-        ) as HTMLTextAreaElement;
-        const duration = document.getElementById(
-            'competition_duration'
-        ) as HTMLInputElement;
-        const schedule = document.getElementById(
-            'competition_schedule'
-        ) as HTMLInputElement;
-        schedule.value = this.datePipe.transform(
-            this.competitionInfo.scheduled_at,
-            'yyyy-MM-ddThh:mm'
-        )!;
-        title.value = this.competitionInfo.title as string;
-        description.value = this.competitionInfo.description as string;
-
-        this.displayLog('Data refreshed');
-        this.loading = false;
     }
 
     toggleVisibility() {
@@ -410,12 +394,14 @@ export class EditorComponent implements OnInit, OnDestroy {
             .putCompetitionInfo(this.competitionInfo)
             .subscribe(
                 (res) => {
-                    this.displayLog('Competition changes saved');
+                    this.snackBar.open('Data saved successfully');
                     this.loading = false;
 
                     this.saveQuestion();
                 },
                 (error) => {
+                    this.snackBar.open('Some error occurred');
+
                     this.loading = false;
                     this.errors = error.error;
                 }

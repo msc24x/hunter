@@ -31,6 +31,9 @@ export class PopupComponent implements OnInit {
     @Input()
     showControls = true;
 
+    @Input()
+    continueMessage = 'Continue';
+
     constructor(private el: ElementRef) {}
 
     bgClicked(event: any) {
