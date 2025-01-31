@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="user-analytics">
-            <h3>Participated Competitions</h3>
+            <h3>Participated In</h3>
             <div
                 class="hosted-comp"
                 *ngFor="let comp of user_profile.participated"
@@ -211,7 +211,13 @@
                     </div>
                 </div>
             </div>
-            <div id="profile_save_btn" (click)="updateUserInfo()">Update</div>
+            <div
+                id="profile_save_btn"
+                class="button main"
+                (click)="updateUserInfo()"
+            >
+                Update
+            </div>
         </div>
     </div>
 </div>

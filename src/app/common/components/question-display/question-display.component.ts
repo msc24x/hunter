@@ -14,6 +14,10 @@ export class QuestionDisplayComponent {
     questionInfo!: QuestionInfo;
 
     getQuestionStatement(questionInfo: QuestionInfo) {
+        if (!questionInfo.statement) {
+            return 'No description provided by host.';
+        }
+
         var final = `$\\textbf{Statement}$\n\n` + questionInfo.statement || '';
 
         if (questionInfo.sample_cases) {

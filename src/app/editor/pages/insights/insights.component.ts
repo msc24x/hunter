@@ -59,7 +59,7 @@ export class InsightsComponent {
     @Input({ required: true })
     competitionInfo!: CompetitionInfo;
 
-    evaluations: result[] = [];
+    evaluations: result[] | null = null;
 
     selectedEvaluation: result | null = null;
 
@@ -125,8 +125,6 @@ export class InsightsComponent {
             this.fetchQuestions();
         }
     }
-
-    fetchPageData() {}
 
     fetchQuestions() {
         this.loading = true;

@@ -30,9 +30,13 @@
         font-weight: 500;
     }
 
+    #query_input {
+        width: 100%;
+    }
+
     select {
         margin-left: 4px;
-        border-radius: 24px;
+        border-radius: 0.5rem;
         border-width: 0px;
         padding: 8px;
         padding-inline: 16px;
@@ -46,7 +50,7 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        margin: 0.3rem;
+        margin-top: 0.3rem;
     }
 }
 
@@ -163,18 +167,17 @@
     background-color: colors.$dim_white;
     margin-inline: auto;
     max-width: 62rem;
-
+    transition: 200ms;
+    cursor: pointer;
     @include sweetBorder();
 
     &:hover {
-        cursor: pointer;
         box-shadow: 0 1rem 2rem -2rem black;
         transform: translateY(-0.2rem);
-        transition: 200ms;
     }
 
-    &:not(:hover) {
-        transition: 200ms;
+    &:active {
+        scale: 0.99;
     }
 
     .detail-tag {

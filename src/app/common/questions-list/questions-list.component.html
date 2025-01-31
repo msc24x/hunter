@@ -48,7 +48,12 @@
         </span>
     </li>
 
-    <li *ngIf="editable" id="create_question_btn" (click)="openCreateQues()">
+    <li
+        style="min-width: 3rem"
+        *ngIf="editable"
+        id="create_question_btn"
+        (click)="openCreateQues()"
+    >
         <mat-select
             #add_question_select
             panelWidth="14rem"

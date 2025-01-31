@@ -17,7 +17,6 @@
     overflow-x: scroll;
     overflow-y: show;
     border-radius: 1rem;
-
     scroll-behavior: smooth;
     margin: 0;
 
@@ -88,6 +87,7 @@
         text-wrap: nowrap;
         @include sweetBorder;
         min-width: 1rem;
+        transition: 100ms;
 
         &.selected-question {
             background-color: colors.$text_black;

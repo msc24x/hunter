@@ -1,5 +1,7 @@
 <div id="question_title" [ngClass]="{ 'titleOnly': titleOnly }">
-    {{ questionInfo.title }}
+    <span class="title_text">
+        {{ questionInfo.title || "Untitled" }}
+    </span>
     <br /><br />
 
     <span class="info-like"

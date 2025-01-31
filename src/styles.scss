@@ -31,6 +31,11 @@ hr {
 input[type="number"],
 input[type="text"] {
     @include appTextArea;
+
+    &.small {
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+    }
 }
 
 button.main,
@@ -44,6 +49,9 @@ button.main,
     border-radius: 1rem;
     cursor: pointer;
     transition: 100ms;
+    text-align: center;
+    font-weight: 400;
+    margin: 2px;
 
     &:hover {
         background-color: #f1f3ff;

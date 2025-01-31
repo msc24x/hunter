@@ -169,7 +169,9 @@
     recommended to take a look at the guide.</app-info-card
 > -->
 
-<div class="page-section">
+<spinner *ngIf="!competitionInfo.id"></spinner>
+
+<div class="page-section" *ngIf="competitionInfo.id">
     <div class="section-side">
         <h2>Meta</h2>
 

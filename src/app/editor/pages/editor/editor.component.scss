@@ -22,9 +22,7 @@ popup {
     margin-inline: auto;
 
     .section-side {
-        flex-basis: 20%;
-        // position: sticky;
-        // top: 2rem;
+        width: 23%;
 
         .meta-section {
             @include basicBack;
@@ -36,8 +34,32 @@ popup {
     }
 
     .section-content {
-        flex-basis: 80%;
+        width: calc(77% - 2rem);
         flex-shrink: 1;
+    }
+
+    @media screen and (max-width: 1080px) {
+        .section-side {
+            width: 40%;
+        }
+
+        .section-content {
+            width: calc(60% - 2rem);
+        }
+    }
+
+    @media screen and (max-width: 840px) {
+        & {
+            flex-wrap: wrap;
+        }
+
+        .section-side {
+            width: 100%;
+        }
+
+        .section-content {
+            width: 100%;
+        }
     }
 }
 
@@ -251,6 +273,10 @@ popup {
             font-size: large;
             width: calc(100% - 4rem);
         }
+
+        @media screen and (max-width: 720px) {
+            flex-wrap: wrap;
+        }
     }
 }
 
@@ -267,6 +293,7 @@ popup {
     padding-block: 8px;
     z-index: 50;
     border-radius: 1rem;
+    flex-wrap: wrap-reverse;
     @include sweetBorder;
 
     button {
@@ -499,6 +526,10 @@ input {
     .io-files,
     .solution-code-file {
         flex-grow: 1;
+    }
+
+    @media screen and (max-width: 720px) {
+        flex-wrap: wrap;
     }
 }
 

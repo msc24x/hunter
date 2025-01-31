@@ -44,6 +44,8 @@ import { SubmissionViewComponent } from './components/submission-view/submission
 import { UserDisplayComponent } from './components/user-display/user-display.component';
 import { QuestionDisplayComponent } from './components/question-display/question-display.component';
 import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -81,6 +83,7 @@ import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
         UserDisplayComponent,
         QuestionDisplayComponent,
         NgKatexComponent,
+        SpinnerComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -91,6 +94,7 @@ import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
         MatSnackBarModule,
         MatSlideToggleModule,
         MatSelectModule,
+        FormsModule,
     ],
     exports: [
         AppBarComponent,
@@ -125,6 +129,7 @@ import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
         UserDisplayComponent,
         QuestionDisplayComponent,
         NgKatexComponent,
+        SpinnerComponent,
     ],
     providers: [DatePipe],
 })

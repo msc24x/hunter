@@ -170,9 +170,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 navigator.userAgent
             )
         ) {
-            alert(
-                'Participating in competitions is not recommended on your device. Hunter is designed to be best viewed on desktops.'
-            );
+            // alert(
+            //     'Participating in competitions is not recommended on your device. Hunter is designed to be best viewed on desktops.'
+            // );
             this.hrlayout = false;
         }
 

@@ -12,7 +12,7 @@
     ></question-display>
 </popup>
 
-<div class="page">
+<div class="page" *ngIf="user && competitionInfo">
     <div class="page-bar">
         <div class="options">
             <div
@@ -115,7 +115,12 @@
                     </div>
                 </div>
 
-                <p class="info-like" [hidden]="evaluations.length > 0">
+                <spinner *ngIf="evaluations === null"></spinner>
+
+                <p
+                    class="info-like"
+                    *ngIf="evaluations && evaluations.length === 0"
+                >
                     No evaluations so far.
                 </p>
             </div>

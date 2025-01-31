@@ -6,12 +6,17 @@
     <div class="competitions-block">
         <div id="filter_controls">
             <div class="filters-heading">Filters</div>
+
             <div>
-                <text-input
-                    id="title_input"
-                    title="Search"
-                    (onChangeEvent)="query = $event; updateList()"
-                ></text-input>
+                <label for="status_select">Search</label>
+                &nbsp; &nbsp; &nbsp;
+                <input
+                    id="query_input"
+                    type="text"
+                    class="small"
+                    [(ngModel)]="query"
+                    (input)="updateList()"
+                />
             </div>
 
             <div>
@@ -55,8 +60,7 @@
                         routerLink="/u/{{ com.host_user_id }}"
                     >
                         <ng-template #authorElem>
-                            By &nbsp;
-
+                            By
                             <user-display
                                 [userInfo]="com.host_user"
                             ></user-display>
@@ -67,7 +71,7 @@
                             >
                                 <fa-icon
                                     [icon]="officialIcon"
-                                    style="color: chocolate"
+                                    style="color: gray"
                                 ></fa-icon>
                             </span>
                         </ng-template>
