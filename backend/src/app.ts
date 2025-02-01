@@ -6,12 +6,19 @@ import config from './config/config';
 import { DatabaseProvider } from './services/databaseProvider';
 import Container from 'typedi';
 import fileUpload from 'express-fileupload';
+import morgan from 'morgan';
 
 const app = express();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(fileUpload());
+
+if (config.env !== 'local') {
+    app.use(morgan('combined'));
+}
+
+app.use(morgan('dev'));
 
 app.use(require('./api/routes'));
 
