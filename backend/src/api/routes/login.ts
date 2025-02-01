@@ -41,6 +41,7 @@ function getOrCreateSession(user: UserInfo): Promise<SessionInfo> {
                     createSession(user).then((session) => {
                         resolve(session);
                     });
+                    return;
                 }
                 resolve(session!);
             })
@@ -176,6 +177,7 @@ router.get('/oauth/github', (req, res) => {
                                 getOrCreateUser(email!, usefulData).then(
                                     (user) => {
                                         if (!user) {
+                                            console.log('ether');
                                             res.sendStatus(400);
                                             return;
                                         }
@@ -191,13 +193,13 @@ router.get('/oauth/github', (req, res) => {
                                                         `${process.env.PROTOCOL}://${process.env.FRONTEND_DOMAIN}`
                                                 );
                                             })
-                                            .catch((err) =>
+                                            .catch((err) => {
                                                 Util.sendResponse(
                                                     res,
                                                     resCode.badRequest,
                                                     err
-                                                )
-                                            );
+                                                );
+                                            });
                                     }
                                 );
                             });

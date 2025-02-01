@@ -16,6 +16,12 @@
     }
 }
 
+.section-container {
+    border-radius: 4rem;
+    background: linear-gradient(180deg, #ff00000d, transparent);
+    padding-top: 2rem;
+}
+
 .feature-section {
     padding: 5rem 2rem;
     display: flex;
@@ -63,7 +69,7 @@
 
 .feature-content p {
     font-size: 1.1rem;
-    color: #666;
+    color: #997070;
     margin-bottom: 2rem;
 }
 
@@ -123,7 +129,7 @@
 }
 
 .stats-section {
-    background: rgb(237, 213, 213);
+    // background: rgb(237, 213, 213);
     padding: 4rem 2rem;
     text-align: center;
     border-radius: 3rem;
