@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterOutlet } from '@angular/router';
+import { faCube } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import { resCode } from 'src/environments/environment';
@@ -13,6 +14,7 @@ import { resCode } from 'src/environments/environment';
 })
 export class CreateDialogComponent implements OnInit {
     loading = false;
+    cubeIcon = faCube;
 
     responseMessage: string = '';
 

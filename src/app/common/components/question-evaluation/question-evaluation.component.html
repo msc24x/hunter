@@ -56,8 +56,11 @@
                     &nbsp;Pending
                 </span>
             </div>
-            <div class="points-time-col">
-                {{ row.created_at | prettyDate }}
+            <div
+                class="points-time-col"
+                [matTooltip]="row.created_at | prettyDate"
+            >
+                {{ row.created_at | timeAgo }}
             </div>
         </div>
 

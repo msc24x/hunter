@@ -82,6 +82,7 @@ popup {
     padding: 8px;
     padding-inline: 16px;
     cursor: pointer;
+    transition: 100ms;
 }
 
 .insight-details {
@@ -145,48 +146,38 @@ popup {
 
 #visbility_controller {
     display: flex;
-    margin-top: 16px;
     justify-content: stretch;
-
-    cursor: default;
+    cursor: pointer;
     border-radius: 1rem;
-    @include sweetBorder();
+    overflow: hidden;
+    font-weight: 600;
 
     & > div {
         flex-grow: 1;
         white-space: nowrap;
         width: 50%;
-    }
-
-    #id {
-        background-color: white;
-        border-radius: 1rem 0px 0px 1rem;
-        font-weight: 500;
-        text-align: center;
+        color: whitesmoke;
         padding: 10px;
-    }
-
-    #rating {
-        background-color: whitesmoke;
-
-        width: fit-content;
-        padding: 10px;
-    }
-
-    #visibility {
-        background-color: rgb(20, 220, 120);
-        color: rgb(0, 0, 0);
-        border-radius: 0px 1rem 1rem 0px;
-
-        font-weight: bold;
-        padding: 10px;
-        cursor: pointer;
         text-align: center;
 
         -webkit-user-select: none; /* Safari */
         -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* IE10+/Edge */
         user-select: none; /* Standard */
+
+        transition: 100ms;
+
+        &:active {
+            scale: 1.1;
+        }
+    }
+
+    .public {
+        background-color: crimson;
+    }
+
+    .private {
+        background-color: rgba(128, 0, 128, 0.8);
     }
 }
 

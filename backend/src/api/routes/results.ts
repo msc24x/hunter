@@ -286,6 +286,11 @@ router.get(
                                 },
                             },
                         },
+                        orderBy: [
+                            {
+                                evaluated_at: 'asc',
+                            },
+                        ],
                     })
                     .then((results) => {
                         Util.sendResponseJson(res, resCode.success, results);

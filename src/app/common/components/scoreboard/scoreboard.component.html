@@ -109,8 +109,11 @@
 
                 <i class="ahead-statement"> Ahead of {{ calcAheadOf() }}% </i>
             </div>
-            <div class="time-col">
-                {{ meta?.user_details?.created_at | prettyDate }}
+            <div
+                class="time-col"
+                [matTooltip]="meta?.user_details?.created_at | prettyDate"
+            >
+                {{ meta?.user_details?.created_at | timeAgo }}
             </div>
             <div class="ques-col">
                 {{ meta?.user_details?.questions_attempted }}
@@ -170,8 +173,8 @@
                     {{ calcAheadOf() }}%
                 </i>
             </div>
-            <div class="time-col">
-                {{ score.created_at | prettyDate }}
+            <div class="time-col" [matTooltip]="score.created_at | prettyDate">
+                {{ score.created_at | timeAgo }}
             </div>
 
             <div class="ques-col">

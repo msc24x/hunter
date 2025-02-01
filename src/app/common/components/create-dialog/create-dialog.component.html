@@ -18,17 +18,18 @@
         placeholder="Example: Winter Challenge Wave-II"
     ></textarea>
     <br />
-    <p>
+    <p class="info-like">
         You will be redirected to the Hunter Editor. Be sure to read the Guide
         to create the best competition. Keep in mind that any poorly designed
         Public competition can be reported by the users.
     </p>
-    <button id="create" (click)="requestCreateCompetition()">
-        Build Private Competition
+    <button id="create" class="main" (click)="requestCreateCompetition()">
+        <fa-icon [icon]="cubeIcon"></fa-icon> &nbsp; Initialize a new
+        competition
     </button>
     <div class="error">{{ responseMessage }}</div>
 </popup>
 
 <div id="create_btn" class="create_btn" (click)="showCreateDialog(true)">
-    Build a new competition
+    <fa-icon [icon]="cubeIcon"></fa-icon> &nbsp; Build a new competition
 </div>

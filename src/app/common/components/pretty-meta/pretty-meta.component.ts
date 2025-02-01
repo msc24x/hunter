@@ -15,7 +15,7 @@ export class PrettyMetaComponent {
     getPrettyRuntimeInfo(info: string): any[] {
         const prettyArr: any[] = [];
         const msgMap: any = {
-            'RE': 'Runtime error',
+            'RE': 'Error',
             'SG': 'Died on signal',
             'TO': 'Timed out',
             'XX': 'Internal error',

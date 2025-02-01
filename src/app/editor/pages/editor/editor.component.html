@@ -157,11 +157,49 @@
 </popup>
 
 <popup
-    heading="Confirmation"
+    heading="Change visibility?"
     id="public_status_confirm"
     (closeEvent)="handlePrivacyConfirmPopupEvent($event)"
+    [continueMessage]="'Yes, make it live'"
+    [destructive]="true"
 >
-    Are you sure to set this competition's visibility to public?
+    <manual-error
+        message="Are you sure to set this competition's visibility to live? "
+    ></manual-error>
+
+    <p>
+        Make sure you have took care of the following considerations before
+        making it live.
+    </p>
+
+    <h3>Quality considerations</h3>
+    <manual-error
+        message="Not meeting quality considerations can result into takedown of your contest."
+    ></manual-error>
+    <ol>
+        <li>
+            Have proper title and description of your competition and your
+            questions
+        </li>
+        <li>Do not include incomplete questions</li>
+        <li>
+            If you are creating coding tests, use our 'Test your own solution'
+            feature to verify whether your question is even solvable or not.
+        </li>
+        <li>
+            For MCQ or Fill In Blank questions, make sure you are configuring
+            your questions to be solvable, having 0 choices or 0 possible
+            answers make your questions useless
+        </li>
+    </ol>
+
+    <h3>Increasing participation</h3>
+    <ol>
+        <li>
+            Share your competition link in your class or in your social network
+            to make your participants ready.
+        </li>
+    </ol>
 </popup>
 
 <!-- <app-info-card (click)="showPopup(true, 'guide')"
@@ -188,7 +226,10 @@
                 type="datetime-local"
                 id="competition_schedule"
                 class="text-area full-input"
-                [value]="competitionInfo.scheduled_at | prettyDate"
+                [value]="
+                    competitionInfo.scheduled_at
+                        | date : 'yyyy-MM-ddThh:mm:ss.SSS'
+                "
             />
             <div id="schedule_end_label" class="label">
                 Close submissions at
@@ -200,29 +241,35 @@
                 type="datetime-local"
                 id="competition_schedule_end"
                 class="text-area full-input"
-                [value]="competitionInfo.scheduled_end_at | prettyDate"
+                [value]="
+                    competitionInfo.scheduled_end_at
+                        | date : 'yyyy-MM-ddThh:mm:ss.SSS'
+                "
             />
 
+            <div class="label">
+                Visibility
+                <infotip
+                    message="Set your contest visibility (Public/Private)"
+                ></infotip>
+            </div>
+
             <div id="visbility_controller">
-                <div id="id">
-                    Visibility
-                    <infotip
-                        message="Set your contest visibility (Public/Private)"
-                    ></infotip>
-                </div>
-                <!-- <div id="rating">
-                    Rating : <b>{{ this.competitionInfo.rating }}</b>
-                </div> -->
                 <div
-                    [matTooltip]="
-                        competitionInfo.public
-                            ? 'Click to toggle, currently anybody can see or participate in the competition'
-                            : 'Click to toggle, currently no one can see or participate in the competition'
-                    "
-                    id="visibility"
-                    (click)="onClickVisibility()"
+                    class="private"
+                    (click)="competitionInfo.public && onClickVisibility(false)"
                 >
-                    PUBLIC
+                    <fa-icon [icon]="checkIcon" *ngIf="!competitionInfo.public">
+                    </fa-icon>
+                    &nbsp; PRIVATE
+                </div>
+                <div
+                    class="public"
+                    (click)="!competitionInfo.public && onClickVisibility(true)"
+                >
+                    <fa-icon [icon]="checkIcon" *ngIf="competitionInfo.public">
+                    </fa-icon
+                    >&nbsp; LIVE
                 </div>
             </div>
 

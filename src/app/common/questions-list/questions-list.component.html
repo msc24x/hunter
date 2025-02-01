@@ -8,10 +8,10 @@
     (closeEvent)="handleDeleteConfirmation($event)"
     continueMessage="Yes, delete the question"
 >
-    <p>
-        You are about to delete the question. This is an irreversible action,
-        please confirm once.
-    </p>
+    <manual-error
+        message="You are about to delete the question. This is an irreversible action,
+    please confirm once"
+    ></manual-error>
 </popup>
 
 <ol class="questions_list">

@@ -12,6 +12,8 @@
     ></question-display>
 </popup>
 
+<spinner *ngIf="!competitionInfo?.id"></spinner>
+
 <div class="page" *ngIf="user && competitionInfo">
     <div class="page-bar">
         <div class="options">
@@ -110,8 +112,8 @@
                             [userInfo]="eval.user"
                         ></user-display>
                     </div>
-                    <div class="at">
-                        Submitted at {{ eval.created_at | prettyDate }}
+                    <div class="at" [matTooltip]="eval.created_at | prettyDate">
+                        Submitted {{ eval.created_at | timeAgo }}
                     </div>
                 </div>
 
@@ -142,10 +144,10 @@
                             type="number"
                             [(ngModel)]="selectedEvaluation.result"
                         />&nbsp;&nbsp;
-                        <button class="main" (click)="updateEvaluation()">
-                            Submit
-                        </button>
                     </p>
+                    <button class="main" (click)="updateEvaluation()">
+                        Submit points
+                    </button>
 
                     <manual-error [message]="errors.result"></manual-error>
 

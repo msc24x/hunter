@@ -166,11 +166,11 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     shareAction() {
         navigator.share({
-            title: `Invitation to ${this.competitionInfo.title}`,
+            title: `Invitation link to "${this.competitionInfo.title}"`,
             url: this.getParticipationLink(),
-            text: `You are invited to participate in the competition created by ${
+            text: `\nYou are invited to participate in the above competition created by ${
                 this.user.name || 'a user'
-            } on https://hunter.cambo.in`,
+            }.\n(Hosted on Hunter, an open source contest hosting platform, with easy participation and automatic evaluation of participants.)`,
         });
     }
 
@@ -254,8 +254,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     selectQuestion(index: number, force: boolean = false) {
-        this.loading = true;
-
         this.questionSelected = index;
         this.questionSelectedInfo =
             index == -1
@@ -270,7 +268,6 @@ export class EditorComponent implements OnInit, OnDestroy {
                 this.testExists = res;
             });
         }
-        this.loading = false;
 
         this.titleService.setTitle(
             `Q${index + 1} • ${this.competitionInfo.title || 'Competition'}`
@@ -360,21 +357,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     toggleVisibility() {
-        this.loading = true;
-        const visBtn = document.getElementById('visibility') as HTMLDivElement;
-
-        if (this.competitionInfo?.public) {
-            this.competitionInfo.public = false;
-            visBtn.innerHTML = 'PRIVATE';
-            visBtn.style.color = 'black';
-            visBtn.style.backgroundColor = 'rgb(20, 220, 120)';
-        } else if (this.competitionInfo) {
-            this.competitionInfo.public = true;
-            visBtn.innerHTML = 'PUBLIC';
-            visBtn.style.color = 'white';
-            visBtn.style.backgroundColor = 'crimson';
-        }
-        this.loading = false;
+        this.competitionInfo.public = !this.competitionInfo.public;
     }
 
     saveChanges() {
@@ -426,6 +409,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         if (event == 'continue') {
             this.toggleVisibility();
         }
+
         this.showPopup(false, 'public_status_confirm');
     }
 
@@ -441,8 +425,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         } else guide.style.display = 'none';
     }
 
-    onClickVisibility() {
-        if (this.competitionInfo.public == false) {
+    onClickVisibility(isPublic = true) {
+        if (isPublic) {
             this.showPopup(true, 'public_status_confirm');
         } else {
             this.toggleVisibility();

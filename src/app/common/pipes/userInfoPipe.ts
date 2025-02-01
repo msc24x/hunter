@@ -57,12 +57,62 @@ export class PrettyDate implements PipeTransform {
         let date = new Date(value);
         let dateNow = new Date();
         let dateString = new DatePipe('en-US').transform(date, format) || '';
-        console.log(dateString, dateNow.getFullYear().toString());
 
         dateString = dateString
             .replace(dateNow.getFullYear().toString(), '')
             .trim();
 
         return dateString;
+    }
+}
+
+@Pipe({
+    name: 'timeAgo',
+})
+export class TimeAgo implements PipeTransform {
+    transform(
+        value: Date | string | undefined | null,
+        future?: boolean
+    ): string {
+        if (!value) {
+            return '';
+        }
+
+        var date: number;
+
+        if (typeof value === 'string') {
+            var date = Date.parse(value);
+        } else {
+            date = value.valueOf();
+        }
+
+        const now = Date.now();
+        var diff: number = 0;
+
+        if (future) {
+            console.log(date);
+            diff = date - now;
+            console.log(diff);
+        } else {
+            diff = now - date;
+        }
+
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const weeks = Math.floor(days / 7);
+
+        if (seconds < 60) {
+            return seconds === 1 ? '1 second ago' : `${seconds} seconds ago`;
+        } else if (minutes < 60) {
+            return minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`;
+        } else if (hours < 24) {
+            return hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+        } else if (days < 7) {
+            return days === 1 ? '1 day ago' : `${days} days ago`;
+        } else {
+            return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+        }
     }
 }

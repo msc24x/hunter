@@ -1,8 +1,11 @@
 <app-bar></app-bar>
 <app-loading *ngIf="loading"></app-loading>
 
-<sign-in-prompt *ngIf="!isAuthenticated"></sign-in-prompt>
-<div class="profile-section" *ngIf="isAuthenticated">
+<sign-in-prompt *ngIf="!loading && !isAuthenticated"></sign-in-prompt>
+
+<spinner *ngIf="loading && !user_profile.id"></spinner>
+
+<div class="profile-section" *ngIf="isAuthenticated && user_profile.id">
     <profile-card *ngIf="user_profile" [user]="user_profile"></profile-card>
     <div class="side-section">
         <div class="user-badges clean-panel">

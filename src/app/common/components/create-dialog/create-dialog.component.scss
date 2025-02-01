@@ -24,31 +24,23 @@
 
     #create {
         font-size: 1.2rem;
-        border-radius: 24px;
-        border-width: 0px;
         width: 100%;
-        background-color: whitesmoke;
-        padding: 16px;
-        margin-top: 24px;
-    }
-
-    #create:hover {
-        background-color: white;
+        margin-top: 1.5rem;
     }
 }
 
 .create_btn {
+    max-width: 60rem;
     padding: 2rem;
+    margin: 2rem;
+    margin-inline: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 2rem;
     font-weight: 600;
     transition: 300ms;
-    margin-inline: auto;
-    max-width: 60rem;
-
     @include yellowBg;
+    border-width: 2px;
 
     &:hover {
         cursor: pointer;

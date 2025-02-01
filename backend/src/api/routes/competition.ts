@@ -162,7 +162,7 @@ router.get('/competitions', authenticate, (req, res) => {
         query: req.query.query?.toString() || '',
         includeSelf: req.query.includeSelf?.toString() === 'true',
         liveStatus: req.query.liveStatus?.toString() || 'all',
-        orderBy: req.query.orderBy?.toString() || '',
+        orderBy: req.query.orderBy?.toString() || 'desc',
     };
 
     if (!res.locals.isAuthenticated) {

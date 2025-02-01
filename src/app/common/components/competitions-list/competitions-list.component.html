@@ -71,7 +71,7 @@
                             >
                                 <fa-icon
                                     [icon]="officialIcon"
-                                    style="color: gray"
+                                    style="color: crimson"
                                 ></fa-icon>
                             </span>
                         </ng-template>
@@ -86,18 +86,18 @@
                         >
                             <fa-icon
                                 [icon]="privateIcon"
-                                style="color: gray"
+                                style="color: crimson"
                             ></fa-icon>
                         </span>
                     </div>
                     <div
                         id="start_schedule"
                         class="detail-tag"
-                        [style.color]="
+                        [ngClass]="
                             (com.scheduled_at
                             | isLiveStatusPipe : com.scheduled_end_at)
-                                ? 'crimson'
-                                : 'colors.$text_black'
+                                ? 'live'
+                                : ''
                         "
                     >
                         <span
@@ -106,17 +106,33 @@
                                 !isClosedNow(com)
                             "
                         >
-                            {{
-                                !isAfterNow(com.scheduled_at)
-                                    ? "Opens at"
-                                    : com.scheduled_at
-                                    ? "Live since"
-                                    : "Open until"
-                            }}
-                            {{
-                                com.scheduled_at || com.scheduled_end_at
-                                    | prettyDate
-                            }}
+                            <span *ngIf="!isAfterNow(com.scheduled_at)">
+                                Not open yet,
+                                {{
+                                    (com.scheduled_at | timeAgo : true).replace(
+                                        "ago",
+                                        "left"
+                                    )
+                                }}
+                            </span>
+                            <span *ngIf="isAfterNow(com.scheduled_at)">
+                                {{
+                                    com.scheduled_at
+                                        ? "Live Since"
+                                        : "Live, closing in"
+                                }}
+                                {{
+                                    com.scheduled_at
+                                        ? (com.scheduled_at | timeAgo).replace(
+                                              "ago",
+                                              ""
+                                          )
+                                        : (
+                                              com.scheduled_end_at
+                                              | timeAgo : true
+                                          ).replace("ago", "")
+                                }}
+                            </span>
                         </span>
                         <span
                             *ngIf="!com.scheduled_at && !com.scheduled_end_at"
@@ -138,7 +154,6 @@
                     >
                         {{ timeLeft(com.scheduled_end_at, timeLeftFlag) }} left
                     </div>
-                    <br />
                     <p id="c_about" *ngIf="com.description">
                         {{ com.description }}
                     </p>

@@ -16,6 +16,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import {
     IsLiveStatusPipe,
     PrettyDate,
+    TimeAgo,
     UserInfoPipe,
 } from './pipes/userInfoPipe';
 import { RouterModule } from '@angular/router';
@@ -65,6 +66,7 @@ import { FormsModule } from '@angular/forms';
         UserInfoPipe,
         IsLiveStatusPipe,
         PrettyDate,
+        TimeAgo,
         InfotipComponent,
         DropDownListComponent,
         CodeEditorComponent,
@@ -130,6 +132,7 @@ import { FormsModule } from '@angular/forms';
         QuestionDisplayComponent,
         NgKatexComponent,
         SpinnerComponent,
+        TimeAgo,
     ],
     providers: [DatePipe],
 })

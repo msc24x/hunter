@@ -1,22 +1,11 @@
 <app-bar></app-bar>
 <app-loading *ngIf="loading"></app-loading>
 
-<div class="body">
+<spinner *ngIf="loading && !competition.id"></spinner>
+<sign-in-prompt *ngIf="!isAuthenticated && !loading"></sign-in-prompt>
+
+<div class="body" *ngIf="competition.id">
     <div class="main">
-        <!-- <app-info-card
-            [persist]="true"
-            *ngIf="!isAuthenticated && !loading"
-            (click)="redirectToGitHubOAuth()"
-        >
-            <br />
-            <div class="row">
-                Want to test your skills, click here to Sign in using GitHub
-            </div>
-            <br />
-        </app-info-card> -->
-
-        <sign-in-prompt *ngIf="!isAuthenticated && !loading"></sign-in-prompt>
-
         <app-info-card *ngIf="hasEnded" [persist]="true">
             Oops! looks like you have missed the opportunity to participate in
             the competition. Meantime, you can practice other live competitions.
@@ -124,7 +113,7 @@
 
         <div
             [ngClass]="{ 'row compete-hr-layout': hrlayout }"
-            *ngIf="!hasEnded && isAuthenticated && questionSelected !== -1"
+            *ngIf="!hasEnded && isAuthenticated && questionSelectedInfo"
         >
             <!-- Questions -->
             <div class="question-section">
@@ -174,10 +163,10 @@
             <ng-template #alreadySubmittedInfo>
                 <p class="" *ngIf="questionSelectedInfo.results?.length != 0">
                     <b>
-                        You have already submitted your response on
+                        You have already submitted your response
                         {{
                             questionSelectedInfo.results?.[0]?.created_at
-                                | prettyDate
+                                | timeAgo
                         }}
                     </b>
                 </p>
@@ -356,7 +345,7 @@
         <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
         <div
             id="submit_controls"
-            *ngIf="!hasEnded && questionSelected != -1 && isAuthenticated"
+            *ngIf="!hasEnded && questionSelectedInfo && isAuthenticated"
             class="row"
         >
             <a
@@ -405,7 +394,11 @@
 
     <br />
 
-    <div class="bottom-section" [ngClass]="{ 'full': bottomSection }">
+    <div
+        *ngIf="questionSelectedInfo"
+        class="bottom-section"
+        [ngClass]="{ 'full': bottomSection }"
+    >
         <div
             class="section-toggle"
             (click)="bottomSection = !bottomSection"

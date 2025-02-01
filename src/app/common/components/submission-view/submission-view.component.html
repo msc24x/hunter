@@ -12,7 +12,9 @@
     <br />
 
     <span class="evaluation-details" *ngIf="viewSubmissionResult.evaluated_at">
-        Evaluated on {{ viewSubmissionResult.evaluated_at | prettyDate }} by
+        Evaluated
+        <span *ngIf="!viewSubmissionResult.evaluated_by">automatically</span>
+        {{ viewSubmissionResult.evaluated_at | timeAgo }} by
         <span *ngIf="!viewSubmissionResult.evaluated_by">Hunter</span>
         <span *ngIf="viewSubmissionResult.evaluated_by"
             ><user-display

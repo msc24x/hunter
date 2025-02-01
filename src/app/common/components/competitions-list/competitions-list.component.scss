@@ -36,7 +36,7 @@
 
     select {
         margin-left: 4px;
-        border-radius: 0.5rem;
+        border-radius: 0.7rem;
         border-width: 0px;
         padding: 8px;
         padding-inline: 16px;
@@ -185,12 +185,17 @@
         border-radius: 0.6rem;
         margin-block: 0.3rem;
         padding: 4px;
-        padding-inline: 12px;
+        padding-inline: 8px;
         margin-right: 4px;
         width: fit-content;
         display: inline-flex;
-
         @include sweetBorder;
+
+        &.live {
+            color: crimson;
+            border-color: crimson;
+            background-color: colors.$ls;
+        }
     }
 }
 

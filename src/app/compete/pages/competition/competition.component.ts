@@ -83,7 +83,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     evaluation: Array<result> = [];
 
     questionSelected = -1;
-    questionSelectedInfo = {} as QuestionInfo;
+    questionSelectedInfo: QuestionInfo | null = null;
     judgeInProgress = false;
     solutionOutput: ExecutionInfo = {
         expected: '',
@@ -274,6 +274,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     submitAnswerBasedQues() {
+        if (!this.questionSelectedInfo) {
+            return;
+        }
+
         this.judgeInProgress = true;
 
         this.loading++;
@@ -373,6 +377,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     postSolution(samples = false) {
+        if (!this.questionSelectedInfo) {
+            return;
+        }
+
         this.clearOutput();
 
         if (this.questionSelected == -1) {
@@ -390,6 +398,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     fetchLastSubmission() {
+        if (!this.questionSelectedInfo) {
+            return;
+        }
+
         this.fetchSubmissionMsg = '';
         this.loading++;
         this.subscriptions.push(
@@ -500,6 +512,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     selectQuestion(index: number) {
+        if (!this.competition.questions?.length) {
+            return;
+        }
+
         this.questionSelected = index;
         this.questionSelectedInfo = this.competition.questions![index];
 
@@ -518,7 +534,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     getLastSubmission() {
-        return this.questionSelectedInfo.results?.[0];
+        return this.questionSelectedInfo?.results?.[0];
     }
 
     showChoiceAsSelected(choice: QuestionChoice) {
@@ -543,7 +559,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     lastEditorContent(save?: boolean) {
-        const storageKey = `code-c${this.questionSelectedInfo.competition_id}-q${this.questionSelectedInfo.id}`;
+        const storageKey = `code-c${this.questionSelectedInfo?.competition_id}-q${this.questionSelectedInfo?.id}`;
 
         if (save) {
             localStorage.setItem(storageKey, this.codeWritten);
@@ -587,7 +603,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     alreadySelectedOptions() {
         let alreadySelected = 0;
 
-        this.questionSelectedInfo.question_choices?.forEach((ch) => {
+        this.questionSelectedInfo?.question_choices?.forEach((ch) => {
             if (this.showChoiceAsSelected(ch)) {
                 alreadySelected++;
             }
@@ -603,7 +619,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             alreadySelected++;
         }
 
-        if (alreadySelected > (this.questionSelectedInfo.correct_count || 0)) {
+        if (alreadySelected > (this.questionSelectedInfo?.correct_count || 0)) {
             this.snackBar.open(
                 `Cannot select more than ${
                     alreadySelected - 1
