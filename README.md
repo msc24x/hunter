@@ -1,10 +1,10 @@
-# Hunter: Programming Contest Hosting Platform
+# Hunter: Contest Hosting Platform
 
 ![](https://badgen.net/github/license/msc24x/hunter)
 ![](https://badgen.net/github/branches/msc24x/hunter)
 ![](https://badgen.net/github/commits/msc24x/hunter/main)
 
-Built to simplify the daily coding competitions hosting in general. Hunter gives you the ability to create your own coding competitions and necessary features to maintain and judge your participants.
+Built to simplify the daily coding and normal academic competitions hosting in general. Hunter gives you the ability to create your own competitions and necessary features to maintain and judge your participants.
 
 Visit at [hunter.cambo.in](https://hunter.cambo.in)
 
@@ -21,22 +21,34 @@ On the side of the participants, users who wish to just participate can get read
 
 Users submit their solution code to the online judge built for Hunter, that detects the language, compiles it and test it against the test cases provided by the host user. All this is done by a homegrown execution engine called 'Showdown', which is in testing phase and will be open source soon. All the results would be public on a live scoreboard during the competition.
 
-## Features
+## Question Types Supported
 
-### Editor
+-   Coding questions (Hunter started from this)
+    -   Supported 6 programming languages
+    -   In built code execution and evaluation
+-   Multiple choice questions
+-   Fill in blank questions (Or basic input question)
+-   Long answer type questions (Useful for essay writing)
 
-This part of the Hunter allows users to create their custom competitions. They can edit the meta data and scheduling information & define their set of questions. All settings related to competition editing will be there. Users can access the Editor through clicking on any of their created competitions from the Editor page. Users can edit and create any number of competitions they want by just clicking on Create Competition button.
+## Automatic Evaluation
 
-### Participation
+-   Positive marking
+-   Negative marking
+-   Case sensitivity configuration for input based questions
+-   Configure minimum number of words for long answer type questions
 
-Hunter provides clean and non distracting interfaces while participating in competitions. The module of the site is best designed to be viewed on desktops. Any one can participate in a 'Public' competitions whenever they are live. Users can view the questions that the competition contains and start writing code in their preferred language.
+### Manual evaluations for long answer type questions
 
-### Code Execution
+-   Full dashboard with participants responses, grading & ranking
+-   View pending evaluations, read answers and option to grade them manually
 
-As the participants would be writing code, they have the access to the Hunter's online judge, that compiles, execute and test their submissions against the preset tests defined by the host. Users have the ability to test against the full cases or just the samples cases. Meanwhile, Hunter keep users' last submission saved on its servers, so that the participants do not loose their code due to unexpected exits.
+## Key Features
 
-### Scoreboard
-
-Any successful or wrong submissions are evaluated, whose results the participant can see right next to the output in the Evaluation box. All the results for any question will be displayed there. They will get the defined score for the successful submission and one penalty for each wrong submission pre success.
-
-The results of all the questions are accumulated for all the participants in the live scoreboard that rank wise displays their performance.
+| Feature                                 | Description                                                                                                                                                            | Image                                                                                      |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Seamless Automatic Evaluation**       | Build your contest and let Hunter do all the hard work. Configure your questions' rules and grading with effortless settings; so sit back and relax!                   | <img src="https://hunter.cambo.in/assets/evaluation.webp" alt="drawing" width="200"/>      |
+| **Built-in Coding Task Support**        | Create custom programming questions effortlessly. Set up problems, test cases, and scoring systems with our intuitive interface.                                       | <img src="https://hunter.cambo.in/assets/coding%20task.webp" alt="drawing" width="200"/>   |
+| **Secure & Always On Time**             | Custom scheduler features according to your needs and rules. Get rid of manual distribution and increase efficiency, with automated visibilities and grading features. | <img src="https://hunter.cambo.in/assets/scheduler.webp" alt="drawing" width="200"/>       |
+| **Secure Code Compilation & Execution** | Powerful backend infrastructure handles code compilation and execution. Multiple language support with secure sandboxing.                                              | <img src="https://hunter.cambo.in/assets/question.webp" alt="drawing" width="200"/>        |
+| **Essay Evaluation Control**            | View and evaluate your participants' responses that require manual grading. See all the data and details, understand the trends of responses and grade them.           | <img src="https://hunter.cambo.in/assets/insights.webp" alt="drawing" width="200"/>        |
+| **Global Participation**                | Share your contests globally. Engage with participants worldwide and foster a community of programmers.                                                                | <img src="https://hunter.cambo.in/assets/workbench%20new.webp" alt="drawing" width="200"/> |
