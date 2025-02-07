@@ -82,6 +82,19 @@ export class CompetitionsDataService {
         });
     }
 
+    fetchQuality(params: { competition_id: number }) {
+        const endpoint = format(
+            apiEndpoints.competitionQuality,
+            params.competition_id.toString()!
+        );
+
+        return this.http.get(endpoint, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
+    }
+
     verifySolution(exe: HunterExecutable) {
         const endpoint =
             format(

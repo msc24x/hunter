@@ -22,9 +22,13 @@
     <li
         *ngFor="let question of this.questionsList; index as i"
         [ngClass]="{ 'selected-question': questionSelected == i }"
-        (click)="selectQuestion($event)"
-        matTooltip="Click to unselect"
-        [matTooltipDisabled]="questionSelected !== i || !clearable"
+        (click)="selectQuestion(i)"
+        [matTooltip]="
+            clearable && questionSelected === i
+                ? 'Click to unselect'
+                : question.title || 'untitled'
+        "
+        [matTooltipPosition]="'above'"
     >
         <fa-icon
             *ngIf="getQuestionProgress(question.id) as quesProgress"
@@ -35,6 +39,15 @@
             class="question-progress"
             [matTooltip]="quesProgress.total + ' points'"
             matTooltipPosition="above"
+        ></fa-icon>
+
+        <fa-icon
+            *ngIf="quality?.[question.id]?.acceptable === false"
+            [icon]="warningIcon"
+            [style]="'color: darkred; font-size: 1rem; background: transparent'"
+            class="question-progress"
+            [matTooltip]="'Question has poor quality'"
+            matTooltipPosition="left"
         ></fa-icon>
 
         <span>

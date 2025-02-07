@@ -22,7 +22,7 @@ import {
     faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import { error } from 'console';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, timeout } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
@@ -69,9 +69,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     competitionInfo: CompetitionInfo = {} as CompetitionInfo;
     questionSelected = -1;
     questionSelectedInfo = {} as QuestionInfo;
+    questionSelectedBackup = {} as QuestionInfo;
     testExists = false;
     solsExists = false;
     verificationResult: QuestionVerification | null = null;
+    quality: any = {};
     elem: HTMLElement | null = null;
 
     scoreMeta: ScoresMeta = null;
@@ -232,13 +234,15 @@ export class EditorComponent implements OnInit, OnDestroy {
             .subscribe(
                 (res) => {
                     this.loading = false;
-                    this.snackBar.open('Data saved successfully');
+                    this.snackBar.open('Question saved successfully');
 
                     this.fetchQuestions();
                 },
                 (error) => {
                     this.loading = false;
-                    this.snackBar.open('Some error occurred');
+                    this.snackBar.open(
+                        'Some error occurred while saving question'
+                    );
                     this.errors = error.error;
                 }
             );
@@ -253,12 +257,16 @@ export class EditorComponent implements OnInit, OnDestroy {
         } else return null;
     }
 
-    selectQuestion(index: number, force: boolean = false) {
+    _selectQuestion(index: number, checkUnsaved: boolean = false) {
         this.questionSelected = index;
         this.questionSelectedInfo =
             index == -1
                 ? ({} as QuestionInfo)
                 : this.competitionInfo.questions![index];
+
+        this.questionSelectedBackup = structuredClone(
+            this.questionSelectedInfo
+        );
 
         if (this.questionSelectedInfo?.type === 0) {
             this.getFileStatus('solutions').subscribe((res) => {
@@ -272,6 +280,32 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.titleService.setTitle(
             `Q${index + 1} • ${this.competitionInfo.title || 'Competition'}`
         );
+    }
+
+    selectQuestion(index: number, checkUnsaved: boolean = false) {
+        if (
+            checkUnsaved &&
+            JSON.stringify(this.questionSelectedInfo) !==
+                JSON.stringify(this.questionSelectedBackup)
+        ) {
+            const saveRequired = confirm(
+                'Save unsaved changes for the selected question?\nPress "OK" to save, or "CANCEL" to discard unsaved changed.'
+            );
+
+            if (saveRequired) {
+                this.saveQuestion();
+            } else {
+                Object.assign(
+                    this.questionSelectedInfo,
+                    this.questionSelectedBackup
+                );
+            }
+            this._selectQuestion(index, checkUnsaved);
+
+            return;
+        }
+
+        this._selectQuestion(index, checkUnsaved);
     }
 
     updateFile(event: any, filen: string) {
@@ -340,6 +374,14 @@ export class EditorComponent implements OnInit, OnDestroy {
                     if (this.questionSelected) {
                         this.selectQuestion(this.questionSelected);
                     }
+
+                    this.competitionsData
+                        .fetchQuality({ competition_id: this.competition_id })
+                        .subscribe({
+                            next: (qualityRes) => {
+                                this.quality = qualityRes.body;
+                            },
+                        });
                 }
             });
     }
@@ -377,13 +419,15 @@ export class EditorComponent implements OnInit, OnDestroy {
             .putCompetitionInfo(this.competitionInfo)
             .subscribe(
                 (res) => {
-                    this.snackBar.open('Data saved successfully');
+                    this.snackBar.open('Competition info saved successfully');
                     this.loading = false;
 
                     this.saveQuestion();
                 },
                 (error) => {
-                    this.snackBar.open('Some error occurred');
+                    this.snackBar.open(
+                        'Some error occurred while saving competition info'
+                    );
 
                     this.loading = false;
                     this.errors = error.error;

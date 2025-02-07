@@ -156,6 +156,29 @@
     </p>
 </popup>
 
+<ng-template #contestWarnings>
+    <div *ngIf="!quality?.acceptable" class="quality-warnings">
+        <h3>Please take quality precautions</h3>
+
+        <p *ngIf="quality?.title">
+            <manual-error [message]="quality?.title[0]"></manual-error>
+        </p>
+        <p *ngIf="quality?.description">
+            <manual-error [message]="quality?.description[0]"></manual-error>
+        </p>
+        <p *ngIf="quality?.questions">
+            <manual-error [message]="quality?.questions[0]"></manual-error>
+        </p>
+        <p *ngIf="!quality?.questionsAcceptable">
+            <manual-error
+                message="Some of the questions have poor quality, please go through the
+            questions with red indicator to view the problems."
+            >
+            </manual-error>
+        </p>
+    </div>
+</ng-template>
+
 <popup
     heading="Change visibility?"
     id="public_status_confirm"
@@ -172,26 +195,7 @@
         making it live.
     </p>
 
-    <h3>Quality considerations</h3>
-    <manual-error
-        message="Not meeting quality considerations can result into takedown of your contest."
-    ></manual-error>
-    <ol>
-        <li>
-            Have proper title and description of your competition and your
-            questions
-        </li>
-        <li>Do not include incomplete questions</li>
-        <li>
-            If you are creating coding tests, use our 'Test your own solution'
-            feature to verify whether your question is even solvable or not.
-        </li>
-        <li>
-            For MCQ or Fill In Blank questions, make sure you are configuring
-            your questions to be solvable, having 0 choices or 0 possible
-            answers make your questions useless
-        </li>
-    </ol>
+    <ng-outlet [ngTemplateOutlet]="contestWarnings"></ng-outlet>
 
     <h3>Increasing participation</h3>
     <ol>
@@ -201,11 +205,6 @@
         </li>
     </ol>
 </popup>
-
-<!-- <app-info-card (click)="showPopup(true, 'guide')"
-    >Before you set up your contest and define the questions! It is highly
-    recommended to take a look at the guide.</app-info-card
-> -->
 
 <spinner *ngIf="!competitionInfo.id"></spinner>
 
@@ -254,7 +253,10 @@
                 ></infotip>
             </div>
 
-            <div id="visbility_controller">
+            <div
+                id="visbility_controller"
+                [ngClass]="{ 'public': competitionInfo.public }"
+            >
                 <div
                     class="private"
                     (click)="competitionInfo.public && onClickVisibility(false)"
@@ -273,20 +275,24 @@
                 </div>
             </div>
 
-            <h3>Insights</h3>
+            <br />
+
             <div
                 class="participant-link"
                 (click)="shareAction()"
                 matTooltip="Click to share the participation link"
             >
+                <span>
+                    <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
+                </span>
                 <span class="link-text"
                     >Share link to the participants, and let the contest
                     begin!</span
                 >
-                <span>
-                    <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
-                </span>
             </div>
+
+            <h3>Insights</h3>
+
             <div
                 class="text-area insight-details cute-panel"
                 routerLink="/editor/{{ competitionInfo.id }}/data/insights"
@@ -299,13 +305,27 @@
                     [animation]="'fade'"
                 ></fa-icon>
                 <span>
-                    Insights of <b>{{ scoreMeta.total }}</b> users, who took
-                    part in your contest!
+                    Insights & evaluations of <br />
+                    <b>{{ scoreMeta.total }} hunters</b>, who took part in your
+                    contest!
                 </span>
+            </div>
+
+            <br />
+
+            <div
+                class="text-area view-participation cute-panel"
+                routerLink="/compete/p/{{ competitionInfo.id }}"
+                (click)="showPopup(true, 'competition-insights')"
+                *ngIf="scoreMeta"
+            >
+                <fa-icon [icon]="viewIcon" size="lg"></fa-icon>
+                <span> View participation page for your contest </span>
             </div>
         </div>
     </div>
     <div class="section-content">
+        <ng-outlet [ngTemplateOutlet]="contestWarnings"></ng-outlet>
         <h2>Competition Data</h2>
 
         <div class="row_flex editor-first-panel" style="margin-top: 16px">
@@ -336,10 +356,11 @@
                 [competitionInfo]="competitionInfo"
                 [questionsList]="this.competitionInfo.questions || []"
                 (messageEmitter)="displayLog($event)"
-                (questionSelectEmitter)="selectQuestion($event)"
+                (questionSelectEmitter)="selectQuestion($event, true)"
                 (saveClicked)="saveQuestion()"
                 (fetchRequired)="fetchQuestions(false)"
                 [(questionSelected)]="questionSelected"
+                [quality]="quality"
             >
             </questions-list>
         </div>
@@ -362,7 +383,56 @@
                 ></ques-type-label>
             </div>
 
-            <div class="clabel">
+            <br />
+
+            <div
+                class="quality-warnings"
+                *ngIf="quality?.[questionSelectedInfo.id]?.acceptable === false"
+            >
+                <h3>Please take quality precautions</h3>
+                <p
+                    *ngFor="
+                        let warning of quality[questionSelectedInfo.id]?.title
+                    "
+                >
+                    <manual-error [message]="warning"></manual-error>
+                </p>
+                <p
+                    *ngFor="
+                        let warning of quality[questionSelectedInfo.id]
+                            ?.statement
+                    "
+                >
+                    <manual-error [message]="warning"></manual-error>
+                </p>
+                <p
+                    *ngFor="
+                        let warning of quality[questionSelectedInfo.id]
+                            ?.question_choices
+                    "
+                >
+                    <manual-error [message]="warning"></manual-error>
+                </p>
+
+                <p
+                    *ngFor="
+                        let warning of quality[questionSelectedInfo.id]
+                            ?.sample_sols
+                    "
+                >
+                    <manual-error [message]="warning"></manual-error>
+                </p>
+                <p
+                    *ngFor="
+                        let warning of quality[questionSelectedInfo.id]
+                            ?.question_verifications
+                    "
+                >
+                    <manual-error [message]="warning"></manual-error>
+                </p>
+            </div>
+
+            <h3 class="clabel">
                 <span *ngIf="questionSelectedInfo.type === 0"
                     >Coding task title</span
                 >
@@ -373,7 +443,7 @@
                     >Question title</span
                 >
                 <span *ngIf="questionSelectedInfo.type === 3">Task title</span>
-            </div>
+            </h3>
 
             <textarea
                 id="text_qtitle"
@@ -768,12 +838,12 @@
                             class="file_input"
                             (click)="showPopup(true, 'code-tester')"
                             [matTooltip]="
-                                !testExists || !solsExists
-                                    ? 'You must upload both test cases files to test your competition'
+                                !solsExists
+                                    ? 'You must upload solution file to test your competition'
                                     : ''
                             "
                             [ngClass]="{
-                                'no-click disabled': !testExists || !solsExists
+                                'no-click disabled': !solsExists
                             }"
                         >
                             Test your own solution

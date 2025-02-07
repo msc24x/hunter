@@ -89,14 +89,14 @@ function judgeCodeQuestion(req: Request, res: Response) {
         async (question) => {
             if (!samples && !Util.doesTestFilesExist(hunterExecutable)) {
                 Util.sendResponseJson(res, resCode.success, {
-                    output: 'HERR:No test cases has been set for this question',
+                    output: 'HERR: No case solution has been set for this question',
                 });
                 return;
             }
 
-            if (samples && (!question.sample_cases || !question.sample_sols)) {
+            if (samples && !question.sample_sols) {
                 Util.sendResponseJson(res, resCode.success, {
-                    output: 'HERR:No sample test cases has been set for this question',
+                    output: 'HERR: No sample test case solution has been set for this question by the host',
                 });
                 return;
             }

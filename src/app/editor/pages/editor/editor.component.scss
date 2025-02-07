@@ -77,12 +77,12 @@ popup {
     color: brown;
     @include sweetBorder();
     border-color: burlywood;
-    gap: 0.3rem;
     align-items: center;
-    padding: 8px;
+    padding: 16px;
     padding-inline: 16px;
     cursor: pointer;
     transition: 100ms;
+    gap: 0.4rem;
 }
 
 .insight-details {
@@ -94,6 +94,16 @@ popup {
     justify-content: center;
     align-items: center;
     gap: 0.4rem;
+}
+
+.view-participation {
+    background: aliceblue !important;
+    color: #00427c !important;
+    border-color: #487094 !important;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
 }
 
 .no-question-selected {
@@ -177,8 +187,27 @@ popup {
     }
 
     .private {
-        background-color: rgba(128, 0, 128, 0.8);
+        background-color: rgb(32 113 186);
     }
+
+    &.public {
+        .private {
+            background-color: #858585;
+        }
+    }
+
+    &:not(.public) {
+        .public {
+            background-color: #858585;
+        }
+    }
+}
+
+.quality-warnings {
+    @include basicBack;
+    background: #ff000010;
+    border-color: transparent;
+    color: brown;
 }
 
 .vertical_flex {

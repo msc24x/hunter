@@ -125,6 +125,7 @@ export const apiEndpoints = {
     authenticate: environment.apiUrl + '/authenticate',
     logout: environment.apiUrl + '/logout',
     competition: environment.apiUrl + '/competition',
+    competitionQuality: environment.apiUrl + '/competition/{0}/quality',
     getCompetitions: environment.apiUrl + '/competitions',
     question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',

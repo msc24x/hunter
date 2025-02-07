@@ -111,7 +111,7 @@ router.post(
                     Util.sendResponse(
                         res,
                         resCode.badRequest,
-                        'Test files must exist for this question.'
+                        'Test solution file must exist for this question.'
                     );
                     return;
                 }
@@ -431,7 +431,16 @@ function validateQuestionInfo(data: QuestionInfo) {
         )
     ) {
         data.question_choices?.forEach((ch) => {
-            if (!ch.delete && (ch.text || '').length > 150) {
+            if (ch.delete) {
+                return;
+            }
+
+            if (!ch.text) {
+                errors.question_choices =
+                    'Some choices are empty, please write the required text';
+            }
+
+            if ((ch.text || '').length > 150) {
                 errors.question_choices =
                     'Characters in input cannot be more than 150';
             }
@@ -490,6 +499,8 @@ router.put(
                 neg_points: params.neg_points,
                 case_sensitive: params.case_sensitive,
                 char_limit: params.char_limit,
+                sample_cases: params.sample_cases,
+                sample_sols: params.sample_sols,
             },
         });
 

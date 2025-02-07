@@ -7,6 +7,7 @@ import { resCode } from '../../config/settings';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import { time } from 'console';
+import config from '../../config/config';
 
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -155,6 +156,176 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
             Util.sendResponseJson(res, resCode.success, competition);
         });
 });
+
+function isAnyErrorPresent(obj: any) {
+    var error = false;
+
+    Object.values(obj).forEach((val: any) => {
+        if (isNaN(val?.length)) {
+            if (isAnyErrorPresent(val)) {
+                error = true;
+                return;
+            }
+        } else if (val.length > 0) {
+            error = true;
+            return;
+        }
+    });
+
+    return error;
+}
+
+router.get(
+    '/competition/:id/quality',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        if (req.params.id == '') {
+            Util.sendResponse(res, resCode.badRequest);
+            return;
+        }
+
+        client.competitions
+            .findUniqueOrThrow({
+                where: { id: parseInt(req.params.id) },
+                include: {
+                    questions: {
+                        where: {
+                            deleted_at: null,
+                        },
+                        include: {
+                            question_verifications: {
+                                where: {
+                                    success: true,
+                                },
+                            },
+                            question_choices: true,
+                        },
+                    },
+                },
+            })
+            .then((competition) => {
+                if (!competition) {
+                    Util.sendResponse(res, resCode.notFound);
+                    return;
+                }
+
+                var warnings: any = {};
+
+                if (!competition.title) {
+                    warnings.title = ['Competition title is empty'];
+                }
+
+                if (!competition.description) {
+                    warnings.description = ['Competition has no description'];
+                }
+
+                if (!competition.questions.length) {
+                    warnings.questions = ['Competition has no questions'];
+                }
+
+                warnings.questionsAcceptable = true;
+
+                competition.questions.forEach((question) => {
+                    warnings[question.id] = {};
+                    var questionWarnings = warnings[question.id];
+
+                    if (!question.title) {
+                        questionWarnings.title = ['Question title is empty'];
+                    }
+
+                    if (!question.statement) {
+                        questionWarnings.statement = [
+                            'Question has no statement',
+                        ];
+                    }
+
+                    if (question.type === config.questionTypes.code) {
+                        if (!question.sample_sols) {
+                            questionWarnings.sample_sols = [
+                                "No sample solution has been set, hunter cannot evaluate users' output when there is nothing to compare to",
+                            ];
+                        }
+
+                        if (
+                            !Util.doesTestFilesExist({
+                                for: {
+                                    competition_id: competition.id,
+                                    question_id: question.id,
+                                    type: 0,
+                                },
+                                solution: { code: '', lang: 'c' },
+                            })
+                        ) {
+                            questionWarnings.sample_sols = [
+                                'File to specify solution output of your question has been set, this makes your question simply un-solvable',
+                            ];
+                        }
+
+                        if (!question.question_verifications.length) {
+                            questionWarnings.question_verifications = [
+                                'Host has not submitted a verification request for the solutions file to test the solvability of the coding task',
+                            ];
+                        }
+                    }
+
+                    if (question.type === config.questionTypes.mcq) {
+                        questionWarnings.question_choices = [];
+
+                        if (question.question_choices.length < 2) {
+                            questionWarnings.question_choices.push(
+                                'Question do no have enough (at least 2 required) number of choices to choose from'
+                            );
+                        }
+
+                        if (
+                            question.question_choices.every((q) => q.is_correct)
+                        ) {
+                            questionWarnings.question_choices.push(
+                                'All choices in the question have been marked as correct, which is un-acceptable'
+                            );
+                        }
+
+                        if (
+                            question.question_choices.every(
+                                (q) => !q.is_correct
+                            )
+                        ) {
+                            questionWarnings.question_choices.push(
+                                'There is no choice in the question that is marked as correct, which makes the question unsolvable'
+                            );
+                        }
+                    }
+
+                    if (question.type === config.questionTypes.fill) {
+                        questionWarnings.question_choices = [];
+
+                        if (!question.question_choices.length) {
+                            questionWarnings.question_choices.push(
+                                'Question do not have any possible answer, which makes the question un-solvable'
+                            );
+                        }
+                    }
+
+                    questionWarnings.acceptable = true;
+
+                    if (isAnyErrorPresent(questionWarnings)) {
+                        warnings.questionsAcceptable = false;
+                        questionWarnings.acceptable = false;
+                    }
+                });
+
+                warnings.acceptable = !isAnyErrorPresent(warnings);
+
+                Util.sendResponseJson(res, resCode.success, warnings);
+            })
+            .catch((err) => {
+                console.log(err);
+                Util.sendResponse(res, resCode.notFound, err);
+                return;
+            });
+    }
+);
 
 router.get('/competitions', authenticate, (req, res) => {
     const user: UserInfo | null = res.locals.user;

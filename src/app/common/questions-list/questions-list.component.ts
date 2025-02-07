@@ -8,14 +8,10 @@ import {
 } from '@angular/core';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import {
-    faAlignLeft,
-    faCheckCircle,
-    faCheckDouble,
     faCircleCheck,
-    faCircleHalfStroke,
+    faCircleExclamation,
     faCircleXmark,
-    faCode,
-    faParagraph,
+    faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
@@ -33,6 +29,7 @@ export class QuestionsListComponent implements OnInit {
     loading = false;
     checkIcon = faCircleCheck;
     crossIcon = faCircleXmark;
+    warningIcon = faCircleExclamation;
 
     showQuestionDeleteP = false;
 
@@ -54,6 +51,9 @@ export class QuestionsListComponent implements OnInit {
 
     @Input()
     competitionInfo = {} as CompetitionInfo;
+
+    @Input()
+    quality: any = {};
 
     @Output()
     messageEmitter = new EventEmitter();
@@ -101,25 +101,25 @@ export class QuestionsListComponent implements OnInit {
         } else return null;
     }
 
-    selectQuestion(ev: MouseEvent | null) {
-        const target = ev?.target;
+    selectQuestion(index: number) {
+        // const target = ev?.target;
 
-        if (target == null) {
+        if (index == -1) {
             this.questionSelected = -1;
             this.questionSelectEmitter.emit(this.questionSelected);
             return;
         }
 
-        const index = (target as HTMLElement)
-            .closest('li')
-            ?.getElementsByTagName('span')[0].innerText;
-        var newSelection = (index as unknown as number) - 1;
+        // const index = (target as HTMLElement)
+        //     .closest('li')
+        //     ?.getElementsByTagName('span')[0].innerText;
+        // var newSelection = (index as unknown as number) - 1;
 
-        if (this.clearable && newSelection === this.questionSelected) {
-            newSelection = -1;
+        if (this.clearable && index === this.questionSelected) {
+            index = -1;
         }
 
-        this.questionSelected = newSelection;
+        this.questionSelected = index;
 
         this.displayLog('Question ' + this.questionSelected + ' selected');
         this.questionSelectEmitter.emit(this.questionSelected);
@@ -127,7 +127,7 @@ export class QuestionsListComponent implements OnInit {
     }
 
     resetQuestionSelected() {
-        this.selectQuestion(null);
+        this.selectQuestion(-1);
     }
 
     delQuestion() {

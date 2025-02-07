@@ -81,9 +81,6 @@ export class Util {
     }
 
     static doesTestFilesExist(hunterExecutable: HunterExecutable) {
-        return (
-            existsSync(`${Util.getFileName(hunterExecutable, 'solutions')}`) &&
-            existsSync(`${Util.getFileName(hunterExecutable, 'testcases')}`)
-        );
+        return existsSync(`${Util.getFileName(hunterExecutable, 'solutions')}`);
     }
 }

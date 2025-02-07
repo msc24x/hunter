@@ -29,7 +29,7 @@ import { FormsModule } from '@angular/forms';
             useValue: {
                 duration: 4000,
                 horizontalPosition: 'center',
-                verticalPosition: 'top',
+                verticalPosition: 'bottom',
             },
         },
     ],
