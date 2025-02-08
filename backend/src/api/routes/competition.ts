@@ -213,15 +213,15 @@ router.get(
                 var warnings: any = {};
 
                 if (!competition.title) {
-                    warnings.title = ['Competition title is empty'];
+                    warnings.title = ['Competition title is empty.'];
                 }
 
                 if (!competition.description) {
-                    warnings.description = ['Competition has no description'];
+                    warnings.description = ['Competition has no description.'];
                 }
 
                 if (!competition.questions.length) {
-                    warnings.questions = ['Competition has no questions'];
+                    warnings.questions = ['Competition has no questions.'];
                 }
 
                 warnings.questionsAcceptable = true;
@@ -231,19 +231,19 @@ router.get(
                     var questionWarnings = warnings[question.id];
 
                     if (!question.title) {
-                        questionWarnings.title = ['Question title is empty'];
+                        questionWarnings.title = ['Question title is empty.'];
                     }
 
                     if (!question.statement) {
                         questionWarnings.statement = [
-                            'Question has no statement',
+                            'Question has no statement.',
                         ];
                     }
 
                     if (question.type === config.questionTypes.code) {
                         if (!question.sample_sols) {
                             questionWarnings.sample_sols = [
-                                "No sample solution has been set, hunter cannot evaluate users' output when there is nothing to compare to",
+                                "No sample solution has been set, hunter cannot evaluate users' output when there is nothing to compare to.",
                             ];
                         }
 
@@ -258,13 +258,13 @@ router.get(
                             })
                         ) {
                             questionWarnings.sample_sols = [
-                                'File to specify solution output of your question has been set, this makes your question simply un-solvable',
+                                'File to specify solution output of your question has been set, this makes your question simply un-solvable.',
                             ];
                         }
 
                         if (!question.question_verifications.length) {
                             questionWarnings.question_verifications = [
-                                'Host has not submitted a verification request for the solutions file to test the solvability of the coding task',
+                                'Verification request for the solutions file to test the solvability of the coding task has not been submitted, hunter cannot ensure whether your coding task is solvable or not.',
                             ];
                         }
                     }
@@ -274,7 +274,7 @@ router.get(
 
                         if (question.question_choices.length < 2) {
                             questionWarnings.question_choices.push(
-                                'Question do no have enough (at least 2 required) number of choices to choose from'
+                                'Question do no have enough (at least 2 required) number of choices to choose from.'
                             );
                         }
 
@@ -282,7 +282,7 @@ router.get(
                             question.question_choices.every((q) => q.is_correct)
                         ) {
                             questionWarnings.question_choices.push(
-                                'All choices in the question have been marked as correct, which is un-acceptable'
+                                'All choices in the question have been marked as correct, which is un-acceptable.'
                             );
                         }
 
@@ -292,7 +292,7 @@ router.get(
                             )
                         ) {
                             questionWarnings.question_choices.push(
-                                'There is no choice in the question that is marked as correct, which makes the question unsolvable'
+                                'There is no choice in the question that is marked as correct, which makes the question unsolvable.'
                             );
                         }
                     }
@@ -302,7 +302,7 @@ router.get(
 
                         if (!question.question_choices.length) {
                             questionWarnings.question_choices.push(
-                                'Question do not have any possible answer, which makes the question un-solvable'
+                                'Question do not have any possible answer, which makes the question un-solvable.'
                             );
                         }
                     }

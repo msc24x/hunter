@@ -1,5 +1,8 @@
 #about {
     font-size: 1.2rem;
+    max-width: 1080px;
+    margin-inline: auto;
+    padding-left: 4px;
 }
 
 a {
@@ -13,5 +16,30 @@ a {
 @media only screen and (max-width: 456px) {
     #about {
         font-size: 1.05rem !important;
+    }
+
+    .logo {
+        img {
+            display: none;
+        }
+    }
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+
+    img {
+        height: 70vw;
+        max-height: 10rem;
+    }
+
+    span {
+        font-size: min(16vw, 6rem);
+        font-weight: 800;
+        color: crimson;
     }
 }

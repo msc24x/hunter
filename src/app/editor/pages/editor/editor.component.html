@@ -157,7 +157,7 @@
 </popup>
 
 <ng-template #contestWarnings>
-    <div *ngIf="!quality?.acceptable" class="quality-warnings">
+    <div *ngIf="quality?.acceptable === false" class="quality-warnings">
         <h3>Please take quality precautions</h3>
 
         <p *ngIf="quality?.title">
@@ -169,7 +169,7 @@
         <p *ngIf="quality?.questions">
             <manual-error [message]="quality?.questions[0]"></manual-error>
         </p>
-        <p *ngIf="!quality?.questionsAcceptable">
+        <p *ngIf="quality?.questionsAcceptable === false">
             <manual-error
                 message="Some of the questions have poor quality, please go through the
             questions with red indicator to view the problems."
@@ -190,20 +190,13 @@
         message="Are you sure to set this competition's visibility to live? "
     ></manual-error>
 
-    <p>
-        Make sure you have took care of the following considerations before
-        making it live.
-    </p>
-
     <ng-outlet [ngTemplateOutlet]="contestWarnings"></ng-outlet>
 
     <h3>Increasing participation</h3>
-    <ol>
-        <li>
-            Share your competition link in your class or in your social network
-            to make your participants ready.
-        </li>
-    </ol>
+    <p class="info-like">
+        Share your competition link in your class or in your social network to
+        make your participants ready.
+    </p>
 </popup>
 
 <spinner *ngIf="!competitionInfo.id"></spinner>
