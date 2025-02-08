@@ -47,6 +47,7 @@ import { QuestionDisplayComponent } from './components/question-display/question
 import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 
 @NgModule({
     declarations: [
@@ -97,6 +98,8 @@ import { FormsModule } from '@angular/forms';
         MatSlideToggleModule,
         MatSelectModule,
         FormsModule,
+        CdkDropList,
+        CdkDrag,
     ],
     exports: [
         AppBarComponent,

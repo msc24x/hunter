@@ -20,6 +20,14 @@ import {
     QuestionProgress,
 } from 'src/environments/environment';
 
+import {
+    CdkDragDrop,
+    CdkDropList,
+    CdkDrag,
+    moveItemInArray,
+} from '@angular/cdk/drag-drop';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
     selector: 'questions-list',
     templateUrl: './questions-list.component.html',
@@ -32,10 +40,14 @@ export class QuestionsListComponent implements OnInit {
     warningIcon = faCircleExclamation;
 
     showQuestionDeleteP = false;
-
     questionTypeBuffer: number = -1;
 
-    constructor(private competitionsData: CompetitionsDataService) {}
+    dragMap: any = {};
+
+    constructor(
+        private competitionsData: CompetitionsDataService,
+        private snackBar: MatSnackBar
+    ) {}
 
     @Input()
     editable = true;
@@ -82,6 +94,31 @@ export class QuestionsListComponent implements OnInit {
     ];
 
     ngOnInit(): void {}
+
+    dropQuestion(event: CdkDragDrop<string[]>) {
+        console.log('dropp');
+        moveItemInArray(
+            this.questionsList,
+            event.previousIndex,
+            event.currentIndex
+        );
+
+        if (this.questionSelected === event.previousIndex) {
+            this.questionSelected = event.currentIndex;
+        } else {
+            if (
+                event.previousIndex < this.questionSelected &&
+                this.questionSelected <= event.currentIndex
+            ) {
+                this.questionSelected--;
+            } else if (
+                event.currentIndex <= this.questionSelected &&
+                this.questionSelected < event.previousIndex
+            ) {
+                this.questionSelected++;
+            }
+        }
+    }
 
     parseInt(f: any) {
         return parseInt(f);
@@ -145,6 +182,7 @@ export class QuestionsListComponent implements OnInit {
                     this.resetQuestionSelected();
                     this.loading = false;
                     this.fetchRequired.emit();
+                    this.snackBar.open('Question has been deleted permanently');
                 });
         } else this.displayLog('No Question selected');
     }

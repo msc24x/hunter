@@ -365,6 +365,8 @@ export class EditorComponent implements OnInit, OnDestroy {
                         this.toggleVisibility();
                         this.toggleVisibility();
                     }
+
+                    this.competitionInfo.questions = res.body.questions;
                     this.loading = false;
 
                     this.titleService.setTitle(

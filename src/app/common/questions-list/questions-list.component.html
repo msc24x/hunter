@@ -9,19 +9,29 @@
     continueMessage="Yes, delete the question"
 >
     <manual-error
-        message="You are about to delete the question. This is an irreversible action,
-    please confirm once"
+        message="This is an irreversible & immediate action,
+    please confirm once, because cannot undo it."
     ></manual-error>
 </popup>
+
+<!-- cdkDropList
+cdkDropListOrientation="horizontal"
+cdkDropListLockAxis="x"
+(cdkDropListDropped)="dropQuestion($event)" -->
 
 <ol class="questions_list">
     <div class="list-heading">
         {{ questionsList.length }}
         {{ questionsList.length === 1 ? "Question" : "Questions" }}
     </div>
+
+    <!-- cdkDrag
+    cdkDragPreviewContainer="parent" -->
     <li
-        *ngFor="let question of this.questionsList; index as i"
-        [ngClass]="{ 'selected-question': questionSelected == i }"
+        *ngFor="let question of this.questionsList; track: question; index as i"
+        [ngClass]="{
+            'selected-question': questionSelected == i,
+        }"
         (click)="selectQuestion(i)"
         [matTooltip]="
             clearable && questionSelected === i
@@ -29,6 +39,7 @@
                 : question.title || 'untitled'
         "
         [matTooltipPosition]="'above'"
+        matTooltipShowDelay="200"
     >
         <fa-icon
             *ngIf="getQuestionProgress(question.id) as quesProgress"
