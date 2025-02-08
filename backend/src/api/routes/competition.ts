@@ -258,7 +258,7 @@ router.get(
                             })
                         ) {
                             questionWarnings.sample_sols = [
-                                'File to specify solution output of your question has been set, this makes your question simply un-solvable.',
+                                'File to specify solution output of your question has not been set, this makes your question simply un-solvable.',
                             ];
                         }
 
