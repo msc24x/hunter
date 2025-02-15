@@ -17,15 +17,27 @@
         maxlength="120"
         placeholder="Example: Winter Challenge Wave-II"
     ></textarea>
-    <br />
     <p class="info-like">
         You will be redirected to the Hunter Editor. Be sure to read the Guide
         to create the best competition. Keep in mind that any poorly designed
         Public competition can be reported by the users.
     </p>
+
+    <p>
+        Make it a practice contest? (Cannot be changed later) &nbsp;&nbsp;
+        <mat-slide-toggle [(ngModel)]="practiceContest"></mat-slide-toggle>
+    </p>
+    <p class="info-like">
+        Enable practice mode and it will allow participants to attempt the
+        contest multiple times to practice. The points earned from a practice
+        contest won't be added into a user's profile, and will only be effective
+        in this contest's scoreboard.
+    </p>
+
     <button id="create" class="main" (click)="requestCreateCompetition()">
         <fa-icon [icon]="cubeIcon"></fa-icon> &nbsp; Initialize a new
-        competition
+        {{ practiceContest ? "practice" : "competitive" }}
+        contest
     </button>
     <div class="error">{{ responseMessage }}</div>
 </popup>

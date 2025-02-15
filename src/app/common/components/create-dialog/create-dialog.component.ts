@@ -16,6 +16,8 @@ export class CreateDialogComponent implements OnInit {
     loading = false;
     cubeIcon = faCube;
 
+    practiceContest = false;
+
     responseMessage: string = '';
 
     constructor(
@@ -38,16 +40,19 @@ export class CreateDialogComponent implements OnInit {
         const title = (
             document.getElementById('competition_title') as HTMLInputElement
         ).value;
-        this.competitionsData.postCompetition(title)?.subscribe(
-            (res) => {
-                this.router.navigate([
-                    `/editor/${(res.body as unknown as { id: number }).id}`,
-                ]);
-            },
-            (err) => {
-                this.handleResponse(err as HttpErrorResponse);
-            }
-        );
+        this.competitionsData
+            .postCompetition({ title, practice: this.practiceContest })
+            ?.subscribe(
+                (res) => {
+                    this.practiceContest = false;
+                    this.router.navigate([
+                        `/editor/${(res.body as unknown as { id: number }).id}`,
+                    ]);
+                },
+                (err) => {
+                    this.handleResponse(err as HttpErrorResponse);
+                }
+            );
     }
 
     private handleResponse(res: HttpErrorResponse) {

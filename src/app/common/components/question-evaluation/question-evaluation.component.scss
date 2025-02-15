@@ -2,8 +2,16 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
+.pts-col {
+    flex-basis: 14%;
+}
+
+.sub-col {
+    flex-basis: 18%;
+}
+
 .points-time-col {
-    flex-basis: 60%;
+    flex-basis: 50%;
 
     &:not(.header) {
         font-size: 0.8rem;

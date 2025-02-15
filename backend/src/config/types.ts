@@ -28,6 +28,7 @@ export type QuestionInfo = {
     sol_code_file?: boolean;
     user_answer?: string;
     question_choices?: QuestionChoice[];
+    competitions?: CompetitionInfo;
 };
 
 export type QuestionChoice = {
@@ -84,6 +85,7 @@ export type CompetitionInfo = {
     scheduled_end_at: Date;
     rating: number;
     public: boolean;
+    practice: boolean;
 };
 
 export type CodeSolution = {

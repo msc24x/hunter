@@ -59,6 +59,7 @@ async function getUserStats(user_id: number) {
                 deleted_at: null,
                 competitions: {
                     deleted_at: null,
+                    practice: false,
                 },
             },
             user_id: user_id,

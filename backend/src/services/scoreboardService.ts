@@ -17,7 +17,8 @@ export class ScoreboardService {
         user: UserInfo,
         hunterExecutable: HunterExecutable,
         exeInfo: ExeInfo,
-        question: QuestionInfo
+        question: QuestionInfo,
+        practice = false
     ) {
         var points = -1 * question.neg_points;
 
@@ -97,6 +98,11 @@ export class ScoreboardService {
                     evaluated_at: null,
                     result: 0,
                 };
+
+                // We won't require manual evaluation for practice contests.
+                if (practice) {
+                    result_data.evaluated_at = new Date();
+                }
                 break;
             default:
                 throw 'Question type not supported';

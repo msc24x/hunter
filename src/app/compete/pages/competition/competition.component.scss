@@ -231,6 +231,14 @@ textarea {
     border-radius: 1.5rem;
     font-size: 1.1rem;
 
+    .practice-label {
+        margin-inline: auto;
+        margin-top: -2.5rem;
+        color: purple;
+        width: fit-content;
+        @include basicBack;
+    }
+
     infotip {
         margin-left: 0.4rem;
 
@@ -262,6 +270,7 @@ textarea {
     }
     .description-toggle-content-a:hover {
         text-decoration: underline;
+        cursor: pointer;
     }
 
     #description-toggle:checked + p {

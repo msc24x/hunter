@@ -17,7 +17,8 @@ model competitions {
   deleted_at       DateTime?   @db.DateTime(0)
   updated_at       DateTime    @db.DateTime(0)
   rating           Int         @default(0)
-  public           Boolean?
+  public           Boolean     @default(false)
+  practice         Boolean     @default(false)
   scheduled_at     DateTime?   @db.DateTime(0)
   scheduled_end_at DateTime?   @db.DateTime(0)
   questions        questions[]

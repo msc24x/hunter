@@ -90,21 +90,21 @@ export class TimeAgo implements PipeTransform {
         var diff: number = 0;
 
         if (future) {
-            console.log(date);
             diff = date - now;
-            console.log(diff);
         } else {
             diff = now - date;
         }
 
-        const seconds = Math.floor(diff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-        const weeks = Math.floor(days / 7);
+        const seconds = Math.round(diff / 1000);
+        const minutes = Math.round(seconds / 60);
+        const hours = Math.round(minutes / 60);
+        const days = Math.round(hours / 24);
+        const weeks = Math.round(days / 7);
 
         if (seconds < 60) {
-            return seconds === 1 ? '1 second ago' : `${seconds} seconds ago`;
+            return seconds === 1
+                ? '1 second ago'
+                : `${seconds || 'a few'} seconds ago`;
         } else if (minutes < 60) {
             return minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`;
         } else if (hours < 24) {

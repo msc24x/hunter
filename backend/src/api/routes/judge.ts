@@ -68,7 +68,7 @@ function safeRouteToQuestion(
                     );
                     return;
                 }
-                resolve(question);
+                resolve(question as QuestionInfo);
             });
     });
 
@@ -181,9 +181,23 @@ function judgeMcqQuestion(req: Request, res: Response) {
                     user_id: user.id,
                     question_id: question.id,
                 },
+                include: {
+                    question: {
+                        include: {
+                            competitions: {
+                                select: {
+                                    practice: true,
+                                },
+                            },
+                        },
+                    },
+                },
             })
             .then((existingResult) => {
-                if (existingResult) {
+                if (
+                    existingResult &&
+                    !existingResult.question.competitions.practice
+                ) {
                     Util.sendResponse(
                         res,
                         resCode.badRequest,
@@ -257,9 +271,23 @@ function judgeFillQuestion(req: Request, res: Response) {
                         user_id: user.id,
                         question_id: question.id,
                     },
+                    include: {
+                        question: {
+                            include: {
+                                competitions: {
+                                    select: {
+                                        practice: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 })
                 .then((existingResult) => {
-                    if (existingResult) {
+                    if (
+                        existingResult &&
+                        !existingResult.question.competitions.practice
+                    ) {
                         Util.sendResponse(
                             res,
                             resCode.badRequest,
@@ -324,9 +352,20 @@ function judgeLongQuestion(req: Request, res: Response) {
                         user_id: user.id,
                         question_id: question.id,
                     },
+                    include: {
+                        question: {
+                            include: {
+                                competitions: {
+                                    select: {
+                                        practice: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 })
                 .then((existingResult) => {
-                    if (existingResult) {
+                    if (existingResult && !question.competitions!.practice) {
                         Util.sendResponse(
                             res,
                             resCode.badRequest,
@@ -344,7 +383,8 @@ function judgeLongQuestion(req: Request, res: Response) {
                             output: '',
                             success: success,
                         },
-                        question
+                        question,
+                        question.competitions!.practice
                     );
 
                     Util.sendResponse(res, resCode.success);

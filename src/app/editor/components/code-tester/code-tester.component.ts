@@ -68,7 +68,7 @@ export class CodeTesterComponent implements OnInit, OnChanges {
                 },
                 solution: {
                     code: this.code,
-                    lang: this.language,
+                    lang: this.language || 'cpp',
                 },
             })
             .subscribe(

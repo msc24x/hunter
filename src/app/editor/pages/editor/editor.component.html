@@ -319,7 +319,14 @@
     </div>
     <div class="section-content">
         <ng-outlet [ngTemplateOutlet]="contestWarnings"></ng-outlet>
-        <h2>Competition Data</h2>
+        <h2>
+            Competition
+            <span *ngIf="competitionInfo.practice"> (For practice only) </span>
+        </h2>
+
+        <p class="info-like sticky">
+            This competition was initialized as a practice contest.
+        </p>
 
         <div class="row_flex editor-first-panel" style="margin-top: 16px">
             <div id="title_label" class="label">Competition Title</div>
@@ -375,8 +382,6 @@
                     [ques_type]="questionSelectedInfo.type"
                 ></ques-type-label>
             </div>
-
-            <br />
 
             <div
                 class="quality-warnings"

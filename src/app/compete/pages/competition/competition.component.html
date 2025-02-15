@@ -69,6 +69,17 @@
             *ngIf="isAuthenticated && this.competition.title"
             id="competition_info"
         >
+            <div
+                *ngIf="competition.practice"
+                class="practice-label cute-panel"
+                matTooltip="Contest is set as a practice only, allowing you to
+                        attempt the contest multiple times. You can submit your
+                        responses any number of times. Any positive or negative
+                        points here won't affect your user profile."
+            >
+                <fa-icon [icon]="practiceIcon"></fa-icon> &nbsp; Practice
+                Contest
+            </div>
             <div class="title-duration-container">
                 <div class="title">
                     {{ this.competition.title || "Untitled Contest" }}
@@ -77,6 +88,7 @@
                         (click)="showInstructionP = true"
                         [svgSize]="'sm'"
                     ></infotip>
+
                     <div
                         *ngIf="!hasEnded && isAuthenticated"
                         id="duration_info"
@@ -107,6 +119,18 @@
                         this.competition.description ||
                             "No description provided by host."
                     }}
+                    <br />
+                    <br />
+                    <div class="info-like">
+                        Created {{ this.competition.created_at | timeAgo }} by
+                        <user-display
+                            [userInfo]="this.competition.host_user"
+                        ></user-display>
+                    </div>
+                    <div class="info-like">
+                        Updated
+                        {{ this.competition.updated_at | timeAgo }}
+                    </div>
                 </label>
             </p>
         </div>
@@ -161,9 +185,9 @@
             </code-editor>
 
             <ng-template #alreadySubmittedInfo>
-                <p class="" *ngIf="questionSelectedInfo.results?.length != 0">
-                    <b>
-                        You have already submitted your response
+                <p class="">
+                    <b *ngIf="questionSelectedInfo.results?.length != 0">
+                        You submitted a response
                         {{
                             questionSelectedInfo.results?.[0]?.created_at
                                 | timeAgo
@@ -177,6 +201,7 @@
                 class="mcq-section question-side-section"
                 [ngClass]="{
                     'disabled_bright no-click':
+                        !competition.practice &&
                         questionSelectedInfo.results?.length
                 }"
             >
@@ -247,6 +272,7 @@
                 class="blank-section question-side-section"
                 [ngClass]="{
                     'disabled_bright no-click':
+                        !competition.practice &&
                         questionSelectedInfo.results?.length
                 }"
             >
@@ -258,7 +284,7 @@
 
                 <br />
 
-                <p class="info-like">Input your answer below *</p>
+                <p class="">Input your answer below</p>
                 <input
                     type="text"
                     [(ngModel)]="questionSelectedInfo.user_answer"
@@ -275,6 +301,7 @@
                 class="long-answer-section question-side-section"
                 [ngClass]="{
                     'disabled_bright no-click':
+                        !competition.practice &&
                         questionSelectedInfo.results?.length
                 }"
             >
@@ -295,7 +322,6 @@
 
                 <p
                     class="info-like"
-                    *ngIf="questionSelectedInfo.char_limit"
                     [ngClass]="{
                         'acceptable': isLongAnswerAcceptable(
                             this.questionSelectedInfo.user_answer ||
@@ -313,10 +339,13 @@
                                     getLastSubmission()?.submission ||
                                     ""
                             ) || 0
-                        }}/{{ questionSelectedInfo.char_limit }}
+                        }}<span *ngIf="questionSelectedInfo.char_limit">
+                            /{{ questionSelectedInfo.char_limit }}
+                        </span>
                     </span>
 
                     <infotip
+                        *ngIf="questionSelectedInfo.char_limit"
                         [message]="
                             isLongAnswerAcceptable(
                                 this.questionSelectedInfo.user_answer ||
@@ -341,6 +370,12 @@
                 ></ng-outlet>
             </div>
         </div>
+        <p class="info-like" *ngIf="competition.practice">
+            Contest is set as a practice only, allowing you to attempt the
+            contest multiple times. You can submit your responses any number of
+            times. Any positive or negative points here won't affect your user
+            profile.
+        </p>
 
         <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
         <div
@@ -370,6 +405,7 @@
                 </div>
                 <div
                     [matTooltip]="
+                        !competition.practice &&
                         questionSelectedInfo.type !== 0 &&
                         questionSelectedInfo.results?.length
                             ? 'You have already submitted your response'
@@ -381,6 +417,7 @@
                     (click)="postSolution()"
                     [ngClass]="{
                         'disabled no-click':
+                            !competition.practice &&
                             questionSelectedInfo.type !== 0 &&
                             questionSelectedInfo.results?.length
                     }"
@@ -449,6 +486,11 @@
                             {{ getTotalScore() }}
                         </span>
                         points
+
+                        <infotip
+                            *ngIf="competition.practice"
+                            message="Will not affect your profile, since this is a practice contest only."
+                        ></infotip>
                     </div>
                 </div>
             </div>

@@ -55,6 +55,10 @@
                     <div id="c_title" [ngClass]="{ 'untitled': !com.title }">
                         {{ com.title || "untitled" }}
                     </div>
+                    <div *ngIf="!showAuthor" class="info-like">
+                        Created
+                        {{ com.created_at | timeAgo }}
+                    </div>
                     <div
                         id="c_host_user"
                         routerLink="/u/{{ com.host_user_id }}"
@@ -88,7 +92,12 @@
                                 [icon]="privateIcon"
                                 style="color: crimson"
                             ></fa-icon>
+                            &nbsp;
+                            <span style="color: crimson"> Private </span>
                         </span>
+                    </div>
+                    <div class="detail-tag cute-panel" *ngIf="com.practice">
+                        For Practice Only
                     </div>
                     <div
                         id="start_schedule"

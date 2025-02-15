@@ -32,6 +32,7 @@ import {
     faHourglassHalf,
     faMeteor,
     faPlay,
+    faPuzzlePiece,
     faSpinner,
     faTableColumns,
 } from '@fortawesome/free-solid-svg-icons';
@@ -59,6 +60,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     tickIcon = faCheckCircle;
     circleIcon = faCircle;
     clockIcon = faClock;
+    practiceIcon = faPuzzlePiece;
 
     showInstructionP = false;
 
@@ -534,6 +536,13 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     getLastSubmission() {
+        if (
+            this.competition.practice &&
+            this.questionSelectedInfo?.type !== 0
+        ) {
+            return null;
+        }
+
         return this.questionSelectedInfo?.results?.[0];
     }
 
@@ -541,6 +550,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         if (choice.is_correct) {
             return true;
         }
+
+        if (this.competition.practice) {
+            return false;
+        }
+
         const lastSub = this.getLastSubmission();
 
         if (!lastSub) {

@@ -117,8 +117,9 @@ router.post(
                 }
 
                 judgeService
-                    .execute(execReq, false, null, null)
+                    .execute(execReq, true, null, null)
                     .then((exeRes) => {
+                        console.log(exeRes);
                         client.question_verification
                             .upsert({
                                 where: {
@@ -638,6 +639,13 @@ router.get(
                         },
                         include: {
                             question_choices: true,
+                        },
+                    },
+                    host_user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            avatar_url: true,
                         },
                     },
                 },

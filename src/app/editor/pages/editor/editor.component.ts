@@ -373,7 +373,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                         `Build • ${this.competitionInfo.title || 'Competition'}`
                     );
 
-                    if (this.questionSelected) {
+                    if (this.questionSelected !== -1) {
                         this.selectQuestion(this.questionSelected);
                     }
 

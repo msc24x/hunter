@@ -51,6 +51,7 @@ export interface CompetitionInfo {
     scheduled_end_at: Date | null;
     rating: number;
     public: boolean;
+    practice: boolean;
     questions?: QuestionInfo[];
 }
 

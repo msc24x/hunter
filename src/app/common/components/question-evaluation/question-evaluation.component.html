@@ -23,8 +23,8 @@
 <ng-template #evaluationTable>
     <div id="pts_desc" class="btable evaluation-table">
         <div class="table_heading">
-            <div>Submission</div>
-            <div>Pts</div>
+            <div class="sub-col">#</div>
+            <div class="pts-col">Pts</div>
             <div>
                 Evaluation
                 <infotip
@@ -39,16 +39,19 @@
             class="submission-row"
             (click)="viewSubmission(row)"
         >
-            <div>
+            <div class="sub-col">
                 <a class="view-submission" (click)="viewSubmission(row)">
                     <fa-icon [icon]="codeIcon" [size]="'sm'"></fa-icon>
                     &nbsp; <span>View</span></a
                 >
             </div>
-            <div>{{ row.result }}</div>
+            <div class="pts-col">{{ row.result }}</div>
             <div style="font-size: 0.9rem">
                 <span *ngIf="row.evaluated_at">
                     <fa-icon [icon]="checkIcon" size="sm"></fa-icon>
+                    &nbsp;
+
+                    <span> ({{ row.accepted ? "Accepted" : "Wrong" }}) </span>
                 </span>
 
                 <span *ngIf="!row.evaluated_at" style="color: darkred">
@@ -65,8 +68,8 @@
         </div>
 
         <div *ngIf="this.questionSelectedInfo.results?.length === 0">
-            <div>-</div>
-            <div>-</div>
+            <div class="sub-col">-</div>
+            <div class="pts-col">-</div>
             <div class="points-time-col">-</div>
         </div>
 

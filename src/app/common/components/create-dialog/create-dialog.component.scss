@@ -10,14 +10,11 @@
         padding-top: 0px;
     }
     p {
-        color: gray;
-        font-size: 1rem;
-        max-width: 512px;
+        max-width: 712px;
     }
 
     textarea {
         @include appTextArea;
-        margin-top: 24px;
         margin-left: 0px;
         width: calc(100% - 2rem);
     }

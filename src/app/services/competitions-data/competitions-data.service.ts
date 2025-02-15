@@ -205,20 +205,16 @@ export class CompetitionsDataService {
         });
     }
 
-    postCompetition(title: string) {
+    postCompetition(params: { title: string; practice: boolean }) {
         if (!this.authService.isAuthenticated) {
             return;
         }
 
-        return this.http.post(
-            apiEndpoints.competition,
-            { title: title },
-            {
-                responseType: 'json',
-                withCredentials: true,
-                observe: 'response',
-            }
-        );
+        return this.http.post(apiEndpoints.competition, params, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
     }
 
     putCompetitionInfo(competition: CompetitionInfo) {

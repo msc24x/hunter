@@ -12,6 +12,7 @@ import config from '../../config/config';
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
 
+// Delete a contest
 router.delete('/competition/:id', authenticate, loginRequired, (req, res) => {
     client.competitions
         .update({
@@ -35,10 +36,12 @@ router.delete('/competition/:id', authenticate, loginRequired, (req, res) => {
         });
 });
 
+// Create a contest
 router.post('/competition', authenticate, loginRequired, (req, res) => {
     const title = req.body.title;
+    const practice = Boolean(req.body.practice);
 
-    if (title == null || (title as string).length > 20) {
+    if (title == null || (title as string).length > 120) {
         Util.sendResponse(
             res,
             resCode.badRequest,
@@ -53,6 +56,7 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
                 title: req.body.title,
                 description: req.body.description,
                 public: false,
+                practice: practice,
                 created_at: new Date(),
                 host_user_id: res.locals.user.id,
                 updated_at: new Date(),
@@ -70,6 +74,7 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
         });
 });
 
+// Update a contest
 router.put('/competition', authenticate, loginRequired, (req, res) => {
     const competitionBody = req.body;
     if (
@@ -123,6 +128,7 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
         });
 });
 
+// Fetch a contest
 router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
     if (req.params.id == '') {
         Util.sendResponse(res, resCode.badRequest);
@@ -175,6 +181,7 @@ function isAnyErrorPresent(obj: any) {
     return error;
 }
 
+// Fetch quality of a contest
 router.get(
     '/competition/:id/quality',
     authenticate,
@@ -279,6 +286,7 @@ router.get(
                         }
 
                         if (
+                            question.question_choices?.length &&
                             question.question_choices.every((q) => q.is_correct)
                         ) {
                             questionWarnings.question_choices.push(
@@ -327,6 +335,7 @@ router.get(
     }
 );
 
+// Fetch all contests
 router.get('/competitions', authenticate, (req, res) => {
     const user: UserInfo | null = res.locals.user;
     const params = {
