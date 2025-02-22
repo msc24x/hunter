@@ -1,6 +1,13 @@
-<div class="bg" (click)="bgClicked($event)">
+<div
+    [ngClass]="{ 'no-container': noContainer }"
+    class="bg"
+    (click)="bgClicked($event)"
+>
     <div class="dialog">
-        <h2 [ngStyle]="{ 'color': destructive ? 'darkred' : 'initial' }">
+        <h2
+            *ngIf="!noContainer"
+            [ngStyle]="{ 'color': destructive ? 'darkred' : 'initial' }"
+        >
             {{ heading }}
         </h2>
         <ng-content></ng-content>

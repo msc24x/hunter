@@ -54,7 +54,7 @@ export class Results {
                     ORDER BY
                         final_result DESC,
                         result DESC,
-                        created_at DESC
+                        created_at ASC
                 ) s
             ORDER BY
                 user_rank ASC

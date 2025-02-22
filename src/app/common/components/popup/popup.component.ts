@@ -32,6 +32,9 @@ export class PopupComponent implements OnInit {
     showControls = true;
 
     @Input()
+    noContainer = false;
+
+    @Input()
     continueMessage = 'Continue';
 
     constructor(private el: ElementRef) {}

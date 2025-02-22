@@ -232,11 +232,19 @@ textarea {
     font-size: 1.1rem;
 
     .practice-label {
-        margin-inline: auto;
-        margin-top: -2.5rem;
         color: purple;
         width: fit-content;
         @include basicBack;
+        margin-top: -3.3rem;
+        padding: 0.6rem;
+        padding-inline: 1rem;
+        left: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 400;
+        border-radius: 1rem 1rem 0 0;
+        position: relative;
+        z-index: -1;
+        margin-bottom: 1rem;
     }
 
     infotip {

@@ -2,15 +2,20 @@
 <app-loading *ngIf="loading"></app-loading>
 
 <spinner *ngIf="loading && !competition.id"></spinner>
-<sign-in-prompt *ngIf="!isAuthenticated && !loading"></sign-in-prompt>
+
+<popup
+    *ngIf="!isAuthenticated && !loading"
+    [heading]="'Sign in to participate'"
+    [hidden]="!showSignInP"
+    (closeEvent)="showSignInP = false"
+    [showControls]="false"
+    [noContainer]="true"
+>
+    <sign-in-prompt></sign-in-prompt>
+</popup>
 
 <div class="body" *ngIf="competition.id">
     <div class="main">
-        <app-info-card *ngIf="hasEnded" [persist]="true">
-            Oops! looks like you have missed the opportunity to participate in
-            the competition. Meantime, you can practice other live competitions.
-        </app-info-card>
-
         <popup
             [hidden]="!showInstructionP"
             (closeEvent)="showInstructionP = false"
@@ -65,10 +70,7 @@
             </ul>
         </popup>
 
-        <div
-            *ngIf="isAuthenticated && this.competition.title"
-            id="competition_info"
-        >
+        <div *ngIf="this.competition.title" id="competition_info">
             <div
                 *ngIf="competition.practice"
                 class="practice-label cute-panel"
@@ -77,8 +79,8 @@
                         responses any number of times. Any positive or negative
                         points here won't affect your user profile."
             >
-                <fa-icon [icon]="practiceIcon"></fa-icon> &nbsp; Practice
-                Contest
+                <fa-icon [icon]="practiceIcon"></fa-icon>
+                &nbsp; For Practice Only
             </div>
             <div class="title-duration-container">
                 <div class="title">
@@ -89,10 +91,7 @@
                         [svgSize]="'sm'"
                     ></infotip>
 
-                    <div
-                        *ngIf="!hasEnded && isAuthenticated"
-                        id="duration_info"
-                    >
+                    <div *ngIf="!hasEnded" id="duration_info">
                         <fa-icon [icon]="clockIcon"></fa-icon>
                         <span style="width: max-content">
                             &nbsp; &nbsp;
@@ -102,7 +101,12 @@
                 </div>
             </div>
 
-            <input type="checkbox" id="description-toggle" hidden />
+            <input
+                type="checkbox"
+                id="description-toggle"
+                [checked]="true"
+                hidden
+            />
             <p class="description-toggle-content">
                 <label
                     class="description-toggle-content-a"
@@ -122,7 +126,7 @@
                     <br />
                     <br />
                     <div class="info-like">
-                        Created {{ this.competition.created_at | timeAgo }} by
+                        Created {{ this.competition.created_at | timeAgo }} By
                         <user-display
                             [userInfo]="this.competition.host_user"
                         ></user-display>
@@ -137,7 +141,7 @@
 
         <div
             [ngClass]="{ 'row compete-hr-layout': hrlayout }"
-            *ngIf="!hasEnded && isAuthenticated && questionSelectedInfo"
+            *ngIf="!hasEnded && questionSelectedInfo"
         >
             <!-- Questions -->
             <div class="question-section">
@@ -185,8 +189,13 @@
             </code-editor>
 
             <ng-template #alreadySubmittedInfo>
-                <p class="">
-                    <b *ngIf="questionSelectedInfo.results?.length != 0">
+                <p>
+                    <b
+                        *ngIf="
+                            questionSelectedInfo.results?.length != 0 &&
+                            isAuthenticated
+                        "
+                    >
                         You submitted a response
                         {{
                             questionSelectedInfo.results?.[0]?.created_at
@@ -377,10 +386,17 @@
             profile.
         </p>
 
+        <br />
+        <manual-error
+            *ngIf="hasEnded"
+            message="Oops! looks like you have missed the opportunity to participate in
+            the competition. Meantime, you can practice other live competitions."
+        ></manual-error>
+
         <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
         <div
             id="submit_controls"
-            *ngIf="!hasEnded && questionSelectedInfo && isAuthenticated"
+            *ngIf="!hasEnded && questionSelectedInfo"
             class="row"
         >
             <a
@@ -552,6 +568,12 @@
             *ngIf="isAuthenticated"
             [ngTemplateOutlet]="questionEvaluation"
         ></ng-container>
+
+        <div *ngIf="!isAuthenticated">
+            <br />
+            <br />
+            <sign-in-prompt></sign-in-prompt>
+        </div>
 
         <scoreboard [competition_id]="c_id"></scoreboard>
     </div>

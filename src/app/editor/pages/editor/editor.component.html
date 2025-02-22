@@ -324,7 +324,7 @@
             <span *ngIf="competitionInfo.practice"> (For practice only) </span>
         </h2>
 
-        <p class="info-like sticky">
+        <p *ngIf="competitionInfo.practice" class="info-like sticky">
             This competition was initialized as a practice contest.
         </p>
 

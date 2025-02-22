@@ -613,11 +613,11 @@ router.put(
 router.get(
     '/competitions/:comp_id/questions/:id?',
     authenticate,
-    loginRequired,
+    // loginRequired,
     (req, res) => {
         const competition_id: number = parseInt(req.params.comp_id);
         const ques_id: number | '' = req.params.id && parseInt(req.params.id);
-        const user: UserInfo = res.locals.user;
+        const user: UserInfo | null = res.locals.user;
         const is_editor = req.headers.referer?.includes('/editor/');
 
         if (isNaN(competition_id)) {
@@ -658,7 +658,7 @@ router.get(
                 }
 
                 // If its the host, send everything
-                if (competition.host_user_id === user.id && is_editor) {
+                if (competition.host_user_id === user?.id && is_editor) {
                     Util.sendResponseJson(res, resCode.success, competition);
                     return;
                 }

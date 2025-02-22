@@ -35,6 +35,7 @@ import {
     faPuzzlePiece,
     faSpinner,
     faTableColumns,
+    faVolleyball,
 } from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
@@ -60,9 +61,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     tickIcon = faCheckCircle;
     circleIcon = faCircle;
     clockIcon = faClock;
-    practiceIcon = faPuzzlePiece;
+    practiceIcon = faVolleyball;
 
     showInstructionP = false;
+    showSignInP = false;
 
     evaluationChangeOccurred = false;
 
@@ -178,8 +180,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.hrlayout = false;
         }
 
+        this.fetchData();
+
         if (this.isAuthenticated) {
-            this.fetchData();
             return;
         }
 
@@ -195,12 +198,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.isAuthenticated = true;
                         this.authService.user = this.user;
                         this.authService.isAuthenticated.next(true);
-                        this.fetchData();
                     }
                 },
                 error: (err) => {
                     this.loading--;
-                    this.bottomSection = true;
                 },
             })
         );
@@ -305,7 +306,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.evaluationChangeOccurred =
                             !this.evaluationChangeOccurred;
 
-                        this.loading++;
                         this.subscriptions.push(this.fetchProgress());
                     },
 
@@ -379,6 +379,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     postSolution(samples = false) {
+        if (!this.isAuthenticated) {
+            this.showSignInP = true;
+            return;
+        }
+
         if (!this.questionSelectedInfo) {
             return;
         }
@@ -431,6 +436,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     fetchData() {
+        this.loading++;
+
         const dataSubscriptions = [
             this.competitionsService
                 .getQuestions({ competition_id: this.c_id })
@@ -498,17 +505,22 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.fetchProgress(),
         ];
 
-        this.loading += dataSubscriptions.length;
         this.subscriptions.push(...dataSubscriptions);
     }
 
     fetchProgress() {
+        this.loading++;
+
         return this.scoresDataService
             .getProgress({ comp_id: this.c_id })
             .subscribe({
                 next: (res) => {
                     this.loading--;
+
                     this.questionsProgress = res.body || [];
+                },
+                error: () => {
+                    this.loading--;
                 },
             });
     }

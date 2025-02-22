@@ -22,6 +22,7 @@
         rgba(252, 69, 69, 0.5) 150%
     );
     @include sweetBorder;
+    backdrop-filter: blur(1rem);
 
     .text {
         font-weight: bold;

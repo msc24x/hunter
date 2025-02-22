@@ -2,6 +2,17 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
+.no-container {
+    .bg {
+        background-color: whitesmoke;
+    }
+    .dialog {
+        background-color: transparent;
+        padding: 0.5rem;
+        box-shadow: none;
+    }
+}
+
 .bg {
     @include popup;
     z-index: 1000;

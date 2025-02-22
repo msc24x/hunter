@@ -11,6 +11,7 @@ const router = express.Router();
 
 const client = Container.get(DatabaseProvider).client();
 
+// Get scores of a competition
 router.get('/competitions/:id/results', authenticate, (req, res) => {
     if (req.params.id == null) {
         Util.sendResponse(res, resCode.badRequest, 'id not specified');
@@ -33,6 +34,7 @@ router.get('/competitions/:id/results', authenticate, (req, res) => {
     );
 });
 
+// Get self progress for a competition
 router.get(
     '/competitions/:id/progress',
     authenticate,
@@ -162,6 +164,7 @@ async function fetchUserSubmissions(
     return final_res;
 }
 
+// Get scores of a question
 router.get(
     '/competitions/:id/results/:ques_id',
     authenticate,
@@ -213,6 +216,7 @@ router.get(
     }
 );
 
+// Get all evaluations for a competition or for one question
 router.get(
     '/competitions/:id/evaluations/:ques_id?',
     authenticate,
@@ -305,6 +309,7 @@ router.get(
     }
 );
 
+// Update an evaluation
 router.put(
     '/competitions/:id/evaluations/:eval_id',
     authenticate,
