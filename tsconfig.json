@@ -22,8 +22,10 @@
       "es5",
       "es6",
       "dom",
+      "scripthost",
       "dom.iterable",
-      "es2020"
+      "es2020",
+      "es2022",
     ],
     "useDefineForClassFields": false
   },

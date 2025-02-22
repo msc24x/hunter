@@ -22,6 +22,7 @@ import {
     faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import { error } from 'console';
+import katex from 'katex';
 import { BehaviorSubject, timeout } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -37,6 +38,10 @@ import {
     ScoresMeta,
     UserInfo,
 } from 'src/environments/environment';
+
+import suneditor from 'suneditor';
+import SunEditor, { Core } from 'suneditor/src/lib/core';
+import plugins from 'suneditor/src/plugins';
 
 @Component({
     selector: 'editor',
@@ -75,6 +80,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     verificationResult: QuestionVerification | null = null;
     quality: any = {};
     elem: HTMLElement | null = null;
+    suneditor: SunEditor | null = null;
 
     scoreMeta: ScoresMeta = null;
 
@@ -111,6 +117,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.suneditor?.destroy();
+
         document
             .getElementsByTagName('bottom-app-bar')[0]
             .classList.remove('hidden');
@@ -280,6 +288,46 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.titleService.setTitle(
             `Q${index + 1} • ${this.competitionInfo.title || 'Competition'}`
         );
+
+        setTimeout(() => {
+            this.suneditor?.destroy();
+            this.suneditor = suneditor.create('text_statement', {
+                plugins: plugins,
+                charCounter: true,
+                display: 'block',
+                katex: {
+                    src: katex,
+                    options: {
+                        output: 'mathml',
+                        displayMode: false,
+                    },
+                },
+                // Plugins can be used directly in the button list
+                buttonList: [
+                    ['blockquote'],
+                    [
+                        'bold',
+                        'underline',
+                        'italic',
+                        'strike',
+                        'subscript',
+                        'superscript',
+                    ],
+                    ['removeFormat'],
+                    ['outdent', 'indent'],
+                    ['align', 'horizontalRule', 'list'],
+                    ['table', 'link', 'math'],
+                    ['fullScreen'],
+                    ['preview', 'print'],
+                    ['undo', 'redo'],
+                ],
+                defaultStyle: 'font-family: appFont; font-size: 1.1rem;',
+            });
+
+            this.suneditor.onChange = (contents: string, core: Core) => {
+                this.questionSelectedInfo.statement = contents;
+            };
+        });
     }
 
     selectQuestion(index: number, checkUnsaved: boolean = false) {

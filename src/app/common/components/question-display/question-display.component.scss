@@ -14,13 +14,18 @@
     font-weight: 400;
 }
 
+#question_title {
+    margin-bottom: 1rem;
+}
+
 #question_title,
 #question_statement {
     background-color: white;
     padding: 16px;
     border-radius: 1rem;
     font-size: 1.05rem;
-    margin-bottom: 1rem;
+
+    overflow-x: auto;
 
     @include sweetBorder();
 
@@ -37,4 +42,5 @@
 #question_statement {
     font-size: 1.05rem !important;
     flex-grow: 1;
+    flex-basis: 70%;
 }

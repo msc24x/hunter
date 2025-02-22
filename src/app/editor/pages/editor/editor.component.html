@@ -454,9 +454,9 @@
             <manual-error [message]="errors.title"></manual-error>
 
             <div class="statement-label-container">
-                <div class="clabel">
+                <h3 class="clabel">
                     Question statement
-                    <infotip
+                    <!-- <infotip
                         message="The statement body supports Latex by default, learn more about the typesetting at katex.org"
                     ></infotip>
                     <span class="info-like" style="font-size: 0.8rem">
@@ -465,9 +465,9 @@
                             target="_blank"
                             >(Click here KaTeX guide to write LaTeX)</a
                         >
-                    </span>
-                </div>
-                <div
+                    </span> -->
+                </h3>
+                <!-- <div
                     id="toggle_preview_btn"
                     matTooltip="Click to toggle LaTeX preview"
                     (click)="preview_mode = !preview_mode"
@@ -476,7 +476,7 @@
                     <mat-slide-toggle
                         [checked]="preview_mode"
                     ></mat-slide-toggle>
-                </div>
+                </div> -->
             </div>
 
             <textarea

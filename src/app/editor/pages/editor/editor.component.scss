@@ -354,19 +354,21 @@ popup {
 }
 
 #text_qtitle,
+#suneditor_text_statement,
 #text_statement {
     @include appTextArea;
     font-size: large;
 }
 
 #text_statement,
+#suneditor_text_statement,
 #text_statement_preview {
     width: 100%;
     width: auto;
     max-height: 42rem;
     resize: vertical;
     overflow-y: scroll;
-    font-family: monospace;
+    font-family: appFont;
 }
 
 #text_statement_preview {

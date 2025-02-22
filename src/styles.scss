@@ -23,11 +23,6 @@ a {
     text-decoration: none;
 }
 
-hr {
-    border-color: #ffffff;
-    border-bottom: transparent;
-}
-
 input[type="number"],
 input[type="text"] {
     @include appTextArea;
@@ -107,6 +102,45 @@ button.main,
             background-color: antiquewhite;
         }
     }
+}
+
+question-display {
+    .sun-editor {
+        border-width: 0;
+
+        .se-wrapper-inner {
+            padding: 0.5rem;
+        }
+
+        .se-resizing-bar {
+            display: none;
+        }
+    }
+}
+
+.sun-editor {
+    font-family: appFont;
+    width: auto !important;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    .se-btn-module-border {
+        border-radius: 0.9rem;
+    }
+    .se-btn {
+        border-radius: 0.85rem;
+    }
+    .se-dialog .se-dialog-inner .se-dialog-content {
+        border-radius: 1rem;
+    }
+
+    .se-resizing-bar {
+        padding-inline: 1rem;
+    }
+}
+
+.katex-mathml {
+    display: none !important;
 }
 
 // =============================

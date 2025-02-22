@@ -16,6 +16,8 @@ import path from 'path';
 import fileUpload from 'express-fileupload';
 import { JudgeService } from '../../services/judgeService';
 import config from '../../config/config';
+import { JSDOM } from 'jsdom';
+import DOMPurify from 'dompurify';
 
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -486,6 +488,10 @@ router.put(
                 });
         };
 
+        const window = new JSDOM('').window;
+        const purify = DOMPurify(window);
+        const clean_statement = purify.sanitize(params.statement || '');
+
         const saveQuestionDataPr = client.questions.update({
             where: {
                 id: id,
@@ -495,7 +501,7 @@ router.put(
             },
             data: {
                 title: params.title,
-                statement: params.statement,
+                statement: clean_statement,
                 points: params.points,
                 neg_points: params.neg_points,
                 case_sensitive: params.case_sensitive,

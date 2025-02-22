@@ -19,5 +19,19 @@
 </div>
 
 <div id="question_statement" *ngIf="!titleOnly">
-    <ng-katex [data]="getQuestionStatement(questionInfo)"></ng-katex>
+    <b>Statement</b>
+    <br />
+    <br />
+    <div id="statement-content"></div>
+    <!-- [innerHtml]="getQuestionStatement(questionInfo.statement)" -->
+    <br />
+
+    <div *ngIf="questionInfo.sample_cases">
+        <b>Sample Cases</b>
+        <pre>{{ questionInfo.sample_cases }}</pre>
+    </div>
+    <div *ngIf="questionInfo.sample_sols">
+        <b>Sample Output</b>
+        <pre>{{ questionInfo.sample_sols }}</pre>
+    </div>
 </div>

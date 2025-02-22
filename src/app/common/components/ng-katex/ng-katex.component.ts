@@ -38,7 +38,7 @@ export class NgKatexComponent implements OnInit, OnChanges {
                 output: 'mathml',
             });
         } else {
-            elem.innerText = data;
+            elem.innerHTML = data;
         }
 
         paragraph.appendChild(elem);

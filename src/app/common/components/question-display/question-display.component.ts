@@ -1,35 +1,71 @@
-import { Component, Input } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+} from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import katex from 'katex';
 import { QuestionInfo } from 'src/environments/environment';
+import suneditor from 'suneditor';
+import SunEditor from 'suneditor/src/lib/core';
+import plugins from 'suneditor/src/plugins';
 
 @Component({
     selector: 'question-display',
     templateUrl: './question-display.component.html',
     styleUrls: ['./question-display.component.scss'],
 })
-export class QuestionDisplayComponent {
+export class QuestionDisplayComponent implements OnChanges, OnDestroy {
     @Input()
     titleOnly = false;
 
     @Input({ required: true })
     questionInfo!: QuestionInfo;
 
-    getQuestionStatement(questionInfo: QuestionInfo) {
-        if (!questionInfo.statement) {
+    suneditor: SunEditor | null = null;
+
+    constructor(private sanitizer: DomSanitizer) {}
+
+    ngOnDestroy(): void {
+        this.suneditor?.destroy();
+    }
+
+    ngOnChanges(): void {
+        setTimeout(() => {
+            this.suneditor?.destroy();
+
+            this.suneditor = suneditor.create('statement-content', {
+                katex: {
+                    src: katex,
+                    options: {
+                        output: 'mathml',
+                        displayMode: false,
+                    },
+                },
+                hideToolbar: true,
+                defaultStyle: 'font-family: appFont; font-size: 1.1rem;',
+            });
+            this.suneditor.readOnly(true);
+            this.suneditor.setContents(
+                this.getQuestionStatement(this.questionInfo.statement)
+            );
+        });
+    }
+
+    getQuestionStatement(statement: string) {
+        if (!statement) {
             return 'No description provided by host.';
         }
 
-        var final = `$\\textbf{Statement}$\n\n` + questionInfo.statement || '';
+        console.log(statement, '\n\n\n', statement.replaceAll('\n', '<br/>'));
 
-        if (questionInfo.sample_cases) {
-            final +=
-                `\n\n$\\textbf{Sample Cases}$\n\n` + questionInfo.sample_cases;
-        }
+        return statement.replaceAll('\n', '<br/>');
 
-        if (questionInfo.sample_sols) {
-            final +=
-                `\n\n$\\textbf{Sample Output}$\n\n` + questionInfo.sample_sols;
-        }
-
-        return final;
+        // return this.sanitizer.bypassSecurityTrustHtml(
+        //     statement.replaceAll('\n', '<br/>')
+        // );
     }
 }
