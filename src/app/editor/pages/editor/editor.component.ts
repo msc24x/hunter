@@ -387,10 +387,19 @@ export class EditorComponent implements OnInit, OnDestroy {
             .subscribe((res) => {
                 if (res.status !== 200) {
                     this.displayLog('Upload failed');
+                    this.snackBar.open(
+                        `File upload failed due to some reason, please refresh and try again later.`
+                    );
                     return;
                 }
 
-                this.displayLog('File for ' + filen + ' Uploaded');
+                this.snackBar.open(
+                    `File for ${filen} uploaded successfully, now please verify the question by using 'Test your own solution'`
+                );
+
+                if (this.verificationResult) {
+                    this.verificationResult.success = false;
+                }
 
                 if (filen === 'testcases') {
                     this.testExists = true;
@@ -486,6 +495,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     displayLog(msg: string) {
+        console.info(msg);
         this.log.push(msg);
         if (this.elem) this.elem.innerHTML = '&#x1F6C8; ' + msg;
     }
@@ -557,7 +567,8 @@ export class EditorComponent implements OnInit, OnDestroy {
                     next: (res) => {
                         this.deleteCompMessage = 'Deleted';
                         this.showPopup(false, 'delete_comp_popup');
-                        this.router.navigate(['/editor']);
+                        this.router.navigate(['/editor/workbench']);
+                        this.snackBar.open('Competition deleted');
                     },
                     error: (err) => {
                         this.deleteCompMessage = err.status;

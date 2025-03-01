@@ -14,7 +14,7 @@
     list-style: none;
     padding: 0px;
     display: flex;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: show;
     border-radius: 1rem;
     scroll-behavior: smooth;
@@ -103,12 +103,12 @@
         font-weight: bold;
         width: max-content;
         text-align: center;
-        margin-right: 6px;
+        margin-right: 8px;
         cursor: pointer;
         position: relative;
         text-wrap: nowrap;
         @include sweetBorder;
-        min-width: 1rem;
+        min-width: 1.6rem;
         transition: 100ms;
         transition-property: scale, opacity;
         user-select: none;
@@ -129,8 +129,14 @@
             font-size: 1.3rem;
             background: colors.$text_white;
             border-radius: 1.3rem;
-            height: 1.3rem;
+            height: 1.2rem;
             display: block;
+            line-height: 1.3rem;
+
+            &.quality-indi {
+                left: unset;
+                right: -0.5rem;
+            }
         }
 
         &:active {

@@ -67,6 +67,9 @@ export class QuestionsListComponent implements OnInit {
     @Input()
     quality: any = {};
 
+    @Input()
+    showHeader = true;
+
     @Output()
     messageEmitter = new EventEmitter();
 
@@ -96,7 +99,6 @@ export class QuestionsListComponent implements OnInit {
     ngOnInit(): void {}
 
     dropQuestion(event: CdkDragDrop<string[]>) {
-        console.log('dropp');
         moveItemInArray(
             this.questionsList,
             event.previousIndex,

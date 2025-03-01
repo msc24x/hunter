@@ -91,11 +91,13 @@
                         [svgSize]="'sm'"
                     ></infotip>
 
-                    <div *ngIf="!hasEnded" id="duration_info">
+                    <div id="duration_info">
                         <fa-icon [icon]="clockIcon"></fa-icon>
                         <span style="width: max-content">
-                            &nbsp; &nbsp;
-                            {{ timeRemaining }}
+                            &nbsp;
+                            {{
+                                hasEnded ? "Submissions Closed" : timeRemaining
+                            }}
                         </span>
                     </div>
                 </div>
@@ -126,7 +128,7 @@
                     <br />
                     <br />
                     <div class="info-like">
-                        Created {{ this.competition.created_at | timeAgo }} By
+                        Hosted by
                         <user-display
                             [userInfo]="this.competition.host_user"
                         ></user-display>
@@ -141,7 +143,7 @@
 
         <div
             [ngClass]="{ 'row compete-hr-layout': hrlayout }"
-            *ngIf="!hasEnded && questionSelectedInfo"
+            *ngIf="questionSelectedInfo"
         >
             <!-- Questions -->
             <div class="question-section">
@@ -379,19 +381,22 @@
                 ></ng-outlet>
             </div>
         </div>
+        <manual-error
+            *ngIf="hasEnded"
+            message="Oops! looks like you have missed the opportunity to participate in
+            the competition and any new submissions are now closed. Meantime, you can practice other live competitions."
+        >
+            <br />
+            <a [routerLink]="'/compete'" style="color: gray"
+                >Click here to view more competitions.</a
+            >
+        </manual-error>
         <p class="info-like" *ngIf="competition.practice">
             Contest is set as a practice only, allowing you to attempt the
             contest multiple times. You can submit your responses any number of
             times. Any positive or negative points here won't affect your user
             profile.
         </p>
-
-        <br />
-        <manual-error
-            *ngIf="hasEnded"
-            message="Oops! looks like you have missed the opportunity to participate in
-            the competition. Meantime, you can practice other live competitions."
-        ></manual-error>
 
         <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
         <div

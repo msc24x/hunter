@@ -349,7 +349,11 @@
 
         <br />
         <br />
-        <h2>Questions Data</h2>
+        <h2>
+            {{ this.competitionInfo.questions?.length || "0" }} Question{{
+                this.competitionInfo.questions?.length !== 1 ? "s" : ""
+            }}
+        </h2>
 
         <div class="questions-list">
             <questions-list
@@ -361,6 +365,7 @@
                 (fetchRequired)="fetchQuestions(false)"
                 [(questionSelected)]="questionSelected"
                 [quality]="quality"
+                [showHeader]="false"
             >
             </questions-list>
         </div>
@@ -734,7 +739,7 @@
                 <div class="sample-cases-container">
                     <div>
                         <div id="sample_cases_label" class="clabel">
-                            Sample Tests Cases
+                            Sample Tests Cases (Sample input)
                             <infotip
                                 message="Small test cases for participants to test their code against without actually submitting for evaluation. These will be visible to the participants"
                             ></infotip>
@@ -753,8 +758,8 @@
 
                     <div>
                         <div id="sample_sols_label" class="clabel">
-                            Solution to the samples<infotip
-                                message="Solution to the test cases provided above. These will be visible to the participants"
+                            Sample expected output<infotip
+                                message="This is what you expect the code to output in stdout. These will be visible to the participants."
                             ></infotip>
                         </div>
                         <textarea
@@ -769,6 +774,8 @@
                         ></manual-error>
                     </div>
                 </div>
+
+                <h3>Hidden test cases</h3>
                 <div class="file-uploaders">
                     <div class="io-files">
                         <label
@@ -776,22 +783,20 @@
                             class="file_input"
                             for="testcases_file"
                             matTooltipPosition="left"
-                            matTooltip="Upload a text file to define evaluation test cases for this question. These test cases will not be shown to the participants. Hunter will use this to test participants' code"
+                            matTooltip="Upload a text file that should contain the hidden test cases to provide as an input to the runtime programs submitted by the users. These test cases will not be shown to the participants."
                         >
                             Test Cases
 
                             <a
                                 *ngIf="testExists"
                                 [href]="downloadFileUrl('testcases')"
+                                matTooltip="Download existing test cases file"
                                 [download]="
                                     questionSelectedInfo.id + '_testcases.txt'
                                 "
                             >
                                 (Uploaded)
-                                <fa-icon
-                                    matTooltip="Download existing test cases file"
-                                    [icon]="downloadIcon"
-                                ></fa-icon>
+                                <fa-icon [icon]="downloadIcon"></fa-icon>
                             </a>
                         </label>
                         <input
@@ -808,19 +813,17 @@
                             matTooltipPosition="left"
                             matTooltip="Upload a text file to define the expected output from participants code when test cases are supplied to them"
                         >
-                            Solution to tests
+                            Expected output
                             <a
                                 *ngIf="solsExists"
                                 [href]="downloadFileUrl('solutions')"
                                 [download]="
                                     questionSelectedInfo.id + '_solutions.txt'
                                 "
+                                matTooltip="Download existing solution to test cases file"
                             >
                                 (Uploaded)
-                                <fa-icon
-                                    [icon]="downloadIcon"
-                                    matTooltip="Download existing solution to test cases file"
-                                ></fa-icon>
+                                <fa-icon [icon]="downloadIcon"></fa-icon>
                             </a>
                         </label>
                         <input
@@ -844,7 +847,8 @@
                                 'no-click disabled': !solsExists
                             }"
                         >
-                            Test your own solution
+                            Click here to test the question <br />
+                            by submitting the correct code. &nbsp;
                             <fa-icon
                                 *ngIf="verificationResult?.success === true"
                                 [icon]="checkIcon"
@@ -864,6 +868,8 @@
                                     verificationResult?.created_at?.toLocaleString()
                                 "
                             ></fa-icon>
+
+                            <br />
                         </label>
                     </div>
                 </div>

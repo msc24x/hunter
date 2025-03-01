@@ -45,7 +45,8 @@ export class Results {
                     JOIN 
                         users u ON r.user_id = u.id
                     WHERE
-                        q.deleted_at IS NULL 
+                        r.result != 0
+                        AND q.deleted_at IS NULL 
                         AND c.deleted_at IS NULL 
                         AND q.competition_id = ${queryParams.id}
                         ${filterQuestion ? questionQuery : Prisma.empty}

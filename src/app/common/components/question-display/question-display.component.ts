@@ -60,12 +60,6 @@ export class QuestionDisplayComponent implements OnChanges, OnDestroy {
             return 'No description provided by host.';
         }
 
-        console.log(statement, '\n\n\n', statement.replaceAll('\n', '<br/>'));
-
         return statement.replaceAll('\n', '<br/>');
-
-        // return this.sanitizer.bypassSecurityTrustHtml(
-        //     statement.replaceAll('\n', '<br/>')
-        // );
     }
 }

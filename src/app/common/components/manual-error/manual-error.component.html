@@ -1,3 +1,4 @@
 <p *ngIf="message" class="error-like">
     <fa-icon [icon]="errorIcon"></fa-icon> &nbsp; {{ message }}
+    <ng-content></ng-content>
 </p>

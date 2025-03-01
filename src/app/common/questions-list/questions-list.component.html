@@ -10,28 +10,28 @@
 >
     <manual-error
         message="This is an irreversible & immediate action,
-    please confirm once, because cannot undo it."
+        please confirm once, because cannot undo it."
     ></manual-error>
 </popup>
 
 <!-- cdkDropList
-cdkDropListOrientation="horizontal"
-cdkDropListLockAxis="x"
-(cdkDropListDropped)="dropQuestion($event)" -->
+    cdkDropListOrientation="horizontal"
+    cdkDropListLockAxis="x"
+    (cdkDropListDropped)="dropQuestion($event)" -->
 
 <ol class="questions_list">
-    <div class="list-heading">
+    <div class="list-heading" *ngIf="showHeader || !questionsList.length">
         {{ questionsList.length }}
         {{ questionsList.length === 1 ? "Question" : "Questions" }}
     </div>
 
     <!-- cdkDrag
-    cdkDragPreviewContainer="parent" -->
+        cdkDragPreviewContainer="parent" -->
     <li
         *ngFor="let question of this.questionsList; track: question; index as i"
         [ngClass]="{
-            'selected-question': questionSelected == i,
-        }"
+                'selected-question': questionSelected == i,
+            }"
         (click)="selectQuestion(i)"
         [matTooltip]="
             clearable && questionSelected === i
@@ -55,8 +55,8 @@ cdkDropListLockAxis="x"
         <fa-icon
             *ngIf="quality?.[question.id]?.acceptable === false"
             [icon]="warningIcon"
-            [style]="'color: darkred; font-size: 1rem; background: transparent'"
-            class="question-progress"
+            [style]="'color: darkred;'"
+            class="question-progress quality-indi"
             [matTooltip]="'Question has poor quality'"
             matTooltipPosition="left"
         ></fa-icon>
@@ -65,7 +65,7 @@ cdkDropListLockAxis="x"
             <ques-type-label
                 [ques_type]="question.type"
                 [no_label]="true"
-                style="opacity: 0.3; margin-left: -0.3rem"
+                style="opacity: 0.3; margin-left: -0.35rem"
             ></ques-type-label
             >&nbsp;
             {{ this.questionsList.indexOf(question) + 1 }}
@@ -73,7 +73,7 @@ cdkDropListLockAxis="x"
     </li>
 
     <li
-        style="min-width: 3rem"
+        style="min-width: 3rem; margin-left: 0.5rem"
         *ngIf="editable"
         id="create_question_btn"
         (click)="openCreateQues()"
@@ -97,13 +97,13 @@ cdkDropListLockAxis="x"
         </mat-select>
     </li>
     <!-- <div
-        matTooltip="Save changes for the selected question"
-        *ngIf="editable && questionSelected !== -1"
-        id="save_question_btn"
-        (click)="saveClicked.emit()"
-    >
-        Save
-    </div> -->
+            matTooltip="Save changes for the selected question"
+            *ngIf="editable && questionSelected !== -1"
+            id="save_question_btn"
+            (click)="saveClicked.emit()"
+        >
+            Save
+        </div> -->
     <button
         matTooltip="Delete the selected question"
         *ngIf="editable && questionSelected !== -1"

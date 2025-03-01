@@ -14,11 +14,10 @@ div.appBar {
 
     #logout_btn {
         background-color: rgb(255, 244, 244);
-        color: crimson;
+        color: darkred !important;
         border-radius: 12px;
         padding-block: 4px;
-        padding-inline: 16px;
-        min-width: 4rem !important;
+        padding-inline: 16px !important;
         cursor: pointer;
 
         @include sweetBorder();
@@ -119,7 +118,7 @@ div.appBar {
     }
 
     #navBarCompact {
-        // font-weight: bold;
+        font-weight: 400;
         margin-top: 14px;
         position: absolute;
         display: none;
@@ -177,34 +176,21 @@ div.appBar {
             list-style-type: none;
 
             a {
-                min-width: 140px;
                 text-align: center;
+                padding-right: 3rem;
                 color: rgb(71, 71, 71);
                 cursor: pointer;
                 padding-block: 6px;
+                transition: 200ms;
             }
+
             a:hover {
-                animation: forwards;
-                animation-name: burn;
-                animation-duration: 0.25s;
-                animation-iteration-count: 1;
+                color: black;
+                font-weight: 500;
             }
 
-            @keyframes unburn {
-                0% {
-                    color: black;
-                }
-                100% {
-                    color: rgb(71, 71, 71);
-                    transform: translateY(-1px);
-                }
-            }
-
-            @keyframes burn {
-                100% {
-                    color: black;
-                    //transform: translateY(4px);
-                }
+            a:active {
+                scale: 0.98;
             }
         }
     }

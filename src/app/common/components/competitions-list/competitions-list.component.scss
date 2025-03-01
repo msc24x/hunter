@@ -126,7 +126,6 @@
     display: flex;
     justify-content: center;
     font-style: italic;
-    font-weight: lighter;
     font-size: 1rem;
 }
 
@@ -211,7 +210,7 @@
 #c_host_user {
     margin-left: 4px;
     margin-top: 6px;
-    font-weight: lighter;
+    // font-weight: lighter;
     padding: 4px;
     width: fit-content;
 }

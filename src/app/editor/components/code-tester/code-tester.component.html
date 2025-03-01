@@ -7,9 +7,15 @@
 
     <i *ngIf="lastVerification">
         <br />Last verification attempted at
-        {{ lastVerification.created_at.toLocaleString() }}</i
-    >
-    <br />
+        {{ lastVerification.created_at.toLocaleString() }}
+        <br />
+    </i>
+    <p>
+        Use the code tester to verify that your created competition is valid and
+        is solvable. To proceed please select desired language and write correct
+        code for the solution of this question. After that just click the button
+        below, we will verify if your solution works.
+    </p>
     <br />
     <button
         class="main"
@@ -22,11 +28,5 @@
         Submit New Verification Request
     </button>
 </div>
-
-<p>
-    Use the code tester to verify that your created competition is valid and is
-    solvable. To proceed please select desired language and write correct code
-    for the solution of this question. We will verify if your solution works.
-</p>
 
 <code-editor [(code)]="code" [(languageSelected)]="language"> </code-editor>

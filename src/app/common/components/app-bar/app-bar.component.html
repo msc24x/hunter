@@ -46,15 +46,14 @@
         <!-- Explore -->
         <div id="navBarCompact">
             <ul>
-                <a routerLink="/home">HOME</a>
-                <a *ngIf="isAuthenticated" routerLink="/u/{{ user.id }}"
-                    >PROFILE</a
-                >
-                <a routerLink="/compete">COMPETE</a>
+                <a routerLink="/compete">Participate</a>
                 <a *ngIf="isAuthenticated" routerLink="/editor/workbench">
-                    HOST
+                    Create Competition
                 </a>
-                <a routerLink="/about">ABOUT</a>
+                <a *ngIf="isAuthenticated" routerLink="/u/{{ user.id }}"
+                    >Account</a
+                >
+                <a routerLink="/about">About</a>
                 <a
                     *ngIf="isAuthenticated"
                     id="logout_btn"
@@ -67,10 +66,13 @@
 
     <div id="navBar">
         <ul>
-            <a routerLink="/home">HOME</a>
-            <a routerLink="/compete">COMPETE</a>
-            <a *ngIf="isAuthenticated" routerLink="/editor/workbench"> HOST </a>
-            <a routerLink="/about">ABOUT</a>
+            <a routerLink="/compete">Participate</a>
+            <a *ngIf="isAuthenticated" routerLink="/editor/workbench">
+                Create Competition
+            </a>
+            <a *ngIf="isAuthenticated" routerLink="/u/{{ user.id }}">Account</a>
+            <a routerLink="/about">About</a>
+
             <a
                 *ngIf="isAuthenticated"
                 id="logout_btn"

@@ -121,7 +121,6 @@ router.post(
                 judgeService
                     .execute(execReq, true, null, null)
                     .then((exeRes) => {
-                        console.log(exeRes);
                         client.question_verification
                             .upsert({
                                 where: {
@@ -296,7 +295,23 @@ router.post(
                         Util.sendResponse(res, resCode.serverError);
                         return;
                     }
-                    Util.sendResponse(res, resCode.success);
+
+                    client.question_verification
+                        .updateMany({
+                            where: {
+                                question_id: question.id,
+                            },
+                            data: {
+                                success: false,
+                            },
+                        })
+                        .then(() => {
+                            Util.sendResponse(res, resCode.success);
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                            Util.sendResponse(res, resCode.serverError);
+                        });
                 });
             })
             .catch((err) => Util.sendResponse(res, resCode.badRequest, err));
@@ -619,7 +634,6 @@ router.put(
 router.get(
     '/competitions/:comp_id/questions/:id?',
     authenticate,
-    // loginRequired,
     (req, res) => {
         const competition_id: number = parseInt(req.params.comp_id);
         const ques_id: number | '' = req.params.id && parseInt(req.params.id);
@@ -675,9 +689,7 @@ router.get(
                 // If its not live yet, remove questions info
                 if (
                     !competition.public ||
-                    (competition.scheduled_at &&
-                        competition.scheduled_at > now) ||
-                    (endDate && endDate < now)
+                    (competition.scheduled_at && competition.scheduled_at > now)
                 ) {
                     competition.questions = competition.questions.map(
                         (ques) => {

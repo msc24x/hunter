@@ -3,31 +3,30 @@
 @use "../../../../assets/mixins" as *;
 
 :host {
+    @include basicBack;
     overflow: auto;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+
+    margin-bottom: 1rem;
+    padding-top: 1rem !important;
 }
 
 .title_text {
+    margin-top: 0.5rem;
     font-size: 1.2rem;
-    font-weight: 400;
-}
-
-#question_title {
-    margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 #question_title,
 #question_statement {
-    background-color: white;
-    padding: 16px;
-    border-radius: 1rem;
+    // background-color: white;
+    // padding: 16px;
+    // border-radius: 1rem;
+    // @include sweetBorder();
+
     font-size: 1.05rem;
-
-    overflow-x: auto;
-
-    @include sweetBorder();
 
     ques-type-label {
         float: right;
@@ -35,12 +34,12 @@
     }
 }
 
-#question_title.titleOnly {
-    background-color: ghostwhite;
-}
+// #question_title.titleOnly {
+//     background-color: ghostwhite;
+// }
 
 #question_statement {
     font-size: 1.05rem !important;
     flex-grow: 1;
-    flex-basis: 70%;
+    // flex-basis: 70%;
 }

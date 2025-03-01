@@ -387,6 +387,10 @@ label.file_input {
     text-align: center;
 
     @include sweetBorder();
+
+    a:hover {
+        text-decoration: underline;
+    }
 }
 
 .statement-label-container {

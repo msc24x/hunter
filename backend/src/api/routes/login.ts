@@ -75,6 +75,7 @@ function getOrCreateUser(
                                 linkedin_url: data.linkedin_url,
                                 avatar_url: data.avatar_url,
                                 github_url: data.github_url,
+                                github_fetched_at: new Date(),
                             },
                         })
                         .then((user) =>

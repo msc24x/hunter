@@ -484,7 +484,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                                     clearInterval(this.timeInterval);
                                     return;
                                 }
-                                this.timeRemaining = prettyDuration(seconds);
+                                this.timeRemaining =
+                                    prettyDuration(seconds) + ' left';
                             }, 1000);
                         } else {
                             this.timeRemaining = 'Unlimited';
