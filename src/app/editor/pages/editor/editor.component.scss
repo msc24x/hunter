@@ -312,7 +312,7 @@ popup {
     background-color: rgba(193, 193, 193, 0.501);
     backdrop-filter: blur(0.5rem);
     padding-block: 8px;
-    z-index: 50;
+    z-index: 110;
     border-radius: 1rem;
     flex-wrap: wrap-reverse;
     @include sweetBorder;
@@ -510,7 +510,16 @@ input {
 
 .questions-list {
     @include blackBack;
+    transition: 400ms;
     margin-top: 2rem;
+
+    &.sticky {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-radius: 0 0 2rem 2rem;
+        border-top-color: transparent;
+    }
 }
 
 .editor-first-panel {

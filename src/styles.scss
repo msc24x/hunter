@@ -215,7 +215,7 @@ question-display {
 .disabled {
     &,
     * {
-        opacity: 0.7;
+        opacity: 0.7 !important;
         cursor: not-allowed !important;
     }
 }
@@ -223,7 +223,7 @@ question-display {
 .disabled_bright {
     &,
     * {
-        opacity: 0.85;
+        opacity: 0.85 !important;
         cursor: not-allowed !important;
     }
 }

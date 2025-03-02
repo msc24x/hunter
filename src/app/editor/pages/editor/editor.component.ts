@@ -174,6 +174,26 @@ export class EditorComponent implements OnInit, OnDestroy {
         };
     }
 
+    addObserver() {
+        const iObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.intersectionRatio === 1) {
+                        entry.target.classList.remove('sticky');
+                    } else {
+                        if (entry.boundingClientRect.top > 0) {
+                            return;
+                        }
+                        entry.target.classList.add('sticky');
+                    }
+                });
+            },
+            { rootMargin: '-1px 0px 0px 0px', threshold: [1] }
+        );
+
+        iObserver.observe(document.querySelector('.questions-list')!);
+    }
+
     shareAction() {
         navigator.share({
             title: `Invitation link to "${this.competitionInfo.title}"`,
@@ -441,6 +461,8 @@ export class EditorComponent implements OnInit, OnDestroy {
                                 this.quality = qualityRes.body;
                             },
                         });
+
+                    setTimeout(() => this.addObserver());
                 }
             });
     }

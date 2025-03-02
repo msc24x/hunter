@@ -276,6 +276,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         });
     }
 
+    selectNextPrev(i: number) {
+        this.selectQuestion(this.questionSelected + i);
+    }
+
     submitAnswerBasedQues() {
         if (!this.questionSelectedInfo) {
             return;

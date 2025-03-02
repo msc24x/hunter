@@ -174,10 +174,31 @@
                         (change)="toggleLayout()"
                     />
                 </div>
-
                 <question-display
                     [questionInfo]="questionSelectedInfo"
                 ></question-display>
+                <div class="nav-controls">
+                    <div
+                        class="prev"
+                        [ngClass]="{
+                            'no-click disabled': questionSelected <= 0
+                        }"
+                        (click)="selectNextPrev(-1)"
+                    >
+                        Prev
+                    </div>
+                    <div
+                        class="next"
+                        [ngClass]="{
+                            'no-click disabled':
+                                questionSelected ===
+                                (competition.questions?.length || 0) - 1
+                        }"
+                        (click)="selectNextPrev(1)"
+                    >
+                        Next
+                    </div>
+                </div>
             </div>
 
             <!-- Code editor -->
@@ -412,6 +433,7 @@
                 <fa-icon [icon]="reportIcon" size="sm"></fa-icon>
                 Report/Feedback
             </a>
+
             <div class="row">
                 <div
                     class="button"
@@ -424,6 +446,7 @@
                     <fa-icon [icon]="playIcon"></fa-icon>
                     &nbsp; Run Tests
                 </div>
+
                 <div
                     [matTooltip]="
                         !competition.practice &&

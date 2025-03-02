@@ -2,8 +2,10 @@ import {
     Component,
     EventEmitter,
     Input,
+    OnChanges,
     OnInit,
     Output,
+    SimpleChanges,
     ViewChild,
 } from '@angular/core';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
@@ -33,7 +35,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     templateUrl: './questions-list.component.html',
     styleUrls: ['./questions-list.component.scss'],
 })
-export class QuestionsListComponent implements OnInit {
+export class QuestionsListComponent implements OnInit, OnChanges {
     loading = false;
     checkIcon = faCircleCheck;
     crossIcon = faCircleXmark;
@@ -97,6 +99,16 @@ export class QuestionsListComponent implements OnInit {
     ];
 
     ngOnInit(): void {}
+
+    ngOnChanges(changes: SimpleChanges): void {
+        setTimeout(() => {
+            document.querySelector('.selected-question')?.scrollIntoView({
+                inline: 'center',
+                behavior: 'smooth',
+                block: 'nearest',
+            });
+        });
+    }
 
     dropQuestion(event: CdkDragDrop<string[]>) {
         moveItemInArray(

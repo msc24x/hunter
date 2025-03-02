@@ -121,18 +121,67 @@
         margin-bottom: 1.5rem;
     }
 
-    #report-btn {
-        cursor: pointer;
-        color: colors.$text_black;
-        margin: 1rem;
+    & > div {
+        justify-content: end;
+    }
+}
 
-        &:hover {
-            text-decoration: underline;
-        }
+#report-btn {
+    cursor: pointer;
+    color: colors.$text_black;
+    margin-top: 1rem;
+    display: block;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.nav-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    position: absolute;
+    top: 5.5rem;
+    right: 1rem;
+    z-index: 90;
+    opacity: 0;
+
+    &:hover {
+        opacity: 1;
     }
 
     & > div {
-        justify-content: end;
+        @include basicBack;
+        font-size: 0.9rem;
+        padding: 0.6rem;
+        padding-inline: 0.8rem;
+
+        background-color: rgba(245, 245, 245, 0.5);
+        cursor: pointer;
+        transition: 300ms;
+        user-select: none;
+        opacity: 0.4;
+
+        &:hover {
+            opacity: 1;
+
+            background-color: rgba(245, 245, 245, 1);
+        }
+
+        &:active {
+            scale: 0.95;
+        }
+    }
+}
+
+.question-section {
+    position: relative;
+
+    &:hover {
+        .nav-controls {
+            opacity: 1;
+        }
     }
 }
 
