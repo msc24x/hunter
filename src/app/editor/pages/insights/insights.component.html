@@ -58,25 +58,6 @@
             {{ panels[currentPanel].title }}
         </h2>
 
-        <!-- <h3>
-            {{
-                questionSelected === -1
-                    ? "Select a question to filter"
-                    : "Q" + (questionSelected + 1) + " selected"
-            }}
-        </h3>
-
-        <questions-list
-            [clearable]="true"
-            [editable]="false"
-            [competitionInfo]="competitionInfo"
-            [questionsList]="competitionInfo.questions || []"
-            [questionSelected]="questionSelected"
-            (questionSelectedChange)="
-                questionSelected = $event; fetchEvaluations()
-            "
-        ></questions-list> -->
-
         <div class="eval-section">
             <div class="evaluations">
                 <div

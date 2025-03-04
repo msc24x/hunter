@@ -183,7 +183,7 @@
     heading="Change visibility?"
     id="public_status_confirm"
     (closeEvent)="handlePrivacyConfirmPopupEvent($event)"
-    [continueMessage]="'Yes, make it live'"
+    [continueMessage]="'Yes, mark it as live'"
     [destructive]="true"
 >
     <manual-error
@@ -330,13 +330,13 @@
 
         <div class="row_flex editor-first-panel" style="margin-top: 16px">
             <div id="title_label" class="label">Competition Title</div>
-            <textarea
+            <input
                 maxlength="120"
                 id="text_title"
-                rows="1"
+                type="text"
                 placeholder="Example: University Club Tie-breaker Challenge"
                 [(ngModel)]="competitionInfo.title"
-            ></textarea>
+            />
             <div id="desc_label" class="label">Competition Description</div>
             <textarea
                 maxlength="456"
@@ -448,13 +448,13 @@
                 <span *ngIf="questionSelectedInfo.type === 3">Task title</span>
             </h3>
 
-            <textarea
+            <input
                 id="text_qtitle"
                 maxlength="400"
-                rows="3"
+                type="text"
                 [(ngModel)]="questionSelectedInfo.title"
                 placeholder="Example: Write a program to flip the string."
-            ></textarea>
+            />
 
             <manual-error [message]="errors.title"></manual-error>
 
@@ -641,6 +641,7 @@
                         ></fa-icon>
                     </div>
                     <input
+                        id="choice-text-{{ choice.id }}"
                         type="text"
                         name="choice-text"
                         class="app-text-area"
@@ -701,6 +702,7 @@
                         ></fa-icon>
                     </div>
                     <textarea
+                        id="choice-text-{{ choice.id }}"
                         type="text"
                         name="choice-text"
                         class="app-text-area"
@@ -840,7 +842,7 @@
                             (click)="showPopup(true, 'code-tester')"
                             [matTooltip]="
                                 !solsExists
-                                    ? 'You must upload solution file to test your competition'
+                                    ? 'You must upload Expected output file to test your competition'
                                     : ''
                             "
                             [ngClass]="{
@@ -883,7 +885,7 @@
                     showPopup(false, 'guide')
                 "
             >
-                <fa-icon [icon]="trashIcon"></fa-icon> &nbsp; DELETE CONTEST
+                <fa-icon [icon]="trashIcon"></fa-icon> &nbsp; DELETE
             </button>
             <!-- <div matTooltip="Logs for fun" id="log" (click)="showLog()">
                 Welcome!

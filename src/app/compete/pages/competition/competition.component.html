@@ -289,9 +289,7 @@
                                 'selected': showChoiceAsSelected(choice)
                             }"
                         ></fa-icon>
-                        <div>
-                            {{ choice.text }}
-                        </div>
+                        <div [innerText]="choice.text"></div>
                     </div>
                 </div>
                 <ng-outlet

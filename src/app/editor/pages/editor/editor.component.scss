@@ -73,7 +73,7 @@ popup {
     display: flex;
     border-radius: 1rem;
     width: calc(100% - 32px);
-    justify-content: space-between;
+    justify-content: start;
     color: brown;
     @include sweetBorder();
     border-color: burlywood;
@@ -91,7 +91,7 @@ popup {
     background-color: papayawhip;
     margin-top: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     gap: 0.4rem;
 }
@@ -103,6 +103,8 @@ popup {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    justify-content: start;
+
     cursor: pointer;
 }
 
@@ -307,13 +309,11 @@ popup {
     left: 0px;
     justify-content: space-around;
     align-items: center;
-    margin: 0.3rem;
-    width: calc(100% - 0.6rem);
+    width: 100%;
     background-color: rgba(193, 193, 193, 0.501);
     backdrop-filter: blur(0.5rem);
     padding-block: 8px;
     z-index: 110;
-    border-radius: 1rem;
     flex-wrap: wrap-reverse;
     @include sweetBorder;
 
@@ -465,7 +465,6 @@ input {
     padding: 8px;
     padding-inline: 16px;
     border-width: 0px;
-    margin-inline: 0.3rem;
     font-size: 1.2rem;
     color: colors.$text_black;
 

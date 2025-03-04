@@ -181,7 +181,10 @@ export class EditorComponent implements OnInit, OnDestroy {
                     if (entry.intersectionRatio === 1) {
                         entry.target.classList.remove('sticky');
                     } else {
-                        if (entry.boundingClientRect.top > 0) {
+                        if (
+                            entry.intersectionRect.top > 100 ||
+                            !entry.intersectionRect.width
+                        ) {
                             return;
                         }
                         entry.target.classList.add('sticky');
@@ -234,12 +237,21 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     addNewChoiceInQuestion() {
+        const chId = -1 * Date.now();
         this.questionSelectedInfo.question_choices?.push({
-            id: -1,
+            id: chId,
             is_correct: false,
             position: this.questionSelectedInfo.question_choices.length,
             question_id: this.questionSelectedInfo.id,
             text: '',
+        });
+
+        setTimeout(() => {
+            const choiceElem = document.querySelector(`#choice-text-${chId}`);
+
+            if (choiceElem) {
+                (choiceElem as HTMLTextAreaElement).select();
+            }
         });
     }
 
@@ -251,29 +263,36 @@ export class EditorComponent implements OnInit, OnDestroy {
         if (this.questionSelected == -1) {
             return;
         }
-
         this.loading = true;
-        this.competitionsData
-            .putQuestion({
-                ...this.questionSelectedInfo,
-                created_at: this.competitionInfo.created_at,
-                updated_at: new Date(),
-            } as QuestionInfo)
-            .subscribe(
-                (res) => {
-                    this.loading = false;
-                    this.snackBar.open('Question saved successfully');
+        var promise = new Promise<void>((resolve, reject) => {
+            this.competitionsData
+                .putQuestion({
+                    ...this.questionSelectedInfo,
+                    created_at: this.competitionInfo.created_at,
+                    updated_at: new Date(),
+                } as QuestionInfo)
+                .subscribe(
+                    (res) => {
+                        this.loading = false;
+                        this.errors = {};
+                        this.snackBar.open('Question saved successfully');
 
-                    this.fetchQuestions();
-                },
-                (error) => {
-                    this.loading = false;
-                    this.snackBar.open(
-                        'Some error occurred while saving question'
-                    );
-                    this.errors = error.error;
-                }
-            );
+                        this.fetchQuestions();
+
+                        resolve();
+                    },
+                    (error) => {
+                        this.loading = false;
+                        this.snackBar.open(
+                            'Some error occurred while saving question'
+                        );
+                        this.errors = error.error;
+                        reject();
+                    }
+                );
+        });
+
+        return promise;
     }
 
     selectedQuestionElement(): HTMLLIElement | null {
@@ -285,16 +304,18 @@ export class EditorComponent implements OnInit, OnDestroy {
         } else return null;
     }
 
-    _selectQuestion(index: number, checkUnsaved: boolean = false) {
+    _selectQuestion(index: number, backup = true) {
         this.questionSelected = index;
         this.questionSelectedInfo =
             index == -1
                 ? ({} as QuestionInfo)
                 : this.competitionInfo.questions![index];
 
-        this.questionSelectedBackup = structuredClone(
-            this.questionSelectedInfo
-        );
+        if (backup) {
+            this.questionSelectedBackup = structuredClone(
+                this.questionSelectedInfo
+            );
+        }
 
         if (this.questionSelectedInfo?.type === 0) {
             this.getFileStatus('solutions').subscribe((res) => {
@@ -351,6 +372,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     selectQuestion(index: number, checkUnsaved: boolean = false) {
+        var currentQuestionIndex = this.questionSelected;
+
         if (
             checkUnsaved &&
             JSON.stringify(this.questionSelectedInfo) !==
@@ -361,19 +384,27 @@ export class EditorComponent implements OnInit, OnDestroy {
             );
 
             if (saveRequired) {
-                this.saveQuestion();
+                this.saveQuestion()?.then(
+                    () => {
+                        this._selectQuestion(index);
+                    },
+                    () => {
+                        this._selectQuestion(currentQuestionIndex, false);
+                    }
+                );
+                return;
             } else {
                 Object.assign(
                     this.questionSelectedInfo,
                     this.questionSelectedBackup
                 );
             }
-            this._selectQuestion(index, checkUnsaved);
+            this._selectQuestion(index);
 
             return;
         }
 
-        this._selectQuestion(index, checkUnsaved);
+        this._selectQuestion(index);
     }
 
     updateFile(event: any, filen: string) {

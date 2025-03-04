@@ -137,15 +137,18 @@ export class InsightsComponent {
 
                     const tab =
                         this.activatedRoute.snapshot.paramMap.get('tab');
+                    var tabName = '';
 
                     if (tab === 'insights') {
+                        tabName = 'Scoreboard';
                         this.selectPanel(0);
                     } else if (tab === 'evaluations') {
+                        tabName = 'Evaluations';
                         this.selectPanel(1);
                     }
 
                     this.titleService.setTitle(
-                        `${tab?.toUpperCase()} • ${
+                        `${tabName} • ${
                             this.competitionInfo.title || 'Competition'
                         }`
                     );

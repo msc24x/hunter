@@ -9,13 +9,13 @@ import { ProfileComponent } from './pages/profile/profile.component';
 const routes: Routes = [
     {
         'path': '',
-        'title': 'Home • Hunter',
+        'title': 'Hunter - Contest Hosting Platform',
         'component': HomeComponent,
         'pathMatch': 'full',
     },
     {
         'path': 'home',
-        'title': 'Home • Hunter',
+        'title': 'Hunter - Contest Hosting Platform',
         'component': HomeComponent,
     },
     {
