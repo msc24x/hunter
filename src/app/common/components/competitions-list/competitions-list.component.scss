@@ -157,6 +157,8 @@
 }
 
 .competition_card {
+    display: block;
+    color: inherit;
     margin-bottom: 0.5rem;
     padding: 16px;
     border-radius: 1rem;
@@ -210,9 +212,10 @@
 #c_host_user {
     margin-left: 4px;
     margin-top: 6px;
-    // font-weight: lighter;
     padding: 4px;
     width: fit-content;
+    display: block;
+    color: inherit;
 }
 
 #c_about {

@@ -100,6 +100,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     timeRemaining = '(-_-)';
     hasEnded = false;
+    notStarted = false;
 
     routerSubsc: Subscription | null = null;
     subscriptions: Subscription[] = [];
@@ -466,8 +467,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             this.competition.scheduled_at &&
                             this.competition.scheduled_at.getTime() > Date.now()
                         ) {
-                            alert('Competition has not started yet');
-                            this.router.navigate(['/compete']);
+                            this.notStarted = true;
                         }
 
                         if (
@@ -561,6 +561,16 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         }
 
         return this.questionSelectedInfo?.results?.[0];
+    }
+
+    getQuestionCounts() {
+        var counts = [0, 0, 0, 0];
+
+        this.competition.questions?.forEach((ques) => {
+            counts[ques.type]++;
+        });
+
+        return counts;
     }
 
     showChoiceAsSelected(choice: QuestionChoice) {

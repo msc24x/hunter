@@ -14,7 +14,63 @@
     <sign-in-prompt></sign-in-prompt>
 </popup>
 
-<div class="body" *ngIf="competition.id">
+<div class="body info-section" *ngIf="competition.id && notStarted">
+    <div class="competition-title">{{ competition.title }}</div>
+    <br />
+    <div>
+        Hosted by
+        <user-display [userInfo]="competition.host_user"></user-display>
+    </div>
+    <div class="competition-desc">{{ competition.description }}</div>
+    <br />
+    <div>
+        <div class="competition-start">
+            Starts at
+            {{ competition.scheduled_at | prettyDate }}
+        </div>
+
+        <div *ngIf="competition.scheduled_end_at" class="competition-end">
+            Ends at
+            {{ competition.scheduled_end_at | prettyDate }}
+        </div>
+    </div>
+
+    <br />
+
+    <div>
+        <h3>Number of questions</h3>
+
+        <div class="tags">
+            <ng-container
+                *ngFor="let quesCount of getQuestionCounts(); let i = index"
+            >
+                <div class="tag" *ngIf="quesCount > 0">
+                    <span style="font-size: 1.2rem; font-weight: 500">
+                        {{ quesCount }}
+                    </span>
+                    <span style="font-size: 0.8rem">
+                        &nbsp;
+                        <ques-type-label [ques_type]="i"></ques-type-label>
+                    </span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <br />
+
+    <button class="main danger">
+        {{
+            notStarted
+                ? (competition.scheduled_end_at | timeAgo : true).replace(
+                      "ago",
+                      "left to start"
+                  )
+                : "Start Now"
+        }}
+    </button>
+</div>
+
+<div class="body" *ngIf="competition.id && !notStarted">
     <div class="main">
         <popup
             [hidden]="!showInstructionP"
@@ -121,11 +177,12 @@
                     for="description-toggle"
                     matTooltip="Click to collapse"
                 >
-                    {{
-                        this.competition.description ||
-                            "No description provided by host."
-                    }}
-                    <br />
+                    <div
+                        [innerText]="
+                            this.competition.description.trim() ||
+                            'No description provided by host.'
+                        "
+                    ></div>
                     <br />
                     <div class="info-like">
                         Hosted by
@@ -289,7 +346,7 @@
                                 'selected': showChoiceAsSelected(choice)
                             }"
                         ></fa-icon>
-                        <div [innerText]="choice.text"></div>
+                        <div [innerText]="choice.text.trim()"></div>
                     </div>
                 </div>
                 <ng-outlet

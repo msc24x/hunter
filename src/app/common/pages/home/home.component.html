@@ -19,6 +19,13 @@
     <sign-in-prompt></sign-in-prompt>
 </div>
 
+<div class="direct-buttons" *ngIf="isAuthenticated">
+    <button class="main" routerLink="/compete">Compete against others</button>
+    <button class="main danger" routerLink="/editor/workbench">
+        Create your own contest
+    </button>
+</div>
+
 <br />
 <br />
 
@@ -26,11 +33,11 @@
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-item">
-                <h3>100+</h3>
+                <h3>150+</h3>
                 <p>Active Users</p>
             </div>
             <div class="stat-item">
-                <h3>90+</h3>
+                <h3>140+</h3>
                 <p>Contests Hosted</p>
             </div>
             <div class="stat-item">
@@ -39,7 +46,7 @@
             </div>
             <div class="stat-item">
                 <h3>6</h3>
-                <p>Prominent Languages Supported</p>
+                <p>Coding Languages Supported</p>
             </div>
         </div>
     </section>

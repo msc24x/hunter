@@ -2,18 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://hunter.cambo.in/</loc>
-        <lastmod>2023-05-27</lastmod>
+        <lastmod>2025-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://hunter.cambo.in/home</loc>
-        <lastmod>2023-05-27</lastmod>
+        <lastmod>2025-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://hunter.cambo.in/about</loc>
-        <lastmod>2023-05-27</lastmod>
+        <lastmod>2025-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
     </url>
     <url>
         <loc>https://hunter.cambo.in/compete</loc>
-        <lastmod>2023-05-27</lastmod>
+        <lastmod>2025-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
     </url>
 </urlset>

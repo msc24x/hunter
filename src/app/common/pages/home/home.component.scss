@@ -16,6 +16,20 @@
     }
 }
 
+.direct-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    button {
+        font-size: 1.4rem;
+        padding: 2rem;
+        border-radius: 2rem;
+    }
+}
+
 .section-container {
     border-radius: 4rem;
     background: linear-gradient(180deg, #ff00000d, transparent);

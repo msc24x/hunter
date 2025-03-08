@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     faArrowUpRightFromSquare,
@@ -34,7 +35,8 @@ export class ProfileComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private userService: UserDataService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private titleService: Title
     ) {}
 
     fetchUserDetails() {
@@ -46,6 +48,15 @@ export class ProfileComponent implements OnInit {
             next: (data) => {
                 this.user_profile = data.body!;
                 this.loading--;
+
+                this.titleService.setTitle(
+                    `${
+                        (this.user_profile.name || 'Anonymous') +
+                        '#' +
+                        this.user_profile_id +
+                        ' on Hunter'
+                    }`
+                );
 
                 this.editable = this.user.id === this.user_profile_id;
             },

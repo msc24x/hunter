@@ -48,7 +48,7 @@
             <create-dialog *ngIf="showBuildButton"></create-dialog>
 
             <li *ngFor="let com of this.competitionsList">
-                <div
+                <a
                     class="competition_card"
                     routerLink="/{{ this.route }}/{{ com.id }}"
                 >
@@ -59,10 +59,7 @@
                         Created
                         {{ com.created_at | timeAgo }}
                     </div>
-                    <div
-                        id="c_host_user"
-                        routerLink="/u/{{ com.host_user_id }}"
-                    >
+                    <a id="c_host_user" routerLink="/u/{{ com.host_user_id }}">
                         <ng-template #authorElem>
                             By
                             <user-display
@@ -95,7 +92,7 @@
                             &nbsp;
                             <span style="color: crimson"> Private </span>
                         </span>
-                    </div>
+                    </a>
                     <div class="detail-tag cute-panel" *ngIf="com.practice">
                         For Practice Only
                     </div>
@@ -164,9 +161,10 @@
                         {{ timeLeft(com.scheduled_end_at, timeLeftFlag) }} left
                     </div>
                     <p id="c_about" *ngIf="com.description">
-                        {{ com.description }}
+                        {{ com.description.slice(0, 400)
+                        }}<span *ngIf="com.description.length > 300">...</span>
                     </p>
-                </div>
+                </a>
             </li>
 
             <li *ngIf="!loading && competitionsList !== null">
