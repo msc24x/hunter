@@ -15,16 +15,21 @@
 </popup>
 
 <div class="body info-section" *ngIf="competition.id && notStarted">
-    <div class="competition-title">{{ competition.title }}</div>
+    <br />
+    <br />
+
+    <div class="competition-title">{{ competition.title || "Untitled" }}</div>
     <br />
     <div>
         Hosted by
         <user-display [userInfo]="competition.host_user"></user-display>
     </div>
-    <div class="competition-desc">{{ competition.description }}</div>
+    <div class="competition-desc">
+        {{ competition.description || "No description provided by the host." }}
+    </div>
     <br />
     <div>
-        <div class="competition-start">
+        <div *ngIf="competition.scheduled_at" class="competition-start">
             Starts at
             {{ competition.scheduled_at | prettyDate }}
         </div>
@@ -38,7 +43,11 @@
     <br />
 
     <div>
-        <h3>Number of questions</h3>
+        <h3>
+            {{ competition.questions?.length || 0 }} question{{
+                (competition.questions?.length || 0) === 1 ? "" : "s"
+            }}
+        </h3>
 
         <div class="tags">
             <ng-container
@@ -57,17 +66,26 @@
         </div>
     </div>
     <br />
+    <br />
 
-    <button class="main danger">
+    <button
+        *ngIf="isAuthenticated"
+        class="main danger"
+        (click)="startCompetitionSession()"
+    >
         {{
-            notStarted
+            notStarted && !startable
                 ? (competition.scheduled_end_at | timeAgo : true).replace(
                       "ago",
                       "left to start"
                   )
+                : hasEnded
+                ? "Submissions Closed"
                 : "Start Now"
         }}
     </button>
+
+    <sign-in-prompt *ngIf="!isAuthenticated"></sign-in-prompt>
 </div>
 
 <div class="body" *ngIf="competition.id && !notStarted">
@@ -177,13 +195,6 @@
                     for="description-toggle"
                     matTooltip="Click to collapse"
                 >
-                    <div
-                        [innerText]="
-                            this.competition.description.trim() ||
-                            'No description provided by host.'
-                        "
-                    ></div>
-                    <br />
                     <div class="info-like">
                         Hosted by
                         <user-display
@@ -194,6 +205,22 @@
                         Updated
                         {{ this.competition.updated_at | timeAgo }}
                     </div>
+
+                    <br />
+                    <div
+                        [innerText]="
+                            this.competition.description.trim() ||
+                            'No description provided by host.'
+                        "
+                    ></div>
+
+                    <p
+                        *ngIf="this.competition.competition_sessions?.[0]?.created_at"
+                        class="info-like"
+                    >
+                        Your started this competition at
+                        {{ this.competition.competition_sessions?.[0]?.created_at | prettyDate}}
+                    </p>
                 </label>
             </p>
         </div>

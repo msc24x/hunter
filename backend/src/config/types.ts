@@ -11,6 +11,7 @@ export type SessionInfo = {
 export type QuestionInfo = {
     id: number;
     competition_id: number;
+    competitions?: CompetitionInfo;
     title: string | null;
     type: number;
     statement: string | null;
@@ -28,7 +29,6 @@ export type QuestionInfo = {
     sol_code_file?: boolean;
     user_answer?: string;
     question_choices?: QuestionChoice[];
-    competitions?: CompetitionInfo;
 };
 
 export type QuestionChoice = {
@@ -86,6 +86,15 @@ export type CompetitionInfo = {
     rating: number;
     public: boolean;
     practice: boolean;
+};
+
+export type CompetitionSession = {
+    id: number;
+    user_id: number;
+    user_info?: UserInfo;
+    competition_id: number;
+    competitions?: CompetitionInfo;
+    created_at: Date;
 };
 
 export type CodeSolution = {

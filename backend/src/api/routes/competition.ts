@@ -128,6 +128,77 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
         });
 });
 
+// Start a contest for self
+router.post(
+    '/competition/:id/session',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        if (!parseInt(req.params.id)) {
+            Util.sendResponse(res, resCode.badRequest);
+            return;
+        }
+
+        const comp_id = parseInt(req.params.id);
+
+        client.competitions
+            .findUnique({
+                where: {
+                    id: comp_id,
+                    public: true,
+                    OR: [
+                        {
+                            scheduled_at: null,
+                        },
+                        {
+                            scheduled_at: {
+                                lt: new Date(),
+                            },
+                        },
+                    ],
+                    deleted_at: null,
+                },
+                include: {
+                    competition_sessions: {
+                        where: {
+                            user_id: res.locals.user.id,
+                        },
+                    },
+                },
+            })
+            .then((comp) => {
+                if (!comp) {
+                    Util.sendResponse(res, resCode.notFound);
+                    return;
+                }
+
+                if (comp?.competition_sessions.length) {
+                    Util.sendResponse(res, resCode.success);
+                    return;
+                }
+
+                client.competition_session
+                    .create({
+                        data: {
+                            user_id: res.locals.user.id,
+                            competition_id: comp_id,
+                            created_at: new Date(),
+                        },
+                    })
+                    .then((csession) => {
+                        Util.sendResponse(res, resCode.created);
+                        return;
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
+            })
+            .catch((err) => {
+                Util.sendResponse(res, resCode.serverError, err);
+            });
+    }
+);
+
 // Fetch a contest
 router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
     if (req.params.id == '') {
@@ -136,15 +207,30 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
     }
 
     client.competitions
-        .findUnique({ where: { id: parseInt(req.params.id) } })
+        .findUnique({
+            where: { id: parseInt(req.params.id) },
+            include: {
+                competition_sessions: {
+                    where: {
+                        user_id: res.locals.user.id,
+                    },
+                    select: {
+                        created_at: true,
+                    },
+                },
+            },
+        })
         .then((competition) => {
             if (!competition) {
                 Util.sendResponse(res, resCode.notFound);
                 return;
             }
 
-            // send the competition right away if its public
-            if (competition.public) {
+            // send the competition right away if its public and started by user.
+            if (
+                competition.public &&
+                competition.competition_sessions?.[0]?.created_at
+            ) {
                 Util.sendResponseJson(res, resCode.success, competition);
                 return;
             }

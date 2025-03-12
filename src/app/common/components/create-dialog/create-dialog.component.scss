@@ -13,7 +13,7 @@
         max-width: 712px;
     }
 
-    textarea {
+    input {
         @include appTextArea;
         margin-left: 0px;
         width: calc(100% - 2rem);

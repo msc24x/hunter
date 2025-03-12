@@ -22,6 +22,18 @@ model competitions {
   scheduled_at     DateTime?   @db.DateTime(0)
   scheduled_end_at DateTime?   @db.DateTime(0)
   questions        questions[]
+  competition_sessions        competition_session[]
+}
+
+model competition_session {
+  id               Int         @id @default(autoincrement())
+  created_at       DateTime    @default(now()) @db.DateTime(0)
+  last_success_at       DateTime?    @db.DateTime(0)
+  user_id     Int
+  user        users       @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  competition_id Int
+  competition        competitions       @relation(fields: [competition_id], references: [id], onDelete: NoAction)
+
 }
 
 model files {
@@ -115,4 +127,5 @@ model users {
   results           results[]
   evaluations       results[]      @relation("evaluator")
   session           session?
+  competition_sessions        competition_session[]
 }

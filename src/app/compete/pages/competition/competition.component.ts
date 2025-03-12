@@ -101,6 +101,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     timeRemaining = '(-_-)';
     hasEnded = false;
     notStarted = false;
+    startable = false;
 
     routerSubsc: Subscription | null = null;
     subscriptions: Subscription[] = [];
@@ -279,6 +280,29 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     selectNextPrev(i: number) {
         this.selectQuestion(this.questionSelected + i);
+    }
+
+    startCompetitionSession() {
+        if (!this.notStarted || !this.startable) {
+            this.snackBar.open(
+                'Competition has not started yet, please come back later.'
+            );
+            return;
+        }
+
+        this.loading++;
+
+        this.competitionsService
+            .startCompetitionSession({ id: this.c_id })
+            ?.subscribe({
+                next: () => {
+                    window.location.reload();
+                },
+                error: () => {
+                    this.loading--;
+                    this.snackBar.open('Some unknown error occurred');
+                },
+            });
     }
 
     submitAnswerBasedQues() {
@@ -463,11 +487,22 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             clearInterval(this.timeInterval);
                         }
 
+                        // If submissions are not open yet, put it in not started state
                         if (
                             this.competition.scheduled_at &&
                             this.competition.scheduled_at.getTime() > Date.now()
                         ) {
                             this.notStarted = true;
+                        }
+
+                        // If user did not start the session for a non-practice contest, put it in not started state
+                        if (
+                            !this.competition.competition_sessions?.[0]
+                                ?.created_at &&
+                            !this.competition.practice
+                        ) {
+                            this.notStarted = true;
+                            this.startable = true;
                         }
 
                         if (

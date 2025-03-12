@@ -205,6 +205,21 @@ export class CompetitionsDataService {
         });
     }
 
+    startCompetitionSession(params: { id: number }) {
+        if (!this.authService.isAuthenticated) {
+            return;
+        }
+
+        return this.http.post(
+            format(apiEndpoints.competitionSession, params.id.toString()),
+            {
+                responseType: 'json',
+                withCredentials: true,
+                observe: 'response',
+            }
+        );
+    }
+
     postCompetition(params: { title: string; practice: boolean }) {
         if (!this.authService.isAuthenticated) {
             return;

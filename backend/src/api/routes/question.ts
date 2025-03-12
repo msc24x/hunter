@@ -668,6 +668,16 @@ router.get(
                             avatar_url: true,
                         },
                     },
+                    ...(user && {
+                        competition_sessions: {
+                            where: {
+                                user_id: user.id,
+                            },
+                            select: {
+                                created_at: true,
+                            },
+                        },
+                    }),
                 },
             })
             .then((competition) => {
@@ -686,10 +696,13 @@ router.get(
                 const now = new Date();
                 const endDate = competition.scheduled_end_at;
 
-                // If its not live yet, remove questions info
+                // If its not live yet or non-practice not started by user, remove questions info
                 if (
                     !competition.public ||
-                    (competition.scheduled_at && competition.scheduled_at > now)
+                    (competition.scheduled_at &&
+                        competition.scheduled_at > now) ||
+                    (!competition.competition_sessions?.[0]?.created_at &&
+                        !competition.practice)
                 ) {
                     competition.questions = competition.questions.map(
                         (ques) => {

@@ -43,7 +43,15 @@ function safeRouteToQuestion(
                     deleted_at: null,
                 },
                 include: {
-                    competitions: true,
+                    competitions: {
+                        include: {
+                            competition_sessions: {
+                                where: {
+                                    user_id: res.locals.user.id,
+                                },
+                            },
+                        },
+                    },
                     question_choices: true,
                 },
             })
@@ -65,6 +73,18 @@ function safeRouteToQuestion(
                         res,
                         resCode.forbidden,
                         'Either the competition is not live or has ended'
+                    );
+                    return;
+                }
+
+                if (
+                    !question.competitions.practice &&
+                    !question.competitions.competition_sessions.length
+                ) {
+                    Util.sendResponse(
+                        res,
+                        resCode.forbidden,
+                        'Onboarding have not been done for this competition'
                     );
                     return;
                 }

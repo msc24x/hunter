@@ -2,28 +2,32 @@
 
 <div id="tagline" class="app-line">
     Effortless Hosting Platform <br />For Academic Contests <br />
+    <img
+        src="../../../../assets/clumsy.svg"
+        class="product-illu"
+        alt="Product illustration"
+    />
     <span class="helperline">
         <fa-icon [icon]="homeIcon"></fa-icon>
         with Ease & Freedom!
     </span>
 </div>
+
 <div id="tagline_small" class="app-line inview_slide">
     <span class="">Open source</span> platform for you to host your own
     customized academic competitions.
     <span class="">Build, Judge or Participate</span>, all under one roof.
 </div>
-
-<div *ngIf="!isAuthenticated" [ngClass]="{ 'vanish': isAuthenticated }">
-    <br />
-
-    <sign-in-prompt></sign-in-prompt>
-</div>
-
 <div class="direct-buttons" *ngIf="isAuthenticated">
     <button class="main" routerLink="/compete">Compete against others</button>
     <button class="main danger" routerLink="/editor/workbench">
         Create your own contest
     </button>
+</div>
+<div *ngIf="!isAuthenticated" [ngClass]="{ 'vanish': isAuthenticated }">
+    <br />
+
+    <sign-in-prompt></sign-in-prompt>
 </div>
 
 <br />
@@ -50,6 +54,7 @@
             </div>
         </div>
     </section>
+
     <section class="feature-section">
         <div class="feature-content">
             <h2>Seamless automatic evaluation features</h2>

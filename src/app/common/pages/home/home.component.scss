@@ -16,6 +16,14 @@
     }
 }
 
+.product-illu {
+    margin-inline: auto;
+    display: block;
+    width: 70%;
+    max-width: 35rem;
+    margin-top: 1rem;
+}
+
 .direct-buttons {
     display: flex;
     justify-content: center;
@@ -130,7 +138,7 @@
     .helperline {
         font-size: 2rem;
         opacity: 0.8;
-        text-shadow: -2px 10px 100px rgb(225 0 0);
+        text-shadow: -2px 10px 100px rgb(255, 0, 0);
     }
 }
 
@@ -204,7 +212,7 @@
 }
 
 #tagline {
-    margin-top: 10rem;
+    margin-top: 7rem;
     font-size: 5rem;
 }
 

@@ -10,13 +10,12 @@
         Initialize with a title (max 120 characters)
         <infotip message="You can change it later"></infotip>
     </p>
-    <textarea
+    <input
         id="competition_title"
         type="text"
-        [rows]="2"
         maxlength="120"
         placeholder="Example: Winter Challenge Wave-II"
-    ></textarea>
+    />
     <p class="info-like">
         You will be redirected to the Hunter Editor. Be sure to read the Guide
         to create the best competition. Keep in mind that any poorly designed
@@ -28,16 +27,15 @@
         <mat-slide-toggle [(ngModel)]="practiceContest"></mat-slide-toggle>
     </p>
     <p class="info-like">
-        Enable practice mode and it will allow participants to attempt the
-        contest multiple times to practice. The points earned from a practice
-        contest won't be added into a user's profile, and will only be effective
-        in this contest's scoreboard.
+        It will allow participants to attempt the contest multiple times to
+        practice. The points earned from a practice contest won't be added into
+        a user's profile, and will only be effective in this contest's
+        scoreboard.
     </p>
 
     <button id="create" class="main" (click)="requestCreateCompetition()">
         <fa-icon [icon]="cubeIcon"></fa-icon> &nbsp; Initialize a new
-        {{ practiceContest ? "practice" : "competitive" }}
-        contest
+        {{ practiceContest ? "practice test" : "competition" }}
     </button>
     <div class="error">{{ responseMessage }}</div>
 </popup>

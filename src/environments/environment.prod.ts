@@ -53,7 +53,17 @@ export interface CompetitionInfo {
     public: boolean;
     practice: boolean;
     questions?: QuestionInfo[];
+    competition_sessions?: CompetitionSession[];
 }
+
+export type CompetitionSession = {
+    id: number;
+    user_id: number;
+    user_info?: UserInfo;
+    competition_id: number;
+    competitions?: CompetitionInfo;
+    created_at: Date;
+};
 
 export type HunterExecutable = {
     for: {
@@ -127,6 +137,7 @@ export const apiEndpoints = {
     logout: environment.apiUrl + '/logout',
     competition: environment.apiUrl + '/competition',
     competitionQuality: environment.apiUrl + '/competition/{0}/quality',
+    competitionSession: environment.apiUrl + '/competition/{0}/session',
     getCompetitions: environment.apiUrl + '/competitions',
     question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',
