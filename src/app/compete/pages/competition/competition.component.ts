@@ -393,6 +393,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         } else {
                             this.solutionOutput.output = res.statusText;
                         }
+
+                        this.evaluationChangeOccurred =
+                            !this.evaluationChangeOccurred;
+
+                        this.subscriptions.push(this.fetchProgress());
                     },
 
                     error: (err) => {

@@ -59,3 +59,4 @@ static-update.bat
 server-update.bat
 backend-update.bat
 frontend-update.bat
+backend/src/scripts/shell.ts
