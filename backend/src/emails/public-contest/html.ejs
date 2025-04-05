@@ -1,0 +1,60 @@
+<%- include('emails/header') -%>
+
+<section class="email-body">
+    <h1>Your Contest is Now Public!</h1>
+
+    <p>Dear <%= user.name %>,</p>
+
+    <p>
+        Following contest's visibility was marked as public, and now will be
+        visible to everyone.
+    </p>
+
+    <table
+        class="contest-details"
+        style="
+            background-color: #eaeaea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            width: 100%;
+        "
+    >
+        <tr>
+            <td style="font-weight: bold; padding-bottom: 5px">
+                <%= contest.title %>
+            </td>
+        </tr>
+
+        <% if(contest.startDate){ %>
+        <tr>
+            <td>Submissions open at <%= contest.startDate %></td>
+        </tr>
+        <% } %> <% if(contest.endDate){ %>
+        <tr>
+            <td>Submissions close at <%= contest.endDate %></td>
+        </tr>
+        <% } %>
+    </table>
+
+    <p>What's next?</p>
+    <ol>
+        <li>
+            Share <a href="<%= contest.url %>"> your contest link</a> on your
+            socials to increase your reach!
+        </li>
+        <li>
+            Monitor submissions through our
+            <a href="<%= contest.scoreboard %>"
+                >scoreboard (Insights & Evaluations)</a
+            >.
+        </li>
+    </ol>
+
+    <br />
+    <br />
+
+    <a href="<%= contest.url %>" class="button">View Contest</a>
+</section>
+
+<%- include('emails/footer') -%>

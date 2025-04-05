@@ -76,6 +76,7 @@ export type CompetitionInfo = {
     id: number;
     host_user_id: number;
     host_user_info?: UserInfo;
+    host_user?: UserInfo;
     title: string;
     description: string;
     created_at: Date;

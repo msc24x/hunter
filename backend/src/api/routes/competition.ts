@@ -8,6 +8,7 @@ import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import { time } from 'console';
 import config from '../../config/config';
+import { sendPublicContestEmail } from '../../emails/public-contest/sender';
 
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -100,6 +101,8 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                 return;
             }
 
+            const markingPublic = !competition.public && competitionBody.public;
+
             client.competitions
                 .update({
                     where: {
@@ -118,9 +121,16 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                             : null,
                         updated_at: new Date(),
                     },
+                    include: {
+                        host_user: true,
+                    },
                 })
                 .then((competition) => {
                     Util.sendResponseJson(res, resCode.success, competition);
+
+                    if (markingPublic) {
+                        sendPublicContestEmail(competition as CompetitionInfo);
+                    }
                 })
                 .catch((err) => {
                     Util.sendResponse(res, resCode.serverError, err);
