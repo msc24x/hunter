@@ -4,12 +4,21 @@ import { DatabaseProvider } from '../services/databaseProvider';
 var client = new DatabaseProvider().client();
 
 async function main() {
-    await client.competition_session.deleteMany({
-        where: {
-            competition_id: 154,
-            user_id: 1,
-        },
-    });
+    console.log(
+        await client.results.findMany({
+            where: {
+                user_id: 33,
+            },
+        })
+    );
+
+    console.log(
+        await client.competition_session.findMany({
+            where: {
+                user_id: 33,
+            },
+        })
+    );
 }
 
 client.$connect().then(() => main());

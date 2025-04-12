@@ -20,6 +20,8 @@ export interface UserInfo {
     github_url?: string;
     linkedin_url?: string;
 
+    email_updates_disabled_at?: Date | null;
+
     hunt_points?: number;
     participated?: Array<CompetitionInfo>;
 
@@ -98,6 +100,7 @@ export type result = {
     result: number;
     accepted: boolean;
     created_at?: string;
+    created_at_diff?: number;
     evaluated_at?: string;
     language?: HunterLanguage;
     neg_result?: number;

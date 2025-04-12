@@ -4,6 +4,8 @@ import { DatabaseProvider } from '../services/databaseProvider';
 var client = new DatabaseProvider().client();
 
 async function main() {
+    await client.competition_session.deleteMany();
+
     var users = await client.users.findMany({
         include: {
             competition_sessions: true,
@@ -48,9 +50,7 @@ async function main() {
             var data = {
                 competition_id: comp_id,
                 user_id: user.id,
-                created_at:
-                    res.question.competitions.scheduled_at ??
-                    res.question.competitions.created_at,
+                created_at: res.question.competitions.created_at,
                 last_success_at: last_success,
             };
 

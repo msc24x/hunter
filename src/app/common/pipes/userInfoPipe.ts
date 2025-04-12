@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { resCode, UserInfo } from 'src/environments/environment';
-import { isLive } from '../../utils/utils';
+import { isLive, prettyDuration } from '../../utils/utils';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { DatePipe } from '@angular/common';
 
@@ -114,5 +114,18 @@ export class TimeAgo implements PipeTransform {
         } else {
             return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
         }
+    }
+}
+
+@Pipe({
+    name: 'prettyDuration',
+})
+export class PrettyDuration implements PipeTransform {
+    transform(diff: number): string {
+        if (!diff) {
+            return '0 sec';
+        }
+
+        return prettyDuration(diff, true, true);
     }
 }

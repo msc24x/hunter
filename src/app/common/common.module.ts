@@ -16,6 +16,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import {
     IsLiveStatusPipe,
     PrettyDate,
+    PrettyDuration,
     TimeAgo,
     UserInfoPipe,
 } from './pipes/userInfoPipe';
@@ -68,6 +69,7 @@ import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
         IsLiveStatusPipe,
         PrettyDate,
         TimeAgo,
+        PrettyDuration,
         InfotipComponent,
         DropDownListComponent,
         CodeEditorComponent,
@@ -136,6 +138,7 @@ import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
         NgKatexComponent,
         SpinnerComponent,
         TimeAgo,
+        PrettyDuration,
     ],
     providers: [DatePipe],
 })

@@ -6,6 +6,7 @@ import { sendInfoEmail } from '../../services/email';
 import config from '../../config/config';
 import juice from 'juice';
 import { render } from '../renderer';
+import { Util } from '../../util/util';
 
 // Type for template data
 interface EmailData {
@@ -35,7 +36,7 @@ export function sendPublicContestEmail(competition: CompetitionInfo) {
 
     data.user = {
         email: competition.host_user!.email,
-        name: competition.host_user!.name || 'User',
+        name: Util.getFirstName(competition.host_user!.name || 'User'),
     };
 
     render(data, 'public-contest').then((html) => {

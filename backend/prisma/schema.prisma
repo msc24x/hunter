@@ -123,6 +123,7 @@ model users {
   blog_url          String?        @db.VarChar(100)
   linkedin_url      String?        @db.VarChar(100)
   github_fetched_at DateTime?      @db.DateTime(0)
+  email_updates_disabled_at DateTime?      @db.DateTime(0)
   competitions      competitions[]
   results           results[]
   evaluations       results[]      @relation("evaluator")

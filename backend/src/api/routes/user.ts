@@ -144,6 +144,9 @@ router.put('/users', authenticate, loginRequired, (req, res) => {
                 name: updateUser.name,
                 linkedin_url: updateUser.linkedin_url,
                 blog_url: updateUser.blog_url,
+                email_updates_disabled_at: updateUser.email_updates_disabled_at
+                    ? new Date()
+                    : null,
             },
         })
         .then(() => Util.sendResponse(res, resCode.success))

@@ -29,7 +29,11 @@ export function format(str: string, ...args: string[]) {
     return res;
 }
 
-export function prettyDuration(seconds: number, showSeconds = true) {
+export function prettyDuration(
+    seconds: number,
+    showSeconds = true,
+    short = false
+) {
     seconds = Math.floor(seconds);
 
     const minutes = Math.floor(seconds / 60);
@@ -49,16 +53,31 @@ export function prettyDuration(seconds: number, showSeconds = true) {
 
     const weeks = Math.floor(days / 7);
 
-    if (!weeks) return `${days % 7} days ${hours % 24} hr ${minutes % 60} min`;
+    if (!weeks) {
+        if (short) {
+            return `${days % 7} days ${hours % 24} hr`;
+        } else {
+            return `${days % 7} days ${hours % 24} hr ${minutes % 60} min`;
+        }
+    }
 
     const years = Math.floor(weeks / 52);
 
-    if (!years)
-        return `${weeks % 52} weeks ${days % 7} days ${hours % 24} hr ${
-            minutes % 60
-        } min`;
+    if (!years) {
+        if (short) {
+            return `${weeks % 52} wk ${days % 7} days`;
+        } else {
+            return `${weeks % 52} weeks ${days % 7} days ${hours % 24} hr ${
+                minutes % 60
+            } min`;
+        }
+    }
 
-    return `${years} yrs ${weeks % 52} weeks ${days % 7} days ${
-        hours % 24
-    } hr ${minutes % 60} min`;
+    if (short) {
+        return `${years} yr ${weeks % 52} wk`;
+    } else {
+        return `${years} yrs ${weeks % 52} weeks ${days % 7} days ${
+            hours % 24
+        } hr ${minutes % 60} min`;
+    }
 }

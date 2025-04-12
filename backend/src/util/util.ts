@@ -83,4 +83,16 @@ export class Util {
     static doesTestFilesExist(hunterExecutable: HunterExecutable) {
         return existsSync(`${Util.getFileName(hunterExecutable, 'solutions')}`);
     }
+
+    static getFirstName(name: string) {
+        const names = name.trim().split(' ');
+
+        for (let fName of names) {
+            if (fName.length > 2) {
+                return fName;
+            }
+        }
+
+        return name;
+    }
 }

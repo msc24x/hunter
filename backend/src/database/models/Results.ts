@@ -31,7 +31,19 @@ export class Results {
                         r.user_id, 
                         u.name AS user_name,
                         u.avatar_url AS user_avatar_url,
-                        MAX(r.created_at) AS created_at,
+                        CONVERT_TZ(MAX(case when r.result >= 0 then r.created_at else 0 end), @@session.time_zone, '+00:00') AS created_at,
+                        TIMESTAMPDIFF(
+                            SECOND,
+                            (
+                                SELECT competition_session.created_at
+                                FROM competition_session
+                                WHERE 
+                                    competition_session.user_id = r.user_id
+                                    AND competition_session.competition_id = c.id
+                                LIMIT 1
+                            ),
+                            MAX(case when r.result >= 0 then r.created_at else 0 end)
+                        ) AS created_at_diff,
                         SUM(case when r.result > 0 then r.result else 0 end) AS result,
                         SUM(case when r.result < 0 then r.result else 0 end) AS neg_result,
                         SUM(r.result) AS final_result,
@@ -51,10 +63,12 @@ export class Results {
                         AND q.competition_id = ${queryParams.id}
                         ${filterQuestion ? questionQuery : Prisma.empty}
                     GROUP BY 
-                        r.user_id
+                        r.user_id,
+                        c.id
                     ORDER BY
                         final_result DESC,
                         result DESC,
+                        created_at_diff ASC,
                         created_at ASC
                 ) s
             ORDER BY

@@ -53,7 +53,11 @@
         <div class="table_heading">
             <div class="rank-col">Rank</div>
             <div class="name-col">User Name</div>
-            <div class="time-col">Last Submission</div>
+            <div class="time-col">
+                {{
+                    competitionInfo.practice ? "Last submission" : "Time Taken"
+                }}
+            </div>
             <div class="ques-col">
                 Ques
                 <infotip message="Number of questions attempted"></infotip>
@@ -111,9 +115,31 @@
             </div>
             <div
                 class="time-col"
-                [matTooltip]="meta?.user_details?.created_at | prettyDate"
+                [matTooltip]="
+                    'Last successful submission on ' +
+                    (meta?.user_details?.created_at | prettyDate)
+                "
+                matTooltipPosition="left"
+                [matTooltipDisabled]="competitionInfo.practice"
             >
-                {{ meta?.user_details?.created_at | timeAgo }}
+                <span *ngIf="competitionInfo.practice">
+                    <span *ngIf="meta?.user_details?.created_at">
+                        {{ meta?.user_details?.created_at | prettyDate }}
+                    </span>
+                    <span *ngIf="!meta?.user_details?.created_at"> - </span>
+                </span>
+                <span *ngIf="!competitionInfo.practice">
+                    <span *ngIf="meta?.user_details?.created_at_diff">
+                        {{
+                            meta?.user_details?.created_at_diff!
+                                | prettyDuration
+                        }}
+                    </span>
+
+                    <span *ngIf="!meta?.user_details?.created_at_diff">
+                        -
+                    </span>
+                </span>
             </div>
             <div class="ques-col">
                 {{ meta?.user_details?.questions_attempted }}
@@ -173,8 +199,29 @@
                     {{ calcAheadOf() }}%
                 </i>
             </div>
-            <div class="time-col" [matTooltip]="score.created_at | prettyDate">
-                {{ score.created_at | timeAgo }}
+            <div
+                class="time-col"
+                [matTooltip]="
+                    'Last successful submission on ' +
+                    (score.created_at | prettyDate)
+                "
+                matTooltipPosition="left"
+                [matTooltipDisabled]="competitionInfo.practice"
+            >
+                <span *ngIf="competitionInfo.practice">
+                    <span *ngIf="score.created_at">
+                        {{ score.created_at | prettyDate }}
+                    </span>
+
+                    <span *ngIf="!score.created_at"> - </span>
+                </span>
+                <span *ngIf="!competitionInfo.practice">
+                    <span *ngIf="score.created_at_diff">
+                        {{ score.created_at_diff! | prettyDuration }}
+                    </span>
+
+                    <span *ngIf="!score.created_at_diff"> - </span>
+                </span>
             </div>
 
             <div class="ques-col">

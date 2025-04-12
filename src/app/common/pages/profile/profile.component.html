@@ -61,20 +61,6 @@
                         />
                     </div>
                 </div>
-                <!-- <div class="field-row">
-                    <div class="label">
-                        Display your Email to contest hosts?
-                        <infotip
-                            message="When you participate in a contest"
-                        ></infotip>
-                    </div>
-                    <div class="row">
-                        <mat-slide-toggle
-                            disabled
-                            matTooltip="Feature preview"
-                        ></mat-slide-toggle>
-                    </div>
-                </div> -->
                 <div class="field-row">
                     <div class="label">Display Name</div>
                     <div class="row">
@@ -143,6 +129,20 @@
                         />
                     </div>
                 </div>
+                <div class="field-row">
+                    <div class="label">
+                        Receive occasional communication mails from Hunter?
+                    </div>
+                    <div class="row">
+                        <mat-slide-toggle
+                            (change)="updateEmailPref($event.checked)"
+                            [checked]="!user.email_updates_disabled_at"
+                        ></mat-slide-toggle>
+                    </div>
+                </div>
+                <p class="field-note">
+                    Enable updates about new features & product changes.
+                </p>
             </div>
             <div
                 id="profile_save_btn"
@@ -202,7 +202,7 @@
                 </div>
 
                 <div class="comp-created-at">
-                    Created
+                    Created on
                     {{ comp.created_at | prettyDate }}
                 </div>
 

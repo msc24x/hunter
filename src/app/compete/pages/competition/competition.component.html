@@ -218,7 +218,7 @@
                         *ngIf="this.competition.competition_sessions?.[0]?.created_at"
                         class="info-like"
                     >
-                        Your started this competition at
+                        Your started this competition on
                         {{ this.competition.competition_sessions?.[0]?.created_at | prettyDate}}
                     </p>
                 </label>
@@ -685,6 +685,9 @@
             <sign-in-prompt></sign-in-prompt>
         </div>
 
-        <scoreboard [competition_id]="c_id"></scoreboard>
+        <scoreboard
+            [competitionInfo]="competition"
+            [competition_id]="c_id"
+        ></scoreboard>
     </div>
 </div>

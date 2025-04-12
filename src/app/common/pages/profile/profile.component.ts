@@ -112,6 +112,14 @@ export class ProfileComponent implements OnInit {
         window.open(url, '_blank');
     }
 
+    updateEmailPref(enabled: boolean) {
+        if (enabled) {
+            this.user.email_updates_disabled_at = null;
+        } else {
+            this.user.email_updates_disabled_at = new Date();
+        }
+    }
+
     updateUserInfo() {
         const getElemVal = (key: string) => {
             const elem = document.getElementById(key) as HTMLInputElement;
@@ -132,6 +140,7 @@ export class ProfileComponent implements OnInit {
                 blog_url: this.user.blog_url,
                 linkedin_url: this.user.linkedin_url,
                 email: this.user.email,
+                email_updates_disabled_at: this.user.email_updates_disabled_at,
             })
             .subscribe((res) => {
                 this.loading--;

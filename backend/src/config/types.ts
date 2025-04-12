@@ -69,6 +69,7 @@ export type UserInfo = {
     github_url?: string;
     linkedin_url?: string;
 
+    email_updates_disabled_at?: Date;
     github_fetched_at?: Date;
 };
 
