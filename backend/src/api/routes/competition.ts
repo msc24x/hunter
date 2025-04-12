@@ -75,16 +75,51 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
         });
 });
 
+function validateContestInfo(comp: CompetitionInfo) {
+    var errors: any = {};
+
+    if (comp?.title?.length > 120) {
+        errors.title =
+            'Cannot have more than 120 characters in competition title';
+    }
+
+    if (comp?.description?.length > 456) {
+        errors.description =
+            'Cannot have more than 456 characters in competition description';
+    }
+
+    if (comp?.time_limit && comp?.time_limit > 96 * 60) {
+        errors.time_limit =
+            'Cannot set time limit more than 96 hours, please lower the limit';
+    }
+
+    if (comp?.time_limit && comp?.time_limit < 0) {
+        errors.time_limit =
+            'Cannot set invalid time limit, please set at least 1 minute or 1 hour';
+    }
+
+    if (comp?.scheduled_at && comp?.scheduled_end_at) {
+        if (new Date(comp.scheduled_at) > new Date(comp.scheduled_end_at)) {
+            errors.scheduled_end_at =
+                'The rejection date-time for submissions is set before the opening date-time, which is invalid. Please fix it to continue';
+        }
+    }
+
+    return errors;
+}
+
 // Update a contest
 router.put('/competition', authenticate, loginRequired, (req, res) => {
     const competitionBody = req.body;
-    if (
-        !competitionBody?.host_user_id ||
-        !competitionBody?.id ||
-        competitionBody?.title?.length > 120 ||
-        competitionBody?.description?.length > 456
-    ) {
+    if (!competitionBody?.host_user_id || !competitionBody?.id) {
         Util.sendResponse(res, resCode.badRequest);
+        return;
+    }
+
+    var errors = validateContestInfo(competitionBody);
+
+    if (Object.keys(errors).length) {
+        Util.sendResponseJson(res, resCode.badRequest, errors);
         return;
     }
 
@@ -120,6 +155,9 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                             ? new Date(competitionBody.scheduled_end_at)
                             : null,
                         updated_at: new Date(),
+                        time_limit: competition.practice
+                            ? null
+                            : competitionBody.time_limit,
                     },
                     include: {
                         host_user: true,

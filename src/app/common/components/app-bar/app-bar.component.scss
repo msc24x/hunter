@@ -13,7 +13,7 @@ div.appBar {
     margin-bottom: 2rem;
 
     #logout_btn {
-        background-color: rgb(255, 244, 244);
+        background-color: colors.$mild_red;
         color: darkred !important;
         border-radius: 12px;
         padding-block: 4px;

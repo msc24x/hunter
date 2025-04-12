@@ -354,6 +354,12 @@ textarea {
         margin-bottom: 0;
         width: 100%;
         cursor: pointer;
+
+        .startup-info {
+            text-align: right;
+            padding-right: 1rem;
+            color: darkgreen;
+        }
     }
     .description-toggle-content-a:hover {
         text-decoration: underline;
@@ -392,6 +398,17 @@ textarea {
 
         .label {
             font-size: 1rem;
+        }
+
+        span {
+            font-family: monospace;
+            background: colors.$mild_red;
+            border-radius: 0.5rem;
+            padding: 0.3rem;
+            padding-inline: 0.5rem;
+            @include sweetBorder;
+
+            border-color: #dcadb6;
         }
     }
 }

@@ -156,6 +156,21 @@ popup {
     }
 }
 
+.duration-picker {
+    display: flex;
+    align-items: center;
+
+    span {
+        font-weight: 600;
+        padding: 0.5rem;
+        padding-right: 0.8rem;
+    }
+
+    input {
+        width: 3rem;
+    }
+}
+
 #visbility_controller {
     display: flex;
     justify-content: stretch;
@@ -517,7 +532,9 @@ input {
         top: 0;
         z-index: 100;
         border-radius: 0 0 2rem 2rem;
+        background-color: rgba(188, 188, 188, 0.5);
         border-top-color: transparent;
+        backdrop-filter: blur(0.8rem);
     }
 }
 

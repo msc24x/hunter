@@ -21,6 +21,7 @@ model competitions {
   practice         Boolean     @default(false)
   scheduled_at     DateTime?   @db.DateTime(0)
   scheduled_end_at DateTime?   @db.DateTime(0)
+  time_limit       Int?
   questions        questions[]
   competition_sessions        competition_session[]
 }

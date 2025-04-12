@@ -23,7 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { error } from 'console';
 import katex from 'katex';
-import { BehaviorSubject, timeout } from 'rxjs';
+import { BehaviorSubject, min, timeout } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
@@ -75,6 +75,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     questionSelected = -1;
     questionSelectedInfo = {} as QuestionInfo;
     questionSelectedBackup = {} as QuestionInfo;
+    timeLimitEnabled = false;
+    timeLimit: { hours: number; mins: number } = {
+        hours: 0,
+        mins: 15,
+    };
     testExists = false;
     solsExists = false;
     verificationResult: QuestionVerification | null = null;
@@ -89,6 +94,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     eventPopup = new BehaviorSubject<string>('');
 
     errors: any = {};
+    contest_errors: any = {};
 
     choiceTypes = {
         selectable: 0,
@@ -261,6 +267,8 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     saveQuestion() {
         if (this.questionSelected == -1) {
+            this.fetchQuestions();
+
             return;
         }
         this.loading = true;
@@ -331,7 +339,14 @@ export class EditorComponent implements OnInit, OnDestroy {
         );
 
         setTimeout(() => {
-            this.suneditor?.destroy();
+            if (this.suneditor?.destroy) {
+                this.suneditor?.destroy();
+            }
+
+            if (this.questionSelected === -1) {
+                return;
+            }
+
             this.suneditor = suneditor.create('text_statement', {
                 plugins: plugins,
                 charCounter: true,
@@ -472,6 +487,18 @@ export class EditorComponent implements OnInit, OnDestroy {
                         this.competitionInfo = res.body as CompetitionInfo;
                         this.toggleVisibility();
                         this.toggleVisibility();
+
+                        if (!this.competitionInfo.time_limit) {
+                            this.timeLimitEnabled = false;
+                        } else {
+                            this.timeLimitEnabled = true;
+                            this.timeLimit = {
+                                hours: Math.floor(
+                                    this.competitionInfo.time_limit / 60
+                                ),
+                                mins: this.competitionInfo.time_limit % 60,
+                            };
+                        }
                     }
 
                     this.competitionInfo.questions = res.body.questions;
@@ -514,9 +541,26 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.competitionInfo.public = !this.competitionInfo.public;
     }
 
+    cleanTimeLimits() {
+        setTimeout(() => {
+            this.timeLimit.hours = Number(this.timeLimit.hours);
+            this.timeLimit.mins = Number(this.timeLimit.mins);
+            this.timeLimit.hours =
+                this.timeLimit.hours < 0 ? 0 : this.timeLimit.hours;
+            this.timeLimit.mins =
+                this.timeLimit.mins < 0 ? 0 : this.timeLimit.mins;
+
+            if (this.timeLimit.mins >= 60) {
+                this.timeLimit.hours += 1;
+                this.timeLimit.mins = 0;
+            }
+        });
+    }
+
     saveChanges() {
         this.loading = true;
         this.errors = {};
+        this.contest_errors = {};
 
         const schedule = document.getElementById(
             'competition_schedule'
@@ -527,6 +571,14 @@ export class EditorComponent implements OnInit, OnDestroy {
 
         this.competitionInfo.scheduled_end_at = new Date(schedule_end.value);
         this.competitionInfo.scheduled_at = new Date(schedule.value);
+
+        if (this.timeLimitEnabled) {
+            this.competitionInfo.time_limit =
+                this.timeLimit.mins + this.timeLimit.hours * 60;
+        } else {
+            this.competitionInfo.time_limit = null;
+        }
+
         this.competitionsData
             .putCompetitionInfo(this.competitionInfo)
             .subscribe(
@@ -542,7 +594,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                     );
 
                     this.loading = false;
-                    this.errors = error.error;
+                    this.contest_errors = error.error;
                 }
             );
     }

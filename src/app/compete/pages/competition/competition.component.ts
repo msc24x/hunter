@@ -34,7 +34,9 @@ import {
     faPlay,
     faPuzzlePiece,
     faSpinner,
+    faStopwatch,
     faTableColumns,
+    faTicket,
     faVolleyball,
 } from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
@@ -62,6 +64,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     circleIcon = faCircle;
     clockIcon = faClock;
     practiceIcon = faVolleyball;
+    ticketIcon = faTicket;
+    stopwatchIcon = faStopwatch;
 
     showInstructionP = false;
     showSignInP = false;
@@ -100,6 +104,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     timeRemaining = '(-_-)';
     hasEnded = false;
+    timeLimitReached = false;
     notStarted = false;
     startable = false;
 
@@ -229,6 +234,13 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    getTimeLimit() {
+        return {
+            hours: Math.floor(this.competition.time_limit! / 60),
+            mins: this.competition.time_limit! % 60,
+        };
     }
 
     clearOutput() {
@@ -510,17 +522,44 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             this.startable = true;
                         }
 
+                        var submissionsClosingAt =
+                            this.competition.scheduled_end_at;
+
                         if (
-                            this.competition.scheduled_end_at &&
-                            new Date() > this.competition.scheduled_end_at
+                            !this.competition.practice &&
+                            this.competition.time_limit &&
+                            this.competition.competition_sessions?.[0]
+                                ?.created_at
                         ) {
-                            this.hasEnded = true;
+                            const userStartingTime = new Date(
+                                this.competition.competition_sessions?.[0]?.created_at
+                            );
+
+                            submissionsClosingAt = new Date(
+                                userStartingTime.getTime() +
+                                    this.competition.time_limit * 60 * 1000
+                            );
                         }
 
-                        if (this.competition.scheduled_end_at !== null) {
+                        if (
+                            submissionsClosingAt &&
+                            new Date() > submissionsClosingAt
+                        ) {
+                            this.hasEnded = true;
+
+                            if (
+                                !this.competition.scheduled_end_at ||
+                                this.competition.scheduled_end_at >
+                                    submissionsClosingAt
+                            ) {
+                                this.timeLimitReached = true;
+                            }
+                        }
+
+                        if (submissionsClosingAt !== null) {
                             this.timeInterval = setInterval(() => {
                                 let seconds =
-                                    (this.competition.scheduled_end_at!.getTime() -
+                                    (submissionsClosingAt!.getTime() -
                                         Date.now()) /
                                     1000;
                                 if (seconds < 0) {

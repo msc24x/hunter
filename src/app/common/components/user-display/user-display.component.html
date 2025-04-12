@@ -9,9 +9,11 @@
     class="user-name link-like"
     routerLink="/u/{{ userInfo?.id }}"
 >
-    {{ userInfo?.name?.trim() || "Anonymous" }}#{{ userInfo?.id }}
+    {{ userInfo?.name?.trim() || "Anonymous"
+    }}<span class="user-tag">#{{ userInfo?.id }}</span>
 </a>
 
 <span *ngIf="noClick" class="user-name">
-    {{ userInfo?.name?.trim() || "Anonymous" }}#{{ userInfo?.id }}
+    {{ userInfo?.name?.trim() || "Anonymous"
+    }}<span class="user-tag">#{{ userInfo?.id }}</span>
 </span>

@@ -201,9 +201,10 @@
 }
 
 #c_title {
-    font-weight: 400;
+    font-weight: 500;
     word-break: break-word;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    color: colors.$text_black;
 
     &.untitled {
         opacity: 0.3;
@@ -220,4 +221,5 @@
 
 #c_about {
     word-break: break-word;
+    color: rgb(24, 24, 24);
 }

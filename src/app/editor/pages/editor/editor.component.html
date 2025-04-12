@@ -224,7 +224,7 @@
                 "
             />
             <div id="schedule_end_label" class="label">
-                Close submissions at
+                Reject all submissions after
                 <infotip
                     message="When should the competition stop submissions and participation"
                 />
@@ -239,12 +239,59 @@
                 "
             />
 
-            <div class="label">
-                Visibility
-                <infotip
-                    message="Set your contest visibility (Public/Private)"
-                ></infotip>
-            </div>
+            <manual-error
+                [message]="contest_errors.scheduled_end_at"
+            ></manual-error>
+
+            <ng-template #timeLimitTmpl>
+                <h3 style="display: flex; align-items: center">
+                    Time Limit &nbsp; &nbsp;
+                    <mat-slide-toggle
+                        [(ngModel)]="timeLimitEnabled"
+                    ></mat-slide-toggle>
+                </h3>
+                <p class="info-like sticky">
+                    Limit how much time should a participant be allowed to spend
+                    in this contest?
+                </p>
+
+                <div class="duration-picker" *ngIf="timeLimitEnabled">
+                    <input
+                        type="number"
+                        [min]="0"
+                        name="hours"
+                        [(ngModel)]="timeLimit.hours"
+                        (change)="cleanTimeLimits()"
+                        (input)="cleanTimeLimits()"
+                    />
+                    <span>Hours</span>
+                    <input
+                        [min]="0"
+                        [max]="60"
+                        type="number"
+                        name="mins"
+                        [(ngModel)]="timeLimit.mins"
+                        (change)="cleanTimeLimits()"
+                        (input)="cleanTimeLimits()"
+                        [step]="15"
+                    />
+                    <span>Mins</span>
+                </div>
+
+                <manual-error
+                    [message]="contest_errors.time_limit"
+                ></manual-error>
+            </ng-template>
+
+            <ng-outlet
+                [ngTemplateOutlet]="timeLimitTmpl"
+                *ngIf="!competitionInfo.practice"
+            ></ng-outlet>
+
+            <h3>Visibility</h3>
+            <p class="info-like sticky">
+                Set your contest visibility (Public/Private)
+            </p>
 
             <div
                 id="visbility_controller"

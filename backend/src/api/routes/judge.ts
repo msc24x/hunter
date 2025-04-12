@@ -88,6 +88,29 @@ function safeRouteToQuestion(
                     );
                     return;
                 }
+
+                if (
+                    !question.competitions.practice &&
+                    question.competitions.time_limit
+                ) {
+                    var time_limit = question.competitions.time_limit;
+                    var time_limit_end_at =
+                        question.competitions.competition_sessions[0]
+                            .created_at;
+                    time_limit_end_at = new Date(
+                        time_limit_end_at.getTime() + time_limit * 60 * 1000
+                    );
+
+                    if (!models.competitions.hasNotEnded(time_limit_end_at)) {
+                        Util.sendResponse(
+                            res,
+                            resCode.forbidden,
+                            'Time limit for this contest has exceeded, cannot send any more submissions'
+                        );
+                        return;
+                    }
+                }
+
                 resolve(question as QuestionInfo);
             });
     });

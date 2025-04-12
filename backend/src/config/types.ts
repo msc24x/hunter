@@ -85,6 +85,7 @@ export type CompetitionInfo = {
     deleted_at: Date;
     scheduled_at: Date;
     scheduled_end_at: Date;
+    time_limit: number | null;
     rating: number;
     public: boolean;
     practice: boolean;

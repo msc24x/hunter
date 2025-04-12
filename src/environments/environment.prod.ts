@@ -51,6 +51,7 @@ export interface CompetitionInfo {
     deleted_at: Date | null;
     scheduled_at: Date | null;
     scheduled_end_at: Date | null;
+    time_limit: number | null;
     rating: number;
     public: boolean;
     practice: boolean;

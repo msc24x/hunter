@@ -32,6 +32,9 @@ function getPublicUserDetails(user_id: number) {
                     title: true,
                     created_at: true,
                     questions: {
+                        where: {
+                            deleted_at: null,
+                        },
                         select: {
                             _count: {
                                 select: {

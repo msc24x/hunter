@@ -28,26 +28,54 @@
         {{ competition.description || "No description provided by the host." }}
     </div>
     <br />
-    <div>
+    <br />
+
+    <div *ngIf="competition.scheduled_at || competition.scheduled_end_at">
+        <h3>
+            <fa-icon [icon]="clockIcon"></fa-icon>
+            Scheduling info
+        </h3>
         <div *ngIf="competition.scheduled_at" class="competition-start">
-            Starts at
-            {{ competition.scheduled_at | prettyDate }}
+            {{
+                startable
+                    ? "Started accepting submissions on "
+                    : "Will start accepting submissions on "
+            }}
+            <b>
+                {{ competition.scheduled_at | prettyDate }}
+            </b>
         </div>
 
         <div *ngIf="competition.scheduled_end_at" class="competition-end">
-            Ends at
-            {{ competition.scheduled_end_at | prettyDate }}
+            Closing the submissions after
+            <b>
+                {{ competition.scheduled_end_at | prettyDate }}
+            </b>
         </div>
     </div>
 
     <br />
 
-    <div>
+    <div *ngIf="competition.time_limit && !competition.practice">
         <h3>
-            {{ competition.questions?.length || 0 }} question{{
-                (competition.questions?.length || 0) === 1 ? "" : "s"
-            }}
+            <fa-icon [icon]="stopwatchIcon"></fa-icon>
+            Time limit
         </h3>
+        Once you start the contest, you will be given
+        <b>
+            {{ getTimeLimit().hours ? getTimeLimit().hours + " hours" : "" }}
+            {{ getTimeLimit().mins ? getTimeLimit().mins + " mins" : "" }} </b
+        >. So start when you are ready
+        {{
+            competition.scheduled_end_at
+                ? ", but ensure you begin in time, as submissions will close for the entire competition according to the schedule, even if you still have time remaining"
+                : ""
+        }}.
+    </div>
+    <br />
+
+    <div>
+        <h3>Questions</h3>
 
         <div class="tags">
             <ng-container
@@ -56,8 +84,12 @@
                 <div class="tag" *ngIf="quesCount > 0">
                     <span style="font-size: 1.2rem; font-weight: 500">
                         {{ quesCount }}
+                        <span style="font-size: 0.8rem">
+                            question{{ quesCount === 1 ? "" : "s" }}
+                            of type
+                        </span>
                     </span>
-                    <span style="font-size: 0.8rem">
+                    <span style="font-size: 1rem">
                         &nbsp;
                         <ques-type-label [ques_type]="i"></ques-type-label>
                     </span>
@@ -166,11 +198,13 @@
                     ></infotip>
 
                     <div id="duration_info">
-                        <fa-icon [icon]="clockIcon"></fa-icon>
                         <span style="width: max-content">
-                            &nbsp;
                             {{
-                                hasEnded ? "Submissions Closed" : timeRemaining
+                                hasEnded
+                                    ? timeLimitReached
+                                        ? "Time limit reached"
+                                        : "Submissions Closed"
+                                    : timeRemaining
                             }}
                         </span>
                     </div>
@@ -214,13 +248,44 @@
                         "
                     ></div>
 
-                    <p
+                    <div
                         *ngIf="this.competition.competition_sessions?.[0]?.created_at"
-                        class="info-like"
+                        class="info-like startup-info"
                     >
-                        Your started this competition on
-                        {{ this.competition.competition_sessions?.[0]?.created_at | prettyDate}}
-                    </p>
+                        <div>
+                            <fa-icon
+                                [icon]="ticketIcon"
+                                [size]="'xs'"
+                            ></fa-icon>
+                            You started this contest on
+                            {{ this.competition.competition_sessions?.[0]?.created_at | prettyDate}}
+                        </div>
+
+                        <div>
+                            <span
+                                *ngIf="
+                                    competition.time_limit &&
+                                    !competition.practice
+                                "
+                            >
+                                <fa-icon
+                                    [icon]="stopwatchIcon"
+                                    [size]="'xs'"
+                                ></fa-icon>
+                                Contest has a max time limit of
+                                {{
+                                    getTimeLimit().hours
+                                        ? getTimeLimit().hours + " hrs"
+                                        : ""
+                                }}
+                                {{
+                                    getTimeLimit().mins
+                                        ? getTimeLimit().mins + " mins"
+                                        : ""
+                                }}
+                            </span>
+                        </div>
+                    </div>
                 </label>
             </p>
         </div>
