@@ -360,7 +360,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                 },
                 // Plugins can be used directly in the button list
                 buttonList: [
-                    ['blockquote'],
+                    ['blockquote', 'formatBlock'],
                     [
                         'bold',
                         'underline',

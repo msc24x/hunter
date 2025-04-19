@@ -138,6 +138,11 @@ question-display {
     .se-resizing-bar {
         padding-inline: 1rem;
     }
+
+    .se-list-format {
+        max-height: 9rem;
+        border-radius: 0.5rem;
+    }
 }
 
 .katex-mathml {
