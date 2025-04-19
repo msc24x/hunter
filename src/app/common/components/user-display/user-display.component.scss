@@ -1,6 +1,10 @@
 :host {
     display: inline-flex;
     align-items: center;
+
+    * {
+        color: inherit;
+    }
 }
 
 .avatar {
@@ -12,5 +16,5 @@
 }
 
 .user-tag {
-    color: rgb(118, 118, 118);
+    opacity: 0.6;
 }

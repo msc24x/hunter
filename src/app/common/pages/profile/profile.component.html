@@ -62,7 +62,18 @@
                     </div>
                 </div>
                 <div class="field-row">
-                    <div class="label">Display Name</div>
+                    <div class="label">
+                        Display Name
+                        <p class="field-note">
+                            Your name is currently displayed as
+                            <span
+                                class="name-preview"
+                                matTooltip="Hunter users' name will have a suffix, which will be their user id"
+                            >
+                                {{ user.name || "Anonymous" }}#{{ user.id }}
+                            </span>
+                        </p>
+                    </div>
                     <div class="row">
                         <input
                             id="user_name_input"
@@ -72,15 +83,6 @@
                         />
                     </div>
                 </div>
-                <p class="field-note">
-                    Your name is currently displayed as
-                    <span
-                        class="name-preview"
-                        matTooltip="Hunter users' name will have a suffix, which will be their user id"
-                    >
-                        {{ user.name || "Anonymous" }}#{{ user.id }}
-                    </span>
-                </p>
 
                 <div class="field-row">
                     <div class="label">Your Blog/Website</div>
@@ -131,7 +133,10 @@
                 </div>
                 <div class="field-row">
                     <div class="label">
-                        Receive occasional communication mails from Hunter?
+                        Enable updates about new features & product changes
+                        <p class="field-note">
+                            Receive occasional communication mails from Hunter?
+                        </p>
                     </div>
                     <div class="row">
                         <mat-slide-toggle
@@ -140,9 +145,6 @@
                         ></mat-slide-toggle>
                     </div>
                 </div>
-                <p class="field-note">
-                    Enable updates about new features & product changes.
-                </p>
             </div>
             <div
                 id="profile_save_btn"

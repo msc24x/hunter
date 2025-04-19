@@ -249,19 +249,21 @@ function judgeMcqQuestion(req: Request, res: Response) {
                     return;
                 }
 
+                var resInfo = {
+                    expected: '',
+                    meta: '',
+                    output: '',
+                    success: success,
+                };
+
                 scoreboardService.updateResult(
                     user,
                     hunterExecutable,
-                    {
-                        expected: '',
-                        meta: '',
-                        output: '',
-                        success: success,
-                    },
+                    resInfo,
                     question
                 );
 
-                Util.sendResponse(res, resCode.success);
+                Util.sendResponseJson(res, resCode.success, resInfo);
             });
     });
 }
@@ -339,19 +341,21 @@ function judgeFillQuestion(req: Request, res: Response) {
                         return;
                     }
 
+                    var resInfo = {
+                        expected: '',
+                        meta: '',
+                        output: '',
+                        success: success,
+                    };
+
                     scoreboardService.updateResult(
                         user,
                         hunterExecutable,
-                        {
-                            expected: '',
-                            meta: '',
-                            output: '',
-                            success: success,
-                        },
+                        resInfo,
                         question
                     );
 
-                    Util.sendResponse(res, resCode.success);
+                    Util.sendResponseJson(res, resCode.success, resInfo);
                 });
         }
     );

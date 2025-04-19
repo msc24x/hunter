@@ -318,6 +318,7 @@
             <br />
 
             <div
+                *ngIf="competitionInfo.public"
                 class="participant-link"
                 (click)="shareAction()"
                 matTooltip="Click to share the participation link"

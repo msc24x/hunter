@@ -27,7 +27,8 @@
       "es2020",
       "es2022",
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "allowSyntheticDefaultImports": true, /* Allow 'import x from y' when a module doesn't have a default export. */
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

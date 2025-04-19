@@ -45,6 +45,7 @@ import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { faCircle, faClock } from '@fortawesome/free-regular-svg-icons';
 import { LocationStrategy } from '@angular/common';
+import confetti from 'canvas-confetti';
 
 @Component({
     selector: 'competition',
@@ -344,6 +345,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.enableSubmitControls(true);
                         this.scrollToTop();
 
+                        if ((res.body as ExecutionInfo)?.success) {
+                            this.showConfetti();
+                        }
+
                         this.evaluationChangeOccurred =
                             !this.evaluationChangeOccurred;
 
@@ -361,6 +366,15 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                     },
                 })
         );
+    }
+
+    async showConfetti() {
+        confetti({
+            particleCount: 10,
+            spread: 20,
+            origin: { y: 1, x: 0.95 },
+            angle: 105,
+        });
     }
 
     executeCode(samples = false) {
@@ -402,6 +416,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
                         if (res.status == resCode.success) {
                             this.solutionOutput = res.body as ExecutionInfo;
+
+                            if (this.solutionOutput.success) {
+                                this.showConfetti();
+                            }
                         } else {
                             this.solutionOutput.output = res.statusText;
                         }
