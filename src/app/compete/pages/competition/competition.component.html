@@ -107,7 +107,7 @@
     >
         {{
             notStarted && !startable
-                ? (competition.scheduled_end_at | timeAgo : true).replace(
+                ? (competition.scheduled_at | timeAgo : true).replace(
                       "ago",
                       "left to start"
                   )

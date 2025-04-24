@@ -528,10 +528,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             this.competition.scheduled_at.getTime() > Date.now()
                         ) {
                             this.notStarted = true;
+                            this.startable = false;
                         }
 
                         // If user did not start the session for a non-practice contest, put it in not started state
-                        if (
+                        else if (
                             !this.competition.competition_sessions?.[0]
                                 ?.created_at &&
                             !this.competition.practice
@@ -553,10 +554,17 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                                 this.competition.competition_sessions?.[0]?.created_at
                             );
 
-                            submissionsClosingAt = new Date(
+                            const timeLimitEndsAt = new Date(
                                 userStartingTime.getTime() +
                                     this.competition.time_limit * 60 * 1000
                             );
+
+                            if (
+                                !submissionsClosingAt ||
+                                timeLimitEndsAt < submissionsClosingAt
+                            ) {
+                                submissionsClosingAt = timeLimitEndsAt;
+                            }
                         }
 
                         if (
