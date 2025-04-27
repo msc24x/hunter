@@ -28,7 +28,7 @@ export interface UserInfo {
     competitions?: Array<CompetitionInfo>;
 }
 
-export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go';
+export type HunterLanguage = 'cpp' | 'py' | 'c' | 'js' | 'ts' | 'go' | 'java';
 
 export type QuestionVerification = {
     id: number;
@@ -163,6 +163,7 @@ export const templates = {
     js: "const readline = require('readline');\n\nconst stdio = readline.createInterface({\n    input: process.stdin,\n    output: process.stdout\n});\n\nfunction main() {\n    //write your code here\n}\nmain();",
     ts: "import * as readline from 'readline';\r\n\r\nconst stdio = readline.createInterface({\r\n    input: process.stdin,\r\n    output: process.stdout\r\n});\r\n\r\nfunction main(): void {\r\n    //write your code here\r\n}\r\n\r\nmain();\r\n",
     go: 'package main\n\nimport "fmt"\n\nfunc main() {\n  fmt.Println("Hello, World!")\n}',
+    java: 'class MainClass {\n    public static void main(String[] args) {\n        \n    }\n}',
 };
 
 export const resCode = {

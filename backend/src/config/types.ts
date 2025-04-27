@@ -101,7 +101,7 @@ export type CompetitionSession = {
 };
 
 export type CodeSolution = {
-    lang: 'py' | 'c' | 'cpp' | 'js' | 'ts' | 'go';
+    lang: 'py' | 'c' | 'cpp' | 'js' | 'ts' | 'go' | 'java';
     code: string;
 };
 

@@ -24,7 +24,7 @@ Users submit their solution code to the online judge built for Hunter, that dete
 ## Question Types Supported
 
 -   Coding questions (Hunter started from this)
-    -   Supported 6 programming languages
+    -   Supported 7 programming languages
     -   In built code execution and evaluation
 -   Multiple choice questions
 -   Fill in blank questions (Or basic input question)

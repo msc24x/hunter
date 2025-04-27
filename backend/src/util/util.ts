@@ -39,7 +39,7 @@ export class Util {
     }
 
     static getValidLangs(): string[] {
-        return ['c', 'cpp', 'py', 'js', 'ts', 'go'];
+        return ['c', 'cpp', 'py', 'js', 'ts', 'go', 'java'];
     }
 
     static isValidExecRequest(exec: HunterExecutable): boolean {

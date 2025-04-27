@@ -88,23 +88,19 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     }
 
     _updateEditorMode() {
-        switch (this.languageSelected) {
-            case 'c':
-            case 'cpp':
-                this.editor.session.setMode('ace/mode/c_cpp');
-                break;
-            case 'py':
-                this.editor.session.setMode('ace/mode/python');
-                break;
-            case 'js':
-                this.editor.session.setMode('ace/mode/javascript');
-                break;
-            case 'ts':
-                this.editor.session.setMode('ace/mode/typescript');
-                break;
-            case 'go':
-                this.editor.session.setMode('ace/mode/golang');
-                break;
+        const modeMap: { [key in HunterLanguage]: string } = {
+            c: 'ace/mode/c_cpp',
+            cpp: 'ace/mode/c_cpp',
+            py: 'ace/mode/python',
+            js: 'ace/mode/javascript',
+            ts: 'ace/mode/typescript',
+            go: 'ace/mode/golang',
+            java: 'ace/mode/java',
+        };
+
+        const mode = modeMap[this.languageSelected];
+        if (mode) {
+            this.editor.session.setMode(mode);
         }
     }
 
