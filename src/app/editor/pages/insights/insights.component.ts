@@ -80,7 +80,7 @@ export class InsightsComponent {
         private snackBar: MatSnackBar,
         private location: Location
     ) {
-        titleService.setTitle('Build • Hunter');
+        titleService.setTitle('Build - Hunter');
 
         this.competition_id = parseInt(
             this.activatedRoute.snapshot.paramMap.get('competition_id') || ''
@@ -148,7 +148,7 @@ export class InsightsComponent {
                     }
 
                     this.titleService.setTitle(
-                        `${tabName} • ${
+                        `${tabName} - ${
                             this.competitionInfo.title || 'Competition'
                         }`
                     );

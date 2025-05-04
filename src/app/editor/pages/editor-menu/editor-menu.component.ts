@@ -47,7 +47,7 @@ export class EditorMenuComponent implements OnInit {
         private router: Router,
         private titleService: Title
     ) {
-        this.titleService.setTitle('Workbench • Hunter');
+        this.titleService.setTitle('Workbench - Hunter');
         console.log(this.authService.user);
         this.user = this.authService.user;
 
@@ -58,8 +58,8 @@ export class EditorMenuComponent implements OnInit {
             if (this.user) {
                 this.titleService.setTitle(
                     `${
-                        this.user?.name ? this.user.name + ' • ' : ''
-                    }Workbench • Hunter`
+                        this.user?.name ? this.user.name + ' - ' : ''
+                    }Workbench - Hunter`
                 );
             }
         });

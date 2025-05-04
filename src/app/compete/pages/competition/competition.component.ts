@@ -139,7 +139,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.q_idx = idQues;
         }
 
-        titleService.setTitle('Participate • Hunter');
+        titleService.setTitle('Participate - Hunter');
 
         this.user = this.authService.user;
         this.isAuthenticated = this.authService.isAuthenticated.value;
@@ -650,11 +650,15 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         this.lastEditorContent();
 
-        this.titleService.setTitle(
-            `Q${this.questionSelected + 1} • ${
-                this.competition.title || 'Competition'
-            }`
-        );
+        if (this.questionSelected > 0) {
+            this.titleService.setTitle(
+                `Q${this.questionSelected + 1} - ${
+                    this.competition.title || 'Competition'
+                }`
+            );
+        } else {
+            this.titleService.setTitle(this.competition.title || 'Competition');
+        }
     }
 
     getLastSubmission() {

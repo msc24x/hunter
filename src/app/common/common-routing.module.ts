@@ -22,18 +22,19 @@ const routes: Routes = [
     },
     {
         'path': 'compete',
-        'title': 'Public Competitions • Hunter',
+        'title': 'Public Competitions - Hunter',
         'component': CompeteComponent,
     },
     {
         'path': 'u/:user_id',
-        'title': 'Anonymous user • Hunter',
+        'title': 'Anonymous user - Hunter',
 
         'component': ProfileComponent,
     },
     {
         'path': 'about',
-        'title': 'About • Hunter',
+        'title':
+            'Hunter - Open Source platform built for simplicity, speed, and control',
         'component': AboutComponent,
     },
 ];

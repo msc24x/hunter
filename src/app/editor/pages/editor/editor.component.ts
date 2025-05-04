@@ -110,7 +110,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         private titleService: Title,
         private snackBar: MatSnackBar
     ) {
-        titleService.setTitle('Build • Hunter');
+        titleService.setTitle('Build - Hunter');
 
         this.competition_id = parseInt(
             this.activatedRoute.snapshot.paramMap.get('competition_id') || ''
@@ -335,7 +335,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
 
         this.titleService.setTitle(
-            `Q${index + 1} • ${this.competitionInfo.title || 'Competition'}`
+            `Q${index + 1} - ${this.competitionInfo.title || 'Competition'}`
         );
 
         setTimeout(() => {
@@ -505,7 +505,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                     this.loading = false;
 
                     this.titleService.setTitle(
-                        `Build • ${this.competitionInfo.title || 'Competition'}`
+                        `Build - ${this.competitionInfo.title || 'Competition'}`
                     );
 
                     if (this.questionSelected !== -1) {
