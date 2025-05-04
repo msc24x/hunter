@@ -37,17 +37,20 @@ export class QuestionDisplayComponent implements OnChanges, OnDestroy {
         setTimeout(() => {
             this.suneditor?.destroy();
 
-            this.suneditor = suneditor.create('statement-content', {
-                katex: {
-                    src: katex,
-                    options: {
-                        output: 'mathml',
-                        displayMode: false,
+            this.suneditor = suneditor.create(
+                `statement-content-${this.questionInfo.id}`,
+                {
+                    katex: {
+                        src: katex,
+                        options: {
+                            output: 'mathml',
+                            displayMode: false,
+                        },
                     },
-                },
-                hideToolbar: true,
-                defaultStyle: 'font-family: appFont; font-size: 1.1rem;',
-            });
+                    hideToolbar: true,
+                    defaultStyle: 'font-family: appFont; font-size: 1.1rem;',
+                }
+            );
             this.suneditor.readOnly(true);
             this.suneditor.setContents(
                 this.getQuestionStatement(this.questionInfo.statement)

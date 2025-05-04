@@ -1,5 +1,5 @@
 <div id="question_title" [ngClass]="{ 'titleOnly': titleOnly }">
-    <span class="title_text">
+    <span class="title_text no-selection no-click">
         {{ questionInfo.title || "Untitled" }}
     </span>
     <br /><br />
@@ -20,12 +20,14 @@
 
 <br />
 
-<div id="question_statement" *ngIf="!titleOnly">
+<div id="question_statement" class="no-selection no-click" *ngIf="!titleOnly">
     <b>Statement</b>
     <br />
     <br />
-    <div id="statement-content"></div>
-    <!-- [innerHtml]="getQuestionStatement(questionInfo.statement)" -->
+    <div
+        [id]="'statement-content-' + questionInfo.id"
+        class="statement-container"
+    ></div>
     <br />
 
     <div *ngIf="questionInfo.sample_cases">

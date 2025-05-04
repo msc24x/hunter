@@ -198,6 +198,23 @@ question-display {
     }
 }
 
+.no-selection {
+    &,
+    & * {
+        -webkit-user-select: none !important; /* Safari */
+        -moz-user-select: none !important; /* Firefox */
+        -ms-user-select: none !important; /* IE10+/Edge */
+        user-select: none !important; /* Standard */
+    }
+
+    &.no-click {
+        &,
+        & * {
+            pointer-events: none !important;
+        }
+    }
+}
+
 // =============================
 // State Classes
 // =============================

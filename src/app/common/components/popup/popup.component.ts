@@ -51,26 +51,5 @@ export class PopupComponent implements OnInit {
 
     ngOnInit(): void {
         if (!this.visible) this.closeEvent.emit('cancel');
-
-        // document.addEventListener('keydown', (event) => {
-        //     if (event.key.startsWith('Esc')) {
-        //         document.querySelectorAll('popup').forEach((pelem) => {
-        //             const haveAnotherPopup =
-        //                 pelem.querySelectorAll('popup').length;
-
-        //             if (haveAnotherPopup) {
-        //                 return;
-        //             }
-
-        //             if (
-        //                 pelem.id === (this.el.nativeElement as HTMLElement).id
-        //             ) {
-
-        //                 console.log('esc on popup', pelem);
-        //                 this.closeEvent.emit('cancel');
-        //             }
-        //         });
-        //     }
-        // });
     }
 }

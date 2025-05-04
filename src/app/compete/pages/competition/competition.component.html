@@ -361,13 +361,14 @@
             </code-editor>
 
             <ng-template #alreadySubmittedInfo>
-                <p>
-                    <b
-                        *ngIf="
-                            questionSelectedInfo.results?.length != 0 &&
-                            isAuthenticated
-                        "
-                    >
+                <p
+                    (click)="openLastResponse()"
+                    *ngIf="
+                        isAuthenticated && questionSelectedInfo.results?.length
+                    "
+                    class="link-like"
+                >
+                    <b>
                         You submitted a response
                         {{
                             questionSelectedInfo.results?.[0]?.created_at
@@ -630,7 +631,7 @@
         <div
             class="section-toggle"
             (click)="bottomSection = !bottomSection"
-            matTooltip="Toggle (Ctrl + `) or Close (Esc)"
+            matTooltip="Toggle (Ctrl + `)"
         >
             <fa-icon [icon]="upIcon"></fa-icon>
         </div>

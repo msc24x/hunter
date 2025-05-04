@@ -170,8 +170,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
             if (event.ctrlKey && event.key == '`') {
                 this.bottomSection = !this.bottomSection;
-            } else if (event.key.startsWith('Esc')) {
-                this.bottomSection = false;
             }
 
             this.lastEditorContent(true);
@@ -242,6 +240,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             hours: Math.floor(this.competition.time_limit! / 60),
             mins: this.competition.time_limit! % 60,
         };
+    }
+
+    openLastResponse() {
+        this.bottomSection = true;
     }
 
     clearOutput() {
@@ -488,7 +490,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.loading--;
                     },
                     error: (err) => {
-                        console.log(err);
                         this.loading--;
                         this.fetchSubmissionMsg =
                             '* Not found any .' +

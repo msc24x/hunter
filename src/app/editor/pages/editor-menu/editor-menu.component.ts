@@ -43,12 +43,10 @@ export class EditorMenuComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private competitionsDataService: CompetitionsDataService,
-        private userDataService: UserDataService,
         private router: Router,
         private titleService: Title
     ) {
         this.titleService.setTitle('Workbench - Hunter');
-        console.log(this.authService.user);
         this.user = this.authService.user;
 
         this.authService.isAuthenticated.subscribe((isAuth) => {

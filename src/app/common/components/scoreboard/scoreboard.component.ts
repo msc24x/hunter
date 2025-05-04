@@ -88,7 +88,7 @@ export class ScoreboardComponent implements OnInit, OnChanges {
     fetchScores(question_id?: number) {
         this.loading = true;
         this.scoresDataService
-            .getScoresAll({
+            ?.getScoresAll({
                 comp_id: this.competition_id,
                 ques_id: question_id,
                 after: this.pages[this.pages.length - 1],

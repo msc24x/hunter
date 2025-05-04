@@ -178,7 +178,6 @@ router.get('/oauth/github', (req, res) => {
                                 getOrCreateUser(email!, usefulData).then(
                                     (user) => {
                                         if (!user) {
-                                            console.log('ether');
                                             res.sendStatus(400);
                                             return;
                                         }

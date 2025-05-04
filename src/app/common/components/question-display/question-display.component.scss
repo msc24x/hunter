@@ -21,11 +21,6 @@
 
 #question_title,
 #question_statement {
-    // background-color: white;
-    // padding: 16px;
-    // border-radius: 1rem;
-    // @include sweetBorder();
-
     font-size: 1.05rem;
 
     ques-type-label {
@@ -34,12 +29,7 @@
     }
 }
 
-// #question_title.titleOnly {
-//     background-color: ghostwhite;
-// }
-
 #question_statement {
     font-size: 1.05rem !important;
     flex-grow: 1;
-    // flex-basis: 70%;
 }
