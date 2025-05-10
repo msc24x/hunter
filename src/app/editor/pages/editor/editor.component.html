@@ -183,11 +183,11 @@
     heading="Change visibility?"
     id="public_status_confirm"
     (closeEvent)="handlePrivacyConfirmPopupEvent($event)"
-    [continueMessage]="'Yes, mark it as live'"
+    [continueMessage]="'Yes, mark it as public'"
     [destructive]="true"
 >
     <manual-error
-        message="Are you sure to set this competition's visibility to live? "
+        message="Are you sure to set this competition's visibility to public? "
     ></manual-error>
 
     <ng-outlet [ngTemplateOutlet]="contestWarnings"></ng-outlet>
@@ -311,7 +311,7 @@
                 >
                     <fa-icon [icon]="checkIcon" *ngIf="competitionInfo.public">
                     </fa-icon
-                    >&nbsp; LIVE
+                    >&nbsp; PUBLIC
                 </div>
             </div>
 

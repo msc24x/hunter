@@ -29,7 +29,7 @@ export class DropDownListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.itemSelected = this.items[0];
+        this.itemSelected = this.itemSelected || this.items[0];
     }
 
     expandList() {
