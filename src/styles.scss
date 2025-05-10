@@ -91,6 +91,10 @@ button.main,
     border-radius: 0.5rem !important;
 }
 
+.mat-mdc-snack-bar-action {
+    color: rgb(109, 65, 0) !important;
+}
+
 .mat-mdc-select-panel {
     border-radius: 1rem !important;
     @include sweetBorder;

@@ -204,13 +204,41 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     shareAction() {
-        navigator.share({
-            title: `Invitation link to "${this.competitionInfo.title}"`,
-            url: this.getParticipationLink(),
-            text: `\nYou are invited to participate in the above competition created by ${
-                this.user.name || 'a user'
-            }.\n(Hosted on Hunter, an open source contest hosting platform, with easy participation and automatic evaluation of participants.)`,
-        });
+        const linkText = `\nYou are invited to participate in the above competition created by ${
+            this.user.name || 'a user'
+        }.\n(Hosted on Hunter, an open source contest hosting platform, with easy participation and automatic evaluation of participants.)`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: `Invitation link to "${this.competitionInfo.title}"`,
+                url: this.getParticipationLink(),
+                text: linkText,
+            });
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+            // Use the modern API.  This is the preferred method as it's more secure
+            // and doesn't require adding elements to the DOM.
+            navigator.clipboard
+                .writeText(
+                    `Invitation link to "${
+                        this.competitionInfo.title
+                    }": ${this.getParticipationLink()}\n\n ${linkText}`
+                )
+                .then(
+                    () => {
+                        this.snackBar.open(
+                            'Link copied to clipboard',
+                            'Dismiss'
+                        );
+                    },
+                    () => {
+                        this.snackBar.open(
+                            `${this.getParticipationLink()} (Unable to auto share, please copy the link)`,
+                            'Dismiss',
+                            { duration: 0 }
+                        );
+                    }
+                );
+        }
     }
 
     getParticipationLink() {
