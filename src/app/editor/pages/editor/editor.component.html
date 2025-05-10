@@ -206,6 +206,50 @@
         <h2>Meta</h2>
 
         <div class="meta-section">
+            <h3>Visibility</h3>
+            <p class="info-like sticky">
+                Set your contest visibility (Public/Private)
+            </p>
+
+            <div
+                id="visbility_controller"
+                [ngClass]="{ 'public': competitionInfo.public }"
+            >
+                <div
+                    class="private"
+                    (click)="competitionInfo.public && onClickVisibility(false)"
+                >
+                    <fa-icon [icon]="checkIcon" *ngIf="!competitionInfo.public">
+                    </fa-icon>
+                    &nbsp; PRIVATE
+                </div>
+                <div
+                    class="public"
+                    (click)="!competitionInfo.public && onClickVisibility(true)"
+                >
+                    <fa-icon [icon]="checkIcon" *ngIf="competitionInfo.public">
+                    </fa-icon
+                    >&nbsp; PUBLIC
+                </div>
+            </div>
+
+            <div
+                *ngIf="competitionInfo.public"
+                class="participant-link"
+                (click)="shareAction()"
+                matTooltip="Click to share the participation link"
+            >
+                <span>
+                    <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
+                </span>
+                <span class="link-text"
+                    >Share link to the participants, and let the contest
+                    begin!</span
+                >
+            </div>
+        </div>
+
+        <div class="meta-section">
             <h3>Schedule</h3>
 
             <div id="schedule_label" class="label">
@@ -287,51 +331,9 @@
                 [ngTemplateOutlet]="timeLimitTmpl"
                 *ngIf="!competitionInfo.practice"
             ></ng-outlet>
+        </div>
 
-            <h3>Visibility</h3>
-            <p class="info-like sticky">
-                Set your contest visibility (Public/Private)
-            </p>
-
-            <div
-                id="visbility_controller"
-                [ngClass]="{ 'public': competitionInfo.public }"
-            >
-                <div
-                    class="private"
-                    (click)="competitionInfo.public && onClickVisibility(false)"
-                >
-                    <fa-icon [icon]="checkIcon" *ngIf="!competitionInfo.public">
-                    </fa-icon>
-                    &nbsp; PRIVATE
-                </div>
-                <div
-                    class="public"
-                    (click)="!competitionInfo.public && onClickVisibility(true)"
-                >
-                    <fa-icon [icon]="checkIcon" *ngIf="competitionInfo.public">
-                    </fa-icon
-                    >&nbsp; PUBLIC
-                </div>
-            </div>
-
-            <br />
-
-            <div
-                *ngIf="competitionInfo.public"
-                class="participant-link"
-                (click)="shareAction()"
-                matTooltip="Click to share the participation link"
-            >
-                <span>
-                    <fa-icon [icon]="shareIcon" size="lg"></fa-icon>
-                </span>
-                <span class="link-text"
-                    >Share link to the participants, and let the contest
-                    begin!</span
-                >
-            </div>
-
+        <div class="meta-section">
             <h3>Insights</h3>
 
             <div

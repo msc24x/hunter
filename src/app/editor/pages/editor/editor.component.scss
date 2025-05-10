@@ -23,6 +23,7 @@ popup {
 
     .section-side {
         width: 23%;
+        margin-bottom: 5rem;
 
         .meta-section {
             @include basicBack;
@@ -30,6 +31,7 @@ popup {
             border-radius: 2rem;
             height: fit-content;
             padding-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
     }
 
@@ -83,6 +85,7 @@ popup {
     cursor: pointer;
     transition: 100ms;
     gap: 0.4rem;
+    margin-top: 1rem;
 }
 
 .insight-details {
@@ -226,6 +229,10 @@ popup {
     border-color: transparent;
     color: brown;
     margin-top: 1rem;
+
+    h3 {
+        font-style: italic;
+    }
 }
 
 .vertical_flex {
