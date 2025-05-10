@@ -49,6 +49,8 @@
             align-items: center;
             gap: 0.3rem;
             flex-grow: 1;
+            @include sweetBorder;
+            border-width: 2px;
 
             & > div {
                 white-space: nowrap;
@@ -69,16 +71,19 @@
         .points {
             background-color: #fff1e7;
             color: brown;
+            border-color: rgba(165, 42, 42, 0.5);
         }
 
         .competitions {
-            background-color: #fffeed;
-            color: #ff6464;
+            background-color: #fff4f1;
+            color: #ff5353;
+            border-color: #ff47478b;
         }
 
         .participated {
-            background-color: aliceblue;
+            background-color: #fff2f2;
             color: chocolate;
+            border-color: rgba(210, 105, 30, 0.52);
         }
     }
 
