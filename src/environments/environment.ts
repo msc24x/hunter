@@ -59,6 +59,7 @@ export interface CompetitionInfo {
     practice: boolean;
     questions?: QuestionInfo[];
     competition_sessions?: CompetitionSession[];
+    competition_invites?: CompetitionInvite[];
 }
 
 export type CompetitionSession = {

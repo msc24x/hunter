@@ -752,6 +752,7 @@
         </div>
 
         <scoreboard
+            *ngIf="!competition.hidden_scoreboard"
             [competitionInfo]="competition"
             [competition_id]="c_id"
         ></scoreboard>

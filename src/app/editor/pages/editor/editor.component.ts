@@ -9,6 +9,7 @@ import {
     faCircleCheck,
     faCircleXmark,
     faDownload,
+    faEnvelope,
     faEye,
     faEyeSlash,
     faMinusCircle,
@@ -58,6 +59,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     trashUpIcon = faTrashArrowUp;
     magicIcon = faWandMagicSparkles;
     guideIcon = faBook;
+    inviteIcon = faEnvelope;
 
     correctIcon = faCheckDouble;
     minusIcon = faMinusCircle;
@@ -92,6 +94,12 @@ export class EditorComponent implements OnInit, OnDestroy {
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
     eventPopup = new BehaviorSubject<string>('');
+
+    inviteP = {
+        input: '',
+        invites: [] as string[],
+    };
+    showInviteP = false;
 
     errors: any = {};
     contest_errors: any = {};
@@ -711,6 +719,20 @@ export class EditorComponent implements OnInit, OnDestroy {
                         this.loading = false;
                     },
                 });
+        }
+    }
+
+    handleInvitesEvent(event: string) {
+        if (event == 'cancel') {
+            this.showInviteP = false;
+            return;
+        }
+    }
+
+    handleTempEmailBlur() {
+        if (this.inviteP.input) {
+            this.inviteP.invites.push(this.inviteP.input);
+            this.inviteP.input = '';
         }
     }
 }

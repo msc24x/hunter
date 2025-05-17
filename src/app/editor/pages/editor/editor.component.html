@@ -35,6 +35,27 @@
 </popup>
 
 <popup
+    id="invite_participants"
+    heading="Enter emails to send invites"
+    [hidden]="!showInviteP"
+    (closeEvent)="handleInvitesEvent($event)"
+    [showControls]="true"
+    [destructive]="false"
+    [continueMessage]="'Send invite emails'"
+>
+    <div>
+        <div *ngFor="let inviteEmail of inviteP.invites">{{ inviteEmail }}</div>
+        <input
+            type="email"
+            name="email"
+            [(ngModel)]="inviteP.input"
+            email
+            (blur)="handleTempEmailBlur()"
+        />
+    </div>
+</popup>
+
+<popup
     heading="Destructive Action"
     id="delete_comp_popup"
     (closeEvent)="handleDeleteCompPopupEvent($event)"
@@ -274,6 +295,14 @@
 
             <div *ngIf="competitionInfo.visibility == 'INVITE'">
                 <h3>Invites</h3>
+                <p class="info-like sticky">
+                    People exclusively invited to participate in this
+                    competition
+                </p>
+
+                <div class="button main" (click)="showInviteP = true">
+                    Invite participants
+                </div>
             </div>
 
             <h3 style="display: flex; align-items: center">
