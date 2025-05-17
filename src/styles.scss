@@ -47,6 +47,10 @@ button.main,
     font-weight: 400;
     margin: 2px;
 
+    &.sim {
+        border-color: #9ea4d0;
+    }
+
     &:hover {
         background-color: #f1f3ff;
 

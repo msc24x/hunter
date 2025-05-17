@@ -36,21 +36,37 @@
 
 <popup
     id="invite_participants"
-    heading="Enter emails to send invites"
+    heading="Invite participants"
     [hidden]="!showInviteP"
     (closeEvent)="handleInvitesEvent($event)"
     [showControls]="true"
     [destructive]="false"
     [continueMessage]="'Send invite emails'"
 >
-    <div>
-        <div *ngFor="let inviteEmail of inviteP.invites">{{ inviteEmail }}</div>
+    <h3>Email addresses</h3>
+    <p>Type or paste in emails below, separated by commas</p>
+
+    <div class="emails-input-container">
+        <div class="emails-prev">
+            <div *ngFor="let inviteEmail of inviteP.invites" class="email-prev">
+                {{ inviteEmail }}
+                <span
+                    class="rem-temp-email"
+                    matTooltip="Remove email"
+                    (click)="removeTempEmail(inviteEmail)"
+                >
+                    <fa-icon [icon]="minusIcon" size="xs"></fa-icon>
+                </span>
+            </div>
+        </div>
         <input
             type="email"
             name="email"
             [(ngModel)]="inviteP.input"
             email
-            (blur)="handleTempEmailBlur()"
+            (input)="handleTempEmail()"
+            (blur)="handleTempEmail(true)"
+            placeholder="Type emails"
         />
     </div>
 </popup>

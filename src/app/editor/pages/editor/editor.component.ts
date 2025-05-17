@@ -13,6 +13,7 @@ import {
     faEye,
     faEyeSlash,
     faMinusCircle,
+    faPaperPlane,
     faPenToSquare,
     faShare,
     faShareNodes,
@@ -59,7 +60,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     trashUpIcon = faTrashArrowUp;
     magicIcon = faWandMagicSparkles;
     guideIcon = faBook;
-    inviteIcon = faEnvelope;
+    inviteIcon = faPaperPlane;
 
     correctIcon = faCheckDouble;
     minusIcon = faMinusCircle;
@@ -729,10 +730,52 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
     }
 
-    handleTempEmailBlur() {
-        if (this.inviteP.input) {
-            this.inviteP.invites.push(this.inviteP.input);
-            this.inviteP.input = '';
+    isValidEmailRobust(emailString: string) {
+        if (typeof emailString !== 'string') {
+            return false;
         }
+        // More robust regex (still not 100% RFC 5322 compliant but covers more cases)
+        const emailRegex =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return emailRegex.test(emailString);
+    }
+
+    handleTempEmail(blur = false) {
+        const safePushEmail = (email: string) => {
+            email = email.trim();
+
+            if (
+                email &&
+                !this.inviteP.invites.includes(email) &&
+                this.isValidEmailRobust(email)
+            ) {
+                this.inviteP.invites.push(email);
+            }
+        };
+
+        if (
+            this.inviteP.input &&
+            this.isValidEmailRobust(this.inviteP.input) &&
+            blur
+        ) {
+            safePushEmail(this.inviteP.input);
+            this.inviteP.input = '';
+
+            return;
+        }
+
+        if (this.inviteP.input.includes(',')) {
+            this.inviteP.input.split(',').forEach((i) => safePushEmail(i));
+
+            setTimeout(() => {
+                this.inviteP.input = '';
+            });
+        }
+
+        return true;
+    }
+
+    removeTempEmail(email: string) {
+        this.inviteP.invites = this.inviteP.invites.filter((i) => i !== email);
     }
 }

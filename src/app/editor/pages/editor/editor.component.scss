@@ -127,6 +127,43 @@
     cursor: pointer;
 }
 
+#invite_participants {
+    .emails-input-container {
+        @include sweetBorder;
+        padding: 0.5rem;
+        border-radius: 1rem;
+    }
+
+    .emails-prev {
+        max-width: 32rem;
+    }
+    .email-prev {
+        width: fit-content;
+        display: inline-block;
+        margin: 0 6px 6px 0;
+        background: #cac6ee;
+        border-radius: 0.5rem;
+        padding-inline: 4px;
+        font-size: 1.1rem;
+        cursor: default;
+
+        fa-icon {
+            opacity: 0.7;
+        }
+
+        .rem-temp-email {
+            &:hover {
+                color: red;
+                cursor: pointer;
+            }
+        }
+    }
+
+    input {
+        width: calc(100% - 2.1rem);
+    }
+}
+
 #created_at {
     background-color: whitesmoke;
 
