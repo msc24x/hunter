@@ -513,8 +513,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                 if (res.body) {
                     if (update_competition) {
                         this.competitionInfo = res.body as CompetitionInfo;
-                        this.toggleVisibility();
-                        this.toggleVisibility();
+                        this.toggleVisibility(this.competitionInfo.visibility);
 
                         if (!this.competitionInfo.time_limit) {
                             this.timeLimitEnabled = false;
@@ -565,8 +564,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.fetchQuestions();
     }
 
-    toggleVisibility() {
-        this.competitionInfo.public = !this.competitionInfo.public;
+    toggleVisibility(status: string) {
+        this.competitionInfo.visibility = status;
     }
 
     cleanTimeLimits() {
@@ -644,7 +643,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     handlePrivacyConfirmPopupEvent(event: string) {
         if (event == 'continue') {
-            this.toggleVisibility();
+            this.toggleVisibility('PUBLIC');
         }
 
         this.showPopup(false, 'public_status_confirm');
@@ -662,11 +661,13 @@ export class EditorComponent implements OnInit, OnDestroy {
         } else guide.style.display = 'none';
     }
 
-    onClickVisibility(isPublic = true) {
-        if (isPublic) {
+    onClickVisibility(status: string) {
+        if (status == this.competitionInfo.visibility) return;
+
+        if (status == 'PUBLIC') {
             this.showPopup(true, 'public_status_confirm');
         } else {
-            this.toggleVisibility();
+            this.toggleVisibility(status);
         }
     }
 

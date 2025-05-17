@@ -21,6 +21,7 @@ model competitions {
   description      String?     @db.VarChar(456)
   created_at       DateTime    @db.DateTime(0)
   deleted_at       DateTime?   @db.DateTime(0)
+  hidden_scoreboard       Boolean     @default(false)
   updated_at       DateTime    @db.DateTime(0)
   rating           Int         @default(0)
   visibility       Visibility  @default(PRIVATE)

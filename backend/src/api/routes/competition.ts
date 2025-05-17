@@ -136,7 +136,9 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                 return;
             }
 
-            const markingPublic = !competition.public && competitionBody.public;
+            const markingPublic =
+                competition.visibility != competitionBody.visibility &&
+                competitionBody.visibility == 'PUBLIC';
 
             client.competitions
                 .update({
@@ -147,7 +149,8 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                     data: {
                         description: competitionBody.description || '',
                         title: competitionBody.title || '',
-                        public: competitionBody.public,
+                        visibility: competitionBody.visibility,
+                        hidden_scoreboard: competitionBody.hidden_scoreboard,
                         scheduled_at: competitionBody.scheduled_at
                             ? new Date(competitionBody.scheduled_at)
                             : null,

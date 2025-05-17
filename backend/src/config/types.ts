@@ -89,6 +89,7 @@ export type CompetitionInfo = {
     time_limit: number | null;
     rating: number;
     public: boolean;
+    hidden_scoreboard: boolean;
     practice: boolean;
 };
 

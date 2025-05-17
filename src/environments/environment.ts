@@ -45,6 +45,7 @@ export interface CompetitionInfo {
     host_user_id: number;
     host_user?: UserInfo;
     title: string;
+    hidden_scoreboard: boolean;
     visibility: string;
     description: string;
     created_at: Date;

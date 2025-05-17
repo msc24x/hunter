@@ -190,6 +190,7 @@ popup {
         color: whitesmoke;
         padding: 10px;
         text-align: center;
+        background-color: #858585;
 
         -webkit-user-select: none; /* Safari */
         -moz-user-select: none; /* Firefox */
@@ -203,24 +204,16 @@ popup {
         }
     }
 
-    .public {
+    .public.selected {
         background-color: crimson;
     }
 
-    .private {
+    .private.selected {
         background-color: rgb(32 113 186);
     }
 
-    &.public {
-        .private {
-            background-color: #858585;
-        }
-    }
-
-    &:not(.public) {
-        .public {
-            background-color: #858585;
-        }
+    .invite.selected {
+        background-color: purple;
     }
 }
 

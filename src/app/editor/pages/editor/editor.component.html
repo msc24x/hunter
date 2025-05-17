@@ -207,42 +207,58 @@
 
         <div class="meta-section">
             <h3>Visibility</h3>
-            <p class="info-like sticky">
-                Set your contest visibility (Public/Private)
-            </p>
+            <p class="info-like sticky">Set your contest visibility</p>
 
             <div
                 id="visbility_controller"
-                [ngClass]="{ 'public': competitionInfo.public }"
+                ngClass="{{ competitionInfo.visibility }}"
             >
                 <div
                     class="private"
-                    (click)="competitionInfo.public && onClickVisibility(false)"
+                    [ngClass]="{
+                        'selected': competitionInfo.visibility == 'PRIVATE'
+                    }"
+                    (click)="onClickVisibility('PRIVATE')"
                 >
-                    <fa-icon [icon]="checkIcon" *ngIf="!competitionInfo.public">
+                    <fa-icon
+                        [icon]="checkIcon"
+                        *ngIf="competitionInfo.visibility == 'PRIVATE'"
+                    >
                     </fa-icon>
                     &nbsp; PRIVATE
                 </div>
                 <div
                     class="invite"
-                    (click)="competitionInfo.public && onClickVisibility(false)"
+                    [ngClass]="{
+                        'selected': competitionInfo.visibility == 'INVITE'
+                    }"
+                    (click)="onClickVisibility('INVITE')"
                 >
-                    <fa-icon [icon]="checkIcon" *ngIf="!competitionInfo.public">
+                    <fa-icon
+                        [icon]="checkIcon"
+                        *ngIf="competitionInfo.visibility == 'INVITE'"
+                    >
                     </fa-icon>
                     &nbsp; INVITE
                 </div>
                 <div
                     class="public"
-                    (click)="!competitionInfo.public && onClickVisibility(true)"
+                    [ngClass]="{
+                        'selected': competitionInfo.visibility == 'PUBLIC'
+                    }"
+                    (click)="onClickVisibility('PUBLIC')"
                 >
-                    <fa-icon [icon]="checkIcon" *ngIf="competitionInfo.public">
+                    <fa-icon
+                        [icon]="checkIcon"
+                        *ngIf="competitionInfo.visibility == 'PUBLIC'"
+                    >
                     </fa-icon
                     >&nbsp; PUBLIC
                 </div>
             </div>
 
             <div
-                *ngIf="competitionInfo.public"
+                *ngIf="competitionInfo.visibility == 'PUBLIC'"
                 class="participant-link"
                 (click)="shareAction()"
                 matTooltip="Click to share the participation link"
@@ -255,6 +271,22 @@
                     begin!</span
                 >
             </div>
+
+            <div *ngIf="competitionInfo.visibility == 'INVITE'">
+                <h3>Invites</h3>
+            </div>
+
+            <h3 style="display: flex; align-items: center">
+                Hide Scoreboard? &nbsp; &nbsp;
+                <mat-slide-toggle
+                    [(ngModel)]="competitionInfo.hidden_scoreboard"
+                ></mat-slide-toggle>
+            </h3>
+            <p class="info-like sticky">
+                Enabling it would keep the scoreboard hidden from every
+                participant, and they won't be able to see who else participated
+                and how well anyone else performed.
+            </p>
         </div>
 
         <div class="meta-section">
