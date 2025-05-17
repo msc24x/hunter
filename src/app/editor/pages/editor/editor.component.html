@@ -224,6 +224,14 @@
                     &nbsp; PRIVATE
                 </div>
                 <div
+                    class="invite"
+                    (click)="competitionInfo.public && onClickVisibility(false)"
+                >
+                    <fa-icon [icon]="checkIcon" *ngIf="!competitionInfo.public">
+                    </fa-icon>
+                    &nbsp; INVITE
+                </div>
+                <div
                     class="public"
                     (click)="!competitionInfo.public && onClickVisibility(true)"
                 >

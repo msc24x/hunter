@@ -2,6 +2,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Visibility {
+  PRIVATE
+  PUBLIC
+  INVITE
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DB_URL")
@@ -17,6 +23,7 @@ model competitions {
   deleted_at       DateTime?   @db.DateTime(0)
   updated_at       DateTime    @db.DateTime(0)
   rating           Int         @default(0)
+  visibility       Visibility  @default(PRIVATE)
   public           Boolean     @default(false)
   practice         Boolean     @default(false)
   scheduled_at     DateTime?   @db.DateTime(0)
@@ -24,6 +31,7 @@ model competitions {
   time_limit       Int?
   questions        questions[]
   competition_sessions        competition_session[]
+  competition_invites        competition_invite[]
 }
 
 model competition_session {
@@ -35,6 +43,18 @@ model competition_session {
   competition_id Int
   competition        competitions       @relation(fields: [competition_id], references: [id], onDelete: NoAction)
 
+}
+
+model competition_invite {
+  id               Int         @id @default(autoincrement())
+  uuid           String      @default(uuid())
+  created_at       DateTime    @default(now()) @db.DateTime(0)
+  accepted_at       DateTime?    @db.DateTime(0)
+  email       String?        @db.VarChar(330)
+  user_id     Int
+  user        users       @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  competition_id Int
+  competition        competitions       @relation(fields: [competition_id], references: [id], onDelete: NoAction)
 }
 
 model files {
@@ -130,4 +150,5 @@ model users {
   evaluations       results[]      @relation("evaluator")
   session           session?
   competition_sessions        competition_session[]
+  competition_invites        competition_invite[]
 }

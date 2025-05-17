@@ -45,6 +45,7 @@ export interface CompetitionInfo {
     host_user_id: number;
     host_user?: UserInfo;
     title: string;
+    visibility: string;
     description: string;
     created_at: Date;
     updated_at: Date;
@@ -66,6 +67,18 @@ export type CompetitionSession = {
     competition_id: number;
     competitions?: CompetitionInfo;
     created_at: Date;
+};
+
+export type CompetitionInvite = {
+    id: number;
+    uuid: string;
+    email: string;
+    user_id: number;
+    user_info?: UserInfo;
+    competition_id: number;
+    competitions?: CompetitionInfo;
+    created_at: Date;
+    accepted_at: Date | null;
 };
 
 export type HunterExecutable = {
