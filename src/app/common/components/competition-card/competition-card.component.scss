@@ -21,8 +21,6 @@
     transition: 200ms;
     cursor: pointer;
     @include sweetBorder();
-    height: 100%;
-    box-sizing: border-box;
 
     &:hover {
         box-shadow: 0 1rem 2rem -2rem black;

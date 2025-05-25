@@ -515,6 +515,11 @@ router.get('/competitions', authenticate, (req, res) => {
         params.includeSelf = false;
     }
 
+    if (params.invited && !user) {
+        Util.sendResponseJson(res, resCode.success, []);
+        return;
+    }
+
     var orParams: any[] = [];
     var andParams = [];
     var orderBy: any = {};
