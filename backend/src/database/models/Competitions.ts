@@ -45,6 +45,18 @@ export class Competitions {
         });
     }
 
+    static async setVisibility(
+        id: number,
+        vis: 'PRIVATE' | 'PUBLIC' | 'INVITE'
+    ) {
+        const client = Container.get(DatabaseProvider).client();
+
+        return await client.competitions.update({
+            where: { id: id },
+            data: { visibility: vis },
+        });
+    }
+
     static sendInviteEmailToPending(competition_id: number) {
         const client = Container.get(DatabaseProvider).client();
 

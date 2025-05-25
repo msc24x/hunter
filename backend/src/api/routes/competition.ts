@@ -506,6 +506,7 @@ router.get('/competitions', authenticate, (req, res) => {
     const params = {
         query: req.query.query?.toString() || '',
         includeSelf: req.query.includeSelf?.toString() === 'true',
+        invited: req.query.invited?.toString() === 'true',
         liveStatus: req.query.liveStatus?.toString() || 'all',
         orderBy: req.query.orderBy?.toString() || 'desc',
     };
@@ -529,6 +530,11 @@ router.get('/competitions', authenticate, (req, res) => {
 
     if (params.includeSelf) {
         andParams.push({ host_user_id: user!.id });
+    } else if (params.invited && user) {
+        andParams.push({
+            visibility: 'INVITE',
+            competition_invites: { some: { user_id: user.id } },
+        });
     } else {
         andParams.push({ visibility: 'PUBLIC' });
     }
@@ -578,6 +584,15 @@ router.get('/competitions', authenticate, (req, res) => {
                         name: true,
                     },
                 },
+                _count: {
+                    select: {
+                        questions: {
+                            where: {
+                                deleted_at: null,
+                            },
+                        },
+                    },
+                },
             },
         })
         .then((competitions) => {
@@ -589,7 +604,10 @@ router.get('/competitions', authenticate, (req, res) => {
             }
             Util.sendResponseJson(res, resCode.success, competitions);
         })
-        .catch((err) => Util.sendResponse(res, resCode.serverError, err));
+        .catch((err) => {
+            console.error(err);
+            Util.sendResponse(res, resCode.serverError, err);
+        });
 });
 
 module.exports = router;

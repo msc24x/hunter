@@ -699,10 +699,7 @@ router.get(
             })
             .then(async (competition) => {
                 // If not found, then not found
-                if (
-                    !competition ||
-                    (!user && competition.visibility !== 'PUBLIC')
-                ) {
+                if (!competition) {
                     Util.sendResponse(res, resCode.notFound);
                     return;
                 }
@@ -714,6 +711,12 @@ router.get(
                         await Competitions.getInvites(competition.id);
 
                     Util.sendResponseJson(res, resCode.success, response);
+                    return;
+                }
+
+                // If not public, then not found
+                if (competition.visibility !== 'PUBLIC') {
+                    Util.sendResponse(res, resCode.notFound);
                     return;
                 }
 

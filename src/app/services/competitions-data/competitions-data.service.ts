@@ -324,6 +324,8 @@ export class CompetitionsDataService {
             httpParams = httpParams.set('orderBy', params.orderBy);
         if (params?.includeSelf)
             httpParams = httpParams.set('includeSelf', params.includeSelf);
+        if (params?.invited)
+            httpParams = httpParams.set('invited', params.invited);
 
         const promise = new Promise<Array<CompetitionInfo>>(
             (resolve, reject) => {

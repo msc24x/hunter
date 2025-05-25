@@ -97,6 +97,7 @@ router.post(
                                     )
                                 );
                                 Competitions.sendInviteEmailToPending(comp_id);
+                                Competitions.setVisibility(comp_id, 'INVITE');
                                 return;
                             },
                             (err) => {
@@ -211,7 +212,11 @@ router.delete(
             })
             .then((invite) => {
                 Util.sendResponse(res, resCode.success);
-                sendInviteRemovedEmail(invite as CompetitionInvite);
+
+                // Inform if user had accepted it
+                if (invite.accepted_at) {
+                    sendInviteRemovedEmail(invite as CompetitionInvite);
+                }
             })
             .catch((err) => {
                 console.error(err);

@@ -77,6 +77,12 @@
     @include sweetBorder();
 }
 
+@mixin ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @mixin inputText {
     border-radius: 1rem;
     color: colors.$text_black;

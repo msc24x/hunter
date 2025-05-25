@@ -26,6 +26,7 @@ import {
     faBug,
     faCheckCircle,
     faChevronUp,
+    faEdit,
     faEnvelopeOpenText,
     faFileCode,
     faFlag,
@@ -67,6 +68,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     practiceIcon = faVolleyball;
     ticketIcon = faTicket;
     stopwatchIcon = faStopwatch;
+    editIcon = faEdit;
 
     showInstructionP = false;
     showSignInP = false;

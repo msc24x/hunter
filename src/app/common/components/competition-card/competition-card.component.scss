@@ -1,0 +1,110 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+:host {
+    display: block;
+}
+
+.competition_card {
+    display: block;
+    color: inherit;
+    margin-bottom: 0.5rem;
+    padding: 16px;
+    border-radius: 1rem;
+    border-color: black;
+    border-width: 110px;
+    height: fit-content;
+    background-color: colors.$dim_white;
+    margin-inline: auto;
+    max-width: 62rem;
+    transition: 200ms;
+    cursor: pointer;
+    @include sweetBorder();
+    height: 100%;
+    box-sizing: border-box;
+
+    &:hover {
+        box-shadow: 0 1rem 2rem -2rem black;
+        transform: translateY(-0.2rem);
+    }
+
+    &:active {
+        scale: 0.99;
+    }
+
+    .detail-tag {
+        background-color: rgba(128, 128, 128, 0.1);
+        border-radius: 0.6rem;
+        margin-block: 0.3rem;
+        padding: 4px;
+        padding-inline: 8px;
+        margin-right: 4px;
+        width: fit-content;
+        display: inline-flex;
+        @include sweetBorder;
+
+        &.live {
+            color: crimson;
+            border-color: crimson;
+            background-color: colors.$ls;
+        }
+
+        &.ques-tag {
+            color: darkblue;
+            background: #0000ff13;
+            border-color: #00008b6e;
+        }
+    }
+}
+
+#c_title {
+    font-weight: 500;
+    word-break: break-word;
+    font-size: 1.3rem;
+    color: colors.$text_black;
+
+    &.untitled {
+        opacity: 0.3;
+    }
+
+    &.short {
+        @include ellipsis;
+        max-width: 100%;
+    }
+}
+#c_host_user {
+    margin-left: 4px;
+    margin-top: 6px;
+    padding: 4px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: inherit;
+}
+
+#c_about {
+    word-break: break-word;
+    color: rgb(24, 24, 24);
+}
+
+@media only screen and (max-width: 620px) {
+    .competition_card {
+        font-size: 0.8rem;
+
+        #c_title {
+            font-size: 1.1rem;
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .competition_card {
+        font-size: 0.8rem;
+
+        #c_title {
+            font-size: 0.9rem;
+        }
+    }
+}

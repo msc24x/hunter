@@ -49,6 +49,7 @@ import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { CompetitionCardComponent } from './components/competition-card/competition-card.component';
 
 @NgModule({
     declarations: [
@@ -89,6 +90,7 @@ import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
         QuestionDisplayComponent,
         NgKatexComponent,
         SpinnerComponent,
+        CompetitionCardComponent,
     ],
     imports: [
         AngularCommonModule,

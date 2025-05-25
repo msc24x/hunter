@@ -733,8 +733,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if (event == 'continue') {
+        if (event == 'continue' && this.inviteP.invites.length) {
             this.submitInvites();
+        } else {
+            this.snackBar.open('Please provide the emails first to continue');
         }
     }
 
@@ -841,6 +843,8 @@ export class EditorComponent implements OnInit, OnDestroy {
                     this.competitionInfo.competition_invites = res.body!;
                     this.loading = false;
                     this.showInviteP = false;
+                    this.inviteP.invites = [];
+                    this.inviteP.input = '';
                     this.snackBar.open('Invite has been sent');
                 },
                 error: (error) => {

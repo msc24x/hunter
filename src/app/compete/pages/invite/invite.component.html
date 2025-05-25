@@ -12,10 +12,10 @@
             <i>{{ invite.competition?.title || "Untitled" }}</i>
         </h2>
         <p>
+            Invited by the host
             <user-display
                 [userInfo]="invite.competition?.host_user"
             ></user-display>
-            has invited you to join their contest:<br />
         </p>
         <p>
             {{

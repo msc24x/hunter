@@ -40,6 +40,10 @@ export type QuestionVerification = {
     question_id: number;
 };
 
+export interface CompetitionInfoCounts {
+    questions: number;
+}
+
 export interface CompetitionInfo {
     id: number;
     host_user_id: number;
@@ -59,6 +63,8 @@ export interface CompetitionInfo {
     questions?: QuestionInfo[];
     competition_sessions?: CompetitionSession[];
     competition_invites?: CompetitionInvite[];
+
+    _count: CompetitionInfoCounts;
 }
 
 export type CompetitionSession = {
