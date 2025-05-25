@@ -1,5 +1,5 @@
-&nbsp;<img
-    *ngIf="userInfo"
+<img
+    *ngIf="userInfo && !noAvatar"
     src="{{ userInfo.avatar_url || '/assets/empty-profile.webp' }}"
     alt="user-avatar"
     class="avatar"
@@ -9,11 +9,15 @@
     class="user-name link-like"
     routerLink="/u/{{ userInfo?.id }}"
 >
-    {{ userInfo?.name?.trim() || "Anonymous"
-    }}<span class="user-tag">#{{ userInfo?.id }}</span>
+    <span class="name-text">
+        {{ userInfo?.name?.trim() || "Anonymous" }}
+    </span>
+    <span class="user-tag">#{{ userInfo?.id }}</span>
 </a>
 
 <span *ngIf="noClick" class="user-name">
-    {{ userInfo?.name?.trim() || "Anonymous"
-    }}<span class="user-tag">#{{ userInfo?.id }}</span>
+    <span class="name-text">
+        {{ userInfo?.name?.trim() || "Anonymous" }}
+    </span>
+    <span class="user-tag">#{{ userInfo?.id }}</span>
 </span>

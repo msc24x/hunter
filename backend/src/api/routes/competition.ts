@@ -56,7 +56,6 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
             data: {
                 title: req.body.title,
                 description: req.body.description,
-                public: false,
                 practice: practice,
                 created_at: new Date(),
                 host_user_id: res.locals.user.id,
@@ -136,7 +135,9 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                 return;
             }
 
-            const markingPublic = !competition.public && competitionBody.public;
+            const markingPublic =
+                competition.visibility != competitionBody.visibility &&
+                competitionBody.visibility == 'PUBLIC';
 
             client.competitions
                 .update({
@@ -147,7 +148,8 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                     data: {
                         description: competitionBody.description || '',
                         title: competitionBody.title || '',
-                        public: competitionBody.public,
+                        visibility: competitionBody.visibility,
+                        hidden_scoreboard: competitionBody.hidden_scoreboard,
                         scheduled_at: competitionBody.scheduled_at
                             ? new Date(competitionBody.scheduled_at)
                             : null,
@@ -193,15 +195,34 @@ router.post(
             .findUnique({
                 where: {
                     id: comp_id,
-                    public: true,
-                    OR: [
+                    AND: [
                         {
-                            scheduled_at: null,
+                            OR: [
+                                { visibility: 'PUBLIC' },
+                                {
+                                    visibility: 'INVITE',
+                                    competition_invites: {
+                                        some: {
+                                            user_id: res.locals.user.id,
+                                            accepted_at: {
+                                                not: null,
+                                            },
+                                        },
+                                    },
+                                },
+                            ],
                         },
                         {
-                            scheduled_at: {
-                                lt: new Date(),
-                            },
+                            OR: [
+                                {
+                                    scheduled_at: null,
+                                },
+                                {
+                                    scheduled_at: {
+                                        lt: new Date(),
+                                    },
+                                },
+                            ],
                         },
                     ],
                     deleted_at: null,
@@ -266,6 +287,14 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
                         created_at: true,
                     },
                 },
+                competition_invites: {
+                    where: {
+                        accepted_at: {
+                            not: null,
+                        },
+                        user_id: res.locals.user.id,
+                    },
+                },
             },
         })
         .then((competition) => {
@@ -274,9 +303,11 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
                 return;
             }
 
-            // send the competition right away if its public and started by user.
+            // send the competition right away if its (public or invited) and started by user.
             if (
-                competition.public &&
+                (competition.visibility === 'PUBLIC' ||
+                    (competition.visibility == 'INVITE' &&
+                        competition.competition_invites.length)) &&
                 competition.competition_sessions?.[0]?.created_at
             ) {
                 Util.sendResponseJson(res, resCode.success, competition);
@@ -475,6 +506,7 @@ router.get('/competitions', authenticate, (req, res) => {
     const params = {
         query: req.query.query?.toString() || '',
         includeSelf: req.query.includeSelf?.toString() === 'true',
+        invited: req.query.invited?.toString() === 'true',
         liveStatus: req.query.liveStatus?.toString() || 'all',
         orderBy: req.query.orderBy?.toString() || 'desc',
     };
@@ -498,8 +530,13 @@ router.get('/competitions', authenticate, (req, res) => {
 
     if (params.includeSelf) {
         andParams.push({ host_user_id: user!.id });
+    } else if (params.invited && user) {
+        andParams.push({
+            visibility: 'INVITE',
+            competition_invites: { some: { user_id: user.id } },
+        });
     } else {
-        andParams.push({ public: true });
+        andParams.push({ visibility: 'PUBLIC' });
     }
 
     if (params.liveStatus === 'upcoming') {
@@ -524,11 +561,16 @@ router.get('/competitions', authenticate, (req, res) => {
         orderBy.created_at = params.orderBy;
     }
 
-    const whereClause = {
+    const whereClause: any = {
         deleted_at: null,
-        ...(orParams.length && { OR: [...orParams] }),
-        ...(andParams.length && { AND: [...andParams] }),
     };
+
+    if (orParams.length) {
+        whereClause.OR = orParams;
+    }
+    if (andParams.length) {
+        whereClause.AND = andParams;
+    }
 
     client.competitions
         .findMany({
@@ -542,6 +584,15 @@ router.get('/competitions', authenticate, (req, res) => {
                         name: true,
                     },
                 },
+                _count: {
+                    select: {
+                        questions: {
+                            where: {
+                                deleted_at: null,
+                            },
+                        },
+                    },
+                },
             },
         })
         .then((competitions) => {
@@ -553,7 +604,10 @@ router.get('/competitions', authenticate, (req, res) => {
             }
             Util.sendResponseJson(res, resCode.success, competitions);
         })
-        .catch((err) => Util.sendResponse(res, resCode.serverError, err));
+        .catch((err) => {
+            console.error(err);
+            Util.sendResponse(res, resCode.serverError, err);
+        });
 });
 
 module.exports = router;

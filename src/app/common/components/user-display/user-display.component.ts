@@ -12,4 +12,7 @@ export class UserDisplayComponent {
 
     @Input()
     noClick = false;
+
+    @Input()
+    noAvatar = false;
 }

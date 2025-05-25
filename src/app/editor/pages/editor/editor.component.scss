@@ -2,10 +2,6 @@
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
-popup {
-    display: none;
-}
-
 .red {
     color: darkred;
 }
@@ -61,6 +57,53 @@ popup {
 
         .section-content {
             width: 100%;
+        }
+    }
+}
+
+.invited-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+
+    .invited {
+        width: fit-content;
+        display: inline-flex;
+        padding-inline: 0.5rem;
+        background: #80008017;
+        color: purple;
+        border-radius: 0.5rem;
+        font-size: 1.1rem;
+        @include sweetBorder;
+        border-color: purple;
+        gap: 0.5rem;
+        align-items: center;
+        cursor: default;
+
+        .email-text {
+            max-width: 13rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+        }
+
+        .check-icon {
+            color: green;
+        }
+
+        .circle-icon {
+            color: orange;
+        }
+
+        .remove-icon {
+            cursor: pointer;
+            display: inline-flex;
+
+            &:hover {
+                color: red;
+            }
         }
     }
 }
@@ -131,6 +174,43 @@ popup {
     cursor: pointer;
 }
 
+#invite_participants {
+    .emails-input-container {
+        @include sweetBorder;
+        padding: 0.5rem;
+        border-radius: 1rem;
+    }
+
+    .emails-prev {
+        max-width: 32rem;
+    }
+    .email-prev {
+        width: fit-content;
+        display: inline-block;
+        margin: 0 6px 6px 0;
+        background: #cac6ee;
+        border-radius: 0.5rem;
+        padding-inline: 4px;
+        font-size: 1.1rem;
+        cursor: default;
+
+        fa-icon {
+            opacity: 0.7;
+        }
+
+        .rem-temp-email {
+            &:hover {
+                color: red;
+                cursor: pointer;
+            }
+        }
+    }
+
+    input {
+        width: calc(100% - 2.1rem);
+    }
+}
+
 #created_at {
     background-color: whitesmoke;
 
@@ -181,6 +261,7 @@ popup {
     border-radius: 1rem;
     overflow: hidden;
     font-weight: 600;
+    font-size: 0.85rem;
 
     & > div {
         flex-grow: 1;
@@ -189,6 +270,7 @@ popup {
         color: whitesmoke;
         padding: 10px;
         text-align: center;
+        background-color: #858585;
 
         -webkit-user-select: none; /* Safari */
         -moz-user-select: none; /* Firefox */
@@ -202,24 +284,16 @@ popup {
         }
     }
 
-    .public {
+    .public.selected {
         background-color: crimson;
     }
 
-    .private {
+    .private.selected {
         background-color: rgb(32 113 186);
     }
 
-    &.public {
-        .private {
-            background-color: #858585;
-        }
-    }
-
-    &:not(.public) {
-        .public {
-            background-color: #858585;
-        }
+    .invite.selected {
+        background-color: purple;
     }
 }
 

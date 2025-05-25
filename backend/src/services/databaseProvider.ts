@@ -55,10 +55,11 @@ export class DatabaseProvider {
             this._dbPool.getConnection((err, poolConn) => {
                 if (err) {
                     console.log(
-                        'destroying errored connection while providing'
+                        'destroying errored connection while providing',
+                        err
                     );
-                    poolConn.destroy();
-                    reject('err');
+                    poolConn?.destroy();
+                    reject(err);
                     return;
                 }
 

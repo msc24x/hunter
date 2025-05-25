@@ -6,12 +6,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
     faBook,
     faCheckDouble,
+    faCircle,
     faCircleCheck,
     faCircleXmark,
     faDownload,
+    faEnvelope,
     faEye,
     faEyeSlash,
     faMinusCircle,
+    faPaperPlane,
     faPenToSquare,
     faShare,
     faShareNodes,
@@ -28,6 +31,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     CompetitionInfo,
+    CompetitionInvite,
     domainName,
     environment,
     protocol,
@@ -58,6 +62,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     trashUpIcon = faTrashArrowUp;
     magicIcon = faWandMagicSparkles;
     guideIcon = faBook;
+    inviteIcon = faPaperPlane;
+    circleIcon = faCircle;
 
     correctIcon = faCheckDouble;
     minusIcon = faMinusCircle;
@@ -92,6 +98,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     isAuthenticated: boolean = false;
     user = {} as UserInfo;
     eventPopup = new BehaviorSubject<string>('');
+
+    inviteP = {
+        input: '',
+        invites: [] as string[],
+    };
+    showInviteP = false;
+    inviteToRemove: null | CompetitionInvite = null;
 
     errors: any = {};
     contest_errors: any = {};
@@ -513,8 +526,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                 if (res.body) {
                     if (update_competition) {
                         this.competitionInfo = res.body as CompetitionInfo;
-                        this.toggleVisibility();
-                        this.toggleVisibility();
+                        this.toggleVisibility(this.competitionInfo.visibility);
 
                         if (!this.competitionInfo.time_limit) {
                             this.timeLimitEnabled = false;
@@ -565,8 +577,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.fetchQuestions();
     }
 
-    toggleVisibility() {
-        this.competitionInfo.public = !this.competitionInfo.public;
+    toggleVisibility(status: 'PUBLIC' | 'PRIVATE' | 'INVITE') {
+        this.competitionInfo.visibility = status;
     }
 
     cleanTimeLimits() {
@@ -644,7 +656,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     handlePrivacyConfirmPopupEvent(event: string) {
         if (event == 'continue') {
-            this.toggleVisibility();
+            this.toggleVisibility('PUBLIC');
         }
 
         this.showPopup(false, 'public_status_confirm');
@@ -662,11 +674,13 @@ export class EditorComponent implements OnInit, OnDestroy {
         } else guide.style.display = 'none';
     }
 
-    onClickVisibility(isPublic = true) {
-        if (isPublic) {
+    onClickVisibility(status: 'PUBLIC' | 'PRIVATE' | 'INVITE') {
+        if (status == this.competitionInfo.visibility) return;
+
+        if (status == 'PUBLIC') {
             this.showPopup(true, 'public_status_confirm');
         } else {
-            this.toggleVisibility();
+            this.toggleVisibility(status);
         }
     }
 
@@ -711,5 +725,134 @@ export class EditorComponent implements OnInit, OnDestroy {
                     },
                 });
         }
+    }
+
+    handleInvitesEvent(event: string) {
+        if (event == 'cancel') {
+            this.showInviteP = false;
+            return;
+        }
+
+        if (event == 'continue' && this.inviteP.invites.length) {
+            this.submitInvites();
+        } else {
+            this.snackBar.open('Please provide the emails first to continue');
+        }
+    }
+
+    isValidEmailRobust(emailString: string) {
+        if (typeof emailString !== 'string') {
+            return false;
+        }
+        // More robust regex (still not 100% RFC 5322 compliant but covers more cases)
+        const emailRegex =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return emailRegex.test(emailString);
+    }
+
+    handleTempEmail(blur = false) {
+        const safePushEmail = (email: string) => {
+            email = email.trim();
+
+            if (
+                email &&
+                !this.inviteP.invites.includes(email) &&
+                this.isValidEmailRobust(email)
+            ) {
+                this.inviteP.invites.push(email);
+            }
+        };
+
+        if (
+            this.inviteP.input &&
+            this.isValidEmailRobust(this.inviteP.input) &&
+            blur
+        ) {
+            safePushEmail(this.inviteP.input);
+            this.inviteP.input = '';
+
+            return;
+        }
+
+        if (this.inviteP.input.includes(',')) {
+            this.inviteP.input.split(',').forEach((i) => safePushEmail(i));
+
+            setTimeout(() => {
+                this.inviteP.input = '';
+            });
+        }
+
+        return true;
+    }
+
+    removeTempEmail(email: string) {
+        this.inviteP.invites = this.inviteP.invites.filter((i) => i !== email);
+    }
+
+    removeInvite(event: string) {
+        if (event == 'cancel') {
+            this.inviteToRemove = null;
+            return;
+        }
+
+        this.loading = true;
+
+        var invite = this.inviteToRemove!;
+
+        this.competitionsData
+            .removeInvite({
+                comp_id: invite.competition_id,
+                invite_id: invite.id,
+            })
+            .subscribe({
+                next: (res) => {
+                    this.competitionInfo.competition_invites =
+                        this.competitionInfo.competition_invites?.filter(
+                            (i) => i.id !== invite.id
+                        );
+                    this.snackBar.open(
+                        `Invitee ${invite.email} has been removed from the contest`
+                    );
+                    this.loading = false;
+                    this.inviteToRemove = null;
+                },
+                error: (err) => {
+                    this.loading = false;
+                    this.snackBar.open('Something went wrong, try again later');
+                },
+            });
+    }
+
+    submitInvites() {
+        var payload = this.inviteP.invites.map((email) => {
+            return {
+                email: email,
+            } as CompetitionInvite;
+        });
+
+        this.loading = true;
+        this.errors.invites = null;
+
+        this.competitionsData
+            .createInvites({
+                id: this.competitionInfo.id,
+                invites: payload,
+            })
+            .subscribe({
+                next: (res) => {
+                    this.competitionInfo.competition_invites = res.body!;
+                    this.loading = false;
+                    this.showInviteP = false;
+                    this.inviteP.invites = [];
+                    this.inviteP.input = '';
+                    this.snackBar.open('Invite has been sent');
+                },
+                error: (error) => {
+                    if (error.error?.errors?.invites) {
+                        this.errors.invites = error.error?.errors?.invites;
+                    }
+                    this.loading = false;
+                },
+            });
     }
 }

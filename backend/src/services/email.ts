@@ -11,12 +11,16 @@ function sendEmail(params: {
         html: string;
     };
 }) {
-    transport.sendMail(params.body, (error, info) => {
-        if (error) {
-            return console.error('[Email] failed', error);
-        }
+    return new Promise<void>((resolve, reject) => {
+        transport.sendMail(params.body, (error, info) => {
+            if (error) {
+                reject();
+                return console.error('[Email] failed', error);
+            }
 
-        console.info('[Email]', params.body.from, 'to', params.body.to);
+            resolve();
+            console.info('[Email]', params.body.from, 'to', params.body.to);
+        });
     });
 }
 
@@ -27,7 +31,7 @@ export function sendInfoEmail(params: {
         html: string;
     };
 }) {
-    sendEmail({
+    return sendEmail({
         body: {
             from: 'Hunter Contests <hunter@cambo.in>',
             ...params.body,

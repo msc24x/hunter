@@ -1,0 +1,17 @@
+<body>
+    <div class="container">
+        <%- include('emails/header') -%>
+
+        <div class="content">
+            <h1>Access revoked 🥹</h1>
+
+            <p>
+                This email is sent to inform you that the <%= user.name %> has
+                removed your access from the contest
+                <b> <%= contest.title %> </b>
+            </p>
+        </div>
+
+        <%- include('emails/footer') -%>
+    </div>
+</body>

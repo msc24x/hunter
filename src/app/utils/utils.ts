@@ -21,10 +21,10 @@ export function isLive(date: Date | null, endDate: Date | null) {
     );
 }
 
-export function format(str: string, ...args: string[]) {
+export function format(str: string, ...args: (string | number)[]) {
     var res = str;
     for (var arg in args) {
-        res = res.replace('{' + arg + '}', args[arg]);
+        res = res.replace('{' + arg + '}', args[arg].toString());
     }
     return res;
 }

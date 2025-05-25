@@ -4,33 +4,13 @@ import { CompetitionInfo, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 
-export class Question {
-    constructor(
-        public title: string,
-        public description: string,
-        public value: number
-    ) {}
-}
-
-export class Competition {
-    constructor(
-        public id: number,
-        public title: string,
-        public about: string,
-        public dateCreated: number,
-        public duration: number,
-        public questions: Array<Question>,
-        public isPublic: Boolean
-    ) {}
-}
-
 @Component({
     selector: 'compete',
     templateUrl: './compete.component.html',
     styleUrls: ['./compete.component.scss'],
 })
 export class CompeteComponent implements OnInit {
-    loading = false;
+    loading = 0;
 
     isAuthenticated: boolean = false;
     user = {
@@ -40,6 +20,7 @@ export class CompeteComponent implements OnInit {
     };
 
     publicCompetitions: Array<CompetitionInfo> | null = null;
+    invitedCompetitions: Array<CompetitionInfo> | null = null;
 
     constructor(
         private authService: AuthService,
@@ -50,12 +31,20 @@ export class CompeteComponent implements OnInit {
             this.user = this.authService.user;
             this.isAuthenticated = isAuth;
 
-            this.loading = true;
+            this.loading++;
             this.competitionsDataService
                 .getCompetitions({ title: '', dateOrder: '-1', public: true })
                 .then((res) => {
                     this.publicCompetitions = res;
-                    this.loading = false;
+                    this.loading--;
+                });
+
+            this.loading++;
+            this.competitionsDataService
+                .getCompetitions({ title: '', dateOrder: '-1', invited: true })
+                .then((res) => {
+                    this.invitedCompetitions = res;
+                    this.loading--;
                 });
         });
     }
@@ -79,7 +68,7 @@ export class CompeteComponent implements OnInit {
     }
 
     routeToCompetition() {
-        this.loading = true;
+        this.loading++;
         const id = document.getElementById(
             'competition_id_text'
         ) as HTMLInputElement;

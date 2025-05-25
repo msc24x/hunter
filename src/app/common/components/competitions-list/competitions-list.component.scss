@@ -64,6 +64,19 @@
     border-radius: 12px;
 }
 
+.invited-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    competition-card {
+        padding-top: 0.2rem;
+        width: 23rem;
+        min-width: 23rem;
+    }
+}
+
 @media only screen and (max-width: 1024px) {
     #competitions_list {
         margin-inline: 0.5%;
@@ -77,20 +90,19 @@
 }
 
 @media only screen and (max-width: 620px) {
-    .competition_card {
-        font-size: 0.8rem;
-
-        #c_title {
-            font-size: 1.1rem;
-        }
-    }
-
     s {
         font-size: 1rem;
     }
 
     .competitions-block {
         flex-wrap: wrap;
+    }
+
+    .invited-container {
+        competition-card {
+            width: 16rem;
+            min-width: 16rem;
+        }
     }
 
     #competitions_ol,
@@ -109,16 +121,6 @@
 
     .heading {
         font-size: 1.4rem !important;
-    }
-}
-
-@media only screen and (max-width: 500px) {
-    .competition_card {
-        font-size: 0.8rem;
-
-        #c_title {
-            font-size: 0.9rem;
-        }
     }
 }
 
@@ -154,72 +156,4 @@
         border-width: 2px;
         border-color: black;
     }
-}
-
-.competition_card {
-    display: block;
-    color: inherit;
-    margin-bottom: 0.5rem;
-    padding: 16px;
-    border-radius: 1rem;
-    border-color: black;
-    border-width: 110px;
-    height: fit-content;
-    background-color: colors.$dim_white;
-    margin-inline: auto;
-    max-width: 62rem;
-    transition: 200ms;
-    cursor: pointer;
-    @include sweetBorder();
-
-    &:hover {
-        box-shadow: 0 1rem 2rem -2rem black;
-        transform: translateY(-0.2rem);
-    }
-
-    &:active {
-        scale: 0.99;
-    }
-
-    .detail-tag {
-        background-color: rgba(128, 128, 128, 0.1);
-        border-radius: 0.6rem;
-        margin-block: 0.3rem;
-        padding: 4px;
-        padding-inline: 8px;
-        margin-right: 4px;
-        width: fit-content;
-        display: inline-flex;
-        @include sweetBorder;
-
-        &.live {
-            color: crimson;
-            border-color: crimson;
-            background-color: colors.$ls;
-        }
-    }
-}
-
-#c_title {
-    font-weight: 500;
-    word-break: break-word;
-    font-size: 1.3rem;
-    color: colors.$text_black;
-
-    &.untitled {
-        opacity: 0.3;
-    }
-}
-#c_host_user {
-    margin-left: 4px;
-    margin-top: 6px;
-    padding: 4px;
-    width: fit-content;
-    display: block;
-    color: inherit;
-}
-
-#c_about {
-    word-break: break-word;
-    color: rgb(24, 24, 24);
 }

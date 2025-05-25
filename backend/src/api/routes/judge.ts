@@ -37,7 +37,20 @@ function safeRouteToQuestion(
                     competition_id: hunterExecutable.for.competition_id,
                     type: type,
                     competitions: {
-                        public: true,
+                        OR: [
+                            { visibility: 'PUBLIC' },
+                            {
+                                visibility: 'INVITE',
+                                competition_invites: {
+                                    some: {
+                                        user_id: res.locals.user.id,
+                                        accepted_at: {
+                                            not: null,
+                                        },
+                                    },
+                                },
+                            },
+                        ],
                         deleted_at: null,
                     },
                     deleted_at: null,
@@ -465,7 +478,7 @@ router.post('/submit', authenticate, loginRequired, (req, res) => {
 
 router.get('/submission/:lang', authenticate, loginRequired, (req, res) => {
     const competition_id = parseInt(req.query.competition_id as string);
-    const question_id = req.query.question_id;
+    const question_id = parseInt(req.query.question_id as string);
     const lang = req.params.lang;
     const user: UserInfo = res.locals.user;
 
@@ -478,56 +491,56 @@ router.get('/submission/:lang', authenticate, loginRequired, (req, res) => {
         return;
     }
 
-    models.questions.findAll({ id: question_id }, (questions) => {
-        if (questions.length == 0) {
-            Util.sendResponse(res, resCode.notFound, 'no ques');
-            return;
-        }
-
-        models.competitions.findAll(
-            { id: questions[0].competition_id },
-            0,
-            -1,
-            (competitions) => {
-                if (competitions.length == 0) {
-                    Util.sendResponse(res, resCode.notFound, 'no comp');
-                    return;
-                }
-
-                if (competitions[0].id != competition_id) {
-                    Util.sendResponse(res, resCode.badRequest);
-                    return;
-                }
-
-                if (
-                    !competitions[0].public &&
-                    competitions[0].host_user_id != user.id
-                ) {
-                    Util.sendResponse(res, resCode.forbidden);
-                    return;
-                }
-
-                readFile(
-                    `${judgeService.filesPath}${competition_id}_${question_id}_${user.id}.${lang}`,
-                    { encoding: 'utf-8' },
-                    (err, data) => {
-                        if (err) {
-                            if (err.code == 'ENOENT')
-                                Util.sendResponse(res, resCode.notFound);
-                            else Util.sendResponse(res, resCode.serverError);
-                            return;
-                        }
-                        Util.sendResponseJson(res, resCode.success, {
-                            data: data,
-                        });
-                    }
-                );
+    client.questions
+        .findUnique({
+            where: {
+                id: question_id,
+                competition_id: competition_id,
+                competitions: {
+                    OR: [
+                        {
+                            visibility: 'PUBLIC',
+                        },
+                        {
+                            visibility: 'INVITE',
+                            competition_invites: {
+                                some: {
+                                    accepted_at: {
+                                        not: null,
+                                    },
+                                    user_id: user.id,
+                                },
+                            },
+                        },
+                    ],
+                },
             },
-            (err) => {
-                Util.sendResponse(res, resCode.forbidden);
+            include: {
+                competitions: true,
+            },
+        })
+        .then((question) => {
+            if (!question) {
+                Util.sendResponse(res, resCode.notFound);
+                return;
             }
-        );
-    });
+
+            readFile(
+                `${judgeService.filesPath}${competition_id}_${question_id}_${user.id}.${lang}`,
+                { encoding: 'utf-8' },
+                (err, data) => {
+                    if (err) {
+                        if (err.code == 'ENOENT')
+                            Util.sendResponse(res, resCode.notFound);
+                        else Util.sendResponse(res, resCode.serverError);
+                        return;
+                    }
+                    Util.sendResponseJson(res, resCode.success, {
+                        data: data,
+                    });
+                }
+            );
+        });
 });
 
 module.exports = router;

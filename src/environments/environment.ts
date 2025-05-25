@@ -40,11 +40,17 @@ export type QuestionVerification = {
     question_id: number;
 };
 
+export interface CompetitionInfoCounts {
+    questions: number;
+}
+
 export interface CompetitionInfo {
     id: number;
     host_user_id: number;
     host_user?: UserInfo;
     title: string;
+    hidden_scoreboard: boolean;
+    visibility: 'PRIVATE' | 'PUBLIC' | 'INVITE';
     description: string;
     created_at: Date;
     updated_at: Date;
@@ -53,10 +59,12 @@ export interface CompetitionInfo {
     scheduled_end_at: Date | null;
     time_limit: number | null;
     rating: number;
-    public: boolean;
     practice: boolean;
     questions?: QuestionInfo[];
     competition_sessions?: CompetitionSession[];
+    competition_invites?: CompetitionInvite[];
+
+    _count: CompetitionInfoCounts;
 }
 
 export type CompetitionSession = {
@@ -66,6 +74,18 @@ export type CompetitionSession = {
     competition_id: number;
     competitions?: CompetitionInfo;
     created_at: Date;
+};
+
+export type CompetitionInvite = {
+    id: number;
+    uuid: string;
+    email: string;
+    user_id: number;
+    user?: UserInfo;
+    competition_id: number;
+    competition?: CompetitionInfo;
+    created_at: Date;
+    accepted_at: Date | null;
 };
 
 export type HunterExecutable = {
@@ -142,6 +162,10 @@ export const apiEndpoints = {
     competition: environment.apiUrl + '/competition',
     competitionQuality: environment.apiUrl + '/competition/{0}/quality',
     competitionSession: environment.apiUrl + '/competition/{0}/session',
+    competitionInvites: environment.apiUrl + '/competitions/{0}/invites',
+    competitionInviteDelete:
+        environment.apiUrl + '/competitions/{0}/invites/{1}',
+    invites: environment.apiUrl + '/competitions/invites/{0}',
     getCompetitions: environment.apiUrl + '/competitions',
     question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',

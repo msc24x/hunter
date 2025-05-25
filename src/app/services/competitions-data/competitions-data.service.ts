@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {
     apiEndpoints,
     CompetitionInfo,
+    CompetitionInvite,
     HunterExecutable,
     QuestionInfo,
 } from 'src/environments/environment';
@@ -220,6 +221,56 @@ export class CompetitionsDataService {
         );
     }
 
+    acceptInvite(params: { invite: string }) {
+        return this.http.post<CompetitionInvite>(
+            format(apiEndpoints.invites, params.invite),
+            {},
+            {
+                responseType: 'json',
+                withCredentials: true,
+                observe: 'response',
+            }
+        );
+    }
+
+    removeInvite(params: { comp_id: number; invite_id: number }) {
+        return this.http.delete<void>(
+            format(
+                apiEndpoints.competitionInviteDelete,
+                params.comp_id,
+                params.invite_id
+            ),
+            {
+                responseType: 'json',
+                withCredentials: true,
+                observe: 'response',
+            }
+        );
+    }
+
+    getInvite(params: { invite: string }) {
+        return this.http.get<CompetitionInvite>(
+            format(apiEndpoints.invites, params.invite),
+            {
+                responseType: 'json',
+                withCredentials: true,
+                observe: 'response',
+            }
+        );
+    }
+
+    createInvites(params: { id: number; invites: CompetitionInvite[] }) {
+        return this.http.post<CompetitionInvite[]>(
+            format(apiEndpoints.competitionInvites, params.id),
+            params.invites,
+            {
+                responseType: 'json',
+                withCredentials: true,
+                observe: 'response',
+            }
+        );
+    }
+
     postCompetition(params: { title: string; practice: boolean }) {
         if (!this.authService.isAuthenticated) {
             return;
@@ -273,6 +324,8 @@ export class CompetitionsDataService {
             httpParams = httpParams.set('orderBy', params.orderBy);
         if (params?.includeSelf)
             httpParams = httpParams.set('includeSelf', params.includeSelf);
+        if (params?.invited)
+            httpParams = httpParams.set('invited', params.invited);
 
         const promise = new Promise<Array<CompetitionInfo>>(
             (resolve, reject) => {

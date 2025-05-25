@@ -54,9 +54,10 @@
     margin-block: auto;
 
     .row {
-        margin-top: 24px;
+        margin-top: 1.5rem;
         display: flex;
-        justify-content: space-around;
+        justify-content: right;
+        gap: 1rem;
 
         div {
             padding: 8px;

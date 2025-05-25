@@ -35,6 +35,70 @@
 </popup>
 
 <popup
+    id="invite_participants"
+    heading="Invite participants"
+    [hidden]="!showInviteP"
+    (closeEvent)="handleInvitesEvent($event)"
+    [showControls]="true"
+    [destructive]="false"
+    [continueMessage]="'Send invite emails'"
+>
+    <h3>Email addresses</h3>
+    <p>Type or paste in emails below, separated by commas</p>
+
+    <div class="emails-input-container">
+        <div class="emails-prev">
+            <div *ngFor="let inviteEmail of inviteP.invites" class="email-prev">
+                {{ inviteEmail }}
+                <span
+                    class="rem-temp-email"
+                    matTooltip="Remove email"
+                    (click)="removeTempEmail(inviteEmail)"
+                >
+                    <fa-icon [icon]="crossIcon" size="xs"></fa-icon>
+                </span>
+            </div>
+        </div>
+        <input
+            type="email"
+            name="email"
+            [(ngModel)]="inviteP.input"
+            email
+            (input)="handleTempEmail()"
+            (blur)="handleTempEmail(true)"
+            placeholder="Type emails"
+        />
+
+        <manual-error [message]="errors.invites"></manual-error>
+    </div>
+</popup>
+
+<popup
+    heading="Remove Invitee"
+    id="delete_invitee"
+    [hidden]="!inviteToRemove"
+    (closeEvent)="removeInvite($event)"
+    [showControls]="true"
+    [destructive]="true"
+    [continueMessage]="'Yes, remove ' + inviteToRemove?.email"
+>
+    Invitee <b>{{ inviteToRemove?.email }}</b>
+    <span *ngIf="inviteToRemove?.user"
+        >(<user-display
+            [noAvatar]="true"
+            [userInfo]="inviteToRemove!.user"
+        ></user-display
+        >)</span
+    >
+    will be removed, and they will not be able to participate in this contest
+    anymore.
+    <br />
+    <br />
+    <b>Are you sure you want to continue?</b>
+    <br />
+</popup>
+
+<popup
     heading="Destructive Action"
     id="delete_comp_popup"
     (closeEvent)="handleDeleteCompPopupEvent($event)"
@@ -207,34 +271,61 @@
 
         <div class="meta-section">
             <h3>Visibility</h3>
-            <p class="info-like sticky">
-                Set your contest visibility (Public/Private)
-            </p>
+            <p class="info-like sticky">Set your contest visibility</p>
 
             <div
                 id="visbility_controller"
-                [ngClass]="{ 'public': competitionInfo.public }"
+                ngClass="{{ competitionInfo.visibility }}"
             >
                 <div
                     class="private"
-                    (click)="competitionInfo.public && onClickVisibility(false)"
+                    [ngClass]="{
+                        'selected': competitionInfo.visibility == 'PRIVATE'
+                    }"
+                    (click)="onClickVisibility('PRIVATE')"
+                    matTooltip="Visible to no one"
                 >
-                    <fa-icon [icon]="checkIcon" *ngIf="!competitionInfo.public">
+                    <fa-icon
+                        [icon]="checkIcon"
+                        *ngIf="competitionInfo.visibility == 'PRIVATE'"
+                    >
                     </fa-icon>
                     &nbsp; PRIVATE
                 </div>
                 <div
-                    class="public"
-                    (click)="!competitionInfo.public && onClickVisibility(true)"
+                    class="invite"
+                    [ngClass]="{
+                        'selected': competitionInfo.visibility == 'INVITE'
+                    }"
+                    (click)="onClickVisibility('INVITE')"
+                    matTooltip="Visible to only the invited"
                 >
-                    <fa-icon [icon]="checkIcon" *ngIf="competitionInfo.public">
+                    <fa-icon
+                        [icon]="checkIcon"
+                        *ngIf="competitionInfo.visibility == 'INVITE'"
+                    >
+                    </fa-icon>
+                    &nbsp; INVITE
+                </div>
+                <div
+                    class="public"
+                    [ngClass]="{
+                        'selected': competitionInfo.visibility == 'PUBLIC'
+                    }"
+                    (click)="onClickVisibility('PUBLIC')"
+                    matTooltip="Visible to everyone"
+                >
+                    <fa-icon
+                        [icon]="checkIcon"
+                        *ngIf="competitionInfo.visibility == 'PUBLIC'"
+                    >
                     </fa-icon
                     >&nbsp; PUBLIC
                 </div>
             </div>
 
             <div
-                *ngIf="competitionInfo.public"
+                *ngIf="competitionInfo.visibility == 'PUBLIC'"
                 class="participant-link"
                 (click)="shareAction()"
                 matTooltip="Click to share the participation link"
@@ -247,6 +338,79 @@
                     begin!</span
                 >
             </div>
+
+            <div *ngIf="competitionInfo.visibility == 'INVITE'">
+                <h3>Invitees</h3>
+                <p class="info-like sticky">
+                    {{ competitionInfo.competition_invites?.length || 0 }}
+                    people exclusively invited to participate in this
+                    competition
+                </p>
+
+                <div class="invited-list">
+                    <div
+                        *ngFor="
+                            let invitedObj of competitionInfo.competition_invites
+                        "
+                        class="invited"
+                    >
+                        <fa-icon
+                            *ngIf="!invitedObj.accepted_at"
+                            class="circle-icon"
+                            [icon]="circleIcon"
+                            size="xs"
+                            matTooltip="Invitation sent"
+                        ></fa-icon>
+                        <fa-icon
+                            *ngIf="invitedObj.accepted_at"
+                            class="check-icon"
+                            [icon]="checkIcon"
+                            size="xs"
+                            matTooltip="User has accepted the invitation"
+                        ></fa-icon>
+                        <div
+                            [matTooltip]="invitedObj.email"
+                            style="display: flex"
+                        >
+                            <div
+                                class="email-text"
+                                *ngIf="!invitedObj.accepted_at"
+                            >
+                                {{ invitedObj.email }}
+                            </div>
+                            <div *ngIf="invitedObj.accepted_at">
+                                <user-display
+                                    [noAvatar]="true"
+                                    [userInfo]="invitedObj.user"
+                                ></user-display>
+                            </div>
+                        </div>
+                        <fa-icon
+                            class="remove-icon"
+                            [icon]="crossIcon"
+                            size="xs"
+                            matTooltip="Remove invitee from contest"
+                            (click)="inviteToRemove = invitedObj"
+                        ></fa-icon>
+                    </div>
+                </div>
+
+                <div class="button main" (click)="showInviteP = true">
+                    Invite participants
+                </div>
+            </div>
+
+            <h3 style="display: flex; align-items: center">
+                Hide Scoreboard? &nbsp; &nbsp;
+                <mat-slide-toggle
+                    [(ngModel)]="competitionInfo.hidden_scoreboard"
+                ></mat-slide-toggle>
+            </h3>
+            <p class="info-like sticky">
+                Enabling it would keep the scoreboard hidden from every
+                participant, and they won't be able to see who else participated
+                and how well anyone else performed.
+            </p>
         </div>
 
         <div class="meta-section">

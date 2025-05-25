@@ -1,7 +1,24 @@
 <app-loading *ngIf="loading"></app-loading>
 
 <div id="competitions_list">
-    <p class="heading">{{ this.heading }}</p>
+    <div *ngIf="invitedList?.length">
+        <h1>Invitations for you</h1>
+        <p class="info-like sticky">
+            Private contests where you have been invited to participate
+        </p>
+
+        <div class="invited-container">
+            <competition-card
+                *ngFor="let com of invitedList"
+                [com]="com"
+                [route]="route"
+                [showDesc]="false"
+                [shortTitle]="true"
+            ></competition-card>
+        </div>
+    </div>
+
+    <h1>{{ this.heading }}</h1>
 
     <div class="competitions-block">
         <div id="filter_controls">
@@ -48,123 +65,11 @@
             <create-dialog *ngIf="showBuildButton"></create-dialog>
 
             <li *ngFor="let com of this.competitionsList">
-                <a
-                    class="competition_card"
-                    routerLink="/{{ this.route }}/{{ com.id }}"
-                >
-                    <div id="c_title" [ngClass]="{ 'untitled': !com.title }">
-                        {{ com.title || "untitled" }}
-                    </div>
-                    <div *ngIf="!showAuthor" class="info-like">
-                        Created
-                        {{ com.created_at | timeAgo }}
-                    </div>
-                    <a id="c_host_user" routerLink="/u/{{ com.host_user_id }}">
-                        <ng-template #authorElem>
-                            By
-                            <user-display
-                                [userInfo]="com.host_user"
-                            ></user-display>
-                            &nbsp;
-                            <span
-                                *ngIf="com.host_user_id == 1"
-                                matTooltip="Official by Hunter"
-                            >
-                                <fa-icon
-                                    [icon]="officialIcon"
-                                    style="color: crimson"
-                                ></fa-icon>
-                            </span>
-                        </ng-template>
-
-                        <ng-container
-                            [ngTemplateOutlet]="authorElem"
-                            *ngIf="showAuthor"
-                        ></ng-container>
-                        <span
-                            *ngIf="!com.public"
-                            matTooltip="Private, only visible to you"
-                        >
-                            <fa-icon
-                                [icon]="privateIcon"
-                                style="color: crimson"
-                            ></fa-icon>
-                            &nbsp;
-                            <span style="color: crimson"> Private </span>
-                        </span>
-                    </a>
-                    <div class="detail-tag cute-panel" *ngIf="com.practice">
-                        For Practice Only
-                    </div>
-                    <div
-                        id="start_schedule"
-                        class="detail-tag"
-                        [ngClass]="
-                            (com.scheduled_at
-                            | isLiveStatusPipe : com.scheduled_end_at)
-                                ? 'live'
-                                : ''
-                        "
-                    >
-                        <span
-                            *ngIf="
-                                (com.scheduled_at || com.scheduled_end_at) &&
-                                !isClosedNow(com)
-                            "
-                        >
-                            <span *ngIf="!isAfterNow(com.scheduled_at)">
-                                Not open yet,
-                                {{
-                                    (com.scheduled_at | timeAgo : true).replace(
-                                        "ago",
-                                        "left"
-                                    )
-                                }}
-                            </span>
-                            <span *ngIf="isAfterNow(com.scheduled_at)">
-                                {{
-                                    com.scheduled_at
-                                        ? "Live Since"
-                                        : "Live, closing in"
-                                }}
-                                {{
-                                    com.scheduled_at
-                                        ? (com.scheduled_at | timeAgo).replace(
-                                              "ago",
-                                              ""
-                                          )
-                                        : (
-                                              com.scheduled_end_at
-                                              | timeAgo : true
-                                          ).replace("ago", "")
-                                }}
-                            </span>
-                        </span>
-                        <span
-                            *ngIf="!com.scheduled_at && !com.scheduled_end_at"
-                        >
-                            Always Live
-                        </span>
-                        &nbsp;
-                        <span *ngIf="isClosedNow(com)">
-                            Submissions Closed
-                        </span>
-                    </div>
-                    <div
-                        *ngIf="
-                            com.scheduled_end_at &&
-                            !isClosedNow(com) &&
-                            isAfterNow(com.scheduled_at)
-                        "
-                        class="detail-tag"
-                    >
-                        {{ timeLeft(com.scheduled_end_at, timeLeftFlag) }} left
-                    </div>
-                    <p id="c_about" *ngIf="com.description">
-                        {{ com.description.slice(0, 400)
-                        }}<span *ngIf="com.description.length > 300">...</span>
-                    </p>
-                </a>
+                <competition-card
+                    [com]="com"
+                    [showAuthor]="showAuthor"
+                    [route]="route"
+                ></competition-card>
             </li>
 
             <li *ngIf="!loading && competitionsList !== null">

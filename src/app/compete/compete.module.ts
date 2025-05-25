@@ -8,9 +8,10 @@ import { CompeteRoutingModule } from './compete-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
+import { InviteComponent } from './pages/invite/invite.component';
 
 @NgModule({
-    declarations: [CompetitionComponent],
+    declarations: [CompetitionComponent, InviteComponent],
     imports: [
         CommonModule,
         HunterCommonModule,

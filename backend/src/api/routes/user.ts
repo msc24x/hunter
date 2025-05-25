@@ -24,7 +24,7 @@ function getPublicUserDetails(user_id: number) {
             linkedin_url: true,
             competitions: {
                 where: {
-                    public: true,
+                    visibility: 'PUBLIC',
                     deleted_at: null,
                 },
                 select: {
@@ -82,7 +82,7 @@ async function getUserStats(user_id: number) {
                 },
             },
             deleted_at: null,
-            public: true,
+            visibility: 'PUBLIC',
         },
         include: {
             host_user: {

@@ -1,24 +1,13 @@
 import { exit } from 'process';
 import { DatabaseProvider } from '../services/databaseProvider';
+import { Competitions } from '../database/models/Competitions';
+import Container from 'typedi';
+import 'reflect-metadata';
 
-var client = new DatabaseProvider().client();
+var client = Container.get(DatabaseProvider).client();
 
 async function main() {
-    console.log(
-        await client.results.findMany({
-            where: {
-                user_id: 33,
-            },
-        })
-    );
-
-    console.log(
-        await client.competition_session.findMany({
-            where: {
-                user_id: 33,
-            },
-        })
-    );
+    Competitions.sendInviteEmailToPending(185);
 }
 
 client.$connect().then(() => main());
