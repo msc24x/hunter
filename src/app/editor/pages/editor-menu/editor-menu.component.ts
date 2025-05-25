@@ -99,7 +99,7 @@ export class EditorMenuComponent implements OnInit {
             ) {
                 data.live += 1;
             }
-            if (competition.public) {
+            if (competition.visibility === 'PUBLIC') {
                 data.public += 1;
             }
         }

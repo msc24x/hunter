@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
     faBook,
     faCheckDouble,
+    faCircle,
     faCircleCheck,
     faCircleXmark,
     faDownload,
@@ -30,6 +31,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     CompetitionInfo,
+    CompetitionInvite,
     domainName,
     environment,
     protocol,
@@ -61,6 +63,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     magicIcon = faWandMagicSparkles;
     guideIcon = faBook;
     inviteIcon = faPaperPlane;
+    circleIcon = faCircle;
 
     correctIcon = faCheckDouble;
     minusIcon = faMinusCircle;
@@ -101,6 +104,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         invites: [] as string[],
     };
     showInviteP = false;
+    inviteToRemove: null | CompetitionInvite = null;
 
     errors: any = {};
     contest_errors: any = {};
@@ -573,7 +577,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.fetchQuestions();
     }
 
-    toggleVisibility(status: string) {
+    toggleVisibility(status: 'PUBLIC' | 'PRIVATE' | 'INVITE') {
         this.competitionInfo.visibility = status;
     }
 
@@ -670,7 +674,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         } else guide.style.display = 'none';
     }
 
-    onClickVisibility(status: string) {
+    onClickVisibility(status: 'PUBLIC' | 'PRIVATE' | 'INVITE') {
         if (status == this.competitionInfo.visibility) return;
 
         if (status == 'PUBLIC') {
@@ -728,6 +732,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             this.showInviteP = false;
             return;
         }
+
+        if (event == 'continue') {
+            this.submitInvites();
+        }
     }
 
     isValidEmailRobust(emailString: string) {
@@ -777,5 +785,70 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     removeTempEmail(email: string) {
         this.inviteP.invites = this.inviteP.invites.filter((i) => i !== email);
+    }
+
+    removeInvite(event: string) {
+        if (event == 'cancel') {
+            this.inviteToRemove = null;
+            return;
+        }
+
+        this.loading = true;
+
+        var invite = this.inviteToRemove!;
+
+        this.competitionsData
+            .removeInvite({
+                comp_id: invite.competition_id,
+                invite_id: invite.id,
+            })
+            .subscribe({
+                next: (res) => {
+                    this.competitionInfo.competition_invites =
+                        this.competitionInfo.competition_invites?.filter(
+                            (i) => i.id !== invite.id
+                        );
+                    this.snackBar.open(
+                        `Invitee ${invite.email} has been removed from the contest`
+                    );
+                    this.loading = false;
+                    this.inviteToRemove = null;
+                },
+                error: (err) => {
+                    this.loading = false;
+                    this.snackBar.open('Something went wrong, try again later');
+                },
+            });
+    }
+
+    submitInvites() {
+        var payload = this.inviteP.invites.map((email) => {
+            return {
+                email: email,
+            } as CompetitionInvite;
+        });
+
+        this.loading = true;
+        this.errors.invites = null;
+
+        this.competitionsData
+            .createInvites({
+                id: this.competitionInfo.id,
+                invites: payload,
+            })
+            .subscribe({
+                next: (res) => {
+                    this.competitionInfo.competition_invites = res.body!;
+                    this.loading = false;
+                    this.showInviteP = false;
+                    this.snackBar.open('Invite has been sent');
+                },
+                error: (error) => {
+                    if (error.error?.errors?.invites) {
+                        this.errors.invites = error.error?.errors?.invites;
+                    }
+                    this.loading = false;
+                },
+            });
     }
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CompetitionComponent } from './pages/competition/competition.component';
+import { InviteComponent } from './pages/invite/invite.component';
 
 const routes: Routes = [
     {
@@ -10,6 +11,10 @@ const routes: Routes = [
     {
         'path': 'p/:competition_id/:ques_id',
         'component': CompetitionComponent,
+    },
+    {
+        'path': 'i/:invite_id',
+        'component': InviteComponent,
     },
 ];
 

@@ -55,7 +55,7 @@
                     matTooltip="Remove email"
                     (click)="removeTempEmail(inviteEmail)"
                 >
-                    <fa-icon [icon]="minusIcon" size="xs"></fa-icon>
+                    <fa-icon [icon]="crossIcon" size="xs"></fa-icon>
                 </span>
             </div>
         </div>
@@ -68,7 +68,34 @@
             (blur)="handleTempEmail(true)"
             placeholder="Type emails"
         />
+
+        <manual-error [message]="errors.invites"></manual-error>
     </div>
+</popup>
+
+<popup
+    heading="Remove Invitee"
+    id="delete_invitee"
+    [hidden]="!inviteToRemove"
+    (closeEvent)="removeInvite($event)"
+    [showControls]="true"
+    [destructive]="true"
+    [continueMessage]="'Yes, remove ' + inviteToRemove?.email"
+>
+    Invitee <b>{{ inviteToRemove?.email }}</b>
+    <span *ngIf="inviteToRemove?.user"
+        >(<user-display
+            [noAvatar]="true"
+            [userInfo]="inviteToRemove!.user"
+        ></user-display
+        >)</span
+    >
+    will be removed, and they will not be able to participate in this contest
+    anymore.
+    <br />
+    <br />
+    <b>Are you sure you want to continue?</b>
+    <br />
 </popup>
 
 <popup
@@ -256,6 +283,7 @@
                         'selected': competitionInfo.visibility == 'PRIVATE'
                     }"
                     (click)="onClickVisibility('PRIVATE')"
+                    matTooltip="Visible to no one"
                 >
                     <fa-icon
                         [icon]="checkIcon"
@@ -270,6 +298,7 @@
                         'selected': competitionInfo.visibility == 'INVITE'
                     }"
                     (click)="onClickVisibility('INVITE')"
+                    matTooltip="Visible to only the invited"
                 >
                     <fa-icon
                         [icon]="checkIcon"
@@ -284,6 +313,7 @@
                         'selected': competitionInfo.visibility == 'PUBLIC'
                     }"
                     (click)="onClickVisibility('PUBLIC')"
+                    matTooltip="Visible to everyone"
                 >
                     <fa-icon
                         [icon]="checkIcon"
@@ -310,11 +340,60 @@
             </div>
 
             <div *ngIf="competitionInfo.visibility == 'INVITE'">
-                <h3>Invites</h3>
+                <h3>Invitees</h3>
                 <p class="info-like sticky">
-                    People exclusively invited to participate in this
+                    {{ competitionInfo.competition_invites?.length || 0 }}
+                    people exclusively invited to participate in this
                     competition
                 </p>
+
+                <div class="invited-list">
+                    <div
+                        *ngFor="
+                            let invitedObj of competitionInfo.competition_invites
+                        "
+                        class="invited"
+                    >
+                        <fa-icon
+                            *ngIf="!invitedObj.accepted_at"
+                            class="circle-icon"
+                            [icon]="circleIcon"
+                            size="xs"
+                            matTooltip="Invitation sent"
+                        ></fa-icon>
+                        <fa-icon
+                            *ngIf="invitedObj.accepted_at"
+                            class="check-icon"
+                            [icon]="checkIcon"
+                            size="xs"
+                            matTooltip="User has accepted the invitation"
+                        ></fa-icon>
+                        <div
+                            [matTooltip]="invitedObj.email"
+                            style="display: flex"
+                        >
+                            <div
+                                class="email-text"
+                                *ngIf="!invitedObj.accepted_at"
+                            >
+                                {{ invitedObj.email }}
+                            </div>
+                            <div *ngIf="invitedObj.accepted_at">
+                                <user-display
+                                    [noAvatar]="true"
+                                    [userInfo]="invitedObj.user"
+                                ></user-display>
+                            </div>
+                        </div>
+                        <fa-icon
+                            class="remove-icon"
+                            [icon]="crossIcon"
+                            size="xs"
+                            matTooltip="Remove invitee from contest"
+                            (click)="inviteToRemove = invitedObj"
+                        ></fa-icon>
+                    </div>
+                </div>
 
                 <div class="button main" (click)="showInviteP = true">
                     Invite participants

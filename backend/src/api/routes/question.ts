@@ -3,6 +3,7 @@ import { existsSync, readFile, writeFile } from 'fs';
 import models from '../../database/containers/models';
 import {
     CodeSolution,
+    CompetitionInfo,
     HunterExecutable,
     QuestionInfo,
     UserInfo,
@@ -18,6 +19,7 @@ import { JudgeService } from '../../services/judgeService';
 import config from '../../config/config';
 import { JSDOM } from 'jsdom';
 import DOMPurify from 'dompurify';
+import { Competitions } from '../../database/models/Competitions';
 
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -605,6 +607,7 @@ router.put(
         return;
     }
 );
+
 /**
  * GET question
  *  authenticate
@@ -677,19 +680,40 @@ router.get(
                                 created_at: true,
                             },
                         },
+                        competition_invites: {
+                            where: {
+                                user_id: user.id,
+                            },
+                            include: {
+                                user: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                        avatar_url: true,
+                                    },
+                                },
+                            },
+                        },
                     }),
                 },
             })
-            .then((competition) => {
+            .then(async (competition) => {
                 // If not found, then not found
-                if (!competition) {
+                if (
+                    !competition ||
+                    (!user && competition.visibility !== 'PUBLIC')
+                ) {
                     Util.sendResponse(res, resCode.notFound);
                     return;
                 }
 
                 // If its the host, send everything
-                if (competition.host_user_id === user?.id && is_editor) {
-                    Util.sendResponseJson(res, resCode.success, competition);
+                if (competition.host_user_id === user?.id) {
+                    var response: any = competition;
+                    response.competition_invites =
+                        await Competitions.getInvites(competition.id);
+
+                    Util.sendResponseJson(res, resCode.success, response);
                     return;
                 }
 
@@ -698,7 +722,11 @@ router.get(
 
                 // If its not live yet or non-practice not started by user, remove questions info
                 if (
-                    !competition.public ||
+                    !(
+                        competition.visibility === 'PUBLIC' ||
+                        (competition.visibility === 'INVITE' &&
+                            competition.competition_invites?.[0]?.accepted_at)
+                    ) ||
                     (competition.scheduled_at &&
                         competition.scheduled_at > now) ||
                     (!competition.competition_sessions?.[0]?.created_at &&

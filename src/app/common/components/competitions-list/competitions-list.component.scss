@@ -215,7 +215,9 @@
     margin-top: 6px;
     padding: 4px;
     width: fit-content;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 4px;
     color: inherit;
 }
 

@@ -1,0 +1,36 @@
+<app-bar></app-bar>
+<app-loading *ngIf="loading"></app-loading>
+
+<sign-in-prompt *ngIf="!loading && !isAuthenticated"></sign-in-prompt>
+
+<spinner *ngIf="!invite && loading"></spinner>
+
+<div class="page" *ngIf="invite">
+    <div class="invite-box">
+        <h2>
+            You've been invited to take part in <br />
+            <i>{{ invite.competition?.title || "Untitled" }}</i>
+        </h2>
+        <p>
+            <user-display
+                [userInfo]="invite.competition?.host_user"
+            ></user-display>
+            has invited you to join their contest:<br />
+        </p>
+        <p>
+            {{
+                invite.competition?.description ||
+                    "No description provided by the host."
+            }}
+        </p>
+        <div class="button main" (click)="acceptInvite()">
+            <fa-icon [icon]="inviteIcon"></fa-icon>
+            Accept Invite
+        </div>
+        <p class="info-like">
+            This invite is intended for <i>{{ invite.email }}</i>
+        </p>
+    </div>
+</div>
+
+<bottom-app-bar></bottom-app-bar>

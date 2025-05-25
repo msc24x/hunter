@@ -50,10 +50,11 @@ model competition_invite {
   id               Int         @id @default(autoincrement())
   uuid           String      @default(uuid())
   created_at       DateTime    @default(now()) @db.DateTime(0)
+  sent_at       DateTime?    @db.DateTime(0)
   accepted_at       DateTime?    @db.DateTime(0)
-  email       String?        @db.VarChar(330)
-  user_id     Int
-  user        users       @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  email       String  @unique       @db.VarChar(330)
+  user_id     Int?
+  user        users?       @relation(fields: [user_id], references: [id], onDelete: NoAction)
   competition_id Int
   competition        competitions       @relation(fields: [competition_id], references: [id], onDelete: NoAction)
 }

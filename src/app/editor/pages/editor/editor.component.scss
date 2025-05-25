@@ -61,6 +61,53 @@
     }
 }
 
+.invited-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+
+    .invited {
+        width: fit-content;
+        display: inline-flex;
+        padding-inline: 0.5rem;
+        background: #80008017;
+        color: purple;
+        border-radius: 0.5rem;
+        font-size: 1.1rem;
+        @include sweetBorder;
+        border-color: purple;
+        gap: 0.5rem;
+        align-items: center;
+        cursor: default;
+
+        .email-text {
+            max-width: 13rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+        }
+
+        .check-icon {
+            color: green;
+        }
+
+        .circle-icon {
+            color: orange;
+        }
+
+        .remove-icon {
+            cursor: pointer;
+            display: inline-flex;
+
+            &:hover {
+                color: red;
+            }
+        }
+    }
+}
+
 .full-input {
     width: calc(100% - 32px);
     margin-inline: 0;

@@ -1,7 +1,8 @@
 import mysql, { Connection, PoolConnection, QueryError } from 'mysql2';
-import { CompetitionInfo } from '../../config/types';
+import { CompetitionInfo, CompetitionInvite } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import Container, { Inject, Service } from 'typedi';
+import { sendContentInviteEmail } from '../../emails/contest-invite/sender';
 
 export class Competitions {
     private db: DatabaseProvider;
@@ -27,21 +28,45 @@ export class Competitions {
         return new Date() < endDate;
     }
 
-    update(data: CompetitionInfo, callback: (err: any) => void) {
-        this.db
-            .client()
-            .competitions.update({
-                where: {
-                    id: data.id,
+    static async getInvites(id: number, options?: { unsent: boolean }) {
+        const client = Container.get(DatabaseProvider).client();
+
+        return await client.competition_invite.findMany({
+            where: { competition_id: id },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        avatar_url: true,
+                    },
                 },
-                data: {
-                    title: data.title,
-                    description: data.description,
-                    public: data.public,
+            },
+        });
+    }
+
+    static sendInviteEmailToPending(competition_id: number) {
+        const client = Container.get(DatabaseProvider).client();
+
+        client.competition_invite
+            .findMany({
+                where: {
+                    competition_id: competition_id,
+                    // sent_at: null,
+                    accepted_at: null,
+                },
+                include: {
+                    competition: {
+                        include: {
+                            host_user: true,
+                        },
+                    },
                 },
             })
-            .catch((err) => {
-                callback(err);
+            .then((invites) => {
+                invites.forEach((invite) => {
+                    sendContentInviteEmail(invite as CompetitionInvite);
+                });
             });
     }
 
@@ -101,8 +126,8 @@ export class Competitions {
         }
 
         if (isPublic != -1) {
-            if (isPublic) query += `and public = 1 `;
-            else query += `and public = 0 `;
+            if (isPublic) query += `and visibility = PUBLIC `;
+            else query += `and public != PUBLIC `;
         }
 
         switch (dateOrder) {

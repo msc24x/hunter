@@ -1,0 +1,14 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+.page {
+    .invite-box {
+        margin-inline: auto;
+        max-width: 512px;
+        text-align: center;
+        @include basicBack;
+        border-radius: 2rem;
+        margin-top: 10%;
+    }
+}

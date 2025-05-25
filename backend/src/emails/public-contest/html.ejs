@@ -1,60 +1,61 @@
-<%- include('emails/header') -%>
+<body>
+    <div class="container">
+        <%- include('emails/header') -%>
 
-<section class="email-body">
-    <h1>Your Contest is Now Public!</h1>
+        <div class="content">
+            <h1>Contest is now Public 🎈</h1>
 
-    <p>Dear <%= user.name %>,</p>
+            <p>Dear <%= user.name %>,</p>
 
-    <p>
-        The contest's visibility status was set to public and is now accessible
-        to everyone.
-    </p>
+            <p>
+                The contest's visibility status was set to public and is now
+                accessible to everyone.
+            </p>
 
-    <table
-        class="contest-details"
-        style="
-            background-color: #f1f1f1;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 25px 0;
-            width: 100%;
-        "
-    >
-        <tr>
-            <td style="font-weight: bold; padding-bottom: 5px">
-                <%= contest.title %>
-            </td>
-        </tr>
+            <table
+                class="contest-details"
+                style="
+                    background-color: #f1f1f1;
+                    padding: 20px;
+                    border-radius: 12px;
+                    margin: 25px 0;
+                    width: 100%;
+                "
+            >
+                <tr>
+                    <td style="font-weight: bold; padding-bottom: 5px">
+                        <%= contest.title %>
+                    </td>
+                </tr>
 
-        <% if(contest.startDate){ %>
-        <tr>
-            <td>Submissions open at <%= contest.startDate %></td>
-        </tr>
-        <% } %> <% if(contest.endDate){ %>
-        <tr>
-            <td>Submissions close at <%= contest.endDate %></td>
-        </tr>
-        <% } %>
-    </table>
+                <% if(contest.startDate){ %>
+                <tr>
+                    <td>Submissions open at <%= contest.startDate %></td>
+                </tr>
+                <% } %> <% if(contest.endDate){ %>
+                <tr>
+                    <td>Submissions close at <%= contest.endDate %></td>
+                </tr>
+                <% } %>
+            </table>
 
-    <p>What's next?</p>
-    <ol>
-        <li>
-            Share <a href="<%= contest.url %>"> your contest link</a> on your
-            socials to increase your reach!
-        </li>
-        <li>
-            Monitor submissions through the
-            <a href="<%= contest.scoreboard %>"
-                >scoreboard (Insights & Evaluations)</a
-            >.
-        </li>
-    </ol>
+            <h3>What's next?</h3>
+            <p>
+                Share <a href="<%= contest.url %>"> your contest link</a> on
+                your socials!
+            </p>
+            <p>
+                Monitor the
+                <a href="<%= contest.scoreboard %>"
+                    >scoreboard (Insights & Evaluations)</a
+                >.
+            </p>
 
-    <br />
-    <br />
+            <br />
+            <br />
 
-    <a href="<%= contest.url %>" class="button">View Contest</a>
-</section>
-
-<%- include('emails/footer') -%>
+            <a href="<%= contest.url %>" class="cta-button">View Contest</a>
+        </div>
+        <%- include('emails/footer') -%>
+    </div>
+</body>

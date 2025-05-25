@@ -56,7 +56,6 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
             data: {
                 title: req.body.title,
                 description: req.body.description,
-                public: false,
                 practice: practice,
                 created_at: new Date(),
                 host_user_id: res.locals.user.id,
@@ -196,15 +195,34 @@ router.post(
             .findUnique({
                 where: {
                     id: comp_id,
-                    public: true,
-                    OR: [
+                    AND: [
                         {
-                            scheduled_at: null,
+                            OR: [
+                                { visibility: 'PUBLIC' },
+                                {
+                                    visibility: 'INVITE',
+                                    competition_invites: {
+                                        some: {
+                                            user_id: res.locals.user.id,
+                                            accepted_at: {
+                                                not: null,
+                                            },
+                                        },
+                                    },
+                                },
+                            ],
                         },
                         {
-                            scheduled_at: {
-                                lt: new Date(),
-                            },
+                            OR: [
+                                {
+                                    scheduled_at: null,
+                                },
+                                {
+                                    scheduled_at: {
+                                        lt: new Date(),
+                                    },
+                                },
+                            ],
                         },
                     ],
                     deleted_at: null,
@@ -269,6 +287,14 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
                         created_at: true,
                     },
                 },
+                competition_invites: {
+                    where: {
+                        accepted_at: {
+                            not: null,
+                        },
+                        user_id: res.locals.user.id,
+                    },
+                },
             },
         })
         .then((competition) => {
@@ -277,9 +303,11 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
                 return;
             }
 
-            // send the competition right away if its public and started by user.
+            // send the competition right away if its (public or invited) and started by user.
             if (
-                competition.public &&
+                (competition.visibility === 'PUBLIC' ||
+                    (competition.visibility == 'INVITE' &&
+                        competition.competition_invites.length)) &&
                 competition.competition_sessions?.[0]?.created_at
             ) {
                 Util.sendResponseJson(res, resCode.success, competition);
@@ -502,7 +530,7 @@ router.get('/competitions', authenticate, (req, res) => {
     if (params.includeSelf) {
         andParams.push({ host_user_id: user!.id });
     } else {
-        andParams.push({ public: true });
+        andParams.push({ visibility: 'PUBLIC' });
     }
 
     if (params.liveStatus === 'upcoming') {
@@ -527,11 +555,16 @@ router.get('/competitions', authenticate, (req, res) => {
         orderBy.created_at = params.orderBy;
     }
 
-    const whereClause = {
+    const whereClause: any = {
         deleted_at: null,
-        ...(orParams.length && { OR: [...orParams] }),
-        ...(andParams.length && { AND: [...andParams] }),
     };
+
+    if (orParams.length) {
+        whereClause.OR = orParams;
+    }
+    if (andParams.length) {
+        whereClause.AND = andParams;
+    }
 
     client.competitions
         .findMany({

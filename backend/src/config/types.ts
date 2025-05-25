@@ -88,7 +88,6 @@ export type CompetitionInfo = {
     scheduled_end_at: Date;
     time_limit: number | null;
     rating: number;
-    public: boolean;
     hidden_scoreboard: boolean;
     practice: boolean;
 };
@@ -106,12 +105,13 @@ export type CompetitionInvite = {
     id: number;
     uuid: string;
     email: string;
-    user_id: number;
+    user_id?: number;
     user_info?: UserInfo;
     competition_id: number;
-    competitions?: CompetitionInfo;
+    competition?: CompetitionInfo;
     created_at: Date;
     accepted_at: Date | null;
+    sent_at: Date | null;
 };
 
 export type CodeSolution = {

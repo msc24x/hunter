@@ -18,3 +18,16 @@
 .user-tag {
     opacity: 0.6;
 }
+
+.user-name {
+    display: inline-flex;
+    align-items: center;
+}
+
+.name-text {
+    max-width: 13rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}

@@ -82,7 +82,7 @@
                             *ngIf="showAuthor"
                         ></ng-container>
                         <span
-                            *ngIf="!com.public"
+                            *ngIf="com.visibility == 'PRIVATE'"
                             matTooltip="Private, only visible to you"
                         >
                             <fa-icon

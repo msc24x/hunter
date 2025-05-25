@@ -46,7 +46,7 @@ export interface CompetitionInfo {
     host_user?: UserInfo;
     title: string;
     hidden_scoreboard: boolean;
-    visibility: string;
+    visibility: 'PRIVATE' | 'PUBLIC' | 'INVITE';
     description: string;
     created_at: Date;
     updated_at: Date;
@@ -55,7 +55,6 @@ export interface CompetitionInfo {
     scheduled_end_at: Date | null;
     time_limit: number | null;
     rating: number;
-    public: boolean;
     practice: boolean;
     questions?: QuestionInfo[];
     competition_sessions?: CompetitionSession[];
@@ -76,9 +75,9 @@ export type CompetitionInvite = {
     uuid: string;
     email: string;
     user_id: number;
-    user_info?: UserInfo;
+    user?: UserInfo;
     competition_id: number;
-    competitions?: CompetitionInfo;
+    competition?: CompetitionInfo;
     created_at: Date;
     accepted_at: Date | null;
 };
@@ -157,6 +156,10 @@ export const apiEndpoints = {
     competition: environment.apiUrl + '/competition',
     competitionQuality: environment.apiUrl + '/competition/{0}/quality',
     competitionSession: environment.apiUrl + '/competition/{0}/session',
+    competitionInvites: environment.apiUrl + '/competitions/{0}/invites',
+    competitionInviteDelete:
+        environment.apiUrl + '/competitions/{0}/invites/{1}',
+    invites: environment.apiUrl + '/competitions/invites/{0}',
     getCompetitions: environment.apiUrl + '/competitions',
     question: environment.apiUrl + '/competitions/{0}/questions/{1}',
     deleteQuestion: environment.apiUrl + '/question/delete',
