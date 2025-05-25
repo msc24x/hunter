@@ -715,7 +715,7 @@ router.get(
                 }
 
                 // If not public, then not found
-                if (competition.visibility !== 'PUBLIC') {
+                if (competition.visibility === 'PRIVATE') {
                     Util.sendResponse(res, resCode.notFound);
                     return;
                 }
