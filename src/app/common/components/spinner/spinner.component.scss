@@ -1,4 +1,57 @@
-p {
-    text-align: center;
+div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: gray;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+
+    .loader {
+        height: 1rem;
+        aspect-ratio: 5;
+        display: flex;
+        justify-content: space-between;
+        --_g: no-repeat radial-gradient(farthest-side, gray 95%, #0000);
+        background: var(--_g), var(--_g);
+        background-size: 20% 100%;
+        animation: l42-0 1s infinite;
+    }
+    .loader:before,
+    .loader:after {
+        content: "";
+        height: inherit;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: gray;
+
+        animation: l42-1 1s infinite;
+    }
+    .loader:after {
+        --s: -1, -1;
+    }
+    @keyframes l42-0 {
+        0%,
+        60% {
+            background-position: calc(1 * 100% / 3) 0, calc(2 * 100% / 3) 0;
+        }
+        100% {
+            background-position: calc(0 * 100% / 3) 0, calc(3 * 100% / 3) 0;
+        }
+    }
+    @keyframes l42-1 {
+        0% {
+            transform: scale(var(--s, 1)) translate(0, 0);
+        }
+        33% {
+            background: crimson;
+
+            transform: scale(var(--s, 1)) translate(0, 130%);
+        }
+        66% {
+            transform: scale(var(--s, 1)) translate(calc(400% / 3), 130%);
+        }
+        100% {
+            transform: scale(var(--s, 1)) translate(calc(400% / 3), 0);
+        }
+    }
 }
