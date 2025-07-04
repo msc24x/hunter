@@ -4,6 +4,8 @@
 ![](https://badgen.net/github/branches/msc24x/hunter)
 ![](https://badgen.net/github/commits/msc24x/hunter/main)
 
+![](https://hunter.cambo.in/assets/hunter-banner.jpg)
+
 Built to simplify the daily coding and normal academic competitions hosting in general. Hunter gives you the ability to create your own competitions and necessary features to maintain and judge your participants.
 
 Visit at [hunter.cambo.in](https://hunter.cambo.in)
