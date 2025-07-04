@@ -704,8 +704,10 @@ router.get(
                     return;
                 }
 
+                const isEditor = req.headers.referer?.includes('/editor/');
+
                 // If its the host, send everything
-                if (competition.host_user_id === user?.id) {
+                if (isEditor && competition.host_user_id === user?.id) {
                     var response: any = competition;
                     response.competition_invites =
                         await Competitions.getInvites(competition.id);
