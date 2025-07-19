@@ -8,7 +8,7 @@ dotenv.config({
 
 export default {
     filesPath: 'files/',
-    env: process.env.ENV,
+    env: process.env.ENV as 'local' | 'prod',
     protocol: process.env.PROTOCOL,
     frontend: process.env.FRONTEND_DOMAIN,
     port: process.env.API_PORT,

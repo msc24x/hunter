@@ -15,6 +15,7 @@ interface EmailData {
         name: string;
         email: string;
     };
+    url: string;
 }
 
 export function sendAnnouncementEmail(user: UserInfo) {
@@ -23,8 +24,10 @@ export function sendAnnouncementEmail(user: UserInfo) {
     data.user = {
         id: user!.id,
         email: user!.email,
-        name: Util.getFirstName(user!.name || 'user'),
+        name: Util.getFirstName(user!.name || user.email.split('@')[0]),
     };
+
+    data.url = `${config.protocol}://${config.frontend}`;
 
     render(data, 'announcement').then((html) => {
         sendInfoEmail({
