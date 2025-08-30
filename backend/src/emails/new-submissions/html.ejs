@@ -1,0 +1,56 @@
+<body>
+    <style>
+        .contest {
+            display: block;
+            background-color: antiquewhite;
+            color: darkred;
+            padding: 14px 14px;
+            margin-bottom: 8px;
+            border-radius: 22px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .contest:hover {
+            text-decoration: underline !important;
+        }
+
+        .count {
+            display: block;
+            margin-top: 6px;
+            width: fit-content;
+            border-radius: 12px;
+            background-color: #7d2222;
+            color: white;
+            padding: 4px 9px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+    </style>
+
+    <div class="container">
+        <%- include('emails/header') -%>
+
+        <div class="content">
+            <h1><%= total %> New submission<% if (total > 1) {%>s<% } %> 🪶</h1>
+
+            <p>
+                You have received <%= total %> new submission<% if (total > 1) {%>s<% } %> since the last time you checked.  
+                Here's a quick summary:
+            </p>
+
+            <div class="list">
+                <% for (const contest of contests) { %>
+                    <a class="contest" href="<%= contest.url %>" title="Click to view competition insights">
+                        <%= contest.title %>
+                        <span class="count"><%= contest.count %> submission<% if (contest.count > 1) {%>s<% } %></span>
+                    </a>
+                <% } %>
+            </div>
+
+            <%- include('emails/footer') -%>
+    </div>
+</body>

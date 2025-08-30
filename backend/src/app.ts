@@ -7,6 +7,7 @@ import { DatabaseProvider } from './services/databaseProvider';
 import Container from 'typedi';
 import fileUpload from 'express-fileupload';
 import morgan from 'morgan';
+import { registerTasks } from './cron';
 
 const app = express();
 
@@ -19,8 +20,9 @@ if (config.env !== 'local') {
 }
 
 app.use(morgan('dev'));
-
 app.use(require('./api/routes'));
+
+registerTasks();
 
 app.listen(config.port, () => {
     console.log('Hunter API started at port ' + config.port);

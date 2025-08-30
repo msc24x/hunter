@@ -52,7 +52,7 @@ model competition_invite {
   created_at       DateTime    @default(now()) @db.DateTime(0)
   sent_at       DateTime?    @db.DateTime(0)
   accepted_at       DateTime?    @db.DateTime(0)
-  email       String  @unique       @db.VarChar(330)
+  email       String         @db.VarChar(330)
   user_id     Int?
   user        users?       @relation(fields: [user_id], references: [id], onDelete: NoAction)
   competition_id Int
@@ -153,4 +153,10 @@ model users {
   session           session?
   competition_sessions        competition_session[]
   competition_invites        competition_invite[]
+}
+
+model cron_job {
+  id                Int            @id @default(autoincrement())
+  name              String        @db.VarChar(200)
+  last_run_at       DateTime?      @db.DateTime(0)
 }
