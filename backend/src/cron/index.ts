@@ -22,19 +22,23 @@ const tasks = [
 
 export function registerTasks() {
     tasks.forEach(async (task) => {
-        cron.schedule(task.expression, task.handler, { name: task.name });
+        try {
+            cron.schedule(task.expression, task.handler, { name: task.name });
 
-        let taskObj = await client.cron_job.findFirst({
-            where: { name: task.name },
-        });
-
-        if (!taskObj) {
-            taskObj = await client.cron_job.create({
-                data: { name: task.name, last_run_at: null },
+            let taskObj = await client.cron_job.findFirst({
+                where: { name: task.name },
             });
-            console.log(`[CRON] New task created ${task.name}`);
-        }
 
-        console.log(`[CRON] Registered ${task.name}`);
+            if (!taskObj) {
+                taskObj = await client.cron_job.create({
+                    data: { name: task.name, last_run_at: null },
+                });
+                console.log(`[CRON] New task created ${task.name}`);
+            }
+
+            console.log(`[CRON] Registered ${task.name}`);
+        } catch (error) {
+            console.error('[CRON] Failed to register task', task.name, error);
+        }
     });
 }

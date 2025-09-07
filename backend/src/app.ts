@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express, { Response, Request } from 'express';
+import express, { Response, Request, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import config from './config/config';
@@ -29,4 +29,14 @@ app.listen(config.port, () => {
 }).on('close', () => {
     const db = Container.get(DatabaseProvider);
     db.client().$disconnect();
+});
+
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error('Error caught:', err.message, err.stack);
+
+    res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+    });
 });
