@@ -15,18 +15,10 @@ import config from '../config/config';
 export class JudgeService {
     private isProcessingUserMap = new Map<number, boolean>();
     private entries = 0;
-    private gatewayPath: string;
     private showdownJudgeUrl = process.env.SHOWDOWN_URL!;
-
     public filesPath: string = 'files/';
 
-    constructor() {
-        if (config.env == 'prod') {
-            this.gatewayPath = 'src/scripts/linux/init_judge.sh';
-        } else {
-            this.gatewayPath = 'src/scripts/win/init_judge.bat';
-        }
-    }
+    constructor() {}
 
     private saveEntry({ id }: UserInfo) {
         this.isProcessingUserMap.set(id, true);

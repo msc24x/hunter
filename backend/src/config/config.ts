@@ -33,4 +33,7 @@ export default {
         selectable: 0,
         hidden: 1,
     },
+    fileScopes: {
+        community_banners: 'community/banners/',
+    },
 };
