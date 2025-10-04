@@ -10,5 +10,6 @@ router.use(require('./results'));
 router.use(require('./analytics'));
 router.use(require('./judge'));
 router.use(require('./invites'));
+router.use(require('./communities'));
 
 module.exports = router;

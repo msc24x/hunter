@@ -10,7 +10,7 @@ import { PopupComponent } from './components/popup/popup.component';
 import { SigninDialogComponent } from './components/signin-dialog/signin-dialog.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { AboutComponent } from './pages/about/about.component';
-import { CompeteComponent } from './pages/compete/compete.component';
+import { CompeteComponent } from '../compete/pages/compete/compete.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 import {
@@ -48,8 +48,13 @@ import { QuestionDisplayComponent } from './components/question-display/question
 import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
-import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import {
+    CdkDrag,
+    CdkDropList,
+    CdkDragPlaceholder,
+} from '@angular/cdk/drag-drop';
 import { CompetitionCardComponent } from './components/competition-card/competition-card.component';
+import { CommunityModule } from 'src/app/community/community.module';
 
 @NgModule({
     declarations: [
@@ -104,6 +109,7 @@ import { CompetitionCardComponent } from './components/competition-card/competit
         FormsModule,
         CdkDropList,
         CdkDrag,
+        CdkDragPlaceholder,
     ],
     exports: [
         AppBarComponent,

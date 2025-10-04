@@ -18,9 +18,9 @@ import { DatabaseProvider } from '../../services/databaseProvider';
 import config from '../../config/config';
 
 const router = express.Router();
+const client = Container.get(DatabaseProvider).client();
 const judgeService = Container.get(JudgeService);
 const scoreboardService = Container.get(ScoreboardService);
-const client = Container.get(DatabaseProvider).client();
 
 function safeRouteToQuestion(
     req: Request,

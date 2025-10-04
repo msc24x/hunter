@@ -1,0 +1,56 @@
+<app-bar></app-bar>
+
+<app-loading *ngIf="loading"></app-loading>
+
+<div class="community-form-container">
+    <div class="form">
+        <h2>New Community Form</h2>
+        <hr />
+        <br />
+        <h4>Name of the Community</h4>
+        <p class="info-like sticky">
+            Could be your Official Community name or name of the education
+            institute
+        </p>
+        <input type="text" [(ngModel)]="community.name" />
+        <manual-error [message]="errors.name"></manual-error>
+
+        <h4>Description</h4>
+        <p class="info-like sticky">
+            Explain what defines your community, what you do and/or how you do
+            it.
+        </p>
+        <textarea type="text" [(ngModel)]="community.description"> </textarea>
+        <manual-error [message]="errors.description"></manual-error>
+
+        <h4>Website</h4>
+        <p class="info-like sticky">
+            Any external link that refers to your community
+        </p>
+        <input type="text" [(ngModel)]="community.website_link" />
+        <manual-error [message]="errors.website_link"></manual-error>
+
+        <h4>Logo (Upload an image)</h4>
+        <input type="file" (change)="onLogoFileChange($event)" />
+        <manual-error [message]="errors.logo_file_path"></manual-error>
+
+        <br />
+        <br />
+
+        <p class="flex-row i-confirm">
+            <input type="checkbox" [(ngModel)]="iConfirm" />
+            <span (click)="iConfirm = !iConfirm">
+                I confirm I am an authorized representative of this community
+                and understand that false representation may result in a
+                permanent ban if reported
+            </span>
+        </p>
+        <manual-error [message]="errors.iConfirm"></manual-error>
+
+        <br />
+
+        <button class="main" (click)="sendRequest()">Submit the request</button>
+    </div>
+</div>
+
+<bottom-app-bar></bottom-app-bar>

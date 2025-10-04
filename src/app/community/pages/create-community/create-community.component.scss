@@ -1,0 +1,29 @@
+@use "../../../../assets/colors";
+@use "../../../../assets/fonts";
+@use "../../../../assets/mixins" as *;
+
+.community-form-container {
+    display: flex;
+    justify-content: center;
+
+    .form {
+        @include blackBack;
+        padding: 2rem;
+        max-width: 456px;
+
+        textarea {
+            @include appTextArea;
+            width: calc(100% - 2rem);
+        }
+
+        input[type="text"] {
+            width: calc(100% - 1rem);
+        }
+
+        .i-confirm {
+            align-items: start;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+    }
+}

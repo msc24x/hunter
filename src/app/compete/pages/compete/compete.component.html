@@ -16,6 +16,16 @@
     </div>
 </div> -->
 
+<ng-template #communitiesTemp>
+    <h1>Communities</h1>
+</ng-template>
+
+<ng-outlet
+    [ngTemplateOutlet]="communitiesTemp"
+    *ngIf="publicCommunities?.length"
+>
+</ng-outlet>
+
 <competitions-list
     [competitionsList]="this.publicCompetitions"
     [invitedList]="invitedCompetitions"

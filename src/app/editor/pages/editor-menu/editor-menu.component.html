@@ -28,11 +28,22 @@
             title="{{ competitionsMetaData.public }}"
             message="Number of Public Competitions"
         ></dashboard-card>
+        <div class="community-ad" routerLink="/communities/create">
+            Are you a Community, College or a School?
+            <div class="more">
+                Create a Hunter Community to represent your institution. Click
+                here to learn more.
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- <div class="communities-section">
+    <h1>Communities you joined</h1>
+</div> -->
+
 <competitions-list
-    heading="Your Competitions"
+    heading="Competitions"
     route="editor"
     [includeSelf]="true"
     [showAuthor]="false"

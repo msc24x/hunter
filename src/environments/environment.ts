@@ -63,6 +63,9 @@ export interface CompetitionInfo {
     questions?: QuestionInfo[];
     competition_sessions?: CompetitionSession[];
     competition_invites?: CompetitionInvite[];
+    community_id?: number;
+    community_only?: boolean;
+    community?: Community;
 
     _count: CompetitionInfoCounts;
 }
@@ -178,6 +181,8 @@ export const apiEndpoints = {
     resultsAll: environment.apiUrl + '/competitions/{0}/results',
     progress: environment.apiUrl + '/competitions/{0}/progress',
     submission: environment.apiUrl + '/submission/',
+    communities: environment.apiUrl + '/communities/',
+    createCommunity: environment.apiUrl + '/communities/create',
 };
 
 export const templates = {
@@ -234,6 +239,31 @@ export interface QuestionChoice {
     is_correct: boolean;
     delete?: boolean;
 }
+
+export interface Community {
+    id: number;
+    name?: string;
+    description?: string;
+    logo_file_path?: string;
+    website_link?: string;
+    created_at: Date;
+    status: string;
+    admin_user_id: number;
+    admin_user?: UserInfo;
+    members?: CommunityMember[];
+    competitions?: CompetitionInfo[];
+}
+
+export interface CommunityMember {
+    id: number;
+    user_id: number;
+    community_id: number;
+    status: string;
+    created_at: Date;
+    user?: UserInfo;
+    community?: Community;
+}
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

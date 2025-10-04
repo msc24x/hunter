@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CompetitionInfo, UserInfo } from 'src/environments/environment';
+import {
+    Community,
+    CompetitionInfo,
+    UserInfo,
+} from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 
@@ -21,6 +25,7 @@ export class CompeteComponent implements OnInit {
 
     publicCompetitions: Array<CompetitionInfo> | null = null;
     invitedCompetitions: Array<CompetitionInfo> | null = null;
+    publicCommunities: Array<Community> = [];
 
     constructor(
         private authService: AuthService,
