@@ -5,9 +5,14 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
-import { CompetitionInfo, UserInfo } from 'src/environments/environment';
+import {
+    Community,
+    CompetitionInfo,
+    UserInfo,
+} from 'src/environments/environment';
 
 import { Router } from '@angular/router';
+import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 
 @Component({
     selector: 'communities',
@@ -16,6 +21,7 @@ import { Router } from '@angular/router';
 })
 export class CommunitiesComponent implements OnInit, OnDestroy {
     loading = 0;
+    communities: Array<Community> = [];
 
     user = {} as UserInfo;
     isAuthenticated = false;
@@ -25,7 +31,8 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private titleService: Title,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private communitiesService: CommunitiesDataService
     ) {
         titleService.setTitle('Communities - Hunter');
 
@@ -38,8 +45,6 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {}
 
     ngOnInit(): void {
-        console.log('hi');
-
         if (!this.isAuthenticated) {
             this.loading++;
             this.authService.authenticate_credentials().subscribe(
@@ -50,6 +55,7 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
                         this.authService.user = this.user;
                         this.authService.isAuthenticated.next(true);
                         this.loading--;
+                        this.fetchPageData();
                     }
                 },
                 (err) => {
@@ -57,6 +63,18 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
                 }
             );
         } else {
+            this.fetchPageData();
         }
+    }
+
+    fetchPageData() {
+        this.communitiesService.fetchCommunities({}).subscribe({
+            next: (communitiesResponse) => {
+                this.communities = communitiesResponse.body as Array<Community>;
+            },
+            error: (err) => {
+                this.snackBar.open('Something went wrong');
+            },
+        });
     }
 }

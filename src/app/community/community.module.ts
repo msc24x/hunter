@@ -10,11 +10,10 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommunitiesComponent } from './pages/communities/communities.component';
 import { CommunityRoutingModule } from './community-routing.module';
-import { CommunitiesListComponent } from './components/communities-list/communities-list.component';
 import { CreateCommunityComponent } from './pages/create-community/create-community.component';
 
 @NgModule({
-    declarations: [CommunitiesComponent, CommunitiesListComponent, CreateCommunityComponent],
+    declarations: [CommunitiesComponent, CreateCommunityComponent],
     imports: [
         CommonModule,
         HunterCommonModule,

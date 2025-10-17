@@ -70,32 +70,29 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
 
     const logoBuffer = Buffer.from(logo_file_path!, 'base64');
     const formatCheck = isImageFormat(logoBuffer);
+    console.log(description);
 
-    const logoFileName = `community_logo_${Date.now()}_${Math.floor(
-        Math.random() * 10000
-    )}.${formatCheck.ext}`;
-
-    createFile(logoFileName, logoBuffer)
-        .then(() => {
-            client.community
-                .create({
-                    data: {
-                        name,
-                        description,
-                        website_link,
-                        logo_file_path: logoFileName,
-                        admin_user_id: user.id,
-                        status: 'PENDING_APPROVAL',
-                        created_at: new Date(),
-                    },
-                })
-                .then((community) => {
-                    Util.sendResponseJson(res, resCode.created, community);
-                });
-        })
-        .catch(() => {
-            Util.sendResponse(res, resCode.serverError);
+    client.$transaction(async (tranc) => {
+        var community = await tranc.community.create({
+            data: {
+                name,
+                description,
+                website_link,
+                admin_user_id: user.id,
+                status: 'PENDING_APPROVAL',
+                created_at: new Date(),
+            },
         });
+        const logoFileName = `community_logo/${community.id}.${formatCheck.ext}`;
+
+        await createFile(logoFileName, logoBuffer);
+        await tranc.community.update({
+            where: { id: community.id },
+            data: { logo_file_path: logoFileName },
+        });
+
+        Util.sendResponseJson(res, resCode.created, community);
+    });
 });
 
 router.get('/communities', (req, res) => {

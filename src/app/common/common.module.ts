@@ -55,6 +55,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { CompetitionCardComponent } from './components/competition-card/competition-card.component';
 import { CommunityModule } from 'src/app/community/community.module';
+import { CommunitiesListComponent } from './components/communities-list/communities-list.component';
 
 @NgModule({
     declarations: [
@@ -96,6 +97,7 @@ import { CommunityModule } from 'src/app/community/community.module';
         NgKatexComponent,
         SpinnerComponent,
         CompetitionCardComponent,
+        CommunitiesListComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -147,6 +149,7 @@ import { CommunityModule } from 'src/app/community/community.module';
         SpinnerComponent,
         TimeAgo,
         PrettyDuration,
+        CommunitiesListComponent,
     ],
     providers: [DatePipe],
 })
