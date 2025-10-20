@@ -1,0 +1,29 @@
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+@use "../../../../assets/fonts";
+
+.large-app-page {
+    margin: auto;
+    display: flex;
+    gap: 2rem;
+}
+
+.community-details {
+    width: 100%;
+    max-width: 32rem;
+
+    .logo {
+        width: 100%;
+        max-width: 32rem;
+        height: 18rem;
+        border-radius: 2rem;
+        overflow: hidden;
+        @include sweetBorder;
+
+        img {
+            height: inherit;
+            width: inherit;
+            object-fit: cover;
+        }
+    }
+}

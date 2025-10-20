@@ -74,7 +74,7 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
         });
 });
 
-function validateContestInfo(comp: CompetitionInfo) {
+async function validateContestInfo(comp: CompetitionInfo) {
     var errors: any = {};
 
     if (comp?.title?.length > 120) {
@@ -104,6 +104,21 @@ function validateContestInfo(comp: CompetitionInfo) {
         }
     }
 
+    if (comp?.community_id) {
+        let community_obj = await client.community.findFirst({
+            where: {
+                id: comp.community_id,
+                admin_user_id: comp.host_user_id,
+                // status: 'APPROVED',
+            },
+        });
+
+        if (!community_obj) {
+            errors.community_id =
+                'Linked community must be created by the host and should be APPROVED';
+        }
+    }
+
     return errors;
 }
 
@@ -115,67 +130,76 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
         return;
     }
 
-    var errors = validateContestInfo(competitionBody);
+    validateContestInfo(competitionBody).then((errors) => {
+        if (Object.keys(errors).length) {
+            Util.sendResponseJson(res, resCode.badRequest, errors);
+            return;
+        }
 
-    if (Object.keys(errors).length) {
-        Util.sendResponseJson(res, resCode.badRequest, errors);
-        return;
-    }
+        client.competitions
+            .findUnique({ where: { id: parseInt(competitionBody.id) } })
+            .then((competition) => {
+                if (!competition) {
+                    Util.sendResponse(res, resCode.notFound);
+                    return;
+                }
 
-    client.competitions
-        .findUnique({ where: { id: parseInt(competitionBody.id) } })
-        .then((competition) => {
-            if (!competition) {
-                Util.sendResponse(res, resCode.notFound);
-                return;
-            }
+                if (competition.host_user_id != res.locals.user.id) {
+                    Util.sendResponse(res, resCode.forbidden);
+                    return;
+                }
 
-            if (competition.host_user_id != res.locals.user.id) {
-                Util.sendResponse(res, resCode.forbidden);
-                return;
-            }
+                const markingPublic =
+                    competition.visibility != competitionBody.visibility &&
+                    competitionBody.visibility == 'PUBLIC';
 
-            const markingPublic =
-                competition.visibility != competitionBody.visibility &&
-                competitionBody.visibility == 'PUBLIC';
+                client.competitions
+                    .update({
+                        where: {
+                            id: competition.id,
+                            host_user_id: res.locals.user.id,
+                        },
+                        data: {
+                            description: competitionBody.description || '',
+                            title: competitionBody.title || '',
+                            visibility: competitionBody.visibility,
+                            community_id: competitionBody.community_id,
+                            community_only: competitionBody.community_only,
+                            hidden_scoreboard:
+                                competitionBody.hidden_scoreboard,
+                            scheduled_at: competitionBody.scheduled_at
+                                ? new Date(competitionBody.scheduled_at)
+                                : null,
+                            scheduled_end_at: competitionBody.scheduled_end_at
+                                ? new Date(competitionBody.scheduled_end_at)
+                                : null,
+                            updated_at: new Date(),
+                            time_limit: competition.practice
+                                ? null
+                                : competitionBody.time_limit,
+                        },
+                        include: {
+                            host_user: true,
+                        },
+                    })
+                    .then((competition) => {
+                        Util.sendResponseJson(
+                            res,
+                            resCode.success,
+                            competition
+                        );
 
-            client.competitions
-                .update({
-                    where: {
-                        id: competition.id,
-                        host_user_id: res.locals.user.id,
-                    },
-                    data: {
-                        description: competitionBody.description || '',
-                        title: competitionBody.title || '',
-                        visibility: competitionBody.visibility,
-                        hidden_scoreboard: competitionBody.hidden_scoreboard,
-                        scheduled_at: competitionBody.scheduled_at
-                            ? new Date(competitionBody.scheduled_at)
-                            : null,
-                        scheduled_end_at: competitionBody.scheduled_end_at
-                            ? new Date(competitionBody.scheduled_end_at)
-                            : null,
-                        updated_at: new Date(),
-                        time_limit: competition.practice
-                            ? null
-                            : competitionBody.time_limit,
-                    },
-                    include: {
-                        host_user: true,
-                    },
-                })
-                .then((competition) => {
-                    Util.sendResponseJson(res, resCode.success, competition);
-
-                    if (markingPublic) {
-                        sendPublicContestEmail(competition as CompetitionInfo);
-                    }
-                })
-                .catch((err) => {
-                    Util.sendResponse(res, resCode.serverError, err);
-                });
-        });
+                        if (markingPublic) {
+                            sendPublicContestEmail(
+                                competition as CompetitionInfo
+                            );
+                        }
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
+            });
+    });
 });
 
 // Start a contest for self

@@ -182,6 +182,7 @@ export const apiEndpoints = {
     progress: environment.apiUrl + '/competitions/{0}/progress',
     submission: environment.apiUrl + '/submission/',
     communities: environment.apiUrl + '/communities/',
+    community: environment.apiUrl + '/communities/{0}',
     createCommunity: environment.apiUrl + '/communities/create',
 };
 

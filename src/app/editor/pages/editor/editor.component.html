@@ -530,6 +530,41 @@
                 <span> View participation page for your contest </span>
             </a>
         </div>
+
+        <div class="meta-section">
+            <h3>Link Community</h3>
+            <mat-select
+                placeholder="Add"
+                [(ngModel)]="competitionInfo.community_id"
+            >
+                <mat-option [value]="null">Un-select</mat-option>
+                <mat-option
+                    *ngFor="let op of userCommunities"
+                    [value]="op.id"
+                    >{{ op.name }}</mat-option
+                >
+            </mat-select>
+            <br />
+            <br />
+            <p class="info-like sticky">
+                You can link this competition to a Community created by you.
+                Linked competitions will be labeled under the community page.
+            </p>
+
+            <div *ngIf="competitionInfo.community_id">
+                <h3>
+                    Members only? &nbsp; &nbsp;
+                    <mat-slide-toggle
+                        [(ngModel)]="competitionInfo.community_only"
+                    ></mat-slide-toggle>
+                </h3>
+                <p class="info-like sticky">
+                    Enable this to make it visible to only the Community
+                    Members, which are Hunter users who have joined the
+                    community.
+                </p>
+            </div>
+        </div>
     </div>
     <div class="section-content">
         <ng-outlet [ngTemplateOutlet]="contestWarnings"></ng-outlet>

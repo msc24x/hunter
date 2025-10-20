@@ -1,0 +1,40 @@
+<app-bar></app-bar>
+<app-loading *ngIf="loading"></app-loading>
+
+<div *ngIf="!community && loading" class="large-app-page">
+    <spinner></spinner>
+</div>
+
+<div *ngIf="community" class="large-app-page">
+    <div class="community-details">
+        <div class="logo">
+            <img
+                src="/api/media/{{ community.logo_file_path }}"
+                alt="{{ community.name }} community logo"
+            />
+        </div>
+        <h2>{{ community.name }}</h2>
+        <p>{{ community.description }}</p>
+        <p>
+            <a href="" (click)="openUrl(community.website_link)">{{
+                community.website_link
+            }}</a>
+        </p>
+
+        <p>
+            Managed by:
+            <user-display [userInfo]="community.admin_user"></user-display>
+        </p>
+
+        <div class="button main">Join Community</div>
+    </div>
+
+    <div class="panel">
+        <h1>Competitions</h1>
+
+        <competitions-list
+            [competitionsList]="[]"
+            route="compete/p"
+        ></competitions-list>
+    </div>
+</div>

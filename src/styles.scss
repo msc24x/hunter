@@ -224,6 +224,16 @@ question-display {
     }
 }
 
+.large-app-page {
+    max-width: 1450px;
+    margin-inline: auto;
+}
+
+.small-app-page {
+    max-width: 1080px;
+    margin-inline: auto;
+}
+
 // =============================
 // State Classes
 // =============================

@@ -12,12 +12,7 @@ enum CommunityStatus {
   PENDING_APPROVAL
   APPROVED
   NOT_APPROVED
-}
-
-enum CommunityType {
-  PENDING_APPROVAL
-  APPROVED
-  NOT_APPROVED
+  DISABLED
 }
 
 datasource db {

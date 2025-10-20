@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { format } from 'src/app/utils/utils';
 import { apiEndpoints, Community } from 'src/environments/environment';
 
 @Injectable({
@@ -7,6 +8,16 @@ import { apiEndpoints, Community } from 'src/environments/environment';
 })
 export class CommunitiesDataService {
     constructor(private http: HttpClient) {}
+
+    fetchCommunity(params: { id?: string | number | null }) {
+        let url = format(apiEndpoints.community, params.id?.toString() || '');
+
+        return this.http.get<Community>(url, {
+            withCredentials: true,
+            responseType: 'json',
+            observe: 'response',
+        });
+    }
 
     fetchCommunities(params: { user_id?: number | null }) {
         const httpParams = new HttpParams();

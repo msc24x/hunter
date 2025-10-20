@@ -95,6 +95,38 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
     });
 });
 
+router.get('/communities/:id', (req, res) => {
+    let id = parseInt(req.params.id?.toString() || '');
+
+    client.community
+        .findFirstOrThrow({
+            where: {
+                id: id,
+            },
+            include: {
+                admin_user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        avatar_url: true,
+                    },
+                },
+                competitions: {
+                    where: {
+                        deleted_at: null,
+                    },
+                },
+            },
+        })
+        .then((community) => {
+            Util.sendResponseJson(res, resCode.accepted, community);
+        })
+        .catch((e) => {
+            console.error(e);
+            Util.sendResponse(res, resCode.notFound);
+        });
+});
+
 router.get('/communities', (req, res) => {
     client.community
         .findMany({
@@ -116,5 +148,4 @@ router.get('/communities', (req, res) => {
         });
 });
 
-module.exports = router;
 module.exports = router;

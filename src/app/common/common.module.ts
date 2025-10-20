@@ -31,7 +31,6 @@ import { CodeEditorComponent } from './components/code-editor/code-editor.compon
 import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.component';
 import { GreenredComponent } from './greenred/greenred.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
-import { EditorModule } from '../editor/editor.module';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionEvaluationComponent } from './components/question-evaluation/question-evaluation.component';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -54,7 +53,6 @@ import {
     CdkDragPlaceholder,
 } from '@angular/cdk/drag-drop';
 import { CompetitionCardComponent } from './components/competition-card/competition-card.component';
-import { CommunityModule } from 'src/app/community/community.module';
 import { CommunitiesListComponent } from './components/communities-list/communities-list.component';
 
 @NgModule({
