@@ -32,11 +32,11 @@ const routes: Routes = [
 
         'component': ProfileComponent,
     },
-    {
-        'path': 'communities/:community_id',
-        'title': 'Hunter',
-        'component': CommunityComponent,
-    },
+    // {
+    //     'path': 'communities/:community_id',
+    //     'title': 'Hunter',
+    //     'component': CommunityComponent,
+    // },
     {
         'path': 'about',
         'title':

@@ -318,12 +318,14 @@ export class CompetitionsDataService {
         if (params?.query) httpParams = httpParams.set('query', params.query);
         if (params?.duration)
             httpParams = httpParams.set('duration', params.duration);
+        if (params?.community_id)
+            httpParams = httpParams.set('community_id', params.community_id);
         if (params?.liveStatus)
             httpParams = httpParams.set('liveStatus', params.liveStatus);
         if (params?.orderBy)
             httpParams = httpParams.set('orderBy', params.orderBy);
-        if (params?.includeSelf)
-            httpParams = httpParams.set('includeSelf', params.includeSelf);
+        if (params?.selfOnly)
+            httpParams = httpParams.set('selfOnly', params.selfOnly);
         if (params?.invited)
             httpParams = httpParams.set('invited', params.invited);
 

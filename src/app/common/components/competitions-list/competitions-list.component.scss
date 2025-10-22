@@ -10,13 +10,9 @@
 }
 
 #filter_controls {
-    flex-wrap: wrap;
-    align-items: stretch;
     font-size: 1.1rem;
-    flex-basis: 20%;
-    display: flex;
+    flex-basis: 30%;
     margin-top: 0.4rem;
-    justify-content: stretch;
     background-color: colors.$dim_white;
     border-radius: 1rem;
     margin: 0.3rem;
@@ -28,29 +24,32 @@
     .filters-heading {
         font-size: 1.5rem;
         font-weight: 500;
+        margin-bottom: 0.5rem;
     }
 
     #query_input {
-        width: 100%;
+        width: calc(100% - 1rem);
     }
 
     select {
-        margin-left: 4px;
         border-radius: 0.7rem;
         border-width: 0px;
-        padding: 8px;
-        padding-inline: 16px;
+        padding-inline: 8px;
+        height: 2rem;
         background-color: whitesmoke;
         color: colors.$text_black;
         @include sweetBorder();
     }
 
     & > div {
+        margin-top: 1rem;
+    }
+
+    .inline-setting {
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        margin-top: 0.3rem;
     }
 }
 

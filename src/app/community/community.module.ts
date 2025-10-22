@@ -12,9 +12,14 @@ import { CommunitiesComponent } from './pages/communities/communities.component'
 import { CommunityRoutingModule } from './community-routing.module';
 import { CreateCommunityComponent } from './pages/create-community/create-community.component';
 import { CommunityComponent } from './pages/community/community.component';
+import { CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 
 @NgModule({
-    declarations: [CommunitiesComponent, CreateCommunityComponent, CommunityComponent],
+    declarations: [
+        CommunitiesComponent,
+        CreateCommunityComponent,
+        CommunityComponent,
+    ],
     imports: [
         CommonModule,
         HunterCommonModule,
@@ -25,6 +30,7 @@ import { CommunityComponent } from './pages/community/community.component';
         MatSelectModule,
         MatSlideToggleModule,
         FormsModule,
+        CdkDragPlaceholder,
     ],
     exports: [CommunitiesComponent],
 })

@@ -25,22 +25,21 @@
             <div class="filters-heading">Filters</div>
 
             <div>
-                <label for="status_select">Search</label>
-                &nbsp; &nbsp; &nbsp;
                 <input
                     id="query_input"
                     type="text"
                     class="small"
                     [(ngModel)]="query"
+                    placeholder="Search competitions"
                     (input)="updateList()"
                 />
             </div>
 
-            <div>
-                <label for="status_select">Live Status</label>
+            <div class="inline-setting">
+                <label for="status_select">Status</label>
                 <select
                     id="status_select"
-                    Name="Live Status"
+                    Name="Status"
                     (change)="updateLiveStatus($event)"
                 >
                     <option value="all" [defaultSelected]="true">All</option>
@@ -50,7 +49,7 @@
                 </select>
             </div>
 
-            <div>
+            <div class="inline-setting">
                 <label for="order_select">Order By</label>
                 <select id="order_select" (change)="updateOrderBy($event)">
                     <option value="">Any</option>
@@ -74,7 +73,12 @@
 
             <li *ngIf="!loading && competitionsList !== null">
                 <br />
-                <div id="list_end">No more competitions available!</div>
+                <div *ngIf="competitionsList.length" id="list_end">
+                    No more competitions available!
+                </div>
+                <div *ngIf="!competitionsList.length" id="list_end">
+                    No competitions available!
+                </div>
             </li>
             <li *ngIf="loading || competitionsList === null">
                 <br />

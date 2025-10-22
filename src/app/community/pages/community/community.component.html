@@ -5,7 +5,7 @@
     <spinner></spinner>
 </div>
 
-<div *ngIf="community" class="large-app-page">
+<div *ngIf="community" class="full-app-page">
     <div class="community-details">
         <div class="logo">
             <img
@@ -21,19 +21,73 @@
             }}</a>
         </p>
 
+        <h3>
+            {{ community._count.members }} Member{{
+                community._count.members !== 1 ? "s" : ""
+            }}
+            &nbsp; &bull; &nbsp;
+            {{ community._count.competitions }} Competition{{
+                community._count.competitions !== 1 ? "s" : ""
+            }}
+        </h3>
         <p>
-            Managed by:
+            Created {{ community.created_at | timeAgo }}&nbsp; &bull; &nbsp;By
             <user-display [userInfo]="community.admin_user"></user-display>
         </p>
 
-        <div class="button main">Join Community</div>
+        <div
+            class="button main disabled"
+            *ngIf="community.admin_user_id === user?.id"
+        >
+            You're the Admin
+        </div>
+
+        <ng-template #communityButtons>
+            <div
+                class="button main"
+                [ngClass]="{ disabled: loading }"
+                *ngIf="!isApprovedMember() && !requestSent()"
+                (click)="sendJoinRequest()"
+            >
+                Join Community
+            </div>
+            <div
+                class="button main danger"
+                *ngIf="isApprovedMember()"
+                [ngClass]="{ disabled: loading }"
+            >
+                Leave Community
+            </div>
+            <div class="button main danger disabled" *ngIf="requestSent()">
+                Request Sent
+            </div>
+        </ng-template>
+
+        <ng-outlet
+            [ngTemplateOutlet]="communityButtons"
+            *ngIf="community.admin_user_id !== user?.id"
+        ></ng-outlet>
+
+        <div *ngIf="pendingRequests.length" class="membership-requests">
+            <h2>Membership Requests</h2>
+
+            <div class="request" *ngFor="let req of pendingRequests">
+                <div class="user-info">
+                    <user-display [userInfo]="req.user"></user-display> Wants to
+                    join
+                </div>
+                <p class="time">Received {{ req.created_at | timeAgo }}</p>
+                <div class="actions">
+                    <div class="button main accept">Accept</div>
+                    <div class="button main danger reject">Reject</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="panel">
-        <h1>Competitions</h1>
-
         <competitions-list
-            [competitionsList]="[]"
+            [community_id]="community.id"
             route="compete/p"
         ></competitions-list>
     </div>

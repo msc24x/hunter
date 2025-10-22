@@ -529,14 +529,15 @@ router.get('/competitions', authenticate, (req, res) => {
     const user: UserInfo | null = res.locals.user;
     const params = {
         query: req.query.query?.toString() || '',
-        includeSelf: req.query.includeSelf?.toString() === 'true',
+        selfOnly: req.query.selfOnly?.toString() === 'true',
         invited: req.query.invited?.toString() === 'true',
         liveStatus: req.query.liveStatus?.toString() || 'all',
         orderBy: req.query.orderBy?.toString() || 'desc',
+        community_id: req.query.community_id?.toString() || null,
     };
 
     if (!res.locals.isAuthenticated) {
-        params.includeSelf = false;
+        params.selfOnly = false;
     }
 
     if (params.invited && !user) {
@@ -557,7 +558,7 @@ router.get('/competitions', authenticate, (req, res) => {
         });
     }
 
-    if (params.includeSelf) {
+    if (params.selfOnly) {
         andParams.push({ host_user_id: user!.id });
     } else if (params.invited && user) {
         andParams.push({
@@ -566,6 +567,10 @@ router.get('/competitions', authenticate, (req, res) => {
         });
     } else {
         andParams.push({ visibility: 'PUBLIC' });
+    }
+
+    if (params.community_id) {
+        andParams.push({ community_id: parseInt(params.community_id) });
     }
 
     if (params.liveStatus === 'upcoming') {

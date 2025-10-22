@@ -182,7 +182,11 @@ export const apiEndpoints = {
     progress: environment.apiUrl + '/competitions/{0}/progress',
     submission: environment.apiUrl + '/submission/',
     communities: environment.apiUrl + '/communities/',
+    communityMemberships: environment.apiUrl + '/communities/memberships',
     community: environment.apiUrl + '/communities/{0}',
+    pendingCommunityMemberships:
+        environment.apiUrl + '/communities/{0}/memberships/pending',
+    joinCommunity: environment.apiUrl + '/communities/{0}/join',
     createCommunity: environment.apiUrl + '/communities/create',
 };
 
@@ -253,6 +257,8 @@ export interface Community {
     admin_user?: UserInfo;
     members?: CommunityMember[];
     competitions?: CompetitionInfo[];
+
+    _count?: any;
 }
 
 export interface CommunityMember {

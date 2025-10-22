@@ -114,7 +114,7 @@ export class EditorMenuComponent implements OnInit {
             // fetch user's all created competitions
             this.competitionsDataService
                 .getCompetitions({
-                    includeSelf: true,
+                    selfOnly: true,
                     orderBy: 'desc',
                 })
                 .then((res) => {

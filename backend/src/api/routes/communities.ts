@@ -6,7 +6,7 @@ import { resCode } from '../../config/settings';
 import { authenticate, loginRequired } from '../auth';
 import { Community, UserInfo } from '../../config/types';
 import { createFile } from '../../util/serverStorage';
-import { error } from 'console';
+import { error, log } from 'console';
 
 const router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -70,7 +70,6 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
 
     const logoBuffer = Buffer.from(logo_file_path!, 'base64');
     const formatCheck = isImageFormat(logoBuffer);
-    console.log(description);
 
     client.$transaction(async (tranc) => {
         var community = await tranc.community.create({
@@ -91,11 +90,20 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
             data: { logo_file_path: logoFileName },
         });
 
+        await tranc.community_member.create({
+            data: {
+                community_id: community.id,
+                user_id: user.id,
+                created_at: new Date(),
+                status: 'APPROVED',
+            },
+        });
+
         Util.sendResponseJson(res, resCode.created, community);
     });
 });
 
-router.get('/communities/:id', (req, res) => {
+router.get('/communities/:id(\\d+)', (req, res) => {
     let id = parseInt(req.params.id?.toString() || '');
 
     client.community
@@ -114,6 +122,17 @@ router.get('/communities/:id', (req, res) => {
                 competitions: {
                     where: {
                         deleted_at: null,
+                    },
+                },
+                _count: {
+                    select: {
+                        members: true,
+                        competitions: {
+                            where: {
+                                deleted_at: null,
+                                visibility: 'PUBLIC',
+                            },
+                        },
                     },
                 },
             },
@@ -147,5 +166,154 @@ router.get('/communities', (req, res) => {
             Util.sendResponseJson(res, resCode.accepted, communities);
         });
 });
+
+router.get(
+    '/communities/memberships',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        let user = res.locals.user as UserInfo;
+        let community_id = parseInt(req.query.community_id?.toString() || '');
+
+        client.community_member
+            .findMany({
+                where: {
+                    user_id: user.id,
+                    status: {
+                        not: 'DISABLED',
+                    },
+                    ...(community_id ? { community_id: community_id } : {}),
+                },
+            })
+            .then((community_members) => {
+                Util.sendResponseJson(res, resCode.accepted, community_members);
+            });
+    }
+);
+
+router.get(
+    '/communities/:id/memberships/pending',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        let user = res.locals.user as UserInfo;
+        let community_id = parseInt(req.params.id?.toString() || '');
+
+        client.community_member
+            .findMany({
+                where: {
+                    status: 'PENDING_APPROVAL',
+                    community: {
+                        id: community_id,
+                        admin_user_id: user.id,
+                    },
+                },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            avatar_url: true,
+                        },
+                    },
+                },
+            })
+            .then((community_members) => {
+                Util.sendResponseJson(res, resCode.accepted, community_members);
+            });
+    }
+);
+
+router.post(
+    '/communities/:community_id/memberships/:mem_id/accept',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        let user = res.locals.user as UserInfo;
+        let community_id = parseInt(req.params.id?.toString() || '');
+
+        client.community_member
+            .findMany({
+                where: {
+                    user_id: user.id,
+                    status: {
+                        not: 'DISABLED',
+                    },
+                    ...(community_id ? { community_id: community_id } : {}),
+                },
+            })
+            .then((community_members) => {
+                if (community_members.length) {
+                    Util.sendResponse(
+                        res,
+                        resCode.forbidden,
+                        'Request was already sent'
+                    );
+                    return;
+                }
+                client.community_member
+                    .create({
+                        data: {
+                            community_id: community_id,
+                            user_id: user.id,
+                            status: 'PENDING_APPROVAL',
+                        },
+                    })
+                    .then((community_member) => {
+                        Util.sendResponseJson(
+                            res,
+                            resCode.accepted,
+                            community_member
+                        );
+                    });
+            });
+    }
+);
+
+router.post(
+    '/communities/:id/join',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        let user = res.locals.user as UserInfo;
+        let community_id = parseInt(req.params.id?.toString() || '');
+
+        client.community_member
+            .findMany({
+                where: {
+                    user_id: user.id,
+                    status: {
+                        not: 'DISABLED',
+                    },
+                    ...(community_id ? { community_id: community_id } : {}),
+                },
+            })
+            .then((community_members) => {
+                if (community_members.length) {
+                    Util.sendResponse(
+                        res,
+                        resCode.forbidden,
+                        'Request was already sent'
+                    );
+                    return;
+                }
+                client.community_member
+                    .create({
+                        data: {
+                            community_id: community_id,
+                            user_id: user.id,
+                            status: 'PENDING_APPROVAL',
+                        },
+                    })
+                    .then((community_member) => {
+                        Util.sendResponseJson(
+                            res,
+                            resCode.accepted,
+                            community_member
+                        );
+                    });
+            });
+    }
+);
 
 module.exports = router;

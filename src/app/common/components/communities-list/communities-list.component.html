@@ -1,7 +1,7 @@
 <div
     class="community"
     *ngFor="let community of communities"
-    routerLink="/communities/{{ community.id }}"
+    routerLink="/communities/browse/{{ community.id }}"
 >
     <div class="logo">
         <img src="/api/media/{{ community.logo_file_path }}" />

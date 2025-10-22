@@ -2,10 +2,10 @@
 @use "../../../../assets/mixins" as *;
 @use "../../../../assets/fonts";
 
-.large-app-page {
+.full-app-page {
     margin: auto;
     display: flex;
-    gap: 2rem;
+    gap: 5rem;
 }
 
 .community-details {
@@ -24,6 +24,27 @@
             height: inherit;
             width: inherit;
             object-fit: cover;
+        }
+    }
+}
+
+.panel {
+    width: 100%;
+}
+
+.membership-requests {
+    .request {
+        @include blackBack;
+
+        .user-info {
+            font-size: 1.15rem;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: end;
         }
     }
 }
