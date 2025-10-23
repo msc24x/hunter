@@ -138,8 +138,39 @@ export class CommunityComponent implements OnInit, OnDestroy {
                 },
                 error: (error) => {
                     this.loading++;
-                    this.snackBar.open(error.body);
+                    this.snackBar.open(error.error);
                 },
+            });
+    }
+
+    updateMember(
+        members: CommunityMember[],
+        operation: 'accept' | 'reject' | 'disable'
+    ) {
+        this.loading--;
+
+        this.communityService
+            .updateCommunityMembership({
+                community_id: this.community?.id!,
+                members: members,
+                operation: operation,
+            })
+            .subscribe((res) => {
+                this.loading++;
+
+                let mem_ids = members.map((m) => m.id);
+
+                this.pendingRequests = this.pendingRequests.filter(
+                    (r) => !mem_ids.includes(r.id)
+                );
+
+                let message = {
+                    'accept': 'Accepted the request',
+                    'reject': 'Rejected the request',
+                    'disable': 'Member removed',
+                };
+
+                this.snackBar.open(message[operation]);
             });
     }
 }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { timeout } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 import { Community, UserInfo } from 'src/environments/environment';
@@ -99,7 +100,13 @@ export class CreateCommunityComponent implements OnInit, OnDestroy {
             .subscribe(
                 (res) => {
                     if (res.ok) {
-                        this.snackBar.open('Request sent, thank you!');
+                        this.snackBar.open(
+                            'Request sent, thank you! Redirecting to Compete page...'
+                        );
+
+                        setTimeout(() => {
+                            this.router.navigate(['/compete']);
+                        }, 1000);
                     } else {
                         this.snackBar.open(
                             'There are some issues, please check the form.'
@@ -109,6 +116,11 @@ export class CreateCommunityComponent implements OnInit, OnDestroy {
                 },
                 (error) => {
                     this.loading--;
+
+                    if (typeof error.error === 'string') {
+                        this.snackBar.open(error.error);
+                        return;
+                    }
                     this.errors = error.error;
                 }
             );

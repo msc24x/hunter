@@ -315,9 +315,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 next: () => {
                     window.location.reload();
                 },
-                error: () => {
+                error: (error) => {
                     this.loading--;
-                    this.snackBar.open('Some unknown error occurred');
+                    this.snackBar.open(error.error);
                 },
             });
     }

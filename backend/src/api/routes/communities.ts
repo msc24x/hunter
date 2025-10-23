@@ -4,7 +4,7 @@ import { DatabaseProvider } from '../../services/databaseProvider';
 import { Util } from '../../util/util';
 import { resCode } from '../../config/settings';
 import { authenticate, loginRequired } from '../auth';
-import { Community, UserInfo } from '../../config/types';
+import { Community, CommunityMember, UserInfo } from '../../config/types';
 import { createFile } from '../../util/serverStorage';
 import { error, log } from 'console';
 
@@ -23,16 +23,24 @@ function isImageFormat(buffer: Buffer): { valid: boolean; ext?: string } {
 function validateCommunityRequest(data: Community) {
     var errors: any = {};
 
-    if (!data.name) {
+    if (!data.name?.trim()) {
         errors.name = ['Name is required'];
+    } else if (data.name.length > 120) {
+        errors.name = ['Name cannot be more than 120 characters'];
     }
 
-    if (!data.description) {
+    if (!data.description?.trim()) {
         errors.description = ['Description is required'];
+    } else if (data.description.length > 456) {
+        errors.description = ['Description cannot be more than 456 characters'];
     }
 
-    if (!data.website_link) {
+    if (!data.website_link?.trim()) {
         errors.website_link = ['Website link is required'];
+    } else if (data.website_link.length > 224) {
+        errors.website_link = [
+            'Website link cannot be more than 224 characters',
+        ];
     }
 
     if (!data.logo_file_path) {
@@ -72,9 +80,51 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
     const formatCheck = isImageFormat(logoBuffer);
 
     client.$transaction(async (tranc) => {
+        let sameNameCommunity = await tranc.community.findFirst({
+            where: {
+                name: { equals: name?.trim() || '' },
+                status: { not: 'DISABLED' },
+            },
+        });
+
+        if (sameNameCommunity) {
+            Util.sendResponse(
+                res,
+                resCode.badRequest,
+                'A non disabled community with the same name already exists on Hunter, please chose a different name'
+            );
+            return;
+        }
+
+        let existingCommunities = await tranc.community.findMany({
+            where: {
+                admin_user_id: user.id,
+                status: { not: 'DISABLED' },
+            },
+        });
+
+        if (existingCommunities.length >= 3) {
+            Util.sendResponse(
+                res,
+                resCode.forbidden,
+                'You have reached the limit of 3 communities per account. If you require an exception, please contact support at msc24x@gmail.com.'
+            );
+            return;
+        }
+
+        for (let c of existingCommunities) {
+            if (c.name?.toLowerCase().trim() == name?.toLowerCase().trim()) {
+                Util.sendResponse(
+                    res,
+                    resCode.badRequest,
+                    `You already have an existing community or a creation request with name ${c.name}`
+                );
+            }
+        }
+
         var community = await tranc.community.create({
             data: {
-                name,
+                name: name?.trim() || '',
                 description,
                 website_link,
                 admin_user_id: user.id,
@@ -126,7 +176,7 @@ router.get('/communities/:id(\\d+)', (req, res) => {
                 },
                 _count: {
                     select: {
-                        members: true,
+                        members: { where: { status: 'APPROVED' } },
                         competitions: {
                             where: {
                                 deleted_at: null,
@@ -146,11 +196,22 @@ router.get('/communities/:id(\\d+)', (req, res) => {
         });
 });
 
-router.get('/communities', (req, res) => {
+router.get('/communities', authenticate, (req, res) => {
+    let user_id = res.locals.user?.id as number | undefined;
+
     client.community
         .findMany({
             where: {
-                // status: 'APPROVED',
+                OR: [
+                    {
+                        status: 'APPROVED',
+                    },
+                    user_id
+                        ? {
+                              admin_user_id: user_id,
+                          }
+                        : {},
+                ],
             },
             include: {
                 admin_user: {
@@ -206,6 +267,7 @@ router.get(
                     community: {
                         id: community_id,
                         admin_user_id: user.id,
+                        status: 'APPROVED',
                     },
                 },
                 include: {
@@ -224,48 +286,48 @@ router.get(
     }
 );
 
-router.post(
-    '/communities/:community_id/memberships/:mem_id/accept',
+router.patch(
+    '/communities/:community_id/memberships/:operation',
     authenticate,
     loginRequired,
     (req, res) => {
         let user = res.locals.user as UserInfo;
-        let community_id = parseInt(req.params.id?.toString() || '');
+        let community_id = parseInt(req.params.community_id?.toString() || '');
+        let operation = req.params.operation?.toString() || '';
+
+        if (operation === 'accept') {
+            operation = 'APPROVED';
+        } else if (operation === 'reject') {
+            operation = 'NOT_APPROVED';
+        } else if (operation === 'disable') {
+            operation = 'DISABLED';
+        } else {
+            Util.sendResponse(res, resCode.notFound);
+            return;
+        }
+
+        let memberships = req.body as Array<CommunityMember>;
+        let member_ids = memberships.map((v) => v.id);
 
         client.community_member
-            .findMany({
+            .updateMany({
                 where: {
-                    user_id: user.id,
-                    status: {
-                        not: 'DISABLED',
+                    community_id: community_id,
+                    community: {
+                        admin_user_id: user.id,
+                        status: 'APPROVED',
                     },
-                    ...(community_id ? { community_id: community_id } : {}),
+                    id: { in: member_ids },
+                },
+                data: {
+                    status: operation as
+                        | 'APPROVED'
+                        | 'NOT_APPROVED'
+                        | 'DISABLED',
                 },
             })
             .then((community_members) => {
-                if (community_members.length) {
-                    Util.sendResponse(
-                        res,
-                        resCode.forbidden,
-                        'Request was already sent'
-                    );
-                    return;
-                }
-                client.community_member
-                    .create({
-                        data: {
-                            community_id: community_id,
-                            user_id: user.id,
-                            status: 'PENDING_APPROVAL',
-                        },
-                    })
-                    .then((community_member) => {
-                        Util.sendResponseJson(
-                            res,
-                            resCode.accepted,
-                            community_member
-                        );
-                    });
+                Util.sendResponse(res, resCode.success);
             });
     }
 );
@@ -285,8 +347,11 @@ router.post(
                     status: {
                         not: 'DISABLED',
                     },
-                    ...(community_id ? { community_id: community_id } : {}),
+                    community: {
+                        id: community_id,
+                    },
                 },
+                include: { community: true },
             })
             .then((community_members) => {
                 if (community_members.length) {
@@ -297,20 +362,39 @@ router.post(
                     );
                     return;
                 }
-                client.community_member
-                    .create({
-                        data: {
-                            community_id: community_id,
-                            user_id: user.id,
-                            status: 'PENDING_APPROVAL',
+
+                client.community
+                    .findFirst({
+                        where: {
+                            id: community_id,
+                            status: 'APPROVED',
                         },
                     })
-                    .then((community_member) => {
-                        Util.sendResponseJson(
-                            res,
-                            resCode.accepted,
-                            community_member
-                        );
+                    .then((community) => {
+                        if (community?.status !== 'APPROVED') {
+                            Util.sendResponse(
+                                res,
+                                resCode.forbidden,
+                                'Can only join Approved Communities'
+                            );
+                            return;
+                        }
+
+                        client.community_member
+                            .create({
+                                data: {
+                                    community_id: community_id,
+                                    user_id: user.id,
+                                    status: 'PENDING_APPROVAL',
+                                },
+                            })
+                            .then((community_member) => {
+                                Util.sendResponseJson(
+                                    res,
+                                    resCode.accepted,
+                                    community_member
+                                );
+                            });
                     });
             });
     }

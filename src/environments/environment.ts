@@ -186,6 +186,8 @@ export const apiEndpoints = {
     community: environment.apiUrl + '/communities/{0}',
     pendingCommunityMemberships:
         environment.apiUrl + '/communities/{0}/memberships/pending',
+    updateCommunityMemberships:
+        environment.apiUrl + '/communities/{0}/memberships/{1}',
     joinCommunity: environment.apiUrl + '/communities/{0}/join',
     createCommunity: environment.apiUrl + '/communities/create',
 };

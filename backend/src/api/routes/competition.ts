@@ -109,13 +109,13 @@ async function validateContestInfo(comp: CompetitionInfo) {
             where: {
                 id: comp.community_id,
                 admin_user_id: comp.host_user_id,
-                // status: 'APPROVED',
+                // status: {not: },
             },
         });
 
         if (!community_obj) {
             errors.community_id =
-                'Linked community must be created by the host and should be APPROVED';
+                'Linked community must be a community created by the host';
         }
     }
 
@@ -164,7 +164,9 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                             title: competitionBody.title || '',
                             visibility: competitionBody.visibility,
                             community_id: competitionBody.community_id,
-                            community_only: competitionBody.community_only,
+                            community_only: competitionBody.community_id
+                                ? competitionBody.community_only
+                                : false,
                             hidden_scoreboard:
                                 competitionBody.hidden_scoreboard,
                             scheduled_at: competitionBody.scheduled_at
@@ -257,6 +259,18 @@ router.post(
                             user_id: res.locals.user.id,
                         },
                     },
+                    community: {
+                        select: {
+                            status: true,
+                            name: true,
+                            members: {
+                                where: {
+                                    user_id: res.locals.user.id,
+                                    status: 'APPROVED',
+                                },
+                            },
+                        },
+                    },
                 },
             })
             .then((comp) => {
@@ -267,6 +281,32 @@ router.post(
 
                 if (comp?.competition_sessions.length) {
                     Util.sendResponse(res, resCode.success);
+                    return;
+                }
+
+                if (
+                    comp.community?.status &&
+                    comp.community?.status !== 'APPROVED' &&
+                    comp.community_only
+                ) {
+                    Util.sendResponse(
+                        res,
+                        resCode.forbidden,
+                        `Cannot join a Members only competition of an Inactive Community ${comp.community.name}`
+                    );
+                    return;
+                }
+
+                if (
+                    comp.community?.status === 'APPROVED' &&
+                    !comp.community.members.length &&
+                    comp.community_only
+                ) {
+                    Util.sendResponse(
+                        res,
+                        resCode.forbidden,
+                        `Cannot join a Members only competition of Community ${comp.community.name}`
+                    );
                     return;
                 }
 
@@ -287,6 +327,7 @@ router.post(
                     });
             })
             .catch((err) => {
+                console.log(err);
                 Util.sendResponse(res, resCode.serverError, err);
             });
     }
@@ -318,6 +359,9 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
                         },
                         user_id: res.locals.user.id,
                     },
+                },
+                community: {
+                    select: { id: true, name: true },
                 },
             },
         })
@@ -625,6 +669,12 @@ router.get('/competitions', authenticate, (req, res) => {
                                 deleted_at: null,
                             },
                         },
+                    },
+                },
+                community: {
+                    select: { id: true, name: true },
+                    where: {
+                        status: 'APPROVED',
                     },
                 },
             },

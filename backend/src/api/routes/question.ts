@@ -671,6 +671,9 @@ router.get(
                             avatar_url: true,
                         },
                     },
+                    community: {
+                        select: { id: true, name: true, status: true },
+                    },
                     ...(user && {
                         competition_sessions: {
                             where: {

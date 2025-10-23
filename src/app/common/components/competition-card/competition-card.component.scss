@@ -72,8 +72,6 @@
     }
 }
 #c_host_user {
-    margin-left: 4px;
-    margin-top: 6px;
     padding: 4px;
     width: fit-content;
     display: flex;
@@ -85,6 +83,14 @@
 #c_about {
     word-break: break-word;
     color: rgb(24, 24, 24);
+}
+
+.competition_meta {
+    margin-top: 6px;
+
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
 @media only screen and (max-width: 620px) {

@@ -68,7 +68,15 @@
             *ngIf="community.admin_user_id !== user?.id"
         ></ng-outlet>
 
-        <div *ngIf="pendingRequests.length" class="membership-requests">
+        <manual-error
+            *ngIf="community.status !== 'APPROVED'"
+            message="This community is not active as of now."
+        ></manual-error>
+
+        <div
+            *ngIf="pendingRequests.length && community.status == 'APPROVED'"
+            class="membership-requests"
+        >
             <h2>Membership Requests</h2>
 
             <div class="request" *ngFor="let req of pendingRequests">
@@ -78,8 +86,20 @@
                 </div>
                 <p class="time">Received {{ req.created_at | timeAgo }}</p>
                 <div class="actions">
-                    <div class="button main accept">Accept</div>
-                    <div class="button main danger reject">Reject</div>
+                    <div
+                        class="button main accept"
+                        [ngClass]="{ disabled: loading }"
+                        (click)="updateMember([req], 'accept')"
+                    >
+                        Accept
+                    </div>
+                    <div
+                        class="button main danger reject"
+                        (click)="updateMember([req], 'reject')"
+                        [ngClass]="{ disabled: loading }"
+                    >
+                        Reject
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,6 +109,7 @@
         <competitions-list
             [community_id]="community.id"
             route="compete/p"
+            heading="Public Competitions"
         ></competitions-list>
     </div>
 </div>

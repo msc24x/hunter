@@ -27,4 +27,20 @@ export class CommunitiesListComponent {
     openUrl(url?: string) {
         window.open(this.getUrl(url), '_blank');
     }
+
+    getStatusTooltip(community: Community) {
+        if (community.status === 'DISABLED') {
+            return 'This community has been disabled and is no longer active on Hunter.';
+        }
+
+        if (community.status == 'NOT_APPROVED') {
+            return 'The community creation request was not approved.';
+        }
+
+        if (community.status === 'PENDING_APPROVAL') {
+            return 'The community creation request is under review and awaiting approval.';
+        }
+
+        return '';
+    }
 }

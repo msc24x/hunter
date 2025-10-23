@@ -87,6 +87,24 @@ export class CommunitiesDataService {
         );
     }
 
+    updateCommunityMembership(params: {
+        community_id: string | number;
+        members: Array<CommunityMember>;
+        operation: 'accept' | 'reject' | 'disable';
+    }) {
+        let url = format(
+            apiEndpoints.updateCommunityMemberships,
+            params.community_id,
+            params.operation
+        );
+
+        return this.http.patch(url, params.members, {
+            withCredentials: true,
+            responseType: 'json',
+            observe: 'response',
+        });
+    }
+
     sendCommunityCreateRequest(params: {
         name: string;
         description: string;

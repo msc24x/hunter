@@ -41,6 +41,36 @@
             }
         }
 
+        .badge {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.6rem;
+            z-index: 3;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 999px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            white-space: nowrap;
+            color: #111;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .badge--approved {
+            background: #e6ffed;
+            color: #136f3b;
+        }
+
+        .badge--pending {
+            background: #fff7e6;
+            color: #9a6b00;
+        }
+
+        .badge--rejected {
+            background: #ffecec;
+            color: #8b1e1e;
+        }
+
         .logo {
             width: 100%;
             height: 100%;

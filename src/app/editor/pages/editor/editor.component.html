@@ -531,19 +531,29 @@
             </a>
         </div>
 
-        <div class="meta-section">
+        <div class="meta-section" *ngIf="userCommunities.length">
             <h3>Link Community</h3>
             <mat-select
                 placeholder="Add"
                 [(ngModel)]="competitionInfo.community_id"
             >
                 <mat-option [value]="null">Un-select</mat-option>
-                <mat-option
-                    *ngFor="let op of userCommunities"
-                    [value]="op.id"
-                    >{{ op.name }}</mat-option
-                >
+                <mat-option *ngFor="let op of userCommunities" [value]="op.id"
+                    >{{ op.name }}
+                    {{
+                        op.status === "DISABLED"
+                            ? "(Disabled)"
+                            : op.status === "NOT_APPROVED"
+                            ? "(Rejected)"
+                            : op.status === "PENDING_APPROVAL"
+                            ? "(Pending Approval)"
+                            : ""
+                    }}
+                </mat-option>
             </mat-select>
+            <manual-error
+                [message]="contest_errors.community_id"
+            ></manual-error>
             <br />
             <br />
             <p class="info-like sticky">

@@ -1,0 +1,7 @@
+<a
+    routerLink="/communities/browse/{{ community?.id }}"
+    (click)="$event.stopPropagation()"
+>
+    <fa-icon [icon]="groupIcon"></fa-icon>
+    {{ community?.name }}
+</a>

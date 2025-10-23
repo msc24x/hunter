@@ -2,7 +2,33 @@
     class="community"
     *ngFor="let community of communities"
     routerLink="/communities/browse/{{ community.id }}"
+    [ngClass]="{ 'disabled no-click': community.status !== 'APPROVED' }"
+    [matTooltip]="getStatusTooltip(community)"
 >
+    <div
+        class="badge"
+        *ngIf="
+            ['PENDING_APPROVAL', 'NOT_APPROVED', 'DISABLED'].includes(
+                community.status
+            )
+        "
+        [ngClass]="{
+            'badge--pending': community.status === 'PENDING_APPROVAL',
+            'badge--rejected':
+                community.status === 'NOT_APPROVED' ||
+                community.status === 'DISABLED'
+        }"
+    >
+        {{
+            community.status === "PENDING_APPROVAL"
+                ? "Pending Approval"
+                : community.status === "NOT_APPROVED"
+                ? "Rejected"
+                : community.status === "DISABLED"
+                ? "Disabled"
+                : community.status
+        }}
+    </div>
     <div class="logo">
         <img src="/api/media/{{ community.logo_file_path }}" />
     </div>

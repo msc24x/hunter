@@ -108,6 +108,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     showInviteP = false;
     inviteToRemove: null | CompetitionInvite = null;
     userCommunities: Array<Community> = [];
+    approvedUserCommunities: Array<Community> = [];
 
     errors: any = {};
     contest_errors: any = {};
@@ -529,6 +530,9 @@ export class EditorComponent implements OnInit, OnDestroy {
             .fetchCommunities({ user_id: this.user.id })
             .subscribe((res) => {
                 this.userCommunities = res.body as Array<Community>;
+                this.approvedUserCommunities = this.userCommunities.filter(
+                    (c) => c.status === 'APPROVED'
+                );
             });
     }
 

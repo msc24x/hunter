@@ -23,6 +23,18 @@
     <div>
         Hosted by
         <user-display [userInfo]="competition.host_user"></user-display>
+        <br />
+        <br />
+        <strong *ngIf="competition.community">
+            Part of the community
+            <community-display
+                [community]="competition.community"
+            ></community-display>
+
+            <span *ngIf="competition.community.status !== 'APPROVED'"
+                >(Inactive)</span
+            >
+        </strong>
     </div>
     <div class="competition-desc">
         {{ competition.description || "No description provided by the host." }}
@@ -234,6 +246,13 @@
                         <user-display
                             [userInfo]="this.competition.host_user"
                         ></user-display>
+
+                        <span *ngIf="competition.community">
+                            in
+                            <community-display
+                                [community]="competition.community"
+                            ></community-display>
+                        </span>
                     </div>
                     <div class="info-like">
                         Updated

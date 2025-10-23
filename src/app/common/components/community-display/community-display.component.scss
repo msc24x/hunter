@@ -1,0 +1,11 @@
+@use "../../../../assets/colors";
+
+fa-icon,
+a {
+    color: colors.$cute_blue;
+}
+
+a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
