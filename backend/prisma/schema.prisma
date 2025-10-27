@@ -76,6 +76,7 @@ model community {
   logo_file_path   String?     @db.VarChar(224)
   website_link     String?     @db.VarChar(224)
   created_at       DateTime    @default(now()) @db.DateTime(0)
+  auto_approve_members  Boolean @default(true)
   status           CommunityStatus  @default(PENDING_APPROVAL)
   admin_user_id    Int
   admin_user       users       @relation("admin_communities", fields: [admin_user_id], references: [id], onDelete: NoAction)

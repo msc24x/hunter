@@ -75,6 +75,15 @@ button.main,
     }
 }
 
+.app-settings {
+    .setting-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+}
+
 // =============================
 // Material Design Components
 // =============================

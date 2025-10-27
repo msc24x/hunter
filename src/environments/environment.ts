@@ -189,7 +189,9 @@ export const apiEndpoints = {
     updateCommunityMemberships:
         environment.apiUrl + '/communities/{0}/memberships/{1}',
     joinCommunity: environment.apiUrl + '/communities/{0}/join',
+    leaveCommunity: environment.apiUrl + '/communities/{0}/leave',
     createCommunity: environment.apiUrl + '/communities/create',
+    updateCommunity: environment.apiUrl + '/communities/{0}',
 };
 
 export const templates = {
@@ -256,6 +258,7 @@ export interface Community {
     created_at: Date;
     status: string;
     admin_user_id: number;
+    auto_approve_members: boolean;
     admin_user?: UserInfo;
     members?: CommunityMember[];
     competitions?: CompetitionInfo[];

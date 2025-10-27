@@ -380,12 +380,19 @@ router.post(
                             return;
                         }
 
+                        let status: 'PENDING_APPROVAL' | 'APPROVED' =
+                            'PENDING_APPROVAL';
+
+                        if (community.auto_approve_members) {
+                            status = 'APPROVED';
+                        }
+
                         client.community_member
                             .create({
                                 data: {
                                     community_id: community_id,
                                     user_id: user.id,
-                                    status: 'PENDING_APPROVAL',
+                                    status: status,
                                 },
                             })
                             .then((community_member) => {
@@ -396,6 +403,95 @@ router.post(
                                 );
                             });
                     });
+            });
+    }
+);
+
+function validateCommunityPatch(body: any) {
+    const errors: any = {};
+    if (body.auto_approve_members === undefined) {
+        errors.auto_approve_members = [
+            'Field "auto_approve_members" is required',
+        ];
+    } else if (typeof body.auto_approve_members !== 'boolean') {
+        errors.auto_approve_members = [
+            'Field "auto_approve_members" must be a boolean',
+        ];
+    }
+    return errors;
+}
+
+router.patch('/communities/:id', authenticate, loginRequired, (req, res) => {
+    const user = res.locals.user as UserInfo;
+    const id = parseInt(req.params.id?.toString() || '');
+
+    const body = req.body as { auto_approve_members?: boolean };
+    const errors = validateCommunityPatch(body);
+    if (Object.keys(errors).length) {
+        return Util.sendResponseJson(res, resCode.badRequest, errors);
+    }
+
+    // single update operation guarded by admin_user_id in where clause
+    client.community
+        .update({
+            where: { id: id, admin_user_id: user.id },
+            data: { auto_approve_members: body.auto_approve_members },
+        })
+        .then((result) => {
+            if (!result) {
+                return Util.sendResponse(
+                    res,
+                    resCode.forbidden,
+                    'You are not authorized to update this community'
+                );
+            }
+
+            Util.sendResponseJson(res, resCode.success, result);
+        })
+        .catch((e) => {
+            console.error(e);
+            Util.sendResponse(res, resCode.serverError);
+        });
+});
+
+router.post(
+    '/communities/:id/leave',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        const user = res.locals.user as UserInfo;
+        const community_id = parseInt(req.params.id?.toString() || '');
+
+        // mark existing membership as DISABLED for this user and community
+        client.community_member
+            .updateMany({
+                where: {
+                    user_id: user.id,
+                    community_id: community_id,
+                    status: { not: 'DISABLED' },
+                    community: {
+                        admin_user_id: { not: user.id },
+                    },
+                },
+                data: {
+                    status: 'DISABLED',
+                },
+            })
+            .then((result) => {
+                if (result.count === 0) {
+                    // no active membership found
+                    return Util.sendResponse(
+                        res,
+                        resCode.forbidden,
+                        'No active membership found for this community'
+                    );
+                }
+
+                Util.sendResponse(res, resCode.success);
+            })
+            .catch((e) => {
+                console.error(e);
+                Util.sendResponse(res, resCode.serverError);
             });
     }
 );

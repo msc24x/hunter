@@ -133,12 +133,37 @@ export class CommunityComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (res) => {
                     this.memberships.push(res.body as CommunityMember);
-                    this.snackBar.open('Request sent!');
+
+                    if (this.community?.auto_approve_members) {
+                        this.snackBar.open('Joined!');
+                    } else {
+                        this.snackBar.open('Request sent!');
+                    }
+
                     this.loading++;
                 },
                 error: (error) => {
                     this.loading++;
                     this.snackBar.open(error.error);
+                },
+            });
+    }
+
+    leaveCommunity() {
+        this.loading--;
+        this.communityService
+            .leaveCommunity({ community_id: this.community!.id })
+            .subscribe({
+                next: () => {
+                    this.memberships = [];
+                    this.snackBar.open('You have left the community.');
+                    this.loading++;
+                },
+                error: (err) => {
+                    this.loading++;
+                    const msg =
+                        (err && err.error) || 'Failed to leave community.';
+                    this.snackBar.open(msg);
                 },
             });
     }
@@ -171,6 +196,27 @@ export class CommunityComponent implements OnInit, OnDestroy {
                 };
 
                 this.snackBar.open(message[operation]);
+            });
+    }
+
+    saveSettings() {
+        this.loading--;
+        this.communityService
+            .updateCommunity({
+                community: this.community!,
+            })
+            .subscribe({
+                next: (res) => {
+                    this.loading++;
+                    this.snackBar.open('Community settings updated.');
+                },
+                error: (err) => {
+                    this.loading++;
+                    const msg =
+                        (err && err.error) ||
+                        'Failed to update community settings.';
+                    this.snackBar.open(msg);
+                },
             });
     }
 }

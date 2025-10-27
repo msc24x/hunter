@@ -26,6 +26,10 @@
             object-fit: cover;
         }
     }
+
+    .app-settings {
+        @include blackBack;
+    }
 }
 
 .panel {

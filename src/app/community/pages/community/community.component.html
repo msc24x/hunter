@@ -55,6 +55,7 @@
                 class="button main danger"
                 *ngIf="isApprovedMember()"
                 [ngClass]="{ disabled: loading }"
+                (click)="leaveCommunity()"
             >
                 Leave Community
             </div>
@@ -72,6 +73,33 @@
             *ngIf="community.status !== 'APPROVED'"
             message="This community is not active as of now."
         ></manual-error>
+
+        <div *ngIf="community.admin_user_id === user?.id">
+            <h2>Settings</h2>
+            <div class="app-settings">
+                <p class="setting-row">
+                    <label class="setting-label"
+                        >Auto approve member requests?</label
+                    >
+                    <mat-slide-toggle
+                        [(ngModel)]="community.auto_approve_members"
+                    ></mat-slide-toggle>
+                </p>
+                <p class="info-like sticky">
+                    Anyone requesting to join the community won't require your
+                    permission and will be auto approved into the Community.
+                    Won't affect already received requests.
+                </p>
+
+                <button
+                    class="main"
+                    ngClass="{'disabled no-click': loading}"
+                    (click)="saveSettings()"
+                >
+                    Save Settings
+                </button>
+            </div>
+        </div>
 
         <div
             *ngIf="pendingRequests.length && community.status == 'APPROVED'"

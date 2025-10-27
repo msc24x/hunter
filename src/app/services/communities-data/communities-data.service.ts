@@ -117,4 +117,26 @@ export class CommunitiesDataService {
             observe: 'response',
         });
     }
+
+    updateCommunity(params: { community: Community }) {
+        let url = format(apiEndpoints.updateCommunity, params.community.id);
+        return this.http.patch<Community>(url, params.community, {
+            withCredentials: true,
+            responseType: 'json',
+            observe: 'response',
+        });
+    }
+
+    leaveCommunity(params: { community_id: string | number }) {
+        const url = format(apiEndpoints.leaveCommunity, params.community_id);
+        return this.http.post(
+            url,
+            {},
+            {
+                withCredentials: true,
+                responseType: 'json',
+                observe: 'response',
+            }
+        );
+    }
 }
