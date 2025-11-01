@@ -259,6 +259,7 @@ export interface Community {
     status: string;
     admin_user_id: number;
     auto_approve_members: boolean;
+    is_partner: boolean;
     admin_user?: UserInfo;
     members?: CommunityMember[];
     competitions?: CompetitionInfo[];

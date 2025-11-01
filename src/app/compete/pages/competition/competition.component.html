@@ -118,14 +118,11 @@
         (click)="startCompetitionSession()"
     >
         {{
-            notStarted && !startable
-                ? (competition.scheduled_at | timeAgo : true).replace(
-                      "ago",
-                      "left to start"
-                  )
-                : hasEnded
-                ? "Submissions Closed"
-                : "Start Now"
+            uiStartButtonText() ||
+                (competition.scheduled_at | timeAgo : true).replace(
+                    "ago",
+                    "left to start"
+                )
         }}
     </button>
 

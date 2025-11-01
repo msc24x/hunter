@@ -7,6 +7,7 @@ import { authenticate, loginRequired } from '../auth';
 import { Community, CommunityMember, UserInfo } from '../../config/types';
 import { createFile } from '../../util/serverStorage';
 import { error, log } from 'console';
+import { sendCommunityRequestedEmail } from '../../emails/community-requested/sender';
 
 const router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -150,6 +151,13 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
         });
 
         Util.sendResponseJson(res, resCode.created, community);
+
+        sendCommunityRequestedEmail({
+            community: {
+                id: community.id,
+                name: community.name || '(No name given)',
+            },
+        });
     });
 });
 

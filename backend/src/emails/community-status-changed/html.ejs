@@ -1,0 +1,27 @@
+<body>
+    <div class="container">
+        <%- include('emails/header') -%>
+
+        <div class="content">
+            <h1>Community Status 📃</h1>
+
+            <p>
+                Dear <%= user.name %>, <br />
+                the status of your community
+                <a href="<%= community_link %>"><%= community.name %></a> has
+                been updated. <br /><br />
+
+                <b>New Status: <%= community.status %> </b><br />
+                Reason Given: <%= reason %>
+                <br />
+                <br />
+                <br />
+                <i>
+                    If something is wrong or unexpected, please reply to this
+                    email to contact us.
+                </i>
+            </p>
+        </div>
+        <%- include('emails/footer') -%>
+    </div>
+</body>

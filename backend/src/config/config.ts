@@ -7,6 +7,7 @@ dotenv.config({
 });
 
 export default {
+    staff_email: process.env.STAFF_EMAIL,
     filesPath: 'files/',
     env: process.env.ENV as 'local' | 'prod',
     protocol: process.env.PROTOCOL,

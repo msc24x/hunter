@@ -578,6 +578,15 @@ router.get('/competitions', authenticate, (req, res) => {
         liveStatus: req.query.liveStatus?.toString() || 'all',
         orderBy: req.query.orderBy?.toString() || 'desc',
         community_id: req.query.community_id?.toString() || null,
+        OR: [
+            { community_only: false },
+            {
+                community_only: true,
+                community: {
+                    status: 'APPROVED',
+                },
+            },
+        ],
     };
 
     if (!res.locals.isAuthenticated) {

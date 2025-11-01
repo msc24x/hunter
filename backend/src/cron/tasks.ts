@@ -4,6 +4,7 @@ import { DatabaseProvider } from '../services/databaseProvider';
 import { sendNewSubmissionsEmail } from '../emails/new-submissions/sender';
 import { Util } from '../util/util';
 import config from '../config/config';
+import { sendCommunityMembershipsRequest } from '../emails/new-community-memberships-request/sender';
 
 const client = Container.get(DatabaseProvider).client();
 
@@ -82,6 +83,88 @@ export async function newSubmissionsReminder(context: TaskContext) {
             });
     });
 
+    await client.cron_job.update({
+        where: { id: taskObj.id },
+        data: { last_run_at: new Date() },
+    });
+}
+
+export async function newCommunityMembershipsReminder(context: TaskContext) {
+    // find cron job entry
+    let taskObj = await client.cron_job.findFirstOrThrow({
+        where: { name: context.task!.name },
+    });
+
+    let lastRun = taskObj.last_run_at;
+    if (!lastRun) {
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+        lastRun = sixMonthsAgo;
+    }
+
+    // collect pending membership requests created since last run,
+    // grouped by community and admin user
+    let results: Array<{
+        admin_user_id: number;
+        community_id: number;
+        new_requests_count: number;
+        community_title: string | null;
+    }> = await client.$queryRaw`
+        SELECT
+            com.admin_user_id AS admin_user_id,
+            cm.community_id AS community_id,
+            com.name AS community_title,
+            COUNT(cm.id) AS new_requests_count
+        FROM community_member cm
+        JOIN community com ON cm.community_id = com.id
+        WHERE cm.status = 'PENDING_APPROVAL'
+          AND cm.created_at > ${lastRun}
+          AND com.status = 'APPROVED'
+        GROUP BY com.admin_user_id, cm.community_id;
+    `;
+
+    // group per admin user
+    let perUserData: any = {};
+    results.forEach((row) => {
+        const adminId = Number(row.admin_user_id);
+        if (!perUserData[adminId]) {
+            perUserData[adminId] = { total: 0, communities: [] };
+        }
+        perUserData[adminId].total += Number(row.new_requests_count);
+        perUserData[adminId].communities.push({
+            id: Number(row.community_id),
+            name: row.community_title || '(Untitled community)',
+            count: Number(row.new_requests_count),
+            url: `${config.protocol}://${config.frontend}/communities/browse/${row.community_id}`,
+        });
+    });
+
+    // send email to each admin
+    Object.keys(perUserData).forEach((user_id) => {
+        const userData = perUserData[user_id];
+        client.users
+            .findUniqueOrThrow({ where: { id: Number(user_id) } })
+            .then((user) => {
+                if (!user) {
+                    return;
+                }
+                console.log(userData);
+
+                sendCommunityMembershipsRequest({
+                    user: { name: user.name!, email: user.email! },
+                    community_data: userData.communities,
+                    total: userData.total,
+                });
+            })
+            .catch((e) => {
+                console.error(
+                    'Failed to load admin user for membership notification:',
+                    e
+                );
+            });
+    });
+
+    // update cron job last run time
     await client.cron_job.update({
         where: { id: taskObj.id },
         data: { last_run_at: new Date() },

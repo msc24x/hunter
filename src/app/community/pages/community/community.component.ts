@@ -69,6 +69,10 @@ export class CommunityComponent implements OnInit, OnDestroy {
             this.community = res.body as Community;
             this.loading++;
 
+            this.titleService.setTitle(
+                `${this.community.name || 'Community'} - Hunter`
+            );
+
             if (this.community.admin_user_id === this.user?.id) {
                 this.loading--;
                 this.communityService

@@ -29,6 +29,17 @@
                 : community.status
         }}
     </div>
+
+    <div
+        class="badge badge--partner"
+        *ngIf="community.status === 'APPROVED' && community.is_partner"
+        matTooltip="This community is a verified partner of Hunter"
+        matTooltipPosition="above"
+    >
+        <fa-icon [icon]="starIcon"></fa-icon>
+        Hunter's Partner
+    </div>
+
     <div class="logo">
         <img src="/api/media/{{ community.logo_file_path }}" />
     </div>

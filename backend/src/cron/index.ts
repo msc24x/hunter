@@ -1,5 +1,8 @@
 import cron, { TaskContext } from 'node-cron';
-import { newSubmissionsReminder } from './tasks';
+import {
+    newCommunityMembershipsReminder,
+    newSubmissionsReminder,
+} from './tasks';
 import Container from 'typedi';
 import { DatabaseProvider } from '../services/databaseProvider';
 
@@ -17,6 +20,11 @@ const tasks = [
         name: 'new_submissions_reminder',
         expression: '0 6 * * *', // Every day at 6 AM
         handler: logTask(newSubmissionsReminder),
+    },
+    {
+        name: 'new_community_memberships',
+        expression: '0 * * * *', // Every hour
+        handler: logTask(newCommunityMembershipsReminder),
     },
 ];
 

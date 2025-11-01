@@ -2,11 +2,55 @@
 
 <app-loading *ngIf="loading"></app-loading>
 
-<div class="community-form-container">
-    <div class="form">
-        <h2>New Community Form</h2>
-        <hr />
-        <br />
+<div class="community-form-container large-app-page">
+    <div class="info">
+        <h2>What are Hunter Communities?</h2>
+
+        <p>
+            Communities are spaces where people from the same college, school,
+            or group come together to learn, share, and grow. They’re built
+            around common goals like coding, creativity, or collaboration.
+        </p>
+
+        <h3>Why Create a Community?</h3>
+
+        <p>
+            <fa-icon [icon]="starIcon"></fa-icon>
+            Bring together students, teachers, or members who share the same
+            passion Learn and grow together. <br />
+            <fa-icon [icon]="starIcon"></fa-icon>
+
+            Members get notified whenever you host a contest in the community.
+            <br />
+            <fa-icon [icon]="starIcon"></fa-icon>
+
+            Show your identity, represent your institution or group on the
+            platform Build engagement
+
+            <br />
+            <fa-icon [icon]="starIcon"></fa-icon>
+
+            Stay active to make your presence lively, and let your members
+            participate in your fun contests
+        </p>
+
+        <img src="../../../../assets/community-illu.svg" alt="" />
+
+        <h3>In Short</h3>
+
+        <p>
+            A community is your space to collaborate, create, and compete with
+            others who share your interests or institution
+        </p>
+    </div>
+
+    <spinner *ngIf="!isAuthenticated && loading"></spinner>
+
+    <div *ngIf="!isAuthenticated && !loading">
+        <sign-in-prompt></sign-in-prompt>
+    </div>
+
+    <div class="form" *ngIf="isAuthenticated">
         <h4>Name of the Community</h4>
         <p class="info-like sticky">
             Could be your Official Community name or name of the education

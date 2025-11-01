@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { timeout } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
@@ -14,6 +15,8 @@ import { Community, UserInfo } from 'src/environments/environment';
 })
 export class CreateCommunityComponent implements OnInit, OnDestroy {
     loading = 0;
+
+    starIcon = faStar;
 
     community = {} as Community;
 

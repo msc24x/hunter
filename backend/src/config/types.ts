@@ -85,6 +85,8 @@ export type Community = {
     admin_user?: UserInfo;
     members?: CommunityMember[];
     competitions?: CompetitionInfo[];
+
+    _joined?: boolean;
 };
 
 export type CommunityMember = {

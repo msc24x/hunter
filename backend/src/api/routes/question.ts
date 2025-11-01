@@ -672,7 +672,17 @@ router.get(
                         },
                     },
                     community: {
-                        select: { id: true, name: true, status: true },
+                        select: {
+                            id: true,
+                            name: true,
+                            status: true,
+                            members: {
+                                where: {
+                                    user_id: user?.id,
+                                    status: 'APPROVED',
+                                },
+                            },
+                        },
                     },
                     ...(user && {
                         competition_sessions: {

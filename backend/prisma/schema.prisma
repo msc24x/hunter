@@ -77,6 +77,7 @@ model community {
   website_link     String?     @db.VarChar(224)
   created_at       DateTime    @default(now()) @db.DateTime(0)
   auto_approve_members  Boolean @default(true)
+  is_partner      Boolean @default(false)
   status           CommunityStatus  @default(PENDING_APPROVAL)
   admin_user_id    Int
   admin_user       users       @relation("admin_communities", fields: [admin_user_id], references: [id], onDelete: NoAction)
