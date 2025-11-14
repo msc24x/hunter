@@ -8,6 +8,7 @@ import { Community, CommunityMember, UserInfo } from '../../config/types';
 import { createFile } from '../../util/serverStorage';
 import { error, log } from 'console';
 import { sendCommunityRequestedEmail } from '../../emails/community-requested/sender';
+import { sendMembershipStatusEmail } from '../../emails/membership-status-update/sender';
 
 const router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -302,13 +303,17 @@ router.patch(
         let user = res.locals.user as UserInfo;
         let community_id = parseInt(req.params.community_id?.toString() || '');
         let operation = req.params.operation?.toString() || '';
+        let operation_text: string = '';
 
         if (operation === 'accept') {
             operation = 'APPROVED';
+            operation_text = 'Approved';
         } else if (operation === 'reject') {
             operation = 'NOT_APPROVED';
+            operation_text = 'Rejected';
         } else if (operation === 'disable') {
             operation = 'DISABLED';
+            operation_text = 'Disabled';
         } else {
             Util.sendResponse(res, resCode.notFound);
             return;
@@ -336,6 +341,51 @@ router.patch(
             })
             .then((community_members) => {
                 Util.sendResponse(res, resCode.success);
+
+                client.community_member
+                    .findMany({
+                        where: {
+                            community_id: community_id,
+                            community: {
+                                admin_user_id: user.id,
+                            },
+                            id: { in: member_ids },
+                        },
+                        include: {
+                            community: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            user: {
+                                select: {
+                                    email: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    })
+                    .then((members) => {
+                        members?.forEach((member) => {
+                            sendMembershipStatusEmail({
+                                community_data: {
+                                    id: member.community_id,
+                                    name: member.community.name!,
+                                    url: Util.getCommunityURL(
+                                        member.community_id
+                                    ),
+                                },
+                                status: operation_text as
+                                    | 'Accepted'
+                                    | 'Disabled'
+                                    | 'Rejected',
+                                user: {
+                                    name: member.user.name!,
+                                    email: member.user.email!,
+                                },
+                            });
+                        });
+                    });
             });
     }
 );

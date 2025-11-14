@@ -7,9 +7,12 @@
 
             <p>
                 Dear <%= user.name %>,<br />
-                You membership for Hunter Community
-                <a href="<%= community_url %>"><%= community.name %></a> has
-                been <%= status %>
+                You membership has been <b><%= status %></b>, for <br />
+                <b>
+                    <a href="<%= community_data.url %>"
+                        ><%= community_data.name %></a
+                    >
+                </b>
             </p>
         </div>
 

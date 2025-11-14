@@ -11,10 +11,11 @@ import { Util } from '../../util/util';
 // Type for template data
 interface EmailData {
     user: { email: string; name: string };
-    total: number;
+    status: 'Rejected' | 'Disabled' | 'Accepted';
     community_data: {
         id: number;
         name: string;
+        url: string;
     };
 }
 

@@ -148,7 +148,6 @@ export async function newCommunityMembershipsReminder(context: TaskContext) {
                 if (!user) {
                     return;
                 }
-                console.log(userData);
 
                 sendCommunityMembershipsRequest({
                     user: { name: user.name!, email: user.email! },

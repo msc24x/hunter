@@ -8,10 +8,10 @@
 html {
     overflow-y: scroll;
     font-weight: 200;
+    background-color: colors.$text_white;
 }
 
 body {
-    background-color: colors.$text_white;
     margin: 0;
     max-width: 1720px;
     padding-inline: 2%;

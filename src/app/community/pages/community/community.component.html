@@ -68,6 +68,9 @@
             [ngTemplateOutlet]="communityButtons"
             *ngIf="community.admin_user_id !== user?.id"
         ></ng-outlet>
+        <p class="info-like">
+            Joined members will be notified of the new competitions posted.
+        </p>
 
         <manual-error
             *ngIf="community.status !== 'APPROVED'"
@@ -102,33 +105,50 @@
         </div>
 
         <div
-            *ngIf="pendingRequests.length && community.status == 'APPROVED'"
+            *ngIf="user?.id === community.admin_user_id"
             class="membership-requests"
         >
-            <h2>Membership Requests</h2>
+            <h2>
+                Membership Requests
+                <span *ngIf="pendingRequests.length"
+                    >({{ pendingRequests.length }})</span
+                >
+            </h2>
 
-            <div class="request" *ngFor="let req of pendingRequests">
-                <div class="user-info">
-                    <user-display [userInfo]="req.user"></user-display> Wants to
-                    join
-                </div>
-                <p class="time">Received {{ req.created_at | timeAgo }}</p>
-                <div class="actions">
-                    <div
-                        class="button main accept"
-                        [ngClass]="{ disabled: loading }"
-                        (click)="updateMember([req], 'accept')"
-                    >
-                        Accept
+            <div
+                *ngIf="pendingRequests.length && community.status == 'APPROVED'"
+            >
+                <div class="request" *ngFor="let req of pendingRequests">
+                    <div class="user-info">
+                        <user-display [userInfo]="req.user"></user-display>
+                        Wants to join
                     </div>
-                    <div
-                        class="button main danger reject"
-                        (click)="updateMember([req], 'reject')"
-                        [ngClass]="{ disabled: loading }"
-                    >
-                        Reject
+                    <p class="time">Received {{ req.created_at | timeAgo }}</p>
+                    <div class="actions">
+                        <div
+                            class="button main accept"
+                            [ngClass]="{ disabled: loading }"
+                            (click)="updateMember([req], 'accept')"
+                        >
+                            Accept
+                        </div>
+                        <div
+                            class="button main danger reject"
+                            (click)="updateMember([req], 'reject')"
+                            [ngClass]="{ disabled: loading }"
+                        >
+                            Reject
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <div
+                *ngIf="
+                    !(pendingRequests.length && community.status == 'APPROVED')
+                "
+            >
+                <p class="info-like">No pending member request.</p>
             </div>
         </div>
     </div>
