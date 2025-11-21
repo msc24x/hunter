@@ -5,6 +5,8 @@ import { sendNewSubmissionsEmail } from '../emails/new-submissions/sender';
 import { Util } from '../util/util';
 import config from '../config/config';
 import { sendCommunityMembershipsRequest } from '../emails/new-community-memberships-request/sender';
+import { CompetitionInfo, UserInfo } from '../config/types';
+import { sendNewCompetitionsInCommunity } from '../emails/new-community-contests/sender';
 
 const client = Container.get(DatabaseProvider).client();
 
@@ -167,5 +169,101 @@ export async function newCommunityMembershipsReminder(context: TaskContext) {
     await client.cron_job.update({
         where: { id: taskObj.id },
         data: { last_run_at: new Date() },
+    });
+}
+
+// New contest in community, email per user
+export async function newCompetitionsInCommunity(context: TaskContext) {
+    let taskObj = await client.cron_job.findFirstOrThrow({
+        where: { name: context.task!.name },
+    });
+
+    let lastRun = taskObj.last_run_at;
+    if (!lastRun) {
+        const defaultInterval = new Date();
+        defaultInterval.setHours(defaultInterval.getHours() - 6);
+        lastRun = defaultInterval;
+    }
+
+    let currentTime = new Date();
+
+    let comps = await client.competitions.findMany({
+        where: {
+            deleted_at: null,
+            visibility: 'PUBLIC',
+            community_id: { not: null },
+            first_public_at: { gte: lastRun },
+        },
+        include: {
+            community: {
+                include: {
+                    members: {
+                        where: { status: 'APPROVED' },
+                        select: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    email: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    let email_data = new Map<
+        number,
+        {
+            user: UserInfo;
+            community: { name: string; url: string };
+            competitions: Array<{
+                id: number;
+                title: string;
+                description: string;
+                url: string;
+            }>;
+        }
+    >();
+
+    comps.forEach((comp) => {
+        comp.community?.members.forEach((mem) => {
+            if (!email_data.has(mem.user.id)) {
+                email_data.set(mem.user.id as number, {
+                    user: mem.user as UserInfo,
+                    community: {
+                        name: comp.community?.name!,
+                        url: Util.getCommunityURL(comp.community?.id!),
+                    },
+                    competitions: [
+                        {
+                            id: comp.id,
+                            title: comp.title!,
+                            description: comp.description!,
+                            url: Util.getContestURL(comp.id),
+                        },
+                    ],
+                });
+            } else {
+                email_data.get(mem.user.id)?.competitions.push({
+                    id: comp.id,
+                    title: comp.title!,
+                    description: comp.description!,
+                    url: Util.getContestURL(comp.id),
+                });
+            }
+        });
+    });
+
+    email_data.forEach((data) => {
+        sendNewCompetitionsInCommunity(data);
+    });
+
+    // update cron job last run time
+    await client.cron_job.update({
+        where: { id: taskObj.id },
+        data: { last_run_at: currentTime },
     });
 }

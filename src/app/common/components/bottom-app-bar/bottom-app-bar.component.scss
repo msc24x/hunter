@@ -17,6 +17,14 @@
     flex-wrap: wrap;
     gap: 2rem;
 
+    .github-button {
+        border-radius: 1rem;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        padding: 0.3rem 0.6rem;
+    }
+
     .para {
         max-width: 512px;
     }
@@ -26,7 +34,7 @@
     }
 
     #site_logo {
-        font-weight: 600;
+        font-weight: 700;
         font-size: 2rem;
 
         #site_info {

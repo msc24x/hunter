@@ -195,6 +195,13 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                             sendPublicContestEmail(
                                 competition as CompetitionInfo
                             );
+
+                            client.competitions
+                                .update({
+                                    where: { id: competition.id },
+                                    data: { first_public_at: new Date() },
+                                })
+                                .then(() => {});
                         }
                     })
                     .catch((err) => {

@@ -142,33 +142,37 @@
         <div id="site_info">
             With <fa-icon [icon]="heartIcon"></fa-icon> by
             <a href="https://cambo.in">Maninderpal Singh</a>
-            <br /><br />
-            <a
-                class="github-button"
-                href="https://github.com/msc24x/hunter"
-                data-color-scheme="no-preference: light; light: light; dark: dark;"
-                data-icon="octicon-star"
-                data-size="large"
-                data-show-count="true"
-                aria-label="Star buttons/github-buttons on GitHub"
-                >Star</a
-            >
+
             <br />
             <br />
             <fa-icon [icon]="copyIcon" size="xs"></fa-icon> Cambo
             {{ getYear() }}
+            <br />
+            <br />
+
+            <a
+                class="github-button"
+                href="https://github.com/msc24x/hunter"
+                target="_blank"
+            >
+                <fa-icon [animation]="'spin'" [icon]="startIcon"></fa-icon>
+                on GitHub</a
+            >
         </div>
     </div>
 
     <div class="links">
-        <a href="mailto:msc24x@gmail.com">Contact Support</a>
-        <a href="https://www.linkedin.com/company/hunter-cambo-in">LinkedIn</a>
-        <a href="https://cambo.in">Almighty Creator</a>
-        <a href="https://github.com/msc24x/hunter"> Github</a>
+        <a href="mailto:msc24x@gmail.com" target="_blank">Contact Support</a>
+        <a
+            href="https://www.linkedin.com/company/hunter-cambo-in"
+            target="_blank"
+            >LinkedIn</a
+        >
+        <a href="https://cambo.in" target="_blank">The Almighty Creator</a>
         <a id="privacy_policy" (click)="showPrivacyPolicy(true)">
             Privacy Policy
         </a>
-        <a href="https://donate.cambo.in">
+        <a href="https://donate.cambo.in" target="_blank">
             <fa-icon [icon]="heartIcon"></fa-icon>
             Donate</a
         >

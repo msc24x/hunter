@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faStar } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { showPopup } from 'src/app/utils/utils';
@@ -16,6 +16,7 @@ export class BottomAppBarComponent implements OnInit {
     heartIcon = faHeart;
     copyIcon = faCopyright;
     isAuthenticated = false;
+    startIcon = faStar;
 
     constructor(private authService: AuthService) {
         this.isAuthenticated = authService.isAuthenticated.value;
