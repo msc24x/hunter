@@ -16,6 +16,10 @@ function question(prompt: string): Promise<string> {
 
 async function main() {
     try {
+        console.log(
+            '\nIMPORTANT: Complete export of env variables is required for this command\n'
+        );
+
         const idInput = await question('Enter community id: ');
         const id = parseInt(idInput || '', 10);
         if (Number.isNaN(id)) {
