@@ -16,6 +16,8 @@ Communities are spaces where people from the same college, school, or group come
 To get a better idea of how a community appears, visit the official Hunter community:  
 https://hunter.cambo.in/communities/browse/1
 
+ ![](../src/assets/community-demo-1.png)
+
 # How to Create One?
 
 1. Log in to the site.
