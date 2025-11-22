@@ -21,6 +21,30 @@
     width: 100%;
     max-width: 32rem;
     flex-basis: 40%;
+    position: relative;
+
+    .badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.25rem 0.6rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 999px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        white-space: nowrap;
+        color: #111;
+        background: rgba(255, 255, 255, 0.95);
+        width: fit-content;
+
+        &--partner {
+            background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+            color: #0b3d91; // deep brand blue
+            border: 1px solid rgba(11, 61, 145, 0.08);
+            box-shadow: 0 6px 18px rgba(11, 61, 145, 0.06);
+            font-weight: 700;
+        }
+    }
 
     .logo {
         width: 100%;

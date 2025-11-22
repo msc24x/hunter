@@ -3,6 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -26,6 +27,8 @@ export class CommunityComponent implements OnInit, OnDestroy {
     memberships: Array<CommunityMember> = [];
     pendingRequests: Array<CommunityMember> = [];
 
+    starIcon = faStar;
+
     constructor(
         private authService: AuthService,
         private communityService: CommunitiesDataService,
@@ -43,15 +46,20 @@ export class CommunityComponent implements OnInit, OnDestroy {
             next: (res) => {
                 if (res.status == 202) {
                     this.user = res.body as UserInfo;
-                    this.loading++;
 
                     this.authService.user = this.user;
                     this.isAuthenticated = true;
                     this.authService.isAuthenticated.next(true);
-                    this.loadPageData();
                 }
             },
+            error: () => {
+                this.loading++;
+            },
+            complete: () => {
+                this.loading++;
+            },
         });
+        this.loadPageData();
     }
 
     ngOnDestroy(): void {}
@@ -92,9 +100,12 @@ export class CommunityComponent implements OnInit, OnDestroy {
         this.loading--;
         this.communityService
             .fetchCommunityMemberships({ community_id: id })
-            .subscribe((res) => {
-                this.memberships = res.body as Array<CommunityMember>;
-                this.loading++;
+            .subscribe({
+                next: (res) => {
+                    this.memberships = res.body as Array<CommunityMember>;
+                    this.loading++;
+                },
+                error: () => this.loading++,
             });
     }
 

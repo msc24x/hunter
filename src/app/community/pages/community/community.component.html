@@ -12,13 +12,25 @@
                 src="/api/media/{{ community.logo_file_path }}"
                 alt="{{ community.name }} community logo"
             />
+
+            <div
+                class="badge badge--partner"
+                *ngIf="community.status === 'APPROVED' && community.is_partner"
+                matTooltip="This community is a verified partner of Hunter"
+                matTooltipPosition="above"
+            >
+                <fa-icon [icon]="starIcon"></fa-icon>
+                Hunter's Partner
+            </div>
         </div>
         <h2>{{ community.name }}</h2>
+
         <p class="info-like">
             The Communities feature on Hunter is in active
             <span class="beta-label">Beta</span>
         </p>
         <p>{{ community.description }}</p>
+
         <p>
             <a href="" (click)="openUrl(community.website_link)">{{
                 community.website_link
@@ -66,15 +78,17 @@
             <div class="button main danger disabled" *ngIf="requestSent()">
                 Request Sent
             </div>
+            <p class="info-like">
+                Joined members will be notified of the new competitions posted.
+            </p>
         </ng-template>
 
         <ng-outlet
             [ngTemplateOutlet]="communityButtons"
-            *ngIf="community.admin_user_id !== user?.id"
+            *ngIf="isAuthenticated && community.admin_user_id !== user?.id"
         ></ng-outlet>
-        <p class="info-like">
-            Joined members will be notified of the new competitions posted.
-        </p>
+
+        <sign-in-prompt *ngIf="!isAuthenticated && !loading"></sign-in-prompt>
 
         <manual-error
             *ngIf="community.status !== 'APPROVED'"
