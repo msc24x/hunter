@@ -30,7 +30,7 @@ const tasks = [
 
     {
         name: 'new_competitions_in_community',
-        expression: '* * * * * *', // Every hour
+        expression: '0 * * * *', // Every hour
         handler: logTask(newCompetitionsInCommunity),
     },
 ];

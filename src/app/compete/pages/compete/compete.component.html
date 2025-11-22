@@ -18,7 +18,15 @@
 
 <div class="large-app-page">
     <ng-template #communitiesTemp>
-        <h1>Communities</h1>
+        <h1>
+            Communities
+            <div class="beta-label">Beta</div>
+
+            <infotip
+                message="A community is your space to collaborate, create, and compete with
+            others who share your interests or institution."
+            ></infotip>
+        </h1>
         <communities-list [communities]="publicCommunities"></communities-list>
     </ng-template>
 

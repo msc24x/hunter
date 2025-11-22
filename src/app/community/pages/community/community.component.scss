@@ -6,24 +6,44 @@
     margin: auto;
     display: flex;
     gap: 5rem;
+
+    @media only screen and (max-width: 1080px) {
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .community-details {
+            flex-basis: unset;
+        }
+    }
 }
 
 .community-details {
     width: 100%;
     max-width: 32rem;
+    flex-basis: 40%;
 
     .logo {
         width: 100%;
         max-width: 32rem;
-        height: 18rem;
+        max-height: 18rem;
         border-radius: 2rem;
         overflow: hidden;
+        position: relative;
         @include sweetBorder;
 
+        /* Modern: keep a strict 16:9 ratio */
+        aspect-ratio: 16 / 9;
+
         img {
-            height: inherit;
-            width: inherit;
+            display: block;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
+            object-position: center;
+
+            /* For the padding-top fallback we need absolute positioning */
+            position: absolute;
+            inset: 0;
         }
     }
 

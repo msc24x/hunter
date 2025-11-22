@@ -84,6 +84,30 @@ button.main,
     }
 }
 
+.beta-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle; /* Keeps it aligned with neighboring text */
+
+    /* Shape & Size */
+    padding: 4px 10px;
+    border-radius: 50px; /* Pill shape */
+
+    /* Typography */
+    font-family: sans-serif;
+    font-size: 0.75rem; /* Approx 12px */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* Slight spacing for uppercase readability */
+    line-height: 1;
+
+    /* Colors (Light Blue Theme) */
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border: 1px solid #bae6fd; /* Subtle border for definition */
+}
+
 // =============================
 // Material Design Components
 // =============================

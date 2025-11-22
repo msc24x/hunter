@@ -231,6 +231,7 @@ router.get('/communities', authenticate, (req, res) => {
                     },
                 },
             },
+            orderBy: { status: 'asc' },
         })
         .then((communities) => {
             Util.sendResponseJson(res, resCode.accepted, communities);

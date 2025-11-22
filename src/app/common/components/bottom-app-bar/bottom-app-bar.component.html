@@ -136,45 +136,62 @@
 </popup>
 
 <div id="bottom_app_bar" [ngClass]="{ isAuthenticated: 'no-auth' }">
-    <div id="site_logo">
-        Hunter
-        <br />
-        <div id="site_info">
-            With <fa-icon [icon]="heartIcon"></fa-icon> by
-            <a href="https://cambo.in">Maninderpal Singh</a>
+    <div class="main-content">
+        <div id="site_logo">
+            Hunter
+            <br />
+            <div id="site_info">
+                With <fa-icon [icon]="heartIcon"></fa-icon> by
+                <a href="https://cambo.in">Maninderpal Singh</a>
 
-            <br />
-            <br />
-            <fa-icon [icon]="copyIcon" size="xs"></fa-icon> Cambo
-            {{ getYear() }}
-            <br />
-            <br />
+                <br />
+                <br />
+                <fa-icon [icon]="copyIcon" size="xs"></fa-icon> Cambo
+                {{ getYear() }}
+                <br />
+                <br />
 
-            <a
-                class="github-button"
-                href="https://github.com/msc24x/hunter"
-                target="_blank"
+                <a
+                    class="github-button"
+                    href="https://github.com/msc24x/hunter"
+                    target="_blank"
+                >
+                    <fa-icon [animation]="'spin'" [icon]="startIcon"></fa-icon>
+                    on GitHub</a
+                >
+            </div>
+        </div>
+
+        <div class="links">
+            <a href="mailto:msc24x@gmail.com" target="_blank"
+                >Contact Support</a
             >
-                <fa-icon [animation]="'spin'" [icon]="startIcon"></fa-icon>
-                on GitHub</a
+            <a
+                href="https://www.linkedin.com/company/hunter-cambo-in"
+                target="_blank"
+                >LinkedIn</a
+            >
+            <a href="https://cambo.in" target="_blank">Creator's Portfolio</a>
+            <a id="privacy_policy" (click)="showPrivacyPolicy(true)">
+                Privacy Policy
+            </a>
+            <a href="https://donate.cambo.in" target="_blank">
+                <fa-icon [icon]="heartIcon"></fa-icon>
+                Donate</a
             >
         </div>
     </div>
 
-    <div class="links">
-        <a href="mailto:msc24x@gmail.com" target="_blank">Contact Support</a>
-        <a
-            href="https://www.linkedin.com/company/hunter-cambo-in"
-            target="_blank"
-            >LinkedIn</a
+    <div class="paragraph">
+        Built with passion by
+        <a href="https://cambo.in" target="_blank">Maninderpal Singh</a>, Hunter
+        is an open-source initiative to make contest hosting effortless. We
+        believe in community collaboration and fun access to education. If you
+        enjoy using the platform, consider checking out our code on
+        <a href="https://github.com/msc24x/hunter" target="_blank">GitHub</a> or
+        <a href="https://donate.cambo.in" target="_blank"
+            >supporting the project</a
         >
-        <a href="https://cambo.in" target="_blank">The Almighty Creator</a>
-        <a id="privacy_policy" (click)="showPrivacyPolicy(true)">
-            Privacy Policy
-        </a>
-        <a href="https://donate.cambo.in" target="_blank">
-            <fa-icon [icon]="heartIcon"></fa-icon>
-            Donate</a
-        >
+        to help keep our servers running.
     </div>
 </div>
