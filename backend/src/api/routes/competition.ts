@@ -74,7 +74,7 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
         });
 });
 
-function validateContestInfo(comp: CompetitionInfo) {
+async function validateContestInfo(comp: CompetitionInfo) {
     var errors: any = {};
 
     if (comp?.title?.length > 120) {
@@ -104,6 +104,21 @@ function validateContestInfo(comp: CompetitionInfo) {
         }
     }
 
+    if (comp?.community_id) {
+        let community_obj = await client.community.findFirst({
+            where: {
+                id: comp.community_id,
+                admin_user_id: comp.host_user_id,
+                // status: {not: },
+            },
+        });
+
+        if (!community_obj) {
+            errors.community_id =
+                'Linked community must be a community created by the host';
+        }
+    }
+
     return errors;
 }
 
@@ -115,67 +130,85 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
         return;
     }
 
-    var errors = validateContestInfo(competitionBody);
+    validateContestInfo(competitionBody).then((errors) => {
+        if (Object.keys(errors).length) {
+            Util.sendResponseJson(res, resCode.badRequest, errors);
+            return;
+        }
 
-    if (Object.keys(errors).length) {
-        Util.sendResponseJson(res, resCode.badRequest, errors);
-        return;
-    }
+        client.competitions
+            .findUnique({ where: { id: parseInt(competitionBody.id) } })
+            .then((competition) => {
+                if (!competition) {
+                    Util.sendResponse(res, resCode.notFound);
+                    return;
+                }
 
-    client.competitions
-        .findUnique({ where: { id: parseInt(competitionBody.id) } })
-        .then((competition) => {
-            if (!competition) {
-                Util.sendResponse(res, resCode.notFound);
-                return;
-            }
+                if (competition.host_user_id != res.locals.user.id) {
+                    Util.sendResponse(res, resCode.forbidden);
+                    return;
+                }
 
-            if (competition.host_user_id != res.locals.user.id) {
-                Util.sendResponse(res, resCode.forbidden);
-                return;
-            }
+                const markingPublic =
+                    competition.visibility != competitionBody.visibility &&
+                    competitionBody.visibility == 'PUBLIC';
 
-            const markingPublic =
-                competition.visibility != competitionBody.visibility &&
-                competitionBody.visibility == 'PUBLIC';
+                client.competitions
+                    .update({
+                        where: {
+                            id: competition.id,
+                            host_user_id: res.locals.user.id,
+                        },
+                        data: {
+                            description: competitionBody.description || '',
+                            title: competitionBody.title || '',
+                            visibility: competitionBody.visibility,
+                            community_id: competitionBody.community_id,
+                            community_only: competitionBody.community_id
+                                ? competitionBody.community_only
+                                : false,
+                            hidden_scoreboard:
+                                competitionBody.hidden_scoreboard,
+                            scheduled_at: competitionBody.scheduled_at
+                                ? new Date(competitionBody.scheduled_at)
+                                : null,
+                            scheduled_end_at: competitionBody.scheduled_end_at
+                                ? new Date(competitionBody.scheduled_end_at)
+                                : null,
+                            updated_at: new Date(),
+                            time_limit: competition.practice
+                                ? null
+                                : competitionBody.time_limit,
+                        },
+                        include: {
+                            host_user: true,
+                        },
+                    })
+                    .then((competition) => {
+                        Util.sendResponseJson(
+                            res,
+                            resCode.success,
+                            competition
+                        );
 
-            client.competitions
-                .update({
-                    where: {
-                        id: competition.id,
-                        host_user_id: res.locals.user.id,
-                    },
-                    data: {
-                        description: competitionBody.description || '',
-                        title: competitionBody.title || '',
-                        visibility: competitionBody.visibility,
-                        hidden_scoreboard: competitionBody.hidden_scoreboard,
-                        scheduled_at: competitionBody.scheduled_at
-                            ? new Date(competitionBody.scheduled_at)
-                            : null,
-                        scheduled_end_at: competitionBody.scheduled_end_at
-                            ? new Date(competitionBody.scheduled_end_at)
-                            : null,
-                        updated_at: new Date(),
-                        time_limit: competition.practice
-                            ? null
-                            : competitionBody.time_limit,
-                    },
-                    include: {
-                        host_user: true,
-                    },
-                })
-                .then((competition) => {
-                    Util.sendResponseJson(res, resCode.success, competition);
+                        if (markingPublic) {
+                            sendPublicContestEmail(
+                                competition as CompetitionInfo
+                            );
 
-                    if (markingPublic) {
-                        sendPublicContestEmail(competition as CompetitionInfo);
-                    }
-                })
-                .catch((err) => {
-                    Util.sendResponse(res, resCode.serverError, err);
-                });
-        });
+                            client.competitions
+                                .update({
+                                    where: { id: competition.id },
+                                    data: { first_public_at: new Date() },
+                                })
+                                .then(() => {});
+                        }
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.serverError, err);
+                    });
+            });
+    });
 });
 
 // Start a contest for self
@@ -233,6 +266,18 @@ router.post(
                             user_id: res.locals.user.id,
                         },
                     },
+                    community: {
+                        select: {
+                            status: true,
+                            name: true,
+                            members: {
+                                where: {
+                                    user_id: res.locals.user.id,
+                                    status: 'APPROVED',
+                                },
+                            },
+                        },
+                    },
                 },
             })
             .then((comp) => {
@@ -243,6 +288,32 @@ router.post(
 
                 if (comp?.competition_sessions.length) {
                     Util.sendResponse(res, resCode.success);
+                    return;
+                }
+
+                if (
+                    comp.community?.status &&
+                    comp.community?.status !== 'APPROVED' &&
+                    comp.community_only
+                ) {
+                    Util.sendResponse(
+                        res,
+                        resCode.forbidden,
+                        `Cannot join a Members only competition of an Inactive Community ${comp.community.name}`
+                    );
+                    return;
+                }
+
+                if (
+                    comp.community?.status === 'APPROVED' &&
+                    !comp.community.members.length &&
+                    comp.community_only
+                ) {
+                    Util.sendResponse(
+                        res,
+                        resCode.forbidden,
+                        `Cannot join a Members only competition of Community ${comp.community.name}`
+                    );
                     return;
                 }
 
@@ -263,6 +334,7 @@ router.post(
                     });
             })
             .catch((err) => {
+                console.log(err);
                 Util.sendResponse(res, resCode.serverError, err);
             });
     }
@@ -294,6 +366,9 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
                         },
                         user_id: res.locals.user.id,
                     },
+                },
+                community: {
+                    select: { id: true, name: true },
                 },
             },
         })
@@ -505,14 +580,24 @@ router.get('/competitions', authenticate, (req, res) => {
     const user: UserInfo | null = res.locals.user;
     const params = {
         query: req.query.query?.toString() || '',
-        includeSelf: req.query.includeSelf?.toString() === 'true',
+        selfOnly: req.query.selfOnly?.toString() === 'true',
         invited: req.query.invited?.toString() === 'true',
         liveStatus: req.query.liveStatus?.toString() || 'all',
         orderBy: req.query.orderBy?.toString() || 'desc',
+        community_id: req.query.community_id?.toString() || null,
+        OR: [
+            { community_only: false },
+            {
+                community_only: true,
+                community: {
+                    status: 'APPROVED',
+                },
+            },
+        ],
     };
 
     if (!res.locals.isAuthenticated) {
-        params.includeSelf = false;
+        params.selfOnly = false;
     }
 
     if (params.invited && !user) {
@@ -533,7 +618,7 @@ router.get('/competitions', authenticate, (req, res) => {
         });
     }
 
-    if (params.includeSelf) {
+    if (params.selfOnly) {
         andParams.push({ host_user_id: user!.id });
     } else if (params.invited && user) {
         andParams.push({
@@ -542,6 +627,10 @@ router.get('/competitions', authenticate, (req, res) => {
         });
     } else {
         andParams.push({ visibility: 'PUBLIC' });
+    }
+
+    if (params.community_id) {
+        andParams.push({ community_id: parseInt(params.community_id) });
     }
 
     if (params.liveStatus === 'upcoming') {
@@ -596,6 +685,12 @@ router.get('/competitions', authenticate, (req, res) => {
                                 deleted_at: null,
                             },
                         },
+                    },
+                },
+                community: {
+                    select: { id: true, name: true },
+                    where: {
+                        status: 'APPROVED',
                     },
                 },
             },

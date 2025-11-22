@@ -6,7 +6,10 @@ import {
     protocol,
 } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
-import { faRankingStar } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCircleNodes,
+    faRankingStar,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-home',
@@ -14,7 +17,7 @@ import { faRankingStar } from '@fortawesome/free-solid-svg-icons';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-    homeIcon = faRankingStar;
+    homeIcon = faCircleNodes;
     isAuthenticated: boolean = false;
     prod: boolean = environment.production;
     user = {

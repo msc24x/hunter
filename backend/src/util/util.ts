@@ -95,4 +95,12 @@ export class Util {
 
         return name;
     }
+
+    static getCommunityURL(id: number | string) {
+        return `${config.protocol}://${config.frontend}/communities/browse/${id}`;
+    }
+
+    static getContestURL(id: number | string) {
+        return `${config.protocol}://${config.frontend}/compete/p/${id}`;
+    }
 }

@@ -8,10 +8,10 @@
 html {
     overflow-y: scroll;
     font-weight: 200;
+    background-color: colors.$text_white;
 }
 
 body {
-    background-color: colors.$text_white;
     margin: 0;
     max-width: 1720px;
     padding-inline: 2%;
@@ -73,6 +73,37 @@ button.main,
         color: darkred;
         border-color: darkred;
     }
+}
+
+.app-settings {
+    .setting-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+}
+
+.beta-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Shape & Size */
+    padding: 4px 10px;
+    border-radius: 50px; /* Pill shape */
+
+    /* Typography */
+    font-size: 0.75rem; /* Approx 12px */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* Slight spacing for uppercase readability */
+    line-height: 1;
+
+    /* Colors (Light Blue Theme) */
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border: 1px solid #bae6fd; /* Subtle border for definition */
 }
 
 // =============================
@@ -224,6 +255,21 @@ question-display {
     }
 }
 
+.full-app-page {
+    max-width: 1720px;
+    margin-inline: auto;
+}
+
+.large-app-page {
+    max-width: 1450px;
+    margin-inline: auto;
+}
+
+.small-app-page {
+    max-width: 1080px;
+    margin-inline: auto;
+}
+
 // =============================
 // State Classes
 // =============================
@@ -366,4 +412,48 @@ question-display {
     background: #fff1ff !important;
     border-color: #c19bc1 !important;
     color: purple !important;
+}
+
+.glowing-thing {
+    background: hsl(0, 0%, 100%);
+    padding: 16px 24px;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01);
+
+    &::after {
+        position: absolute;
+        content: "";
+        top: 15px;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        height: 100%;
+        width: 100%;
+        transform: scale(0.9) translateZ(0);
+        filter: blur(15px);
+        background: linear-gradient(
+            to left,
+            #ff5770,
+            #e4428d,
+            #c42da8,
+            #9e16c3,
+            #6501de,
+            #9e16c3,
+            #c42da8,
+            #e4428d,
+            #ff5770
+        );
+        background-size: 200% 200%;
+        animation: animateGlow 1.25s linear infinite;
+    }
+}
+
+@keyframes animateGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
 }

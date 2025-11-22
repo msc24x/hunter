@@ -1,0 +1,71 @@
+<app-bar></app-bar>
+<app-loading *ngIf="loading"></app-loading>
+
+<!-- <app-info-card *ngIf="!isAuthenticated">
+    These are the public competitions currently available on Hunter. Do a quick
+    sign in and you will be able to participate in them, when they are live.
+</app-info-card> -->
+
+<!-- <div *ngIf="isAuthenticated" class="flex_container">
+    <div id="join_competition">
+        <p class="heading">Join with competition code</p>
+        <input type="number" id="competition_id_text" placeholder="Eg. 54321" />
+        <button id="btn_submit_compt_code" (click)="routeToCompetition()">
+            Join
+        </button>
+    </div>
+</div> -->
+
+<div class="large-app-page">
+    <h2>
+        Community Partners
+        <infotip
+            message="These are global communities that have partnered with Hunter to enhance the experience of their members"
+        ></infotip>
+    </h2>
+    <div>
+        <a
+            class="community-partner"
+            href="https://bug2build.in"
+            target="_blank"
+            matTooltip="Click here to visit the community page"
+        >
+            <img
+                src="../../../../assets/partner-1.webp"
+                alt="bug2build community logo"
+            />
+
+            <div class="description">
+                <span class="title">Bug2Build</span> <br />
+                A student-led community that brings together students &
+                professionals
+            </div>
+        </a>
+    </div>
+
+    <ng-template #communitiesTemp>
+        <h1>
+            Communities
+            <div class="beta-label">Beta</div>
+
+            <infotip
+                message="A community is your space to collaborate, create, and compete with
+            others who share your interests or institution."
+            ></infotip>
+        </h1>
+        <communities-list [communities]="publicCommunities"></communities-list>
+    </ng-template>
+
+    <ng-outlet
+        [ngTemplateOutlet]="communitiesTemp"
+        *ngIf="publicCommunities?.length"
+    >
+    </ng-outlet>
+
+    <competitions-list
+        [competitionsList]="this.publicCompetitions"
+        [invitedList]="invitedCompetitions"
+        heading="Public Competitions"
+        route="compete/p"
+    ></competitions-list>
+</div>

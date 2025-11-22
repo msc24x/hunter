@@ -73,6 +73,32 @@ export type UserInfo = {
     github_fetched_at?: Date;
 };
 
+export type Community = {
+    id: number;
+    name?: string;
+    description?: string;
+    logo_file_path?: string;
+    website_link?: string;
+    created_at: Date;
+    status: string;
+    admin_user_id: number;
+    admin_user?: UserInfo;
+    members?: CommunityMember[];
+    competitions?: CompetitionInfo[];
+
+    _joined?: boolean;
+};
+
+export type CommunityMember = {
+    id: number;
+    user_id: number;
+    community_id: number;
+    status: string;
+    created_at: Date;
+    user?: UserInfo;
+    community?: Community;
+};
+
 export type CompetitionInfo = {
     id: number;
     host_user_id: number;
@@ -90,6 +116,9 @@ export type CompetitionInfo = {
     rating: number;
     hidden_scoreboard: boolean;
     practice: boolean;
+    community_id?: number;
+    community_only?: boolean;
+    community?: Community;
 };
 
 export type CompetitionSession = {

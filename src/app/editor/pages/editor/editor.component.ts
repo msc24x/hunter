@@ -28,8 +28,10 @@ import { error } from 'console';
 import katex from 'katex';
 import { BehaviorSubject, min, timeout } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
+    Community,
     CompetitionInfo,
     CompetitionInvite,
     domainName,
@@ -105,6 +107,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     };
     showInviteP = false;
     inviteToRemove: null | CompetitionInvite = null;
+    userCommunities: Array<Community> = [];
+    approvedUserCommunities: Array<Community> = [];
 
     errors: any = {};
     contest_errors: any = {};
@@ -121,7 +125,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         private competitionsData: CompetitionsDataService,
         private datePipe: DatePipe,
         private titleService: Title,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private communityService: CommunitiesDataService
     ) {
         titleService.setTitle('Build - Hunter');
 
@@ -169,6 +174,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                         this.authService.isAuthenticated.next(true);
                         this.loading = false;
                         this.fetchQuestions();
+                        this.fetchUserCommunities();
                     }
                 },
                 (err) => {
@@ -178,6 +184,7 @@ export class EditorComponent implements OnInit, OnDestroy {
             );
         } else {
             this.fetchQuestions();
+            this.fetchUserCommunities();
         }
 
         document.onkeydown = (event) => {
@@ -515,6 +522,17 @@ export class EditorComponent implements OnInit, OnDestroy {
                 }
 
                 this.loading = false;
+            });
+    }
+
+    fetchUserCommunities() {
+        this.communityService
+            .fetchCommunities({ user_id: this.user.id })
+            .subscribe((res) => {
+                this.userCommunities = res.body as Array<Community>;
+                this.approvedUserCommunities = this.userCommunities.filter(
+                    (c) => c.status === 'APPROVED'
+                );
             });
     }
 

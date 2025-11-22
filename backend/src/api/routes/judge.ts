@@ -18,9 +18,9 @@ import { DatabaseProvider } from '../../services/databaseProvider';
 import config from '../../config/config';
 
 const router = express.Router();
+const client = Container.get(DatabaseProvider).client();
 const judgeService = Container.get(JudgeService);
 const scoreboardService = Container.get(ScoreboardService);
-const client = Container.get(DatabaseProvider).client();
 
 function safeRouteToQuestion(
     req: Request,
@@ -63,6 +63,19 @@ function safeRouteToQuestion(
                                     user_id: res.locals.user.id,
                                 },
                             },
+                            community: {
+                                select: {
+                                    status: true,
+                                    name: true,
+                                    id: true,
+                                    members: {
+                                        where: {
+                                            status: 'APPROVED',
+                                            user_id: res.locals.user.id,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                     question_choices: true,
@@ -100,6 +113,35 @@ function safeRouteToQuestion(
                         'Onboarding have not been done for this competition'
                     );
                     return;
+                }
+
+                if (question.competitions.community?.id) {
+                    let community = question.competitions.community;
+                    if (
+                        community.status !== 'APPROVED' &&
+                        question.competitions.community_only
+                    ) {
+                        Util.sendResponse(
+                            res,
+                            resCode.forbidden,
+                            'Competition is a members only competition of an inactive community'
+                        );
+                        return;
+                    }
+
+                    if (
+                        community.status === 'APPROVED' &&
+                        question.competitions.community_only
+                    ) {
+                        if (!community.members.length) {
+                            Util.sendResponse(
+                                res,
+                                resCode.forbidden,
+                                'Competition is a members only competition of the community'
+                            );
+                            return;
+                        }
+                    }
                 }
 
                 if (

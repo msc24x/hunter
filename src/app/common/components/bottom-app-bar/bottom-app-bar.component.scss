@@ -3,7 +3,7 @@
 @use "../../../../assets/mixins" as *;
 
 #bottom_app_bar {
-    background-color: white;
+    background: white;
     color: colors.$text_black;
     position: absolute;
     left: 0px;
@@ -11,14 +11,40 @@
     height: fit-content;
     padding-block: 64px;
     width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
     gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    .para {
-        max-width: 512px;
+    .main-content,
+    .paragraph {
+        max-width: 1280px;
+        margin-inline: 2rem;
+    }
+
+    .main-content {
+        width: calc(100% - 4rem);
+        margin-inline: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .paragraph {
+        color: gray;
+
+        a {
+            color: rgb(29, 29, 29);
+        }
+    }
+
+    .github-button {
+        border-radius: 1rem;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        padding: 0.3rem 0.6rem;
     }
 
     > div {
@@ -26,7 +52,7 @@
     }
 
     #site_logo {
-        font-weight: 600;
+        font-weight: 700;
         font-size: 2rem;
 
         #site_info {
@@ -74,5 +100,26 @@
     }
     .button {
         font-size: 0.9rem !important;
+    }
+}
+
+@media only screen and (max-width: 512px) {
+    .main-content {
+        flex-wrap: wrap;
+        justify-content: center !important;
+        gap: 3rem;
+
+        #site_logo {
+            text-align: center;
+        }
+
+        .links {
+            justify-items: center !important;
+        }
+    }
+
+    .paragraph {
+        margin-block: 0 !important;
+        font-size: 0.8rem;
     }
 }

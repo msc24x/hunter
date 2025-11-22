@@ -110,6 +110,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     timeLimitReached = false;
     notStarted = false;
     startable = false;
+    communityMemberRequired = false;
 
     routerSubsc: Subscription | null = null;
     subscriptions: Subscription[] = [];
@@ -301,9 +302,25 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
     startCompetitionSession() {
         if (!this.notStarted || !this.startable) {
-            this.snackBar.open(
-                'Competition has not started yet, please come back later.'
-            );
+            if (this.communityMemberRequired) {
+                this.snackBar.open(
+                    'Please join the community first before continuing, Redirecting to community page...'
+                );
+
+                setTimeout(() => {
+                    this.router.navigate([
+                        `/communities/browse/${this.competition?.community?.id}`,
+                    ]);
+
+                    this.snackBar.open(
+                        'Proceed to join the community by clicking "Join Community" button'
+                    );
+                }, 1000);
+            } else {
+                this.snackBar.open(
+                    'Competition has not started yet, please come back later.'
+                );
+            }
             return;
         }
 
@@ -315,9 +332,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 next: () => {
                     window.location.reload();
                 },
-                error: () => {
+                error: (error) => {
                     this.loading--;
-                    this.snackBar.open('Some unknown error occurred');
+                    this.snackBar.open(error.error);
                 },
             });
     }
@@ -525,8 +542,18 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             clearInterval(this.timeInterval);
                         }
 
-                        // If submissions are not open yet, put it in not started state
+                        console.log(this.competition);
+
                         if (
+                            this.competition.community_only &&
+                            !this.competition.community?.members?.length
+                        ) {
+                            this.communityMemberRequired = true;
+                            this.notStarted = true;
+                            this.startable = false;
+                        }
+                        // If submissions are not open yet, put it in not started state
+                        else if (
                             this.competition.scheduled_at &&
                             this.competition.scheduled_at.getTime() > Date.now()
                         ) {
@@ -796,5 +823,18 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.numOfWordsWritten(content) >=
             (this.questionSelectedInfo?.char_limit || 0)
         );
+    }
+
+    uiStartButtonText() {
+        if (this.notStarted && this.communityMemberRequired) {
+            return 'Only Community Members can participate';
+        } else if (!this.notStarted || this.startable) {
+            if (this.hasEnded) {
+                return 'Submissions Closed';
+            } else {
+                return 'Start Now';
+            }
+        }
+        return '';
     }
 }

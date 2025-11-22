@@ -1,0 +1,21 @@
+<body>
+    <div class="container">
+        <%- include('emails/header') -%>
+
+        <div class="content">
+            <h1>Community Membership 📋</h1>
+
+            <p>
+                Dear <%= user.name %>,<br />
+                You membership has been <b><%= status %></b>, for <br />
+                <b>
+                    <a href="<%= community_data.url %>"
+                        ><%= community_data.name %></a
+                    >
+                </b>
+            </p>
+        </div>
+
+        <%- include('emails/footer') -%>
+    </div>
+</body>

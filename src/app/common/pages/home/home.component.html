@@ -1,7 +1,7 @@
 <app-bar></app-bar>
 
 <div id="tagline" class="app-line">
-    Effortless Hosting <br />For Contests & Interviews<br />
+    <div>Effortless Hosting <br />For Contests & Interviews<br /></div>
 
     <div class="illu-con">
         <div class="illu-overlay"></div>
@@ -11,23 +11,35 @@
             alt="Product illustration"
         />
     </div>
-    <span class="helperline">
+
+    <div class="helperline">
         <fa-icon [icon]="homeIcon"></fa-icon>
-        with Ease & Freedom!
-    </span>
+        Complexity, simplified!
+    </div>
 </div>
+
+<ng-template #home_buttons>
+    <div class="direct-buttons" *ngIf="isAuthenticated">
+        <button class="main glowing-thing" routerLink="/compete">
+            Compete against others
+        </button>
+        <button
+            class="main danger glowing-thing"
+            routerLink="/editor/workbench"
+        >
+            Create your own contest
+        </button>
+    </div>
+</ng-template>
 
 <div id="tagline_small" class="app-line inview_slide">
     <span class="">Open source</span> platform for you to host your own
     customized academic competitions.
     <span class="">Build, Judge or Participate</span>, all under one roof.
 </div>
-<div class="direct-buttons" *ngIf="isAuthenticated">
-    <button class="main" routerLink="/compete">Compete against others</button>
-    <button class="main danger" routerLink="/editor/workbench">
-        Create your own contest
-    </button>
-</div>
+
+<ng-outlet [ngTemplateOutlet]="home_buttons"></ng-outlet>
+
 <div *ngIf="!isAuthenticated" [ngClass]="{ 'vanish': isAuthenticated }">
     <br />
 
@@ -155,4 +167,9 @@
             />
         </div>
     </section>
+
+    <br />
+    <br />
+
+    <ng-outlet [ngTemplateOutlet]="home_buttons"></ng-outlet>
 </div>

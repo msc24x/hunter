@@ -19,6 +19,13 @@ const routes: Routes = [
             import('./compete/compete.module').then((m) => m.CompeteModule),
     },
     {
+        'path': 'communities',
+        'loadChildren': () =>
+            import('./community/community.module').then(
+                (m) => m.CommunityModule
+            ),
+    },
+    {
         'path': '404',
         'component': NotFoundComponent,
     },

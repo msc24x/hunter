@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CompetitionInfo, UserInfo } from 'src/environments/environment';
+import {
+    Community,
+    CompetitionInfo,
+    UserInfo,
+} from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
+import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 
 @Component({
     selector: 'compete',
@@ -21,10 +26,12 @@ export class CompeteComponent implements OnInit {
 
     publicCompetitions: Array<CompetitionInfo> | null = null;
     invitedCompetitions: Array<CompetitionInfo> | null = null;
+    publicCommunities: Array<Community> = [];
 
     constructor(
         private authService: AuthService,
         private competitionsDataService: CompetitionsDataService,
+        private communitiesDataService: CommunitiesDataService,
         private router: Router
     ) {
         this.authService.isAuthenticated.subscribe((isAuth: boolean) => {
@@ -44,6 +51,14 @@ export class CompeteComponent implements OnInit {
                 .getCompetitions({ title: '', dateOrder: '-1', invited: true })
                 .then((res) => {
                     this.invitedCompetitions = res;
+                    this.loading--;
+                });
+
+            this.loading++;
+            this.communitiesDataService
+                .fetchCommunities({})
+                .subscribe((res) => {
+                    this.publicCommunities = res.body as Array<Community>;
                     this.loading--;
                 });
         });

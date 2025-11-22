@@ -23,6 +23,18 @@
     <div>
         Hosted by
         <user-display [userInfo]="competition.host_user"></user-display>
+        <br />
+        <br />
+        <strong *ngIf="competition.community">
+            Posted in
+            <community-display
+                [community]="competition.community"
+            ></community-display>
+
+            <span *ngIf="competition.community.status !== 'APPROVED'"
+                >(Inactive)</span
+            >
+        </strong>
     </div>
     <div class="competition-desc">
         {{ competition.description || "No description provided by the host." }}
@@ -103,17 +115,18 @@
     <button
         *ngIf="isAuthenticated"
         class="main danger"
+        [ngClass]="{
+            'glowing-thing':
+                (!this.notStarted || this.startable) && !this.hasEnded
+        }"
         (click)="startCompetitionSession()"
     >
         {{
-            notStarted && !startable
-                ? (competition.scheduled_at | timeAgo : true).replace(
-                      "ago",
-                      "left to start"
-                  )
-                : hasEnded
-                ? "Submissions Closed"
-                : "Start Now"
+            uiStartButtonText() ||
+                (competition.scheduled_at | timeAgo : true).replace(
+                    "ago",
+                    "left to start"
+                )
         }}
     </button>
 
@@ -234,6 +247,13 @@
                         <user-display
                             [userInfo]="this.competition.host_user"
                         ></user-display>
+
+                        <span *ngIf="competition.community">
+                            in
+                            <community-display
+                                [community]="competition.community"
+                            ></community-display>
+                        </span>
                     </div>
                     <div class="info-like">
                         Updated

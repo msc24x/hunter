@@ -10,7 +10,7 @@ import { PopupComponent } from './components/popup/popup.component';
 import { SigninDialogComponent } from './components/signin-dialog/signin-dialog.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { AboutComponent } from './pages/about/about.component';
-import { CompeteComponent } from './pages/compete/compete.component';
+import { CompeteComponent } from '../compete/pages/compete/compete.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 import {
@@ -31,7 +31,6 @@ import { CodeEditorComponent } from './components/code-editor/code-editor.compon
 import { PrettyMetaComponent } from './components/pretty-meta/pretty-meta.component';
 import { GreenredComponent } from './greenred/greenred.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
-import { EditorModule } from '../editor/editor.module';
 import { QuestionsListComponent } from './questions-list/questions-list.component';
 import { QuestionEvaluationComponent } from './components/question-evaluation/question-evaluation.component';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -48,8 +47,14 @@ import { QuestionDisplayComponent } from './components/question-display/question
 import { NgKatexComponent } from './components/ng-katex/ng-katex.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
-import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import {
+    CdkDrag,
+    CdkDropList,
+    CdkDragPlaceholder,
+} from '@angular/cdk/drag-drop';
 import { CompetitionCardComponent } from './components/competition-card/competition-card.component';
+import { CommunitiesListComponent } from './components/communities-list/communities-list.component';
+import { CommunityDisplayComponent } from './components/community-display/community-display.component';
 
 @NgModule({
     declarations: [
@@ -91,6 +96,8 @@ import { CompetitionCardComponent } from './components/competition-card/competit
         NgKatexComponent,
         SpinnerComponent,
         CompetitionCardComponent,
+        CommunitiesListComponent,
+        CommunityDisplayComponent,
     ],
     imports: [
         AngularCommonModule,
@@ -104,6 +111,7 @@ import { CompetitionCardComponent } from './components/competition-card/competit
         FormsModule,
         CdkDropList,
         CdkDrag,
+        CdkDragPlaceholder,
     ],
     exports: [
         AppBarComponent,
@@ -141,6 +149,8 @@ import { CompetitionCardComponent } from './components/competition-card/competit
         SpinnerComponent,
         TimeAgo,
         PrettyDuration,
+        CommunitiesListComponent,
+        CommunityDisplayComponent,
     ],
     providers: [DatePipe],
 })

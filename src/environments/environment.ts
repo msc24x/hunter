@@ -63,6 +63,9 @@ export interface CompetitionInfo {
     questions?: QuestionInfo[];
     competition_sessions?: CompetitionSession[];
     competition_invites?: CompetitionInvite[];
+    community_id?: number;
+    community_only?: boolean;
+    community?: Community;
 
     _count: CompetitionInfoCounts;
 }
@@ -178,6 +181,17 @@ export const apiEndpoints = {
     resultsAll: environment.apiUrl + '/competitions/{0}/results',
     progress: environment.apiUrl + '/competitions/{0}/progress',
     submission: environment.apiUrl + '/submission/',
+    communities: environment.apiUrl + '/communities/',
+    communityMemberships: environment.apiUrl + '/communities/memberships',
+    community: environment.apiUrl + '/communities/{0}',
+    pendingCommunityMemberships:
+        environment.apiUrl + '/communities/{0}/memberships/pending',
+    updateCommunityMemberships:
+        environment.apiUrl + '/communities/{0}/memberships/{1}',
+    joinCommunity: environment.apiUrl + '/communities/{0}/join',
+    leaveCommunity: environment.apiUrl + '/communities/{0}/leave',
+    createCommunity: environment.apiUrl + '/communities/create',
+    updateCommunity: environment.apiUrl + '/communities/{0}',
 };
 
 export const templates = {
@@ -234,6 +248,35 @@ export interface QuestionChoice {
     is_correct: boolean;
     delete?: boolean;
 }
+
+export interface Community {
+    id: number;
+    name?: string;
+    description?: string;
+    logo_file_path?: string;
+    website_link?: string;
+    created_at: Date;
+    status: string;
+    admin_user_id: number;
+    auto_approve_members: boolean;
+    is_partner: boolean;
+    admin_user?: UserInfo;
+    members?: CommunityMember[];
+    competitions?: CompetitionInfo[];
+
+    _count?: any;
+}
+
+export interface CommunityMember {
+    id: number;
+    user_id: number;
+    community_id: number;
+    status: string;
+    created_at: Date;
+    user?: UserInfo;
+    community?: Community;
+}
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

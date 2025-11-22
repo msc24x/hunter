@@ -1,0 +1,34 @@
+<body>
+    <div class="container">
+        <%- include('emails/header') -%>
+
+        <div class="content">
+            <h1>Pending Requests 📣</h1>
+
+            <p>
+                Dear <%= user.name %>,<br />
+                You have <strong><%= total %></strong> new membership request<%=
+                total === 1 ? '' : 's' %> awaiting action across your
+                communities.
+            </p>
+
+            <% if (community_data && community_data.length) { %>
+            <p>Please review the requests for each community below:</p>
+            <ul class="communities-list">
+                <% community_data.forEach(function(c) { %>
+                <li>
+                    <strong><%= c.name %></strong>
+                    — <%= c.count %> new request<%= c.count === 1 ? '' : 's' %>
+                    &nbsp;•&nbsp;
+                    <a href="<%= c.url %>">Review</a>
+                </li>
+                <% }); %>
+            </ul>
+            <% } %>
+
+            <p></p>
+        </div>
+
+        <%- include('emails/footer') -%>
+    </div>
+</body>

@@ -1,0 +1,167 @@
+<app-bar></app-bar>
+<app-loading *ngIf="loading"></app-loading>
+
+<div *ngIf="!community && loading" class="large-app-page">
+    <spinner></spinner>
+</div>
+
+<div *ngIf="community" class="full-app-page">
+    <div class="community-details">
+        <div class="logo">
+            <img
+                src="/api/media/{{ community.logo_file_path }}"
+                alt="{{ community.name }} community logo"
+            />
+        </div>
+        <h2>{{ community.name }}</h2>
+        <p class="info-like">
+            The Communities feature on Hunter is in active
+            <span class="beta-label">Beta</span>
+        </p>
+        <p>{{ community.description }}</p>
+        <p>
+            <a href="" (click)="openUrl(community.website_link)">{{
+                community.website_link
+            }}</a>
+        </p>
+
+        <h3>
+            {{ community._count.members }} Member{{
+                community._count.members !== 1 ? "s" : ""
+            }}
+            &nbsp; &bull; &nbsp;
+            {{ community._count.competitions }} Competition{{
+                community._count.competitions !== 1 ? "s" : ""
+            }}
+        </h3>
+        <p>
+            Created {{ community.created_at | timeAgo }}&nbsp; &bull; &nbsp;By
+            <user-display [userInfo]="community.admin_user"></user-display>
+        </p>
+
+        <div
+            class="button main disabled"
+            *ngIf="community.admin_user_id === user?.id"
+        >
+            You're the Admin
+        </div>
+
+        <ng-template #communityButtons>
+            <div
+                class="button main"
+                [ngClass]="{ disabled: loading }"
+                *ngIf="!isApprovedMember() && !requestSent()"
+                (click)="sendJoinRequest()"
+            >
+                Join Community
+            </div>
+            <div
+                class="button main danger"
+                *ngIf="isApprovedMember()"
+                [ngClass]="{ disabled: loading }"
+                (click)="leaveCommunity()"
+            >
+                Leave Community
+            </div>
+            <div class="button main danger disabled" *ngIf="requestSent()">
+                Request Sent
+            </div>
+        </ng-template>
+
+        <ng-outlet
+            [ngTemplateOutlet]="communityButtons"
+            *ngIf="community.admin_user_id !== user?.id"
+        ></ng-outlet>
+        <p class="info-like">
+            Joined members will be notified of the new competitions posted.
+        </p>
+
+        <manual-error
+            *ngIf="community.status !== 'APPROVED'"
+            message="This community is not active as of now."
+        ></manual-error>
+
+        <div *ngIf="community.admin_user_id === user?.id">
+            <h2>Settings</h2>
+            <div class="app-settings">
+                <p class="setting-row">
+                    <label class="setting-label"
+                        >Auto approve member requests?</label
+                    >
+                    <mat-slide-toggle
+                        [(ngModel)]="community.auto_approve_members"
+                    ></mat-slide-toggle>
+                </p>
+                <p class="info-like sticky">
+                    Anyone requesting to join the community won't require your
+                    permission and will be auto approved into the Community.
+                    Won't affect already received requests.
+                </p>
+
+                <button
+                    class="main"
+                    ngClass="{'disabled no-click': loading}"
+                    (click)="saveSettings()"
+                >
+                    Save Settings
+                </button>
+            </div>
+        </div>
+
+        <div
+            *ngIf="user?.id === community.admin_user_id"
+            class="membership-requests"
+        >
+            <h2>
+                Membership Requests
+                <span *ngIf="pendingRequests.length"
+                    >({{ pendingRequests.length }})</span
+                >
+            </h2>
+
+            <div
+                *ngIf="pendingRequests.length && community.status == 'APPROVED'"
+            >
+                <div class="request" *ngFor="let req of pendingRequests">
+                    <div class="user-info">
+                        <user-display [userInfo]="req.user"></user-display>
+                        Wants to join
+                    </div>
+                    <p class="time">Received {{ req.created_at | timeAgo }}</p>
+                    <div class="actions">
+                        <div
+                            class="button main accept"
+                            [ngClass]="{ disabled: loading }"
+                            (click)="updateMember([req], 'accept')"
+                        >
+                            Accept
+                        </div>
+                        <div
+                            class="button main danger reject"
+                            (click)="updateMember([req], 'reject')"
+                            [ngClass]="{ disabled: loading }"
+                        >
+                            Reject
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                *ngIf="
+                    !(pendingRequests.length && community.status == 'APPROVED')
+                "
+            >
+                <p class="info-like">No pending member request.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <competitions-list
+            [community_id]="community.id"
+            route="compete/p"
+            heading="Public Competitions"
+        ></competitions-list>
+    </div>
+</div>

@@ -29,10 +29,13 @@ export class CompetitionsListComponent implements OnInit {
     host_user_id = '';
 
     @Input()
+    community_id: number | null = null;
+
+    @Input()
     heading: string = 'Competitions';
 
     @Input()
-    includeSelf: boolean = false;
+    selfOnly: boolean = false;
 
     @Input()
     showBuildButton: boolean = false;
@@ -55,7 +58,9 @@ export class CompetitionsListComponent implements OnInit {
         }, 30 * 1000);
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.updateList();
+    }
 
     updateLiveStatus(event: Event) {
         let select = event.target as HTMLSelectElement;
@@ -73,9 +78,10 @@ export class CompetitionsListComponent implements OnInit {
         this.competitionsDataService
             .getCompetitions({
                 query: this.query,
-                includeSelf: this.includeSelf,
+                selfOnly: this.selfOnly,
                 orderBy: this.orderBy,
                 liveStatus: this.liveStatus,
+                community_id: this.community_id,
             })
             .then((res) => {
                 this.competitionsList = res;

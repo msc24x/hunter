@@ -9,33 +9,47 @@
 >
 </popup>
 
-<div id="settings_label" class="flex-row justify-sb wrap">
-    <h1>Your Workbench</h1>
-    <profile-card [controls]="true" [user]="user"></profile-card>
-</div>
-
-<div class="row cards-row">
-    <div class="flex-row align-stretch wrap justify-center dashboard-cards">
-        <dashboard-card
-            title="{{ competitionsMetaData.total }}"
-            message="Total Competitions Built"
-        ></dashboard-card>
-        <dashboard-card
-            title="{{ competitionsMetaData.live }}"
-            message="Competitions Live Right Now"
-        ></dashboard-card>
-        <dashboard-card
-            title="{{ competitionsMetaData.public }}"
-            message="Number of Public Competitions"
-        ></dashboard-card>
+<div class="large-app-page">
+    <div id="settings_label" class="flex-row justify-sb wrap">
+        <h1>Your Workbench</h1>
+        <profile-card [controls]="true" [user]="user"></profile-card>
     </div>
-</div>
 
-<competitions-list
-    heading="Your Competitions"
-    route="editor"
-    [includeSelf]="true"
-    [showAuthor]="false"
-    [competitionsList]="this.userCompetitions"
-    [showBuildButton]="true"
-></competitions-list>
+    <div class="row cards-row">
+        <div class="flex-row align-stretch wrap justify-center dashboard-cards">
+            <dashboard-card
+                title="{{ competitionsMetaData.total }}"
+                message="Total Competitions Built"
+            ></dashboard-card>
+            <dashboard-card
+                title="{{ competitionsMetaData.live }}"
+                message="Competitions Live Right Now"
+            ></dashboard-card>
+            <dashboard-card
+                title="{{ competitionsMetaData.public }}"
+                message="Number of Public Competitions"
+            ></dashboard-card>
+            <div class="community-ad" routerLink="/communities/create">
+                Are you a Community, College or a School?
+                <div class="beta-label">Beta</div>
+                <div class="more">
+                    Create a Hunter Community to represent your institution.
+                    Click here to learn more.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="communities-section">
+        <h1>Communities you joined</h1>
+    </div> -->
+
+    <competitions-list
+        heading="Competitions"
+        route="editor"
+        [selfOnly]="true"
+        [showAuthor]="false"
+        [competitionsList]="this.userCompetitions"
+        [showBuildButton]="true"
+    ></competitions-list>
+</div>

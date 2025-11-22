@@ -1,0 +1,72 @@
+<body>
+    <style>
+        .contest {
+            margin-top: 1rem;
+            background-color: rgb(211, 211, 211);
+            border-radius: 1rem;
+            text-align: left;
+            padding: 1rem;
+            display: block;
+            color: black;
+            text-decoration: none;
+        }
+
+        .contest:hover .name {
+            text-decoration: underline;
+        }
+
+        .contest .name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .contest .desc {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .community {
+            font-size: 0.7rem;
+            margin-bottom: 0.3rem;
+            opacity: 0.8;
+        }
+
+
+    </style>
+    <div class="container">
+        <%- include('emails/header') -%>
+
+        <div class="content">
+            <h1>Challenges 📣</h1>
+
+            <p>
+                You have new challenges awaiting for you! Following are the
+                contest(s) that were posted just some time ago in the
+                communities you joined.
+            </p>
+
+            <% if (competitions && competitions.length) { %>
+            <div class="contest-list">
+                <% competitions.forEach(function(c) { %>
+                <a class="contest" href="<%= c.url %>">
+                    <div class="name"><%= c.title %></div>
+                    <div class="community">Posted in community <strong><%= community.name %></strong></div>
+                    <div class="desc"><%= c.description %></div>
+                </a>
+                <% }); %>
+            </ul>
+            <% } %>
+
+            <br>
+            <br>
+            <br>
+
+            <p>
+                You are receiving this email, because you have joined the
+                communities on Hunter.
+            </p>
+        </div>
+
+        <%- include('emails/footer') -%>
+    </div>
+</body>

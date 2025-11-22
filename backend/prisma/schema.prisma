@@ -8,6 +8,13 @@ enum Visibility {
   INVITE
 }
 
+enum CommunityStatus {
+  PENDING_APPROVAL
+  APPROVED
+  NOT_APPROVED
+  DISABLED
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DB_URL")
@@ -20,6 +27,7 @@ model competitions {
   title            String?     @db.VarChar(120)
   description      String?     @db.VarChar(456)
   created_at       DateTime    @db.DateTime(0)
+  first_public_at       DateTime?    @db.DateTime(0)
   deleted_at       DateTime?   @db.DateTime(0)
   hidden_scoreboard       Boolean     @default(false)
   updated_at       DateTime    @db.DateTime(0)
@@ -33,6 +41,9 @@ model competitions {
   questions        questions[]
   competition_sessions        competition_session[]
   competition_invites        competition_invite[]
+  community_id     Int?
+  community        community?  @relation(fields: [community_id], references: [id], onDelete: SetNull)
+  community_only   Boolean     @default(false)
 }
 
 model competition_session {
@@ -57,6 +68,32 @@ model competition_invite {
   user        users?       @relation(fields: [user_id], references: [id], onDelete: NoAction)
   competition_id Int
   competition        competitions       @relation(fields: [competition_id], references: [id], onDelete: NoAction)
+}
+
+model community {
+  id               Int         @id @default(autoincrement())
+  name             String?      @db.VarChar(120)
+  description      String?     @db.VarChar(456)
+  logo_file_path   String?     @db.VarChar(224)
+  website_link     String?     @db.VarChar(224)
+  created_at       DateTime    @default(now()) @db.DateTime(0)
+  auto_approve_members  Boolean @default(true)
+  is_partner      Boolean @default(false)
+  status           CommunityStatus  @default(PENDING_APPROVAL)
+  admin_user_id    Int
+  admin_user       users       @relation("admin_communities", fields: [admin_user_id], references: [id], onDelete: NoAction)
+  members          community_member[]
+  competitions     competitions[]
+}
+
+model community_member {
+  id           Int        @id @default(autoincrement())
+  user_id      Int
+  community_id Int
+  status       CommunityStatus  @default(PENDING_APPROVAL)
+  created_at   DateTime   @default(now()) @db.DateTime(0)
+  user         users      @relation("community_memberships", fields: [user_id], references: [id], onDelete: NoAction)
+  community    community  @relation(fields: [community_id], references: [id], onDelete: Cascade)
 }
 
 model files {
@@ -153,6 +190,8 @@ model users {
   session           session?
   competition_sessions        competition_session[]
   competition_invites        competition_invite[]
+  admin_communities community[]   @relation("admin_communities")
+  community_memberships community_member[] @relation("community_memberships")
 }
 
 model cron_job {

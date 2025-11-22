@@ -1,0 +1,42 @@
+@use "../../../../assets/colors";
+@use "../../../../assets/fonts";
+@use "../../../../assets/mixins" as *;
+
+.community-form-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 4rem;
+
+    .form {
+        @include blackBack;
+        padding: 2rem;
+        max-width: 456px;
+
+        textarea {
+            @include appTextArea;
+            width: calc(100% - 2rem);
+        }
+
+        input[type="text"] {
+            width: calc(100% - 1rem);
+        }
+
+        .i-confirm {
+            align-items: start;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+    }
+
+    .info {
+        img {
+            max-width: 512px;
+            width: 100%;
+        }
+    }
+
+    @media only screen and (max-width: 1080px) {
+        flex-wrap: wrap;
+    }
+}
