@@ -37,7 +37,7 @@
             participate in your fun contests
         </p>
 
-        <img src="../../../../assets/community-illu.svg" alt="" />
+        <img src="../../../../assets/PlantDoodle.svg" alt="" />
 
         <h3>In Short</h3>
 
@@ -78,7 +78,15 @@
         <manual-error [message]="errors.website_link"></manual-error>
 
         <h4>Logo (Upload an image)</h4>
-        <input type="file" (change)="onLogoFileChange($event)" />
+        <p class="info-like sticky">
+            For best results, use a horizontal image with a 16:9 aspect ratio.
+            Wider images (2:1) will also work
+        </p>
+        <input
+            type="file"
+            accept="image/png, image/jpeg, image/webp, image/avif"
+            (change)="onLogoFileChange($event)"
+        />
         <manual-error [message]="errors.logo_file_path"></manual-error>
 
         <br />
