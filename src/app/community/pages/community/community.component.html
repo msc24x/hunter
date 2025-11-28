@@ -95,33 +95,6 @@
             message="This community is not active as of now."
         ></manual-error>
 
-        <div *ngIf="community.admin_user_id === user?.id">
-            <h2>Settings</h2>
-            <div class="app-settings">
-                <p class="setting-row">
-                    <label class="setting-label"
-                        >Auto approve member requests?</label
-                    >
-                    <mat-slide-toggle
-                        [(ngModel)]="community.auto_approve_members"
-                    ></mat-slide-toggle>
-                </p>
-                <p class="info-like sticky">
-                    Anyone requesting to join the community won't require your
-                    permission and will be auto approved into the Community.
-                    Won't affect already received requests.
-                </p>
-
-                <button
-                    class="main"
-                    ngClass="{'disabled no-click': loading}"
-                    (click)="saveSettings()"
-                >
-                    Save Settings
-                </button>
-            </div>
-        </div>
-
         <div
             *ngIf="user?.id === community.admin_user_id"
             class="membership-requests"
@@ -171,11 +144,59 @@
         </div>
     </div>
 
-    <div class="panel">
+    <ng-template #communityContests>
         <competitions-list
             [community_id]="community.id"
             route="compete/p"
-            heading="Public Competitions"
+            heading="Community Contests"
         ></competitions-list>
+    </ng-template>
+
+    <div
+        class="panel"
+        *ngIf="isAuthenticated && community.admin_user_id === user?.id"
+    >
+        <mat-tab-group>
+            <mat-tab label="Community Contests">
+                <ng-outlet [ngTemplateOutlet]="communityContests"></ng-outlet>
+            </mat-tab>
+            <mat-tab label="Settings">
+                <div *ngIf="community.admin_user_id === user?.id">
+                    <h2>Settings</h2>
+                    <div class="app-settings">
+                        <p class="setting-row">
+                            <label class="setting-label"
+                                >Auto approve member requests?</label
+                            >
+                            <mat-slide-toggle
+                                [(ngModel)]="community.auto_approve_members"
+                            ></mat-slide-toggle>
+                        </p>
+                        <p class="info-like sticky">
+                            Anyone requesting to join the community won't
+                            require your permission and will be auto approved
+                            into the Community. Won't affect already received
+                            requests.
+                        </p>
+
+                        <button
+                            class="main"
+                            ngClass="{'disabled no-click': loading}"
+                            (click)="saveSettings()"
+                        >
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- <mat-tab label="Manage Members (Soon)"> </mat-tab> -->
+        </mat-tab-group>
+    </div>
+
+    <div
+        class="panel"
+        *ngIf="!(isAuthenticated && community.admin_user_id === user?.id)"
+    >
+        <ng-outlet [ngTemplateOutlet]="communityContests"></ng-outlet>
     </div>
 </div>

@@ -145,6 +145,26 @@ button.main,
     }
 }
 
+.mat-mdc-tab-label-container {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 1rem;
+    overflow: hidden;
+
+    .mat-mdc-tab {
+        .mdc-tab__content {
+            transition: 300ms;
+        }
+
+        &:hover:not(:active) .mdc-tab__content {
+            transform: translateY(-2px);
+        }
+    }
+
+    * {
+        font-family: appFont;
+    }
+}
+
 question-display {
     .sun-editor {
         border-width: 0;

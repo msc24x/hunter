@@ -70,10 +70,9 @@
             inset: 0;
         }
     }
-
-    .app-settings {
-        @include blackBack;
-    }
+}
+.app-settings {
+    @include blackBack;
 }
 
 .panel {

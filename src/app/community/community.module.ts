@@ -13,6 +13,7 @@ import { CommunityRoutingModule } from './community-routing.module';
 import { CreateCommunityComponent } from './pages/create-community/create-community.component';
 import { CommunityComponent } from './pages/community/community.component';
 import { CdkDragPlaceholder } from '@angular/cdk/drag-drop';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import { CdkDragPlaceholder } from '@angular/cdk/drag-drop';
         MatTooltipModule,
         FontAwesomeModule,
         MatSelectModule,
+        MatTabsModule,
         MatSlideToggleModule,
         FormsModule,
         CdkDragPlaceholder,

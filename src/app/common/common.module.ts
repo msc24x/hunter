@@ -55,6 +55,7 @@ import {
 import { CompetitionCardComponent } from './components/competition-card/competition-card.component';
 import { CommunitiesListComponent } from './components/communities-list/communities-list.component';
 import { CommunityDisplayComponent } from './components/community-display/community-display.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     declarations: [
@@ -108,6 +109,7 @@ import { CommunityDisplayComponent } from './components/community-display/commun
         MatSnackBarModule,
         MatSlideToggleModule,
         MatSelectModule,
+        MatTabsModule,
         FormsModule,
         CdkDropList,
         CdkDrag,
