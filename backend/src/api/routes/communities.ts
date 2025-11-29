@@ -267,6 +267,40 @@ router.get(
 );
 
 router.get(
+    '/communities/:id/memberships/approved',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        let user = res.locals.user as UserInfo;
+        let community_id = parseInt(req.params.id?.toString() || '');
+
+        client.community_member
+            .findMany({
+                where: {
+                    status: 'APPROVED',
+                    community: {
+                        id: community_id,
+                        admin_user_id: user.id,
+                        status: 'APPROVED',
+                    },
+                },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            avatar_url: true,
+                        },
+                    },
+                },
+            })
+            .then((community_members) => {
+                Util.sendResponseJson(res, resCode.accepted, community_members);
+            });
+    }
+);
+
+router.get(
     '/communities/:id/memberships/pending',
     authenticate,
     loginRequired,

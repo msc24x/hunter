@@ -23,6 +23,13 @@
     flex-basis: 40%;
     position: relative;
 
+    .members-count.selectable {
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
     .badge {
         position: absolute;
         top: 1rem;
@@ -92,6 +99,41 @@
             display: flex;
             flex-wrap: nowrap;
             justify-content: end;
+        }
+    }
+}
+
+.members-wrap {
+    // @include blackBack;
+
+    .member-row {
+        @include blackBack;
+        margin-bottom: 0.5rem;
+        padding-inline: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 7rem;
+        gap: 12px;
+        align-items: center;
+
+        .since {
+            color: gray;
+        }
+
+        .permissions {
+            width: 100%;
+            max-width: 20rem;
+        }
+
+        .remove {
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 800px) {
+            grid-template-columns: 1fr auto; /* first two merge, last stays fixed */
+
+            .permissions {
+                order: 2;
+            }
         }
     }
 }

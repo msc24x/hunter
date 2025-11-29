@@ -1,6 +1,22 @@
 <app-bar></app-bar>
 <app-loading *ngIf="loading"></app-loading>
 
+<popup
+    [hidden]="!popups.removeMember.show"
+    [destructive]="true"
+    heading="Remove the member?"
+    (closeEvent)="
+        popups.removeMember.show = false;
+        $event === 'continue' &&
+            removeMember(false, popups.removeMember.member!)
+    "
+    continueMessage="Yes, Remove"
+>
+    Are you sure you want to remove
+    <user-display [userInfo]="popups.removeMember.member?.user"></user-display>
+    from this community?
+</popup>
+
 <div *ngIf="!community && loading" class="large-app-page">
     <spinner></spinner>
 </div>
@@ -38,9 +54,15 @@
         </p>
 
         <h3>
-            {{ community._count.members }} Member{{
-                community._count.members !== 1 ? "s" : ""
-            }}
+            <span
+                class="members-count"
+                [ngClass]="{ 'selectable': selectedCommunitiesTab !== 1 }"
+                (click)="selectedCommunitiesTab = 1"
+            >
+                {{ community._count.members }} Member{{
+                    community._count.members !== 1 ? "s" : ""
+                }}
+            </span>
             &nbsp; &bull; &nbsp;
             {{ community._count.competitions }} Competition{{
                 community._count.competitions !== 1 ? "s" : ""
@@ -156,10 +178,63 @@
         class="panel"
         *ngIf="isAuthenticated && community.admin_user_id === user?.id"
     >
-        <mat-tab-group>
+        <mat-tab-group
+            (selectedTabChange)="uiOnPanelTabChange($event)"
+            [(selectedIndex)]="selectedCommunitiesTab"
+            [animationDuration]="200"
+            dynamicHeight="true"
+        >
             <mat-tab label="Community Contests">
                 <ng-outlet [ngTemplateOutlet]="communityContests"></ng-outlet>
             </mat-tab>
+            <mat-tab label="Manage Members">
+                <h2>Members</h2>
+
+                <spinner *ngIf="loading && !approvedMembers.length"></spinner>
+
+                <div class="members-wrap" *ngIf="approvedMembers.length">
+                    <div
+                        class="member-row"
+                        *ngFor="let mem of approvedMembers"
+                        [matTooltip]="
+                            mem.user_id === community.admin_user_id
+                                ? 'Cannot edit the owner of the community'
+                                : ''
+                        "
+                        [ngClass]="{
+                            'disabled no-click':
+                                mem.user_id === community.admin_user_id
+                        }"
+                    >
+                        <div class="user-info">
+                            <user-display [userInfo]="mem.user"></user-display>
+                            <div class="since">
+                                Joined {{ mem.created_at | timeAgo }}
+                            </div>
+                        </div>
+                        <!-- <div
+                            class="permissions disabled no-click"
+                            matTooltip="Permissions coming soon"
+                        >
+                            <mat-select
+                                multiple
+                                placeholder="Select permissions"
+                            >
+                                <mat-option>Manage Competitions</mat-option>
+                            </mat-select>
+                        </div> -->
+
+                        <div
+                            class="remove button main danger"
+                            (click)="removeMember(true, mem)"
+                        >
+                            <fa-icon [icon]="removeIcon"></fa-icon>
+                            &nbsp; Remove
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+
             <mat-tab label="Settings">
                 <div *ngIf="community.admin_user_id === user?.id">
                     <h2>Settings</h2>
@@ -189,7 +264,6 @@
                     </div>
                 </div>
             </mat-tab>
-            <!-- <mat-tab label="Manage Members (Soon)"> </mat-tab> -->
         </mat-tab-group>
     </div>
 

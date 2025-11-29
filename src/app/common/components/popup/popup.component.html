@@ -15,7 +15,7 @@
             <button
                 class="main"
                 [ngClass]="{ 'danger': destructive }"
-                (click)="closeEvent.emit('continue')"
+                (click)="closeEvent.emit('cancel'); closeEvent.emit('continue')"
             >
                 {{ continueMessage }}
             </button>

@@ -17,7 +17,7 @@ export class PopupComponent implements OnInit {
     closeIcon = faClose;
 
     @Output()
-    closeEvent = new EventEmitter<string>();
+    closeEvent = new EventEmitter<'cancel' | 'continue'>();
 
     @Input()
     heading = 'Message';

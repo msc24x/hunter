@@ -39,7 +39,9 @@ button.main,
     color: colors.$cute_blue;
     border-color: colors.$cute_blue;
     background-color: #e1e5ff;
-    min-width: 6rem;
+    min-width: 5rem;
+    border-radius: 1rem;
+    padding: 0.8rem;
     border-radius: 1rem;
     cursor: pointer;
     transition: 100ms;
@@ -163,6 +165,10 @@ button.main,
     * {
         font-family: appFont;
     }
+}
+
+.mat-mdc-tab-body-wrapper {
+    padding-inline: 0.5rem;
 }
 
 question-display {

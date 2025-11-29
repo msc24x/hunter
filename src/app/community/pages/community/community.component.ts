@@ -1,9 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import {
+    faRemove,
+    faStar,
+    faUserSlash,
+} from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -26,8 +31,21 @@ export class CommunityComponent implements OnInit, OnDestroy {
     community: Community | null = null;
     memberships: Array<CommunityMember> = [];
     pendingRequests: Array<CommunityMember> = [];
+    approvedMembers: Array<CommunityMember> = [];
 
     starIcon = faStar;
+    removeIcon = faUserSlash;
+
+    selectedCommunitiesTab: number = 0;
+
+    popups: {
+        removeMember: { show: boolean; member: CommunityMember | null };
+    } = {
+        removeMember: {
+            show: false,
+            member: null,
+        },
+    };
 
     constructor(
         private authService: AuthService,
@@ -109,6 +127,24 @@ export class CommunityComponent implements OnInit, OnDestroy {
             });
     }
 
+    fetchApprovedMembers() {
+        if (this.approvedMembers.length) {
+            return;
+        }
+
+        this.loading--;
+        this.communityService
+            .fetchApprovedMembershipRequests({
+                community_id: this.community!.id,
+            })
+            .subscribe({
+                next: (res) => {
+                    this.approvedMembers = res.body as Array<CommunityMember>;
+                    this.loading++;
+                },
+            });
+    }
+
     getUrl(url?: string) {
         if (!url?.startsWith('http')) {
             url = 'https://' + url;
@@ -185,7 +221,8 @@ export class CommunityComponent implements OnInit, OnDestroy {
 
     updateMember(
         members: CommunityMember[],
-        operation: 'accept' | 'reject' | 'disable'
+        operation: 'accept' | 'reject' | 'disable',
+        kwargs?: { callback?: () => void }
     ) {
         this.loading--;
 
@@ -211,6 +248,8 @@ export class CommunityComponent implements OnInit, OnDestroy {
                 };
 
                 this.snackBar.open(message[operation]);
+
+                kwargs?.callback?.();
             });
     }
 
@@ -233,5 +272,32 @@ export class CommunityComponent implements OnInit, OnDestroy {
                     this.snackBar.open(msg);
                 },
             });
+    }
+
+    uiOnPanelTabChange(ev: MatTabChangeEvent) {
+        if (ev.index !== 1) {
+            return;
+        }
+
+        this.fetchApprovedMembers();
+    }
+
+    removeMember(ask: boolean = true, member: CommunityMember) {
+        if (this.loading) {
+            return;
+        }
+
+        if (ask) {
+            this.popups.removeMember.show = true;
+            this.popups.removeMember.member = member;
+            return;
+        }
+
+        this.updateMember([member], 'disable', {
+            callback: () => {
+                this.approvedMembers = [];
+                this.fetchApprovedMembers();
+            },
+        });
     }
 }

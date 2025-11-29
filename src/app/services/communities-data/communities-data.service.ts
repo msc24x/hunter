@@ -73,6 +73,21 @@ export class CommunitiesDataService {
         });
     }
 
+    fetchApprovedMembershipRequests(params: {
+        community_id?: number | string | null;
+    }) {
+        let url = format(
+            apiEndpoints.approvedCommunityMemberships,
+            params.community_id?.toString() || ''
+        );
+
+        return this.http.get<Array<CommunityMember>>(url, {
+            withCredentials: true,
+            responseType: 'json',
+            observe: 'response',
+        });
+    }
+
     requestCommunityMembership(params: { community_id: string | number }) {
         let url = format(apiEndpoints.joinCommunity, params.community_id);
 
