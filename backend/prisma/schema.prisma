@@ -94,6 +94,14 @@ model community_member {
   created_at   DateTime   @default(now()) @db.DateTime(0)
   user         users      @relation("community_memberships", fields: [user_id], references: [id], onDelete: NoAction)
   community    community  @relation(fields: [community_id], references: [id], onDelete: Cascade)
+  permissions  community_permission[]
+}
+
+model community_permission {
+  id           Int        @id @default(autoincrement())
+  code         String     @unique @db.VarChar(120)
+  name         String     @db.VarChar(120)
+  members      community_member[]
 }
 
 model files {

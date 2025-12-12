@@ -148,22 +148,41 @@ button.main,
 }
 
 .mat-mdc-tab-label-container {
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 1.3rem;
     overflow: hidden;
+    padding: 0.3rem;
 
     .mat-mdc-tab {
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: 200ms;
+
+        &:hover {
+            background-color: transparent;
+        }
+
         .mdc-tab__content {
             transition: 300ms;
         }
 
-        &:hover:not(:active) .mdc-tab__content {
-            transform: translateY(-2px);
+        &:active .mdc-tab__content {
+            transform: scale(0.96);
         }
     }
 
     * {
         font-family: appFont;
+    }
+
+    .mdc-tab-indicator {
+        display: none;
+    }
+
+    .mdc-tab--active,
+    .mdc-tab--active:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 1rem;
     }
 }
 
@@ -441,7 +460,7 @@ question-display {
 }
 
 .glowing-thing {
-    background: hsl(0, 0%, 100%);
+    background: hsl(0, 0%, 100%) !important;
     padding: 16px 24px;
     position: relative;
     border-radius: 8px;
@@ -460,15 +479,15 @@ question-display {
         filter: blur(15px);
         background: linear-gradient(
             to left,
-            #ff5770,
-            #e4428d,
-            #c42da8,
-            #9e16c3,
-            #6501de,
-            #9e16c3,
-            #c42da8,
-            #e4428d,
-            #ff5770
+            #ff577077,
+            #e4428d77,
+            #c42da877,
+            #9e16c377,
+            #6501de77,
+            #9e16c377,
+            #c42da877,
+            #e4428d77,
+            #ff577077
         );
         background-size: 200% 200%;
         animation: animateGlow 1.25s linear infinite;

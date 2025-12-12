@@ -115,10 +115,6 @@
     <button
         *ngIf="isAuthenticated"
         class="main danger"
-        [ngClass]="{
-            'glowing-thing':
-                (!this.notStarted || this.startable) && !this.hasEnded
-        }"
         (click)="startCompetitionSession()"
     >
         {{

@@ -135,6 +135,11 @@ export class InsightsComponent {
                     this.competitionInfo = res.body as CompetitionInfo;
                     this.loading = false;
 
+                    if (this.competitionInfo.host_user_id !== this.user.id) {
+                        this.router.navigate(['/editor/workbench']);
+                        return;
+                    }
+
                     const tab =
                         this.activatedRoute.snapshot.paramMap.get('tab');
                     var tabName = '';

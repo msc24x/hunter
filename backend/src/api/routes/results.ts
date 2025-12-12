@@ -18,20 +18,40 @@ router.get('/competitions/:id/results', authenticate, (req, res) => {
         return;
     }
 
-    models.results.getCompetitionScores(
-        (rows, err) => {
-            if (err) {
-                Util.sendResponse(res, resCode.serverError, err.message);
+    let user = res.locals.user;
+
+    client.competitions
+        .findFirst({
+            where: {
+                id: parseInt(req.params.id),
+                OR: [{ hidden_scoreboard: false }, { host_user_id: user.id }],
+            },
+        })
+        .then((comp) => {
+            if (!comp) {
+                Util.sendResponse(res, resCode.notFound);
                 return;
             }
 
-            Util.sendResponseJson(res, resCode.success, rows);
-        },
-        req.params.id,
-        res.locals.user,
-        parseInt(req.query.after?.toString() || '0'),
-        parseInt(req.query.question?.toString() || 'null')
-    );
+            models.results.getCompetitionScores(
+                (rows, err) => {
+                    if (err) {
+                        Util.sendResponse(
+                            res,
+                            resCode.serverError,
+                            err.message
+                        );
+                        return;
+                    }
+
+                    Util.sendResponseJson(res, resCode.success, rows);
+                },
+                req.params.id,
+                res.locals.user,
+                parseInt(req.query.after?.toString() || '0'),
+                parseInt(req.query.question?.toString() || 'null')
+            );
+        });
 });
 
 // Get self progress for a competition

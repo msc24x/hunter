@@ -112,6 +112,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     errors: any = {};
     contest_errors: any = {};
+    changesInterval = {
+        interval: 0,
+        unsavedChanges: false,
+    };
 
     choiceTypes = {
         selectable: 0,
@@ -138,6 +142,8 @@ export class EditorComponent implements OnInit, OnDestroy {
             this.user = this.authService.user;
             this.isAuthenticated = isAuth;
         });
+
+        this.startChangesInterval();
     }
 
     ngOnDestroy(): void {
@@ -198,6 +204,27 @@ export class EditorComponent implements OnInit, OnDestroy {
                 this.saveChanges();
             }
         };
+    }
+
+    startChangesInterval() {
+        if (this.changesInterval.interval) {
+            clearInterval(this.changesInterval.interval);
+        }
+
+        // Check changes every second
+        setInterval(() => {
+            if (
+                JSON.stringify(this.questionSelectedInfo) ===
+                    JSON.stringify(this.questionSelectedBackup) ||
+                !this.questionSelected
+            ) {
+                console.log('hi');
+                this.changesInterval.unsavedChanges = false;
+                return;
+            }
+
+            this.changesInterval.unsavedChanges = true;
+        }, 1000);
     }
 
     addObserver() {

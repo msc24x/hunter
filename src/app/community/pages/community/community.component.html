@@ -56,7 +56,11 @@
         <h3>
             <span
                 class="members-count"
-                [ngClass]="{ 'selectable': selectedCommunitiesTab !== 1 }"
+                [ngClass]="{
+                    'selectable':
+                        selectedCommunitiesTab !== 1 &&
+                        community.admin_user_id === user?.id
+                }"
                 (click)="selectedCommunitiesTab = 1"
             >
                 {{ community._count.members }} Member{{
@@ -181,8 +185,8 @@
         <mat-tab-group
             (selectedTabChange)="uiOnPanelTabChange($event)"
             [(selectedIndex)]="selectedCommunitiesTab"
-            [animationDuration]="200"
-            dynamicHeight="true"
+            [animationDuration]="0"
+            disableRipple
         >
             <mat-tab label="Community Contests">
                 <ng-outlet [ngTemplateOutlet]="communityContests"></ng-outlet>

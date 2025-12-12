@@ -14,6 +14,7 @@ import { CreateCommunityComponent } from './pages/create-community/create-commun
 import { CommunityComponent } from './pages/community/community.component';
 import { CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { MatTabsModule } from '@angular/material/tabs';
         MatSlideToggleModule,
         FormsModule,
         CdkDragPlaceholder,
+        MatRippleModule,
     ],
     exports: [CommunitiesComponent],
 })

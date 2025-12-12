@@ -1156,6 +1156,7 @@
                 matTooltip="Save the competition and selected question (Shift + S)"
                 (click)="this.saveChanges()"
             >
+                <span [hidden]="!changesInterval.unsavedChanges">*</span>
                 SAVE CHANGES
             </button>
         </div>

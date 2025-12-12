@@ -390,6 +390,7 @@ router.post(
                             competition_id: competition.id,
                             created_at: new Date(),
                             type: quest_type,
+                            points: 2,
                         },
                     })
                     .then((question) =>

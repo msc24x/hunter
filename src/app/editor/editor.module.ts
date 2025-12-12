@@ -14,6 +14,7 @@ import { CodeTesterComponent } from './components/code-tester/code-tester.compon
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { InsightsComponent } from './pages/insights/insights.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { InsightsComponent } from './pages/insights/insights.component';
         MatSelectModule,
         MatSlideToggleModule,
         FormsModule,
+        MatTabsModule,
     ],
     exports: [NgKatexComponent],
 })
