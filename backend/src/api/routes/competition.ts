@@ -108,14 +108,34 @@ async function validateContestInfo(comp: CompetitionInfo) {
         let community_obj = await client.community.findFirst({
             where: {
                 id: comp.community_id,
-                admin_user_id: comp.host_user_id,
-                // status: {not: },
+            },
+            include: {
+                members: {
+                    where: {
+                        status: 'APPROVED',
+                        user_id: comp.host_user_id,
+                    },
+                    include: {
+                        permissions: {
+                            select: {
+                                code: true,
+                            },
+                        },
+                    },
+                },
             },
         });
 
-        if (!community_obj) {
-            errors.community_id =
-                'Linked community must be a community created by the host';
+        if (
+            !community_obj ||
+            (community_obj.admin_user_id !== comp.host_user_id &&
+                !community_obj.members?.[0]?.permissions.find(
+                    (p) => p.code === 'MANAGE_COMPETITIONS'
+                ))
+        ) {
+            // errors.community_id = "You don't have access to this community";
+            comp.community_id = undefined;
+            comp.community_only = false;
         }
     }
 
@@ -163,7 +183,9 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                             description: competitionBody.description || '',
                             title: competitionBody.title || '',
                             visibility: competitionBody.visibility,
-                            community_id: competitionBody.community_id,
+                            community_id: {
+                                set: competitionBody.community_id || null,
+                            },
                             community_only: competitionBody.community_id
                                 ? competitionBody.community_only
                                 : false,

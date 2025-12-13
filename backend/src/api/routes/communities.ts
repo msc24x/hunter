@@ -4,7 +4,12 @@ import { DatabaseProvider } from '../../services/databaseProvider';
 import { Util } from '../../util/util';
 import { resCode } from '../../config/settings';
 import { authenticate, loginRequired } from '../auth';
-import { Community, CommunityMember, UserInfo } from '../../config/types';
+import {
+    Community,
+    CommunityMember,
+    CommunityPermission,
+    UserInfo,
+} from '../../config/types';
 import { createFile } from '../../util/serverStorage';
 import { error, log } from 'console';
 import { sendCommunityRequestedEmail } from '../../emails/community-requested/sender';
@@ -230,6 +235,12 @@ router.get('/communities', authenticate, (req, res) => {
                         avatar_url: true,
                     },
                 },
+                members: {
+                    where: { user_id: user_id, status: 'APPROVED' },
+                    select: {
+                        permissions: {},
+                    },
+                },
             },
             orderBy: [
                 { is_partner: 'desc' },
@@ -292,6 +303,14 @@ router.get(
                             avatar_url: true,
                         },
                     },
+                    permissions: {
+                        select: {
+                            code: true,
+                        },
+                    },
+                },
+                orderBy: {
+                    permissions: { _count: 'desc' },
                 },
             })
             .then((community_members) => {
@@ -331,6 +350,70 @@ router.get(
             .then((community_members) => {
                 Util.sendResponseJson(res, resCode.accepted, community_members);
             });
+    }
+);
+
+function getCommunityPerms(): Promise<CommunityPermission[]> {
+    return client.community_permission.findMany();
+}
+
+function isValidPerm(perms: CommunityPermission[], code: string) {
+    return perms.find((p) => p.code === code);
+}
+
+router.patch(
+    '/communities/:community_id/permissions',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        let user = res.locals.user as UserInfo;
+        let community_id = parseInt(req.params.community_id?.toString() || '');
+        let members = req.body as CommunityMember[];
+
+        if (!members) {
+            Util.sendResponse(res, resCode.notFound);
+            return;
+        }
+
+        getCommunityPerms().then((validPerms) => {
+            members.forEach((member) => {
+                let newPerms: { id: number }[] = [];
+
+                member.permissions?.forEach((p) => {
+                    let dbPerm = isValidPerm(validPerms, p.code);
+
+                    if (!dbPerm) return;
+
+                    newPerms.push({ id: dbPerm.id });
+                });
+
+                console.log(newPerms);
+
+                client.community_member
+                    .update({
+                        where: {
+                            id: member.id,
+                            status: 'APPROVED',
+                            community: {
+                                id: community_id,
+                                admin_user_id: user.id,
+                                status: { not: 'DISABLED' },
+                            },
+                        },
+                        data: {
+                            permissions: {
+                                set: newPerms || [],
+                            },
+                        },
+                    })
+                    .then((updatedMembers) => {
+                        Util.sendResponse(res, resCode.success);
+                    })
+                    .catch((err) => {
+                        Util.sendResponse(res, resCode.badRequest);
+                    });
+            });
+        });
     }
 );
 

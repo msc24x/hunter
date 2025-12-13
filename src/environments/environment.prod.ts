@@ -190,6 +190,8 @@ export const apiEndpoints = {
         environment.apiUrl + '/communities/{0}/memberships/approved',
     updateCommunityMemberships:
         environment.apiUrl + '/communities/{0}/memberships/{1}',
+    updateMemberPermissions:
+        environment.apiUrl + '/communities/{0}/permissions',
     joinCommunity: environment.apiUrl + '/communities/{0}/join',
     leaveCommunity: environment.apiUrl + '/communities/{0}/leave',
     createCommunity: environment.apiUrl + '/communities/create',
@@ -269,6 +271,13 @@ export interface Community {
     _count?: any;
 }
 
+export interface CommunityPermission {
+    id: number;
+    code: string;
+    name: string;
+    members?: CommunityMember[];
+}
+
 export interface CommunityMember {
     id: number;
     user_id: number;
@@ -277,6 +286,7 @@ export interface CommunityMember {
     created_at: Date;
     user?: UserInfo;
     community?: Community;
+    permissions?: CommunityPermission[];
 }
 
 /*

@@ -97,6 +97,7 @@ export type CommunityMember = {
     created_at: Date;
     user?: UserInfo;
     community?: Community;
+    permissions?: CommunityPermission[];
 };
 
 export type CompetitionInfo = {
@@ -163,4 +164,11 @@ export type ExeInfo = {
     meta: string;
     output: string;
     expected: string;
+};
+
+export type CommunityPermission = {
+    id: number;
+    code: string;
+    name: string;
+    members?: CommunityMember[];
 };

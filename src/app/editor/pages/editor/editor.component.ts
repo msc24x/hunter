@@ -32,6 +32,7 @@ import { CommunitiesDataService } from 'src/app/services/communities-data/commun
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     Community,
+    CommunityPermission,
     CompetitionInfo,
     CompetitionInvite,
     domainName,
@@ -108,7 +109,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     showInviteP = false;
     inviteToRemove: null | CompetitionInvite = null;
     userCommunities: Array<Community> = [];
-    approvedUserCommunities: Array<Community> = [];
+    ownedCommunities: Array<Community> = [];
 
     errors: any = {};
     contest_errors: any = {};
@@ -553,12 +554,18 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     fetchUserCommunities() {
+        var canLinkCompetitions = (perms: CommunityPermission[]) => {
+            return perms.find((p) => p.code === 'MANAGE_COMPETITIONS');
+        };
+
         this.communityService
             .fetchCommunities({ user_id: this.user.id })
             .subscribe((res) => {
                 this.userCommunities = res.body as Array<Community>;
-                this.approvedUserCommunities = this.userCommunities.filter(
-                    (c) => c.status === 'APPROVED'
+                this.ownedCommunities = this.userCommunities.filter(
+                    (c) =>
+                        c.admin_user_id === this.user.id ||
+                        canLinkCompetitions(c.members?.[0]?.permissions || [])
                 );
             });
     }

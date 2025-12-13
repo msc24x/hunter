@@ -88,6 +88,22 @@ export class CommunitiesDataService {
         });
     }
 
+    updateMemberPermissions(params: {
+        community_id: number;
+        members: CommunityMember[];
+    }) {
+        let url = format(
+            apiEndpoints.updateMemberPermissions,
+            params.community_id
+        );
+
+        return this.http.patch<void>(url, params.members, {
+            withCredentials: true,
+            responseType: 'json',
+            observe: 'response',
+        });
+    }
+
     requestCommunityMembership(params: { community_id: string | number }) {
         let url = format(apiEndpoints.joinCommunity, params.community_id);
 

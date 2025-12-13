@@ -216,17 +216,30 @@
                                 Joined {{ mem.created_at | timeAgo }}
                             </div>
                         </div>
-                        <!-- <div
-                            class="permissions disabled no-click"
-                            matTooltip="Permissions coming soon"
-                        >
+                        <div class="permissions">
                             <mat-select
+                                *ngIf="mem.user_id !== community.admin_user_id"
                                 multiple
                                 placeholder="Select permissions"
+                                [(ngModel)]="mem.permissions"
+                                [compareWith]="uiComparePermissions"
+                                (selectionChange)="updatePermissions(mem)"
                             >
-                                <mat-option>Manage Competitions</mat-option>
+                                <mat-optgroup label="Permissions">
+                                    <mat-option
+                                        [value]="{
+                                            code: 'MANAGE_COMPETITIONS'
+                                        }"
+                                    >
+                                        Manage Competitions
+                                    </mat-option>
+                                </mat-optgroup>
                             </mat-select>
-                        </div> -->
+                            <span
+                                *ngIf="mem.user_id === community.admin_user_id"
+                                ><i>Community Admin</i></span
+                            >
+                        </div>
 
                         <div
                             class="remove button main danger"

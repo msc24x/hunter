@@ -1,5 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatOptionSelectionChange } from '@angular/material/core';
+import { MatSelectChange } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Title } from '@angular/platform-browser';
@@ -15,6 +17,7 @@ import { CompetitionsDataService } from 'src/app/services/competitions-data/comp
 import {
     Community,
     CommunityMember,
+    CommunityPermission,
     UserInfo,
 } from 'src/environments/environment';
 
@@ -299,5 +302,30 @@ export class CommunityComponent implements OnInit, OnDestroy {
                 this.fetchApprovedMembers();
             },
         });
+    }
+
+    updatePermissions(member: CommunityMember) {
+        this.loading--;
+        this.communityService
+            .updateMemberPermissions({
+                community_id: this.community?.id!,
+                members: [member],
+            })
+            .subscribe({
+                next: () =>
+                    this.snackBar.open('Permissions updated successfully'),
+                error: () => this.snackBar.open('Something went wrong'),
+                complete: () => {
+                    this.loading++;
+                },
+            });
+    }
+
+    uiComparePermissions(o1: CommunityPermission, o2: CommunityPermission) {
+        return o1.code == o2.code;
+    }
+
+    uiGetPermissions(member: CommunityMember) {
+        return member.permissions?.map((p) => p.code) || [];
     }
 }

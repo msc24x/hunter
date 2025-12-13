@@ -441,6 +441,13 @@ question-display {
         margin-top: -0.7rem;
         font-size: 0.8rem;
     }
+
+    &.option-sticky {
+        margin-top: 0rem;
+        font-size: 0.7rem;
+        line-height: 1rem;
+        margin-bottom: 0;
+    }
 }
 
 .error-like {

@@ -531,14 +531,14 @@
             </a>
         </div>
 
-        <div class="meta-section" *ngIf="userCommunities.length">
+        <div class="meta-section" *ngIf="ownedCommunities.length">
             <h3>Link Community</h3>
             <mat-select
                 placeholder="Add"
                 [(ngModel)]="competitionInfo.community_id"
             >
                 <mat-option [value]="null">Un-select</mat-option>
-                <mat-option *ngFor="let op of userCommunities" [value]="op.id"
+                <mat-option *ngFor="let op of ownedCommunities" [value]="op.id"
                     >{{ op.name }}
                     {{
                         op.status === "DISABLED"
