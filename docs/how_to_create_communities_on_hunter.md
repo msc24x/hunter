@@ -29,3 +29,12 @@ https://hunter.cambo.in/communities/browse/1
 - Open the editor of the competition that you want to link with your Community.
 - You should see a new panel in the side bar that allows you to do the same. <img width="451" height="398" alt="image" src="https://github.com/user-attachments/assets/eb0c0d1f-fb86-4d3f-80ea-35a66d579716" />
 - Just select the community, and save changes.
+
+## Allowing non-admins to link competitions with your Community
+- The non-admin Hunter user must be member of your community.
+- The owner user can see the members on the Community page > Members tab
+
+  <img width="400" height="200" alt="image" src="https://github.com/user-attachments/assets/f4fba879-6a5a-4fec-86ee-04830acbcda3" />
+- Grant "Manage Competitions" permission to the trusted member.
+- The user with that permission will now be able to link the contest to your community from the Editor page as explained in the previous section.
+
