@@ -1,11 +1,12 @@
 import express, { Request, Response } from 'express';
 import { SessionInfo, UserInfo } from '../../config/types';
 import bodyParser from 'body-parser';
-import { authenticate } from '../auth';
+import { authenticate, loginRequired } from '../auth';
 import { Util } from '../../util/util';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import { resCode } from '../../config/settings';
+import config from '../../config/config';
 
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
@@ -253,5 +254,61 @@ router.post('/logout', (req, res) => {
             Util.sendResponse(res, resCode.badRequest);
         });
 });
+
+router.get(
+    '/superuser/impersonate/:user_id',
+    authenticate,
+    loginRequired,
+    (req: Request, res: Response) => {
+        const currentUser = res.locals.user as UserInfo | undefined;
+        if (!currentUser || currentUser.email !== config.staff_email) {
+            return Util.sendResponse(res, resCode.forbidden);
+        }
+
+        const targetId = parseInt(req.params.user_id?.toString() || '');
+        if (!targetId) {
+            return Util.sendResponse(
+                res,
+                resCode.badRequest,
+                'Invalid user id'
+            );
+        }
+
+        client.users
+            .findUnique({ where: { id: targetId } })
+            .then((target) => {
+                if (!target) {
+                    return Util.sendResponse(
+                        res,
+                        resCode.badRequest,
+                        'User not found'
+                    );
+                }
+
+                // clear existing session cookie and create a new session for target user
+                res.clearCookie('session');
+
+                const userInfo: UserInfo = {
+                    id: target.id,
+                    email: target.email || '',
+                    name: target.name || '',
+                };
+
+                getOrCreateSession(userInfo)
+                    .then((session) => {
+                        res.cookie('session', session.id);
+                        res.redirect(`${config.protocol}://${config.frontend}`);
+                    })
+                    .catch((e) => {
+                        console.error(e);
+                        Util.sendResponse(res, resCode.serverError);
+                    });
+            })
+            .catch((e) => {
+                console.error(e);
+                Util.sendResponse(res, resCode.serverError);
+            });
+    }
+);
 
 module.exports = router;
