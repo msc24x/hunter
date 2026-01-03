@@ -649,6 +649,20 @@ export class EditorComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Converts a UTC ISO string to a value usable by <input type="datetime-local">
+     * @param {string} utcString - Example: "2026-01-03T15:30:00Z"
+     * @returns {string} Example: "2026-01-03T10:30"
+     */
+    utcToDatetimeLocal(utcString: Date | string | null) {
+        if (!utcString) {
+            return;
+        }
+        const date = new Date(utcString);
+        const offset = date.getTimezoneOffset() * 60000;
+        return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+    }
+
     saveChanges() {
         this.loading = true;
         this.errors = {};

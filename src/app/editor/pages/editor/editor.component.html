@@ -429,10 +429,7 @@
                 type="datetime-local"
                 id="competition_schedule"
                 class="text-area full-input"
-                [value]="
-                    competitionInfo.scheduled_at
-                        | date : 'yyyy-MM-ddThh:mm:ss.SSS'
-                "
+                [value]="utcToDatetimeLocal(competitionInfo.scheduled_at)"
             />
             <div class="info-like sticky">
                 <br />
@@ -449,10 +446,7 @@
                 type="datetime-local"
                 id="competition_schedule_end"
                 class="text-area full-input"
-                [value]="
-                    competitionInfo.scheduled_end_at
-                        | date : 'yyyy-MM-ddThh:mm:ss.SSS'
-                "
+                [value]="utcToDatetimeLocal(competitionInfo.scheduled_end_at)"
             />
             <div class="info-like sticky">
                 <br />
