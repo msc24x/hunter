@@ -67,7 +67,8 @@
         "karma-jasmine": "~4.0.0",
         "karma-jasmine-html-reporter": "~1.7.0",
         "nodemon": "^2.0.15",
-        "typescript-eslint": "^8.0.1"
+        "typescript-eslint": "^8.0.1",
+        "webpack-bundle-analyzer": "^5.1.0"
     },
     "browser": {}
 }

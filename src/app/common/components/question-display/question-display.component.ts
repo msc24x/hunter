@@ -11,7 +11,6 @@ import katex from 'katex';
 import { QuestionInfo } from 'src/environments/environment';
 import suneditor from 'suneditor';
 import SunEditor from 'suneditor/src/lib/core';
-import plugins from 'suneditor/src/plugins';
 
 @Component({
     selector: 'question-display',
