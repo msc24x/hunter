@@ -42,6 +42,41 @@ export class IsLiveStatusPipe implements PipeTransform {
 }
 
 @Pipe({
+    name: 'pluralize',
+    pure: true,
+})
+export class PluralizePipe implements PipeTransform {
+    transform(
+        value: string | null,
+        count: number,
+        pluralOverride?: string
+    ): string {
+        if (!value) return '';
+
+        if (count === 1) return value;
+
+        if (pluralOverride) return pluralOverride;
+
+        return this.defaultPlural(value);
+    }
+
+    private defaultPlural(word: string): string {
+        // baby → babies
+        if (word.endsWith('y') && !/[aeiou]y$/i.test(word)) {
+            return word.slice(0, -1) + 'ies';
+        }
+
+        // box → boxes, class → classes
+        if (/(s|x|z|ch|sh)$/i.test(word)) {
+            return word + 'es';
+        }
+
+        // default: car → cars
+        return word + 's';
+    }
+}
+
+@Pipe({
     name: 'prettyDate',
 })
 export class PrettyDate implements PipeTransform {

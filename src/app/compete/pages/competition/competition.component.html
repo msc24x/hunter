@@ -77,8 +77,18 @@
         </h3>
         Once you start the contest, you will be given
         <b>
-            {{ getTimeLimit().hours ? getTimeLimit().hours + " hours" : "" }}
-            {{ getTimeLimit().mins ? getTimeLimit().mins + " mins" : "" }} </b
+            {{
+                getTimeLimit().hours
+                    ? getTimeLimit().hours +
+                      (" hour" | pluralize : getTimeLimit().hours)
+                    : ""
+            }}
+            {{
+                getTimeLimit().mins
+                    ? getTimeLimit().mins +
+                      (" min" | pluralize : getTimeLimit().mins)
+                    : ""
+            }} </b
         >. So start when you are ready
         {{
             competition.scheduled_end_at
