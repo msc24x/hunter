@@ -219,7 +219,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                     JSON.stringify(this.questionSelectedBackup) ||
                 !this.questionSelected
             ) {
-                console.log('hi');
+                // console.log('hi');
                 this.changesInterval.unsavedChanges = false;
                 return;
             }

@@ -423,6 +423,7 @@
                 />
             </div>
             <input
+                #scheduleAtInputValue
                 type="datetime-local"
                 id="competition_schedule"
                 class="text-area full-input"
@@ -431,6 +432,10 @@
                         | date : 'yyyy-MM-ddThh:mm:ss.SSS'
                 "
             />
+            <div class="info-like sticky">
+                <br />
+                {{ scheduleAtInputValue.value | prettyDate : undefined : true }}
+            </div>
             <div id="schedule_end_label" class="label">
                 Reject all submissions after
                 <infotip
@@ -438,6 +443,7 @@
                 />
             </div>
             <input
+                #scheduleEndAtInputValue
                 type="datetime-local"
                 id="competition_schedule_end"
                 class="text-area full-input"
@@ -446,6 +452,13 @@
                         | date : 'yyyy-MM-ddThh:mm:ss.SSS'
                 "
             />
+            <div class="info-like sticky">
+                <br />
+                {{
+                    scheduleEndAtInputValue.value
+                        | prettyDate : undefined : true
+                }}
+            </div>
 
             <manual-error
                 [message]="contest_errors.scheduled_end_at"

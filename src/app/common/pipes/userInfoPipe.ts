@@ -47,22 +47,41 @@ export class IsLiveStatusPipe implements PipeTransform {
 export class PrettyDate implements PipeTransform {
     transform(
         value: Date | string | undefined | null,
-        format?: string
+        format?: string,
+        showDaytime?: boolean
     ): string {
         if (!value) {
             return '';
         }
 
         format = format || "yyyy MMM dd 'at' hh:mm aa";
-        let date = new Date(value);
-        let dateNow = new Date();
+        const date = new Date(value);
+        const dateNow = new Date();
         let dateString = new DatePipe('en-US').transform(date, format) || '';
 
         dateString = dateString
             .replace(dateNow.getFullYear().toString(), '')
             .trim();
 
+        if (showDaytime) {
+            const daytime = this.getDaytimeLabel(date);
+            if (daytime) {
+                dateString = `${dateString}${daytime}`;
+            }
+        }
+
         return dateString;
+    }
+
+    private getDaytimeLabel(date: Date): string {
+        const h = date.getHours();
+
+        if (h >= 5 && h < 12) return ' (morning)'; // 5 AM – 11:59 AM
+        if (h >= 12 && h < 17) return ' (afternoon)'; // 12 PM – 4:59 PM
+        if (h >= 17 && h < 21) return ' (evening)'; // 5 PM – 8:59 PM
+        if (h >= 21 || h < 5) return ' (night)'; // 9 PM – 4:59 AM
+
+        return '';
     }
 }
 

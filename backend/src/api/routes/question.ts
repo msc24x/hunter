@@ -220,6 +220,18 @@ router.get(
 
                 if (req.params.op == 'download') {
                     if (existsSync(fileName)) {
+                        const basename = path.basename(fileName);
+
+                        res.setHeader(
+                            'Content-Disposition',
+                            `attachment; filename="${basename}"`
+                        );
+
+                        res.setHeader(
+                            'Content-Type',
+                            'application/octet-stream'
+                        );
+
                         res.sendFile(fileName, (err) => {
                             if (err) {
                                 Util.sendResponse(res, resCode.serverError);

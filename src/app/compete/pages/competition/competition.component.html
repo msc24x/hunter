@@ -54,14 +54,16 @@
                     : "Will start accepting submissions on "
             }}
             <b>
-                {{ competition.scheduled_at | prettyDate }}
+                {{ competition.scheduled_at | prettyDate : undefined : true }}
             </b>
         </div>
 
         <div *ngIf="competition.scheduled_end_at" class="competition-end">
             Closing the submissions after
             <b>
-                {{ competition.scheduled_end_at | prettyDate }}
+                {{
+                    competition.scheduled_end_at | prettyDate : undefined : true
+                }}
             </b>
         </div>
     </div>
