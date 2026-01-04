@@ -189,6 +189,10 @@ router.get('/oauth/github', (req, res) => {
                                                     'session',
                                                     session.id
                                                 );
+                                                res.clearCookie(
+                                                    'impersonating'
+                                                );
+
                                                 res.redirect(
                                                     req.query.redirect_uri?.toString() ||
                                                         `${process.env.PROTOCOL}://${process.env.FRONTEND_DOMAIN}`
@@ -240,6 +244,7 @@ router.get('/authenticate', authenticate, (req, res) => {
 router.post('/logout', (req, res) => {
     const session_id = req.cookies.session;
     res.clearCookie('session');
+    res.clearCookie('impersonating');
 
     client.session
         .delete({
@@ -297,6 +302,10 @@ router.get(
                 getOrCreateSession(userInfo)
                     .then((session) => {
                         res.cookie('session', session.id);
+                        res.cookie(
+                            'impersonating',
+                            userInfo.email + '#' + userInfo.id
+                        );
                         res.redirect(`${config.protocol}://${config.frontend}`);
                     })
                     .catch((e) => {

@@ -11,6 +11,19 @@ html {
     background-color: colors.$text_white;
 }
 
+// Ugly impersonation indicator
+html[impersonating] {
+    &::before {
+        content: attr(impersonating);
+    }
+
+    body {
+        margin: 2rem;
+        border-radius: 2rem;
+        box-shadow: 0 1rem 2rem 2rem coral;
+    }
+}
+
 body {
     margin: 0;
     max-width: 1720px;
