@@ -44,6 +44,17 @@
     cursor: pointer;
 }
 
+.download.cute-panel {
+    @include basicBack;
+    width: fit-content;
+    padding: 0.5rem;
+    padding-inline: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    float: right;
+    cursor: pointer;
+}
+
 .evaluations-panel {
     questions-list {
         @include blackBack;

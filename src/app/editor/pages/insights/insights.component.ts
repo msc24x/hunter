@@ -9,6 +9,7 @@ import {
     faBolt,
     faCheckDouble,
     faCube,
+    faFileCsv,
     faRankingStar,
     faUserPen,
     faWandMagicSparkles,
@@ -35,6 +36,7 @@ export class InsightsComponent {
     InsightsIcon = faWandMagicSparkles;
     linkIcon = faArrowUpRightFromSquare;
     evalIcon = faUserPen;
+    fileIcon = faFileCsv;
     clockIcon = faClock;
     checkedIcon = faCheckDouble;
     bulbIcon = faLightbulb;

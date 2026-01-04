@@ -54,6 +54,149 @@ router.get('/competitions/:id/results', authenticate, (req, res) => {
         });
 });
 
+// Download scores of a competition in batches (accumulates up to a limit)
+router.get(
+    '/competitions/:id/results/download',
+    authenticate,
+    async (req, res) => {
+        if (req.params.id == null) {
+            Util.sendResponse(res, resCode.badRequest, 'id not specified');
+            return;
+        }
+
+        const compId = parseInt(req.params.id);
+        let user = res.locals.user;
+
+        // validate competition and access like the normal endpoint
+        try {
+            const comp = await client.competitions.findFirst({
+                where: {
+                    id: compId,
+                    OR: [
+                        { hidden_scoreboard: false },
+                        { host_user_id: user.id },
+                    ],
+                },
+            });
+
+            if (!comp) {
+                Util.sendResponse(res, resCode.notFound);
+                return;
+            }
+
+            // pagination parameters
+            const maxTotal = 5000;
+            // enforce safe batch size
+            const batchSize = 500;
+            const questionFilter =
+                parseInt(req.query.question?.toString() || '0') || undefined;
+
+            // helper to call the callback-style function as a Promise
+            const getBatch = (afterId?: number) =>
+                new Promise<any>((resolve, reject) => {
+                    // note: pass batchSize as extra arg if supported by implementation
+                    models.results.getCompetitionScores(
+                        (rows, err) => {
+                            if (err) return reject(err);
+                            resolve(rows);
+                        },
+                        req.params.id,
+                        user,
+                        afterId || 0,
+                        questionFilter,
+                        batchSize
+                    );
+                });
+
+            const allRows: any[] = [];
+            let after = parseInt(req.query.after?.toString() || '0') || 0;
+            let keepGoing = true;
+
+            while (keepGoing) {
+                let rows = await getBatch(after);
+                if (!rows || rows.length === 0) break;
+
+                rows = rows.rows;
+                allRows.push(...rows);
+
+                if (allRows.length >= maxTotal) {
+                    // trim to maxTotal
+                    allRows.length = maxTotal;
+                    break;
+                }
+
+                // determine new `after` marker based on last row id if present
+                const last = rows[rows.length - 1];
+                if (last && typeof last.id !== 'undefined') {
+                    after = Number(last.id);
+                } else if (last && typeof last.result_id !== 'undefined') {
+                    after = Number(last.result_id);
+                } else {
+                    // no id to paginate on - stop to avoid infinite loop
+                    break;
+                }
+
+                // safety: if batch returned fewer than requested, we might have exhausted
+                if (rows.length < batchSize) break;
+            }
+
+            // support multiple formats: json (default), csv
+            const format = (req.query.format || 'json')
+                .toString()
+                .toLowerCase();
+
+            if (format === 'csv') {
+                try {
+                    const header = [
+                        { key: 'user_rank', label: 'Rank' },
+                        { key: 'user_name', label: 'Name' },
+                        {
+                            key: 'user_id',
+                            label: 'Hunter profile',
+                            proc: (v: string) => Util.getUserURL(v),
+                        },
+                        {
+                            key: 'result',
+                            label: 'Positive points',
+                            proc: (v: any) => parseInt(v),
+                        },
+                        {
+                            key: 'neg_result',
+                            label: 'Negative points',
+                            proc: (v: any) => parseInt(v),
+                        },
+                        {
+                            key: 'final_result',
+                            label: 'Final points',
+                            proc: (v: any) => parseInt(v),
+                        },
+                        {
+                            key: 'created_at_diff',
+                            label: 'Time taken (seconds)',
+                        },
+                    ];
+                    const csv = Util.rowsToCsv(allRows, header);
+                    const fname = `competition_${compId}_results.csv`;
+                    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+                    res.setHeader(
+                        'Content-Disposition',
+                        `attachment; filename="${fname}"`
+                    );
+                    res.send(Buffer.from('\uFEFF' + csv, 'utf8'));
+                } catch (e: any) {
+                    Util.sendResponse(res, resCode.serverError, e.message || e);
+                }
+                return;
+            }
+
+            // default JSON
+            Util.sendResponseJson(res, resCode.success, allRows);
+        } catch (err: any) {
+            Util.sendResponse(res, resCode.serverError, err.message || err);
+        }
+    }
+);
+
 // Get self progress for a competition
 router.get(
     '/competitions/:id/progress',

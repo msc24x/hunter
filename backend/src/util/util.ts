@@ -103,4 +103,56 @@ export class Util {
     static getContestURL(id: number | string) {
         return `${config.protocol}://${config.frontend}/compete/p/${id}`;
     }
+
+    static getUserURL(id: number | string) {
+        return `${config.protocol}://${config.frontend}/u/${id}`;
+    }
+
+    static rowsToCsv(
+        rows: any[],
+        headers?: { key: string; label: string; proc?: (v: any) => any }[]
+    ): string {
+        if (!rows || rows.length === 0) return '';
+        if (headers) {
+            var keys = headers.map((v) => v.key);
+        } else {
+            const first = rows[0];
+            var keys = Object.keys(first);
+        }
+        let getProc = (key: string) => {
+            if (!headers) {
+                return null;
+            }
+
+            for (let h of headers) {
+                if (h.key === key) {
+                    return h.proc;
+                }
+            }
+        };
+        const escape = (v: any) => {
+            if (v === null || v === undefined) return '';
+            if (typeof v === 'object')
+                return '"' + JSON.stringify(v).replace(/"/g, '""') + '"';
+            const s = String(v);
+            if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+                return '"' + s.replace(/"/g, '""') + '"';
+            }
+
+            return s;
+        };
+
+        const header = keys.join(',');
+        const lines = rows.map((r) =>
+            keys
+                .map((k) =>
+                    getProc(k) ? escape(getProc(k)!(r[k])) : escape(r[k])
+                )
+                .join(',')
+        );
+
+        var labelledHeader = headers?.map((v) => v.label) || header;
+
+        return [labelledHeader].concat(lines).join('\n');
+    }
 }

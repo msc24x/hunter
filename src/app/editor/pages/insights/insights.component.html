@@ -40,6 +40,17 @@
         <h2 class="insights-title">
             <fa-icon [icon]="panels[currentPanel].icon"></fa-icon>
             {{ panels[currentPanel].title }}
+            <a
+                download
+                href="/api/competitions/{{
+                    competitionInfo.id
+                }}/results/download?format=csv"
+                class="download cute-panel"
+                matTooltip="Download all results as CSV sheet format. (Only top 5000 ranks would be returned)"
+            >
+                <fa-icon [icon]="fileIcon"></fa-icon>
+                Download CSV
+            </a>
         </h2>
 
         <scoreboard

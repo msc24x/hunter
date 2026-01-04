@@ -16,6 +16,7 @@ export class Results {
             id: string;
             after: number;
             question_id?: number;
+            batch_size?: number;
         }
     ) {
         const questionQuery = Prisma.sql`AND q.id = ${queryParams.question_id}`;
@@ -73,7 +74,7 @@ export class Results {
             ORDER BY
                 user_rank ASC
             LIMIT
-                ${queryParams.after}, 10
+                ${queryParams.after}, ${queryParams.batch_size}
         `;
 
         return scoresQuery;
@@ -175,17 +176,21 @@ export class Results {
         id: string,
         user?: UserInfo,
         after?: number,
-        question_id?: number
+        question_id?: number,
+        batch_size?: number
     ) {
         after = after || 0;
+        batch_size = batch_size || 10;
 
         var params: {
             id: string;
             after: number;
             question_id?: number;
+            batch_size?: number;
         } = {
             id: id,
             after: after,
+            batch_size: batch_size,
         };
 
         if (question_id) {
@@ -224,6 +229,7 @@ export class Results {
                                     id: id,
                                     after: 0,
                                     question_id: question_id,
+                                    batch_size: batch_size,
                                 })}
                             ) ranked_users
                             WHERE
