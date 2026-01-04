@@ -45,6 +45,11 @@ div.appBar {
             }
         }
 
+        #user_name {
+            max-width: 10rem;
+            @include ellipsis;
+        }
+
         @media only screen and (max-width: 686px) and (min-width: 420px) {
             #app_title_full {
                 display: initial;

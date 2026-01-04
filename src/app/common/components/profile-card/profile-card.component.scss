@@ -53,6 +53,8 @@
 
         .profile-name {
             font-size: 1.2rem;
+            @include ellipsis;
+            max-width: 12rem;
         }
 
         .profile-icons {
