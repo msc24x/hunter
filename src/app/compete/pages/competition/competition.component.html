@@ -327,8 +327,8 @@
             <span>
                 Oops! This competition has already closed and is
                 <b>no longer accepting submissions</b>, but there are plenty of
-                other live competitions waiting for you. Jump in and keep
-                practicing!
+                other live competitions waiting for you. Click here to jump in
+                and keep practicing!
             </span>
         </div>
 
@@ -621,7 +621,7 @@
                 Edit the contest
             </a>
 
-            <div *ngIf="questionSelectedInfo" class="row">
+            <div *ngIf="!hasEnded && questionSelectedInfo" class="row">
                 <div
                     class="button"
                     id="submit_code_samples_btn"
