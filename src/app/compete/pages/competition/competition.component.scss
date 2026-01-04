@@ -137,6 +137,16 @@
     }
 }
 
+.has-ended-info {
+    @include basicBack;
+    margin-block: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    cursor: pointer;
+}
+
 #submit_controls {
     justify-content: space-between !important;
     margin-bottom: 1rem;

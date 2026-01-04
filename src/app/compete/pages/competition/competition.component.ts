@@ -31,6 +31,7 @@ import {
     faFileCode,
     faFlag,
     faHourglassHalf,
+    faLock,
     faMeteor,
     faPlay,
     faPuzzlePiece,
@@ -69,6 +70,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     ticketIcon = faTicket;
     stopwatchIcon = faStopwatch;
     editIcon = faEdit;
+    lockIcon = faLock;
 
     showInstructionP = false;
     showSignInP = false;

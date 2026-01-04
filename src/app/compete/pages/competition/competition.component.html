@@ -319,6 +319,20 @@
         </div>
 
         <div
+            *ngIf="hasEnded"
+            [routerLink]="'/compete'"
+            class="has-ended-info cute-panel"
+        >
+            <fa-icon [icon]="lockIcon" size="2x" animation="fade"></fa-icon>
+            <span>
+                Oops! This competition has already closed and is
+                <b>no longer accepting submissions</b>, but there are plenty of
+                other live competitions waiting for you. Jump in and keep
+                practicing!
+            </span>
+        </div>
+
+        <div
             [ngClass]="{ 'row compete-hr-layout': hrlayout }"
             *ngIf="questionSelectedInfo"
         >
@@ -578,16 +592,7 @@
                 ></ng-outlet>
             </div>
         </div>
-        <manual-error
-            *ngIf="hasEnded"
-            message="Oops! looks like you have missed the opportunity to participate in
-            the competition and any new submissions are now closed. Meantime, you can practice other live competitions."
-        >
-            <br />
-            <a [routerLink]="'/compete'" style="color: gray"
-                >Click here to view more competitions.</a
-            >
-        </manual-error>
+
         <p class="info-like" *ngIf="competition.practice">
             Contest is set as a practice only, allowing you to attempt the
             contest multiple times. You can submit your responses any number of
@@ -596,11 +601,7 @@
         </p>
 
         <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
-        <div
-            id="submit_controls"
-            *ngIf="!hasEnded && questionSelectedInfo"
-            class="row"
-        >
+        <div id="submit_controls" class="row">
             <a
                 *ngIf="competition.host_user_id !== user?.id"
                 id="report-btn"
@@ -620,7 +621,7 @@
                 Edit the contest
             </a>
 
-            <div class="row">
+            <div *ngIf="questionSelectedInfo" class="row">
                 <div
                     class="button"
                     id="submit_code_samples_btn"
