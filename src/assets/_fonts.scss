@@ -2,8 +2,18 @@
     font-family: appFont;
     // src: url("./BAHNSCHRIFT.TTF");
     // src: url("./Inter-VariableFont_opsz,wght.ttf");
-    src: url("./DMSans-VariableFont_opsz,wght.ttf");
+    src: url("./DMSans-VariableFont_opsz,wght.ttf"), system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial,
+        sans-serif;
     // src: url("./Mona-Sans.ttf");
     // src: url("./OpenSans-VariableFont_wdth,wght.ttf");
     // font-weight: 400;
+
+    font-display: swap;
+
+    /* CLS-safe metric overrides */
+    ascent-override: 90%;
+    descent-override: 22%;
+    line-gap-override: 0%;
+    size-adjust: 102%;
 }
