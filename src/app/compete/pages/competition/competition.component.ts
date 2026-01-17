@@ -27,6 +27,7 @@ import {
     faBug,
     faCheckCircle,
     faChevronUp,
+    faClipboardList,
     faCloud,
     faCodeMerge,
     faEdit,
@@ -85,6 +86,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     orgIcon = faSitemap;
     emailIcon = faEnvelopeCircleCheck;
     branchIcon = faCodeMerge;
+    progressIcon = faClipboardList;
 
     showInstructionP = false;
     showSignInP = false;

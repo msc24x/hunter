@@ -722,7 +722,12 @@
             (click)="bottomSection = !bottomSection"
             matTooltip="Toggle (Ctrl + `)"
         >
-            <fa-icon [icon]="upIcon"></fa-icon>
+            <fa-icon [hidden]="bottomSection" [icon]="progressIcon"></fa-icon>
+            <fa-icon [hidden]="!bottomSection" [icon]="upIcon"></fa-icon>
+
+            <div [hidden]="!competition.questions || bottomSection">
+                View Your Progress
+            </div>
         </div>
         <ng-template #overallProgress>
             <div>
