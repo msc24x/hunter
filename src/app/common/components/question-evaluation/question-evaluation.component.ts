@@ -74,7 +74,7 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
         this.evaluationAfterPages.push(
             this.questionSelectedInfo.results?.[
                 this.questionSelectedInfo.results?.length - 1
-            ]?.id!
+            ]?.id!,
         );
         this.fetchEvaluation();
     }
@@ -83,6 +83,8 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
         if (!Object.keys(this.questionSelectedInfo).length) {
             return;
         }
+
+        const ques_id = this.questionSelectedInfo.id;
 
         this.loading = true;
         this.subscriptions.push(
@@ -98,14 +100,17 @@ export class QuestionEvaluationComponent implements OnInit, OnChanges {
                 .subscribe((res) => {
                     this.loading = false;
 
-                    if (res.status == resCode.success) {
+                    if (
+                        res.status == resCode.success &&
+                        ques_id === this.questionSelectedInfo.id
+                    ) {
                         this.questionSelectedInfo.results = res.body?.results
                             ? (res.body.results as Array<result>)
                             : [];
                         this.acceptedEvaluation = res.body!.accepted_count;
                         this.rejectedEvaluation = res.body!.rejected_count;
                     }
-                })
+                }),
         );
     }
 

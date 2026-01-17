@@ -300,7 +300,8 @@
                         ></user-display>
 
                         <span *ngIf="competition.community">
-                            in
+                            <br />
+                            Posted in
                             <community-display
                                 [community]="competition.community"
                             ></community-display>
@@ -351,7 +352,7 @@
                                     [icon]="stopwatchIcon"
                                     [size]="'xs'"
                                 ></fa-icon>
-                                Contest has a max time limit of
+                                Must be completed within
                                 {{
                                     getTimeLimit().hours
                                         ? getTimeLimit().hours + " hrs"
@@ -563,7 +564,9 @@
                 <input
                     type="text"
                     [(ngModel)]="questionSelectedInfo.user_answer"
-                    [value]="getLastSubmission()?.submission"
+                    [value]="
+                        getLastSubmission(questionSelectedInfo)?.submission
+                    "
                     placeholder="Type..."
                 />
                 <ng-outlet
@@ -600,7 +603,8 @@
                     [ngClass]="{
                         'acceptable': isLongAnswerAcceptable(
                             this.questionSelectedInfo.user_answer ||
-                                getLastSubmission()?.submission ||
+                                getLastSubmission(questionSelectedInfo)
+                                    ?.submission ||
                                 ''
                         ),
                     }"
@@ -611,7 +615,8 @@
                         {{
                             numOfWordsWritten(
                                 this.questionSelectedInfo.user_answer ||
-                                    getLastSubmission()?.submission ||
+                                    getLastSubmission(questionSelectedInfo)
+                                        ?.submission ||
                                     ""
                             ) || 0
                         }}<span *ngIf="questionSelectedInfo.char_limit">
@@ -624,7 +629,8 @@
                         [message]="
                             isLongAnswerAcceptable(
                                 this.questionSelectedInfo.user_answer ||
-                                    getLastSubmission()?.submission ||
+                                    getLastSubmission(questionSelectedInfo)
+                                        ?.submission ||
                                     ''
                             )
                                 ? 'You have written enough words, and are ready to submit.'
@@ -637,7 +643,9 @@
                     type="text"
                     [(ngModel)]="questionSelectedInfo.user_answer"
                     placeholder="Start typing your answer..."
-                    [value]="getLastSubmission()?.submission"
+                    [value]="
+                        getLastSubmission(questionSelectedInfo)?.submission
+                    "
                     rows="5"
                 ></textarea>
                 <ng-outlet

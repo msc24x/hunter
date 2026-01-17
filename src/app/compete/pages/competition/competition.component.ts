@@ -728,15 +728,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         }
     }
 
-    getLastSubmission() {
-        if (
-            this.competition.practice &&
-            this.questionSelectedInfo?.type !== 0
-        ) {
+    getLastSubmission(ques: QuestionInfo | null) {
+        if (this.competition.practice && ques?.type !== 0) {
             return null;
         }
 
-        return this.questionSelectedInfo?.results?.[0];
+        return ques?.results?.[0];
     }
 
     getQuestionCounts() {
@@ -758,7 +755,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             return false;
         }
 
-        const lastSub = this.getLastSubmission();
+        const lastSub = this.getLastSubmission(this.questionSelectedInfo);
 
         if (!lastSub) {
             return false;
