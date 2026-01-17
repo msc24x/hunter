@@ -25,6 +25,8 @@ export class HomeComponent implements OnInit {
         email: '',
         name: '',
     };
+    usersCount = 900;
+    contestsCount = 200;
 
     constructor(private authService: AuthService) {
         this.authService.isAuthenticated.subscribe((isAuth) => {
@@ -55,6 +57,7 @@ export class HomeComponent implements OnInit {
 
     ngOnInit(): void {
         this.animateInView();
+        this.loadPageData();
 
         if (this.isAuthenticated) {
             return;
@@ -68,5 +71,27 @@ export class HomeComponent implements OnInit {
                 this.authService.isAuthenticated.next(true);
             }
         });
+    }
+
+    loadPageData() {
+        fetch('/api/status/users')
+            .then((res) => res.json())
+            .then((res) => {
+                let count: number = res?.status;
+
+                if (count) {
+                    this.usersCount = 10 * Math.floor(count / 10);
+                }
+            });
+
+        fetch('/api/status/competitions')
+            .then((res) => res.json())
+            .then((res) => {
+                let count = res?.status;
+
+                if (count) {
+                    this.contestsCount = 10 * Math.floor(count / 10);
+                }
+            });
     }
 }
