@@ -112,6 +112,7 @@
         transition: 100ms;
         transition-property: scale, opacity;
         user-select: none;
+        touch-action: auto !important;
 
         &.selected-question {
             background-color: colors.$text_black;

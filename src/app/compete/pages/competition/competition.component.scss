@@ -161,6 +161,16 @@
             color: colors.$text_white;
         }
     }
+
+    @media screen and (max-width: 512px) {
+        questions-list {
+            max-width: 100%;
+        }
+
+        .toggle-layout-label {
+            display: none;
+        }
+    }
 }
 
 .has-ended-info {
@@ -401,6 +411,12 @@ textarea {
         margin-bottom: 0;
         width: 100%;
         cursor: pointer;
+        user-select: auto;
+
+        & > label {
+            user-select: auto !important;
+            touch-action: auto !important;
+        }
 
         .startup-info {
             text-align: right;
