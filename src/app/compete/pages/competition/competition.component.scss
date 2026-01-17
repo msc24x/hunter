@@ -206,7 +206,7 @@
 .extra-buttons {
     display: flex;
     align-items: center;
-    margin-top: 1rem;
+    margin-block: 1rem;
     gap: 0.5rem;
 
     #share-btn {
@@ -365,7 +365,7 @@ textarea {
     @include blackBack;
     @include sweetBorder;
     border-radius: 1.5rem;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 
     .practice-label {
         color: purple;
@@ -472,6 +472,30 @@ textarea {
             @include sweetBorder;
 
             border-color: #dcadb6;
+        }
+    }
+
+    @media screen and (max-width: 512px) {
+        #duration_info {
+            float: unset;
+            span {
+                width: 100% !important;
+                text-align: center;
+            }
+        }
+        .description-toggle-content {
+            font-size: 1rem;
+        }
+
+        .description-toggle-content-a {
+            text-align: center;
+            width: calc(100% - 0.5rem);
+        }
+
+        .startup-info {
+            text-align: center !important;
+            float: none;
+            margin-top: 1rem;
         }
     }
 }

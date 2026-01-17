@@ -319,6 +319,8 @@
                         "
                     ></div>
 
+                    <hr class="sweet-hr" />
+
                     <div
                         *ngIf="
                             this.competition.competition_sessions?.[0]
@@ -331,7 +333,7 @@
                                 [icon]="ticketIcon"
                                 [size]="'xs'"
                             ></fa-icon>
-                            You started this contest on
+                            You started this contest on <br />
                             {{
                                 this.competition.competition_sessions?.[0]
                                     ?.created_at | prettyDate
