@@ -223,7 +223,12 @@
     </button>
 
     <p
-        *ngIf="isAuthenticated && uiStartButtonText() && uiIsContestStartable"
+        *ngIf="
+            isAuthenticated &&
+            uiStartButtonText() &&
+            uiIsContestStartable() &&
+            !this.hasEnded
+        "
         class="info-like"
     >
         *Heads up! Clicking the button above will start your timer, and the

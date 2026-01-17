@@ -863,7 +863,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             return 'Only Community Members can participate';
         } else if (!this.notStarted || this.startable) {
             if (this.hasEnded) {
-                return 'Submissions Closed';
+                return 'Submissions closed, View questions';
             } else {
                 return "I'm ready, Start now*";
             }

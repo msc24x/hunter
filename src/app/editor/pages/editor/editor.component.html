@@ -416,14 +416,10 @@
         </div>
 
         <div class="meta-section">
-            <h3>Schedule</h3>
-
-            <div id="schedule_label" class="label">
-                Submissions open at
-                <infotip
-                    message="When should the competition be visible to read and start accept submissions"
-                />
-            </div>
+            <h3 id="schedule_label">Submissions open at</h3>
+            <p class="info-like sticky">
+                Controls when the submission window opens
+            </p>
             <input
                 #scheduleAtInputValue
                 type="datetime-local"
@@ -435,12 +431,10 @@
                 <br />
                 {{ scheduleAtInputValue.value | prettyDate: undefined : true }}
             </div>
-            <div id="schedule_end_label" class="label">
-                Reject all submissions after
-                <infotip
-                    message="When should the competition stop submissions and participation"
-                />
-            </div>
+            <h3 id="schedule_end_label">Submissions close at</h3>
+            <p class="info-like sticky">
+                Automatically blocks submissions after this time
+            </p>
             <input
                 #scheduleEndAtInputValue
                 type="datetime-local"
@@ -467,8 +461,8 @@
                     ></mat-slide-toggle>
                 </h3>
                 <p class="info-like sticky">
-                    Limit how much time should a participant be allowed to spend
-                    in this contest?
+                    Set the maximum time a participant is allowed to spend in
+                    the contest, after starting it.
                 </p>
 
                 <div class="duration-picker" *ngIf="timeLimitEnabled">
