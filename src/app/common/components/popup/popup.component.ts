@@ -32,6 +32,9 @@ export class PopupComponent implements OnInit {
     showControls = true;
 
     @Input()
+    continueOnly = false;
+
+    @Input()
     noContainer = false;
 
     @Input()

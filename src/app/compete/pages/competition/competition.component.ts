@@ -27,7 +27,10 @@ import {
     faBug,
     faCheckCircle,
     faChevronUp,
+    faCloud,
+    faCodeMerge,
     faEdit,
+    faEnvelopeCircleCheck,
     faEnvelopeOpenText,
     faFileCode,
     faFlag,
@@ -36,10 +39,13 @@ import {
     faMeteor,
     faPlay,
     faPuzzlePiece,
+    faRotateRight,
+    faSitemap,
     faSpinner,
     faStopwatch,
     faTableColumns,
     faTicket,
+    faUserMinus,
     faVolleyball,
 } from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
@@ -73,6 +79,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     editIcon = faEdit;
     lockIcon = faLock;
     backIcon = faBackward;
+    cloudIcon = faCloud;
+    refreshIcon = faRotateRight;
+    negativeIcon = faUserMinus;
+    orgIcon = faSitemap;
+    emailIcon = faEnvelopeCircleCheck;
+    branchIcon = faCodeMerge;
 
     showInstructionP = false;
     showSignInP = false;
@@ -157,15 +169,15 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             .getElementsByTagName('bottom-app-bar')[0]
             .classList.add('hidden');
 
-        document.addEventListener('click', (event) => {
-            const inBottomSection = (event.target as HTMLElement).closest(
-                '.bottom-section',
-            );
-            const inSubmitControls = (event.target as HTMLElement).closest(
-                '#submit_controls',
-            );
+        document.addEventListener('click', (event: MouseEvent) => {
+            const target = event.target as HTMLElement | null;
+            if (!target) return;
 
-            if (!inBottomSection && !inSubmitControls) {
+            const inBottomSection = target.closest('.bottom-section');
+            const inSubmitControls = target.closest('#submit_controls');
+            const clickedSomewhere = target.closest('.link-like');
+
+            if (!inBottomSection && !inSubmitControls && !clickedSomewhere) {
                 this.bottomSection = false;
             }
         });
@@ -250,7 +262,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     openLastResponse() {
-        this.bottomSection = true;
+        this.bottomSection = !this.bottomSection;
     }
 
     clearOutput() {
@@ -304,8 +316,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         this.selectQuestion(this.questionSelected + i);
     }
 
-    startCompetitionSession() {
-        if (!this.notStarted || !this.startable) {
+    uiIsContestStartable() {
+        return this.notStarted && this.startable;
+    }
+
+    startCompetitionSession(disclaimer = true) {
+        if (!this.uiIsContestStartable()) {
             if (this.communityMemberRequired) {
                 this.snackBar.open(
                     'Please join the community first before continuing, Redirecting to community page...',
@@ -328,6 +344,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             return;
         }
 
+        if (disclaimer) {
+            this.showInstructionP = true;
+            return;
+        }
+
         this.loading++;
 
         this.competitionsService
@@ -341,6 +362,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                     this.snackBar.open(error.error);
                 },
             });
+    }
+
+    getQuestionById(id: number) {
+        return this.competition.questions?.find((q) => q.id === id);
     }
 
     submitAnswerBasedQues() {
@@ -369,6 +394,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.judgeInProgress = false;
                         this.enableSubmitControls(true);
                         this.scrollToTop();
+
+                        // Submit and next for non-coding questions
+                        if (!this.isCodingQues(this.questionSelectedInfo!)) {
+                            setTimeout(() => this.selectNextPrev(1));
+                        }
 
                         if ((res.body as ExecutionInfo)?.success) {
                             this.showConfetti();
@@ -534,6 +564,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.loading--;
 
                         this.competition = res.body as CompetitionInfo;
+                        this.fetchProgress();
                         this.competitionsService.parseCompetitionTypes(
                             this.competition,
                         );
@@ -545,8 +576,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         if (!this.competition.scheduled_end_at) {
                             clearInterval(this.timeInterval);
                         }
-
-                        console.log(this.competition);
 
                         if (
                             this.competition.community_only &&
@@ -647,7 +676,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         }
                     },
                 }),
-            this.fetchProgress(),
         ];
 
         this.subscriptions.push(...dataSubscriptions);
@@ -837,9 +865,25 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             if (this.hasEnded) {
                 return 'Submissions Closed';
             } else {
-                return 'Start Now';
+                return "I'm ready, Start now*";
             }
         }
         return '';
+    }
+
+    isCodingQues(ques: QuestionInfo) {
+        return ques.type === 0;
+    }
+
+    uiIsLastQuestion(ques: QuestionInfo) {
+        if (!this.competition.questions?.length) {
+            return true;
+        }
+
+        let quesIndex = this.competition.questions?.findIndex(
+            (v) => v.id === ques.id,
+        );
+
+        return quesIndex === this.competition.questions?.length - 1;
     }
 }

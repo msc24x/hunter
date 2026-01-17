@@ -26,6 +26,7 @@ export class CodeEditorComponent implements OnInit, OnChanges {
 
     @Output() fetchLastSubmission = new EventEmitter<void>();
 
+    @Input() editorClass: string = '';
     @Input() editable: boolean = true;
     @Input() languageSelected: HunterLanguage = 'cpp';
     @Output() languageSelectedChange = new EventEmitter<HunterLanguage>();
@@ -71,6 +72,7 @@ export class CodeEditorComponent implements OnInit, OnChanges {
              */
             this.editor.setTheme('ace/theme/twilight');
             this.editor.session.setMode('ace/mode/c_cpp');
+            this.editor.setStyle(this.editorClass);
 
             this.editor.on('change', (delta) => {
                 this.emittedChanges = true;
@@ -83,7 +85,7 @@ export class CodeEditorComponent implements OnInit, OnChanges {
 
     loadTemplate() {
         this.editor.setValue(
-            templates[this.languageSelected as HunterLanguage]
+            templates[this.languageSelected as HunterLanguage],
         );
     }
 

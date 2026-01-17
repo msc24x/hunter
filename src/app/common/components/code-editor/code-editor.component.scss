@@ -35,5 +35,9 @@
         height: calc(65svh - 61px);
         font-size: 1rem;
         border-radius: 0 0 24px 24px;
+
+        &.participation-page {
+            height: calc(100svh - 90px - 2rem - 84px - 150px - 61px);
+        }
     }
 }

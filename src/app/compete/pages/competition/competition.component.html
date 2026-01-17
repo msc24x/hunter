@@ -4,6 +4,90 @@
 <spinner *ngIf="loading && !competition.id"></spinner>
 
 <popup
+    [hidden]="!showInstructionP"
+    (closeEvent)="
+        showInstructionP = false;
+        $event === 'continue' &&
+            uiIsContestStartable() &&
+            startCompetitionSession(false)
+    "
+    [showControls]="true"
+    [continueOnly]="true"
+    continueMessage="I Understand"
+    heading="Instructions & Disclaimer"
+>
+    <ul class="instructions">
+        <li>
+            <fa-icon [icon]="timerIcon"></fa-icon>
+
+            <span>
+                Be aware of the <b>closing time</b> of the contest and the
+                <b>time limit</b>, if set. Once your time limit has reached,
+                even though the closing date/time of the contest is yet to come,
+                you won't be able to submit any response to any question.
+            </span>
+        </li>
+        <li>
+            <fa-icon [icon]="cloudIcon"></fa-icon>
+
+            <span>
+                You must <b>submit the response to each question</b>, otherwise
+                they will remain unattempted.
+            </span>
+        </li>
+
+        <li>
+            <fa-icon [icon]="refreshIcon"></fa-icon>
+
+            <span>
+                Avoid closing or refreshing the tab to prevent loosing
+                un-submitted responses.
+            </span>
+        </li>
+        <li>
+            <fa-icon [icon]="negativeIcon"></fa-icon>
+
+            <span>
+                <b>Be aware of the negative marking</b>, if any, that can even
+                reduce your score in case of wrong submissions.
+            </span>
+        </li>
+
+        <li>
+            <fa-icon [icon]="orgIcon"></fa-icon>
+
+            <span>
+                Hunter acts solely as a platform provider for this contest. The
+                contest content, rules, and test cases are created and
+                maintained by the host.
+            </span>
+        </li>
+
+        <li>
+            <fa-icon [icon]="emailIcon"></fa-icon>
+
+            <span>
+                Hunter may, where permitted,
+                <b>allow contest hosts to contact high-ranking users</b> through
+                their registered email addresses. Personal data is handled in
+                accordance with our privacy policy.
+            </span>
+        </li>
+
+        <li>
+            <fa-icon [icon]="branchIcon"></fa-icon>
+
+            <span>
+                Hunter is an open platform, please report any inconvenience or
+                issue you face on our
+                <a href="https://github.com/msc24x/hunter/issues">GitHub</a>.
+                (Or can start the repository if you like the project)
+            </span>
+        </li>
+    </ul>
+</popup>
+
+<popup
     *ngIf="!isAuthenticated && !loading"
     [heading]="'Sign in to participate'"
     [hidden]="!showSignInP"
@@ -138,65 +222,19 @@
         }}
     </button>
 
+    <p
+        *ngIf="isAuthenticated && uiStartButtonText() && uiIsContestStartable"
+        class="info-like"
+    >
+        *Heads up! Clicking the button above will start your timer, and the
+        contest will begin.
+    </p>
+
     <sign-in-prompt *ngIf="!isAuthenticated"></sign-in-prompt>
 </div>
 
 <div class="body" *ngIf="competition.id && !notStarted">
     <div class="main">
-        <popup
-            [hidden]="!showInstructionP"
-            (closeEvent)="showInstructionP = false"
-            [showControls]="false"
-            heading="Important Instructions To Follow"
-        >
-            <ul>
-                <li>
-                    The available questions are displayed in the 'Questions'
-                    list. Submissions can only be made if a question is
-                    selected.
-                </li>
-                <li>
-                    Ensure you are writing code in the correct selected
-                    language.
-                </li>
-                <li>
-                    To verify the correctness of your code, use the "Run Test
-                    Cases" button to run your code against a sample test case.
-                    This will not result in any penalty if an error occurs.
-                </li>
-                <li>
-                    Submit your code well before the competition ends, unless it
-                    is a live forever competition.
-                </li>
-                <li>
-                    To fetch the last submission, you must have made at least
-                    one submission or run test cases. Avoid closing the tab to
-                    prevent losing your in-progress code.
-                </li>
-                <li>
-                    Every incorrect submission results in a penalty and affects
-                    your rank.
-                </li>
-                <li>
-                    Once you have made a successful submission, the points for
-                    the question will be added to your total score. No penalties
-                    will be counted after this.
-                </li>
-                <li>
-                    If the host has not uploaded the files for test cases or
-                    sample test cases, the output will return an error
-                    indicating this. In such cases, you can wait for the host to
-                    update the competition or contact the Hunter team to report
-                    the issue.
-                </li>
-                <li>
-                    Hunter is open for everyone to host competitions. We value
-                    the reliability for participants. Please report any
-                    problematic competitions to the Hunter team immediately.
-                </li>
-            </ul>
-        </popup>
-
         <div *ngIf="this.competition.title" id="competition_info">
             <div
                 *ngIf="competition.practice"
@@ -349,6 +387,7 @@
                         [competitionInfo]="competition"
                         [questionsList]="competition.questions || []"
                         [editable]="false"
+                        [showProgress]="true"
                         (questionSelectEmitter)="selectQuestion($event)"
                         [(questionSelected)]="questionSelected"
                         [questionsProgress]="questionsProgress"
@@ -402,6 +441,7 @@
             <code-editor
                 *ngIf="questionSelectedInfo.type === 0"
                 class="ace-editor question-side-section"
+                editorClass="participation-page"
                 [(code)]="codeWritten"
                 [(languageSelected)]="languageSelected"
                 (fetchLastSubmission)="fetchLastSubmission()"
@@ -652,7 +692,14 @@
                     }"
                 >
                     <fa-icon [icon]="submitIcon"></fa-icon>
-                    &nbsp; Submit & Evaluate
+                    &nbsp;
+                    {{
+                        !isCodingQues(questionSelectedInfo)
+                            ? uiIsLastQuestion(questionSelectedInfo)
+                                ? "Submit Question"
+                                : "Submit & Next"
+                            : "Submit & Evaluate"
+                    }}
                 </div>
             </div>
         </div>

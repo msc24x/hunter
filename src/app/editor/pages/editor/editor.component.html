@@ -280,7 +280,7 @@
                 <div
                     class="private"
                     [ngClass]="{
-                        'selected': competitionInfo.visibility == 'PRIVATE'
+                        'selected': competitionInfo.visibility == 'PRIVATE',
                     }"
                     (click)="onClickVisibility('PRIVATE')"
                     matTooltip="Visible to no one"
@@ -295,7 +295,7 @@
                 <div
                     class="invite"
                     [ngClass]="{
-                        'selected': competitionInfo.visibility == 'INVITE'
+                        'selected': competitionInfo.visibility == 'INVITE',
                     }"
                     (click)="onClickVisibility('INVITE')"
                     matTooltip="Visible to only the invited"
@@ -310,7 +310,7 @@
                 <div
                     class="public"
                     [ngClass]="{
-                        'selected': competitionInfo.visibility == 'PUBLIC'
+                        'selected': competitionInfo.visibility == 'PUBLIC',
                     }"
                     (click)="onClickVisibility('PUBLIC')"
                     matTooltip="Visible to everyone"
@@ -433,7 +433,7 @@
             />
             <div class="info-like sticky">
                 <br />
-                {{ scheduleAtInputValue.value | prettyDate : undefined : true }}
+                {{ scheduleAtInputValue.value | prettyDate: undefined : true }}
             </div>
             <div id="schedule_end_label" class="label">
                 Reject all submissions after
@@ -451,8 +451,7 @@
             <div class="info-like sticky">
                 <br />
                 {{
-                    scheduleEndAtInputValue.value
-                        | prettyDate : undefined : true
+                    scheduleEndAtInputValue.value | prettyDate: undefined : true
                 }}
             </div>
 
@@ -553,10 +552,10 @@
                         op.status === "DISABLED"
                             ? "(Disabled)"
                             : op.status === "NOT_APPROVED"
-                            ? "(Rejected)"
-                            : op.status === "PENDING_APPROVAL"
-                            ? "(Pending Approval)"
-                            : ""
+                              ? "(Rejected)"
+                              : op.status === "PENDING_APPROVAL"
+                                ? "(Pending Approval)"
+                                : ""
                     }}
                 </mat-option>
             </mat-select>
@@ -1114,7 +1113,7 @@
                                     : ''
                             "
                             [ngClass]="{
-                                'no-click disabled': !solsExists
+                                'no-click disabled': !solsExists,
                             }"
                         >
                             Click here to test the question <br />

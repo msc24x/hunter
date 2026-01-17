@@ -32,6 +32,23 @@
     }
 }
 
+.instructions {
+    padding-left: 1rem;
+
+    li {
+        list-style: none;
+        font-weight: normal;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        fa-icon {
+            font-size: 1.5rem;
+        }
+    }
+}
+
 .bottom-section {
     @include basicBack;
     @include hideSrollbar;

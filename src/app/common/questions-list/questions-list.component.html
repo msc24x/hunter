@@ -28,10 +28,10 @@
     <!-- cdkDrag
         cdkDragPreviewContainer="parent" -->
     <li
-        *ngFor="let question of this.questionsList; track: question; index as i"
+        *ngFor="let question of this.questionsList; track question; index as i"
         [ngClass]="{
-                'selected-question': questionSelected == i,
-            }"
+            'selected-question': questionSelected == i,
+        }"
         (click)="selectQuestion(i)"
         [matTooltip]="
             clearable && questionSelected === i
@@ -42,14 +42,24 @@
         matTooltipShowDelay="200"
     >
         <fa-icon
-            *ngIf="getQuestionProgress(question.id) as quesProgress"
+            *ngIf="showProgress && !getQuestionProgress(question.id)"
+            [icon]="quesIcon"
+            [style]="'color: orangered'"
+            class="question-progress"
+            [matTooltip]="'You have not submitted your response to this'"
+            matTooltipPosition="below"
+        ></fa-icon>
+        <fa-icon
+            *ngIf="
+                showProgress && getQuestionProgress(question.id) as quesProgress
+            "
             [icon]="quesProgress.accepted ? checkIcon : crossIcon"
             [style]="
                 quesProgress.accepted ? 'color: darkgreen' : 'color: darkred'
             "
             class="question-progress"
             [matTooltip]="quesProgress.total + ' points'"
-            matTooltipPosition="right"
+            matTooltipPosition="below"
         ></fa-icon>
 
         <fa-icon

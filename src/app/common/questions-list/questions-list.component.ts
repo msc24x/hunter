@@ -13,6 +13,7 @@ import {
     faCircleCheck,
     faCircleExclamation,
     faCircleXmark,
+    faQuestionCircle,
     faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -40,6 +41,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
     checkIcon = faCircleCheck;
     crossIcon = faCircleXmark;
     warningIcon = faCircleExclamation;
+    quesIcon = faQuestionCircle;
 
     showQuestionDeleteP = false;
     questionTypeBuffer: number = -1;
@@ -48,7 +50,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
 
     constructor(
         private competitionsData: CompetitionsDataService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
     ) {}
 
     @Input()
@@ -71,6 +73,9 @@ export class QuestionsListComponent implements OnInit, OnChanges {
 
     @Input()
     showHeader = true;
+
+    @Input()
+    showProgress = false;
 
     @Output()
     messageEmitter = new EventEmitter();
@@ -114,7 +119,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
         moveItemInArray(
             this.questionsList,
             event.previousIndex,
-            event.currentIndex
+            event.currentIndex,
         );
 
         if (this.questionSelected === event.previousIndex) {
@@ -138,7 +143,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
         return parseInt(f);
     }
 
-    getQuestionProgress(ques_id: number) {
+    getQuestionProgress(ques_id: number): QuestionProgress | undefined {
         return this.questionsProgress.find((qp) => qp.question_id === ques_id);
     }
 
@@ -191,7 +196,7 @@ export class QuestionsListComponent implements OnInit, OnChanges {
                 })
                 .subscribe(() => {
                     this.displayLog(
-                        'Question ' + this.questionSelected + ' deleted'
+                        'Question ' + this.questionSelected + ' deleted',
                     );
                     this.resetQuestionSelected();
                     this.loading = false;
