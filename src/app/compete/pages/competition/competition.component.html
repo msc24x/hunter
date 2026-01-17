@@ -54,7 +54,7 @@
                     : "Will start accepting submissions on "
             }}
             <b>
-                {{ competition.scheduled_at | prettyDate : undefined : true }}
+                {{ competition.scheduled_at | prettyDate: undefined : true }}
             </b>
         </div>
 
@@ -62,7 +62,7 @@
             Closing the submissions after
             <b>
                 {{
-                    competition.scheduled_end_at | prettyDate : undefined : true
+                    competition.scheduled_end_at | prettyDate: undefined : true
                 }}
             </b>
         </div>
@@ -80,13 +80,13 @@
             {{
                 getTimeLimit().hours
                     ? getTimeLimit().hours +
-                      (" hour" | pluralize : getTimeLimit().hours)
+                      (" hour" | pluralize: getTimeLimit().hours)
                     : ""
             }}
             {{
                 getTimeLimit().mins
                     ? getTimeLimit().mins +
-                      (" min" | pluralize : getTimeLimit().mins)
+                      (" min" | pluralize: getTimeLimit().mins)
                     : ""
             }} </b
         >. So start when you are ready
@@ -131,7 +131,7 @@
     >
         {{
             uiStartButtonText() ||
-                (competition.scheduled_at | timeAgo : true).replace(
+                (competition.scheduled_at | timeAgo: true).replace(
                     "ago",
                     "left to start"
                 )
@@ -235,7 +235,7 @@
             <input
                 type="checkbox"
                 id="description-toggle"
-                [checked]="true"
+                [checked]="false"
                 hidden
             />
             <p class="description-toggle-content">
@@ -277,7 +277,10 @@
                     ></div>
 
                     <div
-                        *ngIf="this.competition.competition_sessions?.[0]?.created_at"
+                        *ngIf="
+                            this.competition.competition_sessions?.[0]
+                                ?.created_at
+                        "
                         class="info-like startup-info"
                     >
                         <div>
@@ -286,7 +289,10 @@
                                 [size]="'xs'"
                             ></fa-icon>
                             You started this contest on
-                            {{ this.competition.competition_sessions?.[0]?.created_at | prettyDate}}
+                            {{
+                                this.competition.competition_sessions?.[0]
+                                    ?.created_at | prettyDate
+                            }}
                         </div>
 
                         <div>
@@ -372,22 +378,22 @@
                     <div
                         class="prev"
                         [ngClass]="{
-                            'no-click disabled': questionSelected <= 0
+                            'no-click disabled': questionSelected <= 0,
                         }"
                         (click)="selectNextPrev(-1)"
                     >
-                        Prev
+                        <fa-icon [icon]="backIcon"></fa-icon>
                     </div>
                     <div
                         class="next"
                         [ngClass]="{
                             'no-click disabled':
                                 questionSelected ===
-                                (competition.questions?.length || 0) - 1
+                                (competition.questions?.length || 0) - 1,
                         }"
                         (click)="selectNextPrev(1)"
                     >
-                        Next
+                        Skip & Next
                     </div>
                 </div>
             </div>
@@ -426,7 +432,7 @@
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
-                        questionSelectedInfo.results?.length
+                        questionSelectedInfo.results?.length,
                 }"
             >
                 <h3>Select option(s)</h3>
@@ -478,7 +484,7 @@
                                     : circleIcon
                             "
                             [ngClass]="{
-                                'selected': showChoiceAsSelected(choice)
+                                'selected': showChoiceAsSelected(choice),
                             }"
                         ></fa-icon>
                         <div [innerText]="choice.text.trim()"></div>
@@ -495,7 +501,7 @@
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
-                        questionSelectedInfo.results?.length
+                        questionSelectedInfo.results?.length,
                 }"
             >
                 <h3>Fill in the value</h3>
@@ -524,7 +530,7 @@
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
-                        questionSelectedInfo.results?.length
+                        questionSelectedInfo.results?.length,
                 }"
             >
                 <h3>Write your answer</h3>
@@ -549,7 +555,7 @@
                             this.questionSelectedInfo.user_answer ||
                                 getLastSubmission()?.submission ||
                                 ''
-                        )
+                        ),
                     }"
                     class="words-written"
                 >
@@ -585,7 +591,7 @@
                     [(ngModel)]="questionSelectedInfo.user_answer"
                     placeholder="Start typing your answer..."
                     [value]="getLastSubmission()?.submission"
-                    rows="15"
+                    rows="5"
                 ></textarea>
                 <ng-outlet
                     [ngTemplateOutlet]="alreadySubmittedInfo"
@@ -593,14 +599,6 @@
             </div>
         </div>
 
-        <p class="info-like" *ngIf="competition.practice">
-            Contest is set as a practice only, allowing you to attempt the
-            contest multiple times. You can submit your responses any number of
-            times. Any positive or negative points here won't affect your user
-            profile.
-        </p>
-
-        <!-- <app-info-card>Execution services are down at the moment, the remote code execution system is being re-organized and will be back once ready to ship.</app-info-card> -->
         <div id="submit_controls" class="row">
             <a
                 *ngIf="competition.host_user_id !== user?.id"
@@ -650,7 +648,7 @@
                         'disabled no-click':
                             !competition.practice &&
                             questionSelectedInfo.type !== 0 &&
-                            questionSelectedInfo.results?.length
+                            questionSelectedInfo.results?.length,
                     }"
                 >
                     <fa-icon [icon]="submitIcon"></fa-icon>
@@ -729,6 +727,12 @@
 
         <ng-template #questionEvaluation>
             <h2>Question Evaluation</h2>
+            <p class="info-like" *ngIf="competition.practice">
+                Contest is set as a practice only, allowing you to attempt the
+                contest multiple times. You can submit your responses any number
+                of times. Any positive or negative points here won't affect your
+                user profile.
+            </p>
             <div id="output_points">
                 <question-evaluation
                     [questionSelectedInfo]="questionSelectedInfo"

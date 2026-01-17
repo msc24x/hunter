@@ -23,6 +23,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     faAddressCard,
+    faBackward,
     faBug,
     faCheckCircle,
     faChevronUp,
@@ -71,6 +72,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     stopwatchIcon = faStopwatch;
     editIcon = faEdit;
     lockIcon = faLock;
+    backIcon = faBackward;
 
     showInstructionP = false;
     showSignInP = false;
@@ -126,14 +128,14 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         private scoresDataService: ScoresDataService,
         private titleService: Title,
         private snackBar: MatSnackBar,
-        private location: LocationStrategy
+        private location: LocationStrategy,
     ) {
         const idParam = parseInt(
-            this.route.snapshot.paramMap.get('competition_id') || ''
+            this.route.snapshot.paramMap.get('competition_id') || '',
         );
 
         const idQues = parseInt(
-            this.route.snapshot.paramMap.get('ques_id') || ''
+            this.route.snapshot.paramMap.get('ques_id') || '',
         );
 
         if (idParam) {
@@ -157,10 +159,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         document.addEventListener('click', (event) => {
             const inBottomSection = (event.target as HTMLElement).closest(
-                '.bottom-section'
+                '.bottom-section',
             );
             const inSubmitControls = (event.target as HTMLElement).closest(
-                '#submit_controls'
+                '#submit_controls',
             );
 
             if (!inBottomSection && !inSubmitControls) {
@@ -182,7 +184,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         if (
             /iPhone|iPad|iPod|Android|Opera Mini|IEMobile|BlackBerry|WPDesktop/i.test(
-                navigator.userAgent
+                navigator.userAgent,
             )
         ) {
             // alert(
@@ -214,7 +216,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                 error: (err) => {
                     this.loading--;
                 },
-            })
+            }),
         );
     }
 
@@ -306,7 +308,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         if (!this.notStarted || !this.startable) {
             if (this.communityMemberRequired) {
                 this.snackBar.open(
-                    'Please join the community first before continuing, Redirecting to community page...'
+                    'Please join the community first before continuing, Redirecting to community page...',
                 );
 
                 setTimeout(() => {
@@ -315,12 +317,12 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                     ]);
 
                     this.snackBar.open(
-                        'Proceed to join the community by clicking "Join Community" button'
+                        'Proceed to join the community by clicking "Join Community" button',
                     );
                 }, 1000);
             } else {
                 this.snackBar.open(
-                    'Competition has not started yet, please come back later.'
+                    'Competition has not started yet, please come back later.',
                 );
             }
             return;
@@ -387,7 +389,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.scrollToTop();
                         this.solutionOutput = err.statusText;
                     },
-                })
+                }),
         );
     }
 
@@ -428,7 +430,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             code: this.codeWritten,
                         },
                     },
-                    samples
+                    samples,
                 )
                 .subscribe({
                     next: (res) => {
@@ -461,7 +463,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         this.scrollToTop();
                         this.solutionOutput = err.statusText;
                     },
-                })
+                }),
         );
     }
 
@@ -517,7 +519,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                             this.languageSelected +
                             ' submission';
                     },
-                })
+                }),
         );
     }
 
@@ -533,11 +535,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
                         this.competition = res.body as CompetitionInfo;
                         this.competitionsService.parseCompetitionTypes(
-                            this.competition
+                            this.competition,
                         );
 
                         this.titleService.setTitle(
-                            `${this.competition.title || 'Competition'}`
+                            `${this.competition.title || 'Competition'}`,
                         );
 
                         if (!this.competition.scheduled_end_at) {
@@ -583,12 +585,13 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                                 ?.created_at
                         ) {
                             const userStartingTime = new Date(
-                                this.competition.competition_sessions?.[0]?.created_at
+                                this.competition.competition_sessions?.[0]
+                                    ?.created_at,
                             );
 
                             const timeLimitEndsAt = new Date(
                                 userStartingTime.getTime() +
-                                    this.competition.time_limit * 60 * 1000
+                                    this.competition.time_limit * 60 * 1000,
                             );
 
                             if (
@@ -686,7 +689,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.titleService.setTitle(
                 `Q${this.questionSelected + 1} - ${
                     this.competition.title || 'Competition'
-                }`
+                }`,
             );
         } else {
             this.titleService.setTitle(this.competition.title || 'Competition');
@@ -805,7 +808,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             this.snackBar.open(
                 `Cannot select more than ${
                     alreadySelected - 1
-                } choice(s), please un-select some option to choose a new one.`
+                } choice(s), please un-select some option to choose a new one.`,
             );
             return;
         }

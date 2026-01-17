@@ -43,7 +43,9 @@
     right: 12%;
     bottom: -2rem;
     opacity: 0.5;
-    transition: opacity 100ms, top 200ms;
+    transition:
+        opacity 100ms,
+        top 200ms;
     box-shadow: -1px 0px 6px 0px rgba(128, 128, 128, 0.5);
     padding-top: 0;
 
@@ -149,7 +151,7 @@
 
 #submit_controls {
     justify-content: space-between !important;
-    margin-bottom: 1rem;
+    align-items: start;
 
     #submit_code_btn {
         background-color: colors.$ls;
@@ -244,7 +246,7 @@
     }
 
     .question-section {
-        height: 70svh;
+        height: calc(100svh - 90px - 2rem - 84px - 150px);
         display: flex;
         flex-direction: column;
         justify-content: stretch;

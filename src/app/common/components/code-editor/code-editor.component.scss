@@ -32,9 +32,8 @@
     }
 
     .editor-instance {
-        height: 65svh;
+        height: calc(65svh - 61px);
         font-size: 1rem;
         border-radius: 0 0 24px 24px;
-        margin-bottom: 24px;
     }
 }
