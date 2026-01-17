@@ -645,24 +645,37 @@
         </div>
 
         <div id="submit_controls" class="row">
-            <a
-                *ngIf="competition.host_user_id !== user?.id"
-                id="report-btn"
-                matTooltip="Email us for any kind of concern"
-                [href]="reportCompetitionLink()"
-            >
-                <fa-icon [icon]="reportIcon" size="sm"></fa-icon>
-                Report/Feedback
-            </a>
+            <div class="extra-buttons">
+                <a
+                    id="share-btn"
+                    matTooltip="Share this contest"
+                    [href]="getParticipationLink()"
+                    (click)="shareCompetition($event)"
+                >
+                    <fa-icon [icon]="shareIcon" size="sm"></fa-icon>
+                    Share Contest
+                </a>
 
-            <a
-                id="report-btn"
-                *ngIf="competition.host_user_id === user?.id"
-                [routerLink]="'/editor/' + competition.id"
-            >
-                <fa-icon [icon]="editIcon" size="sm"></fa-icon>
-                Edit the contest
-            </a>
+                &bull;
+
+                <a
+                    *ngIf="competition.host_user_id !== user?.id"
+                    id="report-btn"
+                    matTooltip="Email us for any kind of concern"
+                    [href]="reportCompetitionLink()"
+                >
+                    <fa-icon [icon]="reportIcon" size="sm"></fa-icon>
+                    Report/Feedback
+                </a>
+                <a
+                    id="report-btn"
+                    *ngIf="competition.host_user_id === user?.id"
+                    [routerLink]="'/editor/' + competition.id"
+                >
+                    <fa-icon [icon]="editIcon" size="sm"></fa-icon>
+                    Edit the contest
+                </a>
+            </div>
 
             <div *ngIf="!hasEnded && questionSelectedInfo" class="row">
                 <div

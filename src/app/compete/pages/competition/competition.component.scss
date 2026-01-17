@@ -55,7 +55,7 @@
     z-index: 50;
     border-radius: 1.5rem;
     position: fixed;
-    top: 97%;
+    top: 96%;
     left: 12%;
     right: 12%;
     bottom: -2rem;
@@ -78,7 +78,7 @@
 
     &:hover {
         opacity: 0.7;
-        top: 96.8%;
+        top: 95.8%;
     }
 
     &.full {
@@ -193,14 +193,24 @@
     }
 }
 
-#report-btn {
-    cursor: pointer;
-    color: colors.$text_black;
+.extra-buttons {
+    display: flex;
+    align-items: center;
     margin-top: 1rem;
-    display: block;
+    gap: 0.5rem;
 
-    &:hover {
-        text-decoration: underline;
+    #share-btn {
+        color: colors.$text_black;
+    }
+
+    #report-btn {
+        color: colors.$text_black;
+        cursor: pointer;
+        display: block;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 

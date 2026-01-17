@@ -48,6 +48,7 @@ import {
     faTicket,
     faUserMinus,
     faVolleyball,
+    faShareAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
@@ -87,6 +88,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     emailIcon = faEnvelopeCircleCheck;
     branchIcon = faCodeMerge;
     progressIcon = faClipboardList;
+    shareIcon = faShareAlt;
 
     showInstructionP = false;
     showSignInP = false;
@@ -800,6 +802,96 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         } else {
             elem.style.pointerEvents = 'none';
             elem.style.opacity = '0.5';
+        }
+    }
+
+    async shareCompetition(event?: Event) {
+        try {
+            if (event) {
+                event.preventDefault();
+            }
+
+            const url = this.getParticipationLink();
+            const title = this.competition.title || 'Untitled contest';
+
+            const parts: string[] = [];
+            parts.push(title);
+
+            if (
+                this.competition.description &&
+                this.competition.description.trim()
+            ) {
+                parts.push(this.competition.description.trim());
+            }
+
+            if (this.competition.scheduled_at) {
+                const d = new Date(this.competition.scheduled_at);
+                parts.push(`Scheduled: ${d.toLocaleString()}`);
+            }
+
+            const host = this.competition.host_user?.name;
+            if (host) {
+                parts.push(`Hosted by: ${host}`);
+            }
+
+            const community = this.competition.community?.name;
+            if (community) {
+                parts.push(`Community: ${community}`);
+            }
+
+            const text = parts.join('\n\n') + '\n\n' + url;
+
+            // Try native share first
+            if ((navigator as any)?.share) {
+                try {
+                    await (navigator as any).share({ title, text, url });
+                    this.snackBar.open('Shared successfully');
+                    return;
+                } catch (err) {
+                    // fallthrough to clipboard + mail
+                }
+            }
+
+            // Copy URL to clipboard and show a snackbar with optional mail action
+            let copied = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(url);
+                } else {
+                    const ta = document.createElement('textarea');
+                    ta.value = url;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    ta.remove();
+                }
+                copied = true;
+            } catch (err) {
+                copied = false;
+            }
+
+            const subject = encodeURIComponent(title);
+            const body = encodeURIComponent(text);
+            const mailto = `mailto:?subject=${subject}&body=${body}`;
+
+            if (copied) {
+                const ref = this.snackBar.open(
+                    'Link copied to clipboard',
+                    'Compose email',
+                    {
+                        duration: 8000,
+                    },
+                );
+
+                ref.onAction().subscribe(() => {
+                    window.location.href = mailto;
+                });
+            } else {
+                // If copy failed, open mailto as a fallback
+                window.location.href = mailto;
+            }
+        } catch (err) {
+            this.snackBar.open('Unable to share');
         }
     }
 
