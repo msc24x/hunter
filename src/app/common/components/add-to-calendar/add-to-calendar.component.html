@@ -1,0 +1,62 @@
+<div (click)="$event.stopPropagation()" class="add-to-calendar-wrapper">
+    <button
+        class="calendar-btn main"
+        (click)="toggleDropdown(); $event.preventDefault()"
+        type="button"
+        title="Add to calendar"
+    >
+        <fa-icon [icon]="calendarIcon"></fa-icon>
+        <span class="btn-text">Add to Calendar</span>
+    </button>
+
+    <div class="dropdown" *ngIf="isDropdownOpen">
+        <button
+            class="dropdown-item google"
+            (click)="addToGoogle()"
+            type="button"
+        >
+            <span class="icon">
+                <fa-icon [icon]="googleIcon"> </fa-icon>
+            </span>
+            <span class="text">Google Calendar</span>
+        </button>
+        <!-- <button
+            class="dropdown-item apple"
+            (click)="addToApple()"
+            type="button"
+        >
+            <span class="icon">
+                <fa-icon [icon]="appleIcon"> </fa-icon>
+            </span>
+            <span class="text">Apple Calendar</span>
+        </button> -->
+        <button
+            class="dropdown-item outlook"
+            (click)="addToOutlook()"
+            type="button"
+        >
+            <span class="icon">
+                <fa-icon [icon]="calendarIcon"> </fa-icon>
+            </span>
+            <span class="text">Outlook Calendar</span>
+        </button>
+
+        <button
+            class="dropdown-item download"
+            (click)="downloadICS()"
+            type="button"
+        >
+            <span class="icon">
+                <fa-icon [icon]="calendarPlusIcon"> </fa-icon>
+            </span>
+            <span class="text">Download (.ics)</span>
+        </button>
+    </div>
+</div>
+
+<!-- Close dropdown when clicking outside -->
+<div
+    class="dropdown-backdrop"
+    *ngIf="isDropdownOpen"
+    (click)="closeDropdown()"
+></div>

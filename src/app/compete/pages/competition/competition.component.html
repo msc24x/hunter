@@ -222,6 +222,23 @@
         }}
     </button>
 
+    <br />
+
+    <app-add-to-calendar
+        *ngIf="
+            this.isAuthenticated &&
+            this.notStarted &&
+            competition.scheduled_at &&
+            !this.uiIsContestStartable()
+        "
+        [eventTitle]="competition.title"
+        [startDate]="competition.scheduled_at"
+        [endDate]="competition.scheduled_end_at"
+        [link]="getParticipationLink()"
+        [description]="'Join the competition: ' + competition.title"
+        location="Online"
+    ></app-add-to-calendar>
+
     <p
         *ngIf="
             isAuthenticated &&

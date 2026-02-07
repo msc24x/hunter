@@ -58,7 +58,7 @@
         id="start_schedule"
         class="detail-tag"
         [ngClass]="
-            (com.scheduled_at | isLiveStatusPipe : com.scheduled_end_at)
+            (com.scheduled_at | isLiveStatusPipe: com.scheduled_end_at)
                 ? 'live'
                 : ''
         "
@@ -70,14 +70,14 @@
         >
             <span *ngIf="!isAfterNow(com.scheduled_at)">
                 Not open yet,
-                {{ (com.scheduled_at | timeAgo : true).replace("ago", "left") }}
+                {{ (com.scheduled_at | timeAgo: true).replace("ago", "left") }}
             </span>
             <span *ngIf="isAfterNow(com.scheduled_at)">
                 {{ com.scheduled_at ? "Live Since" : "Live, closing in" }}
                 {{
                     com.scheduled_at
                         ? (com.scheduled_at | timeAgo).replace("ago", "")
-                        : (com.scheduled_end_at | timeAgo : true).replace(
+                        : (com.scheduled_end_at | timeAgo: true).replace(
                               "ago",
                               ""
                           )

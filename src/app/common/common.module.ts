@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule as AngularCommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -48,6 +48,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CompetitionCardComponent } from './components/competition-card/competition-card.component';
 import { CommunitiesListComponent } from './components/communities-list/communities-list.component';
 import { CommunityDisplayComponent } from './components/community-display/community-display.component';
+import { AddToCalendarComponent } from './components/add-to-calendar/add-to-calendar.component';
 
 // Pipes (ensure imports exist)
 import {
@@ -117,6 +118,7 @@ const COMPONENTS = [
     CompetitionCardComponent,
     CommunitiesListComponent,
     CommunityDisplayComponent,
+    AddToCalendarComponent,
 ];
 
 const PIPES = [
