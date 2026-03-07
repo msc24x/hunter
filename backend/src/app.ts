@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import express, { Response, Request, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import path from 'path';
 import config from './config/config';
 import { DatabaseProvider } from './services/databaseProvider';
 import Container from 'typedi';
@@ -20,7 +21,16 @@ if (config.env !== 'local') {
 }
 
 app.use(morgan('dev'));
-app.use(require('./api/routes'));
+
+app.use('/api', require('./api/routes'));
+
+// Serve static files from the 'static' directory
+app.use(express.static(path.join(__dirname, '../static')));
+
+// Serve angular application when nothing matches
+app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../static/index.html'));
+});
 
 registerTasks();
 

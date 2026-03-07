@@ -55,8 +55,7 @@ backend/.env/*
 backend/files/*
 .ssh/*
 push-envs.bat
-static-update.bat
-server-update.bat
-backend-update.bat
 frontend-update.bat
 backend/src/scripts/shell.ts
+backend/dist
+backend/static
