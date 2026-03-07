@@ -18,8 +18,12 @@ function sendEmail(params: {
                 return console.error('[Email] failed', error);
             }
 
-            resolve();
             console.info('[Email]', params.body.from, 'to', params.body.to);
+
+            // Delay resolution, to have false rate limiting
+            setTimeout(() => {
+                resolve();
+            }, 1000);
         });
     });
 }

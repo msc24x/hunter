@@ -59,7 +59,7 @@ export async function newSubmissionsReminder(context: TaskContext) {
         }
 
         perUserData[result.host_user_id].total += Number(
-            result.new_results_count
+            result.new_results_count,
         );
         perUserData[result.host_user_id].contests.push({
             url: `${config.protocol}://${config.frontend}/editor/${result.competition_id}/data/insights`,
@@ -160,7 +160,7 @@ export async function newCommunityMembershipsReminder(context: TaskContext) {
             .catch((e) => {
                 console.error(
                     'Failed to load admin user for membership notification:',
-                    e
+                    e,
                 );
             });
     });
@@ -257,9 +257,9 @@ export async function newCompetitionsInCommunity(context: TaskContext) {
         });
     });
 
-    email_data.forEach((data) => {
-        sendNewCompetitionsInCommunity(data);
-    });
+    for (let data of email_data.values()) {
+        await sendNewCompetitionsInCommunity(data);
+    }
 
     // update cron job last run time
     await client.cron_job.update({
