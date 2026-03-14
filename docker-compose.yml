@@ -1,15 +1,21 @@
 version: "1.0.0"
 
 services:
-    hunter-backend:
-        image: msc24x/hunter-backend:latest
-        container_name: hunter-backend
+    hunter:
+        image: msc24x/hunter:latest
+        container_name: hunter
         ports:
-            - 8080:8080
+            - 8182:8182
         restart: always
+        volumes:
+            - ./env:/home/app/.env
+            - ./files:/home/app/files
 
         build:
             context: backend
             args:
                 ENV: prod
             dockerfile: Dockerfile
+            platforms:
+                - linux/amd64
+                - linux/arm64
