@@ -9,6 +9,8 @@ export const environment = {
     production: true,
     apiUrl: `${protocol}://${domainName}/api`,
     version: 'v2.0-beta',
+    sentry_dsn:
+        'https://3e92c710b11d4bebbec3b0a328ba707b@glitchtip.ampere.cambo.in/1',
 };
 
 export interface UserInfo {

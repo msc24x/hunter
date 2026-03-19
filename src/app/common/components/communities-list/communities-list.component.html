@@ -16,17 +16,17 @@
             'badge--pending': community.status === 'PENDING_APPROVAL',
             'badge--rejected':
                 community.status === 'NOT_APPROVED' ||
-                community.status === 'DISABLED'
+                community.status === 'DISABLED',
         }"
     >
         {{
             community.status === "PENDING_APPROVAL"
                 ? "Pending Approval"
                 : community.status === "NOT_APPROVED"
-                ? "Rejected"
-                : community.status === "DISABLED"
-                ? "Disabled"
-                : community.status
+                  ? "Rejected"
+                  : community.status === "DISABLED"
+                    ? "Disabled"
+                    : community.status
         }}
     </div>
 

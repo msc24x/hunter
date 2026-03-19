@@ -6,8 +6,7 @@
         "start": "ng serve",
         "build": "rm -rf /build && ng build --output-path build/",
         "watch": "ng build --watch --configuration development",
-        "build-image": "docker compose -f docker-compose.yml build",
-        "push-image": "docker push msc24x/hunter:latest"
+        "push-image": "docker compose -f docker-compose.yml build --push"
     },
     "private": true,
     "dependencies": {
@@ -26,6 +25,9 @@
         "@fortawesome/free-brands-svg-icons": "^6.4.0",
         "@fortawesome/free-regular-svg-icons": "^6.4.0",
         "@fortawesome/free-solid-svg-icons": "^6.6.0",
+        "@micro-sentry/angular": "^7.2.0",
+        "@sentry/angular": "^10.45.0",
+        "@sentry/tracing": "^7.120.4",
         "ace-builds": "^1.4.14",
         "assert": "^2.0.0",
         "body-parser": "^1.19.1",

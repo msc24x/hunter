@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { ImpersonationInterceptor } from './interceptors/impersonation.interceptor';
+import { TraceService } from '@sentry/angular';
+import * as Sentry from '@sentry/angular';
 
 @NgModule({
     declarations: [AppComponent, NotFoundComponent],
@@ -25,6 +27,8 @@ import { ImpersonationInterceptor } from './interceptors/impersonation.intercept
     ],
     bootstrap: [AppComponent],
     providers: [
+        { provide: ErrorHandler, useValue: Sentry.createErrorHandler() },
+        TraceService,
         {
             provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
             useValue: {

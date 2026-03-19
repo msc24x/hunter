@@ -32,7 +32,7 @@ export class CompeteComponent implements OnInit {
         private authService: AuthService,
         private competitionsDataService: CompetitionsDataService,
         private communitiesDataService: CommunitiesDataService,
-        private router: Router
+        private router: Router,
     ) {
         this.authService.isAuthenticated.subscribe((isAuth: boolean) => {
             this.user = this.authService.user;
@@ -85,7 +85,7 @@ export class CompeteComponent implements OnInit {
     routeToCompetition() {
         this.loading++;
         const id = document.getElementById(
-            'competition_id_text'
+            'competition_id_text',
         ) as HTMLInputElement;
         this.router.navigate(['/compete/p/' + id.valueAsNumber]);
     }
