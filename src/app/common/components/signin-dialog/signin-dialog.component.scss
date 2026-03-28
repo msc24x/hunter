@@ -1,9 +1,9 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
 div#signinDialog {
-    background-color: colors.$dim_white;
+    background-color: var(--dim-white);
     width: 300px;
     border-radius: 30px;
     padding-top: 1px;
@@ -13,7 +13,7 @@ div#signinDialog {
         font-size: 0.7rem;
         padding-inline: 16px;
         margin: 8px;
-        color: gray;
+        color: var(--gray);;
     }
 
     p.sectionHeading {
@@ -23,7 +23,7 @@ div#signinDialog {
         text-align: center;
 
         font-weight: bolder;
-        color: colors.$text_black;
+        color: var(--text-black);
         align-self: center;
     }
     p.inputHeading {
@@ -34,11 +34,11 @@ div#signinDialog {
         margin-left: 17px;
 
         font-weight: normal;
-        color: colors.$text_black;
+        color: var(--text-black);
     }
     input.textbox {
         border-radius: 5px;
-        color: colors.$text_black;
+        color: var(--text-black);
         border-width: 0px;
         stroke-width: 0px;
         height: 30px;
@@ -64,7 +64,7 @@ div#signinDialog {
         margin-left: 5px;
         text-align: justify;
         font-weight: normal;
-        color: colors.$text_black;
+        color: var(--text-black);
     }
     p.line:hover {
         cursor: pointer;
@@ -72,7 +72,7 @@ div#signinDialog {
     #register_btn {
         background-color: #ffffff;
         border-radius: 5px;
-        color: colors.$text_black;
+        color: var(--text-black);
         border-width: 0px;
         stroke-width: 0px;
         height: 30px;
@@ -91,15 +91,15 @@ div#signinDialog {
     }
     #register_btn:hover:active {
         animation: push;
-        color: colors.$text_white;
-        background-color: colors.$text_black;
+        color: var(--text-white);
+        background-color: var(--text-black);
     }
 
     @keyframes come_close {
         100% {
             transform: scale(1.05);
-            color: colors.$text_white;
-            background-color: colors.$text_black;
+            color: var(--text-white);
+            background-color: var(--text-black);
         }
     }
 
@@ -113,7 +113,7 @@ div#signinDialog {
 
         margin-top: 50px;
         font-weight: normal;
-        color: colors.$text_black;
+        color: var(--text-black);
         text-align: center;
         margin-left: auto;
         margin-right: auto;

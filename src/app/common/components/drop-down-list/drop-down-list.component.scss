@@ -1,10 +1,10 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
 .drop-down-list {
-    background-color: colors.$text_black;
-    color: colors.$text_white;
+    background-color: var(--text-black);
+    color: var(--text-white);
     padding-inline: 8px;
     height: 1.8rem;
     min-width: 64px;

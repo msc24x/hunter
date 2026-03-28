@@ -1,4 +1,4 @@
-@use "./colors";
+﻿@use "./colors";
 @use "./fonts";
 
 @mixin nextPrevControls {
@@ -20,7 +20,7 @@
         @include sweetBorder;
 
         &:hover {
-            background-color: white;
+            background-color: var(--white);
         }
     }
 }
@@ -47,22 +47,22 @@
 
 @mixin sweetBorder {
     border-width: 1px;
-    border-color: rgba(128, 128, 128, 0.4);
+    border-color: var(--border-color);
     border-style: solid;
 }
 
 @mixin blackBack {
     // background: #0000000d;
-    background-color: whitesmoke;
+    background-color: var(--whitesmoke);
     padding: 1rem;
     border-radius: 2rem;
     @include sweetBorder();
 }
 
 @mixin basicBackZ {
-    color: colors.$text_black;
+    color: var(--text-black);
     font-size: 1rem;
-    background-color: white;
+    background-color: var(--white);
     border-radius: 1rem;
     @include sweetBorder();
 }
@@ -70,9 +70,9 @@
 @mixin basicBack {
     padding: 0.8rem;
     padding-inline: 1.6rem;
-    color: colors.$text_black;
+    color: var(--text-black);
     font-size: 1rem;
-    background-color: white;
+    background-color: var(--white);
     border-radius: 1rem;
     @include sweetBorder();
 }
@@ -85,7 +85,7 @@
 
 @mixin inputText {
     border-radius: 1rem;
-    color: colors.$text_black;
+    color: var(--text-black);
     background-color: #e4e4e4;
     border-width: 0px;
     stroke-width: 0px;
@@ -103,15 +103,15 @@
 
 @mixin appTextArea {
     resize: vertical;
-    background-color: rgb(250, 250, 250);
+    background-color: var(--whitesmoke);
     border-radius: 1rem;
     font-family: appFont;
     font-weight: 300;
     font-size: 1.2rem;
     padding: 16px;
     border-width: 0px;
-    border-color: gray;
-    color: colors.$text_black;
+    border-color: var(--gray);;
+    color: var(--text-black);
     @include sweetBorder();
 }
 
@@ -129,7 +129,7 @@
 }
 
 @mixin popupBox {
-    background-color: white;
+    background-color: var(--white);
     margin-inline: auto;
     width: fit-content;
     height: fit-content;

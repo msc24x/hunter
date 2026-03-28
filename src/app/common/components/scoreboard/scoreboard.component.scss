@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -40,7 +40,7 @@
         .table_heading {
             font-weight: bold;
             margin-bottom: 8px;
-            background-color: whitesmoke;
+            background-color: var(--whitesmoke);
         }
 
         .user-rank-row {
@@ -49,7 +49,7 @@
             @include sweetBorder();
         }
 
-        background-color: whitesmoke;
+        background-color: var(--whitesmoke);
         padding: 16px;
         border-radius: 1rem;
         @include sweetBorder();
@@ -70,7 +70,7 @@
                 z-index: 50;
                 @include basicBack;
                 border-radius: 0.5rem;
-                background-color: whitesmoke;
+                background-color: var(--whitesmoke);
             }
 
             div {
@@ -118,12 +118,12 @@
             }
 
             .score-n {
-                color: darkred;
+                color: var(--dark-red);
             }
         }
 
         & > div:not(.table_heading):not(.unusual):hover {
-            background-color: colors.$text_white;
+            background-color: var(--text-white);
             border-radius: 0.3rem;
         }
     }

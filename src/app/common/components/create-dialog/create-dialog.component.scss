@@ -1,11 +1,11 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
 #create_dialog_popup {
     .error {
         font-weight: normal;
-        color: colors.$error;
+        color: var(--error);
         text-align: left;
         padding-top: 0px;
     }

@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -29,7 +29,7 @@
     white-space: nowrap;
 
     fa-icon {
-        color: colors.$text_black;
+        color: var(--text-black);
     }
 
     &:hover {

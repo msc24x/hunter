@@ -2,7 +2,7 @@ div {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: gray;
+    color: var(--gray);;
     margin-top: 3rem;
     margin-bottom: 3rem;
 
@@ -11,7 +11,7 @@ div {
         aspect-ratio: 5;
         display: flex;
         justify-content: space-between;
-        --_g: no-repeat radial-gradient(farthest-side, gray 95%, #0000);
+        --_g: no-repeat radial-gradient(farthest-side, : var(--gray); 95%, #0000);
         background: var(--_g), var(--_g);
         background-size: 20% 100%;
         animation: l42-0 1s infinite;
@@ -22,7 +22,7 @@ div {
         height: inherit;
         aspect-ratio: 1;
         border-radius: 50%;
-        background: gray;
+        background: var(--gray);;
 
         animation: l42-1 1s infinite;
     }
@@ -43,7 +43,7 @@ div {
             transform: scale(var(--s, 1)) translate(0, 0);
         }
         33% {
-            background: crimson;
+            background: var(--crimson);
 
             transform: scale(var(--s, 1)) translate(0, 130%);
         }

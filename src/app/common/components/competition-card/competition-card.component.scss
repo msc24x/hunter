@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -12,10 +12,10 @@
     margin-bottom: 0.5rem;
     padding: 16px;
     border-radius: 1rem;
-    border-color: black;
+    border-color: var(--text-black);
     border-width: 110px;
     height: fit-content;
-    background-color: colors.$dim_white;
+    background-color: var(--dim-white);
     margin-inline: auto;
     max-width: 62rem;
     transition: 200ms;
@@ -43,13 +43,13 @@
         @include sweetBorder;
 
         &.live {
-            color: crimson;
-            border-color: crimson;
-            background-color: colors.$ls;
+            color: var(--crimson);
+            border-color: var(--crimson);
+            background-color: var(--ls);
         }
 
         &.ques-tag {
-            color: darkblue;
+            color: var(--dark-blue);
             background: #0000ff13;
             border-color: #00008b6e;
         }
@@ -60,7 +60,7 @@
     font-weight: 500;
     word-break: break-word;
     font-size: 1.3rem;
-    color: colors.$text_black;
+    color: var(--text-black);
 
     &.untitled {
         opacity: 0.3;
@@ -82,7 +82,6 @@
 
 #c_about {
     word-break: break-word;
-    color: rgb(24, 24, 24);
 }
 
 .competition_meta {

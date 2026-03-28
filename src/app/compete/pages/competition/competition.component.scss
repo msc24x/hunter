@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -111,7 +111,7 @@
 
         .progress-box {
             font-size: 1.3rem;
-            background-color: whitesmoke;
+            background-color: var(--whitesmoke);
             padding: 1rem;
             padding-right: 1.3rem;
             width: fit-content;
@@ -157,8 +157,8 @@
         width: max-content;
 
         &.active {
-            background-color: colors.$text_black;
-            color: colors.$text_white;
+            background-color: var(--text-black);
+            color: var(--text-white);
         }
     }
 
@@ -188,7 +188,7 @@
     align-items: start;
 
     #submit_code_btn {
-        background-color: colors.$ls;
+        background-color: var(--ls);
         border-color: #dcadb6;
         color: saddlebrown;
     }
@@ -210,11 +210,11 @@
     gap: 0.5rem;
 
     #share-btn {
-        color: colors.$text_black;
+        color: var(--text-black);
     }
 
     #report-btn {
-        color: colors.$text_black;
+        color: var(--text-black);
         cursor: pointer;
         display: block;
 
@@ -312,7 +312,7 @@ textarea {
 
 .long-answer-section {
     .words-written {
-        color: darkred;
+        color: var(--dark-red);
 
         &.acceptable {
             color: darkgreen;
@@ -361,7 +361,7 @@ textarea {
 #competition_info {
     margin-bottom: 1rem;
     padding: 1.3rem;
-    // background-color: colors.$dim_white;
+    // background-color: var(--dim-white);
     @include blackBack;
     @include sweetBorder;
     border-radius: 1.5rem;
@@ -457,7 +457,7 @@ textarea {
         justify-content: space-between;
         float: right;
         margin: 0.2rem;
-        color: darkred;
+        color: var(--dark-red);
 
         .label {
             font-size: 1rem;
@@ -465,7 +465,7 @@ textarea {
 
         span {
             font-family: monospace;
-            background: colors.$mild_red;
+            background: var(--mild-red);
             border-radius: 0.5rem;
             padding: 0.3rem;
             padding-inline: 0.5rem;
@@ -509,7 +509,7 @@ textarea {
 }
 
 .button:hover {
-    background-color: white;
+    background-color: var(--white);
 }
 
 #output_label {
@@ -535,13 +535,13 @@ textarea {
 
     #solution_output {
         scroll-margin: 24px;
-        background-color: whitesmoke;
+        background-color: var(--whitesmoke);
         width: 50%;
         overflow: scroll;
         padding: 18px;
         font-size: 1rem;
         border-radius: 1rem;
-        border: 1px solid whitesmoke;
+        border: 1px solid var(--whitesmoke);
         margin: 4px;
         transition: height 200ms;
 
@@ -571,7 +571,7 @@ textarea {
 
         pre {
             overflow-x: auto;
-            background-color: colors.$text_white;
+            background-color: var(--text-white);
             padding: 0.5rem;
             border-radius: 0.5rem;
             margin-inline: 0.5rem;

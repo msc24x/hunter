@@ -55,7 +55,7 @@
             "
             [icon]="quesProgress.accepted ? checkIcon : crossIcon"
             [style]="
-                quesProgress.accepted ? 'color: darkgreen' : 'color: darkred'
+                quesProgress.accepted ? 'color: darkgreen' : 'color: var(--dark-red)'
             "
             class="question-progress"
             [matTooltip]="quesProgress.total + ' points'"
@@ -65,7 +65,7 @@
         <fa-icon
             *ngIf="quality?.[question.id]?.acceptable === false"
             [icon]="warningIcon"
-            [style]="'color: darkred;'"
+            [style]="'color: var(--dark-red);'"
             class="question-progress quality-indi"
             [matTooltip]="'Question has poor quality'"
             matTooltipPosition="left"

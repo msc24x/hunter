@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -13,7 +13,7 @@
     font-size: 1.1rem;
     flex-basis: 30%;
     margin-top: 0.4rem;
-    background-color: colors.$dim_white;
+    background-color: var(--dim-white);
     border-radius: 1rem;
     margin: 0.3rem;
     padding: 1rem;
@@ -36,8 +36,8 @@
         border-width: 0px;
         padding-inline: 8px;
         height: 2rem;
-        background-color: whitesmoke;
-        color: colors.$text_black;
+        background-color: var(--whitesmoke);
+        color: var(--text-black);
         @include sweetBorder();
     }
 
@@ -55,7 +55,7 @@
 
 .heading {
     font-weight: normal;
-    color: colors.$text_black;
+    color: var(--text-black);
 }
 
 #competitions_list {
@@ -154,6 +154,6 @@
 
     li {
         border-width: 2px;
-        border-color: black;
+        border-color: var(--text-black);
     }
 }

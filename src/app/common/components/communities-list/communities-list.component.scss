@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -22,10 +22,10 @@
         position: relative;
         cursor: pointer;
         transition: 200ms;
-        color: colors.$text_black;
+        color: var(--text-black);
 
         &:hover {
-            border-color: gray;
+            border-color: var(--gray);;
 
             .name {
                 font-size: 1.05rem;

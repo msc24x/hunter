@@ -54,7 +54,7 @@
                     <span> ({{ row.accepted ? "Accepted" : "Wrong" }}) </span>
                 </span>
 
-                <span *ngIf="!row.evaluated_at" style="color: darkred">
+                <span *ngIf="!row.evaluated_at" style="color: var(--dark-red)">
                     <fa-icon [icon]="clockIcon" size="sm"></fa-icon>
                     &nbsp;Pending
                 </span>

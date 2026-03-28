@@ -8,7 +8,7 @@
 a {
     &:link,
     &:visited {
-        color: crimson;
+        color: var(--crimson);
         text-decoration: none;
     }
 }
@@ -40,6 +40,6 @@ a {
     span {
         font-size: min(16vw, 6rem);
         font-weight: 800;
-        color: crimson;
+        color: var(--crimson);
     }
 }

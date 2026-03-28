@@ -1,9 +1,9 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
 div#loginDialog {
-    background-color: colors.$dim_white;
+    background-color: var(--dim-white);
     width: 300px;
     height: 500px;
     border-radius: 30px;
@@ -20,7 +20,7 @@ div#loginDialog {
         text-align: center;
 
         font-weight: bolder;
-        color: colors.$text_black;
+        color: var(--text-black);
         align-self: center;
     }
     p.inputHeading {
@@ -31,7 +31,7 @@ div#loginDialog {
         margin-left: 17px;
 
         font-weight: normal;
-        color: colors.$text_black;
+        color: var(--text-black);
     }
     input.textbox {
         @include inputText;
@@ -51,7 +51,7 @@ div#loginDialog {
         margin-left: 5px;
         text-align: justify;
         font-weight: normal;
-        color: colors.$text_black;
+        color: var(--text-black);
     }
     p.line:hover {
         cursor: pointer;
@@ -59,7 +59,7 @@ div#loginDialog {
     button {
         background-color: #ffffff;
         border-radius: 5px;
-        color: colors.$text_black;
+        color: var(--text-black);
         border-width: 0px;
         stroke-width: 0px;
         height: 30px;
@@ -78,15 +78,15 @@ div#loginDialog {
     }
     button:hover:active {
         animation: push;
-        color: colors.$text_white;
-        background-color: colors.$text_black;
+        color: var(--text-white);
+        background-color: var(--text-black);
     }
 
     @keyframes come_close {
         100% {
             transform: scale(1.05);
-            color: colors.$text_white;
-            background-color: colors.$text_black;
+            color: var(--text-white);
+            background-color: var(--text-black);
         }
     }
 
@@ -100,7 +100,7 @@ div#loginDialog {
 
         margin-top: 50px;
         font-weight: normal;
-        color: colors.$text_black;
+        color: var(--text-black);
         text-align: center;
         margin-left: auto;
         margin-right: auto;

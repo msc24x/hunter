@@ -26,7 +26,7 @@
                 >
                     <fa-icon
                         [icon]="officialIcon"
-                        style="color: crimson"
+                        style="color: var(--crimson)"
                     ></fa-icon>
                 </span>
             </ng-template>
@@ -40,9 +40,9 @@
                 *ngIf="com.visibility == 'PRIVATE'"
                 matTooltip="Private, only visible to you"
             >
-                <fa-icon [icon]="privateIcon" style="color: crimson"></fa-icon>
+                <fa-icon [icon]="privateIcon" style="color: var(--crimson)"></fa-icon>
                 &nbsp;
-                <span style="color: crimson"> Private </span>
+                <span style="color: var(--crimson)"> Private </span>
             </span>
         </a>
         <div *ngIf="com.community">

@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -13,8 +13,8 @@ div.appBar {
     margin-bottom: 2rem;
 
     #logout_btn {
-        background-color: colors.$mild_red;
-        color: darkred !important;
+        background-color: var(--mild-red);
+        color: var(--dark-red) !important;
         border-radius: 12px;
         padding-block: 4px;
         padding-inline: 16px !important;
@@ -24,7 +24,7 @@ div.appBar {
     }
 
     #app_title {
-        color: colors.$text_black;
+        color: var(--text-black);
         font-weight: 800;
         font-size: 3em;
         display: flex;
@@ -33,7 +33,7 @@ div.appBar {
         #app_title_full {
             cursor: pointer;
             font-size: 2.4rem;
-            color: crimson;
+            color: var(--crimson);
             // font-style: italic;
 
             &:hover {
@@ -63,8 +63,8 @@ div.appBar {
         #user_name,
         #register_btn {
             font-size: 0.8rem;
-            background-color: colors.$text_black;
-            color: colors.$text_white;
+            background-color: var(--text-black);
+            color: var(--text-white);
             border-radius: 12px;
             padding-block: 6px;
             padding-inline: 16px;
@@ -101,7 +101,7 @@ div.appBar {
         align-items: flex-end;
         font-size: 0.8rem;
         font-weight: bolder;
-        // background-color: white;
+        // background-color: var(--white);
         padding: 6px;
         padding-inline: 12px;
         border-radius: 8px;
@@ -119,7 +119,7 @@ div.appBar {
         }
     }
     #navBarBtn:hover {
-        background-color: white;
+        background-color: var(--white);
     }
 
     #navBarCompact {
@@ -141,7 +141,7 @@ div.appBar {
 
             a {
                 display: block;
-                color: colors.$text_black;
+                color: var(--text-black);
                 text-align: left;
                 padding: 12px;
                 padding-top: 10px;
@@ -174,7 +174,7 @@ div.appBar {
 
     #navBar {
         ul {
-            color: colors.$text_black;
+            color: var(--text-black);
             font-weight: normal;
             display: flex;
             flex-wrap: wrap;
@@ -183,14 +183,14 @@ div.appBar {
             a {
                 text-align: center;
                 padding-right: 3rem;
-                color: rgb(71, 71, 71);
+                color: var(--text-black);
                 cursor: pointer;
                 padding-block: 6px;
                 transition: 200ms;
             }
 
             a:hover {
-                color: black;
+                color: var(--text-black);
                 font-weight: 500;
             }
 

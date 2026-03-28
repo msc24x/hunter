@@ -1,8 +1,8 @@
-@use "../../../../assets/colors";
+﻿@use "../../../../assets/colors";
 
 fa-icon,
 a {
-    color: colors.$cute_blue;
+    color: var(--cute-blue);
 }
 
 a:hover {

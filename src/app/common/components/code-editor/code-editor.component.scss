@@ -1,11 +1,11 @@
-@use "../../../../assets/colors";
+﻿@use "../../../../assets/colors";
 @use "../../../../assets/fonts";
 @use "../../../../assets/mixins" as *;
 
 :host {
     .hunter-conf {
         width: calc(100% - 42px);
-        background-color: colors.$text_black;
+        background-color: var(--text-black);
         border-radius: 24px 24px 0 0;
         overflow: hidden;
         height: auto;
@@ -15,8 +15,8 @@
         .editor-button {
             height: 1.8rem;
             padding-inline: 8px;
-            color: white;
-            background-color: colors.$text_black;
+            color: var(--white);
+            background-color: var(--text-black);
             cursor: pointer;
         }
 

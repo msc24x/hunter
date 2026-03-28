@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>Hunter - Open Source Contest Platform</title>
+        
         <base href="/" />
         <meta name="color-scheme" content="light" />
         <meta
@@ -137,6 +138,20 @@
             }
         </script>
     </head>
+
+    <script>
+            (function () {
+                const saved = localStorage.getItem('theme');
+
+                if (saved === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            })();
+    </script>
     <body>
         <app-root></app-root>
     </body>

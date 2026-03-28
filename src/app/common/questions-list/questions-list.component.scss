@@ -1,4 +1,4 @@
-@use "../../../assets/fonts";
+﻿@use "../../../assets/fonts";
 @use "../../../assets/colors";
 @use "../../../assets/mixins" as *;
 
@@ -28,7 +28,7 @@
     }
 
     & > div {
-        background-color: white;
+        background-color: var(--white);
         border-radius: 1rem;
         padding: 16px;
         font-weight: bold;
@@ -71,7 +71,7 @@
         align-items: center;
         justify-content: center;
 
-        color: darkred;
+        color: var(--dark-red);
         -webkit-user-select: none; /* Safari */
         -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* IE10+/Edge */
@@ -97,7 +97,7 @@
 
     li,
     li.cdk-drag-preview {
-        background-color: whitesmoke;
+        background-color: var(--whitesmoke);
         border-radius: 1rem;
         padding: 16px;
         font-weight: bold;
@@ -115,8 +115,8 @@
         touch-action: auto !important;
 
         &.selected-question {
-            background-color: colors.$text_black;
-            color: whitesmoke;
+            background-color: var(--text-black);
+            color: var(--whitesmoke);
 
             &:hover {
                 opacity: 1;
@@ -128,7 +128,7 @@
             top: 0rem;
             left: -0.5rem;
             font-size: 1.3rem;
-            background: colors.$text_white;
+            background: var(--text-white);
             border-radius: 1.3rem;
             height: 1.2rem;
             display: block;
@@ -146,8 +146,8 @@
     }
 
     #delete_question_btn:hover {
-        background-color: darkred;
-        color: whitesmoke;
+        background-color: var(--dark-red);
+        color: var(--whitesmoke);
     }
 
     #delete_question_btn:active {
@@ -157,9 +157,9 @@
     li:hover,
     div#create_question_btn:hover,
     div#save_question_btn:hover {
-        // background-color: colors.$text_black !important;
-        // color: colors.$text_white !important;
+        // background-color: var(--text-black) !important;
+        // color: var(--text-white) !important;
         // opacity: 0.8;
-        border-color: black;
+        border-color: var(--text-black);
     }
 }

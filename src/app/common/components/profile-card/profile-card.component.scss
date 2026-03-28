@@ -1,4 +1,4 @@
-@use "../../../../assets/mixins" as *;
+﻿@use "../../../../assets/mixins" as *;
 @use "../../../../assets/colors";
 
 :host {
@@ -48,7 +48,7 @@
         justify-content: space-between;
 
         a {
-            color: colors.$text_black;
+            color: var(--text-black);
         }
 
         .profile-name {

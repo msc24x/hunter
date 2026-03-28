@@ -1,10 +1,10 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
 #bottom_app_bar {
-    background: white;
-    color: colors.$text_black;
+    background: var(--white);
+    color: var(--text-black);
     position: absolute;
     left: 0px;
     margin-top: 26rem;
@@ -32,7 +32,7 @@
     }
 
     .paragraph {
-        color: gray;
+        color: var(--gray);;
 
         a {
             color: rgb(29, 29, 29);
@@ -41,8 +41,8 @@
 
     .github-button {
         border-radius: 1rem;
-        background-color: black;
-        color: white;
+        background-color: var(--text-black);
+        color: var(--white);
         font-weight: bold;
         padding: 0.3rem 0.6rem;
     }
@@ -67,7 +67,7 @@
     }
 
     a {
-        color: colors.$text_black;
+        color: var(--text-black);
     }
 
     .links {

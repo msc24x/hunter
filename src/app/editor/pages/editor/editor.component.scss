@@ -1,9 +1,9 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
 .red {
-    color: darkred;
+    color: var(--dark-red);
 }
 
 .appTextInput {
@@ -23,7 +23,7 @@
 
         .meta-section {
             @include basicBack;
-            background-color: whitesmoke;
+            background-color: var(--whitesmoke);
             border-radius: 2rem;
             height: fit-content;
             padding-bottom: 1.5rem;
@@ -169,8 +169,8 @@
     border-radius: 1rem;
     width: fit-content;
     margin: 8px;
-    color: white;
-    background-color: darkred;
+    color: var(--white);
+    background-color: var(--dark-red);
     cursor: pointer;
 }
 
@@ -212,7 +212,7 @@
 }
 
 #created_at {
-    background-color: whitesmoke;
+    background-color: var(--whitesmoke);
 
     font-size: 0.8rem;
     width: fit-content;
@@ -223,7 +223,7 @@
 
 .question-data {
     @include basicBack;
-    background-color: whitesmoke;
+    background-color: var(--whitesmoke);
     border-radius: 2rem;
     display: flex;
     flex-direction: column;
@@ -267,7 +267,7 @@
         flex-grow: 1;
         white-space: nowrap;
         width: 50%;
-        color: whitesmoke;
+        color: var(--whitesmoke);
         padding: 10px;
         text-align: center;
         background-color: #858585;
@@ -285,7 +285,7 @@
     }
 
     .public.selected {
-        background-color: crimson;
+        background-color: var(--crimson);
     }
 
     .private.selected {
@@ -318,7 +318,7 @@
 
     a {
         background-color: transparent;
-        color: colors.$text_black;
+        color: var(--text-black);
         width: fit-content;
     }
 }
@@ -343,7 +343,7 @@
     margin-inline: 6px;
     margin-block: 8px;
     margin-top: 16px;
-    color: colors.$text_black;
+    color: var(--text-black);
 }
 
 .text-area {
@@ -414,7 +414,7 @@
     @include sweetBorder;
 
     button {
-        color: colors.$text_black;
+        color: var(--text-black);
         font-size: 1rem;
         background-color: transparent;
         border-width: 0px;
@@ -430,7 +430,7 @@
     }
 
     div {
-        color: gray;
+        color: var(--gray);;
         min-width: 250px;
         text-align: center;
     }
@@ -473,8 +473,8 @@
 }
 
 label.file_input {
-    color: colors.$text_black;
-    background-color: white;
+    color: var(--text-black);
+    background-color: var(--white);
     border-radius: 1rem;
     padding: 1rem;
     cursor: pointer;
@@ -552,7 +552,7 @@ input.file_input {
     }
 
     .delete-choice {
-        color: darkred;
+        color: var(--dark-red);
     }
 }
 
@@ -562,7 +562,7 @@ input {
     padding-inline: 16px;
     border-width: 0px;
     font-size: 1.2rem;
-    color: colors.$text_black;
+    color: var(--text-black);
 
     @include sweetBorder();
 }
@@ -576,7 +576,7 @@ input {
 .info_text {
     text-align: center;
 
-    color: white;
+    color: var(--white);
     font-style: italic;
     text-decoration: underline;
     cursor: pointer;
@@ -584,15 +584,15 @@ input {
 
 #log {
     font-style: italic;
-    color: black;
+    color: var(--text-black);
 }
 
 #delete_competition_btn {
     font-size: 1rem;
     background-color: #fff0f0;
-    color: darkred;
+    color: var(--dark-red);
     width: fit-content;
-    border: 1px solid darkred;
+    border: 1px solid var(--dark-red);
     border-radius: 24px;
     padding: 8px;
     padding-inline: 16px;
@@ -642,7 +642,7 @@ input {
     a {
         padding: 0;
         margin-inline: 0.3rem;
-        color: black;
+        color: var(--text-black);
     }
 
     .solution-code-file {

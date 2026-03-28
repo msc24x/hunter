@@ -1,4 +1,4 @@
-@use "../../../../assets/mixins" as *;
+﻿@use "../../../../assets/mixins" as *;
 @use "../../../../assets/colors";
 
 #settings_label {
@@ -51,8 +51,8 @@
     padding: 1.2rem;
     font-weight: 600;
     font-size: 1.2rem;
-    background-color: colors.$cute_purple;
-    color: white;
+    background-color: var(--cute-purple);
+    color: var(--white);
     cursor: pointer;
 
     &:hover {

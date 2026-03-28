@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -15,7 +15,7 @@
         margin: 0.5rem;
         opacity: 0.8;
         cursor: pointer;
-        background-color: whitesmoke;
+        background-color: var(--whitesmoke);
         transition: transform 200ms;
 
         @include sweetBorder;
@@ -32,7 +32,7 @@
         &.selected {
             opacity: 1;
             font-weight: 500;
-            background-color: white;
+            background-color: var(--white);
             transform: translateY(-0.1rem);
         }
     }
@@ -113,8 +113,8 @@
                     margin: 0.5rem;
 
                     &.pending {
-                        border-color: darkred;
-                        color: darkred;
+                        border-color: var(--dark-red);
+                        color: var(--dark-red);
                         background: #ffe0e0;
                     }
                 }
@@ -150,7 +150,7 @@
             .points {
                 font-size: 1.4rem;
                 font-weight: 400;
-                color: colors.$cute_blue;
+                color: var(--cute-blue);
 
                 input {
                     width: 3rem;

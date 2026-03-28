@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -24,7 +24,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        background: linear-gradient(transparent 37%, colors.$text_white 80%);
+        background: linear-gradient(transparent 37%, var(--text-white) 80%);
     }
 }
 

@@ -1,4 +1,4 @@
-@use "../../../../assets/fonts";
+﻿@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -57,7 +57,7 @@
 
 .heading {
     font-weight: normal;
-    color: colors.$text_black;
+    color: var(--text-black);
 }
 
 .flex_container {
@@ -68,7 +68,7 @@
 }
 
 #join_competition {
-    background-color: whitesmoke;
+    background-color: var(--whitesmoke);
     border-radius: 12px;
     margin-top: 24px;
     flex-wrap: wrap;
@@ -87,8 +87,8 @@
 
 #competition_id_text {
     border-radius: 8px;
-    color: colors.$text_black;
-    background-color: colors.$text_white;
+    color: var(--text-black);
+    background-color: var(--text-white);
     height: 28px;
     border-width: 0px;
     width: 212px;
@@ -103,8 +103,8 @@
     margin-right: 16px;
     margin-top: 16px;
     margin: 16px;
-    background-color: colors.$text_white;
-    color: colors.$text_black;
+    background-color: var(--text-white);
+    color: var(--text-black);
     stroke-width: 0px;
     border-width: 0px;
     height: 28px;
@@ -115,8 +115,8 @@
 }
 
 #btn_submit_compt_code:hover {
-    background-color: colors.$text_black;
-    color: colors.$text_white;
+    background-color: var(--text-black);
+    color: var(--text-white);
 }
 
 .community-partner {
@@ -124,19 +124,19 @@
     justify-content: center;
     width: 16rem;
     height: 10rem;
-    background-color: white;
+    background-color: var(--white);
     border-radius: 1.5rem;
     @include sweetBorder();
     overflow: hidden;
     position: relative;
-    color: colors.$text_black;
+    color: var(--text-black);
 
     img {
         height: 100%;
     }
 
     &:hover {
-        border-color: gray;
+        border-color: var(--gray);;
     }
 
     .description {

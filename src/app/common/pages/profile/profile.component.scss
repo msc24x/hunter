@@ -96,7 +96,7 @@
             padding-inline: 0.8rem;
             margin-bottom: 0.5rem;
             border-radius: 0.8rem;
-            background-color: whitesmoke;
+            background-color: var(--whitesmoke);
 
             .comp-created-at {
                 font-size: 0.7rem;
@@ -139,7 +139,7 @@
                 }
 
                 input {
-                    background-color: whitesmoke;
+                    background-color: var(--whitesmoke);
                     border-radius: 1rem;
                     padding: 8px;
                     padding-inline: 12px;
