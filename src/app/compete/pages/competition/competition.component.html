@@ -337,7 +337,10 @@
                         "
                     ></div>
 
-                    <hr class="sweet-hr" />
+                    <hr *ngIf="
+                            this.competition.competition_sessions?.[0]
+                                ?.created_at
+                        " class="sweet-hr" />
 
                     <div
                         *ngIf="
