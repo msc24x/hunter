@@ -3,25 +3,30 @@
 @use "../../../../assets/mixins" as *;
 
 :host {
+    border-radius: 1rem;
+    @include sweetBorder;
+
     .hunter-conf {
         width: calc(100% - 42px);
-        background-color: var(--text-black);
-        border-radius: 24px 24px 0 0;
+        background-color: var(--dim-white);
+        border-radius: 1rem 1rem 0 0;
         overflow: hidden;
         height: auto;
         padding-block: 8px;
         padding-left: 42px;
+        display: flex;
+        gap: 5px;
 
         .editor-button {
             height: 1.8rem;
             padding-inline: 8px;
-            color: var(--white);
-            background-color: var(--text-black);
+            color: var(--text-black);
+            background-color: var(--dim-white);
             cursor: pointer;
         }
 
         .editor-button:hover {
-            background-color: #494949;
+            background-color: var(--whitesmoke);
         }
 
         .editor-button,
@@ -34,7 +39,7 @@
     .editor-instance {
         height: calc(65svh - 61px);
         font-size: 1rem;
-        border-radius: 0 0 24px 24px;
+        border-radius: 0 0 1rem 1rem;
 
         &.participation-page {
             height: calc(100svh - 90px - 2rem - 84px - 150px - 61px);

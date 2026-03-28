@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import * as ace from 'ace-builds';
 import { BehaviorSubject, timeout } from 'rxjs';
+import { ThemeService } from 'src/app/services/theme/theme.service';
 import { HunterLanguage, templates } from 'src/environments/environment';
 
 @Component({
@@ -34,8 +35,16 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     @Output() codeChange = new EventEmitter<string>();
     @Input() code: string = '';
 
+    constructor(private themeService: ThemeService) {
+
+    }
+
     ngOnInit(): void {
         this.initEditor();
+
+        this.themeService.theme$.subscribe(theme => {
+           this.initEditor();
+        })
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -70,7 +79,12 @@ export class CodeEditorComponent implements OnInit, OnChanges {
              * monokai
              * terminal
              */
-            this.editor.setTheme('ace/theme/twilight');
+            if (this.themeService.getTheme() === 'dark') {
+                this.editor.setTheme("ace/theme/twilight");
+            } else {
+                // this.editor.setTheme("ace/theme/monkai");
+            }
+
             this.editor.session.setMode('ace/mode/c_cpp');
             this.editor.setStyle(this.editorClass);
 

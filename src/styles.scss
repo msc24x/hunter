@@ -127,6 +127,11 @@ button.main,
     border: none;
     margin-block: 1rem;
     border-bottom: 1px dashed gainsboro;
+
+    &.up {
+        margin-bottom: 0;
+        margin-top: 2rem;
+    }
 }
 
 // =============================
@@ -168,7 +173,7 @@ button.main,
     }
 }
 
-.mat-mdc-select-placeholder  {
+.mat-mdc-select-placeholder, .mat-mdc-select-min-line  {
     color: var(--text-black) !important;
 } 
 
@@ -232,7 +237,6 @@ question-display {
 .sun-editor {
     font-family: appFont;
     width: auto !important;
-    border-radius: 1rem;
     overflow: hidden;
 
     .se-btn-module-border {
@@ -450,11 +454,11 @@ question-display {
 }
 
 .info-like {
-    color: var(--gray);;
+    color: var(--gray);
 
     b {
-        font-weight: 500;
-        color: rgb(95, 95, 95);
+        font-weight: 600;
+        color: var(--gray);
     }
 
     &.cute {

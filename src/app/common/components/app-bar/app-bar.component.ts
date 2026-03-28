@@ -13,6 +13,8 @@ import {
     faSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { ThemePalette } from '@angular/material/core';
+import { ThemeService } from 'src/app/services/theme/theme.service';
 
 @Component({
     selector: 'app-bar',
@@ -40,7 +42,7 @@ export class AppBarComponent implements OnInit {
     @Input()
     showRegisterBtn: boolean = true;
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService, private themeService: ThemeService) {
         authService.isAuthenticated.subscribe((val) => {
             this.user = this.authService.user;
             this.isAuthenticated = val;
@@ -49,6 +51,10 @@ export class AppBarComponent implements OnInit {
 
     href(link: string) {
         window.open(link, '_blank');
+    }
+
+    toggleTheme() {
+        this.themeService.toggleTheme();
     }
 
     ngOnInit(): void {

@@ -106,8 +106,8 @@
                 transition: 200ms;
                 background: linear-gradient(
                     to top,
-                    rgba(255, 255, 255, 0.98),
-                    rgba(255, 255, 255, 0.98),
+                    var(--white),
+                    var(--white),
                     rgba(255, 255, 255, 0)
                 );
                 pointer-events: none;

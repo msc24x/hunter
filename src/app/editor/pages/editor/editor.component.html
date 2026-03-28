@@ -773,7 +773,7 @@
             <manual-error [message]="errors.statement"></manual-error>
 
             <br />
-
+            <hr class="sweet-hr up">
             <h3>Evaluation</h3>
             <p class="info-like sticky" *ngIf="questionSelectedInfo.type === 3">
                 Your question type is &nbsp;
@@ -931,6 +931,7 @@
                 class="multiple-choices-panel"
                 *ngIf="questionSelectedInfo.type == 1"
             >
+                <hr class="sweet-hr up">
                 <h3>Choices</h3>
                 <p class="info-like">
                     The choices you add will be shown to the participants. You

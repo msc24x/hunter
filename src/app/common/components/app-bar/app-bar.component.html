@@ -40,6 +40,8 @@
             &nbsp;
             {{ user.name || user.email }}
         </a>
+
+        <button (click)="toggleTheme()">theme</button>
     </div>
     <div id="navBarBtn" (click)="toggleNavBar()">
         <fa-icon [icon]="exploreIcon" size="2xl"></fa-icon>
