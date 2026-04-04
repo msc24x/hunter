@@ -35,16 +35,18 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     @Output() codeChange = new EventEmitter<string>();
     @Input() code: string = '';
 
-    constructor(private themeService: ThemeService) {
-
-    }
+    constructor(private themeService: ThemeService) {}
 
     ngOnInit(): void {
         this.initEditor();
 
-        this.themeService.theme$.subscribe(theme => {
-           this.initEditor();
-        })
+        this.themeService.theme$.subscribe((theme) => {
+            if (this.themeService.getTheme() === 'dark') {
+                this.editor.setTheme('ace/theme/twilight');
+            } else {
+                this.editor.setTheme('');
+            }
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -74,15 +76,11 @@ export class CodeEditorComponent implements OnInit, OnChanges {
             this.editor = ace.edit(`editor-${this.created_at}`);
             this.editor.setReadOnly(!this.editable);
             ace.config.set('basePath', 'assets/');
-            /**
-             * twilight
-             * monokai
-             * terminal
-             */
+
             if (this.themeService.getTheme() === 'dark') {
-                this.editor.setTheme("ace/theme/twilight");
+                this.editor.setTheme('ace/theme/twilight');
             } else {
-                // this.editor.setTheme("ace/theme/monkai");
+                this.editor.setTheme('');
             }
 
             this.editor.session.setMode('ace/mode/c_cpp');

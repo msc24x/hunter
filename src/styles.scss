@@ -8,8 +8,8 @@
 html {
     overflow-y: scroll;
     font-weight: 200;
-    background-color: var(--text-white);
-    color: var(--text-black)
+    background-color: var(--body-bg);
+    color: var(--text-black);
 }
 
 // Ugly impersonation indicator
@@ -52,7 +52,7 @@ button.main,
     font-size: 1rem;
     color: var(--btn-main-fg);
     border-color: var(--btn-main-fg);
-    background-color: #e1e5ff;
+    background-color: var(--btn-bg);
     min-width: 5rem;
     border-radius: 1rem;
     padding: 0.8rem;
@@ -64,28 +64,28 @@ button.main,
     margin: 2px;
 
     &.sim {
-        border-color: #9ea4d0;
+        border-color: var(--btn-sim-border);
     }
 
     &:hover {
-        background-color: #f1f3ff;
+        background-color: var(--btn-bg-hover);
 
         &.danger {
-            background-color: #fff7f7;
+            background-color: var(--btn-danger-bg-hover);
         }
     }
 
     &:active {
         scale: 0.99;
-        background-color: #d6dcff;
+        background-color: var(--btn-bg-active);
 
         &.danger {
-            background-color: #ffe7e7;
+            background-color: var(--btn-danger-bg-active);
         }
     }
 
     &.danger {
-        background-color: #fff1f1;
+        background-color: var(--btn-danger-bg);
         color: var(--btn-danger-fg);
         border-color: var(--btn-danger-fg);
     }
@@ -173,9 +173,10 @@ button.main,
     }
 }
 
-.mat-mdc-select-placeholder, .mat-mdc-select-min-line  {
+.mat-mdc-select-placeholder,
+.mat-mdc-select-min-line {
     color: var(--text-black) !important;
-} 
+}
 
 .mat-mdc-tab-label-container {
     background-color: rgba(255, 255, 255, 0.2);
@@ -211,13 +212,17 @@ button.main,
 
     .mdc-tab--active,
     .mdc-tab--active:hover {
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: var(--white);
         border-radius: 1rem;
     }
 }
 
 .mat-mdc-tab-body-wrapper {
     padding-inline: 0.5rem;
+}
+
+.mdc-tab__text-label {
+    color: var(--text-black) !important;
 }
 
 question-display {
@@ -232,6 +237,10 @@ question-display {
             display: none;
         }
     }
+}
+
+.question-data .sun-editor {
+    border-radius: 1rem;
 }
 
 .sun-editor {
@@ -490,9 +499,9 @@ question-display {
 }
 
 .cute-panel {
-    background: #fff1ff !important;
-    border-color: #c19bc1 !important;
-    color: purple !important;
+    background: var(--cute-panel-bg) !important;
+    border-color: var(--cute-panel-border) !important;
+    color: var(--cute-panel-color) !important;
 }
 
 .glowing-thing {

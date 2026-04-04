@@ -40,11 +40,11 @@
             </div>
         </div>
         <h2>{{ community.name }}</h2>
-
+        <!-- 
         <p class="info-like">
-            The Communities feature on Hunter is in active
+            Communities on Hunter is in active
             <span class="beta-label">Beta</span>
-        </p>
+        </p> -->
         <p>{{ community.description }}</p>
 
         <p>
@@ -59,7 +59,7 @@
                 [ngClass]="{
                     'selectable':
                         selectedCommunitiesTab !== 1 &&
-                        community.admin_user_id === user?.id
+                        community.admin_user_id === user?.id,
                 }"
                 (click)="selectedCommunitiesTab = 1"
             >
@@ -125,7 +125,7 @@
             *ngIf="user?.id === community.admin_user_id"
             class="membership-requests"
         >
-            <hr class="sweet-hr up">
+            <hr class="sweet-hr up" />
             <h2>
                 Membership Requests
                 <span *ngIf="pendingRequests.length"
@@ -208,7 +208,7 @@
                         "
                         [ngClass]="{
                             'disabled no-click':
-                                mem.user_id === community.admin_user_id
+                                mem.user_id === community.admin_user_id,
                         }"
                     >
                         <div class="user-info">
@@ -229,7 +229,7 @@
                                 <mat-optgroup label="Permissions">
                                     <mat-option
                                         [value]="{
-                                            code: 'MANAGE_COMPETITIONS'
+                                            code: 'MANAGE_COMPETITIONS',
                                         }"
                                     >
                                         Manage Competitions

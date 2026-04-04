@@ -3,7 +3,7 @@
 @use "../../../../assets/mixins" as *;
 
 .drop-down-list {
-    background-color: var(--text-white);
+    background-color: var(--body-bg);
     color: var(--text-black);
     padding-inline: 8px;
     height: 1.8rem;

@@ -131,12 +131,12 @@ export class EditorComponent implements OnInit, OnDestroy {
         private datePipe: DatePipe,
         private titleService: Title,
         private snackBar: MatSnackBar,
-        private communityService: CommunitiesDataService
+        private communityService: CommunitiesDataService,
     ) {
         titleService.setTitle('Build - Hunter');
 
         this.competition_id = parseInt(
-            this.activatedRoute.snapshot.paramMap.get('competition_id') || ''
+            this.activatedRoute.snapshot.paramMap.get('competition_id') || '',
         );
 
         this.authService.isAuthenticated.subscribe((isAuth) => {
@@ -187,7 +187,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                 (err) => {
                     this.loading = false;
                     this.router.navigate(['/home']);
-                }
+                },
             );
         } else {
             this.fetchQuestions();
@@ -199,7 +199,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                 event.shiftKey &&
                 event.key == 'S' &&
                 !['INPUT', 'TEXTAREA'].includes(
-                    (event.target as HTMLElement).tagName
+                    (event.target as HTMLElement).tagName,
                 )
             ) {
                 this.saveChanges();
@@ -245,7 +245,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                     }
                 });
             },
-            { rootMargin: '-1px 0px 0px 0px', threshold: [1] }
+            { rootMargin: '-1px 0px 0px 0px', threshold: [1] },
         );
 
         iObserver.observe(document.querySelector('.questions-list')!);
@@ -269,22 +269,22 @@ export class EditorComponent implements OnInit, OnDestroy {
                 .writeText(
                     `Invitation link to "${
                         this.competitionInfo.title
-                    }": ${this.getParticipationLink()}\n\n ${linkText}`
+                    }": ${this.getParticipationLink()}\n\n ${linkText}`,
                 )
                 .then(
                     () => {
                         this.snackBar.open(
                             'Link copied to clipboard',
-                            'Dismiss'
+                            'Dismiss',
                         );
                     },
                     () => {
                         this.snackBar.open(
                             `${this.getParticipationLink()} (Unable to auto share, please copy the link)`,
                             'Dismiss',
-                            { duration: 0 }
+                            { duration: 0 },
                         );
-                    }
+                    },
                 );
         }
     }
@@ -368,11 +368,11 @@ export class EditorComponent implements OnInit, OnDestroy {
                     (error) => {
                         this.loading = false;
                         this.snackBar.open(
-                            'Some error occurred while saving question'
+                            'Some error occurred while saving question',
                         );
                         this.errors = error.error;
                         reject();
-                    }
+                    },
                 );
         });
 
@@ -397,7 +397,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
         if (backup) {
             this.questionSelectedBackup = structuredClone(
-                this.questionSelectedInfo
+                this.questionSelectedInfo,
             );
         }
 
@@ -411,7 +411,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
 
         this.titleService.setTitle(
-            `Q${index + 1} - ${this.competitionInfo.title || 'Competition'}`
+            `Q${index + 1} - ${this.competitionInfo.title || 'Competition'}`,
         );
 
         setTimeout(() => {
@@ -471,7 +471,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                 JSON.stringify(this.questionSelectedBackup)
         ) {
             const saveRequired = confirm(
-                'Save unsaved changes for the selected question?\nPress "OK" to save, or "CANCEL" to discard unsaved changed.'
+                'Save unsaved changes for the selected question?\nPress "OK" to save, or "CANCEL" to discard unsaved changed.',
             );
 
             if (saveRequired) {
@@ -481,13 +481,13 @@ export class EditorComponent implements OnInit, OnDestroy {
                     },
                     () => {
                         this._selectQuestion(currentQuestionIndex, false);
-                    }
+                    },
                 );
                 return;
             } else {
                 Object.assign(
                     this.questionSelectedInfo,
-                    this.questionSelectedBackup
+                    this.questionSelectedBackup,
                 );
             }
             this._selectQuestion(index);
@@ -530,13 +530,13 @@ export class EditorComponent implements OnInit, OnDestroy {
                 if (res.status !== 200) {
                     this.displayLog('Upload failed');
                     this.snackBar.open(
-                        `File upload failed due to some reason, please refresh and try again later.`
+                        `File upload failed due to some reason, please refresh and try again later.`,
                     );
                     return;
                 }
 
                 this.snackBar.open(
-                    `File for ${filen} uploaded successfully, now please verify the question by using 'Test your own solution'`
+                    `File for ${filen} uploaded successfully, now please verify the question by using 'Test your own solution'`,
                 );
 
                 if (this.verificationResult) {
@@ -565,7 +565,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                 this.ownedCommunities = this.userCommunities.filter(
                     (c) =>
                         c.admin_user_id === this.user.id ||
-                        canLinkCompetitions(c.members?.[0]?.permissions || [])
+                        canLinkCompetitions(c.members?.[0]?.permissions || []),
                 );
             });
     }
@@ -586,7 +586,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                             this.timeLimitEnabled = true;
                             this.timeLimit = {
                                 hours: Math.floor(
-                                    this.competitionInfo.time_limit / 60
+                                    this.competitionInfo.time_limit / 60,
                                 ),
                                 mins: this.competitionInfo.time_limit % 60,
                             };
@@ -597,7 +597,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                     this.loading = false;
 
                     this.titleService.setTitle(
-                        `Build - ${this.competitionInfo.title || 'Competition'}`
+                        `Build - ${this.competitionInfo.title || 'Competition'}`,
                     );
 
                     if (this.questionSelected !== -1) {
@@ -660,6 +660,11 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
         const date = new Date(utcString);
         const offset = date.getTimezoneOffset() * 60000;
+
+        if (!offset) {
+            return;
+        }
+
         return new Date(date.getTime() - offset).toISOString().slice(0, 16);
     }
 
@@ -669,10 +674,10 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.contest_errors = {};
 
         const schedule = document.getElementById(
-            'competition_schedule'
+            'competition_schedule',
         ) as HTMLInputElement;
         const schedule_end = document.getElementById(
-            'competition_schedule_end'
+            'competition_schedule_end',
         ) as HTMLInputElement;
 
         this.competitionInfo.scheduled_end_at = new Date(schedule_end.value);
@@ -696,12 +701,12 @@ export class EditorComponent implements OnInit, OnDestroy {
                 },
                 (error) => {
                     this.snackBar.open(
-                        'Some error occurred while saving competition info'
+                        'Some error occurred while saving competition info',
                     );
 
                     this.loading = false;
                     this.contest_errors = error.error;
-                }
+                },
             );
     }
 
@@ -754,7 +759,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         // Saving the text area content into questions statement
         // so that the user do not loose the written content
         let text_statement = document.getElementById(
-            'text_statement'
+            'text_statement',
         ) as HTMLTextAreaElement;
 
         if (text_statement)
@@ -767,7 +772,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.errors.delete_code = '';
 
         let input = document.getElementById(
-            'input_competition_code'
+            'input_competition_code',
         ) as HTMLInputElement;
         if (parseInt(input.value) != this.competitionInfo.id) {
             this.errors.delete_code = 'Code does not match';
@@ -874,10 +879,10 @@ export class EditorComponent implements OnInit, OnDestroy {
                 next: (res) => {
                     this.competitionInfo.competition_invites =
                         this.competitionInfo.competition_invites?.filter(
-                            (i) => i.id !== invite.id
+                            (i) => i.id !== invite.id,
                         );
                     this.snackBar.open(
-                        `Invitee ${invite.email} has been removed from the contest`
+                        `Invitee ${invite.email} has been removed from the contest`,
                     );
                     this.loading = false;
                     this.inviteToRemove = null;

@@ -108,8 +108,8 @@
                     border-radius: 0.6rem;
                     font-size: 0.8rem;
                     @include sweetBorder;
-                    border-color: darkgreen;
-                    color: darkgreen;
+                    border-color: var(--darkgreen);
+                    color: var(--darkgreen);
                     margin: 0.5rem;
 
                     &.pending {
@@ -134,7 +134,7 @@
                 white-space: -o-pre-wrap;
                 word-wrap: break-word;
                 overflow: auto;
-                background-color: rgb(255, 243, 226);
+                background-color: var(--text-white);
                 height: 50svh;
             }
 

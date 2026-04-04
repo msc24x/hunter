@@ -187,11 +187,11 @@
     justify-content: space-between !important;
     align-items: start;
 
-    #submit_code_btn {
-        background-color: var(--ls);
-        border-color: #dcadb6;
-        color: saddlebrown;
-    }
+    // #submit_code_btn {
+    //     background-color: var(--ls);
+    //     border-color: #dcadb6;
+    //     color: saddlebrown;
+    // }
 
     .button {
         margin-top: 0.5rem;
@@ -243,8 +243,6 @@
         font-size: 0.9rem;
         padding: 0.6rem;
         padding-inline: 0.8rem;
-
-        background-color: rgba(245, 245, 245, 0.5);
         cursor: pointer;
         transition: 300ms;
         user-select: none;
@@ -252,8 +250,6 @@
 
         &:hover {
             opacity: 1;
-
-            background-color: rgba(245, 245, 245, 1);
         }
 
         &:active {
@@ -315,7 +311,7 @@ textarea {
         color: var(--dark-red);
 
         &.acceptable {
-            color: darkgreen;
+            color: var(--darkgreen);
         }
     }
 }
@@ -421,7 +417,7 @@ textarea {
         .startup-info {
             text-align: right;
             padding-right: 1rem;
-            color: darkgreen;
+            color: var(--darkgreen);
         }
     }
     .description-toggle-content-a:hover {

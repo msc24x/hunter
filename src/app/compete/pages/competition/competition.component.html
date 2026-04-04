@@ -337,10 +337,13 @@
                         "
                     ></div>
 
-                    <hr *ngIf="
+                    <hr
+                        *ngIf="
                             this.competition.competition_sessions?.[0]
                                 ?.created_at
-                        " class="sweet-hr" />
+                        "
+                        class="sweet-hr"
+                    />
 
                     <div
                         *ngIf="
@@ -728,7 +731,7 @@
                             ? 'You have already submitted your response'
                             : 'Only submit when you\'re ready, to avoid negative marking'
                     "
-                    class="button"
+                    class="button main danger"
                     id="submit_code_btn"
                     [matTooltipPosition]="'above'"
                     (click)="postSolution()"

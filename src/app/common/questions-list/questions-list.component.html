@@ -55,7 +55,9 @@
             "
             [icon]="quesProgress.accepted ? checkIcon : crossIcon"
             [style]="
-                quesProgress.accepted ? 'color: darkgreen' : 'color: var(--dark-red)'
+                quesProgress.accepted
+                    ? 'color: var(--darkgreen)'
+                    : 'color: orangered'
             "
             class="question-progress"
             [matTooltip]="quesProgress.total + ' points'"
@@ -65,7 +67,7 @@
         <fa-icon
             *ngIf="quality?.[question.id]?.acceptable === false"
             [icon]="warningIcon"
-            [style]="'color: var(--dark-red);'"
+            [style]="'color: orangered;'"
             class="question-progress quality-indi"
             [matTooltip]="'Question has poor quality'"
             matTooltipPosition="left"
@@ -86,6 +88,7 @@
         style="min-width: 3rem; margin-left: 0.5rem"
         *ngIf="editable"
         id="create_question_btn"
+        class="button main"
         (click)="openCreateQues()"
     >
         <mat-select

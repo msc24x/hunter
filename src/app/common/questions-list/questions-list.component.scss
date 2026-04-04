@@ -46,14 +46,15 @@
         align-items: center;
         justify-content: center;
         width: 3rem;
-        background-color: rgb(255, 233, 255);
-        color: purple;
         transition: 100ms;
-        border-color: rgb(155, 73, 155);
+        margin-block: 0;
+        // background-color: rgb(255, 233, 255);
+        // color: purple;
+        // border-color: rgb(155, 73, 155);
 
-        &:hover {
-            background-color: rgb(255, 224, 255) !important;
-        }
+        // &:hover {
+        //     background-color: rgb(255, 224, 255) !important;
+        // }
 
         mat-select {
             font-weight: bold;

@@ -285,15 +285,15 @@
     }
 
     .public.selected {
-        background-color: var(--crimson);
+        background-color: var(--visibility-public-bg);
     }
 
     .private.selected {
-        background-color: rgb(32 113 186);
+        background-color: var(--visibility-private-bg);
     }
 
     .invite.selected {
-        background-color: purple;
+        background-color: var(--visibility-invite-bg);
     }
 }
 
@@ -301,8 +301,9 @@
     @include basicBack;
     background: #ff000010;
     border-color: transparent;
-    color: brown;
+    color: var(--dark-red);
     margin-top: 1rem;
+    @include sweetBorder;
 
     h3 {
         font-style: italic;
@@ -430,7 +431,7 @@
     }
 
     div {
-        color: var(--gray);;
+        color: var(--gray);
         min-width: 250px;
         text-align: center;
     }
@@ -667,4 +668,8 @@ input {
 }
 
 .marks-section {
+}
+
+.sun-editor {
+    border-radius: 1rem;
 }

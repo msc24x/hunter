@@ -1,77 +1,108 @@
 :root {
-  /* Light Theme (Default) */
-  --app-a: #3e334d;
-  --app-b: #b091d9;
-  --app-c: #725e8d;
-  --app-d: #7c6799;
-  --app-e: #5d4d73;
+    /* Light Theme (Default) */
+    --app-a: #3e334d;
+    --app-b: #b091d9;
+    --app-c: #725e8d;
+    --app-d: #7c6799;
+    --app-e: #5d4d73;
 
-  --text-white: #e9e9e9;
-  --text-black: #1f2328;
-  --purple-low: #b9b9b9;
-  --purple-high: #563e78;
-  --dim-white: #fffffff5;
-  --sweet-white: #fffef9e8;
-  --error: rgb(148, 48, 48);
-  --ls: #ffeef1;
-  --mild-red: #fff4f4;
+    --body-bg: #e9e9e9;
+    --text-white: #e9e9e9;
+    --text-black: #1f2328;
+    --purple-low: #b9b9b9;
+    --purple-high: #563e78;
+    --dim-white: #fffffff5;
+    --sweet-white: #fffef9e8;
+    --error: rgb(148, 48, 48);
+    --ls: #ffeef1;
+    --mild-red: #fff4f4;
 
+    --dark-blue: darkblue;
+    --crimson: crimson;
+    --whitesmoke: whitesmoke;
+    --popup-bg: #e9e9e9;
+    --white: white;
+    --gray: gray;
 
-  --dark-blue: darkblue;
-  --crimson: crimson;
-  --whitesmoke: whitesmoke;
-  --popup-bg: #e9e9e9;
-  --white: white;
-  --gray: gray;
+    --border-color: rgba(128, 128, 128, 0.4);
+    --btn-main-fg: #00427a;
 
-  --border-color: rgba(128, 128, 128, 0.4);
-  --btn-main-fg: #00427a;
+    --dark-red: darkred;
+    --btn-danger-fg: darkred;
+    --darkgreen: darkgreen;
 
-  --dark-red: darkred;
-  --btn-danger-fg: darkred;
+    --cute-blue: #00427a;
+    --cute-purple: #a63ca6;
 
+    --btn-bg: #e1e5ff;
+    --btn-bg-hover: #f1f3ff;
+    --btn-bg-active: #d6dcff;
+    --btn-danger-bg: #fff1f1;
+    --btn-danger-bg-hover: #fff7f7;
+    --btn-danger-bg-active: #ffe7e7;
+    --btn-sim-border: #9ea4d0;
 
-  --cute-blue: #00427a;
-  --cute-purple: #a63ca6;
+    --cute-panel-bg: #fff1ff;
+    --cute-panel-border: #c19bc1;
+    --cute-panel-color: purple;
+
+    --visibility-public-bg: crimson;
+    --visibility-private-bg: rgb(32 113 186);
+    --visibility-invite-bg: purple;
 }
 
 [data-theme="dark"] {
-  /* Deep purple-black backgrounds — brand stays purple, not : var(--gray); */
-  --app-a: #0c0910;      /* Deepest bg — near-black, purple-tinted */
-  --app-b: #9b72d8;      /* Primary accent — slightly toned vs light theme */
-  --app-c: #141019;      /* Surface — dark purple, replaces neutral zinc */
-  --app-d: #1d1727;      /* Elevated surface — step up from app-c */
-  --app-e: #2c2240;      /* Borders — visible purple-tinted edge */
+    /* Deep purple-black backgrounds — brand stays purple, not : var(--gray); */
+    --app-a: #0c0910; /* Deepest bg — near-black, purple-tinted */
+    --app-b: #9b72d8; /* Primary accent — slightly toned vs light theme */
+    --app-c: #141019; /* Surface — dark purple, replaces neutral zinc */
+    --app-d: #1d1727; /* Elevated surface — step up from app-c */
+    --app-e: #2c2240; /* Borders — visible purple-tinted edge */
 
-  --text-white: #251716; /* Warm purple-white for primary text */
-  --text-black: #fefefe; /* Muted purple-: var(--gray); for secondary text */
-  --purple-low: #6200ff; /* Muted icons — desaturated purple */
-  --purple-high: #c4a0f5;/* Links/highlights — light violet */
+    --body-bg: #232323; /* Warm purple-white for primary text */
+    --text-white: #1c1c1c; /* Warm purple-white for primary text */
+    --text-black: #fefefe; /* Muted purple-: var(--gray); for secondary text */
+    --purple-low: #6200ff; /* Muted icons — desaturated purple */
+    --purple-high: #c4a0f5; /* Links/highlights — light violet */
 
-  /* Surfaces: go dark instead of near-transparent white */
-  --dim-white: #3f302f;  /* Dark purple surface (was whitish overlay) */
-  --sweet-white: #110e1c;/* Deeper purple surface (was near-white tint) */
+    /* Surfaces: go dark instead of near-transparent white */
+    --dim-white: #303030; /* Dark purple surface (was whitish overlay) */
+    --sweet-white: #110e1c; /* Deeper purple surface (was near-white tint) */
 
-  --error: #e05252;         /* Softened red — less harsh than #ef4444 */
-  --ls: rgba(155, 114, 216, 0.18); /* Purple brand tint */
-  --mild-red: rgba(220, 80, 80, 0.12); /* Error tint bg */
+    --error: #e05252; /* Softened red — less harsh than #ef4444 */
+    --ls: rgba(155, 114, 216, 0.18); /* Purple brand tint */
+    --mild-red: rgba(220, 80, 80, 0.12); /* Error tint bg */
 
-  --dark-blue: #babafb;
-  --crimson: #f497aa;
-  --whitesmoke: #564343;
-  --popup-bg: #3f302f;
-  --white: #453131;
-  --gray: #d2d2d2;
+    --dark-blue: #babafb;
+    --crimson: #f497aa;
+    --whitesmoke: rgb(61, 61, 61);
+    --popup-bg: #303030;
+    --white: #303030;
+    --gray: #d2d2d2;
 
-  --dark-red: #fcc;
+    --dark-red: #fcc;
+    --darkgreen: rgb(28, 214, 28);
 
-  --border-color: rgba(147, 147, 147, 0.4);
-  --btn-main-fg: #0b4e8a;
-  --btn-danger-fg: darkred;
+    --border-color: rgba(147, 147, 147, 0.4);
+    --btn-main-fg: #0b4e8a;
+    --btn-danger-fg: #ff8484;
 
+    --cute-blue: #a6d5ff; /* Blue — readable on dark */
+    --cute-purple: #c49ef0; /* Light violet — consistent with purple-high */
 
+    --btn-bg: #e1e5ff;
+    --btn-bg-hover: #f1f3ff;
+    --btn-bg-active: #d6dcff;
+    --btn-danger-bg: #562929b2;
+    --btn-danger-bg-hover: #723030b2;
+    --btn-danger-bg-active: #9b5555b2;
+    --btn-sim-border: #9ea4d0;
 
-  --cute-blue: #76beff;     /* Blue — readable on dark */
-  --cute-purple: #c49ef0;   /* Light violet — consistent with purple-high */
+    --cute-panel-bg: #734b73;
+    --cute-panel-border: #c08ac0;
+    --cute-panel-color: #fff5ff;
+
+    --visibility-public-bg: #ff849d;
+    --visibility-private-bg: rgb(122, 192, 255);
+    --visibility-invite-bg: #ff80ff;
 }
-
