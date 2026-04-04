@@ -198,4 +198,33 @@ div.appBar {
             }
         }
     }
+
+    .theme-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-left: 0.5rem;
+        font-size: 0.8rem;
+        background-color: var(--text-black);
+        color: var(--text-white);
+        border-radius: 100%;
+        width: 27px;
+        height: 27px;
+
+        &:hover {
+            background-color: var(--text-black);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+
+        fa-icon {
+            font-size: 1.2rem;
+        }
+    }
 }

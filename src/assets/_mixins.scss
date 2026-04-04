@@ -29,10 +29,10 @@
     border-radius: 1rem;
     border-width: 2px;
     @include sweetBorder;
-    background: antiquewhite;
+    background: var(--yellowbg-bg);
     border-style: dashed;
-    border-color: goldenrod;
-    color: darkgoldenrod;
+    border-color: var(--yellowbg-color);
+    color: var(--yellowbg-color);
     font-size: 1.2rem;
 }
 
@@ -86,7 +86,7 @@
 @mixin inputText {
     border-radius: 1rem;
     color: var(--text-black);
-    background-color: #e4e4e4;
+    background-color: var(--input-text-bg);
     border-width: 0px;
     stroke-width: 0px;
     height: 30px;
@@ -110,7 +110,7 @@
     font-size: 1.2rem;
     padding: 16px;
     border-width: 0px;
-    border-color: var(--gray);;
+    border-color: var(--gray);
     color: var(--text-black);
     @include sweetBorder();
 }
@@ -124,16 +124,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.548);
-    box-shadow: 0 50px 9000px 900px rgba(0, 0, 0, 0.548);
-}
-
-@mixin popupBox {
-    background-color: var(--white);
-    margin-inline: auto;
-    width: fit-content;
-    height: fit-content;
-    border-radius: 10px;
-    //box-shadow: 0 0 9000px 9000px rgba(0, 0, 0, 0.295);
-    box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
+    background-color: var(--popup-overlay);
+    box-shadow: 0 50px 9000px 900px var(--popup-overlay);
 }

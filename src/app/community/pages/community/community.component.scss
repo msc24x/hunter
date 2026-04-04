@@ -53,6 +53,10 @@
         }
     }
 
+    a {
+        color: var(--crimson);
+    }
+
     .logo {
         width: 100%;
         max-width: 32rem;
@@ -116,7 +120,7 @@
         align-items: center;
 
         .since {
-            color: var(--gray);;
+            color: var(--gray);
         }
 
         .permissions {

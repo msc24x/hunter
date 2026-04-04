@@ -126,7 +126,7 @@ button.main,
     width: 100%;
     border: none;
     margin-block: 1rem;
-    border-bottom: 1px dashed gainsboro;
+    border-bottom: 1px dashed var(--border-color);
 
     &.up {
         margin-bottom: 0;

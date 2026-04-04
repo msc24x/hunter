@@ -35,13 +35,12 @@
     justify-content: center;
     align-items: center;
     font-weight: 600;
-    transition: 300ms;
+    transition: 100ms;
     @include yellowBg;
     border-width: 2px;
 
     &:hover {
         cursor: pointer;
-        background-color: rgb(255, 249, 240);
         transform: scale(1.01);
     }
 }

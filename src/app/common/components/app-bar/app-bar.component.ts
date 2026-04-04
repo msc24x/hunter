@@ -10,7 +10,9 @@ import {
     faBars,
     faCircleUser,
     faCompass,
+    faMoon,
     faSlash,
+    faSun,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { ThemePalette } from '@angular/material/core';
@@ -25,6 +27,7 @@ export class AppBarComponent implements OnInit {
     userIcon = faGithub;
     exploreIcon = faBars;
     slashIcon = faSlash;
+    themeIcon = faSun; // Default to sun icon
     loading = false;
 
     @Input()
@@ -42,10 +45,18 @@ export class AppBarComponent implements OnInit {
     @Input()
     showRegisterBtn: boolean = true;
 
-    constructor(private authService: AuthService, private themeService: ThemeService) {
+    constructor(
+        private authService: AuthService,
+        private themeService: ThemeService,
+    ) {
         authService.isAuthenticated.subscribe((val) => {
             this.user = this.authService.user;
             this.isAuthenticated = val;
+        });
+
+        // Subscribe to theme changes to update icon
+        this.themeService.theme$.subscribe((theme) => {
+            this.themeIcon = theme === 'dark' ? faMoon : faSun;
         });
     }
 
