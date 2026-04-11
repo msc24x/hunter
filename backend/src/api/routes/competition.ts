@@ -46,7 +46,7 @@ router.post('/competition', authenticate, loginRequired, (req, res) => {
         Util.sendResponse(
             res,
             resCode.badRequest,
-            'No more than 120 characters are allowed'
+            'No more than 120 characters are allowed',
         );
         return;
     }
@@ -130,7 +130,7 @@ async function validateContestInfo(comp: CompetitionInfo) {
             !community_obj ||
             (community_obj.admin_user_id !== comp.host_user_id &&
                 !community_obj.members?.[0]?.permissions.find(
-                    (p) => p.code === 'MANAGE_COMPETITIONS'
+                    (p) => p.code === 'MANAGE_COMPETITIONS',
                 ))
         ) {
             // errors.community_id = "You don't have access to this community";
@@ -210,12 +210,12 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                         Util.sendResponseJson(
                             res,
                             resCode.success,
-                            competition
+                            competition,
                         );
 
                         if (markingPublic) {
                             sendPublicContestEmail(
-                                competition as CompetitionInfo
+                                competition as CompetitionInfo,
                             );
 
                             client.competitions
@@ -321,7 +321,7 @@ router.post(
                     Util.sendResponse(
                         res,
                         resCode.forbidden,
-                        `Cannot join a Members only competition of an Inactive Community ${comp.community.name}`
+                        `Cannot join a Members only competition of an Inactive Community ${comp.community.name}`,
                     );
                     return;
                 }
@@ -334,7 +334,7 @@ router.post(
                     Util.sendResponse(
                         res,
                         resCode.forbidden,
-                        `Cannot join a Members only competition of Community ${comp.community.name}`
+                        `Cannot join a Members only competition of Community ${comp.community.name}`,
                     );
                     return;
                 }
@@ -359,7 +359,7 @@ router.post(
                 console.log(err);
                 Util.sendResponse(res, resCode.serverError, err);
             });
-    }
+    },
 );
 
 // Fetch a contest
@@ -543,7 +543,7 @@ router.get(
 
                         if (question.question_choices.length < 2) {
                             questionWarnings.question_choices.push(
-                                'Question do no have enough (at least 2 required) number of choices to choose from.'
+                                'Question do no have enough (at least 2 required) number of choices to choose from.',
                             );
                         }
 
@@ -552,17 +552,17 @@ router.get(
                             question.question_choices.every((q) => q.is_correct)
                         ) {
                             questionWarnings.question_choices.push(
-                                'All choices in the question have been marked as correct, which is un-acceptable.'
+                                'All choices in the question have been marked as correct, which is un-acceptable.',
                             );
                         }
 
                         if (
                             question.question_choices.every(
-                                (q) => !q.is_correct
+                                (q) => !q.is_correct,
                             )
                         ) {
                             questionWarnings.question_choices.push(
-                                'There is no choice in the question that is marked as correct, which makes the question unsolvable.'
+                                'There is no choice in the question that is marked as correct, which makes the question unsolvable.',
                             );
                         }
                     }
@@ -572,7 +572,7 @@ router.get(
 
                         if (!question.question_choices.length) {
                             questionWarnings.question_choices.push(
-                                'Question do not have any possible answer, which makes the question un-solvable.'
+                                'Question do not have any possible answer, which makes the question un-solvable.',
                             );
                         }
                     }
@@ -594,7 +594,7 @@ router.get(
                 Util.sendResponse(res, resCode.notFound, err);
                 return;
             });
-    }
+    },
 );
 
 // Fetch all contests
@@ -628,7 +628,7 @@ router.get('/competitions', authenticate, (req, res) => {
     }
 
     var orParams: any[] = [];
-    var andParams = [];
+    var andParams: any[] = [];
     var orderBy: any = {};
 
     if (params.query) {

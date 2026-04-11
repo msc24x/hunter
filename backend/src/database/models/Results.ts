@@ -17,7 +17,7 @@ export class Results {
             after: number;
             question_id?: number;
             batch_size?: number;
-        }
+        },
     ) {
         const questionQuery = Prisma.sql`AND q.id = ${queryParams.question_id}`;
 
@@ -102,14 +102,14 @@ export class Results {
             ],
             (err) => {
                 callback(err);
-            }
+            },
         );
     }
 
     update(
         id: string,
         result: string,
-        callback: (err: QueryError | null) => void
+        callback: (err: QueryError | null) => void,
     ) {
         let p = 0;
 
@@ -120,14 +120,14 @@ export class Results {
             [result, p, id],
             (err) => {
                 callback(err);
-            }
+            },
         );
     }
 
     getCompetitionScoresCount(
         callback: (res: any | null, err: QueryError | null) => void,
         id: string,
-        question_id?: number
+        question_id?: number,
     ) {
         var params = [id];
         var question_where;
@@ -171,13 +171,13 @@ export class Results {
     getCompetitionScores(
         callback: (
             res: { meta: any; rows: any } | null,
-            err: QueryError | null
+            err: QueryError | null,
         ) => void,
         id: string,
         user?: UserInfo,
         after?: number,
         question_id?: number,
-        batch_size?: number
+        batch_size?: number,
     ) {
         after = after || 0;
         batch_size = batch_size || 10;
@@ -211,7 +211,7 @@ export class Results {
                         var meta: any = {
                             total: parseInt(total_counts.total_count),
                             questions_attempted: parseInt(
-                                total_counts.questions_attempted
+                                total_counts.questions_attempted,
                             ),
                             user_details: null,
                         };
@@ -245,7 +245,7 @@ export class Results {
                                         meta,
                                         rows,
                                     },
-                                    err
+                                    err,
                                 );
                             })
                             .catch((err) => {
@@ -256,7 +256,7 @@ export class Results {
                             });
                     },
                     id,
-                    question_id
+                    question_id,
                 );
             })
             .catch((err) => {
@@ -269,11 +269,11 @@ export class Results {
 
     findAll(
         params: any,
-        callback: (rows: any, err: QueryError | null) => void
+        callback: (rows: any, err: QueryError | null) => void,
     ) {
         let query =
             'select results.*, users.id, users.name from results inner join users on results.user_id = users.id where true ';
-        let args = [];
+        let args: any[] = [];
 
         if (params.user_id) {
             query += ` and user_id = ?`;

@@ -47,7 +47,7 @@ export class Competitions {
 
     static async setVisibility(
         id: number,
-        vis: 'PRIVATE' | 'PUBLIC' | 'INVITE'
+        vis: 'PRIVATE' | 'PUBLIC' | 'INVITE',
     ) {
         const client = Container.get(DatabaseProvider).client();
 
@@ -85,7 +85,7 @@ export class Competitions {
     add(
         host_user_id: number,
         title: string,
-        callback: (err: QueryError | null, rows: any) => void
+        callback: (err: QueryError | null, rows: any) => void,
     ) {
         this.dbConnection.query(
             ` insert into competitions( host_user_id, title, created_at, rating, public, scheduled_at) values( ?, ?, NOW() , 0, false, NOW() )  ;`,
@@ -96,9 +96,9 @@ export class Competitions {
                     [host_user_id],
                     (err, rows) => {
                         callback(err, rows);
-                    }
+                    },
                 );
-            }
+            },
         );
     }
 
@@ -107,7 +107,7 @@ export class Competitions {
         dateOrder: 1 | 0 | -1,
         isPublic: true | false | -1,
         callback: (competitions: Array<CompetitionInfo>) => void,
-        errCallback: (err: QueryError) => void
+        errCallback: (err: QueryError) => void,
     ) {
         let query = `select
 				competitions.*,
@@ -115,7 +115,7 @@ export class Competitions {
 				from competitions
 					inner join users on users.id = competitions.host_user_id
 				where true = true `;
-        let args = [];
+        let args: any[] = [];
 
         if (params.id) {
             query += `and competitions.id = ? `;
@@ -175,7 +175,7 @@ export class Competitions {
     }
 
     delete(params: any, callback: (err: QueryError | null) => void) {
-        let args = [];
+        let args: any[] = [];
         let query = 'delete from competitions where ';
 
         if (params.id) {
@@ -205,7 +205,7 @@ export class Competitions {
                 }
 
                 callback(null, rows);
-            }
+            },
         );
     }
 }

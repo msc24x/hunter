@@ -16,4 +16,5 @@
 	},
 	"editor.formatOnPaste": false,
 	"eslint.format.enable": true,
+	"js/ts.tsdk.path": "node_modules\\typescript\\lib",
 }

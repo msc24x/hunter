@@ -4,9 +4,13 @@ WORKDIR /home/app
 
 RUN apt-get update && apt-get install -y openssl
 
-COPY . .
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY prisma ./
 
-RUN npm install
+RUN npm install --include=dev
+
+COPY . .
 
 ARG ENV
 

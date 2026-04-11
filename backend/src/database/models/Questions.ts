@@ -15,7 +15,7 @@ export class Questions {
     }
 
     delete(params: any, callback: (err: QueryError | null) => void) {
-        let args = [];
+        let args: any[] = [];
         let query = 'delete from questions where ';
 
         if (params.id) {
@@ -36,7 +36,7 @@ export class Questions {
 
     findAll(params: any, callback: (questions: Array<QuestionInfo>) => void) {
         let query = 'select * from questions where true = true ';
-        let args = [];
+        let args: any[] = [];
 
         if (params.competition_id != null) {
             query += `and competition_id = ? `;
@@ -62,7 +62,7 @@ export class Questions {
     add(
         competition_id: number,
         callback: (question_id: number) => void,
-        errCallback: (err: QueryError | null) => void
+        errCallback: (err: QueryError | null) => void,
     ) {
         this.dbConnection.query(
             ` insert into questions (competition_id, date_created) values(?, NOW()) ; `,
@@ -84,9 +84,9 @@ export class Questions {
                         }
 
                         callback(questions[0].id);
-                    }
+                    },
                 );
-            }
+            },
         );
     }
 

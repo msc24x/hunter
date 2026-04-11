@@ -55,13 +55,13 @@ router.get(
                 Util.sendResponseJson(
                     res,
                     resCode.success,
-                    question_verification
+                    question_verification,
                 );
             })
             .catch((err) => {
                 Util.sendResponse(res, resCode.serverError, err);
             });
-    }
+    },
 );
 
 router.post(
@@ -115,7 +115,7 @@ router.post(
                     Util.sendResponse(
                         res,
                         resCode.badRequest,
-                        'Test solution file must exist for this question.'
+                        'Test solution file must exist for this question.',
                     );
                     return;
                 }
@@ -151,7 +151,7 @@ router.post(
                                 Util.sendResponseJson(
                                     res,
                                     resCode.success,
-                                    verification
+                                    verification,
                                 );
                                 return;
                             })
@@ -159,7 +159,7 @@ router.post(
                                 Util.sendResponse(
                                     res,
                                     resCode.serverError,
-                                    err
+                                    err,
                                 );
                                 return;
                             });
@@ -175,7 +175,7 @@ router.post(
                     return;
                 }
             });
-    }
+    },
 );
 
 router.get(
@@ -215,7 +215,7 @@ router.get(
                 const fileName = Util.getAbsoluteFilePath(
                     comp_id,
                     ques_id,
-                    fileType
+                    fileType,
                 );
 
                 if (req.params.op == 'download') {
@@ -224,12 +224,12 @@ router.get(
 
                         res.setHeader(
                             'Content-Disposition',
-                            `attachment; filename="${basename}"`
+                            `attachment; filename="${basename}"`,
                         );
 
                         res.setHeader(
                             'Content-Type',
-                            'application/octet-stream'
+                            'application/octet-stream',
                         );
 
                         res.sendFile(fileName, (err) => {
@@ -249,7 +249,7 @@ router.get(
                 }
             })
             .catch((err) => Util.sendResponse(res, resCode.badRequest, err));
-    }
+    },
 );
 
 router.post(
@@ -300,7 +300,7 @@ router.post(
                 const fileName = Util.getAbsoluteFilePath(
                     comp_id,
                     ques_id,
-                    fileType
+                    fileType,
                 );
 
                 writeFile(fileName, file.data, { flag: 'w' }, (err) => {
@@ -329,7 +329,7 @@ router.post(
                 });
             })
             .catch((err) => Util.sendResponse(res, resCode.badRequest, err));
-    }
+    },
 );
 
 router.delete(
@@ -364,7 +364,7 @@ router.delete(
                 Util.sendResponse(res, resCode.success);
             })
             .catch((err) => Util.sendResponse(res, resCode.badRequest, err));
-    }
+    },
 );
 
 router.post(
@@ -381,7 +381,7 @@ router.post(
             Util.sendResponse(
                 res,
                 resCode.badRequest,
-                'Question type not supported'
+                'Question type not supported',
             );
             return;
         }
@@ -406,14 +406,14 @@ router.post(
                         },
                     })
                     .then((question) =>
-                        Util.sendResponseJson(res, resCode.success, question)
+                        Util.sendResponseJson(res, resCode.success, question),
                     )
                     .catch((err) =>
-                        Util.sendResponse(res, resCode.serverError, err)
+                        Util.sendResponse(res, resCode.serverError, err),
                     );
             })
             .catch((err) => Util.sendResponse(res, resCode.serverError, err));
-    }
+    },
 );
 
 function validateQuestionInfo(data: QuestionInfo) {
@@ -460,7 +460,7 @@ function validateQuestionInfo(data: QuestionInfo) {
 
     if (
         [config.questionTypes.fill, config.questionTypes.mcq].includes(
-            data.type
+            data.type,
         )
     ) {
         data.question_choices?.forEach((ch) => {
@@ -545,7 +545,7 @@ router.put(
 
         if (
             ![config.questionTypes.mcq, config.questionTypes.fill].includes(
-                params.type
+                params.type,
             )
         ) {
             resolvePromisesAndSendRes();
@@ -553,14 +553,14 @@ router.put(
         }
 
         var choicesToCreate = params.question_choices?.filter(
-            (val) => (!val.id || val.id < 0) && !val.delete
+            (val) => (!val.id || val.id < 0) && !val.delete,
         );
 
         var choicesToUpdate = params.question_choices?.filter(
-            (val) => val.id && val.id > 0 && !val.delete
+            (val) => val.id && val.id > 0 && !val.delete,
         );
         var choicesToDelete = params.question_choices?.filter(
-            (val) => val.id && val.id > 0 && val.delete
+            (val) => val.id && val.id > 0 && val.delete,
         );
 
         if (choicesToCreate) {
@@ -572,7 +572,7 @@ router.put(
             promises.push(
                 client.question_choice.createMany({
                     data: choicesToCreate,
-                })
+                }),
             );
         }
 
@@ -593,7 +593,7 @@ router.put(
                             },
                             id: choiceToUpdate.id,
                         },
-                    })
+                    }),
                 );
             });
         }
@@ -612,13 +612,13 @@ router.put(
                             id: params.id,
                         },
                     },
-                })
+                }),
             );
         }
 
         resolvePromisesAndSendRes();
         return;
-    }
+    },
 );
 
 /**
@@ -652,7 +652,8 @@ router.get(
     authenticate,
     (req, res) => {
         const competition_id: number = parseInt(req.params.comp_id);
-        const ques_id: number | '' = req.params.id && parseInt(req.params.id);
+        const ques_id: number | null =
+            (req.params.id && parseInt(req.params.id)) || null;
         const user: UserInfo | null = res.locals.user;
         const is_editor = req.headers.referer?.includes('/editor/');
 
@@ -671,7 +672,7 @@ router.get(
                     questions: {
                         where: {
                             deleted_at: null,
-                            ...(ques_id !== '' && { id: ques_id }),
+                            ...(ques_id && { id: ques_id }),
                         },
                         include: {
                             question_choices: true,
@@ -774,7 +775,7 @@ router.get(
                             ques.question_choices = [];
 
                             return ques;
-                        }
+                        },
                     );
                 }
 
@@ -801,7 +802,7 @@ router.get(
             .catch((err) => {
                 Util.sendResponse(res, resCode.serverError, err);
             });
-    }
+    },
 );
 
 module.exports = router;

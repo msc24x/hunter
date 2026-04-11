@@ -37,7 +37,7 @@ export class User {
     }
 
     delete(params: any, callback: (err: QueryError | null) => void) {
-        let args = [];
+        let args: any[] = [];
         let query = 'delete from users where ';
 
         if (params.id) {
@@ -58,23 +58,23 @@ export class User {
 
     update(
         newUserInfo: UserInfo,
-        callback: (err: mysql.QueryError | null) => void
+        callback: (err: mysql.QueryError | null) => void,
     ) {
         this.dbConnection.query(
             ` update users set name = ? where id = ? ; `,
             [newUserInfo.name, newUserInfo.id],
             (err) => {
                 callback(err);
-            }
+            },
         );
     }
 
     findAll(
         params: any,
-        callback: (err: QueryError | null, rows: any) => void
+        callback: (err: QueryError | null, rows: any) => void,
     ) {
         let query = 'select id, email, name from users where true';
-        let args = [];
+        let args: any[] = [];
 
         if (params.id) {
             query += ` and users.id = ?`;
@@ -106,7 +106,7 @@ export class User {
                 }
 
                 callback(null, rows);
-            }
+            },
         );
     }
 }
