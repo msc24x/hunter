@@ -42,9 +42,9 @@ export class CodeEditorComponent implements OnInit, OnChanges {
 
         this.themeService.theme$.subscribe((theme) => {
             if (this.themeService.getTheme() === 'dark') {
-                this.editor.setTheme('ace/theme/twilight');
+                this.editor?.setTheme('ace/theme/twilight');
             } else {
-                this.editor.setTheme('');
+                this.editor?.setTheme('');
             }
         });
     }

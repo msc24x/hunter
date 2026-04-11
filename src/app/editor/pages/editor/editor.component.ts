@@ -596,6 +596,11 @@ export class EditorComponent implements OnInit, OnDestroy {
                     this.competitionInfo.questions = res.body.questions;
                     this.loading = false;
 
+                    if (this.competitionInfo.host_user_id !== this.user.id) {
+                        this.router.navigate(['/editor/workbench']);
+                        return;
+                    }
+
                     this.titleService.setTitle(
                         `Build - ${this.competitionInfo.title || 'Competition'}`,
                     );
