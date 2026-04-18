@@ -52,7 +52,7 @@
 .bottom-section {
     @include basicBack;
     @include hideSrollbar;
-    z-index: 50;
+    z-index: 990;
     border-radius: 1.5rem;
     position: fixed;
     top: 96%;

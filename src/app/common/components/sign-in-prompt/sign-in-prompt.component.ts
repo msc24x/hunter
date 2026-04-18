@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -7,6 +7,9 @@ import { environment } from 'src/environments/environment';
     styleUrls: ['./sign-in-prompt.component.scss'],
 })
 export class SignInPromptComponent {
+    @Input()
+    minimal = false;
+
     getStarted() {
         window.open(`${environment.apiUrl}/oauth/github`);
     }

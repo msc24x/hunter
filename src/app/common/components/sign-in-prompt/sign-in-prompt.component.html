@@ -1,5 +1,4 @@
-<div class="sign-in-section">
-    <div class="text">Lets get you started with Hunter</div>
+<ng-template #getstarted>
     <div
         id="getstarted"
         [ngClass]="{ 'app-line': true }"
@@ -13,4 +12,11 @@
         />
         <span>Sign In with GitHub</span>
     </div>
+</ng-template>
+
+<div class="sign-in-section" *ngIf="!minimal">
+    <div class="text">Lets get you started with Hunter</div>
+    <ng-outlet [ngTemplateOutlet]="getstarted" />
 </div>
+
+<ng-outlet *ngIf="minimal" [ngTemplateOutlet]="getstarted"></ng-outlet>

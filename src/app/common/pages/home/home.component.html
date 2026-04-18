@@ -33,7 +33,7 @@
             *ngIf="!isAuthenticated"
             [ngClass]="{ 'vanish': isAuthenticated }"
         >
-            <sign-in-prompt></sign-in-prompt>
+            <sign-in-prompt [minimal]="true"></sign-in-prompt>
         </div>
     </div>
 </div>

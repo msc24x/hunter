@@ -11,6 +11,11 @@ div.appBar {
     justify-items: center;
     align-items: center;
     margin-bottom: 2rem;
+    // position: sticky;
+    // top: 0;
+    // background-color: var(--body-bg);
+    // border-bottom: 1px dashed var(--border-color);
+    // z-index: 990;
 
     #logout_btn {
         background-color: var(--mild-red);
