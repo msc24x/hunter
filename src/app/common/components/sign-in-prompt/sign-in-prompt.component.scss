@@ -5,7 +5,7 @@
 .sign-in-section {
     display: flex;
     justify-content: center;
-    max-width: 42rem;
+    max-width: 43rem;
     margin-inline: auto;
     align-items: end;
     padding: 2rem;
@@ -15,7 +15,6 @@
     flex-wrap: wrap;
     overflow: hidden;
     border-radius: 2rem;
-    margin-bottom: 8rem;
     background: linear-gradient(
         120deg,
         rgba(0, 0, 0, 0.8) 10%,
@@ -27,7 +26,7 @@
     .text {
         font-weight: bold;
         font-size: 1.5rem;
-        color: var(--white);
+        color: white;
         text-align: center;
     }
 
@@ -43,6 +42,8 @@
 
 #getstarted {
     @include basicBack;
+    background-color: white;
+    color: black;
     display: flex;
     justify-content: space-around;
     align-items: center;

@@ -101,15 +101,16 @@
     --darkgreen: rgb(28, 214, 28);
 
     --border-color: rgba(147, 147, 147, 0.4);
-    --btn-main-fg: #0b4e8a;
-    --btn-danger-fg: #ff8484;
+    --btn-danger-fg: #ffd0d0;
 
     --cute-blue: #a6d5ff; /* Blue — readable on dark */
     --cute-purple: #c49ef0; /* Light violet — consistent with purple-high */
 
-    --btn-bg: #e1e5ff;
-    --btn-bg-hover: #f1f3ff;
-    --btn-bg-active: #d6dcff;
+    --btn-main-fg: #e1e5ff;
+    --btn-bg: #0d2c49;
+
+    --btn-bg-hover: #113556;
+    --btn-bg-active: #113556;
     --btn-danger-bg: #562929b2;
     --btn-danger-bg-hover: #723030b2;
     --btn-danger-bg-active: #9b5555b2;
@@ -125,10 +126,10 @@
 
     --yellowbg-bg: rgb(71, 55, 35);
     --yellowbg-border: goldenrod;
-    --yellowbg-color: #ffc842;
+    --yellowbg-color: #f4d27f;
 
     --home-section-gradient: rgba(255, 174, 174, 0.11);
-    --home-heading-dark: #ffd2d2;
+    --home-heading-dark: #fff;
     --home-text-muted: #979797;
     --home-stat-text: #cbafaf;
     --home-tagline-muted: rgb(158, 158, 158);

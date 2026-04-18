@@ -43,7 +43,7 @@
 
 .direct-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
     gap: 1rem;
     flex-wrap: wrap;
@@ -52,11 +52,12 @@
         font-size: 1.4rem;
         padding: 2rem;
         border-radius: 2rem;
+        font-weight: 600;
     }
 }
 
 .section-container {
-    border-radius: 4rem;
+    border-radius: 5rem;
     background: linear-gradient(
         180deg,
         var(--home-section-gradient),
@@ -223,7 +224,6 @@
 
     #tagline {
         font-size: 2.5rem !important;
-        margin-top: 4rem !important;
     }
 
     .helperline {
@@ -231,15 +231,143 @@
     }
 }
 
+@keyframes gradientShift {
+    0% {
+        background-position:
+            0% 0%,
+            100% 0%,
+            50% 100%;
+        filter: hue-rotate(0deg);
+    }
+    12% {
+        background-position:
+            35% 25%,
+            60% 40%,
+            75% 70%;
+    }
+    25% {
+        background-position:
+            50% 20%,
+            30% 80%,
+            80% 50%;
+        filter: hue-rotate(5deg);
+    }
+    37% {
+        background-position:
+            70% 35%,
+            20% 60%,
+            45% 15%;
+    }
+    50% {
+        background-position:
+            100% 50%,
+            0% 50%,
+            50% 0%;
+        filter: hue-rotate(0deg);
+    }
+    62% {
+        background-position:
+            65% 65%,
+            75% 25%,
+            15% 75%;
+    }
+    75% {
+        background-position:
+            30% 80%,
+            70% 20%,
+            20% 60%;
+        filter: hue-rotate(5deg);
+    }
+    87% {
+        background-position:
+            15% 45%,
+            85% 65%,
+            55% 25%;
+    }
+    100% {
+        background-position:
+            0% 0%,
+            100% 0%,
+            50% 100%;
+        filter: hue-rotate(0deg);
+    }
+}
+
 #tagline {
-    margin-top: 7rem;
     font-size: 5rem;
+    background-color: #ffec99;
+    background-image:
+        radial-gradient(
+            circle at 28% 100%,
+            hsl(217, 100%, 67%) 0px,
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 81% 12%,
+            hsl(0, 100%, 59%) 0px,
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 84% 87%,
+            hsl(33, 100%, 50%) 0px,
+            transparent 50%
+        );
+    background-size:
+        200% 200%,
+        200% 200%,
+        200% 200%;
+    background-position:
+        0% 0%,
+        100% 0%,
+        50% 100%;
+    padding-block: 7rem;
+    padding-bottom: 4rem;
+    border-radius: 5rem;
+    padding-inline: 4rem;
+    color: black;
+    text-align: start;
+    margin-bottom: 5rem;
+    animation: gradientShift 9s linear infinite;
+}
+
+.sign-in {
+    display: flex;
+    justify-content: end;
 }
 
 #tagline_small {
-    color: var(--home-tagline-muted);
+    color: black;
     margin-top: 16px;
-    margin-bottom: 120px;
+    margin-bottom: 5rem;
     font-size: 1rem;
     font-weight: 400;
+    text-align: start;
+}
+
+@media (max-width: 456px) {
+    #tagline {
+        padding-block: 3rem;
+        font-size: 2rem !important;
+        padding-inline: 2rem;
+        border-radius: 3rem;
+        padding-bottom: 2rem;
+    }
+
+    #tagline_small {
+        margin-bottom: 3rem;
+    }
+
+    .helperline {
+        font-size: 1.2rem !important;
+    }
+
+    .direct-buttons {
+        justify-content: center;
+
+        button {
+            font-size: 1.1rem !important;
+            width: 100%;
+            text-wrap: nowrap;
+        }
+    }
 }

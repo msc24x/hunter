@@ -47,12 +47,13 @@ export class QuestionDisplayComponent implements OnChanges, OnDestroy {
                         },
                     },
                     hideToolbar: true,
-                    defaultStyle: 'font-family: appFont; font-size: 1.1rem; background: var(--white); color: var(--text-black);',
-                }
+                    defaultStyle:
+                        'font-family: appFont; font-size: 1.1rem; background: var(--white); color: var(--text-black);',
+                },
             );
             this.suneditor.readOnly(true);
             this.suneditor.setContents(
-                this.getQuestionStatement(this.questionInfo.statement)
+                this.getQuestionStatement(this.questionInfo.statement),
             );
         });
     }

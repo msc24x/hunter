@@ -4,39 +4,27 @@
 
 .survey-banner {
     margin-bottom: 20px;
+    color: var(--text-black);
 
     .survey-content {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-        background: linear-gradient(135deg, #f8f9ff, #eef2ff);
-        border: 1px solid #e0e7ff;
         border-radius: 2rem;
         padding: 18px 22px;
-    }
-
-    .survey-badge {
-        display: inline-block;
-        background: #6366f1;
-        color: #fff;
-        font-size: 12px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        margin-bottom: 6px;
+        @include blackBack;
     }
 
     h3 {
         margin: 6px 0 4px;
         font-size: 18px;
         font-weight: 600;
-        color: #1f2933;
     }
 
     p {
         margin: 0;
         font-size: 14px;
-        color: #4b5563;
     }
 }
 
@@ -136,7 +124,7 @@
     }
 
     &:hover {
-        border-color: var(--gray);;
+        border-color: var(--gray);
     }
 
     .description {

@@ -1,20 +1,40 @@
 <app-bar></app-bar>
 
-<div id="tagline" class="app-line">
-    <div>Effortless Hosting <br />For Contests & Interviews<br /></div>
+<div class="tagline-wrap">
+    <div id="tagline" class="app-line">
+        <div>Effortless Hosting <br />For Contests & Interviews<br /></div>
 
-    <div class="illu-con">
-        <div class="illu-overlay"></div>
-        <img
-            src="../../../../assets/illu.svg"
-            class="product-illu"
-            alt="Product illustration"
-        />
-    </div>
+        <!-- <div class="illu-con">
+            <div class="illu-overlay"></div>
+            <img
+                src="../../../../assets/illu.svg"
+                class="product-illu"
+                alt="Product illustration"
+            />
+        </div> -->
 
-    <div class="helperline">
-        <fa-icon [icon]="homeIcon"></fa-icon>
-        Complexity, simplified!
+        <div id="tagline_small" class="app-line inview_slide">
+            <span class="">Open source</span> platform for you to host your own
+            customized academic competitions.
+            <span class="">Build, Judge or Participate</span>, all under one
+            roof.
+        </div>
+
+        <div class="helperline">
+            <fa-icon [icon]="homeIcon"></fa-icon>
+            Complexity, simplified!
+        </div>
+        <br />
+
+        <ng-outlet [ngTemplateOutlet]="home_buttons"></ng-outlet>
+
+        <div
+            class="sign-in"
+            *ngIf="!isAuthenticated"
+            [ngClass]="{ 'vanish': isAuthenticated }"
+        >
+            <sign-in-prompt></sign-in-prompt>
+        </div>
     </div>
 </div>
 
@@ -27,26 +47,7 @@
             Create your own contest
         </button>
     </div>
-    <br />
-    <br />
 </ng-template>
-
-<div id="tagline_small" class="app-line inview_slide">
-    <span class="">Open source</span> platform for you to host your own
-    customized academic competitions.
-    <span class="">Build, Judge or Participate</span>, all under one roof.
-</div>
-
-<ng-outlet [ngTemplateOutlet]="home_buttons"></ng-outlet>
-
-<div *ngIf="!isAuthenticated" [ngClass]="{ 'vanish': isAuthenticated }">
-    <br />
-
-    <sign-in-prompt></sign-in-prompt>
-</div>
-
-<br />
-<br />
 
 <div class="section-container">
     <section class="stats-section">
@@ -170,5 +171,5 @@
     <br />
     <br />
 
-    <ng-outlet [ngTemplateOutlet]="home_buttons"></ng-outlet>
+    <!-- <ng-outlet [ngTemplateOutlet]="home_buttons"></ng-outlet> -->
 </div>
