@@ -295,36 +295,36 @@
 
 #tagline {
     font-size: 5rem;
-    background-color: #ffec9999;
-    background-image:
-        radial-gradient(
-            circle at 28% 100%,
-            hsl(0, 100%, 69%) 0px,
-            transparent 50%
-        ),
-        radial-gradient(
-            circle at 81% 12%,
-            hsl(0, 100%, 59%) 0px,
-            transparent 50%
-        ),
-        radial-gradient(
-            circle at 84% 87%,
-            hsl(33, 100%, 50%) 0px,
-            transparent 50%
-        );
-    background-size:
-        200% 200%,
-        200% 200%,
-        200% 200%;
-    background-position:
-        0% 0%,
-        100% 0%,
-        50% 100%;
+    // background-color: #ffec9999;
+    // background-image:
+    //     radial-gradient(
+    //         circle at 28% 100%,
+    //         hsl(0, 100%, 69%) 0px,
+    //         transparent 50%
+    //     ),
+    //     radial-gradient(
+    //         circle at 81% 12%,
+    //         hsl(0, 100%, 59%) 0px,
+    //         transparent 50%
+    //     ),
+    //     radial-gradient(
+    //         circle at 84% 87%,
+    //         hsl(33, 100%, 50%) 0px,
+    //         transparent 50%
+    //     );
+    // background-size:
+    //     200% 200%,
+    //     200% 200%,
+    //     200% 200%;
+    // background-position:
+    //     0% 0%,
+    //     100% 0%,
+    //     50% 100%;
     padding-block: 7rem;
     padding-bottom: 4rem;
     border-radius: 5rem;
     padding-inline: 4rem;
-    color: black;
+    color: var(--text-black);
     text-align: start;
     margin-bottom: 5rem;
     animation: gradientShift 9s linear infinite;
@@ -336,7 +336,7 @@
 }
 
 #tagline_small {
-    color: black;
+    color: var(--text-black);
     margin-top: 16px;
     margin-bottom: 5rem;
     font-size: 1rem;

@@ -12,6 +12,7 @@ import {
     faCompass,
     faMoon,
     faPlus,
+    faPlusCircle,
     faSlash,
     faSun,
 } from '@fortawesome/free-solid-svg-icons';
@@ -28,7 +29,7 @@ export class AppBarComponent implements OnInit {
     userIcon = faGithub;
     exploreIcon = faBars;
     slashIcon = faSlash;
-    plusIcon = faPlus;
+    plusIcon = faPlusCircle;
     themeIcon = faSun; // Default to sun icon
     loading = false;
 
