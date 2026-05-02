@@ -80,7 +80,7 @@
                 margin-bottom: 0.5rem;
 
                 &:hover {
-                    background-color: rgb(255, 253, 248);
+                    border-color: var(--text-black);
                 }
 
                 &:active {
@@ -88,7 +88,7 @@
                 }
 
                 &.selected {
-                    background-color: rgb(255, 251, 242);
+                    border-color: var(--text-black);
                     transform: translateX(0.25rem);
                 }
 
@@ -103,19 +103,19 @@
 
                 .status {
                     width: fit-content;
-                    background-color: #e9ffe0;
                     padding: 0.35rem;
                     border-radius: 0.6rem;
                     font-size: 0.8rem;
                     @include sweetBorder;
-                    border-color: var(--darkgreen);
-                    color: var(--darkgreen);
                     margin: 0.5rem;
+                    color: var(--dark-blue);
+                    background: var(--hollow-blue);
+                    border-color: var(--dark-blue);
 
                     &.pending {
-                        border-color: var(--dark-red);
-                        color: var(--dark-red);
-                        background: #ffe0e0;
+                        color: var(--crimson);
+                        border-color: var(--crimson);
+                        background-color: var(--ls);
                     }
                 }
             }

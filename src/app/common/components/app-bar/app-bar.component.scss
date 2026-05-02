@@ -139,7 +139,7 @@ div.appBar {
             list-style: none;
             backdrop-filter: blur(16px);
             border-radius: 16px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: var(--white);
             box-shadow: 0 0 100px 0px rgba(0, 0, 0, 0.2);
             @include sweetBorder;
 
@@ -155,6 +155,10 @@ div.appBar {
                 border: solid transparent;
                 border-width: 1px;
                 cursor: pointer;
+                display: flex;
+                justify-content: start;
+                align-items: center;
+                gap: 5px;
 
                 &#logout_btn {
                     background-color: initial;
