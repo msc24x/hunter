@@ -4,6 +4,7 @@
 
 :host {
     border-radius: 1rem;
+    display: block;
     @include sweetBorder;
 
     .hunter-conf {

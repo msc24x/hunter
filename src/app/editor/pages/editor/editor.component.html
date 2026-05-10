@@ -130,8 +130,15 @@
     (closeEvent)="handleGuidePopupEvent($event)"
     [showControls]="false"
 >
+    <h3>Watch The Video Tutorial</h3>
+    <hr class="sweet-hr" />
+    <p>
+        <a href="https://www.youtube.com/watch?v=VnhEtH8oq2Y" target="_blank"
+            >YouTube Video</a
+        >
+    </p>
     <h3>Meta section</h3>
-    <hr />
+    <hr class="sweet-hr" />
     <h5>Submissions open at</h5>
     <p>
         Set this as date time at which you would wish your contest to be public,
@@ -151,14 +158,14 @@
     </p>
 
     <h3>Competition Data</h3>
-    <hr />
+    <hr class="sweet-hr" />
     <p>
         You can write competition title and description. These will remain
         public even if submissions are not open or have been closed.
     </p>
 
     <h3>Questions Data</h3>
-    <hr />
+    <hr class="sweet-hr" />
     <h5>Adding a new question</h5>
     <p>
         Use the "Add" button to create a new question. You can created 4 types
@@ -213,7 +220,7 @@
     >
 
     <h3>Saving</h3>
-    <hr />
+    <hr class="sweet-hr" />
     <p>
         Ensure you save your changes by clicking the "SAVE CHANGES" button in
         the bottom bar. You can also use the keyboard shortcut Shift + S.
@@ -773,7 +780,7 @@
             <manual-error [message]="errors.statement"></manual-error>
 
             <br />
-            <hr class="sweet-hr up">
+            <hr class="sweet-hr up" />
             <h3>Evaluation</h3>
             <p class="info-like sticky" *ngIf="questionSelectedInfo.type === 3">
                 Your question type is &nbsp;
@@ -931,7 +938,7 @@
                 class="multiple-choices-panel"
                 *ngIf="questionSelectedInfo.type == 1"
             >
-                <hr class="sweet-hr up">
+                <hr class="sweet-hr up" />
                 <h3>Choices</h3>
                 <p class="info-like">
                     The choices you add will be shown to the participants. You
