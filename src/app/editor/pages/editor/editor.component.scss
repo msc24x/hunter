@@ -407,7 +407,7 @@
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    background-color: rgba(193, 193, 193, 0.501);
+    background-color: var(--controls-bg);
     backdrop-filter: blur(0.5rem);
     padding-block: 8px;
     z-index: 110;

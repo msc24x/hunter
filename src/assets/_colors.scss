@@ -66,6 +66,7 @@
 
     --hollow-blue: #0000ff13;
     --illu-filter: "";
+    --controls-bg: rgba(193, 193, 193, 0.501);
 }
 
 [data-theme="dark"] {
@@ -77,7 +78,7 @@
     --app-e: #2c2240; /* Borders — visible purple-tinted edge */
     --home-text: rgb(111, 10, 10);
 
-    --body-bg: #232323; /* Warm purple-white for primary text */
+    --body-bg: #141414; /* Warm purple-white for primary text */
     --text-white: #1c1c1c; /* Warm purple-white for primary text */
     --text-black: #fefefe; /* Muted purple-: var(--gray); for secondary text */
     --purple-low: #6200ff; /* Muted icons — desaturated purple */
@@ -117,7 +118,7 @@
     --btn-danger-bg-active: #9b5555b2;
     --btn-sim-border: #9ea4d0;
 
-    --cute-panel-bg: #734b73;
+    --cute-panel-bg: #492a49;
     --cute-panel-border: #c08ac0;
     --cute-panel-color: #fff5ff;
 
@@ -140,4 +141,5 @@
 
     --illu-filter: invert(1);
     --hollow-blue: #0000ff13;
+    --controls-bg: rgba(42, 42, 42, 0.7);
 }
