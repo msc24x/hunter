@@ -18,7 +18,10 @@
         </div>
     </div>
 
-    <h1>{{ this.heading }}</h1>
+    <h1>
+        {{ this.heading }}
+        <span *ngIf="!loading">({{ totalCompetitions }})</span>
+    </h1>
 
     <div class="competitions-block">
         <div id="filter_controls">
@@ -73,7 +76,15 @@
 
             <li *ngIf="!loading && competitionsList !== null">
                 <br />
-                <div *ngIf="competitionsList.length" id="list_end">
+                <div
+                    *ngIf="
+                        competitionsList.length &&
+                        totalCompetitions <=
+                            (pages[pages.length - 1] || 0) +
+                                competitionsList.length
+                    "
+                    id="list_end"
+                >
                     No more competitions available!
                 </div>
                 <div *ngIf="!competitionsList.length" id="list_end">
@@ -86,5 +97,27 @@
                 <div id="list_end">Loading competitions...</div>
             </li>
         </ul>
+    </div>
+
+    <div class="next-prev-options" *ngIf="competitionsList?.length">
+        <div
+            [ngClass]="{
+                'no-click disabled': loading || pages.length === 0,
+                'option-prev': true,
+            }"
+            (click)="fetchPrevPage()"
+        >
+            View Prev
+        </div>
+        <div
+            [ngClass]="{
+                'no-click disabled':
+                    loading || competitionsList!.length < pageSize,
+                'option-next': true,
+            }"
+            (click)="fetchNextPage()"
+        >
+            View Next
+        </div>
     </div>
 </div>

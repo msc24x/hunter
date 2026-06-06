@@ -42,7 +42,7 @@ export class CompeteComponent implements OnInit {
             this.competitionsDataService
                 .getCompetitions({ title: '', dateOrder: '-1', public: true })
                 .then((res) => {
-                    this.publicCompetitions = res;
+                    this.publicCompetitions = res.data;
                     this.loading--;
                 });
 
@@ -50,7 +50,7 @@ export class CompeteComponent implements OnInit {
             this.competitionsDataService
                 .getCompetitions({ title: '', dateOrder: '-1', invited: true })
                 .then((res) => {
-                    this.invitedCompetitions = res;
+                    this.invitedCompetitions = res.data;
                     this.loading--;
                 });
 

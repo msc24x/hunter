@@ -118,7 +118,7 @@ export class EditorMenuComponent implements OnInit {
                     orderBy: 'desc',
                 })
                 .then((res) => {
-                    this.userCompetitions = res;
+                    this.userCompetitions = res.data;
                     this.calculateCompetitionsMetaData();
                     this.loading -= 1;
                 });

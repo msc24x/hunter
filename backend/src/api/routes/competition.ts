@@ -618,12 +618,19 @@ router.get('/competitions', authenticate, (req, res) => {
         ],
     };
 
+    const afterParam = req.query.after?.toString();
+    const after = afterParam ? parseInt(afterParam) : 0;
+    const limit = Math.min(parseInt(req.query.limit?.toString() || '20'), 50);
+
     if (!res.locals.isAuthenticated) {
         params.selfOnly = false;
     }
 
     if (params.invited && !user) {
-        Util.sendResponseJson(res, resCode.success, []);
+        Util.sendResponseJson(res, resCode.success, {
+            data: [],
+            meta: { total: 0 },
+        });
         return;
     }
 
@@ -688,35 +695,40 @@ router.get('/competitions', authenticate, (req, res) => {
         whereClause.AND = andParams;
     }
 
-    client.competitions
-        .findMany({
-            where: whereClause,
-            orderBy: orderBy,
-            include: {
-                host_user: {
-                    select: {
-                        id: true,
-                        avatar_url: true,
-                        name: true,
-                    },
+    const findArgs: any = {
+        where: whereClause,
+        orderBy: orderBy,
+        include: {
+            host_user: {
+                select: {
+                    id: true,
+                    avatar_url: true,
+                    name: true,
                 },
-                _count: {
-                    select: {
-                        questions: {
-                            where: {
-                                deleted_at: null,
-                            },
+            },
+            _count: {
+                select: {
+                    questions: {
+                        where: {
+                            deleted_at: null,
                         },
                     },
                 },
-                community: {
-                    select: { id: true, name: true },
-                    where: {
-                        status: 'APPROVED',
-                    },
+            },
+            community: {
+                select: { id: true, name: true },
+                where: {
+                    status: 'APPROVED',
                 },
             },
-        })
+        },
+    };
+
+    findArgs.skip = after;
+    findArgs.take = limit;
+
+    client.competitions
+        .findMany(findArgs)
         .then((competitions) => {
             if (params.liveStatus === 'live') {
                 competitions = competitions.filter((comp) => {
@@ -724,7 +736,19 @@ router.get('/competitions', authenticate, (req, res) => {
                     return new Date() < comp.scheduled_end_at;
                 });
             }
-            Util.sendResponseJson(res, resCode.success, competitions);
+
+            client.competitions
+                .count({ where: whereClause })
+                .then((total) => {
+                    Util.sendResponseJson(res, resCode.success, {
+                        data: competitions,
+                        meta: { total },
+                    });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    Util.sendResponse(res, resCode.serverError, err);
+                });
         })
         .catch((err) => {
             console.error(err);

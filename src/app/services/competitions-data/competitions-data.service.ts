@@ -328,26 +328,33 @@ export class CompetitionsDataService {
             httpParams = httpParams.set('selfOnly', params.selfOnly);
         if (params?.invited)
             httpParams = httpParams.set('invited', params.invited);
+        if (params?.after !== undefined)
+            httpParams = httpParams.set('after', params.after);
+        if (params?.limit)
+            httpParams = httpParams.set('limit', params.limit);
 
-        const promise = new Promise<Array<CompetitionInfo>>(
-            (resolve, reject) => {
-                this.http
-                    .get<Array<CompetitionInfo>>(apiEndpoints.getCompetitions, {
-                        observe: 'response',
-                        responseType: 'json',
-                        withCredentials: true,
-                        params: httpParams,
-                    })
-                    .subscribe((res) => {
-                        res.body?.forEach((comp) => {
-                            this.parseCompetitionTypes(comp);
-                        });
-
-                        resolve(res.body!);
+        return new Promise<{
+            data: CompetitionInfo[];
+            meta: { total: number };
+        }>((resolve, reject) => {
+            this.http
+                .get<{
+                    data: CompetitionInfo[];
+                    meta: { total: number };
+                }>(apiEndpoints.getCompetitions, {
+                    observe: 'response',
+                    responseType: 'json',
+                    withCredentials: true,
+                    params: httpParams,
+                })
+                .subscribe((res) => {
+                    const body = res.body!;
+                    body.data?.forEach((comp) => {
+                        this.parseCompetitionTypes(comp);
                     });
-            }
-        );
-        return promise;
+                    resolve(body);
+                });
+        });
     }
 
     getCompetitionInfo(id: string) {

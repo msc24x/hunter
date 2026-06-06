@@ -18,6 +18,7 @@ import { CompetitionInfo } from 'src/environments/environment';
 })
 export class CompetitionsListComponent implements OnInit {
     loading = false;
+    pageSize = 10;
 
     @Input()
     competitionsList: Array<CompetitionInfo> | null = null;
@@ -52,6 +53,9 @@ export class CompetitionsListComponent implements OnInit {
     debounceTimeout?: NodeJS.Timeout;
     timeLeftFlag = false;
 
+    pages: Array<number> = [];
+    totalCompetitions = 0;
+
     constructor(private competitionsDataService: CompetitionsDataService) {
         setInterval(() => {
             this.timeLeftFlag = !this.timeLeftFlag;
@@ -74,7 +78,20 @@ export class CompetitionsListComponent implements OnInit {
         this.updateList();
     }
 
+    fetchPrevPage() {
+        this.pages.pop();
+        this._updateList();
+    }
+
+    fetchNextPage() {
+        const lastAfter = this.pages[this.pages.length - 1] || 0;
+        this.pages.push(lastAfter + this.pageSize);
+        this._updateList();
+    }
+
     _updateList() {
+        const after = this.pages[this.pages.length - 1];
+
         this.competitionsDataService
             .getCompetitions({
                 query: this.query,
@@ -82,15 +99,19 @@ export class CompetitionsListComponent implements OnInit {
                 orderBy: this.orderBy,
                 liveStatus: this.liveStatus,
                 community_id: this.community_id,
+                after: after,
+                limit: this.pageSize,
             })
             .then((res) => {
-                this.competitionsList = res;
+                this.competitionsList = res.data;
+                this.totalCompetitions = res.meta.total;
                 this.loading = false;
             });
     }
 
     updateList() {
         this.loading = true;
+        this.pages = [];
 
         clearTimeout(this.debounceTimeout);
         this.debounceTimeout = setTimeout(() => {

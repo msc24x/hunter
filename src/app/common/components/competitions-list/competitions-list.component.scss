@@ -63,6 +63,10 @@
     border-radius: 12px;
 }
 
+.next-prev-options {
+    @include nextPrevControls;
+}
+
 .invited-container {
     display: flex;
     gap: 1rem;
