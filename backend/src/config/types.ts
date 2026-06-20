@@ -116,6 +116,7 @@ export type CompetitionInfo = {
     time_limit: number | null;
     rating: number;
     hidden_scoreboard: boolean;
+    randomize_questions?: boolean;
     practice: boolean;
     community_id?: number;
     community_only?: boolean;

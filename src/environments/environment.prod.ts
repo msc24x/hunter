@@ -52,6 +52,7 @@ export interface CompetitionInfo {
     host_user?: UserInfo;
     title: string;
     hidden_scoreboard: boolean;
+    randomize_questions: boolean;
     visibility: 'PRIVATE' | 'PUBLIC' | 'INVITE';
     description: string;
     created_at: Date;

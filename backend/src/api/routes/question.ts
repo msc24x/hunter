@@ -21,6 +21,20 @@ import { JSDOM } from 'jsdom';
 import DOMPurify from 'dompurify';
 import { Competitions } from '../../database/models/Competitions';
 
+function seededShuffle<T>(array: T[], seed: number): T[] {
+    const shuffled = [...array];
+    let s = seed >>> 0;
+    const next = () => {
+        s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+        return s / 4294967296;
+    };
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(next() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
 const judgeService = Container.get(JudgeService);
@@ -796,6 +810,21 @@ router.get(
                         ques.question_choices = [];
                     }
                 });
+
+                // Shuffle the questions except for the host
+                if (
+                    competition.host_user_id !== user?.id &&
+                    competition.randomize_questions &&
+                    competition.competition_sessions?.[0]?.created_at
+                ) {
+                    const seed = new Date(
+                        competition.competition_sessions[0].created_at,
+                    ).getTime();
+                    competition.questions = seededShuffle(
+                        competition.questions,
+                        seed,
+                    );
+                }
 
                 Util.sendResponseJson(res, resCode.success, competition);
             })

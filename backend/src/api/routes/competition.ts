@@ -191,6 +191,8 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                                 : false,
                             hidden_scoreboard:
                                 competitionBody.hidden_scoreboard,
+                            randomize_questions:
+                                competitionBody.randomize_questions,
                             scheduled_at: competitionBody.scheduled_at
                                 ? new Date(competitionBody.scheduled_at)
                                 : null,

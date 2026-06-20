@@ -717,6 +717,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         this.lastEditorContent();
 
+        this.router.navigate(
+            ['/compete/p', this.c_id, index],
+            { replaceUrl: true },
+        );
+
         if (this.questionSelected > 0) {
             this.titleService.setTitle(
                 `Q${this.questionSelected + 1} - ${

@@ -30,6 +30,7 @@ model competitions {
   first_public_at       DateTime?    @db.DateTime(0)
   deleted_at       DateTime?   @db.DateTime(0)
   hidden_scoreboard       Boolean     @default(false)
+  randomize_questions     Boolean     @default(true)
   updated_at       DateTime    @db.DateTime(0)
   rating           Int         @default(0)
   visibility       Visibility  @default(PRIVATE)
@@ -91,7 +92,7 @@ model community_member {
   user_id      Int
   community_id Int
   status       CommunityStatus  @default(PENDING_APPROVAL)
-  created_at   DateTime   @default(now()) @db.DateTime(0)
+  created_at       DateTime    @default(now()) @db.DateTime(3)
   user         users      @relation("community_memberships", fields: [user_id], references: [id], onDelete: NoAction)
   community    community  @relation(fields: [community_id], references: [id], onDelete: Cascade)
   permissions  community_permission[]
