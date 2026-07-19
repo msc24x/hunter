@@ -833,10 +833,21 @@ export class EditorComponent implements OnInit, OnDestroy {
         const description = this.importState.prompt?.trim();
         const schemaBlock = this.schemaToPromptBlock(this.importSchema);
 
+        const compTitle = this.competitionInfo.title?.trim();
+        const compDesc = this.competitionInfo.description?.trim();
+
         return [
-            `Generate exactly ${count} contest questions.`,
-            description ? `\n${description}\n` : '',
-            `Vary the question types naturally between code (0), mcq (1), fill (2), and long (3). Do NOT default to a single type.`,
+            `=== COMPETITION ===`,
+            compTitle ? `Title: ${compTitle}` : '',
+            compDesc ? `Description: ${compDesc}` : '',
+            ``,
+            `=== QUESTION STYLE ===`,
+            description ? description : 'not available',
+            ``,
+            `===`,
+            ``,
+            `For the above competition, generate exactly ${count} contest questions.`,
+            `Vary the question types naturally between code (0), mcq (1), fill (2), and long (3). Do NOT default to a single type. UNLESS specified in Question Style.`,
             ``,
             `Positive marking defaults to ${points}, negative marking defaults to ${negPoints}. You may override per question (min 0, max 40).`,
             ``,
