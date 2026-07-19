@@ -45,5 +45,10 @@
         &.participation-page {
             height: calc(100svh - 90px - 2rem - 84px - 150px - 61px);
         }
+
+        &.json-mode {
+            border-radius: 1rem;
+            height: 16rem;
+        }
     }
 }

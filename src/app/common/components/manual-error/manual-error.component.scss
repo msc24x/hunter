@@ -2,6 +2,8 @@ p {
     font-size: 1.1rem;
     width: fit-content;
 
+    white-space: pre-line;
+
     animation-name: bounce;
     animation-duration: 1s;
     animation-iteration-count: 1;

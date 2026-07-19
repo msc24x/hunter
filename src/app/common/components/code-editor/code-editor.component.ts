@@ -35,6 +35,8 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     @Output() codeChange = new EventEmitter<string>();
     @Input() code: string = '';
 
+    @Input() json_mode: boolean = false;
+
     constructor(private themeService: ThemeService) {}
 
     ngOnInit(): void {
@@ -83,7 +85,9 @@ export class CodeEditorComponent implements OnInit, OnChanges {
                 this.editor.setTheme('');
             }
 
-            this.editor.session.setMode('ace/mode/c_cpp');
+            this.editor.session.setMode(
+                this.json_mode ? 'ace/mode/json' : 'ace/mode/c_cpp',
+            );
             this.editor.setStyle(this.editorClass);
 
             this.editor.on('change', (delta) => {
@@ -102,6 +106,11 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     }
 
     _updateEditorMode() {
+        if (this.json_mode) {
+            this.editor.session.setMode('ace/mode/json');
+            return;
+        }
+
         const modeMap: { [key in HunterLanguage]: string } = {
             c: 'ace/mode/c_cpp',
             cpp: 'ace/mode/c_cpp',

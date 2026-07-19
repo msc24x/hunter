@@ -174,6 +174,10 @@ export const apiEndpoints = {
     invites: environment.apiUrl + '/competitions/invites/{0}',
     getCompetitions: environment.apiUrl + '/competitions',
     question: environment.apiUrl + '/competitions/{0}/questions/{1}',
+    questionImport:
+        environment.apiUrl + '/competitions/{0}/questions/import',
+    questionImportSchema:
+        environment.apiUrl + '/competitions/questions/import/schema',
     deleteQuestion: environment.apiUrl + '/question/delete',
     postFile: environment.apiUrl + '/question/upload',
     submit: environment.apiUrl + '/submit',

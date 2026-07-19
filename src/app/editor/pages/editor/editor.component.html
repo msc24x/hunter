@@ -125,6 +125,125 @@
 </popup>
 
 <popup
+    heading="Import / Generate Questions (BETA)"
+    id="import_questions"
+    (closeEvent)="handleImportPopupEvent($event)"
+    [showControls]="false"
+    [destructive]="importState.delete_existing"
+    [wide]="true"
+>
+    <ol class="import-steps">
+        <li>Describe the set of questions you want.</li>
+        <li>Copy the prompt and paste it into your preferred LLM.</li>
+        <li>Paste the LLM response into the "Questions (JSON)" editor.</li>
+        <li>Press the "IMPORT" button.</li>
+    </ol>
+
+    <div class="details">
+        <div class="import-field">
+            <label for="import_prompt" class="prompt-label"
+                >Describe the style/topic of questions
+                <div
+                    class="button main copy-prompt-btn"
+                    (click)="copyImportPrompt()"
+                    matTooltip="Copy a ready-to-use prompt (with the accepted JSON schema) to paste into your own AI"
+                    matTooltipPosition="left"
+                >
+                    <fa-icon [icon]="copyIcon"></fa-icon>
+                    &nbsp; Copy prompt
+                </div>
+            </label>
+            <div class="prompt-row">
+                <textarea
+                    id="import_prompt"
+                    rows="3"
+                    placeholder="Example: 5 easy MCQs on basic Python syntax, suitable for first-year students"
+                    [(ngModel)]="importState.prompt"
+                    (input)="onImportFieldChange()"
+                ></textarea>
+            </div>
+        </div>
+
+        <div class="import-field-row">
+            <div class="import-field">
+                <label for="import_count">Number of questions</label>
+                <input
+                    id="import_count"
+                    type="number"
+                    min="1"
+                    max="10"
+                    [(ngModel)]="importState.count"
+                    (input)="onImportFieldChange()"
+                />
+            </div>
+            <div class="import-field">
+                <label for="import_pos_marks">Default positive marking</label>
+                <input
+                    id="import_pos_marks"
+                    type="number"
+                    min="0"
+                    max="40"
+                    [(ngModel)]="importState.default_points"
+                    (input)="onImportFieldChange()"
+                />
+            </div>
+            <div class="import-field">
+                <label for="import_neg_marks">Default negative marking</label>
+                <input
+                    id="import_neg_marks"
+                    type="number"
+                    min="0"
+                    max="40"
+                    [(ngModel)]="importState.default_neg_points"
+                    (input)="onImportFieldChange()"
+                />
+            </div>
+        </div>
+    </div>
+
+    <hr class="sweet-hr" />
+
+    <h3>Questions (JSON)</h3>
+    <p class="info-like sticky">
+        <a href="/api/competitions/questions/import/schema" target="_blank"
+            >Supported schema</a
+        >
+    </p>
+    <code-editor
+        class="import-json-editor"
+        [json_mode]="true"
+        [(code)]="importState.json"
+    ></code-editor>
+
+    <manual-error [message]="importErrors.json"></manual-error>
+
+    <div class="import-danger-row">
+        <div class="import-toggle">
+            <mat-slide-toggle
+                [(ngModel)]="importState.delete_existing"
+            ></mat-slide-toggle>
+            <span>Delete all existing questions before import</span>
+        </div>
+        <manual-error
+            *ngIf="importState.delete_existing"
+            message="Every current question (and its submissions) will be removed before the new set is created."
+        ></manual-error>
+    </div>
+
+    <div class="row import-actions">
+        <button class="main" (click)="closeImportPopup()">Cancel</button>
+        <button
+            class="main"
+            [ngClass]="{ danger: importState.delete_existing }"
+            (click)="submitImport()"
+        >
+            <fa-icon [icon]="importIcon"></fa-icon>
+            &nbsp; IMPORT
+        </button>
+    </div>
+</popup>
+
+<popup
     heading="Guide"
     id="guide"
     (closeEvent)="handleGuidePopupEvent($event)"
@@ -627,11 +746,22 @@
 
         <br />
         <br />
-        <h2>
-            {{ this.competitionInfo.questions?.length || "0" }} Question{{
-                this.competitionInfo.questions?.length !== 1 ? "s" : ""
-            }}
-        </h2>
+        <div class="questions-heading-row">
+            <h2>
+                {{ this.competitionInfo.questions?.length || "0" }} Question{{
+                    this.competitionInfo.questions?.length !== 1 ? "s" : ""
+                }}
+            </h2>
+            <div
+                class="button main ai-import-btn"
+                (click)="openImportPopup()"
+                matTooltip="Use AI or paste a JSON to bulk-create questions"
+                matTooltipPosition="right"
+            >
+                <fa-icon [icon]="magicIcon"></fa-icon>
+                &nbsp; Import / Generate
+            </div>
+        </div>
 
         <div class="questions-list">
             <questions-list

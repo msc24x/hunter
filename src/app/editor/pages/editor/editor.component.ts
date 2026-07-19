@@ -9,10 +9,12 @@ import {
     faCircle,
     faCircleCheck,
     faCircleXmark,
+    faCopy,
     faDownload,
     faEnvelope,
     faEye,
     faEyeSlash,
+    faFileImport,
     faMinusCircle,
     faPaperPlane,
     faPenToSquare,
@@ -74,6 +76,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     uploadIcon = faUpload;
     downloadIcon = faDownload;
 
+    copyIcon = faCopy;
+    importIcon = faFileImport;
+
     loading = false;
     preview_mode = false;
     log = new Array<string>();
@@ -108,6 +113,17 @@ export class EditorComponent implements OnInit, OnDestroy {
     };
     showInviteP = false;
     inviteToRemove: null | CompetitionInvite = null;
+
+    importState = {
+        prompt: '',
+        count: 5,
+        default_points: 1,
+        default_neg_points: 0,
+        delete_existing: false,
+        json: '',
+    };
+    importErrors: { json: string } = { json: '' };
+    importSchema: any = null;
     userCommunities: Array<Community> = [];
     ownedCommunities: Array<Community> = [];
 
@@ -169,6 +185,10 @@ export class EditorComponent implements OnInit, OnDestroy {
         };
 
         this.elem = document.getElementById('log');
+
+        this.competitionsData.getImportSchema().then((schema) => {
+            if (schema) this.importSchema = schema;
+        });
 
         if (!this.isAuthenticated) {
             this.loading = true;
@@ -572,6 +592,8 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     fetchQuestions(update_competition = true) {
         this.loading = true;
+        this.questionSelected = -1;
+
         this.competitionsData
             .getQuestions({ competition_id: this.competition_id })
             .subscribe((res) => {
@@ -748,6 +770,292 @@ export class EditorComponent implements OnInit, OnDestroy {
             guide.style.display = 'block';
             window.scroll(0, 0);
         } else guide.style.display = 'none';
+    }
+
+    openImportPopup() {
+        if (!this.importState.json) {
+            this.regenerateImportJson();
+        }
+        this.showPopup(true, 'import_questions');
+    }
+
+    closeImportPopup() {
+        this.showPopup(false, 'import_questions');
+    }
+
+    handleImportPopupEvent(event: string) {
+        if (event === 'cancel') {
+            this.closeImportPopup();
+        }
+    }
+
+    onImportFieldChange() {
+        if (!this.importState.prompt) {
+            this.regenerateImportJson();
+        }
+    }
+
+    regenerateImportJson() {
+        const count = Math.max(1, Number(this.importState.count) || 1);
+        const points = Number(this.importState.default_points) || 0;
+        const negPoints = Number(this.importState.default_neg_points) || 0;
+
+        const questions = Array.from({ length: count }, (_, i) => ({
+            type: 1,
+            title: `Question ${i + 1}`,
+            statement: '',
+            points,
+            neg_points: negPoints,
+            position: null,
+            case_sensitive: false,
+            char_limit: null,
+            question_choices: [
+                { text: 'Option A', is_correct: true, position: 0 },
+                { text: 'Option B', is_correct: false, position: 1 },
+                { text: 'Option C', is_correct: false, position: 2 },
+                { text: 'Option D', is_correct: false, position: 3 },
+            ],
+            sample_cases: null,
+            sample_sols: null,
+            test_cases: null,
+            solutions: null,
+            solution_code: null,
+            solution_lang: null,
+        }));
+
+        this.importState.json = JSON.stringify({ questions }, null, 4);
+    }
+
+    buildImportPrompt(): string {
+        const count = Number(this.importState.count) || 1;
+        const points = Number(this.importState.default_points) || 0;
+        const negPoints = Number(this.importState.default_neg_points) || 0;
+        const description = this.importState.prompt?.trim();
+        const schemaBlock = this.schemaToPromptBlock(this.importSchema);
+
+        return [
+            `Generate exactly ${count} contest questions.`,
+            description ? `\n${description}\n` : '',
+            `Vary the question types naturally between code (0), mcq (1), fill (2), and long (3). Do NOT default to a single type.`,
+            ``,
+            `Positive marking defaults to ${points}, negative marking defaults to ${negPoints}. You may override per question (min 0, max 40).`,
+            ``,
+            `Return ONLY a raw JSON object. Do NOT wrap the output in triple backticks, markdown fences, or any other formatting. The entire response must start with { and end with }.`,
+            ``,
+            `The JSON object must have exactly one key: "questions", whose value is an array of question objects. Each question object must follow this structure:`,
+            ``,
+            schemaBlock,
+            ``,
+            `IMPORTANT RULES FOR VALID JSON:`,
+            `- Escape ALL double quotes and backslashes inside string values. Double quotes inside a string must be written as \\", backslashes as \\\\. Newlines must be \\n, tabs \\t.`,
+            `- Do NOT use trailing commas.`,
+            `- Use "true", "false", and integer/float numbers without quotes for booleans and numbers.`,
+            `- "type" must be an integer (0, 1, 2, or 3) – not a string.`,
+            `- Include only fields that are relevant to the question type. For example, do not include "question_choices" for a code question.`,
+            `- Ensure the final JSON is syntactically valid – no missing brackets or extra characters.`,
+            `- Before outputting, verify that every string value has its double quotes and backslashes properly escaped and that the entire JSON parses without errors.`,
+            ``,
+            `Now generate the ${count}-question JSON. Output ONLY the JSON object, nothing else.`,
+        ]
+            .filter((line) => line !== '')
+            .join('\n');
+    }
+
+    private schemaToPromptBlock(schema: any): string {
+        if (!schema?.question) {
+            return this.schemaFallbackBlock();
+        }
+        const q = schema.question;
+        const fields = Object.keys(q);
+        const lines: string[] = ['{'];
+        fields.forEach((field, i) => {
+            const f = q[field];
+            if (!f || typeof f !== 'object') return;
+            lines.push(this.schemaFieldLine(field, f, i === fields.length - 1));
+        });
+        lines.push('}');
+        return lines.join('\n');
+    }
+
+    private schemaFieldLine(field: string, f: any, isLast: boolean): string {
+        const comma = isLast ? '' : ',';
+        const req = f.required ? 'required' : 'optional';
+        const parts: string[] = [];
+
+        if (f.enum) {
+            parts.push(
+                `one of ${f.enum.map((v: any) => (typeof v === 'string' ? `"${v}"` : String(v))).join(', ')}`,
+            );
+        } else {
+            parts.push(f.type);
+        }
+        if (f.maxLength != null) parts.push(`max ${f.maxLength} characters`);
+        if (f.maxItems != null) parts.push(`max ${f.maxItems} items`);
+        if (f.min != null && f.max != null)
+            parts.push(`min ${f.min}, max ${f.max}`);
+        parts.push(req);
+        if (f.description) parts.push(f.description);
+
+        if (f.type === 'array' && f.item) {
+            const itemFields = Object.keys(f.item);
+            const itemLines = itemFields.map((ik, j) => {
+                const it = f.item[ik];
+                const iComma = j === itemFields.length - 1 ? '' : ',';
+                const iReq = it.required ? 'required' : 'optional';
+                const iParts: string[] = [];
+                if (it.enum) {
+                    iParts.push(
+                        `one of ${it.enum.map((v: any) => (typeof v === 'string' ? `"${v}"` : String(v))).join(', ')}`,
+                    );
+                } else {
+                    iParts.push(it.type);
+                }
+                if (it.maxLength != null)
+                    iParts.push(`max ${it.maxLength} characters`);
+                iParts.push(iReq);
+                if (it.description) iParts.push(it.description);
+                const sample = it.enum
+                    ? it.enum[0]
+                    : it.type === 'string'
+                      ? '"..."'
+                      : it.type === 'number'
+                        ? (it.default ?? 0)
+                        : it.type === 'boolean'
+                          ? (it.default ?? false)
+                          : 'null';
+                return `      "${ik}": ${sample}${iComma}  // ${iParts.join(', ')}`;
+            });
+            return (
+                `  "${field}": [  // ${parts.join(', ')}\n` +
+                itemLines.join('\n') +
+                `\n    ]${comma}`
+            );
+        }
+
+        const sample = f.enum
+            ? f.enum[0]
+            : f.type === 'string'
+              ? '"..."'
+              : f.type === 'number'
+                ? (f.default ?? 0)
+                : f.type === 'boolean'
+                  ? (f.default ?? false)
+                  : f.type === 'array'
+                    ? '[]'
+                    : 'null';
+        return `  "${field}": ${sample}${comma}  // ${parts.join(', ')}`;
+    }
+
+    private schemaFallbackBlock(): string {
+        return [
+            '{',
+            '  "type": 0,          // integer 0, 1, 2, or 3',
+            '  "title": "...",     // string, max 400 characters (optional)',
+            '  "statement": "...", // string, max 4000 characters, HTML sanitized, LaTeX allowed (optional)',
+            `  "points": ${this.importState.default_points || 0},        // number, min 0, max 40 (optional, falls back to ${this.importState.default_points || 0})`,
+            `  "neg_points": ${this.importState.default_neg_points || 0},    // number, min 0, max 40 (optional, falls back to ${this.importState.default_neg_points || 0})`,
+            '  "position": 1,      // number, display order (optional, auto-assigned if omitted)',
+            '  "case_sensitive": false, // boolean, only for type 2 (fill). Omit for other types.',
+            '  "char_limit": 100,  // integer >= 0, only for type 3 (long). Minimum words acceptable.',
+            '  "question_choices": [  // array of choice objects, only for types 1 (mcq) and 2 (fill). Omit for others.',
+            '    {',
+            '      "text": "choice text",',
+            '      "is_correct": true,',
+            '      "position": 1    // optional number, display order',
+            '    }',
+            '  ],',
+            '  "sample_cases": "...",  // string, max 1000 chars, only for type 0 (code). Sample input shown to participants.',
+            '  "sample_sols": "...",   // string, max 1000 chars, only for type 0 (code). Sample output shown to participants.',
+            '  "test_cases": "...",    // string, only for type 0 (code). Full test cases file content.',
+            '  "solutions": "...",     // string, only for type 0 (code). Expected output file content.',
+            '  "solution_code": "...", // string, only for type 0 (code). Correct solution code.',
+            '  "solution_lang": "py"   // string, one of "c", "cpp", "py", "js", "ts", "go", "java". Required if solution_code is present, only for type 0.',
+            '}',
+        ].join('\n');
+    }
+
+    copyImportPrompt() {
+        const prompt = this.buildImportPrompt();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(prompt).then(
+                () =>
+                    this.snackBar.open('Prompt copied to clipboard', 'Dismiss'),
+                () =>
+                    this.snackBar.open(
+                        'Unable to copy prompt, please copy it manually',
+                        'Dismiss',
+                    ),
+            );
+        } else {
+            this.snackBar.open(prompt, 'Dismiss', { duration: 0 });
+        }
+    }
+
+    submitImport() {
+        this.importErrors.json = '';
+
+        let parsed: any;
+        try {
+            parsed = JSON.parse(this.importState.json);
+        } catch (e) {
+            this.importErrors.json = 'Invalid JSON: ' + (e as Error).message;
+            return;
+        }
+
+        if (!parsed || !Array.isArray(parsed.questions)) {
+            this.importErrors.json =
+                'JSON must be an object with a "questions" array.';
+            return;
+        }
+
+        if (!this.competitionInfo.id) {
+            this.importErrors.json = 'No competition loaded.';
+            return;
+        }
+
+        const delete_existing = this.importState.delete_existing;
+        const default_points = Number(this.importState.default_points) || 0;
+        const default_neg_points =
+            Number(this.importState.default_neg_points) || 0;
+
+        this.loading = true;
+        this.competitionsData
+            .importQuestions(this.competitionInfo.id, {
+                delete_existing,
+                default_points,
+                default_neg_points,
+                questions: parsed.questions,
+            })
+            .subscribe({
+                next: () => {
+                    this.loading = false;
+                    this.displayLog(
+                        `Imported ${parsed.questions.length} questions` +
+                            (delete_existing
+                                ? ' (existing questions deleted)'
+                                : ''),
+                    );
+                    this.snackBar.open(
+                        `Imported ${parsed.questions.length} questions`,
+                        'Dismiss',
+                    );
+                    this.closeImportPopup();
+                    this.fetchQuestions();
+                },
+                error: (err) => {
+                    this.loading = false;
+                    const body = err?.error;
+                    if (body && typeof body === 'object') {
+                        this.importErrors.json = Object.entries(body)
+                            .map(([k, v]) => `${k}: ${v}`)
+                            .join('\n');
+                    } else {
+                        this.importErrors.json =
+                            'Import failed: ' +
+                            (err?.statusText || 'unknown error');
+                    }
+                },
+            });
     }
 
     onClickVisibility(status: 'PUBLIC' | 'PRIVATE' | 'INVITE') {

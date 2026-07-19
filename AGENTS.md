@@ -67,6 +67,7 @@ res.json({ success: true, data });
 | Location | File | Purpose |
 |---|---|---|
 | `AGENTS.md` | root | This file — global rules |
+| `UI.md` | root | UI conventions (buttons, inputs, popups, theming, reusable components) |
 | `backend/AGENTS.md` | does not exist yet | Would hold backend-specific override rules |
 | `docs/` | `how_to_create_communities_on_hunter.md`, `system-design.pdf` | Feature docs & architecture |
 | `.github/ISSUE_TEMPLATE/` | root | Issue templates |

@@ -1,4 +1,4 @@
-<div class="row hunter-conf">
+<div class="row hunter-conf" *ngIf="!json_mode">
     <div
         *ngIf="editable"
         matTooltip="Load the boilerplate template for the selected language"
@@ -30,4 +30,8 @@
     ></drop-down-list>
 </div>
 
-<div [id]="'editor-' + created_at" class="editor-instance"></div>
+<div
+    [id]="'editor-' + created_at"
+    class="editor-instance"
+    [class.json-mode]="json_mode"
+></div>

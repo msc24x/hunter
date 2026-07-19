@@ -620,6 +620,123 @@ input {
     }
 }
 
+.import-steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 0 0 1rem 0;
+    padding: 0;
+    color: var(--gray);
+    font-size: 0.8rem;
+    width: 100%;
+
+    li {
+        counter-increment: step;
+        position: relative;
+        padding-left: 1.8rem;
+        margin-bottom: 0.4rem;
+
+        &::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.2rem;
+            height: 1.2rem;
+            line-height: 1.2rem;
+            text-align: center;
+            border-radius: 50%;
+            background: var(--text-black);
+            color: var(--text-white);
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+    }
+}
+
+.questions-heading-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    h2 {
+        margin: 0;
+    }
+
+    .ai-import-btn {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+}
+
+// ---- Import / Generate Questions popup ----
+
+.import-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+
+    label {
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.import-field-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .import-field {
+        flex: 1;
+        min-width: 8rem;
+    }
+}
+
+.prompt-row {
+    display: flex;
+    gap: 0.6rem;
+    align-items: stretch;
+    flex-wrap: wrap;
+
+    textarea {
+        @include appTextArea;
+        flex: 1;
+        min-width: 12rem;
+    }
+
+    .copy-prompt-btn {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+}
+
+.import-danger-row {
+    margin: 1rem 0;
+    text-align: right;
+
+    .import-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        text-align: right;
+    }
+}
+
+.import-json-editor {
+    ::ng-deep .editor-instance {
+        height: 7rem;
+        min-height: 3rem;
+    }
+}
+
+.import-actions {
+    justify-content: flex-end;
+}
+
 .editor-first-panel {
     @include blackBack;
     display: flex;

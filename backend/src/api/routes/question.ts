@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { existsSync, readFile, writeFile } from 'fs';
+import fs, { existsSync, readFile, writeFile } from 'fs';
 import models from '../../database/containers/models';
 import {
     CodeSolution,
@@ -831,6 +831,352 @@ router.get(
             .catch((err) => {
                 Util.sendResponse(res, resCode.serverError, err);
             });
+    },
+);
+
+// GET /competitions/questions/import/schema — returns config.importSchema.
+router.get(
+    '/competitions/questions/import/schema',
+    authenticate,
+    loginRequired,
+    (req, res) => {
+        Util.sendResponseJson(res, resCode.success, config.importSchema);
+    },
+);
+
+function validateImportQuestion(data: any): Record<string, string> {
+    const errors: Record<string, string> = {};
+
+    if (
+        data.type == null ||
+        !Object.values(config.questionTypes).includes(data.type)
+    ) {
+        errors.type =
+            'Question type must be one of 0 (code), 1 (mcq), 2 (fill), 3 (long)';
+        return errors;
+    }
+
+    if (data.points != null && isNaN(Number(data.points))) {
+        errors.points = 'points must be a number';
+    }
+    if (data.neg_points != null && isNaN(Number(data.neg_points))) {
+        errors.neg_points = 'neg_points must be a number';
+    }
+
+    const baseErrors = validateQuestionInfo({
+        ...data,
+        id: 0,
+        competition_id: 0,
+        position: 0,
+        created_at: new Date(),
+        deleted_at: null,
+    } as QuestionInfo);
+    Object.assign(errors, baseErrors);
+
+    if (
+        [config.questionTypes.fill, config.questionTypes.mcq].includes(
+            data.type,
+        ) &&
+        Array.isArray(data.question_choices)
+    ) {
+        data.question_choices.forEach((ch: any, ci: number) => {
+            if (typeof ch !== 'object' || ch == null) {
+                errors[`question_choices[${ci}]`] =
+                    'Each choice must be an object { text, is_correct }';
+                return;
+            }
+            if (ch.text == null) {
+                errors[`question_choices[${ci}].text`] =
+                    'Choice text is required';
+            } else if (String(ch.text).length > 150) {
+                errors[`question_choices[${ci}].text`] =
+                    'Characters in input cannot be more than 150';
+            }
+            if (typeof ch.is_correct !== 'boolean') {
+                errors[`question_choices[${ci}].is_correct`] =
+                    'is_correct must be a boolean';
+            }
+        });
+    }
+
+    if (data.type === config.questionTypes.code) {
+        const hasCode = data.solution_code != null && data.solution_code !== '';
+        const hasLang = data.solution_lang != null && data.solution_lang !== '';
+        if (hasCode && !hasLang) {
+            errors.solution_lang =
+                'solution_lang is required when solution_code is provided';
+        }
+        if (hasLang && !hasCode) {
+            errors.solution_code =
+                'solution_code is required when solution_lang is provided';
+        }
+        if (hasLang && !Util.getValidLangs().includes(data.solution_lang)) {
+            errors.solution_lang =
+                'solution_lang must be one of: ' +
+                Util.getValidLangs().join(', ');
+        }
+    }
+
+    return errors;
+}
+
+// POST /competitions/:comp_id/questions/import
+// Atomically creates a batch of questions (optionally after soft-deleting the
+// existing ones). Coding questions may include test_cases/solutions file
+// contents (written to disk) and solution_code/solution_lang (verified
+// synchronously after the transaction commits).
+router.post(
+    '/competitions/:comp_id/questions/import',
+    authenticate,
+    loginRequired,
+    async (req, res) => {
+        const comp_id = parseInt(req.params.comp_id);
+        const user: UserInfo = res.locals.user;
+        const body = req.body || {};
+
+        const delete_existing = !!body.delete_existing;
+        const default_points =
+            body.default_points == null ? 0 : Number(body.default_points);
+        const default_neg_points =
+            body.default_neg_points == null
+                ? 0
+                : Number(body.default_neg_points);
+        const questions = Array.isArray(body.questions) ? body.questions : null;
+
+        const topErrors: Record<string, string> = {};
+        if (!questions || questions.length === 0) {
+            topErrors.questions = 'Expected a non-empty questions array';
+        } else if (questions.length > 10) {
+            topErrors.questions =
+                'Cannot import more than 10 questions at once';
+        }
+        if (
+            !Number.isFinite(default_points) ||
+            default_points < 0 ||
+            default_points > 40
+        ) {
+            topErrors.default_points =
+                'Default points must be a number between 0 and 40';
+        }
+        if (
+            !Number.isFinite(default_neg_points) ||
+            default_neg_points < 0 ||
+            default_neg_points > 40
+        ) {
+            topErrors.default_neg_points =
+                'Default negative points must be a number between 0 and 40';
+        }
+        if (Object.keys(topErrors).length) {
+            Util.sendResponseJson(res, resCode.badRequest, topErrors);
+            return;
+        }
+
+        const allErrors: Record<string, string> = {};
+        questions.forEach((q: any, i: number) => {
+            const qErrors = validateImportQuestion(q);
+            for (const field in qErrors) {
+                allErrors[`questions[${i}].${field}`] = qErrors[field];
+            }
+        });
+        if (Object.keys(allErrors).length) {
+            Util.sendResponseJson(res, resCode.badRequest, allErrors);
+            return;
+        }
+
+        const competition = await client.competitions
+            .findUnique({
+                where: {
+                    id: comp_id,
+                    host_user_id: user.id,
+                    deleted_at: null,
+                },
+                select: { id: true },
+            })
+            .catch(() => null);
+        if (!competition) {
+            Util.sendResponse(res, resCode.forbidden);
+            return;
+        }
+
+        let startPosition = 1;
+        if (!delete_existing) {
+            const maxPos = await client.questions
+                .aggregate({
+                    where: { competition_id: comp_id, deleted_at: null },
+                    _max: { position: true },
+                })
+                .catch(() => null);
+            if (maxPos?._max?.position != null) {
+                startPosition = maxPos._max.position + 1;
+            }
+        }
+
+        const purify = DOMPurify(new JSDOM('').window);
+        const verificationsPending: Array<{
+            id: number;
+            code: string;
+            lang: string;
+        }> = [];
+        const filesToWrite: Array<{
+            path: string;
+            content: string;
+        }> = [];
+
+        try {
+            await client.$transaction(async (tranc) => {
+                if (delete_existing) {
+                    await tranc.questions.updateMany({
+                        where: {
+                            competition_id: comp_id,
+                            deleted_at: null,
+                        },
+                        data: { deleted_at: new Date() },
+                    });
+                }
+
+                for (let i = 0; i < questions.length; i++) {
+                    const q = questions[i];
+                    const created = await tranc.questions.create({
+                        data: {
+                            competition_id: comp_id,
+                            type: q.type,
+                            title: q.title ?? null,
+                            statement: purify.sanitize(q.statement || ''),
+                            points:
+                                q.points == null
+                                    ? default_points
+                                    : Number(q.points),
+                            neg_points:
+                                q.neg_points == null
+                                    ? default_neg_points
+                                    : Number(q.neg_points),
+                            position:
+                                q.position == null
+                                    ? startPosition + i
+                                    : Number(q.position),
+                            case_sensitive: q.case_sensitive ?? false,
+                            char_limit: q.char_limit ?? null,
+                            sample_cases: q.sample_cases ?? null,
+                            sample_sols: q.sample_sols ?? null,
+                            created_at: new Date(),
+                        },
+                    });
+
+                    if (
+                        [config.questionTypes.fill, config.questionTypes.mcq].includes(
+                            q.type,
+                        ) &&
+                        Array.isArray(q.question_choices) &&
+                        q.question_choices.length > 0
+                    ) {
+                        await tranc.question_choice.createMany({
+                            data: q.question_choices.map(
+                                (ch: any, ci: number) => ({
+                                    text: ch.text,
+                                    is_correct: ch.is_correct,
+                                    position:
+                                        ch.position == null
+                                            ? ci
+                                            : Number(ch.position),
+                                    question_id: created.id,
+                                }),
+                            ),
+                        });
+                    }
+
+                    if (q.type === config.questionTypes.code) {
+                        if (q.test_cases != null) {
+                            filesToWrite.push({
+                                path: Util.getAbsoluteFilePath(
+                                    comp_id,
+                                    created.id,
+                                    'testcases',
+                                ),
+                                content: String(q.test_cases),
+                            });
+                        }
+                        if (q.solutions != null) {
+                            filesToWrite.push({
+                                path: Util.getAbsoluteFilePath(
+                                    comp_id,
+                                    created.id,
+                                    'solutions',
+                                ),
+                                content: String(q.solutions),
+                            });
+                        }
+
+                        if (
+                            q.solution_code &&
+                            q.solution_lang &&
+                            (q.test_cases != null || q.solutions != null)
+                        ) {
+                            verificationsPending.push({
+                                id: created.id,
+                                code: String(q.solution_code),
+                                lang: String(q.solution_lang),
+                            });
+                        }
+                    }
+                }
+            });
+
+            // Write files after the transaction commits so a rollback
+            // doesn't leave orphaned files on disk.
+            for (const f of filesToWrite) {
+                await fs.promises.writeFile(f.path, f.content);
+            }
+
+            for (const v of verificationsPending) {
+                try {
+                    const exeRes = await judgeService.execute(
+                        {
+                            for: {
+                                competition_id: comp_id,
+                                question_id: v.id,
+                                type: config.questionTypes.code,
+                            },
+                            solution: { code: v.code, lang: v.lang as any },
+                        } as HunterExecutable,
+                        false,
+                        null,
+                        null,
+                    );
+                    await client.question_verification.upsert({
+                        where: { question_id: v.id },
+                        create: {
+                            question_id: v.id,
+                            submission: v.code,
+                            language: v.lang,
+                            success: exeRes.success,
+                            reason: exeRes.meta ?? null,
+                            created_at: new Date(),
+                        },
+                        update: {
+                            submission: v.code,
+                            language: v.lang,
+                            success: exeRes.success,
+                            reason: exeRes.meta ?? null,
+                            created_at: new Date(),
+                        },
+                    });
+                } catch (err) {
+                    console.error(
+                        `import: verification failed for question ${v.id}:`,
+                        err,
+                    );
+                }
+            }
+
+            Util.sendResponse(res, resCode.success);
+        } catch (err) {
+            console.error('import: transaction failed:', err);
+            Util.sendResponse(
+                res,
+                resCode.serverError,
+                err instanceof Error ? err.message : String(err),
+            );
+        }
     },
 );
 

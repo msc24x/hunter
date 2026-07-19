@@ -26,6 +26,9 @@ export class PopupComponent implements OnInit {
     destructive = false;
 
     @Input()
+    wide = false;
+
+    @Input()
     visible = false;
 
     @Input()

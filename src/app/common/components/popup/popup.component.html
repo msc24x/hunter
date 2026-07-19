@@ -3,10 +3,12 @@
     class="bg"
     (click)="bgClicked($event)"
 >
-    <div class="dialog">
+    <div class="dialog" [ngClass]="{ 'wide': wide }">
         <h2
             *ngIf="!noContainer"
-            [ngStyle]="{ 'color': destructive ? 'var(--dark-red)' : 'var(--text-black)' }"
+            [ngStyle]="{
+                'color': destructive ? 'var(--dark-red)' : 'var(--text-black)',
+            }"
         >
             {{ heading }}
         </h2>

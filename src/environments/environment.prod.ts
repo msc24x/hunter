@@ -199,6 +199,9 @@ export const apiEndpoints = {
     leaveCommunity: environment.apiUrl + '/communities/{0}/leave',
     createCommunity: environment.apiUrl + '/communities/create',
     updateCommunity: environment.apiUrl + '/communities/{0}',
+    questionImport: environment.apiUrl + '/competitions/{0}/questions/import',
+    questionImportSchema:
+        environment.apiUrl + '/competitions/questions/import/schema',
 };
 
 export const templates = {

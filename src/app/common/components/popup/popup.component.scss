@@ -54,6 +54,10 @@
     margin-inline: 2%;
     margin-block: auto;
 
+    &.wide {
+        min-width: 60%;
+    }
+
     .row {
         margin-top: 1.5rem;
         display: flex;

@@ -15,6 +15,8 @@ import { format } from 'src/app/utils/utils';
     providedIn: 'root',
 })
 export class CompetitionsDataService {
+    private importSchemaCache: any = null;
+
     constructor(private authService: AuthService, private http: HttpClient) {}
 
     deleteCompetition(id: number) {
@@ -360,6 +362,48 @@ export class CompetitionsDataService {
     getCompetitionInfo(id: string) {
         return this.http.get(apiEndpoints.competition + '/' + id, {
             responseType: 'json',
+            observe: 'response',
+        });
+    }
+
+    getImportSchema() {
+        return new Promise<any>((resolve) => {
+            if (this.importSchemaCache) {
+                resolve(this.importSchemaCache);
+                return;
+            }
+            this.http
+                .get(apiEndpoints.questionImportSchema, {
+                    responseType: 'json',
+                    withCredentials: true,
+                    observe: 'response',
+                })
+                .subscribe({
+                    next: (res) => {
+                        this.importSchemaCache = res.body;
+                        resolve(res.body);
+                    },
+                    error: () => resolve(null),
+                });
+        });
+    }
+
+    importQuestions(
+        comp_id: number,
+        params: {
+            delete_existing: boolean;
+            default_points: number;
+            default_neg_points: number;
+            questions: any[];
+        },
+    ) {
+        const endpoint = format(
+            apiEndpoints.questionImport,
+            comp_id.toString(),
+        );
+        return this.http.post(endpoint, params, {
+            responseType: 'json',
+            withCredentials: true,
             observe: 'response',
         });
     }
