@@ -1,4 +1,4 @@
-﻿@use "../../../../assets/fonts";
+@use "../../../../assets/fonts";
 @use "../../../../assets/colors";
 @use "../../../../assets/mixins" as *;
 
@@ -222,7 +222,7 @@
         color: var(--text-black);
     }
 
-    #report-btn {
+    #report-btn, #focus-btn {
         color: var(--text-black);
         cursor: pointer;
         display: block;
@@ -280,17 +280,29 @@
 .compete-hr-layout {
     flex-wrap: nowrap !important;
     align-items: stretch !important;
-    gap: 1rem;
+    gap: 0;
+
+    &.is-resizing {
+        user-select: none;
+        cursor: col-resize;
+
+        * {
+            user-select: none !important;
+            pointer-events: none !important;
+        }
+
+        .resizer-handle {
+            pointer-events: auto !important;
+        }
+    }
 
     .question-side-section {
-        width: 100%;
-        flex-basis: 60%;
-        flex-grow: 1;
         margin-bottom: 1rem;
+        flex-shrink: 0;
+        flex-grow: 0;
 
         &:not(.ace-editor) {
             @include basicBack;
-            flex-basis: calc(60% - 3.3rem);
         }
     }
 
@@ -299,7 +311,50 @@
         display: flex;
         flex-direction: column;
         justify-content: stretch;
-        width: 45%;
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+}
+
+.resizer-handle {
+    width: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: col-resize;
+    user-select: none;
+    z-index: 10;
+    position: relative;
+    flex-shrink: 0;
+    margin-inline: 2px;
+
+    .handle-bar {
+        width: 4px;
+        height: 36px;
+        background-color: var(--border-color);
+        border-radius: 2px;
+        transition: background-color 150ms ease, height 150ms ease;
+    }
+
+    &:hover, &.active {
+        .handle-bar {
+            background-color: var(--cute-blue, #4080ff);
+            height: 48px;
+        }
+    }
+}
+
+.body.focus-mode {
+    padding-top: 0.5rem;
+
+    #competition_info {
+        margin-bottom: 0.5rem;
+    }
+
+    .compete-hr-layout {
+        .question-section {
+            height: calc(100vh - 140px);
+        }
     }
 }
 

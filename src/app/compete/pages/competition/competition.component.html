@@ -1,4 +1,4 @@
-<app-bar></app-bar>
+<app-bar *ngIf="!isFocusMode"></app-bar>
 <app-loading *ngIf="loading"></app-loading>
 
 <spinner *ngIf="loading && !competition.id"></spinner>
@@ -255,7 +255,7 @@
     <sign-in-prompt *ngIf="!isAuthenticated"></sign-in-prompt>
 </div>
 
-<div class="body" *ngIf="competition.id && !notStarted">
+<div class="body" [ngClass]="{ 'focus-mode': isFocusMode }" *ngIf="competition.id && !notStarted">
     <div class="main">
         <div *ngIf="this.competition.title" id="competition_info">
             <div
@@ -408,11 +408,15 @@
         </div>
 
         <div
-            [ngClass]="{ 'row compete-hr-layout': hrlayout }"
+            #hrLayoutContainer
+            [ngClass]="{ 'row compete-hr-layout': hrlayout, 'is-resizing': isResizing }"
             *ngIf="questionSelectedInfo"
         >
             <!-- Questions -->
-            <div class="question-section">
+            <div
+                class="question-section"
+                [style.width]="hrlayout ? 'calc(' + splitPercent + '% - 5px)' : null"
+            >
                 <div class="row questions-container">
                     <questions-list
                         [competitionInfo]="competition"
@@ -468,11 +472,24 @@
                 </div>
             </div>
 
+            <!-- Vertical Drag Handle -->
+            <div
+                *ngIf="hrlayout"
+                class="resizer-handle"
+                [ngClass]="{ 'active': isResizing }"
+                (mousedown)="startResize($event)"
+                (touchstart)="startResize($event)"
+                matTooltip="Drag to resize panels"
+            >
+                <div class="handle-bar"></div>
+            </div>
+
             <!-- Code editor -->
             <code-editor
                 *ngIf="questionSelectedInfo.type === 0"
                 class="ace-editor question-side-section"
                 editorClass="participation-page"
+                [style.width]="hrlayout ? 'calc(' + (100 - splitPercent) + '% - 5px)' : null"
                 [(code)]="codeWritten"
                 [(languageSelected)]="languageSelected"
                 (fetchLastSubmission)="fetchLastSubmission()"
@@ -500,6 +517,7 @@
             <div
                 *ngIf="questionSelectedInfo.type === 1"
                 class="mcq-section question-side-section"
+                [style.width]="hrlayout ? 'calc(' + (100 - splitPercent) + '% - 5px)' : null"
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
@@ -569,6 +587,7 @@
             <div
                 *ngIf="questionSelectedInfo.type === 2"
                 class="blank-section question-side-section"
+                [style.width]="hrlayout ? 'calc(' + (100 - splitPercent) + '% - 5px)' : null"
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
@@ -600,6 +619,7 @@
             <div
                 *ngIf="questionSelectedInfo.type === 3"
                 class="long-answer-section question-side-section"
+                [style.width]="hrlayout ? 'calc(' + (100 - splitPercent) + '% - 5px)' : null"
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
@@ -687,6 +707,17 @@
                 >
                     <fa-icon [icon]="shareIcon" size="sm"></fa-icon>
                     Share Contest
+                </a>
+
+                &bull;
+
+                <a
+                    id="focus-btn"
+                    [matTooltip]="isFocusMode ? 'Exit focus mode' : 'Enter focus mode for distraction-free competing'"
+                    (click)="toggleFocusMode()"
+                >
+                    <fa-icon [icon]="isFocusMode ? compressIcon : expandIcon" size="sm"></fa-icon>
+                    {{ isFocusMode ? 'Exit Focus mode' : 'Focus mode' }}
                 </a>
 
                 &bull;

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import * as ace from 'ace-builds';
 import { last, Subscription } from 'rxjs';
@@ -30,9 +30,11 @@ import {
     faClipboardList,
     faCloud,
     faCodeMerge,
+    faCompress,
     faEdit,
     faEnvelopeCircleCheck,
     faEnvelopeOpenText,
+    faExpand,
     faFileCode,
     faFlag,
     faHourglassHalf,
@@ -89,6 +91,18 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     branchIcon = faCodeMerge;
     progressIcon = faClipboardList;
     shareIcon = faShareAlt;
+    expandIcon = faExpand;
+    compressIcon = faCompress;
+
+    isFocusMode = false;
+    splitPercent = 45;
+    isResizing = false;
+
+    @ViewChild('hrLayoutContainer') hrLayoutContainer?: ElementRef<HTMLDivElement>;
+
+    private handleFullscreenChange = () => {
+        this.isFocusMode = !!document.fullscreenElement;
+    };
 
     showInstructionP = false;
     showSignInP = false;
@@ -169,6 +183,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        document.addEventListener('fullscreenchange', this.handleFullscreenChange);
+
         document
             .getElementsByTagName('bottom-app-bar')[0]
             .classList.add('hidden');
@@ -237,6 +253,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
+
         document
             .getElementsByTagName('bottom-app-bar')[0]
             .classList.remove('hidden');
@@ -981,5 +999,48 @@ export class CompetitionComponent implements OnInit, OnDestroy {
         );
 
         return quesIndex === this.competition.questions?.length - 1;
+    }
+
+    toggleFocusMode(): void {
+        this.isFocusMode = !this.isFocusMode;
+        if (this.isFocusMode) {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            }
+        } else {
+            if (document.fullscreenElement && document.exitFullscreen) {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+    }
+
+    startResize(event: MouseEvent | TouchEvent): void {
+        event.preventDefault();
+        this.isResizing = true;
+
+        const onMove = (e: MouseEvent | TouchEvent) => {
+            if (!this.hrLayoutContainer?.nativeElement) return;
+            const containerRect = this.hrLayoutContainer.nativeElement.getBoundingClientRect();
+            const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
+            const offset = clientX - containerRect.left;
+            let percent = (offset / containerRect.width) * 100;
+            if (percent < 15) percent = 15;
+            if (percent > 85) percent = 85;
+            this.splitPercent = percent;
+        };
+
+        const onEnd = () => {
+            this.isResizing = false;
+            window.removeEventListener('mousemove', onMove);
+            window.removeEventListener('mouseup', onEnd);
+            window.removeEventListener('touchmove', onMove);
+            window.removeEventListener('touchend', onEnd);
+            window.dispatchEvent(new Event('resize'));
+        };
+
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onEnd);
+        window.addEventListener('touchmove', onMove, { passive: false });
+        window.addEventListener('touchend', onEnd);
     }
 }
