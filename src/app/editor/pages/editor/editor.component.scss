@@ -667,6 +667,26 @@ input {
         align-items: center;
         white-space: nowrap;
     }
+
+    .materials-btn {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+}
+
+// ---- Materials selector (question panel) ----
+
+.materials-selector {
+    margin-top: 1rem;
+
+    h3 {
+        margin: 0 0 0.3rem;
+    }
+
+    mat-select {
+        max-width: 400px;
+    }
 }
 
 // ---- Import / Generate Questions popup ----

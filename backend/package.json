@@ -44,6 +44,7 @@
         "dotenv": "^16.0.3",
         "ejs": "^3.1.10",
         "express-fileupload": "^1.5.1",
+        "file-type": "^16.5.4",
         "fs": "^0.0.1-security",
         "jsdom": "^26.0.0",
         "jsonwebtoken": "^8.5.1",

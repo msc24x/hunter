@@ -29,6 +29,7 @@ export type QuestionInfo = {
     sol_code_file?: boolean;
     user_answer?: string;
     question_choices?: QuestionChoice[];
+    material_ids?: number[];
 };
 
 export type QuestionChoice = {
@@ -38,6 +39,19 @@ export type QuestionChoice = {
     position: number;
     is_correct: boolean;
     delete?: boolean;
+};
+
+export type MaterialInfo = {
+    id: number;
+    competition_id: number;
+    title: string | null;
+    type: number;
+    content: string | null;
+    file_path: string | null;
+    file_size: number | null;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date | null;
 };
 
 export type Result = {

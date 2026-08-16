@@ -7,6 +7,7 @@ import {
 } from '../config/types';
 import { existsSync } from 'fs';
 import config from '../config/config';
+import { fromBuffer } from 'file-type';
 
 export class Util {
     static sendResponse(res: any, code: number, msg: string = '') {
@@ -155,4 +156,33 @@ export class Util {
 
         return [labelledHeader].concat(lines).join('\n');
     }
+}
+
+// File type detection using the `file-type` library (comprehensive magic-byte
+// database). Falls back to the original filename extension when the library
+// cannot determine the type (some PDFs from Java-based systems have unusual
+// headers that file-type doesn't recognize but are still valid PDFs).
+export async function detectFileFormat(
+    buf: Buffer,
+    filename?: string,
+): Promise<string | null> {
+    if (!buf || buf.length < 4) return null;
+
+    // 1. Try the file-type library first (most reliable).
+    try {
+        const result = await fromBuffer(buf);
+        if (result) {
+            // file-type may return 'jpeg' — normalize to 'jpg' for our allowed exts.
+            const ext: string = result.ext;
+            return ext === 'jpeg' ? 'jpg' : ext;
+        }
+    } catch {}
+
+    // 2. Fallback: check the original filename extension.
+    if (filename) {
+        const ext = filename.split('.').pop()?.toLowerCase();
+        if (ext) return ext;
+    }
+
+    return null;
 }

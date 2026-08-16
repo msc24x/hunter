@@ -18,9 +18,9 @@
     <ques-type-label [ques_type]="questionInfo.type"></ques-type-label>
 </div>
 
-<hr class="sweet-hr">
+<hr class="sweet-hr" />
 
-<div id="question_statement" class="no-selection no-click" *ngIf="!titleOnly">
+<div id="question_statement" class="no-selection" *ngIf="!titleOnly">
     <b>Statement</b>
     <br />
     <br />
@@ -39,3 +39,85 @@
         <pre>{{ questionInfo.sample_sols }}</pre>
     </div>
 </div>
+
+<div id="question_materials" *ngIf="!titleOnly && linkedMaterials.length > 0">
+    <hr class="sweet-hr" />
+
+    <br />
+    <b>Materials linked</b>
+    <br />
+    <br />
+
+    <div class="material-item" *ngFor="let m of linkedMaterials; let i = index">
+        <div class="material-type-chip">{{ materialTypeLabel(m.type) }}</div>
+        <br />
+
+        <div
+            class="material-rich"
+            *ngIf="m.type === materialTypes.rich_text"
+            [innerHTML]="sanitizedContent(m.content)"
+        ></div>
+
+        <div class="material-file" *ngIf="m.type === materialTypes.image">
+            <img [src]="mediaUrl(m)" alt="material" />
+            <button class="fs-btn" (click)="openFullscreen(m)">
+                <fa-icon [icon]="expandIcon" size="sm"></fa-icon>
+                Full screen
+            </button>
+        </div>
+
+        <div class="material-file" *ngIf="m.type === materialTypes.audio">
+            <audio [src]="mediaUrl(m)" controls></audio>
+        </div>
+
+        <div class="material-file" *ngIf="m.type === materialTypes.video">
+            <video [src]="mediaUrl(m)" controls></video>
+            <button class="fs-btn" (click)="openFullscreen(m)">
+                <fa-icon [icon]="expandIcon" size="sm"></fa-icon>
+                Full screen
+            </button>
+        </div>
+
+        <div class="material-file" *ngIf="m.type === materialTypes.pdf">
+            <iframe [src]="mediaUrl(m)"></iframe>
+            <button class="fs-btn" (click)="openFullscreen(m)">
+                <fa-icon [icon]="expandIcon" size="sm"></fa-icon>
+                Full screen
+            </button>
+        </div>
+
+        <br />
+    </div>
+</div>
+
+<popup
+    *ngIf="fullscreenMaterial"
+    [noContainer]="true"
+    [showControls]="false"
+    [wide]="true"
+    [visible]="true"
+    (closeEvent)="closeFullscreen()"
+>
+    <img
+        *ngIf="fullscreenMaterial.type === materialTypes.image"
+        [src]="mediaUrl(fullscreenMaterial)"
+        class="fs-media fs-img"
+    />
+    <iframe
+        *ngIf="fullscreenMaterial.type === materialTypes.pdf"
+        [src]="mediaUrl(fullscreenMaterial)"
+        class="fs-media fs-iframe"
+    ></iframe>
+    <video
+        *ngIf="fullscreenMaterial.type === materialTypes.video"
+        [src]="mediaUrl(fullscreenMaterial)"
+        controls
+        class="fs-media fs-video"
+    ></video>
+    <audio
+        *ngIf="fullscreenMaterial.type === materialTypes.audio"
+        [src]="mediaUrl(fullscreenMaterial)"
+        controls
+        class="fs-media fs-audio"
+    ></audio>
+</popup>

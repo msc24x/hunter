@@ -5,6 +5,7 @@ import {
     CompetitionInfo,
     CompetitionInvite,
     HunterExecutable,
+    MaterialInfo,
     QuestionInfo,
 } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
@@ -402,6 +403,84 @@ export class CompetitionsDataService {
             comp_id.toString(),
         );
         return this.http.post(endpoint, params, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
+    }
+
+    getMaterials(comp_id: number) {
+        const endpoint = format(apiEndpoints.materials, comp_id.toString());
+        return this.http.get<MaterialInfo[]>(endpoint, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
+    }
+
+    getMaterialDetail(comp_id: number, material_id: number) {
+        const endpoint = format(
+            apiEndpoints.materialDetail,
+            comp_id.toString(),
+            material_id.toString(),
+        );
+        return this.http.get<MaterialInfo>(endpoint, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
+    }
+
+    createMaterial(
+        comp_id: number,
+        params: { title: string; type: number; content?: string },
+        file?: File,
+    ) {
+        const endpoint = format(apiEndpoints.materials, comp_id.toString());
+        const data = new FormData();
+        data.append('title', params.title || '');
+        data.append('type', String(params.type));
+        if (params.type === 0) {
+            data.append('content', params.content || '');
+        } else if (file) {
+            data.append('file', file);
+        }
+        return this.http.post<MaterialInfo>(endpoint, data, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
+    }
+
+    updateMaterial(
+        comp_id: number,
+        material_id: number,
+        params: { title?: string; content?: string },
+        file?: File,
+    ) {
+        const endpoint = format(
+            apiEndpoints.materialDetail,
+            comp_id.toString(),
+            material_id.toString(),
+        );
+        const data = new FormData();
+        if (params.title !== undefined) data.append('title', params.title);
+        if (params.content !== undefined) data.append('content', params.content);
+        if (file) data.append('file', file);
+        return this.http.put<MaterialInfo>(endpoint, data, {
+            responseType: 'json',
+            withCredentials: true,
+            observe: 'response',
+        });
+    }
+
+    deleteMaterial(comp_id: number, material_id: number) {
+        const endpoint = format(
+            apiEndpoints.materialDetail,
+            comp_id.toString(),
+            material_id.toString(),
+        );
+        return this.http.delete(endpoint, {
             responseType: 'json',
             withCredentials: true,
             observe: 'response',

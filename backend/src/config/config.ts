@@ -36,6 +36,22 @@ export default {
     },
     fileScopes: {
         community_banners: 'community/banners/',
+        materials: 'materials/',
+    },
+    materialTypes: {
+        rich_text: 0,
+        pdf: 1,
+        image: 2,
+        audio: 3,
+        video: 4,
+    },
+    // Per-type file size limits (bytes) and allowed extensions.
+    // Magic-byte validation is performed in routes/materials.ts.
+    materialFileLimits: {
+        1: { max: 10 * 1024 * 1024, exts: ['pdf'] },
+        2: { max: 5 * 1024 * 1024, exts: ['png', 'jpg', 'jpeg', 'webp', 'gif'] },
+        3: { max: 50 * 1024 * 1024, exts: ['mp3', 'wav', 'ogg'] },
+        4: { max: 100 * 1024 * 1024, exts: ['mp4', 'webm'] },
     },
     // Schema for the "Import / Generate Questions" feature.
     // Served via GET /competitions/questions/import/schema.

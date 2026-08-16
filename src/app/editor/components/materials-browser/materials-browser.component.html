@@ -1,0 +1,411 @@
+<div class="bg" *ngIf="visible" (click)="close()">
+    <div class="browser" (click)="$event.stopPropagation()">
+        <div class="browser-header">
+            <h2>Materials</h2>
+            <div class="close-icon" (click)="close()" matTooltip="Close">
+                <fa-icon [icon]="closeIcon" size="lg"></fa-icon>
+            </div>
+        </div>
+
+        <div class="browser-body">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-add">
+                    <div class="button main" (click)="showAddForm()">
+                        <fa-icon [icon]="plusIcon"></fa-icon>
+                        &nbsp; Add material
+                    </div>
+                </div>
+
+                <div class="materials-list">
+                    <p class="empty" *ngIf="!loading && materials.length === 0">
+                        No materials yet. Click "Add material".
+                    </p>
+                    <p class="loading" *ngIf="loading && materials.length === 0">
+                        Loading...
+                    </p>
+
+                    <div
+                        class="material-card"
+                        *ngFor="let m of materials"
+                        [ngClass]="{
+                            active:
+                                selectedMaterial?.id === m.id
+                        }"
+                        (click)="selectMaterial(m.id)"
+                    >
+                        <div class="card-title">
+                            {{ m.title || 'Untitled' }}
+                        </div>
+                        <div class="card-meta">
+                            <span class="type-badge">{{
+                                materialTypeLabels[m.type]
+                            }}</span>
+                            <span
+                                class="linked-chip"
+                                matTooltip="Number of questions linked"
+                                >{{ m.linked_count || 0 }} linked</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail panel -->
+            <div class="detail">
+                <!-- Empty state -->
+                <div class="detail-empty" *ngIf="!selectedMaterial && detailMode === 'view'">
+                    <p>Select a material to view its details, or click "Add material".</p>
+                </div>
+
+                <!-- Add form (in detail panel, not sidebar) -->
+                <div class="detail-content" *ngIf="detailMode === 'add'">
+                    <h3>New material</h3>
+
+                    <div class="form-field">
+                        <label for="add_title">Title</label>
+                        <input
+                            id="add_title"
+                            type="text"
+                            maxlength="400"
+                            placeholder="Material title"
+                            [(ngModel)]="addForm.title"
+                        />
+                    </div>
+
+                    <div class="form-field">
+                        <label for="add_type">Type</label>
+                        <mat-select
+                            [(ngModel)]="addForm.type"
+                            (selectionChange)="onAddTypeChange()"
+                            placeholder="Select material type"
+                        >
+                            <mat-option
+                                [value]="materialTypes.rich_text"
+                                >Rich text</mat-option
+                            >
+                            <mat-option [value]="materialTypes.pdf"
+                                >PDF</mat-option
+                            >
+                            <mat-option [value]="materialTypes.image"
+                                >Image</mat-option
+                            >
+                            <mat-option [value]="materialTypes.audio"
+                                >Audio</mat-option
+                            >
+                            <mat-option [value]="materialTypes.video"
+                                >Video</mat-option
+                            >
+                        </mat-select>
+                    </div>
+
+                    <!-- Rich text editor (suneditor) -->
+                    <div
+                        class="form-field"
+                        *ngIf="addForm.type === materialTypes.rich_text"
+                    >
+                        <label>Content</label>
+                        <textarea id="material_add_editor"></textarea>
+                    </div>
+
+                    <!-- File upload (drag/drop + click) -->
+                    <div
+                        class="form-field"
+                        *ngIf="addForm.type !== materialTypes.rich_text"
+                    >
+                        <label>File</label>
+                        <div
+                            class="dropzone"
+                            (dragover)="allowDrop($event)"
+                            (drop)="onDropFile($event, true)"
+                        >
+                            <fa-icon [icon]="uploadIcon" size="2x"></fa-icon>
+                            <p>Drag &amp; drop a file here</p>
+                            <p class="hint">
+                                Allowed: {{ fileLimitExts(addForm.type) }} · Max
+                                {{ fileLimitMb(addForm.type) }}MB
+                            </p>
+                            <label class="file-pick">
+                                <input
+                                    type="file"
+                                    (change)="onAddFileSelected($event)"
+                                />
+                                <span>Choose file</span>
+                            </label>
+                            <p class="chosen" *ngIf="addForm.file">
+                                {{ addForm.file.name }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <manual-error [message]="addError('file')"></manual-error>
+                    <manual-error [message]="addError('title')"></manual-error>
+
+                    <div class="form-actions">
+                        <button
+                            class="main"
+                            [disabled]="saving"
+                            (click)="submitAddForm()"
+                        >
+                            {{ saving ? 'Adding...' : 'Add material' }}
+                        </button>
+                        <button class="main sim" (click)="cancelAddForm()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Material detail view -->
+                <div class="detail-content" *ngIf="selectedMaterial && detailMode === 'view'">
+                    <!-- Title (editable) -->
+                    <div class="detail-title-row">
+                        <input
+                            class="detail-title"
+                            type="text"
+                            maxlength="400"
+                            [(ngModel)]="draftTitle"
+                            placeholder="Material title"
+                        />
+                        <button
+                            class="main"
+                            (click)="saveTitle()"
+                            [disabled]="saving"
+                        >
+                            Save title
+                        </button>
+                    </div>
+
+                    <div class="detail-meta">
+                        <span class="meta-item"
+                            >Type:
+                            <b>{{
+                                materialTypeLabels[selectedMaterial.type]
+                            }}</b></span
+                        >
+                        <span class="meta-item" *ngIf="selectedMaterial.file_size"
+                            >Size:
+                            <b>{{
+                                fileSizeLabel(selectedMaterial.file_size)
+                            }}</b></span
+                        >
+                        <span class="meta-item"
+                            >Uploaded: <b>{{
+                                selectedMaterial.created_at | prettyDate
+                            }}</b></span
+                        >
+                    </div>
+
+                    <hr class="sweet-hr" />
+
+                    <!-- Content rendering / editing -->
+                    <div class="content-block">
+                        <!-- Rich text -->
+                        <ng-container
+                            *ngIf="
+                                selectedMaterial.type ===
+                                materialTypes.rich_text
+                            "
+                        >
+                            <div
+                                class="rich-view"
+                                *ngIf="!editingRichText"
+                                [innerHTML]="selectedMaterial.content"
+                            ></div>
+                            <div class="rich-edit" *ngIf="editingRichText">
+                                <textarea id="material_rich_editor"></textarea>
+                            </div>
+                            <div class="form-actions" *ngIf="!editingRichText">
+                                <button
+                                    class="main"
+                                    (click)="startEditRichText()"
+                                >
+                                    Edit content
+                                </button>
+                            </div>
+                            <div class="form-actions" *ngIf="editingRichText">
+                                <button
+                                    class="main"
+                                    (click)="saveRichText()"
+                                    [disabled]="saving"
+                                >
+                                    {{ saving ? 'Saving...' : 'Save' }}
+                                </button>
+                                <button
+                                    class="main sim"
+                                    (click)="cancelEditRichText()"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </ng-container>
+
+                        <!-- File preview + replace -->
+                        <ng-container
+                            *ngIf="
+                                selectedMaterial.type !==
+                                materialTypes.rich_text
+                            "
+                        >
+                            <div class="file-preview">
+                                <img
+                                    *ngIf="
+                                        selectedMaterial.type ===
+                                        materialTypes.image
+                                    "
+                                    [src]="mediaUrl(selectedMaterial)"
+                                    alt="material"
+                                />
+                                <audio
+                                    *ngIf="
+                                        selectedMaterial.type ===
+                                        materialTypes.audio
+                                    "
+                                    [src]="mediaUrl(selectedMaterial)"
+                                    controls
+                                ></audio>
+                                <video
+                                    *ngIf="
+                                        selectedMaterial.type ===
+                                        materialTypes.video
+                                    "
+                                    [src]="mediaUrl(selectedMaterial)"
+                                    controls
+                                ></video>
+                                <div
+                                    class="pdf-preview"
+                                    *ngIf="
+                                        selectedMaterial.type ===
+                                        materialTypes.pdf
+                                    "
+                                >
+                                    <iframe
+                                        [src]="mediaUrl(selectedMaterial)"
+                                    ></iframe>
+                                </div>
+                                <button
+                                    class="main sim fullscreen-btn"
+                                    (click)="openFullscreen(selectedMaterial)"
+                                >
+                                    View in full screen
+                                </button>
+                            </div>
+
+                            <div
+                                class="dropzone"
+                                (dragover)="allowDrop($event)"
+                                (drop)="onDropFile($event, false)"
+                            >
+                                <fa-icon [icon]="uploadIcon"></fa-icon>
+                                <p>Drag &amp; drop to replace the file</p>
+                                <label class="file-pick">
+                                    <input
+                                        type="file"
+                                        (change)="onReplaceFileSelected($event)"
+                                    />
+                                    <span>Choose file</span>
+                                </label>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <hr class="sweet-hr" />
+
+                    <!-- Linked questions -->
+                    <div class="linked-questions">
+                        <h4>Linked questions</h4>
+                        <p
+                            class="empty"
+                            *ngIf="
+                                !selectedMaterial.question_materials ||
+                                selectedMaterial.question_materials.length ===
+                                    0
+                            "
+                        >
+                            Not linked to any question.
+                        </p>
+                        <div
+                            class="linked-row"
+                            *ngFor="
+                                let qm of selectedMaterial.question_materials
+                            "
+                        >
+                            <span class="linked-title">
+                                Q{{ qm.question_id }}:
+                                {{ qm.question?.title || 'Untitled' }}
+                            </span>
+                            <span
+                                class="unlink-x"
+                                (click)="unlinkQuestion(qm)"
+                                matTooltip="Unlink (applied on Save changes)"
+                                >✕</span
+                            >
+                        </div>
+                    </div>
+
+                    <hr class="sweet-hr" />
+
+                    <!-- Delete -->
+                    <div class="delete-block">
+                        <button class="main danger" (click)="requestDelete()">
+                            <fa-icon [icon]="trashIcon"></fa-icon>
+                            &nbsp; Delete material
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirmation popup -->
+<popup
+    heading="Delete material?"
+    [destructive]="true"
+    [showControls]="false"
+    [visible]="deletePopupVisible"
+    (closeEvent)="handleDeletePopupEvent($event)"
+    *ngIf="deletePopupVisible"
+>
+    Deleting this material will unlink it from every question listed above.
+    This cannot be undone.
+    <br /><br />
+    <div class="row">
+        <button
+            class="main danger"
+            [disabled]="saving"
+            (click)="handleDeletePopupEvent('continue')"
+        >
+            {{ saving ? 'Deleting...' : 'Yes, delete' }}
+        </button>
+        <button class="main sim" (click)="handleDeletePopupEvent('cancel')">
+            Cancel
+        </button>
+    </div>
+</popup>
+
+<!-- Fullscreen preview overlay -->
+<div class="fullscreen-bg" *ngIf="fullscreenMaterial" (click)="closeFullscreen()">
+    <div class="fullscreen-content" (click)="$event.stopPropagation()">
+        <div class="close-icon" (click)="closeFullscreen()" matTooltip="Close">
+            <fa-icon [icon]="closeIcon" size="lg"></fa-icon>
+        </div>
+        <img
+            *ngIf="fullscreenMaterial.type === materialTypes.image"
+            [src]="mediaUrl(fullscreenMaterial)"
+        />
+        <iframe
+            *ngIf="fullscreenMaterial.type === materialTypes.pdf"
+            [src]="mediaUrl(fullscreenMaterial)"
+        ></iframe>
+        <video
+            *ngIf="fullscreenMaterial.type === materialTypes.video"
+            [src]="mediaUrl(fullscreenMaterial)"
+            controls
+        ></video>
+        <audio
+            *ngIf="fullscreenMaterial.type === materialTypes.audio"
+            [src]="mediaUrl(fullscreenMaterial)"
+            controls
+        ></audio>
+    </div>
+</div>

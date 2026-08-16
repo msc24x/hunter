@@ -12,5 +12,6 @@ router.use(require('./judge'));
 router.use(require('./invites'));
 router.use(require('./communities'));
 router.use(require('./media'));
+router.use(require('./materials'));
 
 module.exports = router;

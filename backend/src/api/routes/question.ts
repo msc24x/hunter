@@ -557,6 +557,54 @@ router.put(
 
         promises.push(saveQuestionDataPr);
 
+        // Sync material links. Only when the client sends `material_ids` —
+        // this is the "save changes" flow for linking/unlinking materials.
+        // The array is treated as the desired full set (replace semantics).
+        if (Array.isArray(params.material_ids)) {
+            const desiredIds = Array.from(
+                new Set(
+                    params.material_ids
+                        .map((n) => parseInt(String(n)))
+                        .filter((n) => !isNaN(n) && n > 0),
+                ),
+            );
+
+            const syncMaterialLinks = (async () => {
+                // Verify all referenced materials belong to this competition
+                // and are not deleted.
+                const valid = await client.materials.findMany({
+                    where: {
+                        id: { in: desiredIds },
+                        competition_id: comp_id,
+                        deleted_at: null,
+                    },
+                    select: { id: true },
+                });
+                const validIds = new Set(valid.map((m) => m.id));
+
+                await client.question_material.deleteMany({
+                    where: { question_id: id },
+                });
+
+                if (desiredIds.length > 0) {
+                    const rows = desiredIds
+                        .filter((mid) => validIds.has(mid))
+                        .map((mid, i) => ({
+                            question_id: id,
+                            material_id: mid,
+                            position: i,
+                        }));
+                    if (rows.length > 0) {
+                        await client.question_material.createMany({
+                            data: rows,
+                        });
+                    }
+                }
+            })();
+
+            promises.push(syncMaterialLinks);
+        }
+
         if (
             ![config.questionTypes.mcq, config.questionTypes.fill].includes(
                 params.type,
@@ -690,6 +738,22 @@ router.get(
                         },
                         include: {
                             question_choices: true,
+                            question_materials: {
+                                include: {
+                                    material: {
+                                        select: {
+                                            id: true,
+                                            title: true,
+                                            type: true,
+                                            content: true,
+                                            file_path: true,
+                                            file_size: true,
+                                            deleted_at: true,
+                                        },
+                                    },
+                                },
+                                orderBy: { position: 'asc' },
+                            },
                         },
                     },
                     host_user: {
@@ -753,6 +817,22 @@ router.get(
                     response.competition_invites =
                         await Competitions.getInvites(competition.id);
 
+                    // Drop links to soft-deleted materials in the editor view.
+                    response.questions = response.questions.map(
+                        (q: any) => ({
+                            ...q,
+                            question_materials: (q.question_materials || [])
+                                .filter(
+                                    (qm: any) => !qm.material?.deleted_at,
+                                )
+                                .map((qm: any) => {
+                                    const { deleted_at, ...material } =
+                                        qm.material || {};
+                                    return { ...qm, material };
+                                }),
+                        }),
+                    );
+
                     Util.sendResponseJson(res, resCode.success, response);
                     return;
                 }
@@ -787,6 +867,7 @@ router.get(
                             ques.case_sensitive = false;
                             ques.char_limit = null;
                             ques.question_choices = [];
+                            ques.question_materials = [];
 
                             return ques;
                         },
@@ -809,6 +890,18 @@ router.get(
                     } else if (ques.type === config.questionTypes.fill) {
                         ques.question_choices = [];
                     }
+
+                    // Drop links to soft-deleted materials and the internal
+                    // deleted_at flag for participants.
+                    (ques as any).question_materials = (
+                        ques as any
+                    ).question_materials
+                        ?.filter((qm: any) => !qm.material?.deleted_at)
+                        .map((qm: any) => {
+                            const { deleted_at, ...material } =
+                                qm.material || {};
+                            return { ...qm, material };
+                        });
                 });
 
                 // Shuffle the questions except for the host

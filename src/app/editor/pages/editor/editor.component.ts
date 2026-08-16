@@ -25,6 +25,7 @@ import {
     faTrashCan,
     faUpload,
     faWandMagicSparkles,
+    faPaperclip,
 } from '@fortawesome/free-solid-svg-icons';
 import { error } from 'console';
 import katex from 'katex';
@@ -39,6 +40,7 @@ import {
     CompetitionInvite,
     domainName,
     environment,
+    MaterialInfo,
     protocol,
     QuestionChoice,
     QuestionInfo,
@@ -78,6 +80,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     copyIcon = faCopy;
     importIcon = faFileImport;
+    materialsIcon = faPaperclip;
 
     loading = false;
     preview_mode = false;
@@ -126,6 +129,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     importSchema: any = null;
     userCommunities: Array<Community> = [];
     ownedCommunities: Array<Community> = [];
+
+    materialsBrowserVisible = false;
+    allMaterials: MaterialInfo[] = [];
+    selectedMaterialIds: number[] = [];
 
     errors: any = {};
     contest_errors: any = {};
@@ -202,6 +209,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                         this.loading = false;
                         this.fetchQuestions();
                         this.fetchUserCommunities();
+                        this.fetchMaterials();
                     }
                 },
                 (err) => {
@@ -212,6 +220,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         } else {
             this.fetchQuestions();
             this.fetchUserCommunities();
+            this.fetchMaterials();
         }
 
         document.onkeydown = (event) => {
@@ -368,10 +377,15 @@ export class EditorComponent implements OnInit, OnDestroy {
             return;
         }
         this.loading = true;
+        const material_ids = (this.questionSelectedInfo.question_materials || [])
+            .slice()
+            .sort((a, b) => a.position - b.position)
+            .map((qm) => qm.material_id);
         var promise = new Promise<void>((resolve, reject) => {
             this.competitionsData
                 .putQuestion({
                     ...this.questionSelectedInfo,
+                    material_ids,
                     created_at: this.competitionInfo.created_at,
                     updated_at: new Date(),
                 } as QuestionInfo)
@@ -414,6 +428,11 @@ export class EditorComponent implements OnInit, OnDestroy {
             index == -1
                 ? ({} as QuestionInfo)
                 : this.competitionInfo.questions![index];
+
+        // Sync the material multi-select backing field.
+        this.selectedMaterialIds = (
+            this.questionSelectedInfo.question_materials || []
+        ).map((qm) => qm.material_id);
 
         if (backup) {
             this.questionSelectedBackup = structuredClone(
@@ -777,6 +796,72 @@ export class EditorComponent implements OnInit, OnDestroy {
             this.regenerateImportJson();
         }
         this.showPopup(true, 'import_questions');
+    }
+
+    openMaterialsBrowser() {
+        this.materialsBrowserVisible = true;
+    }
+
+    closeMaterialsBrowser() {
+        this.materialsBrowserVisible = false;
+    }
+
+    handleMaterialsUnlink(event: {
+        material_id: number;
+        question_id: number;
+    }) {
+        // Stage the unlink in the local competition model so that the
+        // affected question's "Save changes" persists it.
+        const q = this.competitionInfo.questions?.find(
+            (x) => x.id === event.question_id,
+        );
+        if (q?.question_materials) {
+            q.question_materials = q.question_materials.filter(
+                (qm) => qm.material_id !== event.material_id,
+            );
+        }
+        if (this.questionSelectedInfo?.id === event.question_id) {
+            this.questionSelectedInfo.question_materials =
+                q?.question_materials || [];
+        }
+    }
+
+    handleMaterialsChanged() {
+        // Materials were created/updated/deleted in the browser. Refresh the
+        // selector list so newly created materials can be linked.
+        this.fetchMaterials();
+    }
+
+    fetchMaterials() {
+        if (!this.competition_id) return;
+        this.competitionsData.getMaterials(this.competition_id).subscribe({
+            next: (res) => {
+                this.allMaterials = (res.body as any) || [];
+            },
+            error: () => {
+                this.allMaterials = [];
+            },
+        });
+    }
+
+    // Called by mat-select ngModelChange — rebuilds question_materials from
+    // the new set of selected material IDs.
+    onMaterialIdsChange(ids: number[]) {
+        this.selectedMaterialIds = ids || [];
+        const existing = this.questionSelectedInfo.question_materials || [];
+        this.questionSelectedInfo.question_materials = (ids || []).map(
+            (id, i) => {
+                const prev = existing.find((qm) => qm.material_id === id);
+                return {
+                    question_id: this.questionSelectedInfo.id,
+                    material_id: id,
+                    position: i,
+                    material:
+                        prev?.material ||
+                        this.allMaterials.find((m) => m.id === id),
+                };
+            },
+        );
     }
 
     closeImportPopup() {

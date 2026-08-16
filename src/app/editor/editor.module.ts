@@ -15,6 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { InsightsComponent } from './pages/insights/insights.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MaterialsBrowserComponent } from './components/materials-browser/materials-browser.component';
 
 @NgModule({
     declarations: [
@@ -23,6 +24,7 @@ import { MatTabsModule } from '@angular/material/tabs';
         DashboardCardComponent,
         CodeTesterComponent,
         InsightsComponent,
+        MaterialsBrowserComponent,
     ],
     imports: [
         CommonModule,

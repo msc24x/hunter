@@ -31,6 +31,113 @@
 
 #question_statement {
     font-size: 1.05rem !important;
-    flex-grow: 1;
     border-radius: 2rem;
+}
+
+#question_materials {
+    font-size: 1.05rem;
+
+    .material-item {
+        margin-bottom: 1.5rem;
+
+        .material-type-chip {
+            display: inline-block;
+            background-color: var(--btn-bg);
+            color: var(--btn-main-fg);
+            padding: 0.15rem 0.6rem;
+            border-radius: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .material-rich {
+            line-height: 1.5;
+            min-height: 1rem;
+            overflow: visible;
+
+            ::ng-deep p {
+                margin: 0.4rem 0;
+            }
+        }
+
+        .material-file {
+            img,
+            video,
+            iframe {
+                max-width: 100%;
+                border-radius: 0.6rem;
+            }
+
+            iframe {
+                width: 100%;
+                height: 420px;
+                border: 0;
+            }
+
+            audio {
+                width: 100%;
+            }
+
+            .fs-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                margin-top: 0.5rem;
+                background: none;
+                border: none;
+                color: var(--cute-blue);
+                cursor: pointer;
+                font-size: 0.8rem;
+                font-family: appFont;
+                padding: 0;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+// Fullscreen media viewer uses the popup component with noContainer mode.
+// Style the projected media inside the popup's dialog.
+:host ::ng-deep popup .dialog {
+    max-width: 92%;
+    max-height: 92%;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.fs-media {
+    &.fs-img {
+        max-width: 90vw;
+        max-height: 88vh;
+        object-fit: contain;
+        border-radius: 0.5rem;
+        display: block;
+    }
+
+    &.fs-iframe {
+        width: 80vw;
+        height: 85vh;
+        border: 0;
+        border-radius: 0.5rem;
+    }
+
+    &.fs-video {
+        max-width: 90vw;
+        max-height: 88vh;
+        border-radius: 0.5rem;
+        display: block;
+    }
+
+    &.fs-audio {
+        width: 30rem;
+        max-width: 90vw;
+        margin: 2rem auto;
+        display: block;
+    }
 }

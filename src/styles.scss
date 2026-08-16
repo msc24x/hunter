@@ -549,3 +549,8 @@ question-display {
         background-position: 200% 50%;
     }
 }
+
+// Raise Angular Material overlay above custom modal overlays (e.g. materials browser at 1100).
+.cdk-overlay-container {
+    z-index: 1300;
+}

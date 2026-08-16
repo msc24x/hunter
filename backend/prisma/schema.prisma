@@ -40,6 +40,7 @@ model competitions {
   scheduled_end_at DateTime?   @db.DateTime(0)
   time_limit       Int?
   questions        questions[]
+  materials        materials[]
   competition_sessions        competition_session[]
   competition_invites        competition_invite[]
   community_id     Int?
@@ -131,9 +132,38 @@ model questions {
   case_sensitive   Boolean           @default(false)
   char_limit       Int?
   question_choices question_choice[]
+  question_materials question_material[]
   results          results[]
 
   @@index([competition_id], map: "fk_cid")
+}
+
+model materials {
+  id              Int       @id @default(autoincrement())
+  competition_id  Int
+  competition     competitions @relation(fields: [competition_id], references: [id], onDelete: Cascade)
+  title           String?   @db.VarChar(400)
+  type            Int       @default(0) @db.UnsignedTinyInt()
+  content         String?   @db.Text
+  file_path       String?   @db.VarChar(224)
+  file_size       Int?
+  created_at      DateTime  @db.DateTime(0)
+  updated_at      DateTime  @db.DateTime(0)
+  deleted_at      DateTime? @db.DateTime(0)
+  question_materials question_material[]
+
+  @@index([competition_id])
+}
+
+model question_material {
+  question_id Int
+  material_id Int
+  position    Int @default(0)
+  question    questions @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  material    materials @relation(fields: [material_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([question_id, material_id])
+  @@index([material_id])
 }
 
 model question_choice {

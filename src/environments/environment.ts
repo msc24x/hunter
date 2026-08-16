@@ -203,6 +203,8 @@ export const apiEndpoints = {
     leaveCommunity: environment.apiUrl + '/communities/{0}/leave',
     createCommunity: environment.apiUrl + '/communities/create',
     updateCommunity: environment.apiUrl + '/communities/{0}',
+    materials: environment.apiUrl + '/competitions/{0}/materials',
+    materialDetail: environment.apiUrl + '/competitions/{0}/materials/{1}',
 };
 
 export const templates = {
@@ -248,8 +250,58 @@ export interface QuestionInfo {
     user_answer?: string;
 
     question_choices?: QuestionChoice[];
+    question_materials?: QuestionMaterial[];
+    material_ids?: number[];
     results?: result[];
 }
+
+export type QuestionMaterial = {
+    question_id: number;
+    material_id: number;
+    position: number;
+    material?: MaterialInfo;
+    question?: { id: number; title: string | null };
+};
+
+export interface MaterialInfo {
+    id: number;
+    competition_id?: number;
+    title: string | null;
+    type: number;
+    content: string | null;
+    file_path: string | null;
+    file_size: number | null;
+    created_at: Date;
+    updated_at: Date;
+    linked_count?: number;
+    question_materials?: QuestionMaterial[];
+}
+
+export const materialTypes = {
+    rich_text: 0,
+    pdf: 1,
+    image: 2,
+    audio: 3,
+    video: 4,
+};
+
+export const materialTypeLabels: Record<number, string> = {
+    0: 'Rich text',
+    1: 'PDF',
+    2: 'Image',
+    3: 'Audio',
+    4: 'Video',
+};
+
+export const materialFileLimits: Record<
+    number,
+    { max: number; exts: string[] }
+> = {
+    1: { max: 10 * 1024 * 1024, exts: ['pdf'] },
+    2: { max: 5 * 1024 * 1024, exts: ['png', 'jpg', 'jpeg', 'webp', 'gif'] },
+    3: { max: 50 * 1024 * 1024, exts: ['mp3', 'wav', 'ogg'] },
+    4: { max: 100 * 1024 * 1024, exts: ['mp4', 'webm'] },
+};
 
 export interface QuestionChoice {
     id: number;

@@ -756,10 +756,19 @@
                 class="button main ai-import-btn"
                 (click)="openImportPopup()"
                 matTooltip="Use AI or paste a JSON to bulk-create questions"
-                matTooltipPosition="right"
+                matTooltipPosition="below"
             >
                 <fa-icon [icon]="magicIcon"></fa-icon>
                 &nbsp; Import / Generate
+            </div>
+            <div
+                class="button main materials-btn"
+                (click)="openMaterialsBrowser()"
+                matTooltip="Manage materials (PDF, images, audio, video, rich text)"
+                matTooltipPosition="below"
+            >
+                <fa-icon [icon]="materialsIcon"></fa-icon>
+                &nbsp; Materials
             </div>
         </div>
 
@@ -918,6 +927,31 @@
             </p>
 
             <manual-error [message]="errors.statement"></manual-error>
+
+            <div class="materials-selector">
+                <h3>Materials Linked</h3>
+                <p class="info-like">
+                    Link any number of materials to this question. They appear
+                    to participants under the question statement. A single
+                    material can be shared across multiple questions, so common
+                    content only needs to be uploaded once.
+                </p>
+
+                <mat-select
+                    multiple
+                    placeholder="Select materials to link"
+                    [ngModel]="selectedMaterialIds"
+                    (ngModelChange)="onMaterialIdsChange($event)"
+                >
+                    <mat-option *ngFor="let m of allMaterials" [value]="m.id">
+                        {{ m.title || "Untitled" }}
+                    </mat-option>
+                </mat-select>
+                <p class="info-like sticky" *ngIf="allMaterials.length === 0">
+                    No materials created yet for this competition. Click
+                    "Materials" above to create one.
+                </p>
+            </div>
 
             <br />
             <hr class="sweet-hr up" />
@@ -1312,3 +1346,11 @@
         </div>
     </div>
 </div>
+
+<materials-browser
+    [competition_id]="competition_id"
+    [visible]="materialsBrowserVisible"
+    (closeEvent)="closeMaterialsBrowser()"
+    (unlinkEvent)="handleMaterialsUnlink($event)"
+    (materialsChanged)="handleMaterialsChanged()"
+></materials-browser>
