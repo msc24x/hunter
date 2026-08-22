@@ -938,6 +938,7 @@
                 </p>
 
                 <mat-select
+                    *ngIf="allMaterials.length"
                     multiple
                     placeholder="Select materials to link"
                     [ngModel]="selectedMaterialIds"
@@ -947,9 +948,11 @@
                         {{ m.title || "Untitled" }}
                     </mat-option>
                 </mat-select>
-                <p class="info-like sticky" *ngIf="allMaterials.length === 0">
-                    No materials created yet for this competition. Click
-                    "Materials" above to create one.
+                <p class="info-like" *ngIf="allMaterials.length === 0">
+                    No materials created yet for this competition.
+                    <span (click)="openMaterialsBrowser()" class="link-like"
+                        >Click here to create one</span
+                    >
                 </p>
             </div>
 

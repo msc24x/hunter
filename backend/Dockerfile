@@ -16,4 +16,4 @@ ARG ENV
 
 ENV ENV ${ENV}
 
-CMD npm run start-${ENV}
+CMD node docker-entrypoint.js && npm run start-${ENV}
