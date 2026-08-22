@@ -325,6 +325,12 @@
             @include ellipsis;
             color: var(--text-black);
             font-size: 0.9rem;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+                color: var(--dark-blue);
+            }
         }
 
         .unlink-x {

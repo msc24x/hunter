@@ -90,6 +90,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     competition_id: number;
     competitionInfo: CompetitionInfo = {} as CompetitionInfo;
     questionSelected = -1;
+    initialQuestionIndex: number | null = null;
     questionSelectedInfo = {} as QuestionInfo;
     questionSelectedBackup = {} as QuestionInfo;
     timeLimitEnabled = false;
@@ -161,6 +162,11 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.competition_id = parseInt(
             this.activatedRoute.snapshot.paramMap.get('competition_id') || '',
         );
+
+        const qIdx = parseInt(
+            this.activatedRoute.snapshot.queryParamMap.get('q') || '',
+        );
+        this.initialQuestionIndex = isNaN(qIdx) ? null : qIdx;
 
         this.authService.isAuthenticated.subscribe((isAuth) => {
             this.user = this.authService.user;
@@ -429,6 +435,14 @@ export class EditorComponent implements OnInit, OnDestroy {
                 ? ({} as QuestionInfo)
                 : this.competitionInfo.questions![index];
 
+        // Keep the URL in sync so refresh restores the same question.
+        if (index >= 0 && this.competition_id) {
+            this.router.navigate([], {
+                queryParams: { q: index },
+                replaceUrl: true,
+            });
+        }
+
         // Sync the material multi-select backing field.
         this.selectedMaterialIds = (
             this.questionSelectedInfo.question_materials || []
@@ -648,6 +662,18 @@ export class EditorComponent implements OnInit, OnDestroy {
 
                     if (this.questionSelected !== -1) {
                         this.selectQuestion(this.questionSelected);
+                    } else if (
+                        this.initialQuestionIndex !== null &&
+                        this.competitionInfo.questions?.length
+                    ) {
+                        // Restore the question selected via URL on first load.
+                        const count = this.competitionInfo.questions.length;
+                        const idx = Math.max(
+                            0,
+                            Math.min(this.initialQuestionIndex, count - 1),
+                        );
+                        this.initialQuestionIndex = null;
+                        this.selectQuestion(idx);
                     }
 
                     this.competitionsData
@@ -830,6 +856,14 @@ export class EditorComponent implements OnInit, OnDestroy {
         // Materials were created/updated/deleted in the browser. Refresh the
         // selector list so newly created materials can be linked.
         this.fetchMaterials();
+    }
+
+    handleLinkedQuestionSelect(question_id: number) {
+        const index = this.competitionInfo.questions?.findIndex(
+            (q) => q.id === question_id,
+        );
+        if (index == null || index === -1) return;
+        this.selectQuestion(index, true);
     }
 
     fetchMaterials() {

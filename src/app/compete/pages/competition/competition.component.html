@@ -255,7 +255,11 @@
     <sign-in-prompt *ngIf="!isAuthenticated"></sign-in-prompt>
 </div>
 
-<div class="body" [ngClass]="{ 'focus-mode': isFocusMode }" *ngIf="competition.id && !notStarted">
+<div
+    class="body"
+    [ngClass]="{ 'focus-mode': isFocusMode }"
+    *ngIf="competition.id && !notStarted"
+>
     <div class="main">
         <div *ngIf="this.competition.title" id="competition_info">
             <div
@@ -409,13 +413,18 @@
 
         <div
             #hrLayoutContainer
-            [ngClass]="{ 'row compete-hr-layout': hrlayout, 'is-resizing': isResizing }"
+            [ngClass]="{
+                'row compete-hr-layout': hrlayout,
+                'is-resizing': isResizing,
+            }"
             *ngIf="questionSelectedInfo"
         >
             <!-- Questions -->
             <div
                 class="question-section"
-                [style.width]="hrlayout ? 'calc(' + splitPercent + '% - 5px)' : null"
+                [style.width]="
+                    hrlayout ? 'calc(' + splitPercent + '% - 5px)' : null
+                "
             >
                 <div class="row questions-container">
                     <questions-list
@@ -488,8 +497,16 @@
             <code-editor
                 *ngIf="questionSelectedInfo.type === 0"
                 class="ace-editor question-side-section"
-                editorClass="participation-page"
-                [style.width]="hrlayout ? 'calc(' + (100 - splitPercent) + '% - 5px)' : null"
+                [editorClass]="
+                    isFocusMode
+                        ? 'participation-page-focus'
+                        : 'participation-page'
+                "
+                [style.width]="
+                    hrlayout
+                        ? 'calc(' + (100 - splitPercent) + '% - 5px)'
+                        : null
+                "
                 [(code)]="codeWritten"
                 [(languageSelected)]="languageSelected"
                 (fetchLastSubmission)="fetchLastSubmission()"
@@ -517,7 +534,11 @@
             <div
                 *ngIf="questionSelectedInfo.type === 1"
                 class="mcq-section question-side-section"
-                [style.width]="hrlayout ? 'calc(' + (100 - splitPercent) + '% - 5px)' : null"
+                [style.width]="
+                    hrlayout
+                        ? 'calc(' + (100 - splitPercent) + '% - 5px)'
+                        : null
+                "
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
@@ -587,7 +608,11 @@
             <div
                 *ngIf="questionSelectedInfo.type === 2"
                 class="blank-section question-side-section"
-                [style.width]="hrlayout ? 'calc(' + (100 - splitPercent) + '% - 5px)' : null"
+                [style.width]="
+                    hrlayout
+                        ? 'calc(' + (100 - splitPercent) + '% - 5px)'
+                        : null
+                "
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
@@ -619,7 +644,11 @@
             <div
                 *ngIf="questionSelectedInfo.type === 3"
                 class="long-answer-section question-side-section"
-                [style.width]="hrlayout ? 'calc(' + (100 - splitPercent) + '% - 5px)' : null"
+                [style.width]="
+                    hrlayout
+                        ? 'calc(' + (100 - splitPercent) + '% - 5px)'
+                        : null
+                "
                 [ngClass]="{
                     'disabled_bright no-click':
                         !competition.practice &&
@@ -713,11 +742,18 @@
 
                 <a
                     id="focus-btn"
-                    [matTooltip]="isFocusMode ? 'Exit focus mode' : 'Enter focus mode for distraction-free competing'"
+                    [matTooltip]="
+                        isFocusMode
+                            ? 'Exit focus mode'
+                            : 'Enter focus mode for distraction-free competing'
+                    "
                     (click)="toggleFocusMode()"
                 >
-                    <fa-icon [icon]="isFocusMode ? compressIcon : expandIcon" size="sm"></fa-icon>
-                    {{ isFocusMode ? 'Exit Focus mode' : 'Focus mode' }}
+                    <fa-icon
+                        [icon]="isFocusMode ? compressIcon : expandIcon"
+                        size="sm"
+                    ></fa-icon>
+                    {{ isFocusMode ? "Exit Focus mode" : "Focus mode" }}
                 </a>
 
                 &bull;

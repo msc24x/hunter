@@ -21,7 +21,10 @@
                     <p class="empty" *ngIf="!loading && materials.length === 0">
                         No materials yet. Click "Add material".
                     </p>
-                    <p class="loading" *ngIf="loading && materials.length === 0">
+                    <p
+                        class="loading"
+                        *ngIf="loading && materials.length === 0"
+                    >
                         Loading...
                     </p>
 
@@ -29,13 +32,12 @@
                         class="material-card"
                         *ngFor="let m of materials"
                         [ngClass]="{
-                            active:
-                                selectedMaterial?.id === m.id
+                            active: selectedMaterial?.id === m.id,
                         }"
                         (click)="selectMaterial(m.id)"
                     >
                         <div class="card-title">
-                            {{ m.title || 'Untitled' }}
+                            {{ m.title || "Untitled" }}
                         </div>
                         <div class="card-meta">
                             <span class="type-badge">{{
@@ -54,8 +56,14 @@
             <!-- Detail panel -->
             <div class="detail">
                 <!-- Empty state -->
-                <div class="detail-empty" *ngIf="!selectedMaterial && detailMode === 'view'">
-                    <p>Select a material to view its details, or click "Add material".</p>
+                <div
+                    class="detail-empty"
+                    *ngIf="!selectedMaterial && detailMode === 'view'"
+                >
+                    <p>
+                        Select a material to view its details, or click "Add
+                        material".
+                    </p>
                 </div>
 
                 <!-- Add form (in detail panel, not sidebar) -->
@@ -80,8 +88,7 @@
                             (selectionChange)="onAddTypeChange()"
                             placeholder="Select material type"
                         >
-                            <mat-option
-                                [value]="materialTypes.rich_text"
+                            <mat-option [value]="materialTypes.rich_text"
                                 >Rich text</mat-option
                             >
                             <mat-option [value]="materialTypes.pdf"
@@ -147,7 +154,7 @@
                             [disabled]="saving"
                             (click)="submitAddForm()"
                         >
-                            {{ saving ? 'Adding...' : 'Add material' }}
+                            {{ saving ? "Adding..." : "Add material" }}
                         </button>
                         <button class="main sim" (click)="cancelAddForm()">
                             Cancel
@@ -156,7 +163,10 @@
                 </div>
 
                 <!-- Material detail view -->
-                <div class="detail-content" *ngIf="selectedMaterial && detailMode === 'view'">
+                <div
+                    class="detail-content"
+                    *ngIf="selectedMaterial && detailMode === 'view'"
+                >
                     <!-- Title (editable) -->
                     <div class="detail-title-row">
                         <input
@@ -182,14 +192,17 @@
                                 materialTypeLabels[selectedMaterial.type]
                             }}</b></span
                         >
-                        <span class="meta-item" *ngIf="selectedMaterial.file_size"
+                        <span
+                            class="meta-item"
+                            *ngIf="selectedMaterial.file_size"
                             >Size:
                             <b>{{
                                 fileSizeLabel(selectedMaterial.file_size)
                             }}</b></span
                         >
                         <span class="meta-item"
-                            >Uploaded: <b>{{
+                            >Uploaded:
+                            <b>{{
                                 selectedMaterial.created_at | prettyDate
                             }}</b></span
                         >
@@ -228,7 +241,7 @@
                                     (click)="saveRichText()"
                                     [disabled]="saving"
                                 >
-                                    {{ saving ? 'Saving...' : 'Save' }}
+                                    {{ saving ? "Saving..." : "Save" }}
                                 </button>
                                 <button
                                     class="main sim"
@@ -317,8 +330,7 @@
                             class="empty"
                             *ngIf="
                                 !selectedMaterial.question_materials ||
-                                selectedMaterial.question_materials.length ===
-                                    0
+                                selectedMaterial.question_materials.length === 0
                             "
                         >
                             Not linked to any question.
@@ -329,16 +341,14 @@
                                 let qm of selectedMaterial.question_materials
                             "
                         >
-                            <span class="linked-title">
-                                Q{{ qm.question_id }}:
-                                {{ qm.question?.title || 'Untitled' }}
-                            </span>
                             <span
-                                class="unlink-x"
-                                (click)="unlinkQuestion(qm)"
-                                matTooltip="Unlink (applied on Save changes)"
-                                >✕</span
+                                class="linked-title"
+                                matTooltip="Open this question in the editor"
+                                (click)="openLinkedQuestion(qm)"
                             >
+                                Q{{ qm.question_id }}:
+                                {{ qm.question?.title || "Untitled" }}
+                            </span>
                         </div>
                     </div>
 
@@ -366,8 +376,8 @@
     (closeEvent)="handleDeletePopupEvent($event)"
     *ngIf="deletePopupVisible"
 >
-    Deleting this material will unlink it from every question listed above.
-    This cannot be undone.
+    Deleting this material will unlink it from every question listed above. This
+    cannot be undone.
     <br /><br />
     <div class="row">
         <button
@@ -375,7 +385,7 @@
             [disabled]="saving"
             (click)="handleDeletePopupEvent('continue')"
         >
-            {{ saving ? 'Deleting...' : 'Yes, delete' }}
+            {{ saving ? "Deleting..." : "Yes, delete" }}
         </button>
         <button class="main sim" (click)="handleDeletePopupEvent('cancel')">
             Cancel
@@ -384,7 +394,11 @@
 </popup>
 
 <!-- Fullscreen preview overlay -->
-<div class="fullscreen-bg" *ngIf="fullscreenMaterial" (click)="closeFullscreen()">
+<div
+    class="fullscreen-bg"
+    *ngIf="fullscreenMaterial"
+    (click)="closeFullscreen()"
+>
     <div class="fullscreen-content" (click)="$event.stopPropagation()">
         <div class="close-icon" (click)="closeFullscreen()" matTooltip="Close">
             <fa-icon [icon]="closeIcon" size="lg"></fa-icon>

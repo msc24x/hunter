@@ -52,6 +52,11 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        if ('editorClass' in changes && this.editor) {
+            this.editor.unsetStyle(changes['editorClass']?.previousValue);
+            this.editor.setStyle(this.editorClass);
+            return;
+        }
         if (this.editor?.getValue() === this.code) {
             this.emittedChanges = false;
             return;

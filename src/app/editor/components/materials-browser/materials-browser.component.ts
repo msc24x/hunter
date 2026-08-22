@@ -42,6 +42,7 @@ export class MaterialsBrowserComponent implements OnChanges, OnDestroy {
         question_id: number;
     }>();
     @Output() materialsChanged = new EventEmitter<void>();
+    @Output() questionSelectEvent = new EventEmitter<number>();
 
     materialTypes = materialTypes;
     materialTypeLabels = materialTypeLabels;
@@ -469,6 +470,13 @@ export class MaterialsBrowserComponent implements OnChanges, OnDestroy {
             (x) => x.id === this.selectedMaterial!.id,
         );
         if (m && m.linked_count) m.linked_count--;
+    }
+
+    openLinkedQuestion(qm: QuestionMaterial): void {
+        const question_id = qm.question_id ?? qm.question?.id;
+        if (!question_id) return;
+        this.questionSelectEvent.emit(question_id);
+        this.close();
     }
 
     openFullscreen(m: MaterialInfo): void {

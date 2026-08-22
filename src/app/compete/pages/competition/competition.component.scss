@@ -222,7 +222,8 @@
         color: var(--text-black);
     }
 
-    #report-btn, #focus-btn {
+    #report-btn,
+    #focus-btn {
         color: var(--text-black);
         cursor: pointer;
         display: block;
@@ -333,10 +334,13 @@
         height: 36px;
         background-color: var(--border-color);
         border-radius: 2px;
-        transition: background-color 150ms ease, height 150ms ease;
+        transition:
+            background-color 150ms ease,
+            height 150ms ease;
     }
 
-    &:hover, &.active {
+    &:hover,
+    &.active {
         .handle-bar {
             background-color: var(--cute-blue, #4080ff);
             height: 48px;
@@ -353,7 +357,7 @@
 
     .compete-hr-layout {
         .question-section {
-            height: calc(100vh - 140px);
+            height: calc(100vh - 84px - 150px);
         }
     }
 }

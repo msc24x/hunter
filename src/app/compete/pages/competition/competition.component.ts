@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import * as ace from 'ace-builds';
 import { last, Subscription } from 'rxjs';
@@ -98,7 +104,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     splitPercent = 45;
     isResizing = false;
 
-    @ViewChild('hrLayoutContainer') hrLayoutContainer?: ElementRef<HTMLDivElement>;
+    @ViewChild('hrLayoutContainer')
+    hrLayoutContainer?: ElementRef<HTMLDivElement>;
 
     private handleFullscreenChange = () => {
         this.isFocusMode = !!document.fullscreenElement;
@@ -183,7 +190,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        document.addEventListener('fullscreenchange', this.handleFullscreenChange);
+        document.addEventListener(
+            'fullscreenchange',
+            this.handleFullscreenChange,
+        );
 
         document
             .getElementsByTagName('bottom-app-bar')[0]
@@ -253,7 +263,10 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
+        document.removeEventListener(
+            'fullscreenchange',
+            this.handleFullscreenChange,
+        );
 
         document
             .getElementsByTagName('bottom-app-bar')[0]
@@ -735,10 +748,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         this.lastEditorContent();
 
-        this.router.navigate(
-            ['/compete/p', this.c_id, index],
-            { replaceUrl: true },
-        );
+        this.router.navigate(['/compete/p', this.c_id, index], {
+            replaceUrl: true,
+        });
 
         if (this.questionSelected > 0) {
             this.titleService.setTitle(
@@ -1020,12 +1032,16 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         const onMove = (e: MouseEvent | TouchEvent) => {
             if (!this.hrLayoutContainer?.nativeElement) return;
-            const containerRect = this.hrLayoutContainer.nativeElement.getBoundingClientRect();
-            const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
+            const containerRect =
+                this.hrLayoutContainer.nativeElement.getBoundingClientRect();
+            const clientX =
+                'touches' in e
+                    ? e.touches[0].clientX
+                    : (e as MouseEvent).clientX;
             const offset = clientX - containerRect.left;
             let percent = (offset / containerRect.width) * 100;
-            if (percent < 15) percent = 15;
-            if (percent > 85) percent = 85;
+            if (percent < 30) percent = 30;
+            if (percent > 70) percent = 70;
             this.splitPercent = percent;
         };
 

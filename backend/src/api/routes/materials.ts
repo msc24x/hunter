@@ -150,6 +150,8 @@ router.get(
                     question_materials: {
                         where: { question: { deleted_at: null } },
                         select: {
+                            question_id: true,
+                            material_id: true,
                             position: true,
                             question: {
                                 select: { id: true, title: true },

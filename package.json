@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
+        "start": "node -e \"require('fs').rmSync('.angular/cache',{recursive:true,force:true})\" && ng serve",
         "build": "rm -rf /build && ng build --output-path build/",
         "watch": "ng build --watch --configuration development",
         "push-image": "docker compose -f docker-compose.yml build --push"
