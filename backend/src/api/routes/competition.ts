@@ -770,9 +770,14 @@ router.get('/competitions', authenticate, (req, res) => {
         });
     } else if (params.liveStatus === 'live') {
         andParams.push({
-            scheduled_at: {
-                lt: new Date(),
-            },
+            OR: [
+                {
+                    scheduled_at: {
+                        lt: new Date(),
+                    },
+                },
+                { scheduled_at: null },
+            ],
         });
     } else if (params.liveStatus === 'always') {
         andParams.push({

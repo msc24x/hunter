@@ -40,8 +40,10 @@
                 *ngIf="com.visibility == 'PRIVATE'"
                 matTooltip="Private, only visible to you"
             >
-                <fa-icon [icon]="privateIcon" style="color: var(--crimson)"></fa-icon>
-                &nbsp;
+                <fa-icon
+                    [icon]="privateIcon"
+                    style="color: var(--crimson)"
+                ></fa-icon>
                 <span style="color: var(--crimson)"> Private </span>
             </span>
         </a>
