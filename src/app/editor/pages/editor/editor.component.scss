@@ -303,10 +303,13 @@
     border-color: transparent;
     color: var(--dark-red);
     margin-top: 1rem;
-    @include sweetBorder;
 
     h3 {
         font-style: italic;
+    }
+
+    .blocker-note {
+        font-weight: 600;
     }
 }
 

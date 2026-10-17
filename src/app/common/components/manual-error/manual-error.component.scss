@@ -4,6 +4,10 @@ p {
 
     white-space: pre-line;
 
+    fa-icon.warn-icon {
+        color: var(--yellowbg-color);
+    }
+
     animation-name: bounce;
     animation-duration: 1s;
     animation-iteration-count: 1;

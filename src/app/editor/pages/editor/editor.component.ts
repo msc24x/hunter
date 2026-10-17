@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+    faBan,
     faBook,
     faCheckDouble,
     faCircle,
@@ -71,6 +72,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     guideIcon = faBook;
     inviteIcon = faPaperPlane;
     circleIcon = faCircle;
+    blockerIcon = faBan;
 
     correctIcon = faCheckDouble;
     minusIcon = faMinusCircle;
@@ -769,6 +771,19 @@ export class EditorComponent implements OnInit, OnDestroy {
                     this.snackBar.open('Competition info saved successfully');
                     this.loading = false;
 
+                    const savedVisibility = (res.body as CompetitionInfo)
+                        ?.visibility;
+
+                    if (
+                        savedVisibility &&
+                        savedVisibility !== this.competitionInfo.visibility
+                    ) {
+                        this.competitionInfo.visibility = savedVisibility;
+                        this.displayLog(
+                            'Visibility was set to PRIVATE because the contest has issues that would prevent participation. Fix them to make it public.',
+                        );
+                    }
+
                     this.saveQuestion();
                 },
                 (error) => {
@@ -786,6 +801,23 @@ export class EditorComponent implements OnInit, OnDestroy {
         console.info(msg);
         this.log.push(msg);
         if (this.elem) this.elem.innerHTML = '&#x1F6C8; ' + msg;
+    }
+
+    isQualityBlocker(warningsObj: any, warning: string): boolean {
+        return warningsObj?.blockers?.includes(warning) ?? false;
+    }
+
+    get hasBlockingQuestions(): boolean {
+        if (!this.quality) {
+            return false;
+        }
+        return Object.values<any>(this.quality).some(
+            (val) => val?.blockers?.length > 0,
+        );
+    }
+
+    get hasBlockers(): boolean {
+        return !!this.quality?.blockers?.length || this.hasBlockingQuestions;
     }
 
     handleDeleteCompPopupEvent(event: string) {

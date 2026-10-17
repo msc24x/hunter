@@ -357,14 +357,23 @@
             <manual-error [message]="quality?.description[0]"></manual-error>
         </p>
         <p *ngIf="quality?.questions">
-            <manual-error [message]="quality?.questions[0]"></manual-error>
+            <manual-error
+                [message]="quality?.questions[0]"
+                [blocker]="quality?.blockers?.includes(quality?.questions[0])"
+            ></manual-error>
         </p>
         <p *ngIf="quality?.questionsAcceptable === false">
             <manual-error
                 message="Some of the questions have poor quality, please go through the
             questions with red indicator to view the problems."
+                [blocker]="hasBlockingQuestions"
             >
             </manual-error>
+        </p>
+        <p class="blocker-note" *ngIf="hasBlockers">
+            You cannot set the contest visibility to a non-private status
+            without fixing blockers. (with
+            <fa-icon [icon]="blockerIcon"></fa-icon> icon)
         </p>
     </div>
 </ng-template>
@@ -449,6 +458,12 @@
                     >&nbsp; PUBLIC
                 </div>
             </div>
+
+            <manual-error
+                *ngIf="hasBlockers"
+                message="Cannot make contest public without fixing blocker issues"
+                [blocker]="true"
+            ></manual-error>
 
             <div
                 *ngIf="competitionInfo.visibility == 'PUBLIC'"
@@ -815,7 +830,15 @@
                         let warning of quality[questionSelectedInfo.id]?.title
                     "
                 >
-                    <manual-error [message]="warning"></manual-error>
+                    <manual-error
+                        [message]="warning"
+                        [blocker]="
+                            isQualityBlocker(
+                                quality[questionSelectedInfo.id],
+                                warning
+                            )
+                        "
+                    ></manual-error>
                 </p>
                 <p
                     *ngFor="
@@ -823,7 +846,15 @@
                             ?.statement
                     "
                 >
-                    <manual-error [message]="warning"></manual-error>
+                    <manual-error
+                        [message]="warning"
+                        [blocker]="
+                            isQualityBlocker(
+                                quality[questionSelectedInfo.id],
+                                warning
+                            )
+                        "
+                    ></manual-error>
                 </p>
                 <p
                     *ngFor="
@@ -831,7 +862,15 @@
                             ?.question_choices
                     "
                 >
-                    <manual-error [message]="warning"></manual-error>
+                    <manual-error
+                        [message]="warning"
+                        [blocker]="
+                            isQualityBlocker(
+                                quality[questionSelectedInfo.id],
+                                warning
+                            )
+                        "
+                    ></manual-error>
                 </p>
 
                 <p
@@ -840,7 +879,15 @@
                             ?.sample_sols
                     "
                 >
-                    <manual-error [message]="warning"></manual-error>
+                    <manual-error
+                        [message]="warning"
+                        [blocker]="
+                            isQualityBlocker(
+                                quality[questionSelectedInfo.id],
+                                warning
+                            )
+                        "
+                    ></manual-error>
                 </p>
                 <p
                     *ngFor="
@@ -848,7 +895,23 @@
                             ?.question_verifications
                     "
                 >
-                    <manual-error [message]="warning"></manual-error>
+                    <manual-error
+                        [message]="warning"
+                        [blocker]="
+                            isQualityBlocker(
+                                quality[questionSelectedInfo.id],
+                                warning
+                            )
+                        "
+                    ></manual-error>
+                </p>
+                <p
+                    class="blocker-note"
+                    *ngIf="quality[questionSelectedInfo.id]?.blockers?.length"
+                >
+                    You cannot set the contest visibility to a non-private
+                    status without fixing blockers. (with
+                    <fa-icon [icon]="blockerIcon"></fa-icon> icon)
                 </p>
             </div>
 

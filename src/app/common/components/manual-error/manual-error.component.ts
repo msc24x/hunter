@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import {
+    faBan,
     faRibbon,
     faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +12,11 @@ import {
 })
 export class ManualErrorComponent {
     errorIcon = faTriangleExclamation;
+    blockerIcon = faBan;
 
     @Input()
     message: string = '';
+
+    @Input()
+    blocker = false;
 }

@@ -169,64 +169,101 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                     return;
                 }
 
-                const markingPublic =
-                    competition.visibility != competitionBody.visibility &&
-                    competitionBody.visibility == 'PUBLIC';
+                const effectiveVisibility =
+                    competitionBody.visibility ?? competition.visibility;
 
-                client.competitions
-                    .update({
-                        where: {
-                            id: competition.id,
-                            host_user_id: res.locals.user.id,
-                        },
-                        data: {
-                            description: competitionBody.description || '',
-                            title: competitionBody.title || '',
-                            visibility: competitionBody.visibility,
-                            community_id: {
-                                set: competitionBody.community_id || null,
+                const performUpdate = () => {
+                    const markingPublic =
+                        competition.visibility != competitionBody.visibility &&
+                        competitionBody.visibility == 'PUBLIC';
+
+                    client.competitions
+                        .update({
+                            where: {
+                                id: competition.id,
+                                host_user_id: res.locals.user.id,
                             },
-                            community_only: competitionBody.community_id
-                                ? competitionBody.community_only
-                                : false,
-                            hidden_scoreboard:
-                                competitionBody.hidden_scoreboard,
-                            randomize_questions:
-                                competitionBody.randomize_questions,
-                            scheduled_at: competitionBody.scheduled_at
-                                ? new Date(competitionBody.scheduled_at)
-                                : null,
-                            scheduled_end_at: competitionBody.scheduled_end_at
-                                ? new Date(competitionBody.scheduled_end_at)
-                                : null,
-                            updated_at: new Date(),
-                            time_limit: competition.practice
-                                ? null
-                                : competitionBody.time_limit,
-                        },
-                        include: {
-                            host_user: true,
-                        },
-                    })
-                    .then((competition) => {
-                        Util.sendResponseJson(
-                            res,
-                            resCode.success,
-                            competition,
-                        );
-
-                        if (markingPublic) {
-                            sendPublicContestEmail(
-                                competition as CompetitionInfo,
+                            data: {
+                                description:
+                                    competitionBody.description || '',
+                                title: competitionBody.title || '',
+                                visibility: competitionBody.visibility,
+                                community_id: {
+                                    set: competitionBody.community_id || null,
+                                },
+                                community_only: competitionBody.community_id
+                                    ? competitionBody.community_only
+                                    : false,
+                                hidden_scoreboard:
+                                    competitionBody.hidden_scoreboard,
+                                randomize_questions:
+                                    competitionBody.randomize_questions,
+                                scheduled_at: competitionBody.scheduled_at
+                                    ? new Date(competitionBody.scheduled_at)
+                                    : null,
+                                scheduled_end_at:
+                                    competitionBody.scheduled_end_at
+                                        ? new Date(
+                                              competitionBody.scheduled_end_at,
+                                          )
+                                        : null,
+                                updated_at: new Date(),
+                                time_limit: competition.practice
+                                    ? null
+                                    : competitionBody.time_limit,
+                            },
+                            include: {
+                                host_user: true,
+                            },
+                        })
+                        .then((competition) => {
+                            Util.sendResponseJson(
+                                res,
+                                resCode.success,
+                                competition,
                             );
 
-                            client.competitions
-                                .update({
-                                    where: { id: competition.id },
-                                    data: { first_public_at: new Date() },
-                                })
-                                .then(() => {});
+                            if (markingPublic) {
+                                sendPublicContestEmail(
+                                    competition as CompetitionInfo,
+                                );
+
+                                client.competitions
+                                    .update({
+                                        where: { id: competition.id },
+                                        data: { first_public_at: new Date() },
+                                    })
+                                    .then(() => {});
+                            }
+                        })
+                        .catch((err) => {
+                            Util.sendResponse(res, resCode.serverError, err);
+                        });
+                };
+
+                if (effectiveVisibility === 'PRIVATE') {
+                    performUpdate();
+                    return;
+                }
+
+                client.competitions
+                    .findUniqueOrThrow({
+                        where: { id: competition.id },
+                        include: {
+                            questions: {
+                                where: { deleted_at: null },
+                                include: { question_choices: true },
+                            },
+                        },
+                    })
+                    .then((full) => {
+                        const blockers = getParticipationBlockers(full);
+
+                        if (blockers.length) {
+                            competitionBody.visibility = 'PRIVATE';
                         }
+
+                        performUpdate();
                     })
                     .catch((err) => {
                         Util.sendResponse(res, resCode.serverError, err);
@@ -427,6 +464,58 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
         });
 });
 
+function getParticipationBlockers(competition: any): string[] {
+    const blockers: string[] = [];
+
+    if (!competition.questions.length) {
+        blockers.push('Competition has no questions.');
+    }
+
+    competition.questions.forEach((question: any) => {
+        const label = `Question "${question.title || '#' + question.id}"`;
+
+        if (question.type === config.questionTypes.code) {
+            if (
+                !Util.doesTestFilesExist({
+                    for: {
+                        competition_id: competition.id,
+                        question_id: question.id,
+                        type: 0,
+                    },
+                    solution: { code: '', lang: 'c' },
+                })
+            ) {
+                blockers.push(
+                    `${label} has no solutions file, submissions cannot be evaluated.`,
+                );
+            }
+        }
+
+        if (question.type === config.questionTypes.mcq) {
+            if (question.question_choices.length < 2) {
+                blockers.push(
+                    `${label} does not have enough choices (at least 2 required).`,
+                );
+            } else if (
+                question.question_choices.every((q: any) => !q.is_correct)
+            ) {
+                blockers.push(
+                    `${label} has no choice marked as correct, making it unsolvable.`,
+                );
+            }
+        }
+
+        if (
+            question.type === config.questionTypes.fill &&
+            !question.question_choices.length
+        ) {
+            blockers.push(`${label} has no possible answer, making it unsolvable.`);
+        }
+    });
+
+    return blockers;
+}
+
 function isAnyErrorPresent(obj: any) {
     var error = false;
 
@@ -482,6 +571,7 @@ router.get(
                 }
 
                 var warnings: any = {};
+                warnings.blockers = [];
 
                 if (!competition.title) {
                     warnings.title = ['Competition title is empty.'];
@@ -493,6 +583,7 @@ router.get(
 
                 if (!competition.questions.length) {
                     warnings.questions = ['Competition has no questions.'];
+                    warnings.blockers.push('Competition has no questions.');
                 }
 
                 warnings.questionsAcceptable = true;
@@ -500,15 +591,10 @@ router.get(
                 competition.questions.forEach((question) => {
                     warnings[question.id] = {};
                     var questionWarnings = warnings[question.id];
+                    questionWarnings.blockers = [];
 
                     if (!question.title) {
                         questionWarnings.title = ['Question title is empty.'];
-                    }
-
-                    if (!question.statement) {
-                        questionWarnings.statement = [
-                            'Question has no statement.',
-                        ];
                     }
 
                     if (question.type === config.questionTypes.code) {
@@ -531,6 +617,9 @@ router.get(
                             questionWarnings.sample_sols = [
                                 'File to specify solution output of your question has not been set, this makes your question simply un-solvable.',
                             ];
+                            questionWarnings.blockers.push(
+                                questionWarnings.sample_sols[0],
+                            );
                         }
 
                         if (!question.question_verifications.length) {
@@ -545,6 +634,9 @@ router.get(
 
                         if (question.question_choices.length < 2) {
                             questionWarnings.question_choices.push(
+                                'Question do no have enough (at least 2 required) number of choices to choose from.',
+                            );
+                            questionWarnings.blockers.push(
                                 'Question do no have enough (at least 2 required) number of choices to choose from.',
                             );
                         }
@@ -566,6 +658,9 @@ router.get(
                             questionWarnings.question_choices.push(
                                 'There is no choice in the question that is marked as correct, which makes the question unsolvable.',
                             );
+                            questionWarnings.blockers.push(
+                                'There is no choice in the question that is marked as correct, which makes the question unsolvable.',
+                            );
                         }
                     }
 
@@ -574,6 +669,9 @@ router.get(
 
                         if (!question.question_choices.length) {
                             questionWarnings.question_choices.push(
+                                'Question do not have any possible answer, which makes the question un-solvable.',
+                            );
+                            questionWarnings.blockers.push(
                                 'Question do not have any possible answer, which makes the question un-solvable.',
                             );
                         }
