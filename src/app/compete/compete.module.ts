@@ -3,8 +3,6 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { CommonModule as HunterCommonModule } from 'src/app/common/common.module';
 import { CompetitionComponent } from './pages/competition/competition.component';
 import { RouterModule } from '@angular/router';
-import { EditorModule } from '../editor/editor.module';
-import { CommunityModule } from '../community/community.module';
 import { CompeteRoutingModule } from './compete-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -16,8 +14,6 @@ import { InviteComponent } from './pages/invite/invite.component';
     imports: [
         CommonModule,
         HunterCommonModule,
-        EditorModule,
-        CommunityModule,
         CompeteRoutingModule,
         RouterModule,
         FontAwesomeModule,
