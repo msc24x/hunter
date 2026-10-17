@@ -10,6 +10,7 @@
         padding-bottom: 2rem !important;
 
         .failure-reason {
+            display: inline-block;
             pre {
                 width: 100%;
                 overflow: scroll;

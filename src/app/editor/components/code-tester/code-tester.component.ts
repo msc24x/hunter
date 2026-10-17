@@ -11,6 +11,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
+    environment,
     HunterLanguage,
     QuestionVerification,
 } from 'src/environments/environment';
@@ -31,6 +32,11 @@ export class CodeTesterComponent implements OnInit, OnChanges {
     language!: HunterLanguage;
     lastVerification: QuestionVerification | null = null;
     verificationInProgress = false;
+    outputFileExists = false;
+
+    get outputDownloadUrl() {
+        return `${environment.apiUrl}/competitions/${this.competition_id}/questions/${this.question_id}/verification_output/download`;
+    }
 
     constructor(
         private competitionsService: CompetitionsDataService,
@@ -52,6 +58,16 @@ export class CodeTesterComponent implements OnInit, OnChanges {
         );
         this.code = this.lastVerification.submission;
         this.language = this.lastVerification.language as HunterLanguage;
+
+        this.competitionsService
+            .getFileStatus({
+                competition_id: this.competition_id,
+                question_id: this.question_id,
+                file_type: 'verification_output',
+            })
+            .subscribe((res) => {
+                this.outputFileExists = (res.body as any)?.exists === true;
+            });
 
         this.lastVerificationChange.emit(this.lastVerification);
     }

@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { readFile, readFileSync, writeFile } from 'fs';
+import { readFile } from '../util/serverStorage';
 import { Service } from 'typedi';
 import {
     CodeSolution,
@@ -38,15 +38,18 @@ export class JudgeService {
         hunterExecutable: HunterExecutable,
         samples: boolean,
         question: QuestionInfo | null,
-        user: UserInfo | null
+        user: UserInfo | null,
+        revealOutput: boolean = false
     ): Promise<ExeInfo> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (user) {
-                if (this.isProcessingUserMap.get(user.id))
+                if (this.isProcessingUserMap.get(user.id)) {
                     resolve({
                         'output': 'Already processing for this user',
                     } as ExeInfo);
-                else this.saveEntry(user);
+                    return;
+                }
+                this.saveEntry(user);
             }
 
             let programInput = '';
@@ -56,14 +59,32 @@ export class JudgeService {
                 programInput = question?.sample_cases || '';
                 programOutput = question?.sample_sols || '';
             } else {
-                programInput = readFileSync(
-                    Util.getFileName(hunterExecutable, 'testcases'),
-                    'utf-8'
-                );
-                programOutput = readFileSync(
-                    Util.getFileName(hunterExecutable, 'solutions'),
-                    'utf-8'
-                );
+                try {
+                    programInput = (
+                        await readFile(
+                            Util.getQuestionFileName(
+                                hunterExecutable.for.competition_id,
+                                hunterExecutable.for.question_id,
+                                'testcases'
+                            )
+                        )
+                    ).toString('utf-8');
+                    programOutput = (
+                        await readFile(
+                            Util.getQuestionFileName(
+                                hunterExecutable.for.competition_id,
+                                hunterExecutable.for.question_id,
+                                'solutions'
+                            )
+                        )
+                    ).toString('utf-8');
+                } catch (err) {
+                    if (user) {
+                        this.remEntry(user);
+                    }
+                    reject(err);
+                    return;
+                }
             }
 
             const headers = new Headers({
@@ -111,16 +132,29 @@ export class JudgeService {
                 method: 'POST',
             }).then(
                 (res) => {
-                    return res.json().then((res_json) => {
-                        fulfillSolution({
-                            expected: samples ? res_json.expected : '',
-                            output: samples ? res_json.output : '',
-                            meta: res_json.meta,
-                            success: res_json.success,
-                        });
-                    });
+                    return res
+                        .json()
+                        .then((res_json) => {
+                            const reveal = samples || revealOutput;
+                            fulfillSolution({
+                                expected: reveal ? res_json.expected : '',
+                                output: reveal ? res_json.output : '',
+                                meta: res_json.meta,
+                                success: res_json.success,
+                            });
+                        })
+                        .catch(() =>
+                            fulfillSolution({
+                                output: 'Invalid response from judge',
+                                success: false,
+                            } as ExeInfo)
+                        );
                 },
-                (err) => fulfillSolution({ output: err } as ExeInfo)
+                (err) =>
+                    fulfillSolution({
+                        output: err instanceof Error ? err.message : String(err),
+                        success: false,
+                    } as ExeInfo)
             );
         });
     }

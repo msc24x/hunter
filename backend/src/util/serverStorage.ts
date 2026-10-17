@@ -2,14 +2,24 @@ import fs from 'fs';
 import path from 'path';
 import config from '../config/config';
 
-function getFilePath(filename: string): string {
+export function getFilePath(filename: string): string {
     return path.join(config.filesPath, filename);
 }
 
-export async function createFile(filename: string, data: any): Promise<void> {
+export function getAbsolutePath(filename: string): string {
+    return path.resolve(getFilePath(filename));
+}
+
+export async function createFile(
+    filename: string,
+    data: any,
+    overwrite: boolean = false,
+): Promise<void> {
     const filePath = getFilePath(filename);
     await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
-    await fs.promises.writeFile(filePath, data, { flag: 'wx' });
+    await fs.promises.writeFile(filePath, data, {
+        flag: overwrite ? 'w' : 'wx',
+    });
 }
 
 export async function deleteFile(filename: string): Promise<void> {
@@ -30,6 +40,10 @@ export async function fileExists(filename: string): Promise<boolean> {
     } catch {
         return false;
     }
+}
+
+export function fileExistsSync(filename: string): boolean {
+    return fs.existsSync(getFilePath(filename));
 }
 
 export async function readFile(filename: string): Promise<Buffer> {

@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import fs, { existsSync, readFile, writeFile } from 'fs';
 import models from '../../database/containers/models';
 import {
     CodeSolution,
@@ -13,13 +12,18 @@ import { authenticate, loginRequired } from '../auth';
 import { resCode } from '../../config/settings';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
-import path from 'path';
 import fileUpload from 'express-fileupload';
 import { JudgeService } from '../../services/judgeService';
 import config from '../../config/config';
 import { JSDOM } from 'jsdom';
 import DOMPurify from 'dompurify';
 import { Competitions } from '../../database/models/Competitions';
+import {
+    createFile,
+    deleteFile,
+    fileExists,
+    getAbsolutePath,
+} from '../../util/serverStorage';
 
 function seededShuffle<T>(array: T[], seed: number): T[] {
     const shuffled = [...array];
@@ -135,48 +139,54 @@ router.post(
                 }
 
                 judgeService
-                    .execute(execReq, true, null, null)
-                    .then((exeRes) => {
-                        client.question_verification
-                            .upsert({
+                    .execute(execReq, false, null, null, true)
+                    .then(async (exeRes) => {
+                        await createFile(
+                            Util.getQuestionFileName(
+                                comp_id,
+                                ques_id,
+                                'verification_output',
+                            ),
+                            exeRes.output ?? '',
+                            true,
+                        )
+                            .catch((err) =>
+                                console.error(
+                                    'verification output write failed:',
+                                    err,
+                                ),
+                            );
+
+                        const verification =
+                            await client.question_verification.upsert({
                                 where: {
                                     question_id: ques_id,
                                 },
                                 create: {
                                     created_at: new Date(),
                                     submission: code,
-                                    success: exeRes.success,
+                                    success: exeRes.success === true,
                                     question_id: ques_id,
-                                    reason: exeRes.meta,
+                                    reason: exeRes.meta ?? null,
                                     language: (execReq.solution as CodeSolution)
                                         .lang,
                                 },
                                 update: {
                                     created_at: new Date(),
                                     submission: code,
-                                    success: exeRes.success,
+                                    success: exeRes.success === true,
                                     question_id: ques_id,
-                                    reason: exeRes.meta,
+                                    reason: exeRes.meta ?? null,
                                     language: (execReq.solution as CodeSolution)
                                         .lang,
                                 },
-                            })
-                            .then((verification) => {
-                                Util.sendResponseJson(
-                                    res,
-                                    resCode.success,
-                                    verification,
-                                );
-                                return;
-                            })
-                            .catch((err) => {
-                                Util.sendResponse(
-                                    res,
-                                    resCode.serverError,
-                                    err,
-                                );
-                                return;
                             });
+
+                        Util.sendResponseJson(
+                            res,
+                            resCode.success,
+                            verification,
+                        );
                     })
                     .catch((err) => {
                         Util.sendResponse(res, resCode.serverError, err);
@@ -202,7 +212,11 @@ router.get(
         const ques_id = parseInt(req.params.id);
         const user: UserInfo = res.locals.user;
 
-        if (!['testcases', 'solutions'].includes(fileType)) {
+        if (
+            !['testcases', 'solutions', 'verification_output'].includes(
+                fileType,
+            )
+        ) {
             Util.sendResponse(res, resCode.badRequest);
             return;
         }
@@ -220,21 +234,25 @@ router.get(
                 },
                 select: { id: true },
             })
-            .then((question) => {
+            .then(async (question) => {
                 if (!question) {
                     Util.sendResponse(res, resCode.notFound);
                     return;
                 }
 
-                const fileName = Util.getAbsoluteFilePath(
+                const fileName = Util.getQuestionFileName(
                     comp_id,
                     ques_id,
                     fileType,
                 );
+                const exists = await fileExists(fileName);
 
                 if (req.params.op == 'download') {
-                    if (existsSync(fileName)) {
-                        const basename = path.basename(fileName);
+                    if (exists) {
+                        const basename =
+                            fileType === 'verification_output'
+                                ? 'output.txt'
+                                : fileName;
 
                         res.setHeader(
                             'Content-Disposition',
@@ -246,7 +264,7 @@ router.get(
                             'application/octet-stream',
                         );
 
-                        res.sendFile(fileName, (err) => {
+                        res.sendFile(getAbsolutePath(fileName), (err) => {
                             if (err) {
                                 Util.sendResponse(res, resCode.serverError);
                             }
@@ -258,7 +276,7 @@ router.get(
                     }
                 } else {
                     Util.sendResponseJson(res, resCode.success, {
-                        exists: existsSync(fileName),
+                        exists,
                     });
                 }
             })
@@ -311,20 +329,23 @@ router.post(
                     return;
                 }
 
-                const fileName = Util.getAbsoluteFilePath(
+                const fileName = Util.getQuestionFileName(
                     comp_id,
                     ques_id,
                     fileType,
                 );
 
-                writeFile(fileName, file.data, { flag: 'w' }, (err) => {
-                    if (err) {
-                        console.log(err);
-                        Util.sendResponse(res, resCode.serverError);
-                        return;
-                    }
+                createFile(fileName, file.data, true)
+                    .then(() => {
+                        deleteFile(
+                            Util.getQuestionFileName(
+                                comp_id,
+                                ques_id,
+                                'verification_output',
+                            ),
+                        ).catch(() => {});
 
-                    client.question_verification
+                        client.question_verification
                         .updateMany({
                             where: {
                                 question_id: question.id,
@@ -340,7 +361,11 @@ router.post(
                             console.error(err);
                             Util.sendResponse(res, resCode.serverError);
                         });
-                });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        Util.sendResponse(res, resCode.serverError);
+                    });
             })
             .catch((err) => Util.sendResponse(res, resCode.badRequest, err));
     },
@@ -1111,7 +1136,7 @@ router.post(
             lang: string;
         }> = [];
         const filesToWrite: Array<{
-            path: string;
+            name: string;
             content: string;
         }> = [];
 
@@ -1180,7 +1205,7 @@ router.post(
                     if (q.type === config.questionTypes.code) {
                         if (q.test_cases != null) {
                             filesToWrite.push({
-                                path: Util.getAbsoluteFilePath(
+                                name: Util.getQuestionFileName(
                                     comp_id,
                                     created.id,
                                     'testcases',
@@ -1190,7 +1215,7 @@ router.post(
                         }
                         if (q.solutions != null) {
                             filesToWrite.push({
-                                path: Util.getAbsoluteFilePath(
+                                name: Util.getQuestionFileName(
                                     comp_id,
                                     created.id,
                                     'solutions',
@@ -1217,7 +1242,7 @@ router.post(
             // Write files after the transaction commits so a rollback
             // doesn't leave orphaned files on disk.
             for (const f of filesToWrite) {
-                await fs.promises.writeFile(f.path, f.content);
+                await createFile(f.name, f.content, true);
             }
 
             for (const v of verificationsPending) {
@@ -1234,21 +1259,38 @@ router.post(
                         false,
                         null,
                         null,
+                        true,
                     );
+                    await createFile(
+                        Util.getQuestionFileName(
+                            comp_id,
+                            v.id,
+                            'verification_output',
+                        ),
+                        exeRes.output ?? '',
+                        true,
+                    )
+                        .catch((err) =>
+                            console.error(
+                                `import: verification output write failed for question ${v.id}:`,
+                                err,
+                            ),
+                        );
+
                     await client.question_verification.upsert({
                         where: { question_id: v.id },
                         create: {
                             question_id: v.id,
                             submission: v.code,
                             language: v.lang,
-                            success: exeRes.success,
+                            success: exeRes.success === true,
                             reason: exeRes.meta ?? null,
                             created_at: new Date(),
                         },
                         update: {
                             submission: v.code,
                             language: v.lang,
-                            success: exeRes.success,
+                            success: exeRes.success === true,
                             reason: exeRes.meta ?? null,
                             created_at: new Date(),
                         },

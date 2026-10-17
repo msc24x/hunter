@@ -8,6 +8,12 @@
     <i *ngIf="lastVerification">
         <br />Last verification attempted at
         {{ lastVerification.created_at.toLocaleString() }}
+        <div
+            class="failure-reason"
+            *ngIf="lastVerification && outputFileExists"
+        >
+            <a [href]="outputDownloadUrl" download>(Download output.txt)</a>
+        </div>
         <br />
     </i>
     <p>
@@ -21,7 +27,7 @@
         class="main"
         [ngClass]="{
             'no-click disabled': verificationInProgress,
-            'test-solution-btn': true
+            'test-solution-btn': true,
         }"
         (click)="verifySolution()"
     >
