@@ -325,6 +325,10 @@ export class CompetitionsDataService {
             httpParams = httpParams.set('community_id', params.community_id);
         if (params?.liveStatus)
             httpParams = httpParams.set('liveStatus', params.liveStatus);
+        if (params?.practice)
+            httpParams = httpParams.set('practice', params.practice);
+        if (params?.qtype !== '' && params?.qtype !== undefined)
+            httpParams = httpParams.set('qtype', params.qtype);
         if (params?.orderBy)
             httpParams = httpParams.set('orderBy', params.orderBy);
         if (params?.selfOnly)

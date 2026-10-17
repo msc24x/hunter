@@ -705,6 +705,8 @@ router.get('/competitions', authenticate, (req, res) => {
         selfOnly: req.query.selfOnly?.toString() === 'true',
         invited: req.query.invited?.toString() === 'true',
         liveStatus: req.query.liveStatus?.toString() || 'all',
+        practice: req.query.practice?.toString() || '',
+        qtype: req.query.qtype?.toString() || '',
         orderBy: req.query.orderBy?.toString() || 'desc',
         community_id: req.query.community_id?.toString() || null,
         OR: [
@@ -762,6 +764,19 @@ router.get('/competitions', authenticate, (req, res) => {
         andParams.push({ community_id: parseInt(params.community_id) });
     }
 
+    if (params.practice === 'true') {
+        andParams.push({ practice: true });
+    } else if (params.practice === 'false') {
+        andParams.push({ practice: false });
+    }
+
+    const qtype = parseInt(params.qtype);
+    if ([0, 1, 2, 3].includes(qtype)) {
+        andParams.push({
+            questions: { some: { type: qtype, deleted_at: null } },
+        });
+    }
+
     if (params.liveStatus === 'upcoming') {
         andParams.push({
             scheduled_at: {
@@ -782,6 +797,12 @@ router.get('/competitions', authenticate, (req, res) => {
     } else if (params.liveStatus === 'always') {
         andParams.push({
             scheduled_end_at: null,
+        });
+    } else if (params.liveStatus === 'ended') {
+        andParams.push({
+            scheduled_end_at: {
+                lt: new Date(),
+            },
         });
     }
 

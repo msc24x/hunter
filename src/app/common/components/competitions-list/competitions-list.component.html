@@ -39,28 +39,55 @@
             </div>
 
             <div class="inline-setting">
-                <label for="status_select">Status</label>
-                <select
-                    id="status_select"
-                    Name="Status"
-                    (change)="updateLiveStatus($event)"
+                <label>Status</label>
+                <mat-select
+                    [(ngModel)]="liveStatus"
+                    (selectionChange)="updateList()"
                 >
-                    <option value="all" [defaultSelected]="true">All</option>
-                    <option value="upcoming">Upcoming</option>
-                    <option value="live">Live</option>
-                    <option value="always">Always Live</option>
-                </select>
+                    <mat-option value="all">All</mat-option>
+                    <mat-option value="upcoming">Upcoming</mat-option>
+                    <mat-option value="live">Live</mat-option>
+                    <mat-option value="always">Always Live</mat-option>
+                    <mat-option value="ended">Ended</mat-option>
+                </mat-select>
             </div>
 
             <div class="inline-setting">
-                <label for="order_select">Order By</label>
-                <select id="order_select" (change)="updateOrderBy($event)">
-                    <option value="">Any</option>
-                    <option value="desc" [defaultSelected]="true">
-                        Latest
-                    </option>
-                    <option value="asc">Oldest</option>
-                </select>
+                <label>Practice</label>
+                <mat-select
+                    [(ngModel)]="practice"
+                    (selectionChange)="updateList()"
+                >
+                    <mat-option value="">All</mat-option>
+                    <mat-option value="true">Practice only</mat-option>
+                    <mat-option value="false">Rated only</mat-option>
+                </mat-select>
+            </div>
+
+            <div class="inline-setting">
+                <label>Question types</label>
+                <mat-select
+                    [(ngModel)]="qtype"
+                    (selectionChange)="updateList()"
+                >
+                    <mat-option value="">Any type</mat-option>
+                    <mat-option value="0">Coding questions</mat-option>
+                    <mat-option value="1">MCQ questions</mat-option>
+                    <mat-option value="2">Fill-blank questions</mat-option>
+                    <mat-option value="3">Long-answer questions</mat-option>
+                </mat-select>
+            </div>
+
+            <div class="inline-setting">
+                <label>Order By</label>
+                <mat-select
+                    [(ngModel)]="orderBy"
+                    (selectionChange)="updateList()"
+                >
+                    <mat-option value="">Any</mat-option>
+                    <mat-option value="desc">Latest</mat-option>
+                    <mat-option value="asc">Oldest</mat-option>
+                </mat-select>
             </div>
         </div>
         <ul id="competitions_ol">

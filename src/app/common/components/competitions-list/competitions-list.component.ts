@@ -49,6 +49,8 @@ export class CompetitionsListComponent implements OnInit {
 
     query = '';
     liveStatus = 'all';
+    practice = '';
+    qtype = '';
     orderBy: '' | 'asc' | 'desc' = 'desc';
     debounceTimeout?: NodeJS.Timeout;
     timeLeftFlag = false;
@@ -63,18 +65,6 @@ export class CompetitionsListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.updateList();
-    }
-
-    updateLiveStatus(event: Event) {
-        let select = event.target as HTMLSelectElement;
-        this.liveStatus = select.value;
-        this.updateList();
-    }
-
-    updateOrderBy(event: Event) {
-        let select = event.target as HTMLSelectElement;
-        this.orderBy = select.value as '' | 'asc' | 'desc';
         this.updateList();
     }
 
@@ -98,6 +88,8 @@ export class CompetitionsListComponent implements OnInit {
                 selfOnly: this.selfOnly,
                 orderBy: this.orderBy,
                 liveStatus: this.liveStatus,
+                practice: this.practice,
+                qtype: this.qtype,
                 community_id: this.community_id,
                 after: after,
                 limit: this.pageSize,

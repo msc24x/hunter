@@ -31,11 +31,12 @@
         width: calc(100% - 1rem);
     }
 
-    select {
+    select,
+    mat-select {
         border-radius: 0.7rem;
         border-width: 0px;
         padding-inline: 8px;
-        height: 2rem;
+        padding-block: 4px;
         background-color: var(--whitesmoke);
         color: var(--text-black);
         @include sweetBorder();
@@ -50,6 +51,18 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
+        gap: 0.6rem;
+
+        label {
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        mat-select {
+            flex: 1;
+            min-width: 0;
+            max-width: 169px;
+        }
     }
 }
 
