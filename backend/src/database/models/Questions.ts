@@ -1,18 +1,11 @@
-import { Connection, PoolConnection, QueryError } from 'mysql2';
+import { QueryError } from 'mysql2';
 import { QuestionInfo } from '../../config/types';
 import { Competitions } from './Competitions';
 import Container, { Inject, Service } from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 
 export class Questions {
-    dbConnection!: PoolConnection;
     dbService: DatabaseProvider = Container.get(DatabaseProvider);
-
-    constructor() {
-        this.dbService.getInstance().then((conn) => {
-            this.dbConnection = conn;
-        });
-    }
 
     delete(params: any, callback: (err: QueryError | null) => void) {
         let args: any[] = [];
@@ -29,7 +22,7 @@ export class Questions {
             return;
         }
 
-        this.dbConnection.query(query, args, (err) => {
+        this.dbService.pool().query(query, args, (err) => {
             callback(err);
         });
     }
@@ -47,7 +40,7 @@ export class Questions {
         }
         query += ';';
 
-        this.dbConnection.query(query, args, (err, rows) => {
+        this.dbService.pool().query(query, args, (err, rows) => {
             if (err) {
                 console.log(err);
                 return;
@@ -64,7 +57,7 @@ export class Questions {
         callback: (question_id: number) => void,
         errCallback: (err: QueryError | null) => void,
     ) {
-        this.dbConnection.query(
+        this.dbService.pool().query(
             ` insert into questions (competition_id, date_created) values(?, NOW()) ; `,
             [competition_id],
             (err) => {
@@ -72,7 +65,7 @@ export class Questions {
                     errCallback(err);
                     return;
                 }
-                this.dbConnection.query(
+                this.dbService.pool().query(
                     ` select * from questions where competition_id = ? order by date_created ;`,
                     [competition_id],
                     (err, rows) => {
@@ -108,7 +101,7 @@ export class Questions {
         query += ` where id = ? ; `;
         args.push(newQuestion.id);
 
-        this.dbConnection.query(query, args, (err) => {
+        this.dbService.pool().query(query, args, (err) => {
             callback(err);
         });
     }

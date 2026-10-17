@@ -1,19 +1,11 @@
-import mysql, { Connection, PoolConnection, QueryError } from 'mysql2';
+import mysql, { QueryError } from 'mysql2';
 import { CompetitionInfo, CompetitionInvite } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import Container, { Inject, Service } from 'typedi';
 import { sendContentInviteEmail } from '../../emails/contest-invite/sender';
 
 export class Competitions {
-    private db: DatabaseProvider;
-    private dbConnection!: PoolConnection;
-
-    constructor() {
-        this.db = Container.get(DatabaseProvider);
-        this.db.getInstance().then((conn) => {
-            this.dbConnection = conn;
-        });
-    }
+    private db: DatabaseProvider = Container.get(DatabaseProvider);
 
     isLiveNow(date: Date | null) {
         if (!date) {
@@ -87,11 +79,11 @@ export class Competitions {
         title: string,
         callback: (err: QueryError | null, rows: any) => void,
     ) {
-        this.dbConnection.query(
+        this.db.pool().query(
             ` insert into competitions( host_user_id, title, created_at, rating, public, scheduled_at) values( ?, ?, NOW() , 0, false, NOW() )  ;`,
             [host_user_id, title],
             (err) => {
-                this.dbConnection.query(
+                this.db.pool().query(
                     `select * from competitions where host_user_id = ? order by created_at desc;`,
                     [host_user_id],
                     (err, rows) => {
@@ -152,7 +144,7 @@ export class Competitions {
         }
         query += ';';
 
-        this.dbConnection.query(query, args, (err, rows) => {
+        this.db.pool().query(query, args, (err, rows) => {
             if (err) {
                 console.log(err);
                 errCallback(err);
@@ -189,13 +181,13 @@ export class Competitions {
             return;
         }
 
-        this.dbConnection.query(query, args, (err) => {
+        this.db.pool().query(query, args, (err) => {
             callback(err);
         });
     }
 
     count(callback: (err: QueryError | null, rows: any) => void) {
-        this.dbConnection.query(
+        this.db.pool().query(
             ' select count(*) as count from competitions;',
             (err, rows) => {
                 if (err) {

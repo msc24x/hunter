@@ -1,11 +1,10 @@
-import { PoolConnection, QueryError } from 'mysql2';
+import { QueryError } from 'mysql2';
 import Container, { Inject, Service } from 'typedi';
 import { Result, UserInfo } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import { Prisma } from '@prisma/client';
 
 export class Results {
-    dbConnection!: PoolConnection;
     client = Container.get(DatabaseProvider).client();
 
     dbService: DatabaseProvider = Container.get(DatabaseProvider);
@@ -80,18 +79,12 @@ export class Results {
         return scoresQuery;
     }
 
-    constructor() {
-        this.dbService.getInstance().then((conn) => {
-            this.dbConnection = conn;
-        });
-    }
-
     post(params: any, callback: (err: QueryError | null) => void) {
         let p = 0;
 
         if (params.result == 0) p = 1;
 
-        this.dbConnection.query(
+        this.dbService.pool().query(
             `insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, ?);`,
             [
                 params.user_id,
@@ -115,7 +108,7 @@ export class Results {
 
         if (result == '0') p = 1;
 
-        this.dbConnection.query(
+        this.dbService.pool().query(
             `update results set result = ?, penalities = penalities + ? where id = ? ;`,
             [result, p, id],
             (err) => {
@@ -294,7 +287,7 @@ export class Results {
 
         query += ';';
 
-        this.dbConnection.query(query, args, (err, rows) => {
+        this.dbService.pool().query(query, args, (err, rows) => {
             callback(rows, err);
         });
     }

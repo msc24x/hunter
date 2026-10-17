@@ -1,5 +1,5 @@
 import Container, { Service } from 'typedi';
-import mysql, { Connection, Pool, PoolConnection } from 'mysql2';
+import mysql, { Pool } from 'mysql2';
 import { Questions } from '../database/models/Questions';
 import config from '../config/config';
 import { Competitions } from '../database/models/Competitions';
@@ -29,6 +29,10 @@ export class DatabaseProvider {
             enableKeepAlive: true,
         });
 
+        this._dbPool.on('error', (err) => {
+            console.error('[DB pool] connection error:', err);
+        });
+
         this.prismaClient = new PrismaClient();
 
         this.prismaClient.$connect().then(
@@ -50,29 +54,8 @@ export class DatabaseProvider {
         this.loaded = true;
     }
 
-    public getInstance() {
-        const conn = new Promise<PoolConnection>((resolve, reject) => {
-            this._dbPool.getConnection((err, poolConn) => {
-                if (err) {
-                    console.log(
-                        'destroying errored connection while providing',
-                        err
-                    );
-                    poolConn?.destroy();
-                    reject(err);
-                    return;
-                }
-
-                poolConn.on('error', (error) => {
-                    console.log('destroying an errored connection');
-                    poolConn.destroy();
-                });
-
-                resolve(poolConn);
-            });
-        });
-
-        return conn;
+    public pool() {
+        return this._dbPool;
     }
 
     public client() {
