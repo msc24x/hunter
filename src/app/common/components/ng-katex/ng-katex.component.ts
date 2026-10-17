@@ -7,7 +7,6 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import katex from 'katex';
 
 @Component({
     selector: 'ng-katex',
@@ -28,7 +27,11 @@ export class NgKatexComponent implements OnInit, OnChanges {
         return data.match(/((\\\$)|[^\$])+/gi);
     }
 
-    render(data: string, plain = false) {
+    render(
+        katex: typeof import('katex').default,
+        data: string,
+        plain = false,
+    ) {
         let elem = document.createElement('span') as HTMLSpanElement;
         let paragraph = this.native.firstElementChild!;
 
@@ -44,17 +47,18 @@ export class NgKatexComponent implements OnInit, OnChanges {
         paragraph.appendChild(elem);
     }
 
-    parseAndRender() {
+    async parseAndRender() {
         this.native.firstElementChild!.innerHTML = '';
         this.data = this.data.trim();
         const segments = this.parse_segments(this.data);
 
         if (!segments) return;
 
+        const katex = (await import('katex')).default;
         let plain = !this.data.startsWith('$');
 
         for (let seg of segments) {
-            this.render(seg, (plain = plain));
+            this.render(katex, seg, plain);
             plain = !plain;
         }
     }

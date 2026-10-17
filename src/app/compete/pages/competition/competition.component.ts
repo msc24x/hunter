@@ -6,7 +6,6 @@ import {
     ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
-import * as ace from 'ace-builds';
 import { last, Subscription } from 'rxjs';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import {

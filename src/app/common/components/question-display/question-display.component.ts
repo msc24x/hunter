@@ -6,15 +6,13 @@ import {
     SimpleChanges,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
-import katex from 'katex';
 import {
     materialTypes,
     materialTypeLabels,
     MaterialInfo,
     QuestionInfo,
 } from 'src/environments/environment';
-import suneditor from 'suneditor';
-import SunEditor from 'suneditor/src/lib/core';
+import type SunEditor from 'suneditor/src/lib/core';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -34,10 +32,12 @@ export class QuestionDisplayComponent implements OnChanges, OnDestroy {
     fullscreenMaterial: MaterialInfo | null = null;
     expandIcon = faExpand;
     private mediaUrlCache = new Map<number, SafeResourceUrl>();
+    private destroyed = false;
 
     constructor(private sanitizer: DomSanitizer) {}
 
     ngOnDestroy(): void {
+        this.destroyed = true;
         this.suneditor?.destroy();
         this.suneditor = null;
         this.mediaUrlCache.clear();
@@ -45,7 +45,20 @@ export class QuestionDisplayComponent implements OnChanges, OnDestroy {
 
     ngOnChanges(): void {
         this.mediaUrlCache.clear();
+        void this.createStatementEditor();
+    }
+
+    private async createStatementEditor() {
+        const [suneditorModule, katexModule] = await Promise.all([
+            import('suneditor'),
+            import('katex'),
+        ]);
+        const suneditor = suneditorModule.default;
+        const katex = katexModule.default;
+
         setTimeout(() => {
+            if (this.destroyed) return;
+
             this.suneditor?.destroy();
             this.suneditor = null;
 

@@ -7,7 +7,7 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
-import * as ace from 'ace-builds';
+import type * as ace from 'ace-builds';
 import { BehaviorSubject, timeout } from 'rxjs';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 import { HunterLanguage, templates } from 'src/environments/environment';
@@ -79,10 +79,14 @@ export class CodeEditorComponent implements OnInit, OnChanges {
     }
 
     initEditor() {
-        setTimeout(() => {
-            this.editor = ace.edit(`editor-${this.created_at}`);
-            this.editor.setReadOnly(!this.editable);
+        setTimeout(async () => {
+            const ace = await import('ace-builds');
+            const el = document.getElementById(`editor-${this.created_at}`);
+            if (!el) return;
+
             ace.config.set('basePath', 'assets/');
+            this.editor = ace.edit(el);
+            this.editor.setReadOnly(!this.editable);
 
             if (this.themeService.getTheme() === 'dark') {
                 this.editor.setTheme('ace/theme/twilight');
