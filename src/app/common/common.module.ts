@@ -13,13 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 
 // Components / Pages
-import { AppBarComponent } from './components/app-bar/app-bar.component';
-import { BottomAppBarComponent } from './components/bottom-app-bar/bottom-app-bar.component';
 import { CompetitionsListComponent } from './components/competitions-list/competitions-list.component';
-import { InfoCardComponent } from './components/info-card/info-card.component';
-import { LoadingComponent } from './components/loading/loading.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
-import { PopupComponent } from './components/popup/popup.component';
 import { SigninDialogComponent } from './components/signin-dialog/signin-dialog.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { AboutComponent } from './pages/about/about.component';
@@ -62,6 +57,7 @@ import {
 
 // Routing
 import { CommonRoutingModule } from './common-routing.module';
+import { ShellModule } from '../shell/shell.module';
 
 // grouped arrays
 const ANGULAR_MODULES = [
@@ -83,13 +79,8 @@ const UI_MODULES = [
 const CDK_MODULES = [DragDropModule];
 
 const COMPONENTS = [
-    AppBarComponent,
-    BottomAppBarComponent,
     CompetitionsListComponent,
-    InfoCardComponent,
-    LoadingComponent,
     LoginDialogComponent,
-    PopupComponent,
     SigninDialogComponent,
     TextInputComponent,
     AboutComponent,
@@ -132,8 +123,13 @@ const PIPES = [
 
 @NgModule({
     declarations: [...COMPONENTS, ...PIPES],
-    imports: [...ANGULAR_MODULES, ...UI_MODULES, ...CDK_MODULES],
-    exports: [...COMPONENTS, ...PIPES],
+    imports: [
+        ShellModule,
+        ...ANGULAR_MODULES,
+        ...UI_MODULES,
+        ...CDK_MODULES,
+    ],
+    exports: [ShellModule, ...COMPONENTS, ...PIPES],
     providers: [DatePipe],
 })
 export class CommonModule {}
