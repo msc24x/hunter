@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { Router } from 'express';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 import { Community, UserInfo } from 'src/environments/environment';

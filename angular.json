@@ -20,7 +20,6 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "allowedCommonJsDependencies": ["crypto"],
                         "outputPath": "dist/hunter",
                         "index": "src/index.html",
                         "main": "src/main.ts",
