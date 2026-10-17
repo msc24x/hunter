@@ -1,7 +1,7 @@
 <p *ngIf="message" class="error-like">
     <fa-icon
         [icon]="blocker ? blockerIcon : errorIcon"
-        [class.warn-icon]="!blocker"
+        [class.warn-icon]="warn && !blocker"
     ></fa-icon>
     &nbsp; {{ message }}
     <ng-content></ng-content>

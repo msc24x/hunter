@@ -1,9 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {
-    faBan,
-    faRibbon,
-    faTriangleExclamation,
-} from '@fortawesome/free-solid-svg-icons';
+import { faBan, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'manual-error',
@@ -19,4 +15,7 @@ export class ManualErrorComponent {
 
     @Input()
     blocker = false;
+
+    @Input()
+    warn = false;
 }

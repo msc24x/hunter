@@ -252,7 +252,12 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                         include: {
                             questions: {
                                 where: { deleted_at: null },
-                                include: { question_choices: true },
+                                include: {
+                                    question_choices: true,
+                                    question_verifications: {
+                                        where: { success: true },
+                                    },
+                                },
                             },
                         },
                     })
@@ -489,6 +494,12 @@ function getParticipationBlockers(competition: any): string[] {
                     `${label} has no solutions file, submissions cannot be evaluated.`,
                 );
             }
+
+            if (!question.question_verifications.length) {
+                blockers.push(
+                    `${label} has not been verified for solvability.`,
+                );
+            }
         }
 
         if (question.type === config.questionTypes.mcq) {
@@ -626,6 +637,9 @@ router.get(
                             questionWarnings.question_verifications = [
                                 'Verification request for the solutions file to test the solvability of the coding task has not been submitted, hunter cannot ensure whether your coding task is solvable or not.',
                             ];
+                            questionWarnings.blockers.push(
+                                questionWarnings.question_verifications[0],
+                            );
                         }
                     }
 
