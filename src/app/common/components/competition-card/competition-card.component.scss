@@ -52,6 +52,11 @@
             color: var(--dark-blue);
             background: var(--hollow-blue);
             border-color: var(--dark-blue);
+            gap: 0.5rem;
+
+            .qtype-sep {
+                opacity: 0.55;
+            }
         }
     }
 }

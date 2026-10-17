@@ -50,7 +50,21 @@
         </div>
     </span>
 
-    <div class="detail-tag ques-tag">{{ com._count.questions || 0 }} Q</div>
+    <div class="detail-tag ques-tag" *ngIf="questionTypeEntries.length">
+        <span
+            *ngFor="let entry of questionTypeEntries; let first = first"
+            class="qtype-count"
+        >
+            <ng-container *ngIf="!first"
+                ><span class="qtype-sep">&bull;</span>&nbsp;</ng-container
+            >
+            {{ entry.count }}
+            <fa-icon [icon]="quesTypeIcon(entry.type)" size="xs"></fa-icon>
+        </span>
+    </div>
+    <div class="detail-tag ques-tag" *ngIf="!questionTypeEntries.length">
+        {{ com._count.questions || 0 }} Q
+    </div>
     <div class="detail-tag cute-panel" *ngIf="com.practice">
         For Practice Only
     </div>

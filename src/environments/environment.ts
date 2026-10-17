@@ -69,6 +69,7 @@ export interface CompetitionInfo {
     community_id?: number;
     community_only?: boolean;
     community?: Community;
+    question_type_counts?: { [type: number]: number };
 
     _count: CompetitionInfoCounts;
 }

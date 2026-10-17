@@ -815,6 +815,14 @@ router.get('/competitions', authenticate, (req, res) => {
                     },
                 },
             },
+            questions: {
+                where: {
+                    deleted_at: null,
+                },
+                select: {
+                    type: true,
+                },
+            },
             community: {
                 select: { id: true, name: true },
                 where: {
@@ -830,6 +838,17 @@ router.get('/competitions', authenticate, (req, res) => {
     client.competitions
         .findMany(findArgs)
         .then((competitions) => {
+            competitions = competitions.map((competition: any) => {
+                const typeCounts: any = {};
+                competition.questions?.forEach((question: any) => {
+                    typeCounts[question.type] =
+                        (typeCounts[question.type] || 0) + 1;
+                });
+                competition.question_type_counts = typeCounts;
+                delete competition.questions;
+                return competition;
+            });
+
             if (params.liveStatus === 'live') {
                 competitions = competitions.filter((comp) => {
                     if (!comp.scheduled_end_at) return true;

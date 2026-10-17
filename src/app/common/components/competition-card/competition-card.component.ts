@@ -1,5 +1,13 @@
 import { Component, Input } from '@angular/core';
-import { faCircleCheck, faLock } from '@fortawesome/free-solid-svg-icons';
+import {
+    faAlignLeft,
+    faCheckDouble,
+    faCircleCheck,
+    faCircleHalfStroke,
+    faCode,
+    faLock,
+    IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
 import { CompetitionInfo } from 'src/environments/environment';
 
@@ -12,6 +20,8 @@ export class CompetitionCardComponent {
     loading = false;
     officialIcon = faCircleCheck;
     privateIcon = faLock;
+
+    questionTypeOrder = [0, 1, 2, 3];
 
     @Input({ required: true })
     com!: CompetitionInfo;
@@ -34,6 +44,33 @@ export class CompetitionCardComponent {
         setInterval(() => {
             this.timeLeftFlag = !this.timeLeftFlag;
         }, 30 * 1000);
+    }
+
+    get questionTypeEntries(): { type: number; count: number }[] {
+        if (!this.com?.question_type_counts) {
+            return [];
+        }
+        return this.questionTypeOrder
+            .filter((t) => this.com.question_type_counts![t] > 0)
+            .map((t) => ({
+                type: t,
+                count: this.com.question_type_counts![t],
+            }));
+    }
+
+    quesTypeIcon(type: number): IconDefinition {
+        switch (type) {
+            case 0:
+                return faCode;
+            case 1:
+                return faCheckDouble;
+            case 2:
+                return faCircleHalfStroke;
+            case 3:
+                return faAlignLeft;
+            default:
+                return faCode;
+        }
     }
 
     isAfterNow(date: Date | null) {
