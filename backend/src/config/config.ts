@@ -6,6 +6,34 @@ dotenv.config({
     path: `.env/.env.${process.env.ENV || 'local'}`,
 });
 
+const smtp = {
+    host: process.env.SMTP_HOST!,
+    port: process.env.SMTP_PORT!,
+    auth: {
+        user: process.env.SMTP_USER!,
+        pass: process.env.SMTP_PASS!,
+    },
+} as TransportOptions;
+
+// Ordered SMTP providers from SMTP_PROVIDERS — a JSON array of nodemailer
+// transport options, index 0 = primary. Falls back to the SMTP_* vars.
+const smtpProviders = ((): TransportOptions[] => {
+    if (process.env.SMTP_PROVIDERS) {
+        try {
+            const parsed = JSON.parse(process.env.SMTP_PROVIDERS);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                return parsed as TransportOptions[];
+            }
+            console.warn(
+                '[Config] SMTP_PROVIDERS must be a non-empty JSON array, using SMTP_* vars'
+            );
+        } catch (error) {
+            console.warn('[Config] could not parse SMTP_PROVIDERS, using SMTP_* vars', error);
+        }
+    }
+    return [smtp];
+})();
+
 export default {
     staff_email: process.env.STAFF_EMAIL,
     filesPath: 'files/',
@@ -16,14 +44,12 @@ export default {
     dbConnectionConfig: {
         db_url: process.env.DB_URL,
     },
-    smtp: {
-        host: process.env.SMTP_HOST!,
-        port: process.env.SMTP_PORT!,
-        auth: {
-            user: process.env.SMTP_USER!,
-            pass: process.env.SMTP_PASS!,
-        },
-    } as TransportOptions,
+    smtp,
+    smtpProviders,
+    // Attempts per provider before failover.
+    smtpMaxRetries: parseInt(process.env.SMTP_MAX_RETRIES || '3') || 3,
+    // Milliseconds a failed provider is skipped.
+    smtpFailoverCooldownMs: parseInt(process.env.SMTP_FAILOVER_COOLDOWN_MS || '300000'),
     questionTypes: {
         code: 0,
         mcq: 1,
