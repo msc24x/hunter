@@ -112,8 +112,8 @@
                 );
                 pointer-events: none;
                 z-index: 1;
-                border-bottom-left-radius: 2rem;
-                border-bottom-right-radius: 2rem;
+                border-bottom-left-radius: var(--r-xl);
+                border-bottom-right-radius: var(--r-xl);
             }
         }
 
