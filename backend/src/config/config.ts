@@ -15,24 +15,19 @@ const smtp = {
     },
 } as TransportOptions;
 
-// Ordered SMTP providers from SMTP_PROVIDERS — a JSON array of nodemailer
-// transport options, index 0 = primary. Falls back to the SMTP_* vars.
-const smtpProviders = ((): TransportOptions[] => {
-    if (process.env.SMTP_PROVIDERS) {
-        try {
-            const parsed = JSON.parse(process.env.SMTP_PROVIDERS);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-                return parsed as TransportOptions[];
-            }
-            console.warn(
-                '[Config] SMTP_PROVIDERS must be a non-empty JSON array, using SMTP_* vars'
-            );
-        } catch (error) {
-            console.warn('[Config] could not parse SMTP_PROVIDERS, using SMTP_* vars', error);
-        }
-    }
-    return [smtp];
-})();
+// Ordered SMTP providers, index 0 = primary. Settings live here; only
+// credentials come from env (SMTP_USER_2 / SMTP_PASS_2, _3, ... per entry).
+const smtpProviders: TransportOptions[] = [
+    smtp,
+    // {
+    //     host: 'smtp2.example.com',
+    //     port: 587,
+    //     auth: {
+    //         user: process.env.SMTP_USER_2!,
+    //         pass: process.env.SMTP_PASS_2!,
+    //     },
+    // },
+];
 
 export default {
     staff_email: process.env.STAFF_EMAIL,

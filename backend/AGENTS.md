@@ -107,7 +107,7 @@ const scores = await db.results.findMany({ where: { user_id: user.id } });
 | `DatabaseProvider` | `src/services/databaseProvider.ts` | Wraps PrismaClient + mysql2 Pool. `client()` → PrismaClient, `getInstance()` → PoolConnection, `loadModels()` registers legacy models |
 | `JudgeService` | `src/services/judgeService.ts` | Calls Showdown API (`SHOWDOWN_URL`, `SHOWDOWN_ACCESS_TOKEN`). Rate-limits by user (rejects concurrent requests for same user) |
 | `ScoreboardService` | `src/services/scoreboardService.ts` | Creates result entries after judging. Handles all 4 question types |
-| `sendInfoEmail` | `src/services/email.ts` | Nodemailer wrapper with multi-provider failover + 1s delay between sends (fake rate limiting). Providers come from `SMTP_PROVIDERS` (JSON array of nodemailer transport options, tried in order) or fall back to single `SMTP_*` vars. Retries each provider `SMTP_MAX_RETRIES` (default 3) times, marks a dead provider down for `SMTP_FAILOVER_COOLDOWN_MS` (default 5m), and refuses to resend on ambiguous post-DATA failures to avoid duplicates |
+| `sendInfoEmail` | `src/services/email.ts` | Nodemailer wrapper with multi-provider failover + 1s delay between sends (fake rate limiting). Providers are the ordered `smtpProviders` array in `src/config/config.ts` (index 0 = primary, uses `SMTP_*` vars); add entries there with creds in `SMTP_USER_N` / `SMTP_PASS_N`. Retries each provider `SMTP_MAX_RETRIES` (default 3) times, marks a dead provider down for `SMTP_FAILOVER_COOLDOWN_MS` (default 5m), and refuses to resend on ambiguous post-DATA failures to avoid duplicates |
 | Email senders | `src/emails/*/sender.ts` | One module per email type, uses `renderer.ts` for ejs templates |
 
 ### File Storage Layout
