@@ -431,22 +431,7 @@ textarea {
     @include sweetBorder;
     border-radius: 1.5rem;
     font-size: 1.2rem;
-
-    .practice-label {
-        color: purple;
-        width: fit-content;
-        @include basicBack;
-        margin-top: -3.3rem;
-        padding: 0.6rem;
-        padding-inline: 1rem;
-        left: 0.5rem;
-        font-size: 0.9rem;
-        font-weight: 400;
-        border-radius: 1rem 1rem 0 0;
-        position: relative;
-        z-index: -1;
-        margin-bottom: 1rem;
-    }
+    cursor: pointer;
 
     infotip {
         margin-left: 0.4rem;
@@ -460,7 +445,8 @@ textarea {
         gap: 1rem;
 
         .title {
-            font-weight: 500;
+            font-size: 1.4rem;
+            font-weight: 600;
         }
 
         > b {
@@ -470,48 +456,53 @@ textarea {
         }
     }
 
-    .description-toggle-content {
-        margin: 6px;
-        margin-top: 9px;
-        margin-bottom: 0;
-        width: 100%;
-        cursor: pointer;
-        user-select: auto;
+    .info-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-top: 0.8rem;
+    }
 
-        & > label {
-            user-select: auto !important;
-            touch-action: auto !important;
+    .info-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        width: fit-content;
+        padding: 0.4rem;
+        padding-inline: 0.7rem;
+        border-radius: 0.6rem;
+        font-size: 0.95rem;
+        color: var(--gray);
+        background-color: rgba(128, 128, 128, 0.1);
+        @include sweetBorder;
+
+        &.practice {
+            color: var(--cute-panel-color);
+            background-color: var(--cute-panel-bg);
+            border-color: var(--cute-panel-border);
         }
+
+        &.toggle {
+            color: var(--btn-main-fg);
+            background-color: var(--btn-bg);
+            border-color: var(--btn-sim-border);
+            font-weight: 500;
+        }
+
+        &.started {
+            color: var(--darkgreen);
+            background-color: rgba(0, 100, 0, 0.08);
+            border-color: rgba(0, 100, 0, 0.35);
+        }
+    }
+
+    .details-content {
+        margin-top: 0.9rem;
+        cursor: default;
 
         .startup-info {
-            text-align: right;
-            padding-right: 1rem;
-            color: var(--darkgreen);
-            opacity: 0.8;
             display: flex;
-            justify-content: space-between;
-        }
-    }
-    .description-toggle-content-a:hover {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-
-    #description-toggle:checked + p {
-        .description-toggle-content-a {
-            display: none;
-        }
-        .description-toggle-content-b {
-            display: block;
-        }
-    }
-
-    #description-toggle:not(:checked) + p {
-        .description-toggle-content-a {
-            display: block;
-        }
-        .description-toggle-content-b {
-            display: none;
+            margin-top: 0.4rem;
         }
     }
 
@@ -526,6 +517,7 @@ textarea {
         float: right;
         margin: 0.2rem;
         color: var(--dark-red);
+        font-weight: 400;
 
         .label {
             font-size: 1rem;
@@ -551,19 +543,13 @@ textarea {
                 text-align: center;
             }
         }
-        .description-toggle-content {
+
+        .info-tags {
             font-size: 1rem;
         }
 
-        .description-toggle-content-a {
-            text-align: center;
-            width: calc(100% - 0.5rem);
-        }
-
         .startup-info {
-            text-align: center !important;
-            float: none;
-            margin-top: 1rem;
+            justify-content: center;
         }
     }
 }
@@ -670,9 +656,5 @@ textarea {
 
     .title-duration-container > b {
         flex-basis: 100% !important;
-    }
-
-    .description-toggle-content-a {
-        text-decoration: underline;
     }
 }

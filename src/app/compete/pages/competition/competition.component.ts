@@ -31,6 +31,7 @@ import {
     faBackward,
     faBug,
     faCheckCircle,
+    faChevronDown,
     faChevronUp,
     faClipboardList,
     faCloud,
@@ -76,6 +77,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     loginIcon = faAddressCard;
     timerIcon = faHourglassHalf;
     upIcon = faChevronUp;
+    downIcon = faChevronDown;
     submitIcon = faEnvelopeOpenText;
     playIcon = faPlay;
     reportIcon = faBug;
@@ -111,6 +113,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     };
 
     showInstructionP = false;
+    detailsExpanded = false;
     showSignInP = false;
 
     evaluationChangeOccurred = false;

@@ -261,24 +261,19 @@
     *ngIf="competition.id && !notStarted"
 >
     <div class="main">
-        <div *ngIf="this.competition.title" id="competition_info">
-            <div
-                *ngIf="competition.practice"
-                class="practice-label cute-panel"
-                matTooltip="Contest is set as a practice only, allowing you to
-                        attempt the contest multiple times. You can submit your
-                        responses any number of times. Any positive or negative
-                        points here won't affect your user profile."
-            >
-                <fa-icon [icon]="practiceIcon"></fa-icon>
-                &nbsp; For Practice Only
-            </div>
+        <div
+            *ngIf="this.competition.title"
+            id="competition_info"
+            (click)="detailsExpanded = !detailsExpanded"
+        >
             <div class="title-duration-container">
                 <div class="title">
                     {{ this.competition.title || "Untitled Contest" }}
                     <infotip
                         message="Click to read instructions"
-                        (click)="showInstructionP = true"
+                        (click)="
+                            $event.stopPropagation(); showInstructionP = true
+                        "
                         [svgSize]="'sm'"
                     ></infotip>
 
@@ -296,105 +291,100 @@
                 </div>
             </div>
 
-            <input
-                type="checkbox"
-                id="description-toggle"
-                [checked]="false"
-                hidden
-            />
-            <p class="description-toggle-content">
-                <label
-                    class="description-toggle-content-a"
-                    for="description-toggle"
+            <div class="info-tags">
+                <span
+                    *ngIf="competition.practice"
+                    class="info-tag practice"
+                    matTooltip="Contest is set as a practice only, allowing you to
+                        attempt the contest multiple times. You can submit your
+                        responses any number of times. Any positive or negative
+                        points here won't affect your user profile."
                 >
-                    Read description
-                </label>
-                <label
-                    class="description-toggle-content-b"
-                    for="description-toggle"
-                    matTooltip="Click to collapse"
+                    <fa-icon [icon]="practiceIcon"></fa-icon>
+                    For Practice Only
+                </span>
+
+                <span
+                    class="info-tag"
+                    matTooltip="Host"
+                    (click)="$event.stopPropagation()"
                 >
-                    <div class="info-like">
-                        Hosted by
-                        <user-display
-                            [userInfo]="this.competition.host_user"
-                        ></user-display>
+                    <user-display
+                        [userInfo]="this.competition.host_user"
+                    ></user-display>
+                </span>
 
-                        <span *ngIf="competition.community">
-                            <br />
-                            Posted in
-                            <community-display
-                                [community]="competition.community"
-                            ></community-display>
-                        </span>
-                    </div>
-                    <div class="info-like">
-                        Updated
-                        {{ this.competition.updated_at | timeAgo }}
-                    </div>
+                <span
+                    class="info-tag"
+                    *ngIf="competition.community"
+                    matTooltip="Posted in this community"
+                    (click)="$event.stopPropagation()"
+                >
+                    <community-display
+                        [community]="competition.community"
+                    ></community-display>
+                </span>
 
-                    <br />
-                    <div
-                        [innerText]="
-                            this.competition.description.trim() ||
-                            'No description provided by host.'
-                        "
-                    ></div>
+                <span class="info-tag">
+                    Updated {{ this.competition.updated_at | timeAgo }}
+                </span>
 
-                    <hr
-                        *ngIf="
+                <span
+                    class="info-tag"
+                    *ngIf="competition.time_limit && !competition.practice"
+                >
+                    <fa-icon [icon]="stopwatchIcon" [size]="'xs'"></fa-icon>
+                    Must be completed within
+                    {{
+                        getTimeLimit().hours
+                            ? getTimeLimit().hours + " hrs"
+                            : ""
+                    }}
+                    {{
+                        getTimeLimit().mins ? getTimeLimit().mins + " mins" : ""
+                    }}
+                </span>
+
+                <span class="info-tag toggle">
+                    {{ detailsExpanded ? "Hide details" : "Details" }}
+                    <fa-icon
+                        [icon]="detailsExpanded ? upIcon : downIcon"
+                        [size]="'xs'"
+                    ></fa-icon>
+                </span>
+            </div>
+
+            <div class="details-content" *ngIf="detailsExpanded">
+                <div
+                    [innerText]="
+                        this.competition.description.trim() ||
+                        'No description provided by host.'
+                    "
+                ></div>
+
+                <hr
+                    *ngIf="
+                        this.competition.competition_sessions?.[0]?.created_at
+                    "
+                    class="sweet-hr"
+                />
+
+                <div
+                    *ngIf="
+                        this.competition.competition_sessions?.[0]?.created_at
+                    "
+                    class="info-like startup-info"
+                >
+                    <span class="info-tag started">
+                        <fa-icon [icon]="ticketIcon" [size]="'xs'"></fa-icon>
+                        You entered on
+                        {{
                             this.competition.competition_sessions?.[0]
-                                ?.created_at
-                        "
-                        class="sweet-hr"
-                    />
-
-                    <div
-                        *ngIf="
-                            this.competition.competition_sessions?.[0]
-                                ?.created_at
-                        "
-                        class="info-like startup-info"
-                    >
-                        <div>
-                            <fa-icon
-                                [icon]="ticketIcon"
-                                [size]="'xs'"
-                            ></fa-icon>
-                            You started this contest on
-                            {{
-                                this.competition.competition_sessions?.[0]
-                                    ?.created_at | prettyDate
-                            }}
-                        </div>
-
-                        <div>
-                            <span
-                                *ngIf="
-                                    competition.time_limit &&
-                                    !competition.practice
-                                "
-                            >
-                                <fa-icon
-                                    [icon]="stopwatchIcon"
-                                    [size]="'xs'"
-                                ></fa-icon>
-                                Must be completed within
-                                {{
-                                    getTimeLimit().hours
-                                        ? getTimeLimit().hours + " hrs"
-                                        : ""
-                                }}
-                                {{
-                                    getTimeLimit().mins
-                                        ? getTimeLimit().mins + " mins"
-                                        : ""
-                                }}
-                            </span>
-                        </div>
-                    </div>
-                </label>
-            </p>
+                                ?.created_at | prettyDate
+                        }}
+                    </span>
+                </div>
+            </div>
         </div>
 
         <div
