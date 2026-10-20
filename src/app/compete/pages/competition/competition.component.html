@@ -816,6 +816,12 @@
     <br />
 
     <div
+        *ngIf="questionSelectedInfo && bottomSection"
+        class="bottom-backdrop"
+        (click)="bottomSection = false"
+    ></div>
+
+    <div
         *ngIf="questionSelectedInfo"
         class="bottom-section"
         [ngClass]="{ 'full': bottomSection }"
@@ -828,8 +834,24 @@
             <fa-icon [hidden]="bottomSection" [icon]="progressIcon"></fa-icon>
             <fa-icon [hidden]="!bottomSection" [icon]="upIcon"></fa-icon>
 
-            <div [hidden]="!competition.questions || bottomSection">
-                View Your Progress
+            <div
+                class="collapsed-progress"
+                *ngIf="competition.questions && !bottomSection"
+            >
+                <span class="attempted-num">
+                    {{ questionsProgress.length }}/{{
+                        competition.questions?.length
+                    }}
+                </span>
+                <greenred
+                    [green_number]="questionsProgress.length"
+                    [red_number]="
+                        (competition.questions?.length || 0) -
+                        questionsProgress.length
+                    "
+                    green_label="Attempted"
+                    red_label="Unattempted"
+                ></greenred>
             </div>
         </div>
         <ng-template #overallProgress>
@@ -870,16 +892,16 @@
                     </div>
 
                     <div class="progress-box score-box cute-panel">
-                        Received a total of
-                        <span class="progress-num">
+                        <span class="score-num">
                             {{ getTotalScore() }}
                         </span>
-                        points
-
-                        <infotip
-                            *ngIf="competition.practice"
-                            message="Will not affect your profile, since this is a practice contest only."
-                        ></infotip>
+                        <span class="score-label">
+                            points earned
+                            <infotip
+                                *ngIf="competition.practice"
+                                message="Will not affect your profile, since this is a practice contest only."
+                            ></infotip>
+                        </span>
                     </div>
                 </div>
             </div>

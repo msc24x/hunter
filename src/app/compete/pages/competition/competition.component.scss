@@ -49,6 +49,12 @@
     }
 }
 
+.bottom-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 989;
+}
+
 .bottom-section {
     @include basicBack;
     @include hideSrollbar;
@@ -110,6 +116,17 @@
         align-items: center;
         gap: 0.5rem;
         font-weight: 600;
+
+        .collapsed-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            line-height: 1;
+
+            greenred {
+                width: 6rem;
+            }
+        }
     }
 
     .progress-container {
@@ -141,9 +158,26 @@
 
             &.score-box {
                 display: flex;
+                flex-direction: column;
                 align-items: center;
-                gap: 0.3rem;
                 justify-content: center;
+                gap: 0.1rem;
+                padding-block: 0.8rem;
+                text-align: center;
+
+                .score-num {
+                    font-size: 2.2rem;
+                    font-weight: 700;
+                    line-height: 1;
+                }
+
+                .score-label {
+                    font-size: 1rem;
+                    opacity: 0.8;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.3rem;
+                }
             }
         }
     }
@@ -343,8 +377,9 @@
     &:hover,
     &.active {
         .handle-bar {
-            background-color: var(--cute-blue, #4080ff);
-            height: 48px;
+            background-color: var(--gray);
+            height: 84px;
+            width: 3px;
         }
     }
 }

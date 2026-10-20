@@ -201,19 +201,6 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             .getElementsByTagName('bottom-app-bar')[0]
             .classList.add('hidden');
 
-        document.addEventListener('click', (event: MouseEvent) => {
-            const target = event.target as HTMLElement | null;
-            if (!target) return;
-
-            const inBottomSection = target.closest('.bottom-section');
-            const inSubmitControls = target.closest('#submit_controls');
-            const clickedSomewhere = target.closest('.link-like');
-
-            if (!inBottomSection && !inSubmitControls && !clickedSomewhere) {
-                this.bottomSection = false;
-            }
-        });
-
         document.addEventListener('keydown', (event) => {
             if (event.shiftKey && event.altKey && event.key == 'J') {
                 this.postSolution(true);
