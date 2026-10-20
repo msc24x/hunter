@@ -6,7 +6,7 @@ div#loginDialog {
     background-color: var(--dim-white);
     width: 300px;
     height: 500px;
-    border-radius: 30px;
+    border-radius: var(--r-xl);
     padding-top: 1px;
     /*float: right;
   margin-right: 8%;
@@ -58,7 +58,7 @@ div#loginDialog {
     }
     button {
         background-color: #ffffff;
-        border-radius: 5px;
+        border-radius: var(--r-xs);
         color: var(--text-black);
         border-width: 0px;
         stroke-width: 0px;

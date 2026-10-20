@@ -37,7 +37,7 @@
         padding: 0.25rem 0.6rem;
         font-size: 1rem;
         font-weight: 600;
-        border-radius: 999px;
+        border-radius: var(--r-pill);
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
         white-space: nowrap;
         color: #111;
@@ -61,7 +61,7 @@
         width: 100%;
         max-width: 32rem;
         max-height: 18rem;
-        border-radius: 2rem;
+        border-radius: var(--r-xl);
         overflow: hidden;
         position: relative;
         @include sweetBorder;

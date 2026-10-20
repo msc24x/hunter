@@ -14,7 +14,7 @@
         padding: 8px;
         padding-inline: 1rem;
         margin-left: 1rem;
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         @include sweetBorder();
     }
     input:active {

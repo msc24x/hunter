@@ -13,7 +13,7 @@
     gap: 2rem;
     flex-wrap: wrap;
     overflow: hidden;
-    border-radius: 2rem;
+    border-radius: var(--r-xl);
     background: linear-gradient(
         120deg,
         rgba(0, 0, 0, 0.8) 10%,
@@ -53,7 +53,7 @@
     animation-iteration-count: 2;
     animation-duration: 0.5s;
     width: fit-content;
-    border-radius: 2rem;
+    border-radius: var(--r-xl);
     font-size: 1.2rem;
     font-weight: 600;
     padding-inline: 1rem;

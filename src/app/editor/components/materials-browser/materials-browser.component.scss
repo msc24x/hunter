@@ -17,7 +17,7 @@
     width: 92%;
     max-width: 1100px;
     max-height: 88vh;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
     display: flex;
     flex-direction: column;
@@ -89,7 +89,7 @@
 
 .material-card {
     @include sweetBorder;
-    border-radius: 0.7rem;
+    border-radius: var(--r-sm);
     padding: 0.55rem 0.7rem;
     cursor: pointer;
     background-color: var(--white);
@@ -120,14 +120,14 @@
             background-color: var(--btn-bg);
             color: var(--btn-main-fg);
             padding: 0.1rem 0.4rem;
-            border-radius: 0.4rem;
+            border-radius: var(--r-xs);
         }
 
         .linked-chip {
             background-color: var(--cute-panel-bg);
             color: var(--cute-panel-color);
             padding: 0.1rem 0.4rem;
-            border-radius: 0.4rem;
+            border-radius: var(--r-xs);
         }
     }
 }
@@ -181,7 +181,7 @@
 .dropzone {
     @include sweetBorder;
     border-style: dashed;
-    border-radius: 0.8rem;
+    border-radius: var(--r-md);
     padding: 1.5rem;
     text-align: center;
     color: var(--text-black);
@@ -206,7 +206,7 @@
         display: inline-block;
         margin-top: 0.6rem;
         @include sweetBorder;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
         padding: 0.4rem 1rem;
         background-color: var(--white);
 
@@ -265,7 +265,7 @@
 
 .rich-view {
     @include sweetBorder;
-    border-radius: 0.7rem;
+    border-radius: var(--r-sm);
     padding: 0.8rem;
     background-color: var(--white);
     min-height: 80px;
@@ -279,7 +279,7 @@
 
     img {
         max-width: 100%;
-        border-radius: 0.6rem;
+        border-radius: var(--r-sm);
     }
 
     audio,
@@ -292,7 +292,7 @@
         width: 100%;
         height: 420px;
         border: 0;
-        border-radius: 0.6rem;
+        border-radius: var(--r-sm);
     }
 
     .fullscreen-btn {
@@ -316,7 +316,7 @@
         justify-content: space-between;
         align-items: center;
         @include sweetBorder;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
         padding: 0.4rem 0.6rem;
         margin-bottom: 0.3rem;
         background-color: var(--white);
@@ -359,7 +359,7 @@
         width: 92%;
         height: 90%;
         background-color: var(--popup-bg);
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         position: relative;
         overflow: hidden;
 

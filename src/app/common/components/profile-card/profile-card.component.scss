@@ -4,7 +4,7 @@
 :host {
     @include basicBack;
     align-items: stretch;
-    border-radius: 2rem;
+    border-radius: var(--r-xl);
     display: flex;
     padding: 1rem;
     gap: 0.5rem;
@@ -20,7 +20,7 @@
         font-size: 1rem;
         color: chocolate;
         width: fit-content;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
         padding: 0.2rem;
         padding-top: 0.3rem;
         padding-inline: 0.4rem;
@@ -69,7 +69,7 @@
     }
 
     img {
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         @include sweetBorder;
     }
 }

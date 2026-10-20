@@ -51,7 +51,7 @@
     button {
         font-size: 1.4rem;
         padding: 2rem;
-        border-radius: 2rem;
+        border-radius: var(--r-xl);
         font-weight: 600;
     }
 }
@@ -86,7 +86,7 @@
 .feature-image {
     flex: 1;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border-radius: 2rem;
+    border-radius: var(--r-xl);
     overflow: hidden;
     transform: translateY(0);
     transition: transform 0.3s ease;

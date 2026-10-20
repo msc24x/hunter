@@ -11,7 +11,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-        border-radius: 2rem;
+        border-radius: var(--r-xl);
         padding: 18px 22px;
         @include blackBack;
     }
@@ -57,7 +57,7 @@
 
 #join_competition {
     background-color: var(--whitesmoke);
-    border-radius: 12px;
+    border-radius: var(--r-sm);
     margin-top: 24px;
     flex-wrap: wrap;
     display: flex;
@@ -74,7 +74,7 @@
 }
 
 #competition_id_text {
-    border-radius: 8px;
+    border-radius: var(--r-sm);
     color: var(--text-black);
     background-color: var(--text-white);
     height: 28px;
@@ -97,7 +97,7 @@
     border-width: 0px;
     height: 28px;
     width: 48px;
-    border-radius: 8px;
+    border-radius: var(--r-sm);
 
     font-weight: bold;
 }
@@ -113,7 +113,7 @@
     width: 16rem;
     height: 10rem;
     background-color: var(--white);
-    border-radius: 1.5rem;
+    border-radius: var(--r-lg);
     @include sweetBorder();
     overflow: hidden;
     position: relative;

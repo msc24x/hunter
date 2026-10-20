@@ -44,13 +44,13 @@
         }
 
         .user-rank-row {
-            border-radius: 0.3rem;
+            border-radius: var(--r-xs);
             @include sweetBorder();
         }
 
         background-color: var(--whitesmoke);
         padding: 16px;
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         @include sweetBorder();
 
         display: flex;
@@ -68,7 +68,7 @@
                 top: 6rem;
                 z-index: 50;
                 @include basicBack;
-                border-radius: 0.5rem;
+                border-radius: var(--r-sm);
                 background-color: var(--whitesmoke);
             }
 
@@ -123,7 +123,7 @@
 
         & > div:not(.table_heading):not(.unusual):hover {
             background-color: var(--text-white);
-            border-radius: 0.3rem;
+            border-radius: var(--r-xs);
         }
     }
 }

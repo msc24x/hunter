@@ -31,7 +31,7 @@
 
 #question_statement {
     font-size: 1.05rem !important;
-    border-radius: 2rem;
+    border-radius: var(--r-xl);
 }
 
 #question_materials {
@@ -45,7 +45,7 @@
             background-color: var(--btn-bg);
             color: var(--btn-main-fg);
             padding: 0.15rem 0.6rem;
-            border-radius: 0.4rem;
+            border-radius: var(--r-xs);
             font-size: 0.75rem;
             font-weight: 500;
             margin-bottom: 0.5rem;
@@ -66,7 +66,7 @@
             video,
             iframe {
                 max-width: 100%;
-                border-radius: 0.6rem;
+                border-radius: var(--r-sm);
             }
 
             iframe {
@@ -116,7 +116,7 @@
         max-width: 90vw;
         max-height: 88vh;
         object-fit: contain;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
         display: block;
     }
 
@@ -124,13 +124,13 @@
         width: 80vw;
         height: 85vh;
         border: 0;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
     }
 
     &.fs-video {
         max-width: 90vw;
         max-height: 88vh;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
         display: block;
     }
 

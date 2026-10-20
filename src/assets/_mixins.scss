@@ -14,7 +14,7 @@
     & > div {
         padding-inline: 1rem;
         padding-block: 0.5rem;
-        border-radius: 0.6rem;
+        border-radius: var(--r-sm);
         max-width: 7rem;
         justify-content: center !important;
         cursor: pointer;
@@ -28,7 +28,7 @@
 }
 
 @mixin yellowBg {
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     border-width: 2px;
     @include sweetBorder;
     background: var(--yellowbg-bg);
@@ -57,7 +57,7 @@
     // background: #0000000d;
     background-color: var(--whitesmoke);
     padding: 1rem;
-    border-radius: 2rem;
+    border-radius: var(--r-xl);
     @include sweetBorder();
 }
 
@@ -65,7 +65,7 @@
     color: var(--text-black);
     font-size: 1rem;
     background-color: var(--white);
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     @include sweetBorder();
 }
 
@@ -75,7 +75,7 @@
     color: var(--text-black);
     font-size: 1rem;
     background-color: var(--white);
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     @include sweetBorder();
 }
 
@@ -86,7 +86,7 @@
 }
 
 @mixin inputText {
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     color: var(--text-black);
     background-color: var(--input-text-bg);
     border-width: 0px;
@@ -106,7 +106,7 @@
 @mixin appTextArea {
     resize: vertical;
     background-color: var(--whitesmoke);
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     font-family: appFont;
     font-weight: 300;
     font-size: 1.2rem;

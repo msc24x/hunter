@@ -11,7 +11,7 @@
     color: inherit;
     margin-bottom: 0.5rem;
     padding: 16px;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     border-color: var(--text-black);
     border-width: 110px;
     height: fit-content;
@@ -33,7 +33,7 @@
 
     .detail-tag {
         background-color: rgba(128, 128, 128, 0.1);
-        border-radius: 0.6rem;
+        border-radius: var(--r-sm);
         margin-block: 0.3rem;
         padding: 4px;
         padding-inline: 8px;

@@ -20,7 +20,7 @@ div.appBar {
     #logout_btn {
         background-color: var(--mild-red);
         color: var(--dark-red) !important;
-        border-radius: 12px;
+        border-radius: var(--r-sm);
         padding-block: 4px;
         padding-inline: 16px !important;
         cursor: pointer;
@@ -69,7 +69,7 @@ div.appBar {
             font-size: 0.8rem;
             background-color: var(--text-black);
             color: var(--text-white);
-            border-radius: 12px;
+            border-radius: var(--r-sm);
             padding-block: 6px;
             padding-inline: 16px;
             margin-left: 12px;
@@ -108,7 +108,7 @@ div.appBar {
         // background-color: var(--white);
         padding: 6px;
         padding-inline: 12px;
-        border-radius: 8px;
+        border-radius: var(--r-sm);
         margin-right: 12px;
         cursor: pointer;
 
@@ -138,7 +138,7 @@ div.appBar {
             padding: 5px;
             list-style: none;
             backdrop-filter: blur(16px);
-            border-radius: 16px;
+            border-radius: var(--r-md);
             background-color: var(--white);
             box-shadow: 0 0 100px 0px rgba(0, 0, 0, 0.2);
             @include sweetBorder;
@@ -149,7 +149,7 @@ div.appBar {
                 text-align: left;
                 padding: 12px;
                 padding-top: 10px;
-                border-radius: 24px;
+                border-radius: var(--r-lg);
                 margin: 5px;
                 min-width: 120px;
                 border: solid transparent;

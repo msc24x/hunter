@@ -44,7 +44,7 @@
     min-width: 33%;
     max-width: 60%;
     max-height: 80%;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     box-shadow: 0 50px 9000px 9px rgba(0, 0, 0, 0.295);
     overflow-y: auto;
     overflow-x: hidden;
@@ -69,7 +69,7 @@
             padding-inline: 16px;
             background-color: var(--whitesmoke);
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: var(--r-sm);
 
             @include sweetBorder();
         }

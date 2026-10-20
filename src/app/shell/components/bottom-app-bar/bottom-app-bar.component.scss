@@ -32,11 +32,11 @@
     }
 
     .paragraph {
-        color: var(--gray);;
+        color: var(--gray);
     }
 
     .github-button {
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         background-color: var(--text-black);
         color: var(--white);
         font-weight: bold;

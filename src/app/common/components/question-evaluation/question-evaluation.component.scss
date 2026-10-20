@@ -54,7 +54,7 @@
     .view-submission-container {
         @include blackBack;
         flex-grow: 1;
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         max-width: 55%;
     }
 }

@@ -16,7 +16,7 @@
     display: flex;
     overflow-x: auto;
     overflow-y: show;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     scroll-behavior: smooth;
     margin: 0;
 
@@ -29,7 +29,7 @@
 
     & > div {
         background-color: var(--white);
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         padding: 16px;
         font-weight: bold;
         width: max-content;
@@ -99,7 +99,7 @@
     li,
     li.cdk-drag-preview {
         background-color: var(--whitesmoke);
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         padding: 16px;
         font-weight: bold;
         width: max-content;
@@ -130,7 +130,7 @@
             left: -0.5rem;
             font-size: 1.3rem;
             background: var(--text-white);
-            border-radius: 1.3rem;
+            border-radius: var(--r-lg);
             height: 1.2rem;
             display: block;
             line-height: 1.3rem;

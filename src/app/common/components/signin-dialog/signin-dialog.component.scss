@@ -5,7 +5,7 @@
 div#signinDialog {
     background-color: var(--dim-white);
     width: 300px;
-    border-radius: 30px;
+    border-radius: var(--r-xl);
     padding-top: 1px;
     padding-bottom: 16px;
 
@@ -13,7 +13,7 @@ div#signinDialog {
         font-size: 0.7rem;
         padding-inline: 16px;
         margin: 8px;
-        color: var(--gray);;
+        color: var(--gray);
     }
 
     p.sectionHeading {
@@ -37,7 +37,7 @@ div#signinDialog {
         color: var(--text-black);
     }
     input.textbox {
-        border-radius: 5px;
+        border-radius: var(--r-xs);
         color: var(--text-black);
         border-width: 0px;
         stroke-width: 0px;
@@ -71,7 +71,7 @@ div#signinDialog {
     }
     #register_btn {
         background-color: #ffffff;
-        border-radius: 5px;
+        border-radius: var(--r-xs);
         color: var(--text-black);
         border-width: 0px;
         stroke-width: 0px;

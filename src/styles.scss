@@ -20,7 +20,7 @@ html[impersonating] {
 
     body {
         margin: 2rem;
-        border-radius: 2rem;
+        border-radius: var(--r-xl);
         box-shadow: 0 1rem 2rem 2rem coral;
     }
 }
@@ -43,7 +43,7 @@ input[type="number"],
 input[type="email"],
 input[type="text"] {
     @include appTextArea;
-    border-radius: 0.7rem !important;
+    border-radius: var(--r-sm) !important;
     padding: 0.5rem;
 }
 
@@ -56,9 +56,9 @@ button.main,
     border-color: var(--btn-main-fg);
     background-color: var(--btn-bg);
     min-width: 5rem;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     padding: 0.8rem;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     cursor: pointer;
     transition: 100ms;
     text-align: center;
@@ -109,7 +109,7 @@ button.main,
 
     /* Shape & Size */
     padding: 4px 10px;
-    border-radius: 50px; /* Pill shape */
+    border-radius: var(--r-pill); /* Pill shape */
 
     /* Typography */
     font-size: 0.75rem; /* Approx 12px */
@@ -154,7 +154,7 @@ button.main,
     --mdc-snackbar-supporting-text-line-height: 1.5rem !important;
     @include sweetBorder;
     border-color: rgb(255, 208, 150);
-    border-radius: 0.5rem !important;
+    border-radius: var(--r-sm) !important;
 }
 
 .mat-mdc-snack-bar-action {
@@ -162,12 +162,12 @@ button.main,
 }
 
 .mat-mdc-select-panel {
-    border-radius: 1rem !important;
+    border-radius: var(--r-md) !important;
     @include sweetBorder;
 
     .mat-mdc-option {
         margin-inline: 0.5rem;
-        border-radius: 0.7rem;
+        border-radius: var(--r-sm);
 
         &:hover {
             background-color: antiquewhite;
@@ -182,12 +182,12 @@ button.main,
 
 .mat-mdc-tab-label-container {
     background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 1.3rem;
+    border-radius: var(--r-lg);
     overflow: hidden;
     padding: 0.3rem;
 
     .mat-mdc-tab {
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         overflow: hidden;
         transition: 200ms;
 
@@ -215,7 +215,7 @@ button.main,
     .mdc-tab--active,
     .mdc-tab--active:hover {
         background-color: var(--white);
-        border-radius: 1rem;
+        border-radius: var(--r-md);
     }
 }
 
@@ -242,7 +242,7 @@ question-display {
 }
 
 .question-data .sun-editor {
-    border-radius: 1rem;
+    border-radius: var(--r-md);
 }
 
 .sun-editor {
@@ -251,13 +251,13 @@ question-display {
     overflow: hidden;
 
     .se-btn-module-border {
-        border-radius: 0.9rem;
+        border-radius: var(--r-md);
     }
     .se-btn {
-        border-radius: 0.85rem;
+        border-radius: var(--r-md);
     }
     .se-dialog .se-dialog-inner .se-dialog-content {
-        border-radius: 1rem;
+        border-radius: var(--r-md);
     }
 
     .se-resizing-bar {
@@ -266,7 +266,7 @@ question-display {
 
     .se-list-format {
         max-height: 9rem;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
     }
 }
 
@@ -402,7 +402,7 @@ question-display {
     color: var(--text-black);
     font-size: 1rem;
     background-color: var(--white);
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     cursor: pointer;
     @include sweetBorder;
 
@@ -426,7 +426,7 @@ question-display {
     font-size: 1.1rem;
     background-color: var(--whitesmoke);
     padding: 16px;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     @include sweetBorder();
 
     .table_heading {
@@ -447,7 +447,7 @@ question-display {
     }
 
     & > div:not(.table_heading):hover {
-        border-radius: 0.3rem;
+        border-radius: var(--r-xs);
         background-color: var(--text-white);
     }
 }
@@ -496,7 +496,7 @@ question-display {
 
 .hsection {
     background-color: var(--whitesmoke);
-    border-radius: 24px;
+    border-radius: var(--r-lg);
     padding: 10px;
 }
 
@@ -510,7 +510,7 @@ question-display {
     background: hsl(0, 0%, 100%) !important;
     padding: 16px 24px;
     position: relative;
-    border-radius: 8px;
+    border-radius: var(--r-sm);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01);
 
     &::after {

@@ -3,14 +3,14 @@
 @use "../../../../assets/mixins" as *;
 
 .options {
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     display: flex;
     display: flex;
     justify-content: center;
 
     .option {
         font-size: 1.2rem;
-        border-radius: 1rem;
+        border-radius: var(--r-md);
         padding: 1rem;
         margin: 0.5rem;
         opacity: 0.8;
@@ -104,7 +104,7 @@
                 .status {
                     width: fit-content;
                     padding: 0.35rem;
-                    border-radius: 0.6rem;
+                    border-radius: var(--r-sm);
                     font-size: 0.8rem;
                     @include sweetBorder;
                     margin: 0.5rem;

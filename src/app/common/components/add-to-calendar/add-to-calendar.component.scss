@@ -18,7 +18,7 @@
     top: calc(100% + 0.5rem);
     left: 0;
     background-color: var(--white);
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     z-index: 2000;
     min-width: 180px;

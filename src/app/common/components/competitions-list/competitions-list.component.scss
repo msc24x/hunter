@@ -14,7 +14,7 @@
     flex-basis: 30%;
     margin-top: 0.4rem;
     background-color: var(--dim-white);
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     margin: 0.3rem;
     padding: 1rem;
     position: sticky;
@@ -33,7 +33,7 @@
 
     select,
     mat-select {
-        border-radius: 0.7rem;
+        border-radius: var(--r-sm);
         border-width: 0px;
         padding-inline: 8px;
         padding-block: 4px;
@@ -73,7 +73,7 @@
 
 #competitions_list {
     padding-bottom: 24px;
-    border-radius: 12px;
+    border-radius: var(--r-sm);
 }
 
 .next-prev-options {

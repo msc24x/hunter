@@ -3,14 +3,14 @@
 @use "../../../../assets/mixins" as *;
 
 :host {
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     display: block;
     @include sweetBorder;
 
     .hunter-conf {
         width: calc(100% - 42px);
         background-color: var(--body-bg);
-        border-radius: 1rem 1rem 0 0;
+        border-radius: var(--r-md) var(--r-md) 0 0;
         overflow: hidden;
         height: auto;
         padding-block: 8px;
@@ -32,7 +32,7 @@
 
         .editor-button,
         drop-down-list {
-            border-radius: 6px;
+            border-radius: var(--r-xs);
             overflow: hidden;
         }
     }
@@ -40,7 +40,7 @@
     .editor-instance {
         height: calc(65svh - 61px);
         font-size: 1rem;
-        border-radius: 0 0 1rem 1rem;
+        border-radius: 0 0 var(--r-md) var(--r-md);
 
         &.participation-page {
             height: calc(100svh - 90px - 2rem - 84px - 150px - 61px);
@@ -51,7 +51,7 @@
         }
 
         &.json-mode {
-            border-radius: 1rem;
+            border-radius: var(--r-md);
             height: 16rem;
         }
     }

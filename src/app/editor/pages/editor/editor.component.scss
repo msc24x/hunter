@@ -24,7 +24,7 @@
         .meta-section {
             @include basicBack;
             background-color: var(--whitesmoke);
-            border-radius: 2rem;
+            border-radius: var(--r-xl);
             height: fit-content;
             padding-bottom: 1.5rem;
             margin-bottom: 1rem;
@@ -73,7 +73,7 @@
         padding-inline: 0.5rem;
         background: #80008017;
         color: purple;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
         font-size: 1.1rem;
         @include sweetBorder;
         border-color: purple;
@@ -116,7 +116,7 @@
 .participant-link {
     background-color: papayawhip;
     display: flex;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     width: calc(100% - 32px);
     justify-content: start;
     color: brown;
@@ -132,7 +132,7 @@
 }
 
 .insight-details {
-    border-radius: 16px;
+    border-radius: var(--r-md);
     cursor: pointer;
     background-color: papayawhip;
     margin-top: 1rem;
@@ -166,7 +166,7 @@
     font-size: 1.2rem;
     padding: 8px;
     padding-inline: 16px;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     width: fit-content;
     margin: 8px;
     color: var(--white);
@@ -178,7 +178,7 @@
     .emails-input-container {
         @include sweetBorder;
         padding: 0.5rem;
-        border-radius: 1rem;
+        border-radius: var(--r-md);
     }
 
     .emails-prev {
@@ -189,7 +189,7 @@
         display: inline-block;
         margin: 0 6px 6px 0;
         background: #cac6ee;
-        border-radius: 0.5rem;
+        border-radius: var(--r-sm);
         padding-inline: 4px;
         font-size: 1.1rem;
         cursor: default;
@@ -218,13 +218,13 @@
     width: fit-content;
     padding: 10px;
     margin-inline: auto;
-    border-radius: 0px 0px 1rem 1rem;
+    border-radius: 0px 0px var(--r-md) var(--r-md);
 }
 
 .question-data {
     @include basicBack;
     background-color: var(--whitesmoke);
-    border-radius: 2rem;
+    border-radius: var(--r-xl);
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -258,7 +258,7 @@
     display: flex;
     justify-content: stretch;
     cursor: pointer;
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     overflow: hidden;
     font-weight: 600;
     font-size: 0.85rem;
@@ -479,7 +479,7 @@
 label.file_input {
     color: var(--text-black);
     background-color: var(--white);
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     padding: 1rem;
     cursor: pointer;
     display: block;
@@ -561,7 +561,7 @@ input.file_input {
 }
 
 input {
-    border-radius: 1rem;
+    border-radius: var(--r-md);
     padding: 8px;
     padding-inline: 16px;
     border-width: 0px;
@@ -597,7 +597,7 @@ input {
     color: var(--dark-red);
     width: fit-content;
     border: 1px solid var(--dark-red);
-    border-radius: 24px;
+    border-radius: var(--r-lg);
     padding: 8px;
     padding-inline: 16px;
     margin: 4px;
@@ -616,7 +616,7 @@ input {
         position: sticky;
         top: 0;
         z-index: 100;
-        border-radius: 0 0 2rem 2rem;
+        border-radius: 0 0 var(--r-xl) var(--r-xl);
         background-color: rgba(188, 188, 188, 0.5);
         border-top-color: transparent;
         backdrop-filter: blur(0.8rem);
@@ -811,5 +811,5 @@ input {
 }
 
 .sun-editor {
-    border-radius: 1rem;
+    border-radius: var(--r-md);
 }

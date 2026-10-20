@@ -3,7 +3,7 @@
 :host {
     @include basicBack;
     width: 186px;
-    border-radius: 2rem;
+    border-radius: var(--r-xl);
     margin: 0.2rem;
     padding: 1.2rem;
 

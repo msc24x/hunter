@@ -67,6 +67,15 @@
     --hollow-blue: #0000ff13;
     --illu-filter: "";
     --controls-bg: rgba(193, 193, 193, 0.501);
+
+    /* Radius scale — see docs/border-radius-audit.md */
+    /* Original scale (pre-scaled): xs 0.4rem, sm 0.6rem, md 1rem, lg 1.5rem, xl 2rem, pill 999px */
+    --r-xs: 0.3rem;
+    --r-sm: 0.5rem;
+    --r-md: 0.8rem;
+    --r-lg: 1.2rem;
+    --r-xl: 1.5rem;
+    --r-pill: 999px;
 }
 
 [data-theme="dark"] {
