@@ -59,3 +59,4 @@ frontend-update.bat
 backend/src/scripts/shell.ts
 backend/dist
 backend/static
+build/
