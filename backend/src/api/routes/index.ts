@@ -14,5 +14,6 @@ router.use(require('./communities'));
 router.use(require('./media'));
 router.use(require('./materials'));
 router.use(require('./tokens'));
+router.use(require('./mcp'));
 
 module.exports = router;

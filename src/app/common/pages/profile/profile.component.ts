@@ -17,7 +17,7 @@ import {
 } from 'src/app/services/api-tokens/api-tokens.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
-import { UserInfo } from 'src/environments/environment';
+import { apiEndpoints, UserInfo } from 'src/environments/environment';
 
 @Component({
     selector: 'profile',
@@ -38,6 +38,18 @@ export class ProfileComponent implements OnInit {
     isAuthenticated = false;
     user_profile: UserInfo = {} as UserInfo;
     user_profile_id: number = -1;
+
+    readonly mcpEndpoint = apiEndpoints.mcp;
+    readonly mcpConfigExample = `{
+    "mcpServers": {
+        "hunter": {
+            "url": "${apiEndpoints.mcp}",
+            "headers": {
+                "Authorization": "Bearer <your-token>"
+            }
+        }
+    }
+}`;
 
     apiTokens: Array<ApiToken> = [];
     tokensFetched = false;
@@ -210,6 +222,12 @@ export class ProfileComponent implements OnInit {
         navigator.clipboard
             .writeText(this.createdToken)
             .then(() => this.snackBar.open('Token copied'));
+    }
+
+    copyMcpConfig() {
+        navigator.clipboard
+            .writeText(this.mcpConfigExample)
+            .then(() => this.snackBar.open('Config copied'));
     }
 
     isTokenExpired(token: ApiToken) {

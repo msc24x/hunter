@@ -207,6 +207,7 @@ export const apiEndpoints = {
     materialDetail: environment.apiUrl + '/competitions/{0}/materials/{1}',
     tokens: environment.apiUrl + '/tokens',
     token: environment.apiUrl + '/tokens/{0}',
+    mcp: environment.apiUrl + '/mcp',
 };
 
 export const templates = {

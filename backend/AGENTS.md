@@ -157,3 +157,14 @@ All tracked via `cron_job` table — `last_run_at` determines query window.
 | `src/cron/` | Cron task registration + implementations |
 | `src/util/` | Utility functions + sanitizer + file storage |
 | `.env/presets/` | Environment templates for selfhost/planetscale/azure |
+
+## 10. MCP endpoint (in-process)
+
+`POST /api/mcp` — MCP server (Streamable HTTP, stateless) mounted in `src/api/routes/mcp.ts`. Tools live in `src/api/mcp/`:
+
+- `hunter-client.ts` — loopback client to `http://127.0.0.1:${API_PORT}/api`, forwards the caller's `Authorization` (or `Cookie`) so permission checks are identical to REST
+- `server.ts` — `buildMcpServer(hunter)`, one per request, bound to `res.locals.user`
+- `tools/contests.ts`, `tools/questions.ts` — registrations via `registerTool` + zod schemas
+- `respond.ts` — API status → MCP result/error mapping
+
+Deps pinned: `@modelcontextprotocol/sdk@~1.22` (last zod-3-only version — ≥1.23 vendors zod v4 whose .d.cts needs TS5) + `zod@~3.25.28` + `overrides.zod: "$zod"` (zod-to-json-schema peers `^3.25.28 || ^4`, otherwise npm plants zod@4 under the SDK). Do NOT upgrade the SDK without checking its zod requirement. tsconfig has `skipLibCheck: true`.

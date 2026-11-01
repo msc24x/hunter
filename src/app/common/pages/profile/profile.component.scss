@@ -230,4 +230,42 @@
             }
         }
     }
+
+    .mcp-section {
+        .mcp-steps {
+            margin-block: 0.5rem;
+            padding-left: 1.2rem;
+
+            li {
+                margin-bottom: 0.4rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        .mcp-config-wrap {
+            position: relative;
+
+            .copy-btn {
+                position: absolute;
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.8rem;
+                padding: 0.4rem;
+                padding-inline: 0.2rem;
+            }
+        }
+
+        .mcp-config {
+            padding: 0.8rem;
+            border-radius: var(--r-md);
+            background-color: var(--whitesmoke);
+            overflow-x: auto;
+            @include sweetBorder;
+
+            code {
+                font-size: 0.8rem;
+                white-space: pre;
+            }
+        }
+    }
 }

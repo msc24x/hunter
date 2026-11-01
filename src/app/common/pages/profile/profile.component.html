@@ -285,6 +285,46 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="mcp-section">
+                        <h3>
+                            MCP Server
+                            <infotip
+                                message="Let AI tools manage your contests"
+                            ></infotip>
+                        </h3>
+
+                        <p class="info-like">
+                            Hunter has an MCP server. AI tools can use it to
+                            create and manage contests for you.
+                        </p>
+
+                        <p class="info-like">To connect:</p>
+                        <ol class="mcp-steps">
+                            <li>Create an API token above and copy it.</li>
+                            <li>
+                                Add this to your MCP client settings, with your
+                                token pasted in place of
+                                <code>&lt;your-token&gt;</code>:
+                            </li>
+                        </ol>
+
+                        <div class="mcp-config-wrap">
+                            <pre class="mcp-config"><code>{{ mcpConfigExample }}</code></pre>
+                            <div
+                                class="button main sim copy-btn"
+                                (click)="copyMcpConfig()"
+                            >
+                                <fa-icon [icon]="copyIcon"></fa-icon>
+                                &nbsp; Copy
+                            </div>
+                        </div>
+
+                        <p class="info-like">
+                            Then restart the client. The AI tool will see your
+                            Hunter tools and can act on your contests.
+                        </p>
+                    </div>
                 </div>
             </mat-tab>
         </mat-tab-group>
