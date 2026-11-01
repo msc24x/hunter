@@ -205,6 +205,8 @@ export const apiEndpoints = {
         environment.apiUrl + '/competitions/questions/import/schema',
     materials: environment.apiUrl + '/competitions/{0}/materials',
     materialDetail: environment.apiUrl + '/competitions/{0}/materials/{1}',
+    tokens: environment.apiUrl + '/tokens',
+    token: environment.apiUrl + '/tokens/{0}',
 };
 
 export const templates = {

@@ -24,7 +24,10 @@ router.get('/competitions/:id/results', authenticate, (req, res) => {
         .findFirst({
             where: {
                 id: parseInt(req.params.id),
-                OR: [{ hidden_scoreboard: false }, { host_user_id: user.id }],
+                OR: [
+                    { hidden_scoreboard: false },
+                    ...(user ? [{ host_user_id: user.id }] : []),
+                ],
             },
         })
         .then((comp) => {
@@ -74,7 +77,7 @@ router.get(
                     id: compId,
                     OR: [
                         { hidden_scoreboard: false },
-                        { host_user_id: user.id },
+                        ...(user ? [{ host_user_id: user.id }] : []),
                     ],
                 },
             });

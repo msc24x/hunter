@@ -5,224 +5,391 @@
 
 <spinner *ngIf="loading && !user_profile.id"></spinner>
 
+<popup
+    [hidden]="!popups.revokeToken.show"
+    [destructive]="true"
+    heading="Revoke this token?"
+    (closeEvent)="
+        popups.revokeToken.show = false;
+        $event === 'continue' && revokeToken(popups.revokeToken.token!)
+    "
+    continueMessage="Yes, Revoke"
+>
+    Are you sure you want to revoke
+    <b>{{ popups.revokeToken.token?.name }}</b
+    >? Any client using it will immediately lose access.
+</popup>
+
 <div class="profile-section" *ngIf="isAuthenticated && user_profile.id">
     <profile-card *ngIf="user_profile" [user]="user_profile"></profile-card>
     <div class="side-section">
-        <div class="user-badges clean-panel">
-            <div
-                class="points badge"
-                *ngIf="user_profile.hunt_points !== undefined"
-            >
-                <div>
-                    {{ user_profile.hunt_points || "0" }}
-                    <fa-icon size="xs" [icon]="pointsIcon"></fa-icon>
+        <mat-tab-group
+            *ngIf="editable; else flatProfile"
+            (selectedTabChange)="onTabChange($event)"
+            [animationDuration]="0"
+            disableRipple
+        >
+            <mat-tab label="Profile">
+                <div class="tab-content">
+                    <ng-container
+                        *ngTemplateOutlet="profileContent"
+                    ></ng-container>
                 </div>
-                <div class="title">Points Earned</div>
-            </div>
-            <div
-                class="competitions badge"
-                *ngIf="user_profile.competitions?.length !== undefined"
-            >
-                <div>
-                    {{ user_profile.competitions?.length || "0" }}
-                    <fa-icon size="xs" [icon]="contestsIcon"></fa-icon>
-                </div>
-                <div class="title">Contests Created</div>
-            </div>
-            <div
-                class="participated badge"
-                *ngIf="user_profile.participated?.length !== undefined"
-            >
-                <div>
-                    {{ user_profile.participated?.length || "0" }}
-                    <fa-icon size="xs" [icon]="participatedIcon"></fa-icon>
-                </div>
-                <div class="title">Participated Contests</div>
-            </div>
-        </div>
-        <div class="profile-settings" *ngIf="editable">
-            <h3>Profile</h3>
+            </mat-tab>
+            <mat-tab label="Settings">
+                <div class="tab-content">
+                    <div class="profile-settings">
+                        <h3>Settings</h3>
 
-            <div class="account-field">
-                <div class="field-row">
-                    <div class="label">
-                        Email Address
-                        <infotip
-                            message="Connected with your GitHub account"
-                        ></infotip>
+                        <div class="account-field">
+                            <div class="field-row">
+                                <div class="label">
+                                    Email Address
+                                    <infotip
+                                        message="Connected with your GitHub account"
+                                    ></infotip>
+                                </div>
+                                <div class="row">
+                                    <input
+                                        type="text"
+                                        maxlength="100"
+                                        [value]="user.email"
+                                        disabled
+                                        class="disabled"
+                                    />
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="label">
+                                    Display Name
+                                    <p class="field-note">
+                                        Your name is currently displayed as
+                                        <span
+                                            class="name-preview"
+                                            matTooltip="Hunter users' name will have a suffix, which will be their user id"
+                                        >
+                                            {{ user.name || "Anonymous" }}#{{
+                                                user.id
+                                            }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <input
+                                        id="user_name_input"
+                                        type="text"
+                                        maxlength="50"
+                                        [value]="user.name"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <div class="label">Your Blog/Website</div>
+                                <div class="row">
+                                    <input
+                                        id="user_blog_input"
+                                        type="text"
+                                        maxlength="100"
+                                        [value]="user.blog_url"
+                                    />
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div
+                                    class="label link-like"
+                                    (click)="openUrl(user.github_url!)"
+                                >
+                                    Github Account
+                                    <fa-icon
+                                        [icon]="linkIcon"
+                                        [style]="{ color: ': var(--gray);' }"
+                                        size="2xs"
+                                    ></fa-icon>
+                                </div>
+                                <div class="row">
+                                    <input
+                                        type="text"
+                                        maxlength="100"
+                                        [value]="user.github_url"
+                                        disabled
+                                        placeholder="Associated with Sign up"
+                                        matTooltip="Associated with Sign up"
+                                        matTooltipPosition="left"
+                                        class="disabled"
+                                    />
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="label">LinkedIn Account</div>
+                                <div class="row">
+                                    <input
+                                        id="user_linkedin_input"
+                                        type="text"
+                                        maxlength="100"
+                                        [value]="user.linkedin_url"
+                                    />
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="label">
+                                    Enable updates about new features & product
+                                    changes
+                                    <p class="field-note">
+                                        Receive occasional communication mails
+                                        from Hunter?
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <mat-slide-toggle
+                                        (change)="
+                                            updateEmailPref($event.checked)
+                                        "
+                                        [checked]="
+                                            !user.email_updates_disabled_at
+                                        "
+                                    ></mat-slide-toggle>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            id="profile_save_btn"
+                            class="button main"
+                            (click)="updateUserInfo()"
+                        >
+                            Update
+                        </div>
                     </div>
-                    <div class="row">
-                        <input
-                            type="text"
-                            maxlength="100"
-                            [value]="user.email"
-                            disabled
-                            class="disabled"
-                        />
-                    </div>
-                </div>
-                <div class="field-row">
-                    <div class="label">
-                        Display Name
-                        <p class="field-note">
-                            Your name is currently displayed as
-                            <span
-                                class="name-preview"
-                                matTooltip="Hunter users' name will have a suffix, which will be their user id"
+
+                    <div class="api-tokens">
+                        <h3>
+                            API Tokens
+                            <infotip
+                                message="Tokens let external tools (like MCP clients) access the Hunter API as you. Treat them like passwords."
+                            ></infotip>
+                        </h3>
+
+                        <div class="account-field">
+                            <div class="field-row">
+                                <div class="label">New token name</div>
+                                <div class="row">
+                                    <input
+                                        type="text"
+                                        maxlength="100"
+                                        placeholder="e.g. MCP client"
+                                        [(ngModel)]="tokenName"
+                                    />
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="label">
+                                    Expires in days
+                                    <p class="field-note">
+                                        Optional. Leave empty for no expiry
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        [(ngModel)]="tokenExpiryDays"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            id="token_create_btn"
+                            class="button main"
+                            [ngClass]="{
+                                'disabled no-click': !tokenName.trim(),
+                            }"
+                            (click)="createToken()"
+                        >
+                            Create token
+                        </div>
+
+                        <div class="tokens-list">
+                            <div
+                                class="token-row new-token"
+                                *ngIf="createdToken"
                             >
-                                {{ user.name || "Anonymous" }}#{{ user.id }}
-                            </span>
-                        </p>
-                    </div>
-                    <div class="row">
-                        <input
-                            id="user_name_input"
-                            type="text"
-                            maxlength="50"
-                            [value]="user.name"
-                        />
-                    </div>
-                </div>
-
-                <div class="field-row">
-                    <div class="label">Your Blog/Website</div>
-                    <div class="row">
-                        <input
-                            id="user_blog_input"
-                            type="text"
-                            maxlength="100"
-                            [value]="user.blog_url"
-                        />
-                    </div>
-                </div>
-                <div class="field-row">
-                    <div
-                        class="label link-like"
-                        (click)="openUrl(user.github_url!)"
-                    >
-                        Github Account
-                        <fa-icon
-                            [icon]="linkIcon"
-                            [style]="{ color: ': var(--gray);' }"
-                            size="2xs"
-                        ></fa-icon>
-                    </div>
-                    <div class="row">
-                        <input
-                            type="text"
-                            maxlength="100"
-                            [value]="user.github_url"
-                            disabled
-                            placeholder="Associated with Sign up"
-                            matTooltip="Associated with Sign up"
-                            matTooltipPosition="left"
-                            class="disabled"
-                        />
-                    </div>
-                </div>
-                <div class="field-row">
-                    <div class="label">LinkedIn Account</div>
-                    <div class="row">
-                        <input
-                            id="user_linkedin_input"
-                            type="text"
-                            maxlength="100"
-                            [value]="user.linkedin_url"
-                        />
-                    </div>
-                </div>
-                <div class="field-row">
-                    <div class="label">
-                        Enable updates about new features & product changes
-                        <p class="field-note">
-                            Receive occasional communication mails from Hunter?
-                        </p>
-                    </div>
-                    <div class="row">
-                        <mat-slide-toggle
-                            (change)="updateEmailPref($event.checked)"
-                            [checked]="!user.email_updates_disabled_at"
-                        ></mat-slide-toggle>
+                                <div class="token-info">
+                                    <div class="token-name">
+                                        <code>{{ createdToken }}</code>
+                                    </div>
+                                    <div class="token-meta">
+                                        Copy your new token now. It won't be
+                                        shown again.
+                                    </div>
+                                </div>
+                                <div
+                                    class="button main sim"
+                                    (click)="copyToken()"
+                                >
+                                    <fa-icon [icon]="copyIcon"></fa-icon>
+                                    &nbsp; Copy
+                                </div>
+                            </div>
+                            <div
+                                class="token-row"
+                                *ngFor="let token of apiTokens"
+                            >
+                                <div class="token-info">
+                                    <div class="token-name">
+                                        {{ token.name }}
+                                        <span
+                                            class="token-state"
+                                            *ngIf="token.revoked_at"
+                                            >revoked</span
+                                        >
+                                        <span
+                                            class="token-state"
+                                            *ngIf="
+                                                !token.revoked_at &&
+                                                isTokenExpired(token)
+                                            "
+                                            >expired</span
+                                        >
+                                    </div>
+                                    <div class="token-meta">
+                                        Created
+                                        {{ token.created_at | timeAgo }} · Last
+                                        used
+                                        {{
+                                            token.last_used_at
+                                                ? (token.last_used_at | timeAgo)
+                                                : "never"
+                                        }}
+                                        <span *ngIf="token.expires_at">
+                                            · Expires
+                                            {{
+                                                token.expires_at | prettyDate
+                                            }}</span
+                                        >
+                                    </div>
+                                </div>
+                                <div
+                                    class="button main danger"
+                                    *ngIf="!token.revoked_at"
+                                    (click)="askRevokeToken(token)"
+                                >
+                                    <fa-icon [icon]="trashIcon"></fa-icon>
+                                    &nbsp; Revoke
+                                </div>
+                            </div>
+                            <div
+                                class="info-like"
+                                *ngIf="!apiTokens.length && tokensFetched"
+                            >
+                                No tokens yet.
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div
-                id="profile_save_btn"
-                class="button main"
-                (click)="updateUserInfo()"
-            >
-                Update
-            </div>
-        </div>
-        <div class="user-analytics">
-            <h3>Participated In</h3>
-            <div
-                class="hosted-comp"
-                *ngFor="let comp of user_profile.participated"
-            >
-                <div class="link-like" routerLink="/compete/p/{{ comp.id }}">
-                    {{ comp.title || "Untitled" }}
-                </div>
-
-                <div class="comp-created-at">
-                    Hosted by
-                    <span
-                        class="link-like"
-                        routerLink="/u/{{ comp.host_user?.id }}"
-                    >
-                        {{ comp.host_user?.name || "Anonymous" }}#{{
-                            comp.host_user?.id
-                        }}
-                    </span>
-                </div>
-
-                <div></div>
-            </div>
-            <div
-                *ngIf="!user_profile.participated?.length"
-                [ngStyle]="{ opacity: 0.7 }"
-            >
-                Did not take part in any competition so far! <br />
-                <br />
-            </div>
-        </div>
-
-        <div class="user-analytics">
-            <h3>
-                Hosted Competitions
-                <infotip
-                    message="Public competitions hosted by the user"
-                ></infotip>
-            </h3>
-            <div
-                class="hosted-comp"
-                *ngFor="let comp of user_profile.competitions"
-                routerLink="/compete/p/{{ comp.id }}"
-            >
-                <div class="link-like">
-                    {{ comp.title || "Untitled" }}
-                </div>
-
-                <div class="comp-created-at">
-                    Created on
-                    {{ comp.created_at | prettyDate }}
-                </div>
-
-                <div class="comp-stats">
-                    <div>{{ comp.questions?.length || "0" }} Ques</div>
-                    <div>
-                        Total Submissions:
-                        {{ getTotalSubmissions(comp.questions) || "0" }}
-                    </div>
-                </div>
-            </div>
-            <div
-                *ngIf="!user_profile.competitions?.length"
-                [ngStyle]="{ opacity: 0.7 }"
-            >
-                No competitions hosted by user yet! <br />
-                <br />
-            </div>
-        </div>
+            </mat-tab>
+        </mat-tab-group>
+        <ng-template #flatProfile>
+            <ng-container *ngTemplateOutlet="profileContent"></ng-container>
+        </ng-template>
     </div>
 </div>
+
+<ng-template #profileContent>
+    <div class="user-badges clean-panel">
+        <div
+            class="points badge"
+            *ngIf="user_profile.hunt_points !== undefined"
+        >
+            <div>
+                {{ user_profile.hunt_points || "0" }}
+                <fa-icon size="xs" [icon]="pointsIcon"></fa-icon>
+            </div>
+            <div class="title">Points Earned</div>
+        </div>
+        <div
+            class="competitions badge"
+            *ngIf="user_profile.competitions?.length !== undefined"
+        >
+            <div>
+                {{ user_profile.competitions?.length || "0" }}
+                <fa-icon size="xs" [icon]="contestsIcon"></fa-icon>
+            </div>
+            <div class="title">Contests Created</div>
+        </div>
+        <div
+            class="participated badge"
+            *ngIf="user_profile.participated?.length !== undefined"
+        >
+            <div>
+                {{ user_profile.participated?.length || "0" }}
+                <fa-icon size="xs" [icon]="participatedIcon"></fa-icon>
+            </div>
+            <div class="title">Participated Contests</div>
+        </div>
+    </div>
+    <div class="user-analytics">
+        <h3>Participated In</h3>
+        <div class="hosted-comp" *ngFor="let comp of user_profile.participated">
+            <div class="link-like" routerLink="/compete/p/{{ comp.id }}">
+                {{ comp.title || "Untitled" }}
+            </div>
+
+            <div class="comp-created-at">
+                Hosted by
+                <span
+                    class="link-like"
+                    routerLink="/u/{{ comp.host_user?.id }}"
+                >
+                    {{ comp.host_user?.name || "Anonymous" }}#{{
+                        comp.host_user?.id
+                    }}
+                </span>
+            </div>
+
+            <div></div>
+        </div>
+        <div
+            *ngIf="!user_profile.participated?.length"
+            [ngStyle]="{ opacity: 0.7 }"
+        >
+            Did not take part in any competition so far! <br />
+            <br />
+        </div>
+    </div>
+
+    <div class="user-analytics">
+        <h3>
+            Hosted Competitions
+            <infotip message="Public competitions hosted by the user"></infotip>
+        </h3>
+        <div
+            class="hosted-comp"
+            *ngFor="let comp of user_profile.competitions"
+            routerLink="/compete/p/{{ comp.id }}"
+        >
+            <div class="link-like">
+                {{ comp.title || "Untitled" }}
+            </div>
+
+            <div class="comp-created-at">
+                Created on
+                {{ comp.created_at | prettyDate }}
+            </div>
+
+            <div class="comp-stats">
+                <div>{{ comp.questions?.length || "0" }} Ques</div>
+                <div>
+                    Total Submissions:
+                    {{ getTotalSubmissions(comp.questions) || "0" }}
+                </div>
+            </div>
+        </div>
+        <div
+            *ngIf="!user_profile.competitions?.length"
+            [ngStyle]="{ opacity: 0.7 }"
+        >
+            No competitions hosted by user yet! <br />
+            <br />
+        </div>
+    </div>
+</ng-template>

@@ -13,5 +13,6 @@ router.use(require('./invites'));
 router.use(require('./communities'));
 router.use(require('./media'));
 router.use(require('./materials'));
+router.use(require('./tokens'));
 
 module.exports = router;

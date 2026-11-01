@@ -206,6 +206,8 @@ export const apiEndpoints = {
     updateCommunity: environment.apiUrl + '/communities/{0}',
     materials: environment.apiUrl + '/competitions/{0}/materials',
     materialDetail: environment.apiUrl + '/competitions/{0}/materials/{1}',
+    tokens: environment.apiUrl + '/tokens',
+    token: environment.apiUrl + '/tokens/{0}',
 };
 
 export const templates = {

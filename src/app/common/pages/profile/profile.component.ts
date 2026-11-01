@@ -1,13 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     faArrowUpRightFromSquare,
+    faCopy,
     faDatabase,
+    faTrash,
     faTrophy,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+    ApiToken,
+    ApiTokensService,
+} from 'src/app/services/api-tokens/api-tokens.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { UserInfo } from 'src/environments/environment';
@@ -22,6 +29,8 @@ export class ProfileComponent implements OnInit {
     pointsIcon = faTrophy;
     contestsIcon = faDatabase;
     participatedIcon = faUser;
+    copyIcon = faCopy;
+    trashIcon = faTrash;
 
     user: UserInfo = {} as UserInfo;
     loading: number = 0;
@@ -30,11 +39,21 @@ export class ProfileComponent implements OnInit {
     user_profile: UserInfo = {} as UserInfo;
     user_profile_id: number = -1;
 
+    apiTokens: Array<ApiToken> = [];
+    tokensFetched = false;
+    tokenName = '';
+    tokenExpiryDays: number | null = null;
+    createdToken = '';
+    popups = {
+        revokeToken: { show: false, token: null as ApiToken | null },
+    };
+
     constructor(
         private routeService: Router,
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private userService: UserDataService,
+        private apiTokensService: ApiTokensService,
         private snackBar: MatSnackBar,
         private titleService: Title
     ) {}
@@ -110,6 +129,91 @@ export class ProfileComponent implements OnInit {
 
     openUrl(url: string) {
         window.open(url, '_blank');
+    }
+
+    onTabChange(event: MatTabChangeEvent) {
+        // Settings tab. Tokens are fetched lazily, only for the owner.
+        if (event.index === 1) {
+            this.fetchTokens();
+        }
+    }
+
+    fetchTokens(force = false) {
+        if (this.tokensFetched && !force) {
+            return;
+        }
+
+        this.loading++;
+        this.apiTokensService.fetchTokens().subscribe({
+            next: (res) => {
+                this.apiTokens = res.body || [];
+                this.tokensFetched = true;
+                this.loading--;
+            },
+            error: () => {
+                this.loading--;
+            },
+        });
+    }
+
+    createToken() {
+        const name = this.tokenName.trim();
+
+        if (!name) {
+            return;
+        }
+
+        this.loading++;
+        this.apiTokensService
+            .createToken({
+                name,
+                expires_in_days: this.tokenExpiryDays || undefined,
+            })
+            .subscribe({
+                next: (res) => {
+                    this.loading--;
+                    this.createdToken = res.body?.token || '';
+                    this.tokenName = '';
+                    this.tokenExpiryDays = null;
+                    this.fetchTokens(true);
+                    this.snackBar.open(
+                        'Token created. Copy it now, it is shown only once'
+                    );
+                },
+                error: () => {
+                    this.loading--;
+                    this.snackBar.open('Could not create the token');
+                },
+            });
+    }
+
+    askRevokeToken(token: ApiToken) {
+        this.popups.revokeToken = { show: true, token };
+    }
+
+    revokeToken(token: ApiToken) {
+        this.loading++;
+        this.apiTokensService.revokeToken(token.id).subscribe({
+            next: () => {
+                this.loading--;
+                token.revoked_at = new Date().toISOString();
+                this.snackBar.open('Token revoked');
+            },
+            error: () => {
+                this.loading--;
+                this.snackBar.open('Could not revoke the token');
+            },
+        });
+    }
+
+    copyToken() {
+        navigator.clipboard
+            .writeText(this.createdToken)
+            .then(() => this.snackBar.open('Token copied'));
+    }
+
+    isTokenExpired(token: ApiToken) {
+        return !!token.expires_at && new Date(token.expires_at) < new Date();
     }
 
     updateEmailPref(enabled: boolean) {
