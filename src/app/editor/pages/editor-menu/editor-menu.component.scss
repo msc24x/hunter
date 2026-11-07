@@ -66,6 +66,10 @@
         font-weight: 500;
         font-size: var(--fs-caption);
     }
+
+    &.mcp-ad {
+        background-color: var(--cute-blue);
+    }
 }
 
 @media only screen and (max-width: 900px) {
