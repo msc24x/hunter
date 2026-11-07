@@ -4,6 +4,7 @@
 
 export const protocol = 'http';
 export const domainName = '127.0.0.1:4200';
+export const supportEmail = 'contact@cambo.in';
 
 export const environment = {
     production: false,

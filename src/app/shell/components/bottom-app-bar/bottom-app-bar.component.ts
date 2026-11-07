@@ -4,7 +4,7 @@ import { faHeart, faStar } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { showPopup } from 'src/app/utils/utils';
-import { environment } from 'src/environments/environment';
+import { environment, supportEmail } from 'src/environments/environment';
 
 @Component({
     selector: 'bottom-app-bar',
@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 })
 export class BottomAppBarComponent implements OnInit {
     version: string = environment.version;
+    supportEmail = supportEmail;
     heartIcon = faHeart;
     copyIcon = faCopyright;
     isAuthenticated = false;

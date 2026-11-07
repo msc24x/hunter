@@ -23,6 +23,7 @@ import {
     UserInfo,
     environment,
     QuestionChoice,
+    supportEmail,
 } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -926,7 +927,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     }
 
     reportCompetitionLink() {
-        var mailtoString = `mailto:msc24x+hunter_reports@gmail.com?subject=%5BReport%5D%20${
+        var mailtoString = `mailto:${supportEmail}?subject=%5BReport%5D%20${
             this.competition.title || '<Untitled competition>'
         }&body=I%20would%20like%20to%20report%20the%20following%20competition.%0A%0ALink%3A%20${this.getParticipationLink()}%0A%0AREASON%3A%0A%3CPlease%20specify%20your%20reason%20here%3E%0A%0AACTION%20REQUEST%3A%0A%3CPlease%20specify%20what%20action%20do%20you%20wish%20the%20Hunter%20to%20take%3E`;
 

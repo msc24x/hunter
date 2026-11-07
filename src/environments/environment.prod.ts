@@ -4,6 +4,7 @@
 
 export const protocol = 'https';
 export const domainName = 'hunter.cambo.in';
+export const supportEmail = 'contact@cambo.in';
 
 export const environment = {
     production: true,

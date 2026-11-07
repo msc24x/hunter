@@ -31,6 +31,7 @@ const smtpProviders: TransportOptions[] = [
 
 export default {
     staff_email: process.env.STAFF_EMAIL,
+    support_email: 'contact@cambo.in',
     filesPath: 'files/',
     env: process.env.ENV as 'local' | 'prod',
     protocol: process.env.PROTOCOL,

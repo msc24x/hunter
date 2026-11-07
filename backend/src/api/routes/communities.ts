@@ -3,6 +3,7 @@ import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import { Util } from '../../util/util';
 import { resCode } from '../../config/settings';
+import config from '../../config/config';
 import { authenticate, loginRequired } from '../auth';
 import {
     Community,
@@ -114,7 +115,7 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
             Util.sendResponse(
                 res,
                 resCode.forbidden,
-                'You have reached the limit of 3 communities per account. If you require an exception, please contact support at msc24x@gmail.com.'
+                `You have reached the limit of 3 communities per account. If you require an exception, please contact support at ${config.support_email}.`
             );
             return;
         }
