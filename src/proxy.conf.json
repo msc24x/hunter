@@ -2,5 +2,13 @@
     "/api": {
         "target": "http://127.0.0.1:8080/",
         "secure": false
+    },
+    "/sitemap.xml": {
+        "target": "http://127.0.0.1:8080/",
+        "secure": false
+    },
+    "/llms.txt": {
+        "target": "http://127.0.0.1:8080/",
+        "secure": false
     }
 }

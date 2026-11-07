@@ -23,6 +23,7 @@ if (config.env !== 'local') {
 app.use(morgan('dev'));
 
 app.use('/api', require('./api/routes'));
+app.use(require('./api/public-routes'));
 
 // Serve static files from the 'static' directory
 app.use(express.static(path.join(__dirname, '../static')));

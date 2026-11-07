@@ -24,8 +24,8 @@
             {{ app_title }}
         </span>
         <div
-            *ngIf="!isAuthenticated && showRegisterBtn"
-            id="register_btn"
+            *ngIf="!isAuthenticated"
+            id="signin_btn"
             (click)="redirectToGitHubOAuth()"
         >
             Sign In

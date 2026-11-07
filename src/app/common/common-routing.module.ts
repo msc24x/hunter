@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from './pages/about/about.component';
 import { HomeComponent } from './pages/home/home.component';
-import { RegisterComponent } from './pages/register/register.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { DocsMcpComponent } from './pages/docs-mcp/docs-mcp.component';
 import { DesignSystemComponent } from './pages/design-system/design-system.component';
@@ -19,10 +18,6 @@ const routes: Routes = [
     {
         'path': 'home',
         'component': HomeComponent,
-    },
-    {
-        'path': 'register',
-        'component': RegisterComponent,
     },
     {
         'path': 'compete',

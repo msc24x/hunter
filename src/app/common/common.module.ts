@@ -14,13 +14,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 // Components / Pages
 import { CompetitionsListComponent } from './components/competitions-list/competitions-list.component';
-import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
-import { SigninDialogComponent } from './components/signin-dialog/signin-dialog.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { AboutComponent } from './pages/about/about.component';
 import { CompeteComponent } from '../compete/pages/compete/compete.component';
 import { HomeComponent } from './pages/home/home.component';
-import { RegisterComponent } from './pages/register/register.component';
 import { InfotipComponent } from './components/infotip/infotip.component';
 import { DropDownListComponent } from './components/drop-down-list/drop-down-list.component';
 import { CodeEditorComponent } from './components/code-editor/code-editor.component';
@@ -82,13 +79,10 @@ const CDK_MODULES = [DragDropModule];
 
 const COMPONENTS = [
     CompetitionsListComponent,
-    LoginDialogComponent,
-    SigninDialogComponent,
     TextInputComponent,
     AboutComponent,
     CompeteComponent,
     HomeComponent,
-    RegisterComponent,
     InfotipComponent,
     DropDownListComponent,
     CodeEditorComponent,

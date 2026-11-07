@@ -163,7 +163,6 @@ export type QuestionProgress = {
 };
 
 export const apiEndpoints = {
-    register: environment.apiUrl + '/register',
     login: environment.apiUrl + '/login',
     authenticate: environment.apiUrl + '/authenticate',
     logout: environment.apiUrl + '/logout',

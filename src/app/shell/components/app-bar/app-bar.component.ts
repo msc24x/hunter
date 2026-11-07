@@ -45,9 +45,6 @@ export class AppBarComponent implements OnInit {
         name: '',
     };
 
-    @Input()
-    showRegisterBtn: boolean = true;
-
     constructor(
         private authService: AuthService,
         private themeService: ThemeService,
