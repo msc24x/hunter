@@ -17,6 +17,7 @@
     border-style: solid;
     border-width: 1px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     gap: 0.5rem;
     & > div {

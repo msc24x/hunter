@@ -604,6 +604,10 @@ code {
     padding: 0.15em 0.4em;
 }
 
+pre {
+    overflow-x: auto;
+}
+
 pre code {
     background: none;
     border: none;

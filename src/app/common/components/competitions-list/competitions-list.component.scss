@@ -31,17 +31,6 @@
         width: calc(100% - 1rem);
     }
 
-    select,
-    mat-select {
-        border-radius: var(--r-sm);
-        border-width: 0px;
-        padding-inline: 8px;
-        padding-block: 4px;
-        background-color: var(--whitesmoke);
-        color: var(--text-black);
-        @include sweetBorder();
-    }
-
     & > div {
         margin-top: 1rem;
     }
