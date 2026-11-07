@@ -676,6 +676,18 @@ input {
         align-items: center;
         white-space: nowrap;
     }
+
+    .mcp-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        text-decoration: none;
+        min-width: unset;
+        color: var(--cute-panel-color);
+        border-color: var(--cute-panel-border);
+        background-color: var(--cute-panel-bg);
+    }
 }
 
 // ---- Materials selector (question panel) ----

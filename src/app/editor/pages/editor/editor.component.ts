@@ -22,6 +22,7 @@ import {
     faShare,
     faShareNodes,
     faSquareShareNodes,
+    faStarOfLife,
     faTrashArrowUp,
     faTrashCan,
     faUpload,
@@ -83,6 +84,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     copyIcon = faCopy;
     importIcon = faFileImport;
     materialsIcon = faPaperclip;
+    mcpIcon = faStarOfLife;
 
     loading = false;
     preview_mode = false;
