@@ -462,6 +462,14 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             return;
         }
 
+        const selectedQuestion = this.competition.questions?.[
+            this.questionSelected
+        ];
+        if (!selectedQuestion) {
+            this.snackBar.open('Please select a question first');
+            return;
+        }
+
         this.solutionOutput.output = '';
         this.judgeInProgress = true;
 
@@ -473,10 +481,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                     {
                         for: {
                             competition_id: this.c_id,
-                            question_id:
-                                this.competition.questions![
-                                    this.questionSelected
-                                ].id,
+                            question_id: selectedQuestion.id,
                             type: 0,
                         },
                         solution: {

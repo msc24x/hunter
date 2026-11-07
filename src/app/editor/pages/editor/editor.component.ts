@@ -179,7 +179,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.suneditor?.destroy();
+        if (typeof this.suneditor?.destroy === 'function') {
+            this.suneditor.destroy();
+        }
 
         document
             .getElementsByTagName('bottom-app-bar')[0]
@@ -285,7 +287,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             { rootMargin: '-1px 0px 0px 0px', threshold: [1] },
         );
 
-        iObserver.observe(document.querySelector('.questions-list')!);
+        const questionsList = document.querySelector('.questions-list');
+        if (questionsList) {
+            iObserver.observe(questionsList);
+        }
     }
 
     shareAction() {
@@ -294,11 +299,23 @@ export class EditorComponent implements OnInit, OnDestroy {
         }.\n(Hosted on Hunter, an open source contest hosting platform, with easy participation and automatic evaluation of participants.)`;
 
         if (navigator.share) {
-            navigator.share({
-                title: `Invitation link to "${this.competitionInfo.title}"`,
-                url: this.getParticipationLink(),
-                text: linkText,
-            });
+            navigator
+                .share({
+                    title: `Invitation link to "${this.competitionInfo.title}"`,
+                    url: this.getParticipationLink(),
+                    text: linkText,
+                })
+                .catch((err) => {
+                    if (
+                        err?.name === 'AbortError' ||
+                        err?.name === 'InvalidStateError'
+                    ) {
+                        return;
+                    }
+                    this.snackBar.open(
+                        `${this.getParticipationLink()} (Unable to share, please copy the link)`,
+                    );
+                });
         } else if (navigator.clipboard && navigator.clipboard.writeText) {
             // Use the modern API.  This is the preferred method as it's more secure
             // and doesn't require adding elements to the DOM.
@@ -385,7 +402,9 @@ export class EditorComponent implements OnInit, OnDestroy {
             return;
         }
         this.loading = true;
-        const material_ids = (this.questionSelectedInfo.question_materials || [])
+        const material_ids = (
+            this.questionSelectedInfo?.question_materials || []
+        )
             .slice()
             .sort((a, b) => a.position - b.position)
             .map((qm) => qm.material_id);
@@ -435,7 +454,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.questionSelectedInfo =
             index == -1
                 ? ({} as QuestionInfo)
-                : this.competitionInfo.questions![index];
+                : this.competitionInfo.questions?.[index] ??
+                  ({} as QuestionInfo);
 
         // Keep the URL in sync so refresh restores the same question.
         if (index >= 0 && this.competition_id) {
@@ -447,7 +467,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
         // Sync the material multi-select backing field.
         this.selectedMaterialIds = (
-            this.questionSelectedInfo.question_materials || []
+            this.questionSelectedInfo?.question_materials || []
         ).map((qm) => qm.material_id);
 
         if (backup) {
@@ -470,11 +490,15 @@ export class EditorComponent implements OnInit, OnDestroy {
         );
 
         setTimeout(() => {
-            if (this.suneditor?.destroy) {
-                this.suneditor?.destroy();
+            if (typeof this.suneditor?.destroy === 'function') {
+                this.suneditor.destroy();
             }
 
             if (this.questionSelected === -1) {
+                return;
+            }
+
+            if (!document.getElementById('text_statement')) {
                 return;
             }
 
@@ -1343,7 +1367,11 @@ export class EditorComponent implements OnInit, OnDestroy {
 
         this.loading = true;
 
-        var invite = this.inviteToRemove!;
+        const invite = this.inviteToRemove;
+        if (!invite) {
+            this.loading = false;
+            return;
+        }
 
         this.competitionsData
             .removeInvite({

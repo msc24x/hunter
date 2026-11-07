@@ -82,7 +82,8 @@ export class HomeComponent implements OnInit {
                 if (count) {
                     this.usersCount = 10 * Math.floor(count / 10);
                 }
-            });
+            })
+            .catch(() => {});
 
         fetch('/api/status/competitions')
             .then((res) => res.json())
@@ -92,6 +93,7 @@ export class HomeComponent implements OnInit {
                 if (count) {
                     this.contestsCount = 10 * Math.floor(count / 10);
                 }
-            });
+            })
+            .catch(() => {});
     }
 }

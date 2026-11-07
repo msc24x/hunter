@@ -10,7 +10,12 @@ export class ThemeService {
   theme$ = this.themeSubject.asObservable();
 
   initTheme() {
-    const saved = localStorage.getItem('theme') as Theme | null;
+    let saved: Theme | null = null;
+    try {
+      saved = localStorage.getItem('theme') as Theme | null;
+    } catch {
+      // localStorage can be unavailable (e.g. blocked site data)
+    }
 
     const theme = (saved && this.themes.includes(saved))
       ? saved
@@ -38,6 +43,10 @@ export class ThemeService {
 
   private applyTheme(theme: Theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    try {
+      localStorage.setItem('theme', theme);
+    } catch {
+      // localStorage can be unavailable (e.g. blocked site data)
+    }
   }
 }
