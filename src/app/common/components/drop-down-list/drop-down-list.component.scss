@@ -5,7 +5,9 @@
 .drop-down-list {
     background-color: var(--body-bg);
     color: var(--text-black);
-    padding-inline: 8px;
+    @include sweetBorder;
+    border-radius: var(--r-xs);
+    padding-inline: 10px;
     height: 1.8rem;
     min-width: 64px;
     width: max-content;
@@ -14,6 +16,17 @@
     flex-direction: row;
     text-align: center;
     cursor: pointer;
+
+    a::after {
+        content: "";
+        width: 0.4rem;
+        height: 0.4rem;
+        margin-left: 0.45rem;
+        flex-shrink: 0;
+        border-right: 1.5px solid currentColor;
+        border-bottom: 1.5px solid currentColor;
+        transform: rotate(45deg) translateY(-1.5px);
+    }
 
     div {
         display: flex;

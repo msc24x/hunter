@@ -1,3 +1,4 @@
+<app-bar></app-bar>
 <div class="design-page">
     <aside class="design-sidebar">
         <div class="sidebar-title">Design System</div>
@@ -59,10 +60,12 @@
             <h5 id="btn-icons">With icons</h5>
             <div class="row wrap" style="gap: 0.5rem">
                 <div class="button main">
-                    <fa-icon [icon]="starIcon"></fa-icon>&nbsp; Star
+                    <fa-icon [icon]="starIcon"></fa-icon>
+                    Star
                 </div>
                 <div class="button main danger">
-                    <fa-icon [icon]="trashIcon"></fa-icon>&nbsp; Delete
+                    <fa-icon [icon]="trashIcon"></fa-icon>
+                    Delete
                 </div>
             </div>
         </section>
@@ -228,7 +231,13 @@
             <manual-error message="Warning" [warn]="true"></manual-error>
 
             <h5 id="comp-katex">KaTeX math</h5>
-            <ng-katex [data]="'e^{i\\pi} + 1 = 0'"></ng-katex>
+            <ng-katex
+                [data]="'Euler identity: $e^{i\\pi} + 1 = 0$'"
+            ></ng-katex>
+
+            <h5 id="comp-prettymeta">Pretty meta</h5>
+            <pretty-meta [meta]="demoMeta" [success]="true"></pretty-meta>
+            <pretty-meta [meta]="demoMeta"></pretty-meta>
 
             <h5 id="comp-userdisplay">User display</h5>
             <user-display [userInfo]="demoUser"></user-display>

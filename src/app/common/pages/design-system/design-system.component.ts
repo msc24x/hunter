@@ -25,6 +25,7 @@ int main() {
     std::cout << "Hello Hunter";
     return 0;
 }`;
+    demoMeta = 'cg-mem:2048\ntime:0.012\ntime-wall:0.031\nstatus:OK';
 
     sections: DesignSection[] = [
         {
@@ -90,6 +91,7 @@ int main() {
                 { id: 'comp-dropdown', label: 'Dropdown' },
                 { id: 'comp-manualerror', label: 'Manual error' },
                 { id: 'comp-katex', label: 'KaTeX' },
+                { id: 'comp-prettymeta', label: 'Pretty meta' },
                 { id: 'comp-userdisplay', label: 'User display' },
                 { id: 'comp-signin', label: 'Sign-in prompt' },
             ],

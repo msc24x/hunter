@@ -11,6 +11,7 @@
     background-color: #87cfeb30;
     border-color: skyblue;
     border-radius: var(--r-md);
+    color: var(--text-black);
 
     padding: 1rem;
     border-style: solid;
@@ -20,5 +21,9 @@
     gap: 0.5rem;
     & > div {
         line-height: 1.5rem;
+
+        fa-icon {
+            margin-inline-end: 0.25rem;
+        }
     }
 }

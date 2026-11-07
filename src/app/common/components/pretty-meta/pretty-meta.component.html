@@ -7,15 +7,21 @@
 <div
     matTooltip="Runtime information of the submitted code, provided by Showdown"
     *ngIf="meta"
-    class="solution-meta cute-panel"
+    class="solution-meta"
 >
     <div *ngFor="let infoItem of getPrettyRuntimeInfo(meta)">
-        <b>{{ infoItem[0] }}</b>
+        <b><fa-icon [icon]="infoItem[2]"></fa-icon> {{ infoItem[0] }}</b>
         <br />
         <span>{{ infoItem[1] }}</span>
     </div>
     <div>
-        <b>Status</b>
+        <b
+            ><fa-icon
+                [icon]="success ? successIcon : failureIcon"
+                [style.color]="success ? 'var(--darkgreen)' : 'crimson'"
+            ></fa-icon>
+            Status</b
+        >
         <br />
         <span [style.color]="success ? 'var(--darkgreen)' : 'crimson'">{{
             success ? "Accepted" : "Wrong"

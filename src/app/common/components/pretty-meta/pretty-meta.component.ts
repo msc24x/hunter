@@ -1,4 +1,12 @@
 import { Component, Input } from '@angular/core';
+import {
+    faCircleCheck,
+    faCircleInfo,
+    faCircleXmark,
+    faClock,
+    faMemory,
+    faMicrochip,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'pretty-meta',
@@ -6,6 +14,9 @@ import { Component, Input } from '@angular/core';
     styleUrls: ['./pretty-meta.component.scss'],
 })
 export class PrettyMetaComponent {
+    successIcon = faCircleCheck;
+    failureIcon = faCircleXmark;
+
     @Input()
     meta: string = '';
 
@@ -26,19 +37,20 @@ export class PrettyMetaComponent {
 
             switch (itemName) {
                 case 'cg-mem':
-                    prettyArr.push(['Memory', itemVal + ' kb']);
+                    prettyArr.push(['Memory', itemVal + ' kb', faMemory]);
                     break;
                 case 'status':
                     prettyArr.push([
                         'Message',
                         itemVal + ': ' + (msgMap[itemVal] || ''),
+                        faCircleInfo,
                     ]);
                     break;
                 case 'time':
-                    prettyArr.push(['CPU', itemVal + ' sec']);
+                    prettyArr.push(['CPU', itemVal + ' sec', faMicrochip]);
                     break;
                 case 'time-wall':
-                    prettyArr.push(['Total', itemVal + ' sec']);
+                    prettyArr.push(['Total', itemVal + ' sec', faClock]);
             }
         });
 

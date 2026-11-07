@@ -5,15 +5,20 @@
 :host {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 1rem;
+
+    div {
+        flex-shrink: 0;
+    }
 
     input {
+        flex: 1;
+        min-width: 0;
         border: none;
         outline: none;
         background-color: var(--whitesmoke);
         padding: 8px;
         padding-inline: 1rem;
-        margin-left: 1rem;
         border-radius: var(--r-md);
         @include sweetBorder();
     }

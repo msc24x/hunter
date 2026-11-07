@@ -58,7 +58,6 @@ button.main,
     min-width: 4rem;
     border-radius: var(--r-md);
     padding: 0.65rem 0.9rem;
-    border-radius: var(--r-md);
     cursor: pointer;
     transition: 100ms;
     text-align: center;
@@ -90,6 +89,15 @@ button.main,
         background-color: var(--btn-danger-bg);
         color: var(--btn-danger-fg);
         border-color: var(--btn-danger-fg);
+    }
+
+    fa-icon {
+        &:not(:first-child) {
+            margin-inline-start: 0.3rem;
+        }
+        &:not(:last-child) {
+            margin-inline-end: 0.3rem;
+        }
     }
 }
 
@@ -142,6 +150,41 @@ button.main,
 .mdc-switch {
     --mdc-switch-track-height: 24px !important;
     --mdc-switch-track-shape: 24px !important;
+    --mdc-switch-unselected-track-color: var(--dim-white) !important;
+    --mdc-switch-unselected-hover-track-color: var(--whitesmoke) !important;
+    --mdc-switch-unselected-focus-track-color: var(--dim-white) !important;
+    --mdc-switch-unselected-pressed-track-color: var(--dim-white) !important;
+    --mdc-switch-unselected-track-outline-color: var(--border-color) !important;
+    --mdc-switch-unselected-track-outline-width: 1px !important;
+    --mdc-switch-unselected-handle-color: var(--gray) !important;
+    --mdc-switch-unselected-hover-handle-color: var(--text-black) !important;
+    --mdc-switch-unselected-focus-handle-color: var(--gray) !important;
+    --mdc-switch-unselected-pressed-handle-color: var(--gray) !important;
+    --mdc-switch-unselected-icon-color: var(--dim-white) !important;
+}
+
+.mat-mdc-select {
+    font-size: 0.95rem;
+    line-height: 1.3;
+
+    .mat-mdc-select-trigger {
+        @include sweetBorder;
+        background-color: var(--whitesmoke);
+        border-radius: var(--r-sm);
+        padding: 0.45rem 0.75rem;
+        box-sizing: border-box;
+        min-height: unset;
+    }
+
+    .mat-mdc-select-arrow {
+        color: var(--gray);
+    }
+}
+
+.button.main .mat-mdc-select .mat-mdc-select-trigger {
+    background-color: transparent;
+    border: none;
+    padding: 0;
 }
 
 .mat-mdc-snack-bar-container {
@@ -364,12 +407,7 @@ question-display {
 
 .no-click {
     &,
-    * {
-        &:active {
-            pointer-events: none;
-        }
-    }
-    * {
+    & * {
         pointer-events: none;
     }
 }

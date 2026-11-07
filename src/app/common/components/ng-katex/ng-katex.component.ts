@@ -64,7 +64,9 @@ export class NgKatexComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.parseAndRender();
+        if (!changes['data']?.firstChange) {
+            this.parseAndRender();
+        }
     }
 
     ngOnInit(): void {
