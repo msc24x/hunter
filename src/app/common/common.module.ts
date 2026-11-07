@@ -45,6 +45,7 @@ import { CommunitiesListComponent } from './components/communities-list/communit
 import { CommunityDisplayComponent } from './components/community-display/community-display.component';
 import { AddToCalendarComponent } from './components/add-to-calendar/add-to-calendar.component';
 import { DocsMcpComponent } from './pages/docs-mcp/docs-mcp.component';
+import { DesignSystemComponent } from './pages/design-system/design-system.component';
 
 // Pipes (ensure imports exist)
 import {
@@ -112,6 +113,7 @@ const COMPONENTS = [
     CommunityDisplayComponent,
     AddToCalendarComponent,
     DocsMcpComponent,
+    DesignSystemComponent,
 ];
 
 const PIPES = [

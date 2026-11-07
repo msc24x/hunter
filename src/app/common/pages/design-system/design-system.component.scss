@@ -1,0 +1,129 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+.design-page {
+    display: flex;
+    min-height: 100vh;
+}
+
+.design-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem 1rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+
+    .sidebar-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-black);
+    }
+
+    button.nav-cat,
+    button.nav-item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .nav-cat {
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--gray);
+        margin-top: 1rem;
+
+        &:hover {
+            color: var(--crimson);
+        }
+    }
+
+    .nav-item {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-black);
+        border-radius: var(--r-xs);
+
+        &:hover {
+            background-color: var(--whitesmoke);
+            color: var(--crimson);
+        }
+    }
+}
+
+.design-content {
+    flex: 1;
+    max-width: 60rem;
+    padding: 1.5rem 2rem 4rem;
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h4 {
+        margin-top: 2.5rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.3rem;
+    }
+
+    h5 {
+        margin-top: 1.2rem;
+        font-size: 0.95rem;
+        color: var(--gray);
+    }
+
+    section > *:first-child {
+        margin-top: 0;
+    }
+
+    [id] {
+        scroll-margin-top: 5rem;
+    }
+
+    .form-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        max-width: 24rem;
+    }
+
+    input,
+    textarea,
+    mat-select {
+        max-width: 24rem;
+        width: 100%;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .largeButton {
+        display: inline-block;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .design-page {
+        flex-direction: column;
+    }
+
+    .design-sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+}

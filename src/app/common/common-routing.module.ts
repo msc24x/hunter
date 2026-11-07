@@ -5,6 +5,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { DocsMcpComponent } from './pages/docs-mcp/docs-mcp.component';
+import { DesignSystemComponent } from './pages/design-system/design-system.component';
+import { environment } from 'src/environments/environment';
 import { CompeteComponent } from '../compete/pages/compete/compete.component';
 import { CommunityComponent } from '../community/pages/community/community.component';
 
@@ -49,6 +51,15 @@ const routes: Routes = [
         'title': 'Hunter MCP Server - AI assistants for contest hosting',
         'component': DocsMcpComponent,
     },
+    ...(environment.production
+        ? []
+        : [
+              {
+                  'path': '_design',
+                  'title': 'Design System - Hunter (dev)',
+                  'component': DesignSystemComponent,
+              },
+          ]),
 ];
 
 @NgModule({

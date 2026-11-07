@@ -1,0 +1,264 @@
+<div class="design-page">
+    <aside class="design-sidebar">
+        <div class="sidebar-title">Design System</div>
+        <nav>
+            <div class="nav-group" *ngFor="let s of sections">
+                <button
+                    type="button"
+                    class="nav-cat"
+                    (click)="scrollTo(s.id)"
+                >
+                    {{ s.label }}
+                </button>
+                <button
+                    type="button"
+                    class="nav-item"
+                    *ngFor="let item of s.items"
+                    (click)="scrollTo(item.id)"
+                >
+                    {{ item.label }}
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="design-content">
+        <h1>Design System</h1>
+        <p class="info-like">
+            Internal reference for Hunter's standard styles. Dev builds only.
+        </p>
+
+        <section id="buttons">
+            <h4>Buttons</h4>
+
+            <h5 id="btn-main">Main</h5>
+            <div class="row wrap" style="gap: 0.5rem">
+                <div class="button main">Button</div>
+                <button class="main">Native button</button>
+            </div>
+
+            <h5 id="btn-variants">Variants</h5>
+            <div class="row wrap" style="gap: 0.5rem">
+                <div class="button main sim">Sim</div>
+                <div class="button main danger">Danger</div>
+                <div class="button main sim danger">Sim danger</div>
+            </div>
+
+            <h5 id="btn-states">States</h5>
+            <div class="row wrap" style="gap: 0.5rem">
+                <div class="button main disabled">Disabled</div>
+                <div class="button main no-click">No click</div>
+                <div class="button main" style="pointer-events: none; opacity: 0.5">
+                    Pointer-events off
+                </div>
+            </div>
+
+            <h5 id="btn-large">Large</h5>
+            <div class="largeButton">Large button</div>
+
+            <h5 id="btn-icons">With icons</h5>
+            <div class="row wrap" style="gap: 0.5rem">
+                <div class="button main">
+                    <fa-icon [icon]="starIcon"></fa-icon>&nbsp; Star
+                </div>
+                <div class="button main danger">
+                    <fa-icon [icon]="trashIcon"></fa-icon>&nbsp; Delete
+                </div>
+            </div>
+        </section>
+
+        <hr class="sweet-hr" />
+
+        <section id="forms">
+            <h4>Forms</h4>
+
+            <h5 id="form-inputs">Text inputs</h5>
+            <div class="form-col">
+                <input type="text" placeholder="Text input" />
+                <input type="email" placeholder="Email input" />
+                <input type="number" placeholder="Number input" />
+            </div>
+
+            <h5 id="form-textarea">Textarea</h5>
+            <textarea rows="4" placeholder="Textarea"></textarea>
+
+            <h5 id="form-select">Select</h5>
+            <mat-select placeholder="Material select">
+                <mat-option value="a">Option A</mat-option>
+                <mat-option value="b">Option B</mat-option>
+                <mat-option value="c">Option C</mat-option>
+            </mat-select>
+
+            <h5 id="form-toggle">Slide toggle</h5>
+            <mat-slide-toggle>Slide toggle</mat-slide-toggle>
+        </section>
+
+        <hr class="sweet-hr" />
+
+        <section id="typography">
+            <h4>Typography</h4>
+
+            <h5 id="type-headings">Headings</h5>
+            <h1>Heading 1</h1>
+            <h2>Heading 2</h2>
+            <h4>Heading 4</h4>
+            <p>Body paragraph text.</p>
+
+            <h5 id="type-notes">Info &amp; errors</h5>
+            <p class="info-like">Info-like note text.</p>
+            <p class="info-like cute">Cute info-like note.</p>
+            <p class="error-like">Error-like text.</p>
+
+            <h5 id="type-code">Code</h5>
+            <p>
+                Inline code like <code>get_contests</code> and
+                <code>Authorization: Bearer &lt;token&gt;</code>.
+            </p>
+            <pre><code>const config = &#123; mcpServers: &#123; hunter: &#123; url &#125; &#125; &#125;;</code></pre>
+
+            <h5 id="type-links">Links</h5>
+            <p>
+                <a href="#">Plain link</a> ·
+                <a class="link-like" href="#">Link-like</a>
+            </p>
+        </section>
+
+        <hr class="sweet-hr" />
+
+        <section id="surfaces">
+            <h4>Surfaces</h4>
+
+            <h5 id="surf-section">Section box (.hsection)</h5>
+            <div class="hsection">Content inside an hsection box.</div>
+
+            <h5 id="surf-cute">Cute panel</h5>
+            <div class="cute-panel">
+                Panel with the cute pink/purple styling used across the app.
+            </div>
+
+            <h5 id="surf-glow">Glow</h5>
+            <div class="glowing-thing" style="display: inline-block">
+                Glowing element
+            </div>
+
+            <h5 id="surf-divider">Divider (.sweet-hr)</h5>
+            <hr class="sweet-hr" />
+        </section>
+
+        <hr class="sweet-hr" />
+
+        <section id="material">
+            <h4>Material components</h4>
+
+            <h5 id="mat-tabs">Tabs</h5>
+            <mat-tab-group [animationDuration]="0">
+                <mat-tab label="First">
+                    <div style="padding: 0.5rem">First tab content</div>
+                </mat-tab>
+                <mat-tab label="Second">
+                    <div style="padding: 0.5rem">Second tab content</div>
+                </mat-tab>
+            </mat-tab-group>
+
+            <h5 id="mat-tooltip">Tooltip</h5>
+            <div
+                class="button main"
+                matTooltip="Tooltip text on hover"
+                matTooltipPosition="below"
+            >
+                Hover me
+            </div>
+
+            <h5 id="mat-snackbar">Snackbar</h5>
+            <div class="button main" (click)="showSnackBar()">
+                Open snackbar
+            </div>
+        </section>
+
+        <hr class="sweet-hr" />
+
+        <section id="components">
+            <h4>Components</h4>
+
+            <h5 id="comp-greenred">Green/Red bar</h5>
+            <greenred
+                [green_number]="34"
+                [red_number]="12"
+                green_label="Passed"
+                red_label="Failed"
+            ></greenred>
+
+            <h5 id="comp-code">Code editor</h5>
+            <code-editor
+                [code]="demoCode"
+                languageSelected="cpp"
+            ></code-editor>
+
+            <h5 id="comp-spinner">Spinner</h5>
+            <spinner></spinner>
+
+            <h5 id="comp-infotip">Infotip</h5>
+            <p>
+                Label with a tip
+                <infotip message="Helpful hint on hover"></infotip>
+            </p>
+
+            <h5 id="comp-textinput">Text input</h5>
+            <text-input title="Display name"></text-input>
+
+            <h5 id="comp-questype">Question type labels</h5>
+            <div class="row wrap" style="gap: 0.5rem">
+                <ques-type-label [ques_type]="0"></ques-type-label>
+                <ques-type-label [ques_type]="1"></ques-type-label>
+                <ques-type-label [ques_type]="2"></ques-type-label>
+                <ques-type-label [ques_type]="3"></ques-type-label>
+            </div>
+
+            <h5 id="comp-dropdown">Dropdown list</h5>
+            <drop-down-list
+                [items]="['cpp', 'java', 'python', 'golang']"
+            ></drop-down-list>
+
+            <h5 id="comp-manualerror">Manual error</h5>
+            <manual-error message="Something is missing"></manual-error>
+            <manual-error
+                message="Blocker error"
+                [blocker]="true"
+            ></manual-error>
+            <manual-error message="Warning" [warn]="true"></manual-error>
+
+            <h5 id="comp-katex">KaTeX math</h5>
+            <ng-katex [data]="'e^{i\\pi} + 1 = 0'"></ng-katex>
+
+            <h5 id="comp-userdisplay">User display</h5>
+            <user-display [userInfo]="demoUser"></user-display>
+
+            <h5 id="comp-signin">Sign-in prompt</h5>
+            <sign-in-prompt></sign-in-prompt>
+        </section>
+
+        <hr class="sweet-hr" />
+
+        <section id="utilities">
+            <h4>Utilities</h4>
+
+            <h5 id="util-flex">Flex &amp; layout</h5>
+            <div class="flex row" style="gap: 0.5rem">
+                <div class="hsection" style="flex: 1">flex row 1</div>
+                <div class="hsection" style="flex: 1">flex row 2</div>
+            </div>
+            <div class="flex wrap" style="gap: 0.5rem; margin-top: 0.5rem">
+                <div class="button main">wrap a</div>
+                <div class="button main">wrap b</div>
+                <div class="button main">wrap c</div>
+            </div>
+
+            <h5 id="util-states">State classes</h5>
+            <div class="row wrap" style="gap: 0.5rem">
+                <div class="button main disabled_bright">Disabled bright</div>
+                <div class="button main pointer">Pointer</div>
+            </div>
+            <p class="info-like">Hidden element: <span class="hidden">you can't see me</span></p>
+        </section>
+    </main>
+</div>
