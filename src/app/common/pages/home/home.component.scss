@@ -43,7 +43,7 @@
 
 .direct-buttons {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     gap: 1rem;
     flex-wrap: wrap;
@@ -332,7 +332,7 @@
 
 .sign-in {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 #tagline_small {

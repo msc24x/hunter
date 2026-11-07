@@ -840,13 +840,13 @@
             >
                 <span class="attempted-num">
                     {{ questionsProgress.length }}/{{
-                        competition.questions?.length
+                        competition.questions.length
                     }}
                 </span>
                 <greenred
                     [green_number]="questionsProgress.length"
                     [red_number]="
-                        (competition.questions?.length || 0) -
+                        (competition.questions.length || 0) -
                         questionsProgress.length
                     "
                     green_label="Attempted"

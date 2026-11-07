@@ -184,7 +184,7 @@
 }
 
 .questions-container {
-    align-items: end;
+    align-items: flex-end;
     justify-content: space-between;
     margin-bottom: 1rem;
 
@@ -228,7 +228,7 @@
 
 #submit_controls {
     justify-content: space-between !important;
-    align-items: start;
+    align-items: flex-start;
 
     // #submit_code_btn {
     //     background-color: var(--ls);
@@ -242,7 +242,7 @@
     }
 
     & > div {
-        justify-content: end;
+        justify-content: flex-end;
     }
 }
 
@@ -615,7 +615,7 @@ textarea {
 #output_points {
     display: flex;
     justify-content: stretch;
-    align-items: start;
+    align-items: flex-start;
     gap: 0.6rem;
 
     question-evaluation {
