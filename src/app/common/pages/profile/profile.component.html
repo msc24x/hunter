@@ -26,6 +26,7 @@
         <mat-tab-group
             *ngIf="editable; else flatProfile"
             (selectedTabChange)="onTabChange($event)"
+            [selectedIndex]="selectedTabIndex"
             [animationDuration]="0"
             disableRipple
         >

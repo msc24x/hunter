@@ -44,6 +44,7 @@ import { CompetitionCardComponent } from './components/competition-card/competit
 import { CommunitiesListComponent } from './components/communities-list/communities-list.component';
 import { CommunityDisplayComponent } from './components/community-display/community-display.component';
 import { AddToCalendarComponent } from './components/add-to-calendar/add-to-calendar.component';
+import { DocsMcpComponent } from './pages/docs-mcp/docs-mcp.component';
 
 // Pipes (ensure imports exist)
 import {
@@ -110,6 +111,7 @@ const COMPONENTS = [
     CommunitiesListComponent,
     CommunityDisplayComponent,
     AddToCalendarComponent,
+    DocsMcpComponent,
 ];
 
 const PIPES = [

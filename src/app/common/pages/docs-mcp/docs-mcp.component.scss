@@ -1,0 +1,86 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+#docs-mcp {
+    font-size: 1.2rem;
+    max-width: 1080px;
+    margin-inline: auto;
+    padding-left: 4px;
+
+    .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+
+        img {
+            height: 70vw;
+            max-height: 10rem;
+        }
+    }
+
+    .lead {
+        font-size: 1.2rem;
+    }
+
+    h4 {
+        margin-top: 2rem;
+    }
+
+    a {
+        &:link,
+        &:visited {
+            color: var(--crimson);
+            text-decoration: none;
+        }
+    }
+
+    .mcp-config-wrap {
+        position: relative;
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.8rem;
+            padding: 0.4rem;
+            padding-inline: 0.2rem;
+        }
+    }
+
+    .mcp-config {
+        padding: 0.8rem;
+        border-radius: var(--r-md);
+        background-color: var(--whitesmoke);
+        overflow-x: auto;
+        @include sweetBorder;
+
+        code {
+            background: none;
+            padding: 0;
+            font-size: 0.85rem;
+            white-space: pre;
+        }
+    }
+
+    ul {
+        padding-left: 1.4rem;
+
+        li {
+            margin-bottom: 0.3rem;
+        }
+    }
+}
+
+@media only screen and (max-width: 456px) {
+    #docs-mcp {
+        font-size: 1.05rem !important;
+
+        .logo img {
+            display: none;
+        }
+    }
+}

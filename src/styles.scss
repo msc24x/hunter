@@ -554,3 +554,20 @@ question-display {
 .cdk-overlay-container {
     z-index: 1300;
 }
+
+code {
+    font-family:
+        ui-monospace, "Cascadia Code", "Fira Code", Consolas, "Courier New",
+        monospace;
+    font-size: 0.85em;
+    background-color: var(--whitesmoke);
+    border: 1px solid var(--border-color);
+    border-radius: var(--r-xs);
+    padding: 0.15em 0.4em;
+}
+
+pre code {
+    background: none;
+    border: none;
+    padding: 0;
+}

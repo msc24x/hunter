@@ -4,6 +4,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { DocsMcpComponent } from './pages/docs-mcp/docs-mcp.component';
 import { CompeteComponent } from '../compete/pages/compete/compete.component';
 import { CommunityComponent } from '../community/pages/community/community.component';
 
@@ -42,6 +43,11 @@ const routes: Routes = [
         'title':
             'Hunter - Open Source platform built for simplicity, speed, and control',
         'component': AboutComponent,
+    },
+    {
+        'path': 'docs/mcp',
+        'title': 'Hunter MCP Server - AI assistants for contest hosting',
+        'component': DocsMcpComponent,
     },
 ];
 

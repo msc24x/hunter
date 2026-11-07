@@ -1,0 +1,129 @@
+<app-bar></app-bar>
+
+<div id="docs-mcp">
+    <div class="logo">
+        <img
+            src="../../../../assets/logo-mid.webp"
+            style="border-radius: var(--r-xl)"
+            alt="hunter logo"
+        />
+        <p
+            style="
+                font-size: 1.8rem;
+                font-weight: 500;
+                color: var(--text-black);
+                max-width: 32rem;
+            "
+        >
+            Connect AI assistants to Hunter and let them run your contests
+        </p>
+    </div>
+    <br />
+    <hr class="sweet-hr" />
+    <br />
+
+    <p class="lead">
+        Hunter has a built-in
+        <a
+            href="https://modelcontextprotocol.io"
+            target="_blank"
+            rel="noopener"
+            >MCP (Model Context Protocol)</a
+        >
+        endpoint. When you connect an AI tool like Devin, Claude, or Cursor,
+        it can fetch your contests, create and edit questions, upload test
+        files, run solutions on the judge, check contest quality, and publish
+        the contest for you.
+    </p>
+
+    <p class="info-like">
+        Access is host-only and follows the same permissions as the Hunter
+        web app. An agent can only work on contests that you own.
+    </p>
+
+    <h4>Create an API token</h4>
+    <p *ngIf="isAuthenticated; else anonTokenStep">
+        Open your
+        <a [routerLink]="'/u/' + userId" fragment="settings">account page</a>
+        and create an API token under <b>API Tokens</b>. Hunter shows the raw
+        token only once, so copy it immediately. If you lose it, revoke it
+        and create a new one.
+    </p>
+    <ng-template #anonTokenStep>
+        <p>
+            Sign in to Hunter first. Then open your account page, go to the
+            <b>Settings</b> tab, and create an API token under
+            <b>API Tokens</b>. Hunter shows the raw token only once, so copy
+            it right away.
+        </p>
+    </ng-template>
+
+    <h4>Add the MCP config to your client</h4>
+    <p>
+        Add this to your MCP client settings and put your token in place of
+        <code>&lt;your-token&gt;</code>:
+    </p>
+
+    <div class="mcp-config-wrap">
+        <pre class="mcp-config"><code>{{ mcpConfigExample }}</code></pre>
+        <div class="button main sim copy-btn" (click)="copyConfig()">
+            <fa-icon [icon]="copyIcon"></fa-icon>
+            &nbsp; Copy
+        </div>
+    </div>
+
+    <h4>Endpoint details</h4>
+    <ul>
+        <li>
+            <b>URL:</b> <code>{{ mcpEndpoint }}</code>
+        </li>
+        <li>
+            <b>Auth:</b> send your token in the
+            <code>Authorization: Bearer &lt;token&gt;</code> header. Session
+            cookies also work if your client supports them.
+        </li>
+        <li>
+            <b>Protocol:</b> MCP over HTTPS using the Streamable HTTP
+            transport. It is stateless, so there is nothing to manage.
+        </li>
+    </ul>
+
+    <h4>Available tools</h4>
+    <p>After connecting, the agent can use these tools:</p>
+    <ul>
+        <li><code>get_contests</code> - lists your contests with filters</li>
+        <li><code>get_contest</code> - shows a contest and its questions</li>
+        <li>
+            <code>get_contest_quality</code> - checks whether a contest is
+            ready to publish
+        </li>
+        <li><code>create_contest</code> / <code>update_contest</code></li>
+        <li>
+            <code>get_questions</code>, <code>create_question</code>,
+            <code>update_question</code>, <code>delete_question</code>
+        </li>
+        <li><code>import_questions</code> - adds up to 10 questions at once</li>
+        <li>
+            <code>upload_question_file</code> - uploads test cases and
+            solutions for coding questions
+        </li>
+        <li>
+            <code>verify_question</code> - runs a solution on the judge
+        </li>
+    </ul>
+
+    <h4>Tips for coding questions</h4>
+    <p>
+        The test and solution files you upload for a coding question are the
+        real judging files. Tell the agent what the problem is and ask it to
+        write many varied tests that cover edge cases and boundary values.
+        The solution file must contain the exact expected output for every
+        test, in the same order.
+    </p>
+
+    <p class="info-like">
+        New contests start private. Run <code>get_contest_quality</code>
+        before you publish. If a coding question is not verified, Hunter
+        keeps the contest private, just like in the web editor.
+    </p>
+</div>

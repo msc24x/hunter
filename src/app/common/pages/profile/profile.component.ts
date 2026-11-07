@@ -35,6 +35,7 @@ export class ProfileComponent implements OnInit {
     user: UserInfo = {} as UserInfo;
     loading: number = 0;
     editable = false;
+    selectedTabIndex = 0;
     isAuthenticated = false;
     user_profile: UserInfo = {} as UserInfo;
     user_profile_id: number = -1;
@@ -108,6 +109,10 @@ export class ProfileComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (window.location.hash === '#settings') {
+            this.selectedTabIndex = 1;
+        }
+
         this.activatedRoute.paramMap.subscribe(() => {
             this.fetchUserDetails();
         });
@@ -148,6 +153,13 @@ export class ProfileComponent implements OnInit {
         if (event.index === 1) {
             this.fetchTokens();
         }
+        history.replaceState(
+            null,
+            '',
+            window.location.pathname +
+                window.location.search +
+                (event.index === 1 ? '#settings' : ''),
+        );
     }
 
     fetchTokens(force = false) {
