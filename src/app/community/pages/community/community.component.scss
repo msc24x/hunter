@@ -35,7 +35,7 @@
         top: 1rem;
         right: 1rem;
         padding: 0.25rem 0.6rem;
-        font-size: 1rem;
+        font-size: var(--fs-body);
         font-weight: 600;
         border-radius: var(--r-pill);
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
@@ -95,7 +95,7 @@
         @include blackBack;
 
         .user-info {
-            font-size: 1.15rem;
+            font-size: var(--fs-body-lg);
             font-weight: bold;
         }
 
@@ -129,7 +129,7 @@
         }
 
         .remove {
-            font-size: 0.8rem;
+            font-size: var(--fs-caption);
         }
 
         @media (max-width: 800px) {

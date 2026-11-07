@@ -74,7 +74,7 @@
         background: #80008017;
         color: purple;
         border-radius: var(--r-sm);
-        font-size: 1.1rem;
+        font-size: var(--fs-body-lg);
         @include sweetBorder;
         border-color: purple;
         gap: 0.5rem;
@@ -163,7 +163,7 @@
 }
 
 #delete_competition_btn_popup {
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     padding: 8px;
     padding-inline: 16px;
     border-radius: var(--r-md);
@@ -191,7 +191,7 @@
         background: #cac6ee;
         border-radius: var(--r-sm);
         padding-inline: 4px;
-        font-size: 1.1rem;
+        font-size: var(--fs-body-lg);
         cursor: default;
 
         fa-icon {
@@ -214,7 +214,7 @@
 #created_at {
     background-color: var(--whitesmoke);
 
-    font-size: 0.8rem;
+    font-size: var(--fs-caption);
     width: fit-content;
     padding: 10px;
     margin-inline: auto;
@@ -261,7 +261,7 @@
     border-radius: var(--r-md);
     overflow: hidden;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: var(--fs-caption);
 
     & > div {
         flex-grow: 1;
@@ -342,7 +342,7 @@
 }
 
 .label {
-    font-size: 1.1rem;
+    font-size: var(--fs-body-lg);
     text-align: left;
     margin-inline: 6px;
     margin-block: 8px;
@@ -352,7 +352,7 @@
 
 .text-area {
     @include appTextArea;
-    font-size: 1rem;
+    font-size: var(--fs-body);
 }
 
 #text_title {
@@ -385,7 +385,7 @@
 
         #sample_cases_label,
         #sample_sols_label {
-            font-size: 1rem;
+            font-size: var(--fs-body);
             font-weight: normal;
         }
 
@@ -393,7 +393,7 @@
             @include appTextArea;
             margin: 8px;
             font-family: monospace;
-            font-size: large;
+            font-size: var(--fs-body-lg);
             width: calc(100% - 4rem);
         }
 
@@ -419,7 +419,7 @@
 
     button {
         color: var(--text-black);
-        font-size: 1rem;
+        font-size: var(--fs-body);
         background-color: transparent;
         border-width: 0px;
         padding-inline: 16px;
@@ -448,7 +448,7 @@
 
 .clabel {
     margin-top: 16px;
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     padding: 4px;
     width: 100%;
 }
@@ -457,7 +457,7 @@
 #suneditor_text_statement,
 #text_statement {
     @include appTextArea;
-    font-size: large;
+    font-size: var(--fs-body-lg);
 }
 
 #text_statement,
@@ -473,7 +473,7 @@
 
 #text_statement_preview {
     @include appTextArea;
-    font-size: 1.05rem !important;
+    font-size: var(--fs-body-lg) !important;
 }
 
 label.file_input {
@@ -541,7 +541,7 @@ input.file_input {
     }
 
     .add-choice {
-        font-size: 1.2rem;
+        font-size: var(--fs-h3);
         font-weight: bold;
         margin: 1rem;
         margin-inline: auto;
@@ -565,7 +565,7 @@ input {
     padding: 8px;
     padding-inline: 16px;
     border-width: 0px;
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     color: var(--text-black);
 
     @include sweetBorder();
@@ -573,7 +573,7 @@ input {
 
 #question_points_lbl,
 #question_id {
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     margin: 1rem;
 }
 
@@ -592,7 +592,7 @@ input {
 }
 
 #delete_competition_btn {
-    font-size: 1rem;
+    font-size: var(--fs-body);
     background-color: #fff0f0;
     color: var(--dark-red);
     width: fit-content;
@@ -629,7 +629,7 @@ input {
     margin: 0 0 1rem 0;
     padding: 0;
     color: var(--gray);
-    font-size: 0.8rem;
+    font-size: var(--fs-caption);
     width: 100%;
 
     li {
@@ -650,7 +650,7 @@ input {
             border-radius: 50%;
             background: var(--text-black);
             color: var(--text-white);
-            font-size: 0.7rem;
+            font-size: var(--fs-micro);
             font-weight: 600;
         }
     }
@@ -801,7 +801,7 @@ input {
     .solution-code-file {
         #code_file_label {
             height: 5.5rem;
-            font-size: larger;
+            font-size: var(--fs-h3);
         }
 
         fa-icon {

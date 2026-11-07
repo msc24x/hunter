@@ -35,7 +35,7 @@
     border: none;
     text-align: left;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: var(--fs-small);
     color: #333;
     transition: background-color 0.15s ease;
 
@@ -48,7 +48,7 @@
     }
 
     .icon {
-        font-size: 1.25rem;
+        font-size: var(--fs-h3);
     }
 
     .text {

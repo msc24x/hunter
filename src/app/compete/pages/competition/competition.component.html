@@ -190,14 +190,14 @@
                 *ngFor="let quesCount of getQuestionCounts(); let i = index"
             >
                 <div class="tag" *ngIf="quesCount > 0">
-                    <span style="font-size: 1.2rem; font-weight: 500">
+                    <span style="font-size: var(--fs-h3); font-weight: 500">
                         {{ quesCount }}
-                        <span style="font-size: 0.8rem">
+                        <span style="font-size: var(--fs-caption)">
                             question{{ quesCount === 1 ? "" : "s" }}
                             of type
                         </span>
                     </span>
-                    <span style="font-size: 1rem">
+                    <span style="font-size: var(--fs-body)">
                         &nbsp;
                         <ques-type-label [ques_type]="i"></ques-type-label>
                     </span>

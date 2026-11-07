@@ -16,7 +16,7 @@
 
 #user_info {
     #user_info_h {
-        font-size: 1.25rem;
+        font-size: var(--fs-h3);
         font-weight: bold;
         margin-bottom: 8px;
     }
@@ -35,7 +35,7 @@
 
     overflow-x: scroll;
     max-width: 350px;
-    font-size: 1rem;
+    font-size: var(--fs-body);
     padding: 16px;
     margin: 8px;
     background-color: antiquewhite;
@@ -50,7 +50,7 @@
     margin: 0.2rem;
     padding: 1.2rem;
     font-weight: 600;
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     background-color: var(--cute-purple);
     color: var(--white);
     cursor: pointer;
@@ -64,7 +64,7 @@
     .more {
         margin-top: 1rem;
         font-weight: 500;
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
     }
 }
 
@@ -86,10 +86,6 @@
 @media only screen and (max-width: 620px) {
     #user_name_input {
         width: 150px !important;
-    }
-
-    #label {
-        font-size: 1.1rem !important;
     }
 
     .community-ad .more {

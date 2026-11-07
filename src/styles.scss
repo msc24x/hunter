@@ -3,6 +3,35 @@
 @use "./assets/mixins" as *;
 
 // =============================
+// Type scale — see docs/typography.md
+// =============================
+:root {
+    --fs-micro: 0.75rem; // 12px — badges, legal, hints (floor)
+    --fs-caption: 0.8rem; // 12.8px — meta, timestamps, secondary text
+    --fs-small: 0.875rem; // 14px — labels, helper text
+    --fs-control: 1rem; // 16px — buttons, selects, triggers
+    --fs-body: 1rem; // 16px — default body
+    --fs-body-lg: 1.125rem; // 18px — emphasized body, question text
+    --fs-h3: 1.25rem; // 20px — card titles, section labels
+    --fs-h2: 1.5rem; // 24px — section headings, dialog titles
+    --fs-h1: 1.875rem; // 30px — page titles
+    --fs-display: 2.5rem; // 40px — stats, big numbers
+    --fs-hero: 5rem; // 80px — page taglines
+    --fs-code: 0.85em; // inline code (relative to context)
+}
+
+@media only screen and (max-width: 640px) {
+    :root {
+        --fs-body-lg: 1rem; // 16px
+        --fs-h3: 1.125rem; // 18px
+        --fs-h2: 1.25rem; // 20px
+        --fs-h1: 1.5rem; // 24px
+        --fs-display: 2rem; // 32px
+        --fs-hero: 2.25rem; // 36px
+    }
+}
+
+// =============================
 // Base Styles
 // =============================
 html {
@@ -50,7 +79,7 @@ input[type="text"] {
 button.main,
 .button.main {
     @include blackBack;
-    font-size: 0.95rem;
+    font-size: var(--fs-control);
     font-family: appFont;
     color: var(--btn-main-fg);
     border-color: var(--btn-main-fg);
@@ -120,7 +149,7 @@ button.main,
     border-radius: var(--r-pill); /* Pill shape */
 
     /* Typography */
-    font-size: 0.75rem; /* Approx 12px */
+    font-size: var(--fs-micro); /* Approx 12px */
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em; /* Slight spacing for uppercase readability */
@@ -164,7 +193,7 @@ button.main,
 }
 
 .mat-mdc-select {
-    font-size: 0.95rem;
+    font-size: var(--fs-control);
     line-height: 1.3;
 
     .mat-mdc-select-trigger {
@@ -192,7 +221,7 @@ button.main,
     --mdc-snackbar-supporting-text-color: rgb(109, 65, 0) !important;
     --mdc-snackbar-container-shape: 0.5rem !important;
     --mdc-snackbar-supporting-text-font: appFont !important;
-    --mdc-snackbar-supporting-text-size: 16px !important;
+    --mdc-snackbar-supporting-text-size: var(--fs-body) !important;
     --mdc-snackbar-supporting-text-weight: 400 !important;
     --mdc-snackbar-supporting-text-line-height: 1.5rem !important;
     @include sweetBorder;
@@ -438,7 +467,7 @@ question-display {
 .largeButton {
     padding: 0.8rem 1.6rem;
     color: var(--text-black);
-    font-size: 1rem;
+    font-size: var(--fs-body);
     background-color: var(--white);
     border-radius: var(--r-md);
     cursor: pointer;
@@ -461,7 +490,7 @@ question-display {
     overflow: scroll;
     display: flex;
     flex-direction: column;
-    font-size: 1.1rem;
+    font-size: var(--fs-body-lg);
     background-color: var(--whitesmoke);
     padding: 16px;
     border-radius: var(--r-md);
@@ -517,12 +546,12 @@ question-display {
 
     &.sticky {
         margin-top: -0.7rem;
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
     }
 
     &.option-sticky {
         margin-top: 0rem;
-        font-size: 0.7rem;
+        font-size: var(--fs-micro);
         line-height: 1rem;
         margin-bottom: 0;
     }
@@ -597,7 +626,7 @@ code {
     font-family:
         ui-monospace, "Cascadia Code", "Fira Code", Consolas, "Courier New",
         monospace;
-    font-size: 0.85em;
+    font-size: var(--fs-code);
     background-color: var(--whitesmoke);
     border: 1px solid var(--border-color);
     border-radius: var(--r-xs);

@@ -1,5 +1,5 @@
 #about {
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     max-width: 1080px;
     margin-inline: auto;
     padding-left: 4px;
@@ -15,7 +15,7 @@ a {
 
 @media only screen and (max-width: 456px) {
     #about {
-        font-size: 1.05rem !important;
+        font-size: var(--fs-body-lg) !important;
     }
 
     .logo {
@@ -38,7 +38,7 @@ a {
     }
 
     span {
-        font-size: min(16vw, 6rem);
+        font-size: min(16vw, var(--fs-hero));
         font-weight: 800;
         color: var(--crimson);
     }

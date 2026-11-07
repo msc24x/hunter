@@ -33,7 +33,7 @@
 
     h2 {
         margin: 0;
-        font-size: 1.3rem;
+        font-size: var(--fs-h3);
     }
 
     .close-icon {
@@ -81,7 +81,7 @@
     .empty,
     .loading {
         color: var(--gray);
-        font-size: 0.85rem;
+        font-size: var(--fs-caption);
         text-align: center;
         margin-top: 1rem;
     }
@@ -114,7 +114,7 @@
         display: flex;
         gap: 0.4rem;
         align-items: center;
-        font-size: 0.72rem;
+        font-size: var(--fs-micro);
 
         .type-badge {
             background-color: var(--btn-bg);
@@ -160,7 +160,7 @@
     margin-bottom: 1rem;
 
     label {
-        font-size: 0.9rem;
+        font-size: var(--fs-small);
         color: var(--text-black);
     }
 
@@ -193,11 +193,11 @@
 
     p {
         margin: 0.5rem 0 0;
-        font-size: 0.9rem;
+        font-size: var(--fs-small);
     }
 
     .hint {
-        font-size: 0.75rem;
+        font-size: var(--fs-micro);
         color: var(--gray);
     }
 
@@ -220,7 +220,7 @@
     }
 
     .chosen {
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
         color: var(--darkgreen);
         margin-top: 0.5rem;
     }
@@ -251,7 +251,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    font-size: 0.85rem;
+    font-size: var(--fs-caption);
     color: var(--text-black);
 
     .meta-item b {
@@ -303,12 +303,12 @@
 .linked-questions {
     h4 {
         margin: 0 0 0.5rem;
-        font-size: 1rem;
+        font-size: var(--fs-body);
     }
 
     .empty {
         color: var(--gray);
-        font-size: 0.85rem;
+        font-size: var(--fs-caption);
     }
 
     .linked-row {
@@ -324,7 +324,7 @@
         .linked-title {
             @include ellipsis;
             color: var(--text-black);
-            font-size: 0.9rem;
+            font-size: var(--fs-small);
             cursor: pointer;
 
             &:hover {

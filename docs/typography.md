@@ -221,70 +221,46 @@ text (1→1.05rem @900px); home/about/docs-mcp use container-level
 12. Three different "question statement" sizes coexist: container 1.05rem,
     redundant `!important` 1.05rem, SunEditor inline 1.1rem.
 
-## 7. Proposed standard scale
+## 7. Standardized scale (implemented in `styles.scss`)
 
-Root stays `16px` (no `html` font-size — preserves iOS no-zoom behavior
-for inputs ≥16px). Define as CSS custom properties on `:root`:
+Root stays `16px`. All tokens are even-pixel steps except `caption`
+(12.8px — Bootstrap's `.small` convention) and `code` (intentionally
+relative):
 
 ```scss
 :root {
-    // Type scale — all rem, 16px root
-    --fs-micro:    0.75rem;  // 12px  badges, legal, hints (floor)
-    --fs-caption:  0.8rem;   // 12.8px meta, timestamps, secondary text
-    --fs-small:    0.9rem;   // 14.4px labels, helper text
-    --fs-control:  0.95rem;  // 15.2px buttons, selects, triggers
-    --fs-body:     1rem;     // 16px  default body
-    --fs-body-lg:  1.1rem;   // 17.6px emphasized body, question text
-    --fs-h3:       1.25rem;  // 20px  card titles, section labels
-    --fs-h2:       1.5rem;   // 24px  section headings, dialog titles
-    --fs-h1:       1.9rem;   // 30.4px page titles
-    --fs-display:  2.5rem;   // 40px  hero/taglines
+    --fs-micro:    0.75rem;   // 12px   badges, legal, hints (floor)
+    --fs-caption:  0.8rem;    // 12.8px meta, timestamps, secondary text
+    --fs-small:    0.875rem;  // 14px   labels, helper text
+    --fs-control:  1rem;      // 16px   buttons, selects, triggers
+    --fs-body:     1rem;      // 16px   default body
+    --fs-body-lg:  1.125rem;  // 18px   emphasized body, question text
+    --fs-h3:       1.25rem;   // 20px   card titles, section labels
+    --fs-h2:       1.5rem;    // 24px   section headings, dialog titles
+    --fs-h1:       1.875rem;  // 30px   page titles
+    --fs-display:  2.5rem;    // 40px   stats, big numbers
+    --fs-hero:     5rem;      // 80px   page taglines
+    --fs-code:     0.85em;    // inline code (relative to context)
 }
 ```
 
-Mapping guidance (current → proposed):
+### Mobile scale (single breakpoint, ≤640px)
 
-- `0.7/0.72rem` → `--fs-micro` (or `--fs-caption` if it's real content)
-- `0.75–0.85rem` → `--fs-caption`
-- `0.875–0.95rem` → `--fs-small` / `--fs-control`
-- `1–1.15rem` → `--fs-body` / `--fs-body-lg`
-- `1.2–1.3rem` → `--fs-h3`
-- `1.4–1.5rem` → `--fs-h2`
-- `1.8–2.4rem` → `--fs-h1`
-- `2.5rem+` → `--fs-display` (home tagline 5rem can stay as a one-off
-  display size or become `--fs-hero: 3rem` desktop / 2rem mobile)
-
-### Mobile scale (separate set)
-
-One breakpoint `--bp-mobile: 640px`. Mobile keeps body text unchanged
-(readability + ≥16px inputs avoid iOS auto-zoom) and shrinks only the
-upper scale — large text is what actually breaks small screens:
+Body and caption sizes are unchanged (readability + ≥16px inputs avoid
+iOS auto-zoom); only the upper scale shrinks:
 
 ```scss
 @media (max-width: 640px) {
     :root {
-        --fs-micro:    0.75rem;  // 12px    unchanged (floor)
-        --fs-caption:  0.8rem;   // 12.8px  unchanged
-        --fs-small:    0.85rem;  // 13.6px  slightly smaller labels
-        --fs-control:  0.9rem;   // 14.4px  slimmer controls
-        --fs-body:     1rem;     // 16px    unchanged (readability)
-        --fs-body-lg:  1rem;     // 16px    collapses onto body
-        --fs-h3:       1.15rem;  // 18.4px
-        --fs-h2:       1.3rem;   // 20.8px
+        --fs-body-lg:  1rem;     // 16px  collapses onto body
+        --fs-h3:       1.125rem; // 18px
+        --fs-h2:       1.25rem;  // 20px
         --fs-h1:       1.5rem;   // 24px
         --fs-display:  2rem;     // 32px
+        --fs-hero:     2.25rem;  // 36px
     }
 }
 ```
-
-Alternative worth considering later: scale the root itself
-(`html { font-size: 90% }` at ≤640px shrinks every rem uniformly) —
-requires converting all `px`/keyword sizes to rem first, and drops body
-text to ~14.4px. The token set above is the safer choice.
-
-Either way: **eliminate all `!important` font-size overrides** and the
-direction-inconsistent cases (popup growing text, sign-in-prompt
-container 1.8rem).
 
 ### Breakpoint tokens
 

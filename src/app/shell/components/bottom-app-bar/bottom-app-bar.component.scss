@@ -49,15 +49,15 @@
 
     #site_logo {
         font-weight: 700;
-        font-size: 2rem;
+        font-size: var(--fs-h1);
 
         #site_info {
-            font-size: 1rem;
+            font-size: var(--fs-body);
             font-weight: 400;
         }
 
         .site-version {
-            font-size: 1.2rem;
+            font-size: var(--fs-h3);
             font-weight: 400;
         }
     }
@@ -91,11 +91,8 @@
 @media only screen and (max-width: 1024px) {
     #site_logo {
         #site_info {
-            font-size: 1rem !important;
+            font-size: var(--fs-body) !important;
         }
-    }
-    .button {
-        font-size: 0.9rem !important;
     }
 }
 
@@ -116,6 +113,6 @@
 
     .paragraph {
         margin-block: 0 !important;
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
     }
 }

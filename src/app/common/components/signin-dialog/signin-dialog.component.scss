@@ -10,7 +10,7 @@ div#signinDialog {
     padding-bottom: 16px;
 
     #legal {
-        font-size: 0.7rem;
+        font-size: var(--fs-micro);
         padding-inline: 16px;
         margin: 8px;
         color: var(--gray);
@@ -18,7 +18,7 @@ div#signinDialog {
 
     p.sectionHeading {
         position: relative;
-        font-size: 1.5em;
+        font-size: var(--fs-h2);
         margin-top: 16px;
         text-align: center;
 
@@ -28,7 +28,7 @@ div#signinDialog {
     }
     p.inputHeading {
         position: relative;
-        font-size: 16px;
+        font-size: var(--fs-body);
         margin-top: 34px;
         margin-bottom: 5px;
         margin-left: 17px;
@@ -45,7 +45,7 @@ div#signinDialog {
         width: 259px;
         margin-left: 12px;
 
-        font-size: 16px;
+        font-size: var(--fs-body);
         text-align: left;
         padding-left: 12px;
     }
@@ -57,7 +57,7 @@ div#signinDialog {
     }
 
     p.line {
-        font-size: 12px;
+        font-size: var(--fs-micro);
         float: left;
 
         margin-top: 5px;
@@ -109,7 +109,7 @@ div#signinDialog {
         }
     }
     #login_heading {
-        font-size: 12px;
+        font-size: var(--fs-micro);
 
         margin-top: 50px;
         font-weight: normal;
@@ -125,7 +125,7 @@ div#signinDialog {
     }
 
     #responseMessage {
-        font-size: 12px;
+        font-size: var(--fs-micro);
 
         margin-top: 50px;
         font-weight: normal;

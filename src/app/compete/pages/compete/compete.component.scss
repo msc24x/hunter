@@ -18,13 +18,13 @@
 
     h3 {
         margin: 6px 0 4px;
-        font-size: 18px;
+        font-size: var(--fs-body-lg);
         font-weight: 600;
     }
 
     p {
         margin: 0;
-        font-size: 14px;
+        font-size: var(--fs-small);
     }
 }
 
@@ -67,7 +67,7 @@
 }
 
 #join_competition p.heading {
-    font-size: 20px;
+    font-size: var(--fs-h3);
     font-weight: bolder;
     text-align: center;
     padding-inline: 12px;
@@ -81,7 +81,7 @@
     border-width: 0px;
     width: 212px;
 
-    font-size: 16px;
+    font-size: var(--fs-body);
     text-align: left;
     padding-left: 12px;
 }
@@ -129,14 +129,14 @@
 
     .description {
         position: absolute;
-        font-size: 0.7rem;
+        font-size: var(--fs-micro);
         bottom: 1rem;
         left: 1rem;
         padding-right: 1rem;
         font-weight: bold;
 
         .title {
-            font-size: 1rem;
+            font-size: var(--fs-body);
         }
     }
 

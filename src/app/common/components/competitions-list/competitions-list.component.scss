@@ -10,7 +10,7 @@
 }
 
 #filter_controls {
-    font-size: 1.1rem;
+    font-size: var(--fs-body-lg);
     flex-basis: 30%;
     margin-top: 0.4rem;
     background-color: var(--dim-white);
@@ -22,7 +22,7 @@
     @include sweetBorder;
 
     .filters-heading {
-        font-size: 1.5rem;
+        font-size: var(--fs-h2);
         font-weight: 500;
         margin-bottom: 0.5rem;
     }
@@ -96,7 +96,7 @@
 
 @media only screen and (max-width: 620px) {
     s {
-        font-size: 1rem;
+        font-size: var(--fs-body);
     }
 
     .competitions-block {
@@ -117,16 +117,16 @@
     }
 
     #filter_controls {
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
         position: initial;
 
         .filters-heading {
-            font-size: 1rem;
+            font-size: var(--fs-body);
         }
     }
 
     .heading {
-        font-size: 1.4rem !important;
+        font-size: var(--fs-h2) !important;
     }
 }
 
@@ -134,13 +134,13 @@
     display: flex;
     justify-content: center;
     font-style: italic;
-    font-size: 1rem;
+    font-size: var(--fs-body);
 }
 
 #competitions_list p.heading {
     margin-inline: 16px;
     padding-top: 12px;
-    font-size: 2rem;
+    font-size: var(--fs-h1);
     font-weight: bolder;
 }
 

@@ -534,7 +534,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                     ['preview', 'print'],
                     ['undo', 'redo'],
                 ],
-                defaultStyle: 'font-family: appFont; font-size: 1.1rem;',
+                defaultStyle: 'font-family: appFont; font-size: var(--fs-body-lg);',
             });
 
             this.suneditor.onChange = (contents: string, core: Core) => {

@@ -15,7 +15,7 @@ div#loginDialog {
 
     p.sectionHeading {
         position: relative;
-        font-size: 1.5em;
+        font-size: var(--fs-h2);
         margin-top: 16px;
         text-align: center;
 
@@ -25,7 +25,7 @@ div#loginDialog {
     }
     p.inputHeading {
         position: relative;
-        font-size: 16px;
+        font-size: var(--fs-body);
         margin-top: 34px;
         margin-bottom: 5px;
         margin-left: 17px;
@@ -44,7 +44,7 @@ div#loginDialog {
     }
 
     p.line {
-        font-size: 12px;
+        font-size: var(--fs-micro);
         float: left;
 
         margin-top: 5px;
@@ -96,7 +96,7 @@ div#loginDialog {
         }
     }
     #register_heading {
-        font-size: 12px;
+        font-size: var(--fs-micro);
 
         margin-top: 50px;
         font-weight: normal;
@@ -112,7 +112,7 @@ div#loginDialog {
     }
 
     #responseMessage {
-        font-size: 12px;
+        font-size: var(--fs-micro);
 
         margin-top: 50px;
         font-weight: normal;

@@ -138,7 +138,7 @@ export class MaterialsBrowserComponent implements OnChanges, OnDestroy {
                 ['preview'],
                 ['undo', 'redo'],
             ],
-            defaultStyle: 'font-family: appFont; font-size: 1.1rem;',
+            defaultStyle: 'font-family: appFont; font-size: var(--fs-body-lg);',
         });
     }
 

@@ -18,7 +18,7 @@
     overflow-y: auto;
 
     .sidebar-title {
-        font-size: 1.2rem;
+        font-size: var(--fs-h3);
         font-weight: 600;
         margin-bottom: 1rem;
         color: var(--text-black);
@@ -38,7 +38,7 @@
 
     .nav-cat {
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: var(--fs-caption);
         text-transform: uppercase;
         letter-spacing: 0.04em;
         color: var(--gray);
@@ -51,7 +51,7 @@
 
     .nav-item {
         padding: 0.2rem 0.5rem;
-        font-size: 0.9rem;
+        font-size: var(--fs-small);
         color: var(--text-black);
         border-radius: var(--r-xs);
 
@@ -68,7 +68,7 @@
     padding: 1.5rem 2rem 4rem;
 
     h1 {
-        font-size: 1.8rem;
+        font-size: var(--fs-h1);
     }
 
     h4 {
@@ -79,7 +79,7 @@
 
     h5 {
         margin-top: 1.2rem;
-        font-size: 0.95rem;
+        font-size: var(--fs-control);
         color: var(--gray);
     }
 

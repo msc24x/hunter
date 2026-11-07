@@ -23,13 +23,13 @@
     }
 
     #sc_title {
-        font-size: 1.4rem;
+        font-size: var(--fs-h2);
         font-weight: bold;
         padding: 8px;
     }
 
     #scores_table {
-        font-size: 1.1rem;
+        font-size: var(--fs-body-lg);
 
         &.question-scoreboard {
             & > div:not(.table_heading):not(.unusual) {
@@ -88,7 +88,7 @@
                 justify-content: flex-start;
 
                 .ahead-statement {
-                    font-size: 0.8rem;
+                    font-size: var(--fs-caption);
                     font-weight: bold;
                 }
             }

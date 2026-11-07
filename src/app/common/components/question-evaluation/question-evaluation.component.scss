@@ -14,7 +14,7 @@
     flex-basis: 50%;
 
     &:not(.header) {
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
         display: flex;
         align-items: center;
     }

@@ -3,7 +3,7 @@
 @use "../../../../assets/mixins" as *;
 
 #docs-mcp {
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     max-width: 1080px;
     margin-inline: auto;
     padding-left: 4px;
@@ -23,7 +23,7 @@
     }
 
     .lead {
-        font-size: 1.2rem;
+        font-size: var(--fs-h3);
     }
 
     h4 {
@@ -45,7 +45,7 @@
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
-            font-size: 0.8rem;
+            font-size: var(--fs-caption);
             padding: 0.4rem;
             padding-inline: 0.2rem;
         }
@@ -61,7 +61,7 @@
         code {
             background: none;
             padding: 0;
-            font-size: 0.85rem;
+            font-size: var(--fs-caption);
             white-space: pre;
         }
     }
@@ -77,7 +77,7 @@
 
 @media only screen and (max-width: 456px) {
     #docs-mcp {
-        font-size: 1.05rem !important;
+        font-size: var(--fs-body-lg) !important;
 
         .logo img {
             display: none;

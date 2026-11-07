@@ -35,7 +35,7 @@
     border-style: dashed;
     border-color: var(--yellowbg-color);
     color: var(--yellowbg-color);
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
 }
 
 @mixin hideSrollbar {
@@ -63,7 +63,7 @@
 
 @mixin basicBackZ {
     color: var(--text-black);
-    font-size: 1rem;
+    font-size: var(--fs-body);
     background-color: var(--white);
     border-radius: var(--r-md);
     @include sweetBorder();
@@ -73,7 +73,7 @@
     padding: 0.8rem;
     padding-inline: 1.6rem;
     color: var(--text-black);
-    font-size: 1rem;
+    font-size: var(--fs-body);
     background-color: var(--white);
     border-radius: var(--r-md);
     @include sweetBorder();
@@ -95,7 +95,7 @@
     width: 259px;
     margin-left: 12px;
     font-family: appFont;
-    font-size: 16px;
+    font-size: var(--fs-body);
     text-align: left;
     padding-left: 12px;
     font-weight: 300;
@@ -109,7 +109,7 @@
     border-radius: var(--r-md);
     font-family: appFont;
     font-weight: 300;
-    font-size: 1.2rem;
+    font-size: var(--fs-h3);
     padding: 16px;
     border-width: 0px;
     border-color: var(--gray);

@@ -49,7 +49,7 @@
     flex-wrap: wrap;
 
     button {
-        font-size: 1.4rem;
+        font-size: var(--fs-h2);
         padding: 2rem;
         border-radius: var(--r-xl);
         font-weight: 600;
@@ -105,14 +105,14 @@
 }
 
 .feature-content h2 {
-    font-size: 2.5rem;
+    font-size: var(--fs-display);
     color: var(--home-heading-dark);
     margin-bottom: 1.5rem;
     line-height: 1.2;
 }
 
 .feature-content p {
-    font-size: 1.1rem;
+    font-size: var(--fs-body-lg);
     color: var(--home-text-muted);
     margin-bottom: 2rem;
 }
@@ -129,7 +129,7 @@
 }
 
 #logo {
-    font-size: 9rem;
+    font-size: var(--fs-hero);
 
     span {
         animation-name: breathing;
@@ -143,7 +143,7 @@
     transition-duration: 300ms;
 }
 #login_tag {
-    font-size: 4.5rem;
+    font-size: var(--fs-display);
     text-align: right;
     padding: 36px;
 }
@@ -158,7 +158,7 @@
     }
 
     .helperline {
-        font-size: 2rem;
+        font-size: var(--fs-h1);
         opacity: 0.8;
     }
 }
@@ -189,14 +189,14 @@
 }
 
 .stat-item h3 {
-    font-size: 2.5rem;
+    font-size: var(--fs-display);
     color: var(--home-heading-dark);
     margin-bottom: 0.5rem;
 }
 
 .stat-item p {
     color: var(--home-stat-text);
-    font-size: 1.1rem;
+    font-size: var(--fs-body-lg);
 }
 
 @media (max-width: 768px) {
@@ -210,10 +210,6 @@
         flex-direction: column;
     }
 
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
     .hero {
         padding: 6rem 1.5rem 3rem;
     }
@@ -223,11 +219,11 @@
     }
 
     #tagline {
-        font-size: 2.5rem !important;
+        font-size: var(--fs-display) !important;
     }
 
     .helperline {
-        font-size: 1.5rem !important;
+        font-size: var(--fs-h2) !important;
     }
 }
 
@@ -294,7 +290,7 @@
 }
 
 #tagline {
-    font-size: 5rem;
+    font-size: var(--fs-hero);
     // background-color: #ffec9999;
     // background-image:
     //     radial-gradient(
@@ -339,7 +335,7 @@
     color: var(--text-black);
     margin-top: 16px;
     margin-bottom: 5rem;
-    font-size: 1rem;
+    font-size: var(--fs-body);
     font-weight: 400;
     text-align: start;
 }
@@ -347,7 +343,6 @@
 @media (max-width: 456px) {
     #tagline {
         padding-block: 3rem;
-        font-size: 2rem !important;
         padding-inline: 2rem;
         border-radius: 3rem;
         padding-bottom: 2rem;
@@ -357,15 +352,11 @@
         margin-bottom: 3rem;
     }
 
-    .helperline {
-        font-size: 1.2rem !important;
-    }
-
     .direct-buttons {
         justify-content: center;
 
         button {
-            font-size: 1.1rem !important;
+            font-size: var(--fs-body-lg) !important;
             width: 100%;
             text-wrap: nowrap;
         }

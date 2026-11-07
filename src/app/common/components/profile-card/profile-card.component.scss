@@ -17,7 +17,7 @@
 
     .points {
         background-color: bisque;
-        font-size: 1rem;
+        font-size: var(--fs-body);
         color: chocolate;
         width: fit-content;
         border-radius: var(--r-sm);
@@ -32,7 +32,7 @@
     }
 
     .manage-button {
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
         opacity: 0.8;
         cursor: pointer;
 
@@ -42,7 +42,7 @@
     }
 
     .user-profile-details {
-        font-size: 0.9rem;
+        font-size: var(--fs-small);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -52,7 +52,7 @@
         }
 
         .profile-name {
-            font-size: 1.2rem;
+            font-size: var(--fs-h3);
             @include ellipsis;
             max-width: 12rem;
         }
@@ -62,7 +62,7 @@
             flex-wrap: wrap;
             width: 100%;
             gap: 0.5rem;
-            font-size: 1rem;
+            font-size: var(--fs-body);
             margin: 0.5rem;
             opacity: 0.8;
         }

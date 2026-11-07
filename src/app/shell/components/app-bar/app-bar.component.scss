@@ -31,13 +31,13 @@ div.appBar {
     #app_title {
         color: var(--text-black);
         font-weight: 800;
-        font-size: 3em;
+        font-size: var(--fs-display);
         display: flex;
         align-items: center;
 
         #app_title_full {
             cursor: pointer;
-            font-size: 2.4rem;
+            font-size: var(--fs-display);
             color: crimson;
 
             &:hover {
@@ -66,7 +66,7 @@ div.appBar {
         #user_email,
         #user_name,
         #register_btn {
-            font-size: 0.8rem;
+            font-size: var(--fs-caption);
             background-color: var(--text-black);
             color: var(--text-white);
             border-radius: var(--r-sm);
@@ -90,7 +90,7 @@ div.appBar {
     @media only screen and (max-width: 430px) {
         #app_title_full {
             display: initial;
-            font-size: 1.8rem !important;
+            font-size: var(--fs-h1) !important;
         }
         #user_name,
         #user_email {
@@ -103,7 +103,7 @@ div.appBar {
         flex-direction: column;
         justify-content: right;
         align-items: flex-end;
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
         font-weight: bolder;
         // background-color: var(--white);
         padding: 6px;
@@ -131,7 +131,7 @@ div.appBar {
         margin-top: 14px;
         position: absolute;
         display: none;
-        font-size: 0.9rem;
+        font-size: var(--fs-small);
         z-index: 90;
 
         ul {
@@ -215,7 +215,7 @@ div.appBar {
         cursor: pointer;
         transition: all 0.3s ease;
         margin-left: 0.5rem;
-        font-size: 0.8rem;
+        font-size: var(--fs-caption);
         background-color: var(--text-black);
         color: var(--text-white);
         border-radius: 100%;
@@ -233,7 +233,7 @@ div.appBar {
         }
 
         fa-icon {
-            font-size: 1.2rem;
+            font-size: var(--fs-h3);
         }
     }
 }

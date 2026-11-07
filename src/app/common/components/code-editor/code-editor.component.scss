@@ -39,7 +39,7 @@
 
     .editor-instance {
         height: calc(65svh - 61px);
-        font-size: 1rem;
+        font-size: var(--fs-body);
         border-radius: 0 0 var(--r-md) var(--r-md);
 
         &.participation-page {
