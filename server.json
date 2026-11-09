@@ -15,7 +15,7 @@
         "url": "https://github.com/msc24x/hunter",
         "source": "github"
     },
-    "version": "1.0.0",
+    "version": "1.0.1",
     "remotes": [
         {
             "type": "streamable-http",
