@@ -1,0 +1,17 @@
+{
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "io.github.msc24x/hunter",
+    "title": "Hunter",
+    "description": "Create, manage, and judge coding contests end to end on Hunter.",
+    "repository": {
+        "url": "https://github.com/msc24x/hunter",
+        "source": "github"
+    },
+    "version": "1.0.0",
+    "remotes": [
+        {
+            "type": "streamable-http",
+            "url": "https://hunter.cambo.in/api/mcp"
+        }
+    ]
+}
