@@ -9,6 +9,7 @@ import Container from 'typedi';
 import fileUpload from 'express-fileupload';
 import morgan from 'morgan';
 import { registerTasks } from './cron';
+import { spaFallback } from './api/spa-meta';
 
 const app = express();
 
@@ -26,12 +27,10 @@ app.use('/api', require('./api/routes'));
 app.use(require('./api/public-routes'));
 
 // Serve static files from the 'static' directory
-app.use(express.static(path.join(__dirname, '../static')));
+app.use(express.static(path.join(__dirname, '../static'), { index: false }));
 
 // Serve angular application when nothing matches
-app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../static/index.html'));
-});
+app.use('*', spaFallback);
 
 registerTasks();
 

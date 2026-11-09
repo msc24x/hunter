@@ -695,7 +695,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
                         }
 
                         if (this.competition.questions) {
-                            this.selectQuestion(this.q_idx);
+                            this.selectQuestion(this.q_idx, false);
                         }
                     },
                     error: (err) => {
@@ -728,7 +728,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             });
     }
 
-    selectQuestion(index: number) {
+    selectQuestion(index: number, updateUrl = true) {
         if (!this.competition.questions?.length) {
             return;
         }
@@ -743,9 +743,11 @@ export class CompetitionComponent implements OnInit, OnDestroy {
 
         this.lastEditorContent();
 
-        this.router.navigate(['/compete/p', this.c_id, index], {
-            replaceUrl: true,
-        });
+        if (updateUrl) {
+            this.router.navigate(['/compete/p', this.c_id, index], {
+                replaceUrl: true,
+            });
+        }
 
         if (this.questionSelected > 0) {
             this.titleService.setTitle(
