@@ -3,6 +3,8 @@
 ![](https://badgen.net/github/license/msc24x/hunter)
 ![](https://badgen.net/github/branches/msc24x/hunter)
 ![](https://badgen.net/github/commits/msc24x/hunter/main)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Code of Conduct](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 ![](https://hunter.cambo.in/assets/hunter-banner.jpg)
 
@@ -54,3 +56,10 @@ Users submit their solution code to the online judge built for Hunter, that dete
 | **Secure Code Compilation & Execution** | Powerful backend infrastructure handles code compilation and execution. Multiple language support with secure sandboxing.                                              | <img src="https://hunter.cambo.in/assets/question.webp" alt="drawing" width="200"/>        |
 | **Essay Evaluation Control**            | View and evaluate your participants' responses that require manual grading. See all the data and details, understand the trends of responses and grade them.           | <img src="https://hunter.cambo.in/assets/insights.webp" alt="drawing" width="200"/>        |
 | **Global Participation**                | Share your contests globally. Engage with participants worldwide and foster a community of programmers.                                                                | <img src="https://hunter.cambo.in/assets/workbench.webp" alt="drawing" width="200"/> |
+
+## Contributing
+
+Contributions are welcome. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for setup
+steps, dev commands, and the PR workflow, and read our
+**[Code of Conduct](CODE_OF_CONDUCT.md)**. Issues labeled `good first issue`
+and `help wanted` are good starting points.
