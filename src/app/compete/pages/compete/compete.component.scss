@@ -3,6 +3,7 @@
 @use "../../../../assets/mixins" as *;
 
 .survey-banner {
+    display: none;
     margin-bottom: 20px;
     color: var(--text-black);
 
