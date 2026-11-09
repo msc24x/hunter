@@ -54,10 +54,17 @@ function getOrCreateSession(user: UserInfo): Promise<SessionInfo> {
     return promise;
 }
 
+function githubUsernameFromUrl(url?: string | null) {
+    const match = url?.match(/github\.com\/+([^/?#]+)/i);
+    return match?.[1]?.slice(0, 50) || '';
+}
+
 function getOrCreateUser(
     email: string,
     data: UserInfo
 ): Promise<UserInfo | null> {
+    const githubUsername = githubUsernameFromUrl(data.github_url);
+
     const promise = new Promise<UserInfo | null>((resolve, reject) => {
         client.users
             .findFirst({
@@ -71,7 +78,7 @@ function getOrCreateUser(
                         .create({
                             data: {
                                 email: email,
-                                name: data.name,
+                                name: data.name?.trim() || githubUsername,
                                 blog_url: data.blog_url,
                                 linkedin_url: data.linkedin_url,
                                 avatar_url: data.avatar_url,
@@ -95,7 +102,10 @@ function getOrCreateUser(
                                     id: user.id,
                                 },
                                 data: {
-                                    name: data.name,
+                                    name:
+                                        data.name?.trim() ||
+                                        user.name ||
+                                        githubUsername,
                                     blog_url: data.blog_url,
                                     avatar_url: data.avatar_url,
                                     github_url: data.github_url,
@@ -110,6 +120,37 @@ function getOrCreateUser(
                                 });
                             });
                     } else {
+                        const socialUpdates: any = {};
+                        if (
+                            data.github_url &&
+                            data.github_url !== user.github_url
+                        ) {
+                            socialUpdates.github_url = data.github_url;
+                        }
+                        if (
+                            data.avatar_url &&
+                            data.avatar_url !== user.avatar_url
+                        ) {
+                            socialUpdates.avatar_url = data.avatar_url;
+                        }
+                        if (
+                            data.blog_url !== undefined &&
+                            data.blog_url !== user.blog_url
+                        ) {
+                            socialUpdates.blog_url = data.blog_url;
+                        }
+
+                        if (Object.keys(socialUpdates).length) {
+                            client.users
+                                .update({
+                                    where: {
+                                        id: user.id,
+                                    },
+                                    data: socialUpdates,
+                                })
+                                .catch(() => {});
+                        }
+
                         resolve({
                             id: user.id,
                             email: user.email!,
