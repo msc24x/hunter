@@ -3,6 +3,14 @@
     "name": "io.github.msc24x/hunter",
     "title": "Hunter",
     "description": "Create, manage, and judge coding contests end to end on Hunter.",
+    "websiteUrl": "https://hunter.cambo.in",
+    "icons": [
+        {
+            "src": "https://hunter.cambo.in/assets/logo-mid.webp",
+            "mimeType": "image/webp",
+            "sizes": ["any"]
+        }
+    ],
     "repository": {
         "url": "https://github.com/msc24x/hunter",
         "source": "github"
@@ -11,7 +19,16 @@
     "remotes": [
         {
             "type": "streamable-http",
-            "url": "https://hunter.cambo.in/api/mcp"
+            "url": "https://hunter.cambo.in/api/mcp",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "description": "Hunter API token. Create one from your account settings.",
+                    "isRequired": true,
+                    "isSecret": true,
+                    "placeholder": "Bearer <your-hunter-api-token>"
+                }
+            ]
         }
     ]
 }
