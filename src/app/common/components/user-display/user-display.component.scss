@@ -1,6 +1,8 @@
 :host {
     display: inline-flex;
     align-items: center;
+    min-width: 0;
+    overflow: hidden;
 
     * {
         color: inherit;
@@ -13,15 +15,18 @@
     border-radius: var(--r-xs);
     margin-right: 0.3rem;
     margin-bottom: 3px;
+    flex-shrink: 0;
 }
 
 .user-tag {
     opacity: 0.6;
+    flex-shrink: 0;
 }
 
 .user-name {
     display: inline-flex;
     align-items: center;
+    min-width: 0;
 }
 
 .name-text {

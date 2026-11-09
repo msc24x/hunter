@@ -9,16 +9,21 @@
     align-items: center;
 }
 
+.list-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 2rem;
+    overflow-y: auto;
+}
+
 #filter_controls {
     font-size: var(--fs-body-lg);
-    flex-basis: 30%;
     margin-top: 0.4rem;
     background-color: var(--dim-white);
     border-radius: var(--r-md);
-    margin: 0.3rem;
     padding: 1rem;
-    position: sticky;
-    top: 2rem;
     @include sweetBorder;
 
     .filters-heading {
@@ -111,14 +116,19 @@
     }
 
     #competitions_ol,
-    #filter_controls {
+    .list-sidebar {
         flex-basis: unset !important;
         width: 100%;
     }
 
+    .list-sidebar {
+        position: static;
+        max-height: none;
+        overflow: visible;
+    }
+
     #filter_controls {
         font-size: var(--fs-caption);
-        position: initial;
 
         .filters-heading {
             font-size: var(--fs-body);

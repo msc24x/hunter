@@ -24,72 +24,77 @@
     </h1>
 
     <div class="competitions-block">
-        <div id="filter_controls">
-            <div class="filters-heading">Filters</div>
+        <div class="list-sidebar">
+            <div id="filter_controls">
+                <div class="filters-heading">Filters</div>
 
-            <div>
-                <input
-                    id="query_input"
-                    type="text"
-                    class="small"
-                    [(ngModel)]="query"
-                    placeholder="Search competitions"
-                    (input)="updateList()"
-                />
+                <div>
+                    <input
+                        id="query_input"
+                        type="text"
+                        class="small"
+                        [(ngModel)]="query"
+                        placeholder="Search competitions"
+                        (input)="updateList()"
+                    />
+                </div>
+
+                <div class="inline-setting">
+                    <label>Status</label>
+                    <mat-select
+                        [(ngModel)]="liveStatus"
+                        (selectionChange)="updateList()"
+                    >
+                        <mat-option value="all">All</mat-option>
+                        <mat-option value="upcoming">Upcoming</mat-option>
+                        <mat-option value="live">Live</mat-option>
+                        <mat-option value="always">Always Live</mat-option>
+                        <mat-option value="ended">Ended</mat-option>
+                    </mat-select>
+                </div>
+
+                <div class="inline-setting">
+                    <label>Practice</label>
+                    <mat-select
+                        [(ngModel)]="practice"
+                        (selectionChange)="updateList()"
+                    >
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="true">Practice only</mat-option>
+                        <mat-option value="false">Rated only</mat-option>
+                    </mat-select>
+                </div>
+
+                <div class="inline-setting">
+                    <label>Type</label>
+                    <mat-select
+                        [(ngModel)]="qtype"
+                        (selectionChange)="updateList()"
+                    >
+                        <mat-option value="">Any type</mat-option>
+                        <mat-option value="0">Coding questions</mat-option>
+                        <mat-option value="1">MCQ questions</mat-option>
+                        <mat-option value="2">Fill-blank questions</mat-option>
+                        <mat-option value="3">Long-answer questions</mat-option>
+                    </mat-select>
+                </div>
+
+                <div class="inline-setting">
+                    <label>Order By</label>
+                    <mat-select
+                        [(ngModel)]="orderBy"
+                        (selectionChange)="updateList()"
+                    >
+                        <mat-option value="">Any</mat-option>
+                        <mat-option value="desc">Latest</mat-option>
+                        <mat-option value="asc">Oldest</mat-option>
+                    </mat-select>
+                </div>
             </div>
 
-            <div class="inline-setting">
-                <label>Status</label>
-                <mat-select
-                    [(ngModel)]="liveStatus"
-                    (selectionChange)="updateList()"
-                >
-                    <mat-option value="all">All</mat-option>
-                    <mat-option value="upcoming">Upcoming</mat-option>
-                    <mat-option value="live">Live</mat-option>
-                    <mat-option value="always">Always Live</mat-option>
-                    <mat-option value="ended">Ended</mat-option>
-                </mat-select>
-            </div>
-
-            <div class="inline-setting">
-                <label>Practice</label>
-                <mat-select
-                    [(ngModel)]="practice"
-                    (selectionChange)="updateList()"
-                >
-                    <mat-option value="">All</mat-option>
-                    <mat-option value="true">Practice only</mat-option>
-                    <mat-option value="false">Rated only</mat-option>
-                </mat-select>
-            </div>
-
-            <div class="inline-setting">
-                <label>Question types</label>
-                <mat-select
-                    [(ngModel)]="qtype"
-                    (selectionChange)="updateList()"
-                >
-                    <mat-option value="">Any type</mat-option>
-                    <mat-option value="0">Coding questions</mat-option>
-                    <mat-option value="1">MCQ questions</mat-option>
-                    <mat-option value="2">Fill-blank questions</mat-option>
-                    <mat-option value="3">Long-answer questions</mat-option>
-                </mat-select>
-            </div>
-
-            <div class="inline-setting">
-                <label>Order By</label>
-                <mat-select
-                    [(ngModel)]="orderBy"
-                    (selectionChange)="updateList()"
-                >
-                    <mat-option value="">Any</mat-option>
-                    <mat-option value="desc">Latest</mat-option>
-                    <mat-option value="asc">Oldest</mat-option>
-                </mat-select>
-            </div>
+            <leaderboard *ngIf="showLeaderboard"></leaderboard>
         </div>
+
         <ul id="competitions_ol">
             <create-dialog *ngIf="showBuildButton"></create-dialog>
 

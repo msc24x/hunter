@@ -47,6 +47,9 @@ export class CompetitionsListComponent implements OnInit {
     @Input()
     route: string = 'editor';
 
+    @Input()
+    showLeaderboard: boolean = false;
+
     query = '';
     liveStatus = 'all';
     practice = '';

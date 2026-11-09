@@ -49,6 +49,7 @@ checks inside the handlers, not via scopes on the token.
 | [competitions.md](competitions.md) | Contest CRUD, listing, sessions, quality |
 | [questions.md](questions.md) | Question CRUD, choices, files, import, verification |
 | [results.md](results.md) | Scoreboards, progress, evaluations |
+| [leaderboard.md](leaderboard.md) | Global / per-community top-100 leaderboard |
 | [users.md](users.md) | Profiles |
 | [communities.md](communities.md) | Communities, memberships, permissions |
 | [invites.md](invites.md) | Contest invites |

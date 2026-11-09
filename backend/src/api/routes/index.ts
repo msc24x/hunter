@@ -7,6 +7,7 @@ router.use(require('./user'));
 router.use(require('./question'));
 router.use(require('./login'));
 router.use(require('./results'));
+router.use(require('./leaderboard'));
 router.use(require('./analytics'));
 router.use(require('./judge'));
 router.use(require('./invites'));

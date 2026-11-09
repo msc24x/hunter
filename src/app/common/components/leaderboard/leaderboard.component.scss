@@ -1,0 +1,50 @@
+@use "../../../../assets/fonts";
+@use "../../../../assets/colors";
+@use "../../../../assets/mixins" as *;
+
+.leaderboard-box {
+    background-color: color-mix(in srgb, var(--dim-white) 55%, transparent);
+    border-radius: var(--r-md);
+    padding: 1rem;
+    @include sweetBorder;
+
+    .lb-heading {
+        font-size: var(--fs-h2);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .lb-rows {
+        max-height: 24rem;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+    .lb-row {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.35rem 0.4rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.15rem;
+        border-radius: var(--r-sm);
+
+        .rank {
+            width: 1.6rem;
+            flex-shrink: 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        user-display {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .points {
+            flex-shrink: 0;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+    }
+}

@@ -43,6 +43,7 @@ import { CommunityDisplayComponent } from './components/community-display/commun
 import { AddToCalendarComponent } from './components/add-to-calendar/add-to-calendar.component';
 import { DocsMcpComponent } from './pages/docs-mcp/docs-mcp.component';
 import { DesignSystemComponent } from './pages/design-system/design-system.component';
+import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 
 // Pipes (ensure imports exist)
 import {
@@ -108,6 +109,7 @@ const COMPONENTS = [
     AddToCalendarComponent,
     DocsMcpComponent,
     DesignSystemComponent,
+    LeaderboardComponent,
 ];
 
 const PIPES = [

@@ -147,6 +147,11 @@ export type ScoresMeta = {
     user_details: result | undefined;
 } | null;
 
+export type LeaderboardData = {
+    meta: { total: number };
+    rows: Array<result>;
+};
+
 export type resultFull = {
     id: number;
     user: UserInfo;
@@ -188,6 +193,7 @@ export const apiEndpoints = {
     evaluations: environment.apiUrl + '/competitions/{0}/evaluations/{1}',
     resultsAll: environment.apiUrl + '/competitions/{0}/results',
     progress: environment.apiUrl + '/competitions/{0}/progress',
+    leaderboard: environment.apiUrl + '/leaderboard',
     submission: environment.apiUrl + '/submission/',
     communities: environment.apiUrl + '/communities/',
     communityMemberships: environment.apiUrl + '/communities/memberships',

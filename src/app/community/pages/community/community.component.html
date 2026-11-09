@@ -169,6 +169,12 @@
                 <p class="info-like">No pending member request.</p>
             </div>
         </div>
+
+        <leaderboard
+            *ngIf="community.status === 'APPROVED'"
+            [communityId]="community.id"
+            heading="Community Top 100"
+        ></leaderboard>
     </div>
 
     <ng-template #communityContests>

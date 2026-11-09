@@ -1,0 +1,34 @@
+<div class="leaderboard-box">
+    <div class="lb-heading">{{ heading }}</div>
+
+    <spinner *ngIf="loading"></spinner>
+
+    <ng-container *ngIf="!loading">
+        <div class="lb-rows" *ngIf="rows.length">
+            <div
+                class="lb-row"
+                *ngFor="let row of rows"
+                [ngStyle]="{ 'background-color': medalBg(row.user_rank) }"
+            >
+                <span
+                    class="rank"
+                    [ngStyle]="{ color: medalColor(row.user_rank) }"
+                    >{{ row.user_rank }}</span
+                >
+                <user-display [userInfo]="uiUser(row)"></user-display>
+                <span class="points">
+                    {{ row.result }}
+                    <fa-icon
+                        size="xs"
+                        [icon]="trophyIcon"
+                        [ngStyle]="{ color: medalColor(row.user_rank) }"
+                    ></fa-icon>
+                </span>
+            </div>
+        </div>
+
+        <p class="info-like" *ngIf="!rows.length">
+            No scores yet. Be the first on the leaderboard.
+        </p>
+    </ng-container>
+</div>

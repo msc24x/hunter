@@ -90,6 +90,11 @@
     width: 100%;
 }
 
+.community-details leaderboard {
+    display: block;
+    margin-top: 1.5rem;
+}
+
 .membership-requests {
     .request {
         @include blackBack;

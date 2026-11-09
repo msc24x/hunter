@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { format } from 'src/app/utils/utils';
 import {
     apiEndpoints,
+    LeaderboardData,
     QuestionProgress,
     result,
 } from 'src/environments/environment';
@@ -76,6 +77,20 @@ export class ScoresDataService {
             meta: { user_details: result; total: number };
             rows: result[];
         }>(endpoint, {
+            observe: 'response',
+            responseType: 'json',
+            withCredentials: true,
+        });
+    }
+
+    getLeaderboard(community_id?: number) {
+        var endpoint = apiEndpoints.leaderboard;
+
+        if (community_id) {
+            endpoint += `?community_id=${community_id}`;
+        }
+
+        return this.http.get<LeaderboardData>(endpoint, {
             observe: 'response',
             responseType: 'json',
             withCredentials: true,
