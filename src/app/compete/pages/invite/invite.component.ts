@@ -8,11 +8,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
-import {
-    CompetitionInfo,
-    CompetitionInvite,
-    UserInfo,
-} from 'src/environments/environment';
+import { CompetitionInvite, UserInfo } from 'src/environments/environment';
 
 @Component({
     selector: 'invite',
@@ -41,7 +37,7 @@ export class InviteComponent {
         private scoresDataService: ScoresDataService,
         private titleService: Title,
         private snackBar: MatSnackBar,
-        private location: LocationStrategy
+        private location: LocationStrategy,
     ) {
         const inviteId = this.route.snapshot.paramMap.get('invite_id') || '';
 
@@ -83,7 +79,7 @@ export class InviteComponent {
                 error: (err) => {
                     this.loading--;
                 },
-            })
+            }),
         );
     }
 

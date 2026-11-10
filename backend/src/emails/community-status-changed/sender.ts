@@ -1,13 +1,7 @@
-import ejs from 'ejs';
-import { readFileSync } from 'fs';
-import path from 'path';
-import { Community, CompetitionInfo, UserInfo } from '../../config/types';
+import { Community, UserInfo } from '../../config/types';
 import { sendInfoEmail } from '../../services/email';
 import config from '../../config/config';
-import juice from 'juice';
 import { render } from '../renderer';
-import { Util } from '../../util/util';
-
 // Type for template data
 interface EmailData {
     user: UserInfo;
@@ -33,7 +27,7 @@ export function sendCommunityStatusChangedEmail(data: EmailData) {
                 },
             }).then(
                 () => resolve(),
-                () => reject()
+                () => reject(),
             );
         });
     });

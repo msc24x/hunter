@@ -1,19 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatOptionSelectionChange } from '@angular/material/core';
-import { MatSelectChange } from '@angular/material/select';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-    faRemove,
-    faStar,
-    faUserSlash,
-} from '@fortawesome/free-solid-svg-icons';
+import { faStar, faUserSlash } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
-import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
     Community,
     CommunityMember,
@@ -57,7 +50,7 @@ export class CommunityComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private datePipe: DatePipe,
         private titleService: Title,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
     ) {}
 
     ngOnInit(): void {
@@ -99,7 +92,7 @@ export class CommunityComponent implements OnInit, OnDestroy {
             this.loading++;
 
             this.titleService.setTitle(
-                `${this.community.name || 'Community'} - Hunter`
+                `${this.community.name || 'Community'} - Hunter`,
             );
 
             if (this.community.admin_user_id === this.user?.id) {
@@ -225,7 +218,7 @@ export class CommunityComponent implements OnInit, OnDestroy {
     updateMember(
         members: CommunityMember[],
         operation: 'accept' | 'reject' | 'disable',
-        kwargs?: { callback?: () => void }
+        kwargs?: { callback?: () => void },
     ) {
         this.loading--;
 
@@ -241,7 +234,7 @@ export class CommunityComponent implements OnInit, OnDestroy {
                 let mem_ids = members.map((m) => m.id);
 
                 this.pendingRequests = this.pendingRequests.filter(
-                    (r) => !mem_ids.includes(r.id)
+                    (r) => !mem_ids.includes(r.id),
                 );
 
                 let message = {

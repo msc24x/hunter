@@ -1,7 +1,7 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { faCube } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
@@ -24,7 +24,7 @@ export class CreateDialogComponent implements OnInit {
         private authService: AuthService,
         private router: Router,
         private competitionsData: CompetitionsDataService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
     ) {}
 
     ngOnInit(): void {
@@ -51,7 +51,7 @@ export class CreateDialogComponent implements OnInit {
                 },
                 (err) => {
                     this.handleResponse(err as HttpErrorResponse);
-                }
+                },
             );
     }
 
@@ -65,7 +65,7 @@ export class CreateDialogComponent implements OnInit {
                 break;
             default:
                 this.snackBar.open(
-                    'Unknown error occurred, please try again later'
+                    'Unknown error occurred, please try again later',
                 );
                 break;
         }
@@ -73,7 +73,7 @@ export class CreateDialogComponent implements OnInit {
 
     showCreateDialog(show: boolean) {
         let createDialog = document.getElementById(
-            'create_dialog_popup'
+            'create_dialog_popup',
         ) as HTMLDivElement;
         if (show) {
             window.scroll(0, 0);

@@ -5,7 +5,7 @@ import { sendNewSubmissionsEmail } from '../emails/new-submissions/sender';
 import { Util } from '../util/util';
 import config from '../config/config';
 import { sendCommunityMembershipsRequest } from '../emails/new-community-memberships-request/sender';
-import { CompetitionInfo, UserInfo } from '../config/types';
+import { UserInfo } from '../config/types';
 import { sendNewCompetitionsInCommunity } from '../emails/new-community-contests/sender';
 
 const client = Container.get(DatabaseProvider).client();

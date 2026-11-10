@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule as AngularCommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -123,12 +123,7 @@ const PIPES = [
 
 @NgModule({
     declarations: [...COMPONENTS, ...PIPES],
-    imports: [
-        ShellModule,
-        ...ANGULAR_MODULES,
-        ...UI_MODULES,
-        ...CDK_MODULES,
-    ],
+    imports: [ShellModule, ...ANGULAR_MODULES, ...UI_MODULES, ...CDK_MODULES],
     exports: [ShellModule, ...COMPONENTS, ...PIPES],
     providers: [DatePipe],
 })

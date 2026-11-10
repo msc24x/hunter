@@ -1,11 +1,6 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
-import { Community, UserInfo } from 'src/environments/environment';
+import { Community } from 'src/environments/environment';
 
 @Component({
     selector: 'communities-list',

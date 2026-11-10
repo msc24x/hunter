@@ -1,8 +1,6 @@
-import express, { Request, Response } from 'express';
-import models from '../../database/containers/models';
+import express from 'express';
 import {
     CodeSolution,
-    CompetitionInfo,
     HunterExecutable,
     QuestionInfo,
     UserInfo,
@@ -149,13 +147,12 @@ router.post(
                             ),
                             exeRes.output ?? '',
                             true,
-                        )
-                            .catch((err) =>
-                                console.error(
-                                    'verification output write failed:',
-                                    err,
-                                ),
-                            );
+                        ).catch((err) =>
+                            console.error(
+                                'verification output write failed:',
+                                err,
+                            ),
+                        );
 
                         const verification =
                             await client.question_verification.upsert({
@@ -346,21 +343,21 @@ router.post(
                         ).catch(() => {});
 
                         client.question_verification
-                        .updateMany({
-                            where: {
-                                question_id: question.id,
-                            },
-                            data: {
-                                success: false,
-                            },
-                        })
-                        .then(() => {
-                            Util.sendResponse(res, resCode.success);
-                        })
-                        .catch((err) => {
-                            console.error(err);
-                            Util.sendResponse(res, resCode.serverError);
-                        });
+                            .updateMany({
+                                where: {
+                                    question_id: question.id,
+                                },
+                                data: {
+                                    success: false,
+                                },
+                            })
+                            .then(() => {
+                                Util.sendResponse(res, resCode.success);
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                                Util.sendResponse(res, resCode.serverError);
+                            });
                     })
                     .catch((err) => {
                         console.log(err);
@@ -843,20 +840,16 @@ router.get(
                         await Competitions.getInvites(competition.id);
 
                     // Drop links to soft-deleted materials in the editor view.
-                    response.questions = response.questions.map(
-                        (q: any) => ({
-                            ...q,
-                            question_materials: (q.question_materials || [])
-                                .filter(
-                                    (qm: any) => !qm.material?.deleted_at,
-                                )
-                                .map((qm: any) => {
-                                    const { deleted_at, ...material } =
-                                        qm.material || {};
-                                    return { ...qm, material };
-                                }),
-                        }),
-                    );
+                    response.questions = response.questions.map((q: any) => ({
+                        ...q,
+                        question_materials: (q.question_materials || [])
+                            .filter((qm: any) => !qm.material?.deleted_at)
+                            .map((qm: any) => {
+                                const { deleted_at, ...material } =
+                                    qm.material || {};
+                                return { ...qm, material };
+                            }),
+                    }));
 
                     Util.sendResponseJson(res, resCode.success, response);
                     return;
@@ -1181,9 +1174,10 @@ router.post(
                     });
 
                     if (
-                        [config.questionTypes.fill, config.questionTypes.mcq].includes(
-                            q.type,
-                        ) &&
+                        [
+                            config.questionTypes.fill,
+                            config.questionTypes.mcq,
+                        ].includes(q.type) &&
                         Array.isArray(q.question_choices) &&
                         q.question_choices.length > 0
                     ) {
@@ -1269,13 +1263,12 @@ router.post(
                         ),
                         exeRes.output ?? '',
                         true,
-                    )
-                        .catch((err) =>
-                            console.error(
-                                `import: verification output write failed for question ${v.id}:`,
-                                err,
-                            ),
-                        );
+                    ).catch((err) =>
+                        console.error(
+                            `import: verification output write failed for question ${v.id}:`,
+                            err,
+                        ),
+                    );
 
                     await client.question_verification.upsert({
                         where: { question_id: v.id },

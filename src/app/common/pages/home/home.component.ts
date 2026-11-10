@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    UserInfo,
-    domainName,
-    environment,
-    protocol,
-} from 'src/environments/environment';
+import { UserInfo, environment } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
-import {
-    faCircleNodes,
-    faRankingStar,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleNodes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-home',

@@ -1,5 +1,5 @@
 import { QueryError } from 'mysql2';
-import Container, { Inject, Service } from 'typedi';
+import Container from 'typedi';
 import { Result, UserInfo } from '../../config/types';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import { Prisma } from '@prisma/client';
@@ -84,19 +84,21 @@ export class Results {
 
         if (params.result == 0) p = 1;
 
-        this.dbService.pool().query(
-            `insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, ?);`,
-            [
-                params.user_id,
-                params.question_id,
-                params.competition_id,
-                params.result,
-                p,
-            ],
-            (err) => {
-                callback(err);
-            },
-        );
+        this.dbService
+            .pool()
+            .query(
+                `insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, ?);`,
+                [
+                    params.user_id,
+                    params.question_id,
+                    params.competition_id,
+                    params.result,
+                    p,
+                ],
+                (err) => {
+                    callback(err);
+                },
+            );
     }
 
     update(
@@ -108,13 +110,15 @@ export class Results {
 
         if (result == '0') p = 1;
 
-        this.dbService.pool().query(
-            `update results set result = ?, penalities = penalities + ? where id = ? ;`,
-            [result, p, id],
-            (err) => {
-                callback(err);
-            },
-        );
+        this.dbService
+            .pool()
+            .query(
+                `update results set result = ?, penalities = penalities + ? where id = ? ;`,
+                [result, p, id],
+                (err) => {
+                    callback(err);
+                },
+            );
     }
 
     getCompetitionScoresCount(

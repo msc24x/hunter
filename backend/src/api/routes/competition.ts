@@ -1,12 +1,10 @@
-import express, { Request, Response } from 'express';
-import models from '../../database/containers/models';
+import express from 'express';
 import { CompetitionInfo, UserInfo } from '../../config/types';
 import { Util } from '../../util/util';
 import { authenticate, loginRequired } from '../auth';
 import { resCode } from '../../config/settings';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
-import { time } from 'console';
 import config from '../../config/config';
 import { sendPublicContestEmail } from '../../emails/public-contest/sender';
 import { computeContestQuality } from '../../services/contestQuality';
@@ -185,8 +183,7 @@ router.put('/competition', authenticate, loginRequired, (req, res) => {
                                 host_user_id: res.locals.user.id,
                             },
                             data: {
-                                description:
-                                    competitionBody.description || '',
+                                description: competitionBody.description || '',
                                 title: competitionBody.title || '',
                                 visibility: competitionBody.visibility,
                                 community_id: {
@@ -521,7 +518,9 @@ function getParticipationBlockers(competition: any): string[] {
             question.type === config.questionTypes.fill &&
             !question.question_choices.length
         ) {
-            blockers.push(`${label} has no possible answer, making it unsolvable.`);
+            blockers.push(
+                `${label} has no possible answer, making it unsolvable.`,
+            );
         }
     });
 
@@ -567,7 +566,7 @@ router.get(
                 Util.sendResponseJson(
                     res,
                     resCode.success,
-                    computeContestQuality(competition)
+                    computeContestQuality(competition),
                 );
             })
             .catch((err) => {

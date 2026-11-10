@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import path from 'path';
-import config from '../../config/config';
 const mime = require('mime-types');
 import { readFile, fileExists } from '../../util/serverStorage';
 

@@ -1,5 +1,4 @@
-import express, { Request, Response } from 'express';
-import models from '../../database/containers/models';
+import express from 'express';
 import { UserInfo } from '../../config/types';
 import { Util } from '../../util/util';
 import { authenticate, loginRequired } from '../auth';

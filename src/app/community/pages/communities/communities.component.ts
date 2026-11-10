@@ -1,15 +1,9 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
-import {
-    Community,
-    CompetitionInfo,
-    UserInfo,
-} from 'src/environments/environment';
+import { Community, UserInfo } from 'src/environments/environment';
 
 import { Router } from '@angular/router';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
@@ -32,7 +26,7 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private titleService: Title,
         private snackBar: MatSnackBar,
-        private communitiesService: CommunitiesDataService
+        private communitiesService: CommunitiesDataService,
     ) {
         titleService.setTitle('Communities - Hunter');
 
@@ -60,7 +54,7 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
                 },
                 (err) => {
                     this.loading--;
-                }
+                },
             );
         } else {
             this.fetchPageData();

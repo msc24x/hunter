@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express from 'express';
 import { Cache } from 'memory-cache';
 import { resCode } from '../../config/settings';
 import { Util } from '../../util/util';

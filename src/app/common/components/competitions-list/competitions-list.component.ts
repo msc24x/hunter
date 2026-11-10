@@ -1,14 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-    faCheckDouble,
-    faCircleCheck,
-    faEnvelope,
-    faEnvelopeOpen,
-    faEnvelopeSquare,
-    faLock,
-} from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
-import { isLive, prettyDuration } from 'src/app/utils/utils';
 import { CompetitionInfo } from 'src/environments/environment';
 
 @Component({

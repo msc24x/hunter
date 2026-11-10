@@ -1,11 +1,9 @@
+import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import {
-    Component,
-    Input,
-    OnChanges,
-    OnDestroy,
-    SimpleChanges,
-} from '@angular/core';
-import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
+    DomSanitizer,
+    SafeHtml,
+    SafeResourceUrl,
+} from '@angular/platform-browser';
 import {
     materialTypes,
     materialTypeLabels,

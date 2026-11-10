@@ -1,4 +1,3 @@
-import { exec } from 'child_process';
 import { readFile } from '../util/serverStorage';
 import { Service } from 'typedi';
 import {
@@ -9,8 +8,6 @@ import {
     UserInfo,
 } from '../config/types';
 import { Util } from '../util/util';
-import config from '../config/config';
-
 @Service({ global: true })
 export class JudgeService {
     private isProcessingUserMap = new Map<number, boolean>();
@@ -39,7 +36,7 @@ export class JudgeService {
         samples: boolean,
         question: QuestionInfo | null,
         user: UserInfo | null,
-        revealOutput: boolean = false
+        revealOutput: boolean = false,
     ): Promise<ExeInfo> {
         return new Promise(async (resolve, reject) => {
             if (user) {
@@ -65,8 +62,8 @@ export class JudgeService {
                             Util.getQuestionFileName(
                                 hunterExecutable.for.competition_id,
                                 hunterExecutable.for.question_id,
-                                'testcases'
-                            )
+                                'testcases',
+                            ),
                         )
                     ).toString('utf-8');
                     programOutput = (
@@ -74,8 +71,8 @@ export class JudgeService {
                             Util.getQuestionFileName(
                                 hunterExecutable.for.competition_id,
                                 hunterExecutable.for.question_id,
-                                'solutions'
-                            )
+                                'solutions',
+                            ),
                         )
                     ).toString('utf-8');
                 } catch (err) {
@@ -147,14 +144,15 @@ export class JudgeService {
                             fulfillSolution({
                                 output: 'Invalid response from judge',
                                 success: false,
-                            } as ExeInfo)
+                            } as ExeInfo),
                         );
                 },
                 (err) =>
                     fulfillSolution({
-                        output: err instanceof Error ? err.message : String(err),
+                        output:
+                            err instanceof Error ? err.message : String(err),
                         success: false,
-                    } as ExeInfo)
+                    } as ExeInfo),
             );
         });
     }

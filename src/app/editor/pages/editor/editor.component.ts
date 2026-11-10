@@ -12,17 +12,12 @@ import {
     faCircleXmark,
     faCopy,
     faDownload,
-    faEnvelope,
     faEye,
     faEyeSlash,
     faFileImport,
     faMinusCircle,
     faPaperPlane,
-    faPenToSquare,
-    faShare,
     faShareNodes,
-    faSquareShareNodes,
-    faStarOfLife,
     faTrashArrowUp,
     faTrashCan,
     faUpload,
@@ -32,7 +27,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { error } from 'console';
 import katex from 'katex';
-import { BehaviorSubject, min, timeout } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';

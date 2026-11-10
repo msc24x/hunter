@@ -9,7 +9,6 @@ import {
     QuestionInfo,
 } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
-import { CommonModule } from 'src/app/common/common.module';
 import { format } from 'src/app/utils/utils';
 
 @Injectable({
@@ -18,7 +17,10 @@ import { format } from 'src/app/utils/utils';
 export class CompetitionsDataService {
     private importSchemaCache: any = null;
 
-    constructor(private authService: AuthService, private http: HttpClient) {}
+    constructor(
+        private authService: AuthService,
+        private http: HttpClient,
+    ) {}
 
     deleteCompetition(id: number) {
         return this.http.delete(apiEndpoints.competition + '/' + id, {
@@ -34,7 +36,7 @@ export class CompetitionsDataService {
         if (params.competition_id)
             httpParams = httpParams.set(
                 'competition_id',
-                params.competition_id
+                params.competition_id,
             );
         if (params.question_id)
             httpParams = httpParams.set('question_id', params.question_id);
@@ -46,7 +48,7 @@ export class CompetitionsDataService {
                 withCredentials: true,
                 observe: 'response',
                 params: httpParams,
-            }
+            },
         );
     }
 
@@ -59,7 +61,7 @@ export class CompetitionsDataService {
             format(
                 apiEndpoints.question,
                 params.competition_id.toString()!,
-                params.question_id.toString() || ''
+                params.question_id.toString() || '',
             ) +
             '/' +
             params.file_type;
@@ -76,7 +78,7 @@ export class CompetitionsDataService {
             format(
                 apiEndpoints.question,
                 params.competition_id.toString()!,
-                params.question_id.toString()!
+                params.question_id.toString()!,
             ) + '/verification';
 
         return this.http.get(endpoint, {
@@ -89,7 +91,7 @@ export class CompetitionsDataService {
     fetchQuality(params: { competition_id: number }) {
         const endpoint = format(
             apiEndpoints.competitionQuality,
-            params.competition_id.toString()!
+            params.competition_id.toString()!,
         );
 
         return this.http.get(endpoint, {
@@ -104,7 +106,7 @@ export class CompetitionsDataService {
             format(
                 apiEndpoints.question,
                 exe.for.competition_id.toString()!,
-                exe.for.question_id.toString()!
+                exe.for.question_id.toString()!,
             ) + '/verification';
 
         return this.http.post(
@@ -114,7 +116,7 @@ export class CompetitionsDataService {
                 responseType: 'json',
                 withCredentials: true,
                 observe: 'response',
-            }
+            },
         );
     }
 
@@ -126,7 +128,7 @@ export class CompetitionsDataService {
                 responseType: 'json',
                 withCredentials: true,
                 observe: 'response',
-            }
+            },
         );
     }
 
@@ -134,7 +136,7 @@ export class CompetitionsDataService {
         const endpoint = format(
             apiEndpoints.question,
             params.competition_id.toString()!,
-            ''
+            '',
         );
         return this.http.post<QuestionInfo>(
             endpoint,
@@ -142,7 +144,7 @@ export class CompetitionsDataService {
             {
                 withCredentials: true,
                 observe: 'response',
-            }
+            },
         );
     }
 
@@ -155,7 +157,7 @@ export class CompetitionsDataService {
         const endpoint = format(
             apiEndpoints.question,
             params.competition_id.toString()!,
-            params.id.toString() || ''
+            params.id.toString() || '',
         );
 
         const data = new FormData();
@@ -172,7 +174,7 @@ export class CompetitionsDataService {
         const endpoint = format(
             apiEndpoints.question,
             params.competition_id.toString()!,
-            params.id.toString() || ''
+            params.id.toString() || '',
         );
         return this.http.delete(endpoint, {
             responseType: 'json',
@@ -185,7 +187,7 @@ export class CompetitionsDataService {
         const endpoint = format(
             apiEndpoints.question,
             params.competition_id.toString()!,
-            params.id.toString() || ''
+            params.id.toString() || '',
         );
 
         return this.http.put(endpoint, params, {
@@ -199,7 +201,7 @@ export class CompetitionsDataService {
         const endpoint = format(
             apiEndpoints.question,
             params.competition_id.toString()!,
-            params.id?.toString() || ''
+            params.id?.toString() || '',
         );
 
         return this.http.get<CompetitionInfo>(endpoint, {
@@ -220,7 +222,7 @@ export class CompetitionsDataService {
                 responseType: 'json',
                 withCredentials: true,
                 observe: 'response',
-            }
+            },
         );
     }
 
@@ -232,7 +234,7 @@ export class CompetitionsDataService {
                 responseType: 'json',
                 withCredentials: true,
                 observe: 'response',
-            }
+            },
         );
     }
 
@@ -241,13 +243,13 @@ export class CompetitionsDataService {
             format(
                 apiEndpoints.competitionInviteDelete,
                 params.comp_id,
-                params.invite_id
+                params.invite_id,
             ),
             {
                 responseType: 'json',
                 withCredentials: true,
                 observe: 'response',
-            }
+            },
         );
     }
 
@@ -258,7 +260,7 @@ export class CompetitionsDataService {
                 responseType: 'json',
                 withCredentials: true,
                 observe: 'response',
-            }
+            },
         );
     }
 
@@ -270,7 +272,7 @@ export class CompetitionsDataService {
                 responseType: 'json',
                 withCredentials: true,
                 observe: 'response',
-            }
+            },
         );
     }
 
@@ -337,8 +339,7 @@ export class CompetitionsDataService {
             httpParams = httpParams.set('invited', params.invited);
         if (params?.after !== undefined)
             httpParams = httpParams.set('after', params.after);
-        if (params?.limit)
-            httpParams = httpParams.set('limit', params.limit);
+        if (params?.limit) httpParams = httpParams.set('limit', params.limit);
 
         return new Promise<{
             data: CompetitionInfo[];
@@ -469,7 +470,8 @@ export class CompetitionsDataService {
         );
         const data = new FormData();
         if (params.title !== undefined) data.append('title', params.title);
-        if (params.content !== undefined) data.append('content', params.content);
+        if (params.content !== undefined)
+            data.append('content', params.content);
         if (file) data.append('file', file);
         return this.http.put<MaterialInfo>(endpoint, data, {
             responseType: 'json',

@@ -7,11 +7,7 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
-import {
-    faArrowPointer,
-    faICursor,
-    faMedal,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import {
     CompetitionInfo,
@@ -122,7 +118,7 @@ export class ScoreboardComponent implements OnInit, OnChanges {
 
     uiShowUserRow() {
         return !this.scores.find(
-            (sc) => sc.user_id === this.meta?.user_details?.user_id
+            (sc) => sc.user_id === this.meta?.user_details?.user_id,
         );
     }
 

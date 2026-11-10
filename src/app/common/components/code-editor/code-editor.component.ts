@@ -8,7 +8,7 @@ import {
     SimpleChanges,
 } from '@angular/core';
 import type * as ace from 'ace-builds';
-import { BehaviorSubject, timeout } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 import { HunterLanguage, templates } from 'src/environments/environment';
 

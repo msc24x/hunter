@@ -1,10 +1,6 @@
-import ejs from 'ejs';
-import { readFileSync } from 'fs';
-import path from 'path';
 import { CompetitionInfo } from '../../config/types';
 import { sendInfoEmail } from '../../services/email';
 import config from '../../config/config';
-import juice from 'juice';
 import { render } from '../renderer';
 import { Util } from '../../util/util';
 

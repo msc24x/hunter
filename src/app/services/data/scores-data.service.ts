@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { format } from 'src/app/utils/utils';
 import {
@@ -23,7 +23,7 @@ export class ScoresDataService {
         var endpoint = format(
             apiEndpoints.results,
             params.comp_id.toString(),
-            params.ques_id.toString()
+            params.ques_id.toString(),
         );
 
         var queryParams = [];
@@ -56,7 +56,7 @@ export class ScoresDataService {
     }) {
         var endpoint = format(
             apiEndpoints.resultsAll,
-            params.comp_id.toString()
+            params.comp_id.toString(),
         );
 
         var queryParams: string[] = [];
@@ -114,12 +114,12 @@ export class ScoresDataService {
             endpoint = format(
                 apiEndpoints.evaluations,
                 params.comp_id.toString(),
-                params.ques_id.toString()
+                params.ques_id.toString(),
             );
         } else {
             endpoint = format(
                 apiEndpoints.evaluationsAll,
-                params.comp_id.toString()
+                params.comp_id.toString(),
             );
         }
 
@@ -134,7 +134,7 @@ export class ScoresDataService {
         var endpoint = format(
             apiEndpoints.evaluations,
             params.comp_id.toString(),
-            params.id.toString()
+            params.id.toString(),
         );
 
         return this.http.put(
@@ -144,7 +144,7 @@ export class ScoresDataService {
                 observe: 'response',
                 responseType: 'json',
                 withCredentials: true,
-            }
+            },
         );
     }
 }

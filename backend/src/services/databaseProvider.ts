@@ -5,7 +5,6 @@ import config from '../config/config';
 import { Competitions } from '../database/models/Competitions';
 import { Results } from '../database/models/Results';
 import { User } from '../database/models/User';
-import { log } from 'console';
 import { PrismaClient } from '@prisma/client';
 
 @Service({ global: true })
@@ -41,7 +40,7 @@ export class DatabaseProvider {
             },
             (err) => {
                 console.error(err);
-            }
+            },
         );
     }
 

@@ -4,15 +4,10 @@ import { isLive, showPopup } from 'src/app/utils/utils';
 import { CompetitionInfo, UserInfo } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
-import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { Title } from '@angular/platform-browser';
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import {
     faGear,
-    faGlobe,
     faHexagonNodesBolt,
-    faLink,
-    faPen,
     faPeopleGroup,
     faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';

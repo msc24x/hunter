@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import { readFileSync } from 'fs';
 import { TransportOptions } from 'nodemailer';
 
 dotenv.config({
@@ -45,7 +44,9 @@ export default {
     // Attempts per provider before failover.
     smtpMaxRetries: parseInt(process.env.SMTP_MAX_RETRIES || '3') || 3,
     // Milliseconds a failed provider is skipped.
-    smtpFailoverCooldownMs: parseInt(process.env.SMTP_FAILOVER_COOLDOWN_MS || '300000'),
+    smtpFailoverCooldownMs: parseInt(
+        process.env.SMTP_FAILOVER_COOLDOWN_MS || '300000',
+    ),
     questionTypes: {
         code: 0,
         mcq: 1,
@@ -71,7 +72,10 @@ export default {
     // Magic-byte validation is performed in routes/materials.ts.
     materialFileLimits: {
         1: { max: 10 * 1024 * 1024, exts: ['pdf'] },
-        2: { max: 5 * 1024 * 1024, exts: ['png', 'jpg', 'jpeg', 'webp', 'gif'] },
+        2: {
+            max: 5 * 1024 * 1024,
+            exts: ['png', 'jpg', 'jpeg', 'webp', 'gif'],
+        },
         3: { max: 50 * 1024 * 1024, exts: ['mp3', 'wav', 'ogg'] },
         4: { max: 100 * 1024 * 1024, exts: ['mp4', 'webm'] },
     },

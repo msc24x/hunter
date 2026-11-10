@@ -1,6 +1,4 @@
-import { exit } from 'process';
 import { DatabaseProvider } from '../services/databaseProvider';
-import { Competitions } from '../database/models/Competitions';
 import Container from 'typedi';
 import 'reflect-metadata';
 import { sendAnnouncementEmail } from '../emails/announcement/sender';
@@ -79,7 +77,7 @@ async function confirmAndSend(users: UserInfo[]) {
 async function main() {
     // Step 1: Ask for single or range
     const isSingle = await askConfirmation(
-        'Do you want to pick a single user id? (No for range)'
+        'Do you want to pick a single user id? (No for range)',
     );
 
     let users: UserInfo[] = [];
@@ -101,7 +99,7 @@ async function main() {
     } else {
         // Step 2: Ask for range
         const input = await askInput(
-            'Enter the user id range as two comma-separated integers (start,end)'
+            'Enter the user id range as two comma-separated integers (start,end)',
         );
         const [start, end] = input
             .split(',')

@@ -1,23 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-    UserInfo,
-    domainName,
-    environment,
-    protocol,
-} from 'src/environments/environment';
+import { UserInfo, environment } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth/auth.service';
 import {
     faBars,
-    faCircleUser,
-    faCompass,
     faMoon,
-    faPlus,
     faPlusCircle,
     faSlash,
     faSun,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { ThemePalette } from '@angular/material/core';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 
 @Component({

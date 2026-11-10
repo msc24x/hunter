@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 import { Util } from '../../util/util';
@@ -12,7 +12,6 @@ import {
     UserInfo,
 } from '../../config/types';
 import { createFile } from '../../util/serverStorage';
-import { error, log } from 'console';
 import { sendCommunityRequestedEmail } from '../../emails/community-requested/sender';
 import { sendMembershipStatusEmail } from '../../emails/membership-status-update/sender';
 
@@ -99,7 +98,7 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
             Util.sendResponse(
                 res,
                 resCode.badRequest,
-                'A non disabled community with the same name already exists on Hunter, please chose a different name'
+                'A non disabled community with the same name already exists on Hunter, please chose a different name',
             );
             return;
         }
@@ -115,7 +114,7 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
             Util.sendResponse(
                 res,
                 resCode.forbidden,
-                `You have reached the limit of 3 communities per account. If you require an exception, please contact support at ${config.support_email}.`
+                `You have reached the limit of 3 communities per account. If you require an exception, please contact support at ${config.support_email}.`,
             );
             return;
         }
@@ -125,7 +124,7 @@ router.post('/communities/create', authenticate, loginRequired, (req, res) => {
                 Util.sendResponse(
                     res,
                     resCode.badRequest,
-                    `You already have an existing community or a creation request with name ${c.name}`
+                    `You already have an existing community or a creation request with name ${c.name}`,
                 );
             }
         }
@@ -275,7 +274,7 @@ router.get(
             .then((community_members) => {
                 Util.sendResponseJson(res, resCode.accepted, community_members);
             });
-    }
+    },
 );
 
 router.get(
@@ -317,7 +316,7 @@ router.get(
             .then((community_members) => {
                 Util.sendResponseJson(res, resCode.accepted, community_members);
             });
-    }
+    },
 );
 
 router.get(
@@ -351,7 +350,7 @@ router.get(
             .then((community_members) => {
                 Util.sendResponseJson(res, resCode.accepted, community_members);
             });
-    }
+    },
 );
 
 function getCommunityPerms(): Promise<CommunityPermission[]> {
@@ -415,7 +414,7 @@ router.patch(
                     });
             });
         });
-    }
+    },
 );
 
 router.patch(
@@ -457,9 +456,7 @@ router.patch(
                 },
                 data: {
                     status: operation as
-                        | 'APPROVED'
-                        | 'NOT_APPROVED'
-                        | 'DISABLED',
+                        'APPROVED' | 'NOT_APPROVED' | 'DISABLED',
                 },
             })
             .then((community_members) => {
@@ -495,13 +492,11 @@ router.patch(
                                     id: member.community_id,
                                     name: member.community.name!,
                                     url: Util.getCommunityURL(
-                                        member.community_id
+                                        member.community_id,
                                     ),
                                 },
                                 status: operation_text as
-                                    | 'Accepted'
-                                    | 'Disabled'
-                                    | 'Rejected',
+                                    'Accepted' | 'Disabled' | 'Rejected',
                                 user: {
                                     name: member.user.name!,
                                     email: member.user.email!,
@@ -510,7 +505,7 @@ router.patch(
                         });
                     });
             });
-    }
+    },
 );
 
 router.post(
@@ -539,7 +534,7 @@ router.post(
                     Util.sendResponse(
                         res,
                         resCode.forbidden,
-                        'Request was already sent'
+                        'Request was already sent',
                     );
                     return;
                 }
@@ -556,7 +551,7 @@ router.post(
                             Util.sendResponse(
                                 res,
                                 resCode.forbidden,
-                                'Can only join Approved Communities'
+                                'Can only join Approved Communities',
                             );
                             return;
                         }
@@ -580,12 +575,12 @@ router.post(
                                 Util.sendResponseJson(
                                     res,
                                     resCode.accepted,
-                                    community_member
+                                    community_member,
                                 );
                             });
                     });
             });
-    }
+    },
 );
 
 function validateCommunityPatch(body: any) {
@@ -623,7 +618,7 @@ router.patch('/communities/:id', authenticate, loginRequired, (req, res) => {
                 return Util.sendResponse(
                     res,
                     resCode.forbidden,
-                    'You are not authorized to update this community'
+                    'You are not authorized to update this community',
                 );
             }
 
@@ -664,7 +659,7 @@ router.post(
                     return Util.sendResponse(
                         res,
                         resCode.forbidden,
-                        'No active membership found for this community'
+                        'No active membership found for this community',
                     );
                 }
 
@@ -674,7 +669,7 @@ router.post(
                 console.error(e);
                 Util.sendResponse(res, resCode.serverError);
             });
-    }
+    },
 );
 
 module.exports = router;

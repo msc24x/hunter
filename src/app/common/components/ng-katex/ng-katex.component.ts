@@ -5,7 +5,6 @@ import {
     OnChanges,
     OnInit,
     SimpleChanges,
-    ViewChild,
 } from '@angular/core';
 
 @Component({
@@ -27,11 +26,7 @@ export class NgKatexComponent implements OnInit, OnChanges {
         return data.match(/((\\\$)|[^\$])+/gi);
     }
 
-    render(
-        katex: typeof import('katex').default,
-        data: string,
-        plain = false,
-    ) {
+    render(katex: typeof import('katex').default, data: string, plain = false) {
         let elem = document.createElement('span') as HTMLSpanElement;
         let paragraph = this.native.firstElementChild!;
 

@@ -2,7 +2,6 @@ import {
     CodeSolution,
     CompetitionInfo,
     HunterExecutable,
-    UserInfo,
 } from '../config/types';
 import config from '../config/config';
 import { fromBuffer } from 'file-type';
@@ -29,12 +28,12 @@ export class Util {
               }
             | CompetitionInfo
             | Array<CompetitionInfo>
-            | any
+            | any,
     ) {
         res.status(code).send(
             JSON.stringify(body, (key, value) =>
-                typeof value === 'bigint' ? value.toString() : value
-            )
+                typeof value === 'bigint' ? value.toString() : value,
+            ),
         );
     }
 
@@ -63,7 +62,7 @@ export class Util {
     static getQuestionFileName(
         comp_id: number,
         ques_id: number,
-        file_type: string
+        file_type: string,
     ) {
         return `${comp_id}_${ques_id}_${file_type}`;
     }
@@ -73,8 +72,8 @@ export class Util {
             Util.getQuestionFileName(
                 hunterExecutable.for.competition_id,
                 hunterExecutable.for.question_id,
-                'solutions'
-            )
+                'solutions',
+            ),
         );
     }
 
@@ -104,7 +103,7 @@ export class Util {
 
     static rowsToCsv(
         rows: any[],
-        headers?: { key: string; label: string; proc?: (v: any) => any }[]
+        headers?: { key: string; label: string; proc?: (v: any) => any }[],
     ): string {
         if (!rows || rows.length === 0) return '';
         if (headers) {
@@ -140,9 +139,9 @@ export class Util {
         const lines = rows.map((r) =>
             keys
                 .map((k) =>
-                    getProc(k) ? escape(getProc(k)!(r[k])) : escape(r[k])
+                    getProc(k) ? escape(getProc(k)!(r[k])) : escape(r[k]),
                 )
-                .join(',')
+                .join(','),
         );
 
         var labelledHeader = headers?.map((v) => v.label) || header;

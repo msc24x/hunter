@@ -1,15 +1,9 @@
 import express, { Request, Response } from 'express';
 import models from '../../database/containers/models';
-import {
-    CodeSolution,
-    HunterExecutable,
-    QuestionInfo,
-    UserInfo,
-} from '../../config/types';
+import { HunterExecutable, QuestionInfo, UserInfo } from '../../config/types';
 import { Util } from '../../util/util';
-import { existsSync, readFile, writeFile } from 'fs';
+import { readFile } from 'fs';
 import { authenticate, loginRequired } from '../auth';
-import { exec } from 'child_process';
 import Container from 'typedi';
 import { JudgeService } from '../../services/judgeService';
 import { ScoreboardService } from '../../services/scoreboardService';
@@ -25,7 +19,7 @@ const scoreboardService = Container.get(ScoreboardService);
 function safeRouteToQuestion(
     req: Request,
     res: Response,
-    type: number
+    type: number,
 ): Promise<QuestionInfo> {
     const hunterExecutable = req.body.exec as HunterExecutable;
 
@@ -89,16 +83,16 @@ function safeRouteToQuestion(
 
                 if (
                     !models.competitions.isLiveNow(
-                        question.competitions.scheduled_at
+                        question.competitions.scheduled_at,
                     ) ||
                     !models.competitions.hasNotEnded(
-                        question.competitions.scheduled_end_at
+                        question.competitions.scheduled_end_at,
                     )
                 ) {
                     Util.sendResponse(
                         res,
                         resCode.forbidden,
-                        'Either the competition is not live or has ended'
+                        'Either the competition is not live or has ended',
                     );
                     return;
                 }
@@ -110,7 +104,7 @@ function safeRouteToQuestion(
                     Util.sendResponse(
                         res,
                         resCode.forbidden,
-                        'Onboarding have not been done for this competition'
+                        'Onboarding have not been done for this competition',
                     );
                     return;
                 }
@@ -124,7 +118,7 @@ function safeRouteToQuestion(
                         Util.sendResponse(
                             res,
                             resCode.forbidden,
-                            'Competition is a members only competition of an inactive community'
+                            'Competition is a members only competition of an inactive community',
                         );
                         return;
                     }
@@ -137,7 +131,7 @@ function safeRouteToQuestion(
                             Util.sendResponse(
                                 res,
                                 resCode.forbidden,
-                                'Competition is a members only competition of the community'
+                                'Competition is a members only competition of the community',
                             );
                             return;
                         }
@@ -153,14 +147,14 @@ function safeRouteToQuestion(
                         question.competitions.competition_sessions[0]
                             .created_at;
                     time_limit_end_at = new Date(
-                        time_limit_end_at.getTime() + time_limit * 60 * 1000
+                        time_limit_end_at.getTime() + time_limit * 60 * 1000,
                     );
 
                     if (!models.competitions.hasNotEnded(time_limit_end_at)) {
                         Util.sendResponse(
                             res,
                             resCode.forbidden,
-                            'Time limit for this contest has exceeded, cannot send any more submissions'
+                            'Time limit for this contest has exceeded, cannot send any more submissions',
                         );
                         return;
                     }
@@ -204,7 +198,7 @@ function judgeCodeQuestion(req: Request, res: Response) {
                     hunterExecutable,
                     samples,
                     question as QuestionInfo,
-                    user
+                    user,
                 );
 
                 if (!samples)
@@ -212,7 +206,7 @@ function judgeCodeQuestion(req: Request, res: Response) {
                         user,
                         hunterExecutable,
                         resInfo,
-                        question as QuestionInfo
+                        question as QuestionInfo,
                     );
 
                 Util.sendResponseJson(res, resCode.success, resInfo);
@@ -220,7 +214,7 @@ function judgeCodeQuestion(req: Request, res: Response) {
                 console.log(err);
                 Util.sendResponse(res, resCode.serverError);
             }
-        }
+        },
     );
 }
 
@@ -250,7 +244,7 @@ function judgeMcqQuestion(req: Request, res: Response) {
             Util.sendResponse(
                 res,
                 resCode.badRequest,
-                'Host did not configure the question properly, cannot accept a submission for this.'
+                'Host did not configure the question properly, cannot accept a submission for this.',
             );
             return;
         }
@@ -262,7 +256,7 @@ function judgeMcqQuestion(req: Request, res: Response) {
             Util.sendResponse(
                 res,
                 resCode.badRequest,
-                `Required number of choices are not selected, ${chosenChoices.length}/${correctChoices.length}`
+                `Required number of choices are not selected, ${chosenChoices.length}/${correctChoices.length}`,
             );
             return;
         }
@@ -299,7 +293,7 @@ function judgeMcqQuestion(req: Request, res: Response) {
                     Util.sendResponse(
                         res,
                         resCode.badRequest,
-                        'Already submitted a response'
+                        'Already submitted a response',
                     );
                     return;
                 }
@@ -315,7 +309,7 @@ function judgeMcqQuestion(req: Request, res: Response) {
                     user,
                     hunterExecutable,
                     resInfo,
-                    question
+                    question,
                 );
 
                 Util.sendResponseJson(res, resCode.success, resInfo);
@@ -353,7 +347,7 @@ function judgeFillQuestion(req: Request, res: Response) {
                 Util.sendResponse(
                     res,
                     resCode.badRequest,
-                    'Host did not configure the question properly, cannot accept a submission for this.'
+                    'Host did not configure the question properly, cannot accept a submission for this.',
                 );
                 return;
             }
@@ -391,7 +385,7 @@ function judgeFillQuestion(req: Request, res: Response) {
                         Util.sendResponse(
                             res,
                             resCode.badRequest,
-                            'Already submitted a response'
+                            'Already submitted a response',
                         );
                         return;
                     }
@@ -407,12 +401,12 @@ function judgeFillQuestion(req: Request, res: Response) {
                         user,
                         hunterExecutable,
                         resInfo,
-                        question
+                        question,
                     );
 
                     Util.sendResponseJson(res, resCode.success, resInfo);
                 });
-        }
+        },
     );
 }
 
@@ -437,7 +431,7 @@ function judgeLongQuestion(req: Request, res: Response) {
                     Util.sendResponse(
                         res,
                         resCode.badRequest,
-                        `The number of words in the answer are less than the acceptable number (${question.char_limit}) for this question, please write more words to submit.`
+                        `The number of words in the answer are less than the acceptable number (${question.char_limit}) for this question, please write more words to submit.`,
                     );
                     return;
                 }
@@ -471,7 +465,7 @@ function judgeLongQuestion(req: Request, res: Response) {
                         Util.sendResponse(
                             res,
                             resCode.badRequest,
-                            'Already submitted a response'
+                            'Already submitted a response',
                         );
                         return;
                     }
@@ -486,12 +480,12 @@ function judgeLongQuestion(req: Request, res: Response) {
                             success: success,
                         },
                         question,
-                        question.competitions!.practice
+                        question.competitions!.practice,
                     );
 
                     Util.sendResponse(res, resCode.success);
                 });
-        }
+        },
     );
 }
 
@@ -580,7 +574,7 @@ router.get('/submission/:lang', authenticate, loginRequired, (req, res) => {
                     Util.sendResponseJson(res, resCode.success, {
                         data: data,
                     });
-                }
+                },
             );
         });
 });

@@ -7,8 +7,6 @@ import { DocsMcpComponent } from './pages/docs-mcp/docs-mcp.component';
 import { DesignSystemComponent } from './pages/design-system/design-system.component';
 import { environment } from 'src/environments/environment';
 import { CompeteComponent } from '../compete/pages/compete/compete.component';
-import { CommunityComponent } from '../community/pages/community/community.component';
-
 const routes: Routes = [
     {
         'path': '',

@@ -1,7 +1,6 @@
 import { QueryError } from 'mysql2';
 import { QuestionInfo } from '../../config/types';
-import { Competitions } from './Competitions';
-import Container, { Inject, Service } from 'typedi';
+import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 
 export class Questions {
@@ -57,30 +56,34 @@ export class Questions {
         callback: (question_id: number) => void,
         errCallback: (err: QueryError | null) => void,
     ) {
-        this.dbService.pool().query(
-            ` insert into questions (competition_id, date_created) values(?, NOW()) ; `,
-            [competition_id],
-            (err) => {
-                if (err) {
-                    errCallback(err);
-                    return;
-                }
-                this.dbService.pool().query(
-                    ` select * from questions where competition_id = ? order by date_created ;`,
-                    [competition_id],
-                    (err, rows) => {
-                        var questions = rows as Array<QuestionInfo>;
+        this.dbService
+            .pool()
+            .query(
+                ` insert into questions (competition_id, date_created) values(?, NOW()) ; `,
+                [competition_id],
+                (err) => {
+                    if (err) {
+                        errCallback(err);
+                        return;
+                    }
+                    this.dbService
+                        .pool()
+                        .query(
+                            ` select * from questions where competition_id = ? order by date_created ;`,
+                            [competition_id],
+                            (err, rows) => {
+                                var questions = rows as Array<QuestionInfo>;
 
-                        if (err || questions.length == 0) {
-                            errCallback(err);
-                            return;
-                        }
+                                if (err || questions.length == 0) {
+                                    errCallback(err);
+                                    return;
+                                }
 
-                        callback(questions[0].id);
-                    },
-                );
-            },
-        );
+                                callback(questions[0].id);
+                            },
+                        );
+                },
+            );
     }
 
     update(newQuestion: any, callback: (err: QueryError | null) => void) {

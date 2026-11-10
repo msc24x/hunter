@@ -1,6 +1,6 @@
 import mysql, { QueryError } from 'mysql2';
 import { UserInfo } from '../../config/types';
-import Container, { Inject, Service } from 'typedi';
+import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
 
 export class User {
@@ -52,13 +52,15 @@ export class User {
         newUserInfo: UserInfo,
         callback: (err: mysql.QueryError | null) => void,
     ) {
-        this.dbService.pool().query(
-            ` update users set name = ? where id = ? ; `,
-            [newUserInfo.name, newUserInfo.id],
-            (err) => {
-                callback(err);
-            },
-        );
+        this.dbService
+            .pool()
+            .query(
+                ` update users set name = ? where id = ? ; `,
+                [newUserInfo.name, newUserInfo.id],
+                (err) => {
+                    callback(err);
+                },
+            );
     }
 
     findAll(
@@ -88,9 +90,9 @@ export class User {
     }
 
     count(callback: (err: QueryError | null, rows: any) => void) {
-        this.dbService.pool().query(
-            ' select count(*) as count from users;',
-            (err, rows) => {
+        this.dbService
+            .pool()
+            .query(' select count(*) as count from users;', (err, rows) => {
                 if (err) {
                     console.log(err);
                     callback(err, null);
@@ -98,7 +100,6 @@ export class User {
                 }
 
                 callback(null, rows);
-            },
-        );
+            });
     }
 }

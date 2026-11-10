@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { timeout } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommunitiesDataService } from 'src/app/services/communities-data/communities-data.service';
 import { Community, UserInfo } from 'src/environments/environment';
@@ -32,7 +31,7 @@ export class CreateCommunityComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private titleService: Title,
         private snackBar: MatSnackBar,
-        private communityService: CommunitiesDataService
+        private communityService: CommunitiesDataService,
     ) {
         titleService.setTitle('Communities - Hunter');
 
@@ -59,7 +58,7 @@ export class CreateCommunityComponent implements OnInit, OnDestroy {
                 },
                 (err) => {
                     this.loading--;
-                }
+                },
             );
         } else {
         }
@@ -104,7 +103,7 @@ export class CreateCommunityComponent implements OnInit, OnDestroy {
                 (res) => {
                     if (res.ok) {
                         this.snackBar.open(
-                            'Request sent, thank you! Redirecting to Compete page...'
+                            'Request sent, thank you! Redirecting to Compete page...',
                         );
 
                         setTimeout(() => {
@@ -112,7 +111,7 @@ export class CreateCommunityComponent implements OnInit, OnDestroy {
                         }, 1000);
                     } else {
                         this.snackBar.open(
-                            'There are some issues, please check the form.'
+                            'There are some issues, please check the form.',
                         );
                     }
                     this.loading--;
@@ -125,7 +124,7 @@ export class CreateCommunityComponent implements OnInit, OnDestroy {
                         return;
                     }
                     this.errors = error.error;
-                }
+                },
             );
     }
 }

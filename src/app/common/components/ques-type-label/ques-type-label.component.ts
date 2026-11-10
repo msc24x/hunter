@@ -3,7 +3,6 @@ import {
     faCode,
     faCheckDouble,
     faCircleHalfStroke,
-    faParagraph,
     faAlignLeft,
 } from '@fortawesome/free-solid-svg-icons';
 

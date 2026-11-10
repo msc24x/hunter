@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { CommonModule as HunterCommonModule } from 'src/app/common/common.module';
 import { EditorComponent } from './pages/editor/editor.component';
 import { EditorMenuComponent } from './pages/editor-menu/editor-menu.component';

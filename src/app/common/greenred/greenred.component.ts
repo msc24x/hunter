@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
     selector: 'greenred',
@@ -22,7 +22,7 @@ export class GreenredComponent implements OnChanges {
 
     ngOnChanges(): void {
         this.green_ratio = Math.round(
-            (this.green_number * 100) / (this.green_number + this.red_number)
+            (this.green_number * 100) / (this.green_number + this.red_number),
         );
     }
 }

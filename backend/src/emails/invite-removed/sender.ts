@@ -1,10 +1,5 @@
-import ejs from 'ejs';
-import { readFileSync } from 'fs';
-import path from 'path';
-import { CompetitionInfo, CompetitionInvite } from '../../config/types';
+import { CompetitionInvite } from '../../config/types';
 import { sendInfoEmail } from '../../services/email';
-import config from '../../config/config';
-import juice from 'juice';
 import { render } from '../renderer';
 import { Util } from '../../util/util';
 import Container from 'typedi';
@@ -32,7 +27,7 @@ export function sendInviteRemovedEmail(competition_invite: CompetitionInvite) {
     data.user = {
         email: competition.host_user!.email,
         name: Util.getFirstName(
-            competition.host_user!.name || 'Anonymous Hunter user'
+            competition.host_user!.name || 'Anonymous Hunter user',
         ),
     };
 

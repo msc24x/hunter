@@ -6,7 +6,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
-import { last, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ScoresDataService } from 'src/app/services/data/scores-data.service';
 import {
     CompetitionInfo,
@@ -18,8 +18,6 @@ import {
     QuestionInfo,
     resCode,
     result,
-    resultFull,
-    templates,
     UserInfo,
     environment,
     QuestionChoice,
@@ -42,13 +40,9 @@ import {
     faEnvelopeCircleCheck,
     faEnvelopeOpenText,
     faExpand,
-    faFileCode,
-    faFlag,
     faHourglassHalf,
     faLock,
-    faMeteor,
     faPlay,
-    faPuzzlePiece,
     faRotateRight,
     faSitemap,
     faSpinner,
@@ -60,7 +54,6 @@ import {
     faShareAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { faCircle, faClock } from '@fortawesome/free-regular-svg-icons';
@@ -463,9 +456,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const selectedQuestion = this.competition.questions?.[
-            this.questionSelected
-        ];
+        const selectedQuestion =
+            this.competition.questions?.[this.questionSelected];
         if (!selectedQuestion) {
             this.snackBar.open('Please select a question first');
             return;

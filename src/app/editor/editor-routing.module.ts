@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { EditorMenuComponent } from './pages/editor-menu/editor-menu.component';
 import { EditorComponent } from './pages/editor/editor.component';
 import { InsightsComponent } from './pages/insights/insights.component';
-import { ScoreboardComponent } from '../common/components/scoreboard/scoreboard.component';
-
 const routes: Routes = [
     {
         'path': 'workbench',

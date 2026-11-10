@@ -14,7 +14,6 @@ import {
     faCircleExclamation,
     faCircleXmark,
     faQuestionCircle,
-    faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { CompetitionsDataService } from 'src/app/services/competitions-data/competitions-data.service';
 import {
@@ -23,12 +22,7 @@ import {
     QuestionProgress,
 } from 'src/environments/environment';
 
-import {
-    CdkDragDrop,
-    CdkDropList,
-    CdkDrag,
-    moveItemInArray,
-} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

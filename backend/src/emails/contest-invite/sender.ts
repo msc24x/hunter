@@ -1,10 +1,6 @@
-import ejs from 'ejs';
-import { readFileSync } from 'fs';
-import path from 'path';
-import { CompetitionInfo, CompetitionInvite } from '../../config/types';
+import { CompetitionInvite } from '../../config/types';
 import { sendInfoEmail } from '../../services/email';
 import config from '../../config/config';
-import juice from 'juice';
 import { render } from '../renderer';
 import { Util } from '../../util/util';
 import Container from 'typedi';
@@ -27,7 +23,7 @@ export function sendContentInviteEmail(competition_invite: CompetitionInvite) {
     var competition = competition_invite.competition!;
 
     var inviteId = encodeURIComponent(
-        btoa(`${competition_invite.id}-${competition_invite.uuid}`)
+        btoa(`${competition_invite.id}-${competition_invite.uuid}`),
     );
 
     data.contest = {

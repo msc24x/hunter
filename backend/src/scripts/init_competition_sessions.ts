@@ -1,4 +1,3 @@
-import { exit } from 'process';
 import { DatabaseProvider } from '../services/databaseProvider';
 
 var client = new DatabaseProvider().client();
@@ -32,7 +31,7 @@ async function main() {
             var comp_id = res.question.competitions.id;
             var sessionExists =
                 user.competition_sessions.filter(
-                    (cs) => cs.competition_id === comp_id
+                    (cs) => cs.competition_id === comp_id,
                 ).length > 0;
 
             if (sessionExists || seen_contests.includes(comp_id)) {
@@ -43,7 +42,7 @@ async function main() {
             var last_success = user.results
                 .filter(
                     (ur) =>
-                        ur.question.competitions.id === comp_id && ur.accepted
+                        ur.question.competitions.id === comp_id && ur.accepted,
                 )
                 .sort((p, q) => q.id - p.id)?.[0]?.created_at;
 

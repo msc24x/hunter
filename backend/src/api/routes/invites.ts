@@ -7,7 +7,6 @@ import { resCode } from '../../config/settings';
 import { Sanitizer } from '../../util/sanitizer/sanitizer';
 import { authenticate, loginRequired } from '../auth';
 import { Competitions } from '../../database/models/Competitions';
-import models from '../../database/containers/models';
 import { sendInviteRemovedEmail } from '../../emails/invite-removed/sender';
 
 var router = express.Router();
@@ -93,8 +92,8 @@ router.post(
                                     res,
                                     resCode.success,
                                     await Competitions.getInvites(
-                                        competition.id
-                                    )
+                                        competition.id,
+                                    ),
                                 );
                                 Competitions.sendInviteEmailToPending(comp_id);
                                 Competitions.setVisibility(comp_id, 'INVITE');
@@ -104,16 +103,16 @@ router.post(
                                 Util.sendResponseJson(
                                     res,
                                     resCode.serverError,
-                                    err
+                                    err,
                                 );
-                            }
+                            },
                         );
                 },
                 (err) => {
                     Util.sendResponse(res, resCode.serverError);
-                }
+                },
             );
-    }
+    },
 );
 
 router.get('/competitions/invites/:invite_id', (req, res) => {
@@ -183,7 +182,7 @@ router.post(
             .then(() => {
                 Util.sendResponse(res, resCode.success);
             });
-    }
+    },
 );
 
 router.delete(
@@ -222,7 +221,7 @@ router.delete(
                 console.error(err);
                 Util.sendResponse(res, resCode.serverError);
             });
-    }
+    },
 );
 
 module.exports = router;

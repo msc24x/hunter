@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './common/pages/not-found/not-found.component';
-import { ImpersonationInterceptor } from './interceptors/impersonation.interceptor';
-
 const routes: Routes = [
     {
         'path': '',
@@ -23,7 +21,7 @@ const routes: Routes = [
         'path': 'communities',
         'loadChildren': () =>
             import('./community/community.module').then(
-                (m) => m.CommunityModule
+                (m) => m.CommunityModule,
             ),
     },
     {
