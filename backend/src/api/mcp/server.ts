@@ -1,6 +1,8 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { HunterClient } from './hunter-client';
+import { registerCommunityTools } from './tools/communities';
 import { registerContestTools } from './tools/contests';
+import { registerMaterialTools } from './tools/materials';
 import { registerQuestionTools } from './tools/questions';
 
 export function buildMcpServer(hunter: HunterClient) {
@@ -11,6 +13,8 @@ export function buildMcpServer(hunter: HunterClient) {
 
     registerContestTools(server, hunter);
     registerQuestionTools(server, hunter);
+    registerCommunityTools(server, hunter);
+    registerMaterialTools(server, hunter);
 
     return server;
 }
