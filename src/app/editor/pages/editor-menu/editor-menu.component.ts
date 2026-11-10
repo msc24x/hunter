@@ -10,8 +10,10 @@ import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import {
     faGear,
     faGlobe,
+    faHexagonNodesBolt,
     faLink,
     faPen,
+    faPeopleGroup,
     faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -25,6 +27,8 @@ export class EditorMenuComponent implements OnInit {
 
     penIcon = faGear;
     linkIcon = faUpRightFromSquare;
+    hexIcon = faHexagonNodesBolt;
+    communityIcon = faPeopleGroup;
 
     isAuthenticated: boolean = false;
     user = {

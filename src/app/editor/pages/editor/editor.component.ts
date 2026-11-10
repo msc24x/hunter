@@ -28,6 +28,7 @@ import {
     faUpload,
     faWandMagicSparkles,
     faPaperclip,
+    faHexagonNodesBolt,
 } from '@fortawesome/free-solid-svg-icons';
 import { error } from 'console';
 import katex from 'katex';
@@ -84,7 +85,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     copyIcon = faCopy;
     importIcon = faFileImport;
     materialsIcon = faPaperclip;
-    mcpIcon = faStarOfLife;
+    mcpIcon = faHexagonNodesBolt;
 
     loading = false;
     preview_mode = false;
@@ -456,8 +457,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.questionSelectedInfo =
             index == -1
                 ? ({} as QuestionInfo)
-                : this.competitionInfo.questions?.[index] ??
-                  ({} as QuestionInfo);
+                : (this.competitionInfo.questions?.[index] ??
+                  ({} as QuestionInfo));
 
         // Keep the URL in sync so refresh restores the same question.
         if (index >= 0 && this.competition_id) {
@@ -534,7 +535,8 @@ export class EditorComponent implements OnInit, OnDestroy {
                     ['preview', 'print'],
                     ['undo', 'redo'],
                 ],
-                defaultStyle: 'font-family: appFont; font-size: var(--fs-body-lg);',
+                defaultStyle:
+                    'font-family: appFont; font-size: var(--fs-body-lg);',
             });
 
             this.suneditor.onChange = (contents: string, core: Core) => {
@@ -890,10 +892,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.materialsBrowserVisible = false;
     }
 
-    handleMaterialsUnlink(event: {
-        material_id: number;
-        question_id: number;
-    }) {
+    handleMaterialsUnlink(event: { material_id: number; question_id: number }) {
         // Stage the unlink in the local competition model so that the
         // affected question's "Save changes" persists it.
         const q = this.competitionInfo.questions?.find(

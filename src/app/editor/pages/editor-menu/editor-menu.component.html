@@ -30,17 +30,21 @@
                 message="Number of Public Competitions"
             ></dashboard-card>
             <div class="community-ad" routerLink="/communities/create">
-                Are you a Community, College or a School?
+                <fa-icon [icon]="communityIcon" size="2x"></fa-icon>
+                <br /><br />
+
+                Strengthen your community
                 <div class="more">
                     Create a Hunter Community to represent your institution.
                     Click here to learn more.
                 </div>
             </div>
             <div class="community-ad mcp-ad" routerLink="/docs/mcp">
+                <fa-icon [icon]="hexIcon" size="2x"></fa-icon> <br /><br />
                 Automate contest hosting with AI
                 <div class="more">
-                    Connect your AI assistant to Hunter via MCP.
-                    Click here to learn more.
+                    Connect your AI assistant to Hunter via MCP. Click here to
+                    learn more.
                 </div>
             </div>
         </div>
