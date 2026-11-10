@@ -50,8 +50,8 @@ import {
     faTableColumns,
     faTicket,
     faUserMinus,
-    faVolleyball,
     faShareAlt,
+    faRepeat,
 } from '@fortawesome/free-solid-svg-icons';
 import { prettyDuration } from 'src/app/utils/utils';
 import { Title } from '@angular/platform-browser';
@@ -78,7 +78,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     tickIcon = faCheckCircle;
     circleIcon = faCircle;
     clockIcon = faClock;
-    practiceIcon = faVolleyball;
+    practiceIcon = faRepeat;
     ticketIcon = faTicket;
     stopwatchIcon = faStopwatch;
     editIcon = faEdit;
