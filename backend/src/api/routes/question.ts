@@ -41,6 +41,21 @@ var router = express.Router();
 const client = Container.get(DatabaseProvider).client();
 const judgeService = Container.get(JudgeService);
 
+function findHostQuestion(comp_id: number, ques_id: number, user: UserInfo) {
+    return client.questions.findUnique({
+        where: {
+            id: ques_id,
+            competition_id: comp_id,
+            competitions: {
+                host_user_id: user.id,
+                deleted_at: null,
+            },
+            deleted_at: null,
+        },
+        select: { id: true },
+    });
+}
+
 router.get(
     '/competitions/:comp_id/questions/:id/verification',
     authenticate,
@@ -108,19 +123,7 @@ router.post(
             return;
         }
 
-        client.questions
-            .findUnique({
-                where: {
-                    id: ques_id,
-                    competition_id: comp_id,
-                    competitions: {
-                        host_user_id: user.id,
-                        deleted_at: null,
-                    },
-                    deleted_at: null,
-                },
-                select: { id: true },
-            })
+        findHostQuestion(comp_id, ques_id, user)
             .then((question) => {
                 if (!question) {
                     Util.sendResponse(res, resCode.notFound);
@@ -218,19 +221,7 @@ router.get(
             return;
         }
 
-        client.questions
-            .findUnique({
-                where: {
-                    id: ques_id,
-                    competition_id: comp_id,
-                    competitions: {
-                        host_user_id: user.id,
-                        deleted_at: null,
-                    },
-                    deleted_at: null,
-                },
-                select: { id: true },
-            })
+        findHostQuestion(comp_id, ques_id, user)
             .then(async (question) => {
                 if (!question) {
                     Util.sendResponse(res, resCode.notFound);
@@ -307,19 +298,7 @@ router.post(
             return;
         }
 
-        client.questions
-            .findUnique({
-                where: {
-                    id: ques_id,
-                    competition_id: comp_id,
-                    competitions: {
-                        host_user_id: user.id,
-                        deleted_at: null,
-                    },
-                    deleted_at: null,
-                },
-                select: { id: true },
-            })
+        findHostQuestion(comp_id, ques_id, user)
             .then((question) => {
                 if (!question) {
                     Util.sendResponse(res, resCode.notFound);

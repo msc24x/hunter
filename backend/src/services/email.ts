@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import config from '../config/config';
+import { render } from '../emails/renderer';
 
 interface EmailBody {
     from: string;
@@ -113,4 +114,22 @@ export function sendInfoEmail(params: {
             ...params.body,
         },
     });
+}
+
+// Renders an emails/<template>/html.ejs template and sends it through the
+// configured SMTP providers. Resolves once the message has been handed off.
+export function sendRenderedEmail(
+    data: any,
+    template: string,
+    options: { to: string; subject: string },
+): Promise<void> {
+    return render(data, template).then((html) =>
+        sendInfoEmail({
+            body: {
+                to: options.to,
+                subject: options.subject,
+                html,
+            },
+        }),
+    );
 }

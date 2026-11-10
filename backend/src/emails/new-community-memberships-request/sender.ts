@@ -1,5 +1,5 @@
-import { sendInfoEmail } from '../../services/email';
-import { render } from '../renderer';
+import { sendRenderedEmail } from '../../services/email';
+
 // Type for template data
 interface EmailData {
     user: { email: string; name: string };
@@ -13,22 +13,8 @@ interface EmailData {
 }
 
 export function sendCommunityMembershipsRequest(data: EmailData) {
-    let p = new Promise<void>((resolve, reject) => {
-        render(data, 'new-community-memberships-request').then((html) => {
-            sendInfoEmail({
-                body: {
-                    to: `${data.user.name || 'Hunter user'} <${
-                        data.user.email
-                    }>`,
-                    subject: `New pending requests to join your Hunter Communities - ${data.total} new`,
-                    html: html,
-                },
-            }).then(
-                () => resolve(),
-                () => reject(),
-            );
-        });
+    return sendRenderedEmail(data, 'new-community-memberships-request', {
+        to: `${data.user.name || 'Hunter user'} <${data.user.email}>`,
+        subject: `New pending requests to join your Hunter Communities - ${data.total} new`,
     });
-
-    return p;
 }

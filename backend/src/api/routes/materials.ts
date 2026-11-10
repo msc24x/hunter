@@ -19,6 +19,83 @@ function materialFilePath(materialId: number, ext: string): string {
     return `${config.fileScopes.materials}${materialId}.${ext}`;
 }
 
+// Fetches a material only when it belongs to a competition hosted by `user`.
+// Returns null when missing or not owned — callers respond 404.
+async function findOwnedMaterial(
+    id: number,
+    user: UserInfo,
+    select: any,
+): Promise<any> {
+    const material: any = await client.materials.findUnique({
+        where: { id },
+        select: {
+            ...select,
+            competition: { select: { host_user_id: true } },
+        },
+    });
+
+    if (!material || material.competition.host_user_id !== user.id) {
+        return null;
+    }
+
+    return material;
+}
+
+// Validates an uploaded material file against the type's size/format
+// limits. Returns the buffer + detected extension, or an error message
+// for the `errors` bag.
+async function validateMaterialFile(
+    uploaded: fileUpload.UploadedFile | undefined,
+    type: number,
+): Promise<{
+    buffer: Buffer | null;
+    ext: string | null;
+    error: string | null;
+}> {
+    if (!uploaded) {
+        return {
+            buffer: null,
+            ext: null,
+            error: 'A file is required for this material type',
+        };
+    }
+
+    const limit = (config.materialFileLimits as any)[type];
+
+    if (uploaded.size > limit.max) {
+        return {
+            buffer: null,
+            ext: null,
+            error: `File size exceeds the ${Math.floor(
+                limit.max / (1024 * 1024),
+            )}MB limit for this material type`,
+        };
+    }
+
+    const buffer = Buffer.from(uploaded.data);
+    const detected = await detectFileFormat(buffer, uploaded.name);
+
+    if (!detected) {
+        return {
+            buffer: null,
+            ext: null,
+            error: 'File format could not be recognized',
+        };
+    }
+
+    if (!limit.exts.includes(detected)) {
+        return {
+            buffer: null,
+            ext: null,
+            error: `File format ${detected} is not allowed for this material type (allowed: ${limit.exts.join(
+                ', ',
+            )})`,
+        };
+    }
+
+    return { buffer, ext: detected, error: null };
+}
+
 // GET /competitions/:comp_id/materials
 // Host: list all (incl. soft-deleted? no — only live). Participant: gated by question GET logic.
 router.get(
@@ -134,37 +211,30 @@ router.get(
         const user: UserInfo = res.locals.user;
 
         try {
-            const material = await client.materials.findUnique({
-                where: { id },
-                select: {
-                    id: true,
-                    title: true,
-                    type: true,
-                    content: true,
-                    file_path: true,
-                    file_size: true,
-                    created_at: true,
-                    updated_at: true,
-                    competition: { select: { host_user_id: true } },
-                    question_materials: {
-                        where: { question: { deleted_at: null } },
-                        select: {
-                            question_id: true,
-                            material_id: true,
-                            position: true,
-                            question: {
-                                select: { id: true, title: true },
-                            },
+            const material = await findOwnedMaterial(id, user, {
+                id: true,
+                title: true,
+                type: true,
+                content: true,
+                file_path: true,
+                file_size: true,
+                created_at: true,
+                updated_at: true,
+                question_materials: {
+                    where: { question: { deleted_at: null } },
+                    select: {
+                        question_id: true,
+                        material_id: true,
+                        position: true,
+                        question: {
+                            select: { id: true, title: true },
                         },
-                        orderBy: { position: 'asc' },
                     },
+                    orderBy: { position: 'asc' },
                 },
             });
 
-            if (
-                !material ||
-                material.competition.host_user_id !== user.id
-            ) {
+            if (!material) {
                 Util.sendResponse(res, resCode.notFound);
                 return;
             }
@@ -209,28 +279,13 @@ router.post(
 
         if (isFileType) {
             const uploaded = req.files?.file as
-                | fileUpload.UploadedFile
-                | undefined;
-            if (!uploaded) {
-                errors.file = 'A file is required for this material type';
+                fileUpload.UploadedFile | undefined;
+            const result = await validateMaterialFile(uploaded, type);
+            if (result.error) {
+                errors.file = result.error;
             } else {
-                const limit = (config.materialFileLimits as any)[type];
-                if (uploaded.size > limit.max) {
-                    errors.file = `File size exceeds the ${Math.floor(
-                        limit.max / (1024 * 1024),
-                    )}MB limit for this material type`;
-                }
-                fileBuffer = Buffer.from(uploaded.data);
-                const detected = await detectFileFormat(fileBuffer, uploaded.name);
-                if (!detected) {
-                    errors.file = 'File format could not be recognized';
-                } else if (!limit.exts.includes(detected)) {
-                    errors.file = `File format ${detected} is not allowed for this material type (allowed: ${limit.exts.join(
-                        ', ',
-                    )})`;
-                } else {
-                    fileExt = detected;
-                }
+                fileBuffer = result.buffer;
+                fileExt = result.ext;
             }
         } else {
             // rich_text
@@ -322,19 +377,12 @@ router.put(
         }
 
         try {
-            const material = await client.materials.findUnique({
-                where: { id },
-                select: {
-                    id: true,
-                    type: true,
-                    file_path: true,
-                    competition: { select: { host_user_id: true } },
-                },
+            const material = await findOwnedMaterial(id, user, {
+                id: true,
+                type: true,
+                file_path: true,
             });
-            if (
-                !material ||
-                material.competition.host_user_id !== user.id
-            ) {
+            if (!material) {
                 Util.sendResponse(res, resCode.notFound);
                 return;
             }
@@ -345,31 +393,17 @@ router.put(
 
             if (isFileType) {
                 const uploaded = req.files?.file as
-                    | fileUpload.UploadedFile
-                    | undefined;
+                    fileUpload.UploadedFile | undefined;
                 if (uploaded) {
-                    const limit = (config.materialFileLimits as any)[
-                        material.type
-                    ];
-                    if (uploaded.size > limit.max) {
-                        errors.file = `File size exceeds the ${Math.floor(
-                            limit.max / (1024 * 1024),
-                        )}MB limit for this material type`;
+                    const result = await validateMaterialFile(
+                        uploaded,
+                        material.type,
+                    );
+                    if (result.error) {
+                        errors.file = result.error;
                     } else {
-                        newFileBuffer = Buffer.from(uploaded.data);
-                        const detected = await detectFileFormat(
-                            newFileBuffer,
-                            uploaded.name,
-                        );
-                        if (!detected) {
-                            errors.file = 'File format could not be recognized';
-                        } else if (!limit.exts.includes(detected)) {
-                            errors.file = `File format ${detected} is not allowed for this material type (allowed: ${limit.exts.join(
-                                ', ',
-                            )})`;
-                        } else {
-                            newFileExt = detected;
-                        }
+                        newFileBuffer = result.buffer;
+                        newFileExt = result.ext;
                     }
                 }
                 if (body.content != null) {
@@ -457,18 +491,11 @@ router.delete(
         const user: UserInfo = res.locals.user;
 
         try {
-            const material = await client.materials.findUnique({
-                where: { id },
-                select: {
-                    id: true,
-                    file_path: true,
-                    competition: { select: { host_user_id: true } },
-                },
+            const material = await findOwnedMaterial(id, user, {
+                id: true,
+                file_path: true,
             });
-            if (
-                !material ||
-                material.competition.host_user_id !== user.id
-            ) {
+            if (!material) {
                 Util.sendResponse(res, resCode.notFound);
                 return;
             }

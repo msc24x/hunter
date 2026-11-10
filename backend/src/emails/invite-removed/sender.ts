@@ -1,6 +1,5 @@
 import { CompetitionInvite } from '../../config/types';
-import { sendInfoEmail } from '../../services/email';
-import { render } from '../renderer';
+import { sendRenderedEmail } from '../../services/email';
 import { Util } from '../../util/util';
 
 // Type for template data
@@ -29,15 +28,8 @@ export function sendInviteRemovedEmail(competition_invite: CompetitionInvite) {
         ),
     };
 
-    render(data, 'invite-removed').then((html) => {
-        sendInfoEmail({
-            body: {
-                to: `${competition_invite!.email} <${
-                    competition_invite!.email
-                }>`,
-                subject: `Invited contest access revoked`,
-                html: html,
-            },
-        });
+    sendRenderedEmail(data, 'invite-removed', {
+        to: `${competition_invite!.email} <${competition_invite!.email}>`,
+        subject: `Invited contest access revoked`,
     });
 }

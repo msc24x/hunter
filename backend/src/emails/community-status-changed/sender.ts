@@ -1,7 +1,7 @@
 import { Community, UserInfo } from '../../config/types';
-import { sendInfoEmail } from '../../services/email';
+import { sendRenderedEmail } from '../../services/email';
 import config from '../../config/config';
-import { render } from '../renderer';
+
 // Type for template data
 interface EmailData {
     user: UserInfo;
@@ -15,22 +15,8 @@ export function sendCommunityStatusChangedEmail(data: EmailData) {
 
     data.reason = data.reason || '(No reason given)';
 
-    let p = new Promise<void>((resolve, reject) => {
-        render(data, 'community-status-changed').then((html) => {
-            sendInfoEmail({
-                body: {
-                    to: `${data.user.name || 'Hunter user'} <${
-                        data.user.email
-                    }>`,
-                    subject: `Hunter Communities: Community status changed `,
-                    html: html,
-                },
-            }).then(
-                () => resolve(),
-                () => reject(),
-            );
-        });
+    return sendRenderedEmail(data, 'community-status-changed', {
+        to: `${data.user.name || 'Hunter user'} <${data.user.email}>`,
+        subject: `Hunter Communities: Community status changed `,
     });
-
-    return p;
 }

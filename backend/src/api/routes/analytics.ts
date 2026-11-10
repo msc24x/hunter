@@ -22,30 +22,27 @@ router.get('/status/:subject', (req, res) => {
     }
 
     let subject = req.params.subject;
+    const countPromise =
+        subject === 'users'
+            ? client.users.count()
+            : subject === 'competitions'
+              ? client.competitions.count()
+              : null;
 
-    if (subject == 'users') {
-        client.users.count().then((rows) => {
-            mcache.put(subject, rows, 1000 * 10);
-
-            Util.sendResponseJson(res, resCode.success, {
-                subject: req.params.subject,
-                status: rows,
-                color: 'blue',
-            });
-        });
-    } else if (subject == 'competitions') {
-        client.competitions.count().then((rows) => {
-            mcache.put(subject, rows, 1000 * 10);
-
-            Util.sendResponseJson(res, resCode.success, {
-                subject: req.params.subject,
-                status: rows,
-                color: 'blue',
-            });
-        });
-    } else {
+    if (!countPromise) {
         Util.sendResponse(res, resCode.badRequest);
+        return;
     }
+
+    countPromise.then((rows) => {
+        mcache.put(subject, rows, 1000 * 10);
+
+        Util.sendResponseJson(res, resCode.success, {
+            subject: req.params.subject,
+            status: rows,
+            color: 'blue',
+        });
+    });
 });
 
 module.exports = router;

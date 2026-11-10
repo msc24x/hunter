@@ -1,7 +1,6 @@
 import { CompetitionInfo } from '../../config/types';
-import { sendInfoEmail } from '../../services/email';
+import { sendRenderedEmail } from '../../services/email';
 import config from '../../config/config';
-import { render } from '../renderer';
 import { Util } from '../../util/util';
 
 // Type for template data
@@ -35,15 +34,8 @@ export function sendPublicContestEmail(competition: CompetitionInfo) {
         name: Util.getFirstName(competition.host_user!.name || 'User'),
     };
 
-    render(data, 'public-contest').then((html) => {
-        sendInfoEmail({
-            body: {
-                to: `${competition.host_user!.name} <${
-                    competition.host_user!.email
-                }>`,
-                subject: `You contest is now public`,
-                html: html,
-            },
-        });
+    sendRenderedEmail(data, 'public-contest', {
+        to: `${competition.host_user!.name} <${competition.host_user!.email}>`,
+        subject: `You contest is now public`,
     });
 }

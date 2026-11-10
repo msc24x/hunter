@@ -1,7 +1,6 @@
 import { UserInfo } from '../../config/types';
-import { sendInfoEmail } from '../../services/email';
+import { sendRenderedEmail } from '../../services/email';
 import config from '../../config/config';
-import { render } from '../renderer';
 import { Util } from '../../util/util';
 
 // Type for template data
@@ -25,13 +24,8 @@ export function sendAnnouncementEmail(user: UserInfo) {
 
     data.url = `${config.protocol}://${config.frontend}`;
 
-    render(data, 'announcement').then((html) => {
-        sendInfoEmail({
-            body: {
-                to: `${user!.name || 'Hunter'} <${user!.email}>`,
-                subject: `Unlock More with Hunter 🚀: Latest Product Release Notes`,
-                html: html,
-            },
-        });
+    sendRenderedEmail(data, 'announcement', {
+        to: `${user!.name || 'Hunter'} <${user!.email}>`,
+        subject: `Unlock More with Hunter 🚀: Latest Product Release Notes`,
     });
 }

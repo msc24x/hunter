@@ -5,7 +5,6 @@ import { authenticate, loginRequired } from '../auth';
 import { resCode } from '../../config/settings';
 import Container from 'typedi';
 import { DatabaseProvider } from '../../services/databaseProvider';
-import config from '../../config/config';
 import { sendPublicContestEmail } from '../../emails/public-contest/sender';
 import { computeContestQuality } from '../../services/contestQuality';
 
@@ -468,59 +467,13 @@ router.get('/competition/:id', authenticate, loginRequired, (req, res) => {
 });
 
 function getParticipationBlockers(competition: any): string[] {
-    const blockers: string[] = [];
-
-    if (!competition.questions.length) {
-        blockers.push('Competition has no questions.');
-    }
+    const quality = computeContestQuality(competition);
+    const blockers: string[] = [...(quality.blockers ?? [])];
 
     competition.questions.forEach((question: any) => {
-        const label = `Question "${question.title || '#' + question.id}"`;
-
-        if (question.type === config.questionTypes.code) {
-            if (
-                !Util.doesTestFilesExist({
-                    for: {
-                        competition_id: competition.id,
-                        question_id: question.id,
-                        type: 0,
-                    },
-                    solution: { code: '', lang: 'c' },
-                })
-            ) {
-                blockers.push(
-                    `${label} has no solutions file, submissions cannot be evaluated.`,
-                );
-            }
-
-            if (!question.question_verifications.length) {
-                blockers.push(
-                    `${label} has not been verified for solvability.`,
-                );
-            }
-        }
-
-        if (question.type === config.questionTypes.mcq) {
-            if (question.question_choices.length < 2) {
-                blockers.push(
-                    `${label} does not have enough choices (at least 2 required).`,
-                );
-            } else if (
-                question.question_choices.every((q: any) => !q.is_correct)
-            ) {
-                blockers.push(
-                    `${label} has no choice marked as correct, making it unsolvable.`,
-                );
-            }
-        }
-
-        if (
-            question.type === config.questionTypes.fill &&
-            !question.question_choices.length
-        ) {
-            blockers.push(
-                `${label} has no possible answer, making it unsolvable.`,
-            );
+        const questionBlockers = quality[question.id]?.blockers;
+        if (questionBlockers?.length) {
+            blockers.push(...questionBlockers);
         }
     });
 

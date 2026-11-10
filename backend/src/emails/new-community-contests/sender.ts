@@ -1,5 +1,5 @@
-import { sendInfoEmail } from '../../services/email';
-import { render } from '../renderer';
+import { sendRenderedEmail } from '../../services/email';
+
 // Type for template data
 interface EmailData {
     user: { email: string; name: string };
@@ -20,24 +20,9 @@ export function sendNewCompetitionsInCommunity(data: EmailData) {
         c.description = c.description + '...';
         c.title = c.title || 'Untitled';
     });
-    let p = new Promise<void>((resolve, reject) => {
-        render(data, 'new-community-contests').then((html) => {
-            sendInfoEmail({
-                body: {
-                    to: `${data.user.name || 'Hunter user'} <${
-                        data.user.email
-                    }>`,
-                    subject: `🏆 Fresh Opportunities to Hunt & Win - Community Contests Alert`,
-                    html: html,
-                },
-            })
-                .then(
-                    () => resolve(),
-                    (err) => reject(err),
-                )
-                .catch((err) => reject(err));
-        });
-    });
 
-    return p;
+    return sendRenderedEmail(data, 'new-community-contests', {
+        to: `${data.user.name || 'Hunter user'} <${data.user.email}>`,
+        subject: `🏆 Fresh Opportunities to Hunt & Win - Community Contests Alert`,
+    });
 }
