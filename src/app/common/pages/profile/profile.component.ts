@@ -91,6 +91,7 @@ export class ProfileComponent implements OnInit {
                 );
 
                 this.editable = this.user.id === this.user_profile_id;
+                this.maybeFetchTokens();
             },
             error: (err) => {
                 this.loading--;
@@ -128,6 +129,7 @@ export class ProfileComponent implements OnInit {
                         this.authService.isAuthenticated.next(true);
                         this.loading--;
                         this.editable = this.user.id === this.user_profile_id;
+                        this.maybeFetchTokens();
                     }
                 },
                 (err) => {
@@ -160,6 +162,14 @@ export class ProfileComponent implements OnInit {
                 window.location.search +
                 (event.index === 1 ? '#settings' : ''),
         );
+    }
+
+    private maybeFetchTokens() {
+        // Covers landing directly on #settings: selectedTabIndex is set
+        // programmatically, so selectedTabChange (and its fetch) never fires.
+        if (this.editable && this.selectedTabIndex === 1) {
+            this.fetchTokens();
+        }
     }
 
     fetchTokens(force = false) {
