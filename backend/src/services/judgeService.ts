@@ -11,7 +11,6 @@ import { Util } from '../util/util';
 @Service({ global: true })
 export class JudgeService {
     private isProcessingUserMap = new Map<number, boolean>();
-    private entries = 0;
     private showdownJudgeUrl = process.env.SHOWDOWN_URL!;
     public filesPath: string = 'files/';
 
@@ -19,17 +18,11 @@ export class JudgeService {
 
     private saveEntry({ id }: UserInfo) {
         this.isProcessingUserMap.set(id, true);
-        this.entries++;
     }
 
     private remEntry({ id }: UserInfo) {
         this.isProcessingUserMap.set(id, false);
-        this.entries--;
     }
-
-    getNumberOfEntries = () => {
-        return this.entries;
-    };
 
     async execute(
         hunterExecutable: HunterExecutable,

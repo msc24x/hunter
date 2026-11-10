@@ -36,9 +36,6 @@ export default {
     protocol: process.env.PROTOCOL,
     frontend: process.env.FRONTEND_DOMAIN,
     port: process.env.API_PORT,
-    dbConnectionConfig: {
-        db_url: process.env.DB_URL,
-    },
     smtp,
     smtpProviders,
     // Attempts per provider before failover.

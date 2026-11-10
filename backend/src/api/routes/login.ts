@@ -14,7 +14,7 @@ const client = Container.get(DatabaseProvider).client();
 router.use(bodyParser.json());
 
 function createSession(user: UserInfo): Promise<SessionInfo> {
-    const promise = new Promise<SessionInfo>((resolve, reject) => {
+    const promise = new Promise<SessionInfo>((resolve) => {
         client.session
             .create({
                 data: {
@@ -65,7 +65,7 @@ function getOrCreateUser(
 ): Promise<UserInfo | null> {
     const githubUsername = githubUsernameFromUrl(data.github_url);
 
-    const promise = new Promise<UserInfo | null>((resolve, reject) => {
+    const promise = new Promise<UserInfo | null>((resolve) => {
         client.users
             .findFirst({
                 where: {
@@ -293,10 +293,10 @@ router.post('/logout', (req, res) => {
                 id: session_id,
             },
         })
-        .then((session) => {
+        .then(() => {
             Util.sendResponse(res, resCode.success);
         })
-        .catch((err) => {
+        .catch(() => {
             Util.sendResponse(res, resCode.badRequest);
         });
 });

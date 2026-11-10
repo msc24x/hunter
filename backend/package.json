@@ -10,9 +10,7 @@
         "start": "nodemon -L src/app.ts",
         "win-start-prod": "set ENV=prod&& ts-node src/app.ts",
         "shell": "ts-node src/scripts/shell.ts",
-        "lint": "eslint src/**/*.{ts,tsx}",
-        "check-types": "tsc --noemit",
-        "eslint": "eslint"
+        "check-types": "tsc --noemit"
     },
     "author": "Maninderpal Singh (msc24x@gmail.com)",
     "license": "ISC",
@@ -38,7 +36,6 @@
         "@modelcontextprotocol/sdk": "~1.22.0",
         "@prisma/client": "^6.1.0",
         "@types/express-fileupload": "^1.5.1",
-        "argon2": "^0.30.3",
         "body-parser": "^1.19.1",
         "cookie-parser": "^1.4.6",
         "dompurify": "^3.2.4",
@@ -48,7 +45,6 @@
         "file-type": "^16.5.4",
         "fs": "^0.0.1-security",
         "jsdom": "^26.0.0",
-        "jsonwebtoken": "^8.5.1",
         "juice": "^11.0.1",
         "memory-cache": "^0.2.0",
         "morgan": "^1.10.0",

@@ -52,7 +52,7 @@ export class Util {
                 langs.includes((exec.solution as CodeSolution).lang)
             )
                 return true;
-        } catch (error) {
+        } catch {
             return false;
         }
 

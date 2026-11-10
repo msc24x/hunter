@@ -18,7 +18,7 @@ export class ScoreboardService {
         hunterExecutable: HunterExecutable,
         exeInfo: ExeInfo,
         question: QuestionInfo,
-        practice = false
+        practice = false,
     ) {
         var points = -1 * question.neg_points;
 
@@ -106,7 +106,6 @@ export class ScoreboardService {
                 break;
             default:
                 throw 'Question type not supported';
-                break;
         }
 
         client.results

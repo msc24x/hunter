@@ -1,8 +1,3 @@
-export type RegisterRequest = {
-    user: string;
-    password: string;
-};
-
 export type SessionInfo = {
     id: string;
     user_id: number;
@@ -41,19 +36,6 @@ export type QuestionChoice = {
     delete?: boolean;
 };
 
-export type MaterialInfo = {
-    id: number;
-    competition_id: number;
-    title: string | null;
-    type: number;
-    content: string | null;
-    file_path: string | null;
-    file_size: number | null;
-    created_at: Date;
-    updated_at: Date;
-    deleted_at: Date | null;
-};
-
 export type Result = {
     id: number;
     user_id: number;
@@ -64,13 +46,6 @@ export type Result = {
     final_result: number;
     user_rank: number;
     questions_attempted?: number;
-};
-
-export type UserSocials = {
-    avatar_url?: string;
-    blog_url?: string;
-    github_url?: string;
-    linkedin_url?: string;
 };
 
 export type UserInfo = {
@@ -135,15 +110,6 @@ export type CompetitionInfo = {
     community_id?: number;
     community_only?: boolean;
     community?: Community;
-};
-
-export type CompetitionSession = {
-    id: number;
-    user_id: number;
-    user_info?: UserInfo;
-    competition_id: number;
-    competitions?: CompetitionInfo;
-    created_at: Date;
 };
 
 export type CompetitionInvite = {

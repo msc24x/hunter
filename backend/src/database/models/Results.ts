@@ -7,8 +7,6 @@ import { Prisma } from '@prisma/client';
 export class Results {
     client = Container.get(DatabaseProvider).client();
 
-    dbService: DatabaseProvider = Container.get(DatabaseProvider);
-
     getScoresQuery(
         filterQuestion: boolean,
         queryParams: {
@@ -77,48 +75,6 @@ export class Results {
         `;
 
         return scoresQuery;
-    }
-
-    post(params: any, callback: (err: QueryError | null) => void) {
-        let p = 0;
-
-        if (params.result == 0) p = 1;
-
-        this.dbService
-            .pool()
-            .query(
-                `insert into results(user_id, question_id, competition_id, result, penalities) values(?, ?, ?, ?, ?);`,
-                [
-                    params.user_id,
-                    params.question_id,
-                    params.competition_id,
-                    params.result,
-                    p,
-                ],
-                (err) => {
-                    callback(err);
-                },
-            );
-    }
-
-    update(
-        id: string,
-        result: string,
-        callback: (err: QueryError | null) => void,
-    ) {
-        let p = 0;
-
-        if (result == '0') p = 1;
-
-        this.dbService
-            .pool()
-            .query(
-                `update results set result = ?, penalities = penalities + ? where id = ? ;`,
-                [result, p, id],
-                (err) => {
-                    callback(err);
-                },
-            );
     }
 
     getCompetitionScoresCount(
@@ -262,37 +218,5 @@ export class Results {
                     return;
                 }
             });
-    }
-
-    findAll(
-        params: any,
-        callback: (rows: any, err: QueryError | null) => void,
-    ) {
-        let query =
-            'select results.*, users.id, users.name from results inner join users on results.user_id = users.id where true ';
-        let args: any[] = [];
-
-        if (params.user_id) {
-            query += ` and user_id = ?`;
-            args.push(params.user_id);
-        }
-        if (params.competition_id) {
-            query += ` and competition_id = ?`;
-            args.push(params.competition_id);
-        }
-        if (params.question_id) {
-            query += ` and question_id = ?`;
-            args.push(params.question_id);
-        }
-        if (params.id) {
-            query += ` and id = ?`;
-            args.push(params.id);
-        }
-
-        query += ';';
-
-        this.dbService.pool().query(query, args, (err, rows) => {
-            callback(rows, err);
-        });
     }
 }

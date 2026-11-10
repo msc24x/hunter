@@ -1,12 +1,9 @@
 import express, { Request, Response } from 'express';
-import Container from 'typedi';
-import { DatabaseProvider } from '../../services/databaseProvider';
 import path from 'path';
 const mime = require('mime-types');
 import { readFile, fileExists } from '../../util/serverStorage';
 
 var router = express.Router();
-const client = Container.get(DatabaseProvider).client();
 
 router.get('/media/*', async (req: Request, res: Response) => {
     try {

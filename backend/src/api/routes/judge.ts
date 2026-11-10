@@ -23,7 +23,7 @@ function safeRouteToQuestion(
 ): Promise<QuestionInfo> {
     const hunterExecutable = req.body.exec as HunterExecutable;
 
-    var promise = new Promise<QuestionInfo>((resolve, reject) => {
+    var promise = new Promise<QuestionInfo>((resolve) => {
         client.questions
             .findUnique({
                 where: {

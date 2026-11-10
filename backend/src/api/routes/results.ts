@@ -391,7 +391,6 @@ router.get(
         const user: UserInfo = res.locals.user;
         const competition_id = req.params.id;
         const question_id = req.params.ques_id;
-        const after_id = req.query.after;
 
         if (!competition_id && !question_id) {
             Util.sendResponse(res, resCode.badRequest);
@@ -410,7 +409,7 @@ router.get(
                     host_user: true,
                 },
             })
-            .then((comp) => {
+            .then(() => {
                 var questionFilter: any = {
                     competition_id: parseInt(competition_id),
                     deleted_at: null,

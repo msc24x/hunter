@@ -56,7 +56,7 @@ async function main() {
             console.log(data);
             seen_contests.push(comp_id);
 
-            var created_data = await client.competition_session.create({
+            await client.competition_session.create({
                 data: data,
             });
         });

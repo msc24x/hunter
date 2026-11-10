@@ -739,7 +739,6 @@ router.get(
         const ques_id: number | null =
             (req.params.id && parseInt(req.params.id)) || null;
         const user: UserInfo | null = res.locals.user;
-        const is_editor = req.headers.referer?.includes('/editor/');
 
         if (isNaN(competition_id)) {
             Util.sendResponse(res, resCode.badRequest);
@@ -862,7 +861,6 @@ router.get(
                 }
 
                 const now = new Date();
-                const endDate = competition.scheduled_end_at;
 
                 // If its not live yet or non-practice not started by user, remove questions info
                 if (

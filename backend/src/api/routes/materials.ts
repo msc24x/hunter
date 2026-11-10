@@ -130,7 +130,6 @@ router.get(
     authenticate,
     loginRequired,
     async (req: Request, res: Response) => {
-        const comp_id = parseInt(req.params.comp_id);
         const id = parseInt(req.params.id);
         const user: UserInfo = res.locals.user;
 
@@ -281,7 +280,7 @@ router.post(
                 const relPath = materialFilePath(created.id, fileExt);
                 try {
                     await createFile(relPath, fileBuffer);
-                } catch (e) {
+                } catch {
                     // Roll back the row if the file write fails.
                     await client.materials.delete({ where: { id: created.id } });
                     Util.sendResponseJson(res, resCode.serverError, {
@@ -313,7 +312,6 @@ router.put(
     authenticate,
     loginRequired,
     async (req: Request, res: Response) => {
-        const comp_id = parseInt(req.params.comp_id);
         const id = parseInt(req.params.id);
         const user: UserInfo = res.locals.user;
         const body = req.body || {};
@@ -417,7 +415,7 @@ router.put(
                 const relPath = materialFilePath(id, newFileExt);
                 try {
                     await createFile(relPath, newFileBuffer);
-                } catch (e) {
+                } catch {
                     Util.sendResponseJson(res, resCode.serverError, {
                         file: 'Failed to store the uploaded file',
                     });
@@ -455,7 +453,6 @@ router.delete(
     authenticate,
     loginRequired,
     async (req: Request, res: Response) => {
-        const comp_id = parseInt(req.params.comp_id);
         const id = parseInt(req.params.id);
         const user: UserInfo = res.locals.user;
 

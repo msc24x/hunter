@@ -2,8 +2,6 @@ import { CompetitionInvite } from '../../config/types';
 import { sendInfoEmail } from '../../services/email';
 import { render } from '../renderer';
 import { Util } from '../../util/util';
-import Container from 'typedi';
-import { DatabaseProvider } from '../../services/databaseProvider';
 
 // Type for template data
 interface EmailData {
@@ -30,8 +28,6 @@ export function sendInviteRemovedEmail(competition_invite: CompetitionInvite) {
             competition.host_user!.name || 'Anonymous Hunter user',
         ),
     };
-
-    const client = Container.get(DatabaseProvider).client();
 
     render(data, 'invite-removed').then((html) => {
         sendInfoEmail({
