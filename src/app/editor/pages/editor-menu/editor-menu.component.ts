@@ -44,7 +44,7 @@ export class EditorMenuComponent implements OnInit {
         private authService: AuthService,
         private competitionsDataService: CompetitionsDataService,
         private router: Router,
-        private titleService: Title
+        private titleService: Title,
     ) {
         this.titleService.setTitle('Workbench - Hunter');
         this.user = this.authService.user;
@@ -57,7 +57,7 @@ export class EditorMenuComponent implements OnInit {
                 this.titleService.setTitle(
                     `${
                         this.user?.name ? this.user.name + ' - ' : ''
-                    }Workbench - Hunter`
+                    }Workbench - Hunter`,
                 );
             }
         });

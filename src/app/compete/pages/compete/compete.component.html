@@ -44,8 +44,6 @@
         <h1>
             Communities
 
-            <!-- <div class="beta-label">Beta</div> -->
-
             <infotip
                 message="A community is your space to collaborate, create, and compete with
             others who share your interests or institution."
@@ -54,16 +52,12 @@
         <communities-list [communities]="publicCommunities"></communities-list>
     </ng-template>
 
-    <ng-outlet
-        [ngTemplateOutlet]="communitiesTemp"
-        *ngIf="publicCommunities?.length"
-    >
-    </ng-outlet>
+    <ng-outlet [ngTemplateOutlet]="communitiesTemp"> </ng-outlet>
 
     <competitions-list
         [competitionsList]="this.publicCompetitions"
         [invitedList]="invitedCompetitions"
-        heading="Public Competitions"
+        heading="Competitions"
         route="compete/p"
         [showLeaderboard]="true"
     ></competitions-list>

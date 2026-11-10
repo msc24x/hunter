@@ -8,6 +8,11 @@
     gap: 1rem;
     flex-wrap: nowrap;
     overflow-x: auto;
+    height: 9.5rem;
+
+    spinner {
+        margin-inline: auto;
+    }
 
     .community {
         @include blackBack;
